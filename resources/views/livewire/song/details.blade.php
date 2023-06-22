@@ -109,6 +109,15 @@
                         >
                             {{ __('Share') }}
                         </button>
+                        @if ($song->amazon_id)
+                            <a
+                                class="block w-full pl-4 pr-4 pt-2 pb-2 bg-white text-gray-400 text-xs text-center font-semibold hover:bg-gray-50 focus:bg-gray-200"
+                                href="{{ config('services.amazon.music.albums') . $song->amazon_id }}"
+                                target="_blank"
+                            >
+                                {{ __('View on Amazon Music') }}
+                            </a>
+                        @endif
                         @if ($song->am_id)
                             <a
                                 class="block w-full pl-4 pr-4 pt-2 pb-2 bg-white text-gray-400 text-xs text-center font-semibold hover:bg-gray-50 focus:bg-gray-200"
@@ -117,6 +126,42 @@
                                 x-show="songURL"
                             >
                                 {{ __('View on Apple Music') }}
+                            </a>
+                        @endif
+                        @if ($song->deezer_id)
+                            <a
+                                class="block w-full pl-4 pr-4 pt-2 pb-2 bg-white text-gray-400 text-xs text-center font-semibold hover:bg-gray-50 focus:bg-gray-200"
+                                href="{{ config('services.deezer.track') . $song->deezer_id }}"
+                                target="_blank"
+                            >
+                                {{ __('View on Deezer') }}
+                            </a>
+                        @endif
+                        @if ($song->spotify_id)
+                            <a
+                                class="block w-full pl-4 pr-4 pt-2 pb-2 bg-white text-gray-400 text-xs text-center font-semibold hover:bg-gray-50 focus:bg-gray-200"
+                                href="{{ config('services.spotify.track') . $song->spotify_id }}"
+                                target="_blank"
+                            >
+                                {{ __('View on Spotify') }}
+                            </a>
+                        @endif
+                        @if ($song->tidal_id)
+                            <a
+                                class="block w-full pl-4 pr-4 pt-2 pb-2 bg-white text-gray-400 text-xs text-center font-semibold hover:bg-gray-50 focus:bg-gray-200"
+                                href="{{ config('services.tidal.track') . $song->tidal_id }}"
+                                target="_blank"
+                            >
+                                {{ __('View on Tidal') }}
+                            </a>
+                        @endif
+                        @if ($song->youtube_id)
+                            <a
+                                class="block w-full pl-4 pr-4 pt-2 pb-2 bg-white text-gray-400 text-xs text-center font-semibold hover:bg-gray-50 focus:bg-gray-200"
+                                href="{{ config('services.youtube.music.watch') . $song->youtube_id }}"
+                                target="_blank"
+                            >
+                                {{ __('View on Youtube Music') }}
                             </a>
                         @endif
                     </x-slot:content>

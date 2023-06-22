@@ -32,19 +32,19 @@
         <section class="mt-4">
             @switch($chartKind)
                 @case(App\Enums\ChartKind::Anime)
-                    <x-rows.small-lockup :animes="$this->chart" :is-ranked="true" :is-row="false" />
+                    <x-rows.small-lockup :animes="$this->chart" :page="$page" :per-page="$perPage" :is-ranked="true" :is-row="false" />
                 @break
                 @case(App\Enums\ChartKind::Episodes)
-                    <x-rows.episode-lockup :episodes="$this->chart" :is-ranked="true" :is-row="false" />
+                    <x-rows.episode-lockup :episodes="$this->chart" :page="$page" :per-page="$perPage" :is-ranked="true" :is-row="false" />
                 @break
                 @case(App\Enums\ChartKind::Games)
-                    <x-rows.small-lockup :games="$this->chart" :is-ranked="true" :is-row="false" />
+                    <x-rows.small-lockup :games="$this->chart" :page="$page" :per-page="$perPage" :is-ranked="true" :is-row="false" />
                 @break
                 @case(App\Enums\ChartKind::Manga)
-                    <x-rows.small-lockup :mangas="$this->chart" :is-ranked="true" :is-row="false" />
+                    <x-rows.small-lockup :mangas="$this->chart" :page="$page" :per-page="$perPage" :is-ranked="true" :is-row="false" />
                 @break
                 @case(App\Enums\ChartKind::Songs)
-                    <x-rows.music-lockup :songs="$this->chart" :is-ranked="true" :is-row="false" />
+                    <x-rows.music-lockup :songs="$this->chart" :page="$page" :per-page="$perPage" :is-ranked="true" :is-row="false" />
                 @break
             @endswitch
         </section>

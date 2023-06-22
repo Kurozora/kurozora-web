@@ -1,4 +1,4 @@
-@props(['song', 'anime' => null, 'type' => null, 'position' => null, 'episodes' => null, 'showEpisodes' => true, 'showModel' => false, 'isRanked' => false, 'isRow' => true])
+@props(['song', 'anime' => null, 'type' => null, 'position' => null, 'episodes' => null, 'showEpisodes' => true, 'showModel' => false, 'rank', 'isRanked' => false, 'isRow' => true])
 
 @php
     $class = $isRow ? 'shrink-0' : 'flex-grow';
@@ -68,6 +68,10 @@
 
     <div class="relative mt-4">
         <div class="flex flex-col justify-between">
+            @if ($isRanked)
+                <p class="text-sm leading-tight font-semibold">#{{ $rank }}</p>
+            @endif
+
             <a class="flex gap-2 justify-between" href="{{ route('songs.details', $song) }}">
                 <p class="line-clamp-2" x-text="songTitle"></p>
                 @if ($type)

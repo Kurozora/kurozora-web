@@ -35,6 +35,13 @@ return [
         'secret' => env('STRIPE_SECRET'),
     ],
 
+    'amazon' => [
+        'music' => [
+            'base' => 'https://amazon.com/music/player/',
+            'albums' => 'https://amazon.com/music/player/albums/',
+        ]
+    ],
+
     'apple' => [
         'store_kit' => [
             'password' => env('SK_APP_PASSWORD'),
@@ -45,9 +52,9 @@ return [
         'redirect' => env('APPLE_REDIRECT_URI', '/siwa/callback'),
     ],
 
-    'patreon' => [
-        'url' => 'https://patreon.com/' . env('PATREON_HANDLE', 'kurozora'),
-        'username' => env('PATREON_HANDLE', 'kurozora'),
+    'deezer' => [
+        'url' => 'https://deezer.com/',
+        'track' => 'https://deezer.com/track/',
     ],
 
     'ko-fi' => [
@@ -55,12 +62,32 @@ return [
         'username' => env('KOFI_HANDLE', 'kurozora'),
     ],
 
+    'patreon' => [
+        'url' => 'https://patreon.com/' . env('PATREON_HANDLE', 'kurozora'),
+        'username' => env('PATREON_HANDLE', 'kurozora'),
+    ],
+
     'paypal' => [
         'url' => 'https://paypal.com/paypalme/' . env('PAYPAL_HANDLE', 'Kiritokatklian'),
         'username' => env('PAYPAL_HANDLE', 'Kiritokatklian'),
     ],
 
+    'spotify' => [
+        'url' => 'https://spotify.com/',
+        'track' => 'https://open.spotify.com/track/',
+    ],
+
+    'tidal' => [
+        'url' => 'https://tidal.com/',
+        'track' => 'https://tidal.com/browse/track/',
+    ],
+
     'youtube' => [
+        'url' => 'https://youtube.com/',
+        'music' => [
+            'base' => 'https://music.youtube.com/',
+            'watch' => 'https://music.youtube.com/watch?v='
+        ],
         'api_key' => env('YOUTUBE_API_KEY'),
     ],
 

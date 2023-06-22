@@ -10,6 +10,7 @@ use App\Traits\SearchFilterable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
 use Laravel\Scout\Searchable;
@@ -38,6 +39,9 @@ class Song extends KModel implements HasMedia, Sitemapable
     // How long to cache certain responses
     const CACHE_KEY_ANIMES_SECONDS = 120 * 60;
     const CACHE_KEY_GAMES_SECONDS = 120 * 60;
+
+    // Minimum ratings required to calculate average
+    const MINIMUM_RATINGS_REQUIRED = 1;
 
     // Table name
     const TABLE_NAME = 'songs';
@@ -93,6 +97,7 @@ class Song extends KModel implements HasMedia, Sitemapable
     public function toSearchableArray(): array
     {
         $song = $this->toArray();
+        $song['rating_average'] = $this->mediaStat?->rating_average ?? 0;
         $song['created_at'] = $this->created_at?->timestamp;
         $song['updated_at'] = $this->updated_at?->timestamp;
         return $song;
@@ -166,6 +171,17 @@ class Song extends KModel implements HasMedia, Sitemapable
         return Cache::remember($cacheKey, self::CACHE_KEY_GAMES_SECONDS, function () use ($limit) {
             return $this->games()->paginate($limit);
         });
+    }
+
+    /**
+     * The media rating relationship of the song.
+     *
+     * @return MorphMany
+     */
+    function ratings(): MorphMany
+    {
+        return $this->morphMany(MediaRating::class, 'model')
+            ->where('model_type', Song::class);
     }
 
     /**
