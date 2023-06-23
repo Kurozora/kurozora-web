@@ -37,6 +37,8 @@ return new class extends Migration
             $table->text('biography_markdown')->nullable();
             $table->boolean('is_pro')->default(false);
             $table->boolean('is_subscribed')->default(false);
+            $table->boolean('is_staff')->default(false);
+            $table->boolean('is_developer')->default(false);
             $table->boolean('is_verified')->default(false);
             $table->boolean('can_change_username')->default(false);
             $table->integer('view_count')->default(0);
@@ -48,6 +50,12 @@ return new class extends Migration
         Schema::table(User::TABLE_NAME, function (Blueprint $table) {
             // Set index key constraints
             $table->index('language_id');
+            $table->index('is_pro');
+            $table->index('is_subscribed');
+            $table->index('is_staff');
+            $table->index('is_developer');
+            $table->index('last_anime_import_at');
+            $table->index('last_manga_import_at');
 
             // Set unique key constraints
             $table->unique(['uuid']);

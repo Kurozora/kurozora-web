@@ -49,6 +49,8 @@ class UserResourceBasic extends JsonResource
                 'joinDate'          => $this->resource->created_at->timestamp,
                 'isPro'             => $this->resource->is_pro,
                 'isSubscribed'      => $this->resource->is_subscribed,
+                'isStaff'           => $this->resource->is_staff,
+                'isDeveloper'       => $this->resource->is_developer,
                 'isVerified'        => $this->resource->is_verified,
             ]
         ]);
