@@ -150,7 +150,7 @@
                     </li>
 
                     <li class="mt-2">
-                        <x-footer-link href="{{ route('status') }}" target="_blank">{{ __('Kurozora Status') }}</x-footer-link>
+                        <x-footer-link href="{{ config('app.status_url') }}" target="_blank">{{ __('Kurozora Status') }}</x-footer-link>
                     </li>
                 </ul>
             </div>
@@ -162,13 +162,6 @@
                         <x-footer-link href="{{ route('misc.team') }}">{{ __('Kurozora Team') }}</x-footer-link>
                     </li>
 
-{{--                    <li class="mt-2">--}}
-{{--                        <x-footer-link href="{{ route('misc.jobs') }}">{{ __('Job Opportunities') }}</x-footer-link>--}}
-{{--                    </li>--}}
-
-{{--                    <li class="mt-2">--}}
-{{--                        <x-footer-link href="{{ route('misc.investors') }}">{{ __('Investors') }}</x-footer-link>--}}
-{{--                    </li>--}}
                     <li class="mt-2">
                         <x-footer-link href="{{ route('misc.projects') }}">{{ __('Open-Source Projects') }}</x-footer-link>
                     </li>
