@@ -136,7 +136,7 @@
                                 {{ __('Songs') }}
                             </x-nav-link>
 
-                            <x-nav-link href="{{ route('characters.index') }}" :active="request()->routeIs('characters.index')"
+                            <x-nav-link href="{{ route('charts.index') }}" :active="request()->routeIs('charts.index')"
                                         x-show="! isSearchEnabled"
                                         x-transition:enter="ease-out duration-150 delay-[250ms] transform"
                                         x-transition:enter-start="opacity-0 scale-75"
@@ -145,10 +145,10 @@
                                         x-transition:leave-start="opacity-100 scale-100"
                                         x-transition:leave-end="opacity-0 scale-75"
                             >
-                                {{ __('Characters') }}
+                                {{ __('Charts') }}
                             </x-nav-link>
 
-                            <x-nav-link href="{{ route('people.index') }}" :active="request()->routeIs('people.index')"
+                            <x-nav-link href="{{ route('characters.index') }}" :active="request()->routeIs('characters.index')"
                                         x-show="! isSearchEnabled"
                                         x-transition:enter="ease-out duration-150 delay-300 transform"
                                         x-transition:enter-start="opacity-0 scale-75"
@@ -157,10 +157,10 @@
                                         x-transition:leave-start="opacity-100 scale-100"
                                         x-transition:leave-end="opacity-0 scale-75"
                             >
-                                {{ __('People') }}
+                                {{ __('Characters') }}
                             </x-nav-link>
 
-                            <x-nav-link href="{{ route('studios.index') }}" :active="request()->routeIs('studios.index')"
+                            <x-nav-link href="{{ route('people.index') }}" :active="request()->routeIs('people.index')"
                                         x-show="! isSearchEnabled"
                                         x-transition:enter="ease-out duration-150 delay-[350ms] transform"
                                         x-transition:enter-start="opacity-0 scale-75"
@@ -169,11 +169,10 @@
                                         x-transition:leave-start="opacity-100 scale-100"
                                         x-transition:leave-end="opacity-0 scale-75"
                             >
-                                {{ __('Studios') }}
+                                {{ __('People') }}
                             </x-nav-link>
 
-                            <x-nav-link href="{{ config('app.ios.store_url') }}"
-                                        target="_blank"
+                            <x-nav-link href="{{ route('studios.index') }}" :active="request()->routeIs('studios.index')"
                                         x-show="! isSearchEnabled"
                                         x-transition:enter="ease-out duration-150 delay-[400ms] transform"
                                         x-transition:enter-start="opacity-0 scale-75"
@@ -182,7 +181,7 @@
                                         x-transition:leave-start="opacity-100 scale-100"
                                         x-transition:leave-end="opacity-0 scale-75"
                             >
-                                App
+                                {{ __('Studios') }}
                             </x-nav-link>
                         </div>
                     </span>
@@ -364,6 +363,10 @@
                     {{ __('Songs') }}
                 </x-responsive-nav-link>
 
+                <x-responsive-nav-link href="{{ route('charts.index') }}" :active="request()->routeIs('charts.index')">
+                    {{ __('Charts') }}
+                </x-responsive-nav-link>
+
                 <x-responsive-nav-link href="{{ route('characters.index') }}" :active="request()->routeIs('characters.index')">
                     {{ __('Characters') }}
                 </x-responsive-nav-link>
@@ -374,10 +377,6 @@
 
                 <x-responsive-nav-link href="{{ route('studios.index') }}" :active="request()->routeIs('studios.index')">
                     {{ __('Studios') }}
-                </x-responsive-nav-link>
-
-                <x-responsive-nav-link href="{{ config('app.ios.store_url') }}" target="_blank">
-                    App
                 </x-responsive-nav-link>
             </div>
 

@@ -80,6 +80,10 @@
                     </li>
 
                     <li class="mt-2">
+                        <x-footer-link href="{{ route('charts.index') }}">{{ __('Charts') }}</x-footer-link>
+                    </li>
+
+                    <li class="mt-2">
                         <x-footer-link href="{{ route('genres.index') }}">{{ __('Genres') }}</x-footer-link>
                     </li>
 

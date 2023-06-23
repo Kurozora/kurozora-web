@@ -30,7 +30,9 @@
         </section>
 
         <section class="mt-4">
-            <x-rows.small-lockup :animes="$this->searchResults" :is-row="false" />
+            @foreach($chartKinds as $chartKind)
+                <livewire:components.chart.section :chart-kind="$chartKind" />
+            @endforeach
         </section>
     </div>
 </main>
