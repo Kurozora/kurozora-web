@@ -40,11 +40,13 @@
 {{--                        <p class="text-xs leading-tight text-black/60 line-clamp-2">{{ __($anime->started_at?->year) }}</p>--}}
                     </div>
 
-                    <div class="inline-flex my-auto">
-                        <p class="text-sm font-bold text-orange-500">{{ number_format($anime->mediaStat?->rating_average ?? 0, 1) }}</p>
+                    @if (!empty($anime->mediaStat?->rating_count))
+                        <div class="inline-flex my-auto">
+                            <p class="text-sm font-bold text-orange-500">{{ number_format($anime->mediaStat?->rating_average ?? 0, 1) }}</p>
 
-                        <livewire:anime.star-rating :rating="$anime->mediaStat?->rating_average" :star-size="'sm'" :disabled="true" wire:key="{{ uniqid(more_entropy: true) }}" />
-                    </div>
+                            <livewire:anime.star-rating :rating="$anime->mediaStat?->rating_average" :star-size="'sm'" :disabled="true" wire:key="{{ uniqid(more_entropy: true) }}" />
+                        </div>
+                    @endif
                 </div>
 
                 <livewire:anime.library-button :anime="$anime" wire:key="{{ uniqid($anime->id, true) }}" />
@@ -85,11 +87,13 @@
 {{--                        <p class="text-xs leading-tight text-black/60 line-clamp-2">{{ __($game->published_at?->year) }}</p>--}}
                     </div>
 
-                    <div class="inline-flex my-auto">
-                        <p class="text-sm font-bold text-orange-500">{{ number_format($game->mediaStat?->rating_average ?? 0, 1) }}</p>
+                    @if (!empty($manga->mediaStat?->rating_count))
+                        <div class="inline-flex my-auto">
+                            <p class="text-sm font-bold text-orange-500">{{ number_format($game->mediaStat?->rating_average ?? 0, 1) }}</p>
 
-                        <livewire:game.star-rating :rating="$game->mediaStat?->rating_average" :star-size="'sm'" :disabled="true" wire:key="{{ uniqid(more_entropy: true) }}" />
-                    </div>
+                            <livewire:game.star-rating :rating="$game->mediaStat?->rating_average" :star-size="'sm'" :disabled="true" wire:key="{{ uniqid(more_entropy: true) }}" />
+                        </div>
+                    @endif
                 </div>
 
                 <livewire:game.library-button :game="$game" wire:key="{{ uniqid($game->id, true) }}" />
@@ -136,11 +140,13 @@
 {{--                        <p class="text-xs leading-tight text-black/60 line-clamp-2">{{ __($manga->started_at?->year) }}</p>--}}
                     </div>
 
-                    <div class="inline-flex my-auto">
-                        <p class="text-sm font-bold text-orange-500">{{ number_format($manga->mediaStat?->rating_average ?? 0, 1) }}</p>
+                    @if (!empty($game->mediaStat?->rating_count))
+                        <div class="inline-flex my-auto">
+                            <p class="text-sm font-bold text-orange-500">{{ number_format($manga->mediaStat?->rating_average ?? 0, 1) }}</p>
 
-                        <livewire:manga.star-rating :rating="$manga->mediaStat?->rating_average" :star-size="'sm'" :disabled="true" wire:key="{{ uniqid(more_entropy: true) }}" />
-                    </div>
+                            <livewire:manga.star-rating :rating="$manga->mediaStat?->rating_average" :star-size="'sm'" :disabled="true" wire:key="{{ uniqid(more_entropy: true) }}" />
+                        </div>
+                    @endif
                 </div>
 
                 <livewire:manga.library-button :manga="$manga" wire:key="{{ uniqid($manga->id, true) }}" />
