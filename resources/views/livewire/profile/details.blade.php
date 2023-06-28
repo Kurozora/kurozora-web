@@ -32,18 +32,10 @@
                         <livewire:components.profile-image-view :user="$user" :on-profile="true" />
                     </div>
 
-                    <div>
-                        <span class="flex items-end">
-                            <p class="ml-2 text-xl font-bold">{{ $user->username }}</p>
-                            @if ($user->is_verified)
-                                <span class="block ml-1" title="{{ __('This account is verified because it’s notable in animators, voice actors, entertainment studios, or another designated category.') }}">
-                                    @svg('checkmark_seal_fill', 'text-orange-500 fill-current', ['width' => 24, 'style' => 'min-width: 24px;'])
-                                </span>
-                            @endif
-                            @if ($user->is_pro || $user->is_subscribed)
-                                <x-pro-badge class="ml-1" />
-                            @endif
-                        </span>
+                    <div class="flex flex-col gap-1 sm:flex-row">
+                        <p class="ml-2 text-xl font-bold">{{ $user->username }}</p>
+
+                        <livewire:components.user.badge-shelf :user="$user" />
                     </div>
                 </div>
 

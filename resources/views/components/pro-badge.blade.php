@@ -1,1 +1,0 @@
-<span {{ $attributes->merge(['class' => 'block pl-2 pr-2 border-2 rounded-full text-xs font-semibold cursor-default']) }} style="color: #ffd200; border-color: #ffd200;" title="{{ __('Pro account') }}">{{ __('PRO') }}</span>

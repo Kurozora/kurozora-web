@@ -18,12 +18,8 @@
         <div class="flex gap-2 justify-between w-full">
             <div class="flex gap-1 overflow-hidden">
                 <x-simple-link class="text-sm font-semibold text-gray-500 whitespace-nowrap overflow-hidden" href="{{ route('profile.details', $feedMessage->user) }}">{{ $feedMessage->user->username }}</x-simple-link>
-                @if ($feedMessage->user->is_verified)
-                    @svg('checkmark_seal_fill', 'text-orange-500 fill-current', ['width' => 18, 'style' => 'min-width: 18px;'])
-                @endif
-                @if ($feedMessage->user->is_pro || $feedMessage->user->is_subscribed)
-                    <x-pro-badge />
-                @endif
+
+                <livewire:components.user.badge-shelf :user="$feedMessage->user" />
             </div>
 
             <p class="text-sm text-gray-500 whitespace-nowrap" title="{{ $feedMessage->created_at }}">{{ $feedMessage->created_at->shortAbsoluteDiffForHumans() }}</p>
