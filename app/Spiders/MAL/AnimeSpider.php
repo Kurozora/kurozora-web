@@ -187,8 +187,12 @@ class AnimeSpider extends BasicSpider
             });
         $scores = Arr::collapse($scores);
 
-        $scoreAverage = $response->filter('.leftside .score-label')
-            ->text();
+        try {
+            $scoreAverage = $response->filter('.leftside .score-label')
+                ->text();
+        } catch (Exception $e) {
+            $scoreAverage = 'N/A';
+        }
 
         $scoreCount = $scoreAverage !== 'N/A' ? $response->filter('span[itemprop="ratingCount"]')->text() : 0;
 
