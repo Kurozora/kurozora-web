@@ -40,6 +40,8 @@ class MediaStatsResource extends JsonResource
             'ratingCount' => $this->resource->rating_count,
             'rankGlobal' => $this->resource->rank_global,
             'rankTotal' => $this->resource->rank_total,
+            'sentiment' => $this->resource->sentiment,
+            'highestRatingPercentage' => $this->resource->highest_rating_percentage,
         ];
     }
 }
