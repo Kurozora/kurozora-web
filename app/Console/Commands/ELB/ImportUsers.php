@@ -54,8 +54,8 @@ class ImportUsers extends Command
                             'remember_token' => $user->remember_token,
                             'biography' => $user->biography,
                             'can_change_username' => $user->can_change_username,
-                            'last_anime_import_at' => $user->last_anime_import_at,
-                            'last_manga_import_at' => $user->last_manga_import_at,
+                            'anime_imported_at' => $user->anime_imported_at,
+                            'manga_imported_at' => $user->manga_imported_at,
                         ]);
                     } catch (Exception $exception) {
                         print 'Exception at: ' . $user->id . PHP_EOL;

@@ -115,7 +115,7 @@
                 <span
                     class="block cursor-pointer"
                     style="min-width: 18px; max-width: 18px;"
-                    title="{{ __('This account is a Kurozora+ subscriber since :x.', ['x' => $user->created_at?->toDateString()]) }}"
+                    title="{{ __('This account is a Kurozora+ subscriber since :x.', ['x' => $user->subscribed_at?->format('d F, Y')]) }}"
                     x-on:click="updateTooltip($el)"
                 >
                     <x-picture>

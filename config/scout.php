@@ -135,8 +135,8 @@ return [
         'index-settings' => [
             \App\Models\Anime::TABLE_NAME => [
                 'searchableAttributes' => ['original_title', 'title', 'synonym_titles', 'translations', 'synopsis', 'tagline', 'tags'],
-                'sortableAttributes'=> ['air_day', 'air_season', 'air_time', 'duration', 'started_at', 'rank_total', 'is_nsfw', 'ended_at', 'original_title', 'title', 'created_at', 'update_at'],
-                'filterableAttributes'=> ['id', 'air_day', 'air_season', 'air_time', 'duration', 'started_at', 'is_nsfw', 'ended_at', 'media_type_id', 'source_id', 'status_id', 'tv_rating_id', 'season_count', 'episode_count'],
+                'sortableAttributes'=> ['original_title', 'title', 'duration', 'air_time', 'air_day', 'air_season', 'is_nsfw', 'rank_total', 'started_at', 'ended_at', 'created_at', 'update_at'],
+                'filterableAttributes'=> ['id', 'tv_rating_id', 'media_type_id', 'source_id', 'status_id', 'duration', 'air_time', 'air_day', 'air_season', 'is_nsfw', 'episode_count', 'season_count', 'started_at', 'ended_at'],
             ],
             \App\Models\AppTheme::TABLE_NAME => [
                 'searchableAttributes' => ['name'],
@@ -155,13 +155,13 @@ return [
             ],
             \App\Models\Game::TABLE_NAME => [
                 'searchableAttributes' => ['original_title', 'title', 'synonym_titles', 'translations', 'synopsis', 'tagline', 'tags'],
-                'sortableAttributes'=> ['publication_day', 'publication_season', 'duration', 'rank_total', 'published_at', 'is_nsfw', 'original_title', 'title', 'edition_count', 'created_at', 'update_at'],
-                'filterableAttributes'=> ['id', 'publication_day', 'publication_season', 'duration', 'published_at', 'is_nsfw', 'media_type_id', 'original_title', 'source_id', 'status_id', 'title', 'tv_rating_id', 'edition_count'],
+                'sortableAttributes'=> ['original_title', 'title', 'duration', 'publication_day', 'publication_season', 'is_nsfw', 'rank_total', 'edition_count', 'published_at', 'created_at', 'update_at'],
+                'filterableAttributes'=> ['id', 'duration', 'tv_rating_id', 'media_type_id', 'source_id', 'status_id', 'publication_day', 'publication_season', 'is_nsfw', 'edition_count', 'published_at'],
             ],
             \App\Models\Manga::TABLE_NAME => [
                 'searchableAttributes' => ['original_title', 'title', 'synonym_titles', 'translations', 'synopsis', 'tagline', 'tags'],
-                'sortableAttributes'=> ['publication_day', 'publication_season', 'publication_time', 'duration', 'rank_total', 'started_at', 'ended_at', 'is_nsfw', 'original_title', 'title', 'created_at', 'update_at'],
-                'filterableAttributes'=> ['id', 'publication_day', 'publication_season', 'publication_time', 'duration', 'started_at', 'ended_at', 'is_nsfw', 'media_type_id', 'original_title', 'source_id', 'status_id', 'title', 'tv_rating_id', 'volume_count', 'chapter_count', 'page_count'],
+                'sortableAttributes'=> ['original_title', 'title', 'duration', 'publication_time', 'publication_day', 'publication_season', 'is_nsfw', 'rank_total', 'started_at', 'ended_at', 'created_at', 'update_at'],
+                'filterableAttributes'=> ['id', 'duration', 'publication_time', 'publication_day', 'publication_season', 'is_nsfw', 'tv_rating_id', 'media_type_id', 'source_id', 'status_id', 'volume_count', 'chapter_count', 'page_count', 'started_at', 'ended_at'],
             ],
             \App\Models\Person::TABLE_NAME => [
                 'searchableAttributes' => ['first_name', 'last_name', 'family_name', 'given_name', 'alternative_names', 'about', 'short_description'],
@@ -184,8 +184,8 @@ return [
             ],
             \App\Models\User::TABLE_NAME => [
                 'searchableAttributes' => ['slug', 'username', 'biography'],
-                'sortableAttributes'=> ['username', 'slug', 'created_at', 'update_at'],
-                'filterableAttributes'=> ['id', 'username', 'slug', 'biography', 'created_at'],
+                'sortableAttributes'=> ['slug', 'username', 'created_at', 'update_at'],
+                'filterableAttributes'=> ['id', 'is_developer', 'is_staff', 'is_early_supporter', 'is_pro', 'is_subscribed', 'subscribed_at', 'created_at'],
             ],
         ],
     ],

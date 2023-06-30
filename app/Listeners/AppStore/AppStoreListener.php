@@ -100,7 +100,7 @@ abstract class AppStoreListener implements HandlesSubscription
      * @param User|null $user
      * @param PurchaseEvent $event
      */
-    public function notifyUserAboutUpdate(?User $user, PurchaseEvent $event)
+    public function notifyUserAboutUpdate(?User $user, PurchaseEvent $event): void
     {
         if (empty($user)) {
             return;

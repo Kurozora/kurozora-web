@@ -7,6 +7,7 @@ use App\Nova\Metrics\NewUsers;
 use App\Nova\Metrics\ProUsers;
 use App\Nova\Metrics\SubscribedUsers;
 use App\Nova\Metrics\UsersPerDay;
+use App\Nova\Metrics\UsersPerPlan;
 use Laravel\Nova\Dashboards\Main as Dashboard;
 
 class UserInsights extends Dashboard
@@ -21,6 +22,7 @@ class UserInsights extends Dashboard
         return [
             NewUsers::make(),
             UsersPerDay::make(),
+            UsersPerPlan::make(),
             ProUsers::make(),
             SubscribedUsers::make(),
             ActivityLogCount::make(),
@@ -42,7 +44,7 @@ class UserInsights extends Dashboard
      *
      * @return string
      */
-    public function uriKey()
+    public function uriKey(): string
     {
         return 'user-insights';
     }

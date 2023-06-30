@@ -215,13 +215,17 @@ class User extends Resource
             Boolean::make('Is Verified')
                 ->help('Indicates whether the user is verified, because it’s notable in animators, voice actors, entertainment studios, or another designated category.'),
 
-            Date::make('Last Anime Import date', 'last_anime_import_at')
-                ->help('The date at which the user last imported an anime export file. The cooldown is <strong>' . config('import.cooldown_in_days') . '</strong> day(s).')
-                ->hideFromIndex(),
+            Date::make('Subscribed At')
+                ->hideFromIndex()
+                ->help('The date time the user subscribed at.'),
 
-            Date::make('Last Manga Import date', 'last_manga_import_at')
-                ->help('The date at which the user last imported a manga export file. The cooldown is <strong>' . config('import.cooldown_in_days') . '</strong> day(s).')
-                ->hideFromIndex(),
+            Date::make('Anime Imported At', 'anime_import_at')
+                ->hideFromIndex()
+                ->help('The date at which the user last imported an anime export file. The cooldown is <strong>' . config('import.cooldown_in_days') . '</strong> day(s).'),
+
+            Date::make('Manga Imported At', 'manga_import_at')
+                ->hideFromIndex()
+                ->help('The date at which the user last imported a manga export file. The cooldown is <strong>' . config('import.cooldown_in_days') . '</strong> day(s).'),
 
             // Roles and permissions
             RoleBooleanGroup::make('Roles')

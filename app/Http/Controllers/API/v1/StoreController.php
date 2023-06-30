@@ -89,11 +89,18 @@ class StoreController extends Controller
             ]);
         }
 
-        $user = $userReceipt->user;
-        $user?->update([
+        // Update user
+        $updateUserAttributes = [
             'is_pro'        => $isSubscriptionValid,
             'is_subscribed' => $isSubscriptionValid
-        ]);
+        ];
+
+        if (!empty($purchaseDate)) {
+            $updateUserAttributes['subscribed_at'] = $purchaseDate->toDateTime();
+        }
+
+        $user = $userReceipt->user;
+        $user?->update($updateUserAttributes);
 
         return JSONResult::success([
             'data' => [

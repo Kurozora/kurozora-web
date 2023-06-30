@@ -4,7 +4,6 @@ namespace App\Listeners\AppStore;
 
 use App\Models\UserReceipt;
 use Imdhemy\AppStore\ServerNotifications\V2DecodedPayload;
-use Imdhemy\AppStore\ValueObjects\JwsRenewalInfo;
 
 class OfferRedeemed extends AppStoreListener
 {
@@ -80,10 +79,16 @@ class OfferRedeemed extends AppStoreListener
         }
 
         // Update user values.
-        $user = $userReceipt->user;
-        $user?->update([
+        $updateUserAttributes = [
             'is_subscribed' => $isSubscriptionValid
-        ]);
+        ];
+
+        if (!empty($purchaseDate)) {
+            $updateUserAttributes['subscribed_at'] = $purchaseDate->toDateTime();
+        }
+
+        $user = $userReceipt->user;
+        $user?->update($updateUserAttributes);
 
         // Notify the user about the subscription update.
         $this->notifyUserAboutUpdate($user, $event);

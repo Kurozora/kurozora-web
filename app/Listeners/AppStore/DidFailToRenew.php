@@ -3,7 +3,6 @@
 namespace App\Listeners\AppStore;
 
 use Imdhemy\AppStore\ServerNotifications\V2DecodedPayload;
-use Imdhemy\AppStore\ValueObjects\JwsRenewalInfo;
 
 class DidFailToRenew extends AppStoreListener
 {
@@ -12,7 +11,7 @@ class DidFailToRenew extends AppStoreListener
      *
      * @param \Imdhemy\Purchases\Events\AppStore\DidFailToRenew $event
      */
-    public function handle($event)
+    public function handle($event): void
     {
         // Retrieve the necessary data from the event
         $notification = $event->getServerNotification();

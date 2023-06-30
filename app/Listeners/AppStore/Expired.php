@@ -11,7 +11,7 @@ class Expired extends AppStoreListener
      *
      * @param \Imdhemy\Purchases\Events\AppStore\Expired $event
      */
-    public function handle($event)
+    public function handle($event): void
     {
         // Retrieve the necessary data from the event
         $notification = $event->getServerNotification();
