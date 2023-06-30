@@ -120,8 +120,8 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      * @var array
      */
     protected $casts = [
-        'last_anime_import_at' => 'datetime',
-        'last_manga_import_at' => 'datetime',
+        'anime_imported_at' => 'datetime',
+        'manga_imported_at' => 'datetime',
         'is_pro' => 'bool',
         'is_subscribed' => 'bool',
         'is_verified' => 'bool',
@@ -237,6 +237,15 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
             'slug' => $this->slug,
             'username' => $this->username,
             'biography' => $this->biography,
+            'is_developer' => $this->is_developer,
+            'is_staff' => $this->is_staff,
+            'is_early_supporter' => $this->is_early_supporter,
+            'is_pro' => $this->is_pro,
+            'is_subscribed' => $this->is_subscribed,
+            'is_verified' => $this->is_verified,
+            'subscribed_at' => $this->subscribed_at?->timestamp,
+            'anime_imported_at' => $this->anime_imported_at?->timestamp,
+            'manga_imported_at' => $this->manga_imported_at?->timestamp,
             'created_at' => $this->created_at?->timestamp,
             'updated_at' => $this->updated_at?->timestamp,
         ];
@@ -657,11 +666,11 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      */
     function canDoAnimeImport(): bool
     {
-        if (!$this->last_anime_import_at) {
+        if (!$this->anime_imported_at) {
             return true;
         }
 
-        if ($this->last_anime_import_at > now()->subDays(config('import.cooldown_in_days'))) {
+        if ($this->anime_imported_at > now()->subDays(config('import.cooldown_in_days'))) {
             return false;
         }
 
@@ -675,11 +684,11 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      */
     function canDoMangaImport(): bool
     {
-        if (!$this->last_manga_import_at) {
+        if (!$this->manga_imported_at) {
             return true;
         }
 
-        if ($this->last_manga_import_at > now()->subDays(config('import.cooldown_in_days'))) {
+        if ($this->manga_imported_at > now()->subDays(config('import.cooldown_in_days'))) {
             return false;
         }
 

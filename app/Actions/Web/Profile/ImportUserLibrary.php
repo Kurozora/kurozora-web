@@ -46,8 +46,8 @@ class ImportUserLibrary implements ImportsUserLibrary
         if ($isInImportCooldown) {
             $cooldownDays = config('import.cooldown_in_days');
             $lastImportDate = match ($libraryKind->value) {
-                UserLibraryKind::Manga => $user->last_manga_import_at,
-                default => $user->last_anime_import_at
+                UserLibraryKind::Manga => $user->manga_imported_at,
+                default => $user->anime_imported_at
             };
 
             $errorMessage = match ($libraryKind->value) {
@@ -82,8 +82,8 @@ class ImportUserLibrary implements ImportsUserLibrary
 
         // Update last library import date for user
         $lastImportDateKey = match ($libraryKind->value) {
-            UserLibraryKind::Manga => 'last_manga_import_at',
-            default => 'last_anime_import_at'
+            UserLibraryKind::Manga => 'manga_imported_at',
+            default => 'anime_imported_at'
         };
 
         $user->update([

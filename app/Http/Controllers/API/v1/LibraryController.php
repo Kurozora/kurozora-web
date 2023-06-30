@@ -256,8 +256,8 @@ class LibraryController extends Controller
 
         // Update last library import date for user
         $lastImportDateKey = match ($libraryKind->value) {
-            UserLibraryKind::Manga => 'last_manga_import_at',
-            default => 'last_anime_import_at',
+            UserLibraryKind::Manga => 'manga_imported_at',
+            default => 'anime_imported_at',
         };
 
         $user->update([
