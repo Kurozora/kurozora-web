@@ -107,11 +107,22 @@
                     title="{{ __('This account is an early supporter of Kurozora.') }}"
                     x-on:click="updateTooltip($el)"
                 >
-                    @svg('badges-rocket_circle_variable', 'text-sky-500 fill-current', ['width' => '100%'])
+                    @svg('badges-bird_triangle_variable', 'text-sky-500 fill-current', ['width' => '100%'])
                 </span>
             @endif
 
-            @if ($user->is_pro || $user->is_subscribed)
+            @if ($user->is_pro)
+                <span
+                    class="block cursor-pointer"
+                    style="min-width: 18px; max-width: 18px;"
+                    title="{{ __('This account is a Pro user.') }}"
+                    x-on:click="updateTooltip($el)"
+                >
+                    @svg('badges-rocket_circle_variable', 'text-violet-500 fill-current', ['width' => '100%'])
+                </span>
+            @endif
+
+            @if ($user->is_subscribed)
                 <span
                     class="block cursor-pointer"
                     style="min-width: 18px; max-width: 18px;"
