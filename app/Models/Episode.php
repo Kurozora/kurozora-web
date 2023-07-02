@@ -6,6 +6,7 @@ use App\Enums\MediaCollection;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\Actionable;
 use App\Traits\Model\HasComments;
+use App\Traits\Model\HasMediaStat;
 use App\Traits\Model\HasVideos;
 use App\Traits\Model\HasViews;
 use App\Traits\Model\TvRated;
@@ -31,6 +32,7 @@ class Episode extends KModel implements HasMedia, Sitemapable
 {
     use Actionable,
         HasComments,
+        HasMediaStat,
         HasFactory,
         HasVideos,
         HasViews,
@@ -71,8 +73,11 @@ class Episode extends KModel implements HasMedia, Sitemapable
     protected $with = [
         'anime',
         'season',
+        'media',
+        'mediaStat',
         'translations',
         'tv_rating',
+        'videos',
     ];
 
     /**

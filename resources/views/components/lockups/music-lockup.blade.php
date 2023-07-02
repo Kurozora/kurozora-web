@@ -62,8 +62,9 @@
         </x-picture>
     </div>
 
-    <div class="relative mt-4">
-        <div class="flex flex-col justify-between">
+    <div class="relative flex flex-grow mt-2">
+        <div class="flex flex-col w-full gap-2 justify-between">
+            <div>
             @if ($isRanked)
                 <p class="text-sm leading-tight font-semibold">#{{ $rank }}</p>
             @endif
@@ -82,6 +83,7 @@
             @if (!empty($episodes) && $showEpisodes)
                 <p class="text-sm text-black/60 line-clamp-2">{{ __('Episodes: :x', ['x' => $episodes]) }}</p>
             @endif
+            </div>
         </div>
     </div>
 </div>

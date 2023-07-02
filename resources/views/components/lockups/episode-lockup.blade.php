@@ -4,7 +4,7 @@
     $class = $isRow ? 'pb-2 shrink-0' : '';
 @endphp
 
-<div {{ $attributes->merge(['class' => 'relative flex-grow w-64 md:w-80 ' . $class]) }}>
+<div {{ $attributes->merge(['class' => 'relative flex flex-col flex-grow w-64 md:w-80 ' . $class]) }}>
     <div class="flex flex-nowrap">
         <picture class="relative w-full aspect-video rounded-lg overflow-hidden">
             <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $episode->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? asset('images/static/placeholders/episode_banner.webp') }}" alt="{{ $episode->title }} Banner" title="{{ $episode->title }}">
@@ -15,21 +15,23 @@
 
     <a class="absolute bottom-0 w-full h-full" href="{{ route('episodes.details', $episode) }}"></a>
 
-    <div class="relative mt-2">
+    <div class="relative flex flex-grow mt-2">
         <div class="flex flex-col w-full gap-2 justify-between">
             <div>
-                @if ($isRanked)
-                    <p class="text-sm leading-tight font-semibold">#{{ $rank }}</p>
-                @endif
+                <a href="{{ route('episodes.details', $episode) }}">
+                    @if ($isRanked)
+                        <p class="text-sm font-semibold">#{{ $rank }}</p>
+                    @endif
 
-                <p class="text-xs leading-tight line-clamp-2">{{ __('S:x · E:y', ['x' => $episode->season->number, 'y' => $episode->number_total]) }}</p>
+                    <p class="text-xs line-clamp-2">{{ __('S:x · E:y', ['x' => $episode->season->number, 'y' => $episode->number_total]) }}</p>
 
-                <p class="leading-tight line-clamp-2">{{ $episode->title }}</p>
+                    <p class="line-clamp-2">{{ $episode->title }}</p>
+                </a>
 
-                <div class="flex text-xs leading-tight font-semibold">
-                    <a class="text-xs text-orange-500 leading-tight line-clamp-2" href="{{ route('anime.details', $episode->season->anime) }}">{{ $episode->season->anime->title }}</a>
-                    &nbsp;
-                    <p class="line-clamp-2"> · {{ __(':x views', ['x' => number_format($episode->view_count)]) . ' · ' . $episode->started_at?->toFormattedDateString() }}</p>
+                <div class="mt-1">
+                    <a class="text-xs text-orange-500 font-semibold line-clamp-2" href="{{ route('anime.details', $episode->season->anime) }}">{{ $episode->season->anime->title }}</a>
+
+                    <p class="text-xs line-clamp-2" title="{{ $episode->started_at?->format('F d, Y H:i:s') }}">{{ __(':x views', ['x' => number_format($episode->view_count)]) . ' · ' . $episode->started_at?->toFormattedDateString() }}</p>
                 </div>
             </div>
 

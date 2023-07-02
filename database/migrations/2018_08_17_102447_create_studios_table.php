@@ -27,6 +27,7 @@ return new class extends Migration
             $table->date('founded')->nullable();
             $table->json('website_urls')->nullable();
             $table->boolean('is_nsfw')->default(false);
+            $table->unsignedBigInteger('rank_total')->default(0);
             $table->integer('view_count')->default(0);
             $table->timestamps();
             $table->softDeletes();
@@ -34,6 +35,7 @@ return new class extends Migration
 
         Schema::table(Studio::TABLE_NAME, function (Blueprint $table) {
             // Set index key constraints
+            $table->index('rank_total');
             $table->index('deleted_at');
 
             // Set unique key constraints

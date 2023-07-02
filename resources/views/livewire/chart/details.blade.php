@@ -34,6 +34,9 @@
                 @case(App\Enums\ChartKind::Anime)
                     <x-rows.small-lockup :animes="$this->chart" :page="$page" :per-page="$perPage" :is-ranked="true" :is-row="false" />
                 @break
+                @case(App\Enums\ChartKind::Characters)
+                    <x-rows.character-lockup :characters="$this->chart" :page="$page" :per-page="$perPage" :is-ranked="true" :is-row="false" />
+                @break
                 @case(App\Enums\ChartKind::Episodes)
                     <x-rows.episode-lockup :episodes="$this->chart" :page="$page" :per-page="$perPage" :is-ranked="true" :is-row="false" />
                 @break
@@ -43,8 +46,14 @@
                 @case(App\Enums\ChartKind::Manga)
                     <x-rows.small-lockup :mangas="$this->chart" :page="$page" :per-page="$perPage" :is-ranked="true" :is-row="false" />
                 @break
+                @case(App\Enums\ChartKind::People)
+                    <x-rows.person-lockup :people="$this->chart" :page="$page" :per-page="$perPage" :is-ranked="true" :is-row="false" />
+                @break
                 @case(App\Enums\ChartKind::Songs)
                     <x-rows.music-lockup :songs="$this->chart" :page="$page" :per-page="$perPage" :is-ranked="true" :is-row="false" />
+                @break
+                @case(App\Enums\ChartKind::Studios)
+                    <x-rows.studio-lockup :studios="$this->chart" :page="$page" :per-page="$perPage" :is-ranked="true" :is-row="false" />
                 @break
             @endswitch
         </section>

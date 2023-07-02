@@ -4,10 +4,13 @@ namespace App\Http\Livewire\Components\Chart;
 
 use App\Enums\ChartKind;
 use App\Models\Anime;
+use App\Models\Character;
 use App\Models\Episode;
 use App\Models\Game;
 use App\Models\Manga;
+use App\Models\Person;
 use App\Models\Song;
+use App\Models\Studio;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -58,28 +61,20 @@ class Section extends Component
      */
     public function getChartProperty(): ?LengthAwarePaginator
     {
-        return match ($this->chartKind) {
-            ChartKind::Anime => Anime::orderBy('rank_total')
-                ->where('rank_total', '!=', 0)
-                ->limit(10)
-                ->paginate(),
-            ChartKind::Episodes => Episode::orderBy('rank_total')
-                ->where('rank_total', '!=', 0)
-                ->limit(10)
-                ->paginate(),
-            ChartKind::Games => Game::orderBy('rank_total')
-                ->where('rank_total', '!=', 0)
-                ->limit(10)
-                ->paginate(),
-            ChartKind::Manga => Manga::orderBy('rank_total')
-                ->where('rank_total', '!=', 0)
-                ->limit(10)
-                ->paginate(),
-            ChartKind::Songs => Song::orderBy('rank_total')
-                ->where('rank_total', '!=', 0)
-                ->limit(10)
-                ->paginate(),
+        $model = match ($this->chartKind) {
+            ChartKind::Anime => Anime::class,
+            ChartKind::Characters => Character::class,
+            ChartKind::Episodes => Episode::class,
+            ChartKind::Games => Game::class,
+            ChartKind::Manga => Manga::class,
+            ChartKind::People => Person::class,
+            ChartKind::Songs => Song::class,
+            ChartKind::Studios => Studio::class
         };
+
+        return $model::orderBy('rank_total')
+            ->where('rank_total', '!=', 0)
+            ->paginate();
     }
 
     /**

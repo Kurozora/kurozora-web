@@ -1,10 +1,10 @@
-@props(['studio', 'isRow' => true])
+@props(['studio', 'rank', 'isRanked' => false, 'isRow' => true])
 
 @php
     $class = $isRow ? 'pb-2 shrink-0' : '';
 @endphp
 
-<div {{ $attributes->merge(['class' => 'relative flex-grow w-64 md:w-80 ' . $class]) }}>
+<div {{ $attributes->merge(['class' => 'relative flex flex-col flex-grow w-64 md:w-80 ' . $class]) }}>
     <div class="flex flex-nowrap">
         <picture class="relative w-full aspect-video rounded-lg overflow-hidden">
             <img class="w-full h-full object-cover lazyload"
@@ -40,10 +40,19 @@
 
     <a class="absolute bottom-0 w-full h-full" href="{{ route('studios.details', $studio) }}"></a>
 
-    <div class="mt-1">
-        <p class="font-semibold">{{ $studio->name }}</p>
-        @if (!empty($studio->founded))
-            <p class="text-sm">{{ __('Founded on :x', ['x' => $studio->founded->toFormattedDateString()]) }}</p>
-        @endif
+    <div class="relative flex flex-grow mt-2">
+        <div class="flex flex-col w-full gap-2 justify-between">
+            <div>
+                @if ($isRanked)
+                    <p class="text-sm font-semibold">#{{ $rank }}</p>
+                @endif
+
+                <p class="line-clamp-2">{{ $studio->name }}</p>
+
+                @if (!empty($studio->founded))
+                    <p class="text-sm">{{ __('Founded on :x', ['x' => $studio->founded->toFormattedDateString()]) }}</p>
+                @endif
+            </div>
+        </div>
     </div>
 </div>

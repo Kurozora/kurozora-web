@@ -6,6 +6,7 @@ use App\Casts\AsArrayObject;
 use App\Enums\MediaCollection;
 use App\Enums\StudioType;
 use App\Traits\InteractsWithMediaExtension;
+use App\Traits\Model\HasMediaStat;
 use App\Traits\Model\HasViews;
 use App\Traits\Model\TvRated;
 use App\Traits\SearchFilterable;
@@ -29,6 +30,7 @@ class Studio extends KModel implements HasMedia, Sitemapable
     use HasFactory,
         HasSlug,
         HasViews,
+        HasMediaStat,
         InteractsWithMedia,
         InteractsWithMediaExtension,
         Searchable,
@@ -42,6 +44,8 @@ class Studio extends KModel implements HasMedia, Sitemapable
     // How long to cache certain responses
     const CACHE_KEY_ANIME_SECONDS = 60 * 60 * 2;
     const CACHE_KEY_MANGA_SECONDS = 60 * 60 * 2;
+    const CACHE_KEY_GAME_SECONDS = 60 * 60 * 2;
+    const CACHE_KEY_STATS_SECONDS = 60 * 60 * 2;
 
     // Table name
     const TABLE_NAME = 'studios';
@@ -293,8 +297,24 @@ class Studio extends KModel implements HasMedia, Sitemapable
         $cacheKey = self::cacheKey(['name' => 'studios.games', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit, 'page' => $page, 'where' => $where]);
 
         // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_MANGA_SECONDS, function () use ($limit, $where) {
+        return Cache::remember($cacheKey, self::CACHE_KEY_GAME_SECONDS, function () use ($limit, $where) {
             return $this->games()->where($where)->paginate($limit);
+        });
+    }
+
+    /**
+     * Returns the media stat.
+     *
+     * @return mixed
+     */
+    public function getMediaStat(): mixed
+    {
+        // Find location of cached data
+        $cacheKey = self::cacheKey(['name' => 'studio.media-stat', 'id' => $this->id]);
+
+        // Retrieve or save cached result
+        return Cache::remember($cacheKey, self::CACHE_KEY_STATS_SECONDS, function () {
+            return $this->mediaStat;
         });
     }
 

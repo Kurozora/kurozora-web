@@ -22,6 +22,9 @@
                 @case(App\Enums\ChartKind::Anime)
                     <x-rows.small-lockup :animes="$this->chart" :is-ranked="true" :is-row="true" />
                     @break
+                @case(App\Enums\ChartKind::Characters)
+                    <x-rows.character-lockup :characters="$this->chart" :is-ranked="true" :is-row="true" />
+                    @break
                 @case(App\Enums\ChartKind::Episodes)
                     <x-rows.episode-lockup :episodes="$this->chart" :is-ranked="true" :is-row="true" />
                     @break
@@ -31,8 +34,14 @@
                 @case(App\Enums\ChartKind::Manga)
                     <x-rows.small-lockup :mangas="$this->chart" :is-ranked="true" :is-row="true" />
                     @break
+                @case(App\Enums\ChartKind::People)
+                    <x-rows.person-lockup :people="$this->chart" :is-ranked="true" :is-row="true" />
+                    @break
                 @case(App\Enums\ChartKind::Songs)
                     <x-rows.music-lockup :songs="$this->chart" :is-ranked="true" :is-row="true" />
+                    @break
+                @case(App\Enums\ChartKind::Studios)
+                    <x-rows.studio-lockup :studios="$this->chart" :is-ranked="true" :is-row="true" />
                     @break
             @endswitch
         </div>

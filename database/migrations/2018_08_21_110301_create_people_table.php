@@ -27,15 +27,17 @@ return new class extends Migration
             $table->string('short_description')->nullable();
             $table->unsignedTinyInteger('astrological_sign')->nullable();
             $table->json('website_urls')->nullable();
-            $table->integer('view_count')->default(0);
             $table->date('birthdate')->nullable();
             $table->date('deceased_date')->nullable();
+            $table->unsignedBigInteger('rank_total')->default(0);
+            $table->integer('view_count')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });
 
         Schema::table(Person::TABLE_NAME, function (Blueprint $table) {
             // Set index key constraints
+            $table->index('rank_total');
             $table->index('birthdate');
             $table->index('deleted_at');
 
