@@ -122,6 +122,10 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     protected $casts = [
         'anime_imported_at' => 'datetime',
         'manga_imported_at' => 'datetime',
+        'subscribed_at' => 'datetime',
+        'is_developer' => 'bool',
+        'is_early_supporter' => 'bool',
+        'is_staff' => 'bool',
         'is_pro' => 'bool',
         'is_subscribed' => 'bool',
         'is_verified' => 'bool',
