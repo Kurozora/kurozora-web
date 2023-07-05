@@ -1,6 +1,6 @@
 @props(['title', 'information' => null, 'footer' => null, 'icon' => null])
 
-<div {{ $attributes->merge(['class' => 'flex flex-col justify-between pt-4 pr-4 pb-4 pl-4 min-h-[150px] bg-gray-500 bg-opacity-20 rounded-lg']) }}>
+<div {{ $attributes->merge(['class' => 'flex flex-col justify-between pt-4 pr-4 pb-4 pl-4 min-h-[150px] bg-gray-100 rounded-lg']) }}>
     <div>
         <div class="flex flex-wrap w-full">
             @if(!empty($icon))
