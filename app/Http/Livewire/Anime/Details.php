@@ -4,10 +4,12 @@ namespace App\Http\Livewire\Anime;
 
 use App\Events\AnimeViewed;
 use App\Models\Anime;
+use App\Models\MediaRating;
 use App\Models\Studio;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Model;
 use Livewire\Component;
 
 class Details extends Component
@@ -34,15 +36,6 @@ class Details extends Component
     public bool $isReminded = false;
 
     /**
-     * The component's listeners.
-     *
-     * @var array
-     */
-    protected $listeners = [
-        'update-anime' => 'updateAnimeHandler'
-    ];
-
-    /**
      * Whether the user is tracking the anime.
      *
      * @var bool $isTracking
@@ -57,11 +50,25 @@ class Details extends Component
     public bool $showVideo = false;
 
     /**
+     * Whether to show the review box to the user.
+     *
+     * @var bool $showReviewBox
+     */
+    public bool $showReviewBox = false;
+
+    /**
      * Whether to show the popup to the user.
      *
      * @var bool $showPopup
      */
     public bool $showPopup = false;
+
+    /**
+     * The written review text.
+     *
+     * @var string|null $reviewText
+     */
+    public ?string $reviewText;
 
     /**
      * The data used to populate the popup.
@@ -71,6 +78,15 @@ class Details extends Component
     public array $popupData = [
         'title' => '',
         'message' => '',
+    ];
+
+    /**
+     * The component's listeners.
+     *
+     * @var array
+     */
+    protected $listeners = [
+        'update-anime' => 'updateAnimeHandler'
     ];
 
     /**
@@ -116,6 +132,16 @@ class Details extends Component
     public function showVideo(): void
     {
         $this->showVideo = true;
+        $this->showPopup = true;
+    }
+
+    /**
+     * Shows the review text box to the user.
+     */
+    public function showReviewBox(): void
+    {
+        $this->reviewText = $this->userRating->description;
+        $this->showReviewBox = true;
         $this->showPopup = true;
     }
 
@@ -170,6 +196,20 @@ class Details extends Component
     }
 
     /**
+     * Submits the written review.
+     *
+     * @return void
+     */
+    public function submitReview(): void
+    {
+        $this->userRating->update([
+            'description' => $this->reviewText
+        ]);
+        $this->showReviewBox = false;
+        $this->showPopup = false;
+    }
+
+    /**
      * Returns the studio relationship of the anime.
      *
      * @return Studio|null
@@ -177,6 +217,16 @@ class Details extends Component
     public function getStudioProperty(): ?Studio
     {
         return $this->anime->studios()?->firstWhere('is_studio', '=', true) ?? $this->anime->studios->first();
+    }
+
+    /**
+     * Returns the user rating.
+     *
+     * @return MediaRating|Model|null
+     */
+    public function getUserRatingProperty(): MediaRating|Model|null
+    {
+        return $this->anime->mediaRatings()->firstWhere('user_id', auth()->user()->id);
     }
 
     /**
