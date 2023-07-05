@@ -17,7 +17,7 @@
     <div class="flex flex-col items-baseline w-full overflow-hidden">
         <div class="flex gap-2 justify-between w-full">
             <div class="flex gap-1 overflow-hidden">
-                <x-simple-link class="text-sm font-semibold text-gray-500 whitespace-nowrap overflow-hidden" href="{{ route('profile.details', $feedMessage->user) }}">{{ $feedMessage->user->username }}</x-simple-link>
+                <a class="inline-flex items-center text-sm font-semibold whitespace-nowrap overflow-hidden" href="{{ route('profile.details', $feedMessage->user) }}">{{ $feedMessage->user->username }}</a>
 
                 <livewire:components.user.badge-shelf :user="$feedMessage->user" />
             </div>
