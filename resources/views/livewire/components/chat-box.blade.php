@@ -40,7 +40,7 @@
                             {{ __('Display') }}
                         </div>
 
-                        <div class="block flex flex-col pl-4 pr-4 pt-2 pb-2">
+                        <div class="flex flex-col pl-4 pr-4 pt-2 pb-2">
                             @foreach([__('Cozy'), __('Compact')] as $optionKey => $option)
                                 <x-radio value="{{ $optionKey }}" name="selectedCommentDisplayOption" wire:model="selectedCommentDisplayOption">
                                     {{ $option }}
@@ -64,7 +64,7 @@
     </div>
 
     {{-- Body --}}
-    <div class="flex flex-col flex-col-reverse gap-2 pt-2 pb-2 h-full overflow-scroll z-10">
+    <div class="flex flex-col-reverse gap-2 pt-2 pb-2 h-full overflow-scroll z-10">
         @if ($this->comments->count())
             @foreach($this->comments as $comment)
                 @if ($selectedCommentDisplayOption === 0)
