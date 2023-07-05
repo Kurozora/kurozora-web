@@ -103,7 +103,7 @@ class ChatBox extends Component
         $this->validate();
 
         // Save
-        $this->model->comment(e($this->comment));
+        $this->model->comment(strip_tags($this->comment));
 
         // Reset
         $this->comment = '';
