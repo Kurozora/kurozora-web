@@ -67,7 +67,7 @@ class EpisodeResource extends JsonResource
         $anime = $this->resource->anime;
 
         // Get the user rating for this episode
-        $givenRating = $this->resource->ratings()
+        $givenRating = $this->resource->mediaRatings()
             ->firstWhere('user_id', $user->id);
 
         // Get watch status

@@ -85,7 +85,7 @@ class LiteratureResourceBasic extends JsonResource
         $user = auth()->user();
 
         // Get the user rating for this Manga
-        $givenRating = $this->resource->ratings()
+        $givenRating = $this->resource->mediaRatings()
             ->firstWhere('user_id', $user->id);
 
         // Get the current library status
