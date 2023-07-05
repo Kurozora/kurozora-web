@@ -77,7 +77,7 @@
             </section>
         @endauth
 
-        <x-rows.rating-lockup :ratings="$this->mediaRatings" :is-row="false" />
+        <x-rows.review-lockup :reviews="$this->mediaRatings" :is-row="false" />
 
         <section class="mt-4">
             {{ $this->mediaRatings->links() }}

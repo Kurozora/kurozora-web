@@ -203,7 +203,7 @@ class Details extends Component
     public function submitReview(): void
     {
         $this->userRating->update([
-            'description' => $this->reviewText
+            'description' => e($this->reviewText)
         ]);
         $this->showReviewBox = false;
         $this->showPopup = false;

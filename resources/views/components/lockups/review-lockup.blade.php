@@ -1,4 +1,4 @@
-@props(['rating', 'isRow' => true])
+@props(['review', 'isRow' => true])
 
 @php
     $class = $isRow ? 'pb-2 shrink-0 snap-normal snap-center' : '';
@@ -8,27 +8,27 @@
     <div
         class="relative flex flex-row gap-2 pr-2 pl-2 pt-2 pb-2 h-full bg-gray-100 rounded-xl"
         x-data="{}"
-        wire:key="{{ uniqid($rating->id, true) }}"
+        wire:key="{{ uniqid($review->id, true) }}"
     >
-        <x-profile-image-view class="w-16 h-16" :user="$rating->user" />
+        <x-profile-image-view class="w-16 h-16" :user="$review->user" />
 
         <div class="flex flex-col items-baseline w-full overflow-hidden">
             <div class="flex gap-2 justify-between w-full">
                 <div class="flex gap-1 overflow-hidden">
-                    <a class="inline-flex items-center text-sm font-semibold whitespace-nowrap overflow-hidden" href="{{ route('profile.details', $rating->user) }}">{{ $rating->user->username }}</a>
+                    <a class="inline-flex items-center text-sm font-semibold whitespace-nowrap overflow-hidden" href="{{ route('profile.details', $review->user) }}">{{ $review->user->username }}</a>
 
-                    <livewire:components.user.badge-shelf :user="$rating->user" wire:key="{{ uniqid('badges-', true) }}" />
+                    <livewire:components.user.badge-shelf :user="$review->user" wire:key="{{ uniqid('badges-', true) }}" />
                 </div>
 
-                <p class="text-sm text-gray-500 whitespace-nowrap" title="{{ $rating->created_at->toFormattedDateString() }}">{{ $rating->created_at->toFormattedDateString() }}</p>
+                <p class="text-sm text-gray-500 whitespace-nowrap" title="{{ $review->created_at->toFormattedDateString() }}">{{ $review->created_at->toFormattedDateString() }}</p>
             </div>
 
             <div>
-                <livewire:anime.star-rating :rating="$rating->rating" :star-size="'sm'" :disabled="true" wire:key="{{ uniqid('rating-', true) }}" />
+                <livewire:anime.star-rating :rating="$review->rating" :star-size="'sm'" :disabled="true" wire:key="{{ uniqid('rating-', true) }}" />
             </div>
 
             <div class="mt-2 w-full">
-                <p class="line-clamp-5" style="word-break: break-word;">{!! nl2br($rating->description) !!}</p>
+                <p class="line-clamp-5" style="word-break: break-word;">{!! nl2br(e($review->description)) !!}</p>
             </div>
 
 {{--            <div class="flex gap-2 justify-between w-full">--}}

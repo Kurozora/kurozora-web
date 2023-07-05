@@ -109,6 +109,20 @@ class Reviews extends Component
     }
 
     /**
+     * Submits the written review.
+     *
+     * @return void
+     */
+    public function submitReview(): void
+    {
+        $this->userRating->update([
+            'description' => e($this->reviewText)
+        ]);
+        $this->showReviewBox = false;
+        $this->showPopup = false;
+    }
+
+    /**
      * Render the component.
      *
      * @return Application|Factory|View

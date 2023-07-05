@@ -3,5 +3,5 @@
         <x-spinner />
     </div>
 
-    <x-rows.rating-lockup :ratings="$this->reviews" />
+    <x-rows.review-lockup :reviews="$this->reviews" />
 </div>
