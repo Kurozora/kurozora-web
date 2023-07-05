@@ -4,10 +4,14 @@ namespace App\Http\Livewire\Manga;
 
 use App\Events\MangaViewed;
 use App\Models\Manga;
+use App\Models\MediaRating;
 use App\Models\Studio;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Routing\Redirector;
 use Livewire\Component;
 
 class Details extends Component
@@ -34,20 +38,18 @@ class Details extends Component
     public bool $isReminded = false;
 
     /**
-     * The component's listeners.
-     *
-     * @var array
-     */
-    protected $listeners = [
-        'update-manga' => 'updateMangaHandler'
-    ];
-
-    /**
      * Whether the user is tracking the manga.
      *
      * @var bool $isTracking
      */
     public bool $isTracking = false;
+
+    /**
+     * Whether to show the review box to the user.
+     *
+     * @var bool $showReviewBox
+     */
+    public bool $showReviewBox = false;
 
     /**
      * Whether to show the popup to the user.
@@ -57,6 +59,13 @@ class Details extends Component
     public bool $showPopup = false;
 
     /**
+     * The written review text.
+     *
+     * @var string|null $reviewText
+     */
+    public ?string $reviewText;
+
+    /**
      * The data used to populate the popup.
      *
      * @var array|string[]
@@ -64,6 +73,15 @@ class Details extends Component
     public array $popupData = [
         'title' => '',
         'message' => '',
+    ];
+
+    /**
+     * The component's listeners.
+     *
+     * @var array
+     */
+    protected $listeners = [
+        'update-manga' => 'updateMangaHandler'
     ];
 
     /**
@@ -85,7 +103,7 @@ class Details extends Component
     /**
      * Sets up the actions according to the user's settings.
      */
-    protected function setupActions()
+    protected function setupActions(): void
     {
         $user = auth()->user();
         if (!empty($user)) {
@@ -98,15 +116,32 @@ class Details extends Component
     /**
      * Handles the update manga vent.
      */
-    public function updateMangaHandler()
+    public function updateMangaHandler(): void
     {
         $this->setupActions();
     }
 
     /**
+     * Shows the review text box to the user.
+     *
+     * @return Application|RedirectResponse|Redirector|void
+     */
+    public function showReviewBox()
+    {
+        // Require user to authenticate if necessary.
+        if (!auth()->check()) {
+            return redirect(route('sign-in'));
+        }
+
+        $this->reviewText = $this->userRating->description;
+        $this->showReviewBox = true;
+        $this->showPopup = true;
+    }
+
+    /**
      * Adds the manga to the user's favorite list.
      */
-    public function favoriteManga()
+    public function favoriteManga(): void
     {
         $user = auth()->user();
 
@@ -124,7 +159,7 @@ class Details extends Component
     /**
      * Adds the manga to the user's reminder list.
      */
-    public function remindManga()
+    public function remindManga(): void
     {
         $user = auth()->user();
 
@@ -154,6 +189,20 @@ class Details extends Component
     }
 
     /**
+     * Submits the written review.
+     *
+     * @return void
+     */
+    public function submitReview(): void
+    {
+        $this->userRating->update([
+            'description' => strip_tags($this->reviewText)
+        ]);
+        $this->showReviewBox = false;
+        $this->showPopup = false;
+    }
+
+    /**
      * Returns the studio relationship of the manga.
      *
      * @return Studio|null
@@ -161,6 +210,16 @@ class Details extends Component
     public function getStudioProperty(): ?Studio
     {
         return $this->manga->studios()?->firstWhere('is_studio', '=', true) ?? $this->manga->studios->first();
+    }
+
+    /**
+     * Returns the user rating.
+     *
+     * @return MediaRating|Model|null
+     */
+    public function getUserRatingProperty(): MediaRating|Model|null
+    {
+        return $this->manga->mediaRatings()->firstWhere('user_id', auth()->user()?->id);
     }
 
     /**

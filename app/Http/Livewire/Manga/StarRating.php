@@ -5,6 +5,8 @@ namespace App\Http\Livewire\Manga;
 use App\Models\Manga;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Routing\Redirector;
 use Illuminate\View\View;
 use Livewire\Component;
 
@@ -63,13 +65,13 @@ class StarRating extends Component
     /**
      * Updates the authenticated user's rating of the manga.
      *
-     * @return void
+     * @return Application|RedirectResponse|Redirector|void
      */
-    public function rate(): void
+    public function rate()
     {
         $user = auth()->user();
         if (empty($user)) {
-            return;
+            return redirect(route('sign-in'));
         }
 
         if ($this->rating == -1) {

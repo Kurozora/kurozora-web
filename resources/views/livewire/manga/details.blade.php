@@ -175,7 +175,7 @@
                 @endif
 
                 <div id="rankingBadge" class="flex-grow px-12 border-l-2">
-                    <a class="flex flex-col items-center" href="#genres">
+                    <a class="flex flex-col items-center" href="{{ route('charts.top', App\Enums\ChartKind::Manga) }}">
                         <p class="font-bold">{{ trans_choice('{0} -|[1,*] #:x', $manga->mediaStat->rank_total ?? 0, ['x' => $manga->mediaStat->rank_total]) }}</p>
                         <p class="text-orange-500">
                             @svg('chart_bar_fill', 'fill-current', ['width' => '20'])
@@ -238,6 +238,10 @@
                     <x-slot:title>
                         {{ __('Ratings & Reviews') }}
                     </x-slot:title>
+
+                    <x-slot:action>
+                        <x-section-nav-link class="whitespace-nowrap" href="{{ route('manga.reviews', $manga) }}">{{ __('See All') }}</x-section-nav-link>
+                    </x-slot:action>
                 </x-section-nav>
 
                 <div class="flex flex-row flex-wrap justify-between gap-4">
@@ -260,26 +264,28 @@
                 </div>
             </section>
 
-            @auth
-                <section id="writeAReview" class="pt-5 pb-8 pl-4 pr-4 border-t-2">
-                    <div class="flex flex-row flex-wrap justify-between gap-4">
-                        <div class="flex justify-between items-center">
-                            <p class="">{{ __('Click to Rate:') }}</p>
+            <section id="writeAReview" class="pt-5 pb-8 pl-4 pr-4 border-t-2">
+                <div class="flex flex-row flex-wrap gap-4">
+                    <div class="flex justify-between items-center">
+                        <p class="">{{ __('Click to Rate:') }}</p>
 
-                            <livewire:manga.star-rating :manga="$manga" :rating="$manga->ratings()->firstWhere('user_id', auth()->user()->id)?->rating" :star-size="'md'" />
-                        </div>
-
-                        <div class="flex justify-between">
-                            <a class="flex gap-1" href="#">
-                                @svg('pencil', 'fill-current', ['width' => 18])
-                                {{ __('Write a Review') }}
-                            </a>
-                        </div>
-
-                        <div></div>
+                        <livewire:manga.star-rating :manga="$manga" :rating="$this->userRating?->rating" :star-size="'md'" />
                     </div>
-                </section>
-            @endauth
+
+                    <div class="flex justify-between">
+                        <x-simple-button class="flex gap-1" wire:click="showReviewBox">
+                            @svg('pencil', 'fill-current', ['width' => 18])
+                            {{ __('Write a Review') }}
+                        </x-simple-button>
+                    </div>
+
+                    <div></div>
+                </div>
+
+                <div class="mt-5">
+                    <livewire:components.manga.reviews-section :manga="$manga" />
+                </div>
+            </section>
 
             <section class="pt-5 pb-8 pl-4 pr-4 border-t-2">
                 <x-section-nav>
@@ -447,17 +453,39 @@
             </div>
 
             <x-dialog-modal maxWidth="md" model="showPopup">
-                <x-slot:title>
-                    {{ $popupData['title'] }}
-                </x-slot:title>
+                @if ($showReviewBox)
+                    <x-slot:title>
+                        {{ __('Write a Review') }}
+                    </x-slot:title>
 
-                <x-slot:content>
-                    <p>{{ $popupData['message'] }}</p>
-                </x-slot:content>
+                    <x-slot:content>
+                        <div class="flex flex-col gap-2">
+                            <div class="flex items-center">
+                                <p class="">{{ __('Click to Rate:') }}</p>
 
-                <x-slot:footer>
-                    <x-button wire:click="$toggle('showPopup')">{{ __('Ok') }}</x-button>
-                </x-slot:footer>
+                                <livewire:manga.star-rating :manga="$manga" :rating="$this->userRating?->rating" :star-size="'md'" />
+                            </div>
+
+                            <x-textarea class="block w-full h-48 mt-1 resize-none" placeholder="{{ __('What’s on your mind?') }}" wire:model.defer="reviewText"></x-textarea>
+                        </div>
+                    </x-slot:content>
+
+                    <x-slot:footer>
+                        <x-button wire:click="submitReview">{{ __('Submit') }}</x-button>
+                    </x-slot:footer>
+                @else
+                    <x-slot:title>
+                        {{ $popupData['title'] }}
+                    </x-slot:title>
+
+                    <x-slot:content>
+                        <p>{{ $popupData['message'] }}</p>
+                    </x-slot:content>
+
+                    <x-slot:footer>
+                        <x-button wire:click="$toggle('showPopup')">{{ __('Ok') }}</x-button>
+                    </x-slot:footer>
+                @endif
             </x-dialog-modal>
         </div>
     </div>

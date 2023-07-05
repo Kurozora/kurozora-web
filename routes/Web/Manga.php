@@ -10,6 +10,7 @@ use App\Http\Livewire\Manga\Index as MangaIndex;
 use App\Http\Livewire\Manga\RelatedGames;
 use App\Http\Livewire\Manga\RelatedMangas;
 use App\Http\Livewire\Manga\RelatedShows;
+use App\Http\Livewire\Manga\Reviews as MangaReviews;
 use App\Http\Livewire\Manga\Staff as MangaStaff;
 use App\Http\Livewire\Manga\Studios as MangaStudios;
 
@@ -79,5 +80,8 @@ Route::prefix('/manga')
 
                 Route::get('/related-games', RelatedGames::class)
                     ->name('.related-games');
+
+                Route::get('/reviews', MangaReviews::class)
+                    ->name('.reviews');
             });
     });
