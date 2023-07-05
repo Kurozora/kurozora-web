@@ -6,6 +6,7 @@ use App\Http\Livewire\Anime\Index as AnimeIndex;
 use App\Http\Livewire\Anime\RelatedGames;
 use App\Http\Livewire\Anime\RelatedMangas;
 use App\Http\Livewire\Anime\RelatedShows;
+use App\Http\Livewire\Anime\Reviews as AnimeReviews;
 use App\Http\Livewire\Anime\Songs as AnimeSongs;
 use App\Http\Livewire\Anime\Staff as AnimeStaff;
 use App\Http\Livewire\Anime\Studios as AnimeStudios;
@@ -87,5 +88,8 @@ Route::prefix('/anime')
 
                 Route::get('/related-games', RelatedGames::class)
                     ->name('.related-games');
+
+                Route::get('/reviews', AnimeReviews::class)
+                    ->name('.reviews');
             });
     });

@@ -10,6 +10,7 @@ use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\Actionable;
 use App\Traits\Model\Favorable;
 use App\Traits\Model\HasMediaGenres;
+use App\Traits\Model\HasMediaRatings;
 use App\Traits\Model\HasMediaRelations;
 use App\Traits\Model\HasMediaSongs;
 use App\Traits\Model\HasMediaStaff;
@@ -55,6 +56,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
         HasFactory,
         HasSlug,
         HasMediaGenres,
+        HasMediaRatings,
         HasMediaRelations,
         HasMediaSongs,
         HasMediaStaff,
@@ -399,17 +401,6 @@ class Anime extends KModel implements HasMedia, Sitemapable
         return Cache::remember($cacheKey, self::CACHE_KEY_STUDIOS_SECONDS, function () use ($limit) {
             return $this->studios()->paginate($limit);
         });
-    }
-
-    /**
-     * Get the Anime's ratings
-     *
-     * @return MorphMany
-     */
-    public function ratings(): MorphMany
-    {
-        return $this->morphMany(MediaRating::class, 'model')
-            ->where('model_type', Anime::class);
     }
 
     /**
