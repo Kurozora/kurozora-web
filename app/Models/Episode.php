@@ -6,6 +6,7 @@ use App\Enums\MediaCollection;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\Actionable;
 use App\Traits\Model\HasComments;
+use App\Traits\Model\HasMediaRatings;
 use App\Traits\Model\HasMediaStat;
 use App\Traits\Model\HasVideos;
 use App\Traits\Model\HasViews;
@@ -32,6 +33,7 @@ class Episode extends KModel implements HasMedia, Sitemapable
 {
     use Actionable,
         HasComments,
+        HasMediaRatings,
         HasMediaStat,
         HasFactory,
         HasVideos,
@@ -344,17 +346,6 @@ class Episode extends KModel implements HasMedia, Sitemapable
         return Cache::remember($cacheKey, self::CACHE_KEY_STAT_SECONDS, function () {
             return $this->mediaStat;
         });
-    }
-
-    /**
-     * The media rating relationship of the episode.
-     *
-     * @return MorphMany
-     */
-    function ratings(): MorphMany
-    {
-        return $this->morphMany(MediaRating::class, 'model')
-            ->where('model_type', Episode::class);
     }
 
     /**
