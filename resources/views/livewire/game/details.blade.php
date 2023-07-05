@@ -268,30 +268,28 @@
                 </div>
             </section>
 
-            @auth
-                <section id="writeAReview" class="pt-5 pb-8 pl-4 pr-4 border-t-2">
-                    <div class="flex flex-row flex-wrap gap-4">
-                        <div class="flex justify-between items-center">
-                            <p class="">{{ __('Click to Rate:') }}</p>
+            <section id="writeAReview" class="pt-5 pb-8 pl-4 pr-4 border-t-2">
+                <div class="flex flex-row flex-wrap gap-4">
+                    <div class="flex justify-between items-center">
+                        <p class="">{{ __('Click to Rate:') }}</p>
 
-                            <livewire:game.star-rating :game="$game" :rating="$this->userRating?->rating" :star-size="'md'" />
-                        </div>
-
-                        <div class="flex justify-between">
-                            <x-simple-button class="flex gap-1" wire:click="showReviewBox">
-                                @svg('pencil', 'fill-current', ['width' => 18])
-                                {{ __('Write a Review') }}
-                            </x-simple-button>
-                        </div>
-
-                        <div></div>
+                        <livewire:game.star-rating :game="$game" :rating="$this->userRating?->rating" :star-size="'md'" />
                     </div>
 
-                    <div class="mt-5">
-                        <livewire:components.game.reviews-section :game="$game" />
+                    <div class="flex justify-between">
+                        <x-simple-button class="flex gap-1" wire:click="showReviewBox">
+                            @svg('pencil', 'fill-current', ['width' => 18])
+                            {{ __('Write a Review') }}
+                        </x-simple-button>
                     </div>
-                </section>
-            @endauth
+
+                    <div></div>
+                </div>
+
+                <div class="mt-5">
+                    <livewire:components.game.reviews-section :game="$game" />
+                </div>
+            </section>
 
             <section class="pt-5 pb-8 pl-4 pr-4 border-t-2">
                 <x-section-nav>
