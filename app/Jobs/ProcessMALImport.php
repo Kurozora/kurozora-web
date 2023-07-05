@@ -104,7 +104,7 @@ class ProcessMALImport implements ShouldQueue
     /**
      * Execute the job.
      */
-    public function handle()
+    public function handle(): void
     {
         switch ($this->libraryKind->value) {
             case UserLibraryKind::Anime:
@@ -122,7 +122,7 @@ class ProcessMALImport implements ShouldQueue
     /**
      * Execute the anime job.
      */
-    public function handleAnime()
+    public function handleAnime(): void
     {
         // Wipe current library if behavior is set to overwrite
         if ($this->behavior->value === ImportBehavior::Overwrite) {
@@ -154,7 +154,7 @@ class ProcessMALImport implements ShouldQueue
     /**
      * Execute the manga job.
      */
-    public function handleManga()
+    public function handleManga(): void
     {
         // Wipe current library if behavior is set to overwrite
         if ($this->behavior->value === ImportBehavior::Overwrite) {
@@ -192,7 +192,7 @@ class ProcessMALImport implements ShouldQueue
      * @param string $malStartDate
      * @param string $malEndDate
      */
-    protected function importModel(int $malID, string $malStatus, int $malRating, string $malStartDate, string $malEndDate)
+    protected function importModel(int $malID, string $malStatus, int $malRating, string $malStartDate, string $malEndDate): void
     {
         // Try to find the model in our DB
         $model = match ($this->libraryKind->value) {
@@ -345,7 +345,7 @@ class ProcessMALImport implements ShouldQueue
      * @param string $status
      * @param int $rating
      */
-    protected function registerSuccess(mixed $modelID, int $malID, string $status, int $rating)
+    protected function registerSuccess(mixed $modelID, int $malID, string $status, int $rating): void
     {
         $this->results['successful'][] = [
             'library'   => $this->libraryKind->description,
@@ -362,7 +362,7 @@ class ProcessMALImport implements ShouldQueue
      * @param int $malID
      * @param string $reason
      */
-    protected function registerFailure(int $malID, string $reason)
+    protected function registerFailure(int $malID, string $reason): void
     {
         $this->results['failure'][] = [
             'library'   => $this->libraryKind->description,

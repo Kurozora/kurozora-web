@@ -19,7 +19,7 @@ class TvRatingScope implements Scope
     /**
      * @inheritDoc
      */
-    public function apply(Builder $builder, Model $model)
+    public function apply(Builder $builder, Model $model): void
     {
         if (auth()->check()) {
             $preferredTvRating = auth()->user()->tv_rating;
