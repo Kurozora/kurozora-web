@@ -1,9 +1,8 @@
 @props(['autoresize' => true, 'rounded' => 'full', 'disabled' => false, 'readonly' => false])
 
 <x-textarea
-    {{ $attributes->merge(['class' => 'bg-transparent resize-none']) }}
+    {{ $attributes->merge(['class' => 'bg-transparent resize-none', 'rows' => 1]) }}
     placeholder="{{ __('Add a comment...') }}"
-    rows="1"
     :autoresize="$autoresize"
     :rounded="$rounded"
     :disabled="$disabled"
