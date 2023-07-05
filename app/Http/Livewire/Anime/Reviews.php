@@ -9,7 +9,9 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Routing\Redirector;
 use Livewire\Component;
 
 class Reviews extends Component
@@ -66,9 +68,16 @@ class Reviews extends Component
 
     /**
      * Shows the review text box to the user.
+     *
+     * @return Application|RedirectResponse|Redirector|void
      */
-    public function showReviewBox(): void
+    public function showReviewBox()
     {
+        // Require user to authenticate if necessary.
+        if (!auth()->check()) {
+            return redirect(route('sign-in'));
+        }
+
         $this->reviewText = $this->userRating->description;
         $this->showReviewBox = true;
         $this->showPopup = true;
@@ -105,7 +114,7 @@ class Reviews extends Component
     public function getUserRatingProperty(): MediaRating|Model|null
     {
         return $this->anime->mediaRatings()
-            ->firstWhere('user_id', auth()->user()->id);
+            ->firstWhere('user_id', auth()->user()?->id);
     }
 
     /**
@@ -116,7 +125,7 @@ class Reviews extends Component
     public function submitReview(): void
     {
         $this->userRating->update([
-            'description' => e($this->reviewText)
+            'description' => strip_tags($this->reviewText)
         ]);
         $this->showReviewBox = false;
         $this->showPopup = false;

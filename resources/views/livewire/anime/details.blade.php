@@ -268,30 +268,28 @@
                 </div>
             </section>
 
-            @auth
-                <section id="writeAReview" class="pt-5 pb-8 pl-4 pr-4 border-t-2">
-                    <div class="flex flex-row flex-wrap gap-4">
-                        <div class="flex justify-between items-center">
-                            <p class="">{{ __('Click to Rate:') }}</p>
+            <section id="writeAReview" class="pt-5 pb-8 pl-4 pr-4 border-t-2">
+                <div class="flex flex-row flex-wrap gap-4">
+                    <div class="flex justify-between items-center">
+                        <p class="">{{ __('Click to Rate:') }}</p>
 
-                            <livewire:anime.star-rating :anime="$anime" :rating="$this->userRating?->rating" :star-size="'md'" />
-                        </div>
-
-                        <div class="flex justify-between">
-                            <x-simple-button class="flex gap-1" wire:click="showReviewBox">
-                                @svg('pencil', 'fill-current', ['width' => 18])
-                                {{ __('Write a Review') }}
-                            </x-simple-button>
-                        </div>
-
-                        <div></div>
+                        <livewire:anime.star-rating :anime="$anime" :rating="$this->userRating?->rating" :star-size="'md'" />
                     </div>
 
-                    <div class="mt-5">
-                        <livewire:components.anime.reviews-section :anime="$anime" />
+                    <div class="flex justify-between">
+                        <x-simple-button class="flex gap-1" wire:click="showReviewBox">
+                            @svg('pencil', 'fill-current', ['width' => 18])
+                            {{ __('Write a Review') }}
+                        </x-simple-button>
                     </div>
-                </section>
-            @endauth
+
+                    <div></div>
+                </div>
+
+                <div class="mt-5">
+                    <livewire:components.anime.reviews-section :anime="$anime" />
+                </div>
+            </section>
 
             <section class="pt-5 pb-8 pl-4 pr-4 border-t-2">
                 <x-section-nav>
@@ -434,33 +432,33 @@
                 </div>
             </section>
 
-            <livewire:components.anime-seasons-section :anime="$anime" />
+{{--            <livewire:components.anime-seasons-section :anime="$anime" />--}}
 
-            <livewire:components.anime-cast-section :anime="$anime" />
+{{--            <livewire:components.anime-cast-section :anime="$anime" />--}}
 
-            <livewire:components.anime-staff-section :anime="$anime" />
+{{--            <livewire:components.anime-staff-section :anime="$anime" />--}}
 
-            <livewire:components.anime-songs-section :anime="$anime" />
+{{--            <livewire:components.anime-songs-section :anime="$anime" />--}}
 
-            <livewire:components.anime-studios-section :anime="$anime" />
+{{--            <livewire:components.anime-studios-section :anime="$anime" />--}}
 
-            <div class="bg-orange-50">
-                @if(!empty($this->studio))
-                    <livewire:components.anime-more-by-studio-section :studio="$this->studio" />
-                @endif
+{{--            <div class="bg-orange-50">--}}
+{{--                @if(!empty($this->studio))--}}
+{{--                    <livewire:components.anime-more-by-studio-section :studio="$this->studio" />--}}
+{{--                @endif--}}
 
-                <livewire:components.anime.anime-relations-section :anime="$anime" />
+{{--                <livewire:components.anime.anime-relations-section :anime="$anime" />--}}
 
-                <livewire:components.anime.manga-relations-section :anime="$anime" />
+{{--                <livewire:components.anime.manga-relations-section :anime="$anime" />--}}
 
-                <livewire:components.anime.game-relations-section :anime="$anime" />
+{{--                <livewire:components.anime.game-relations-section :anime="$anime" />--}}
 
-                @if (!empty($anime->copyright))
-                    <section class="pt-4 pr-4 pb-4 pl-4 border-t">
-                        <p class="text-sm text-gray-400">{{ $anime->copyright }}</p>
-                    </section>
-                @endif
-            </div>
+{{--                @if (!empty($anime->copyright))--}}
+{{--                    <section class="pt-4 pr-4 pb-4 pl-4 border-t">--}}
+{{--                        <p class="text-sm text-gray-400">{{ $anime->copyright }}</p>--}}
+{{--                    </section>--}}
+{{--                @endif--}}
+{{--            </div>--}}
 
             <x-dialog-modal maxWidth="md" model="showPopup">
                 @if ($showVideo)

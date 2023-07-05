@@ -56,26 +56,24 @@
             </div>
         </section>
 
-        @auth
-            <section id="writeAReview" class="mb-5 pt-5 border-t-2">
-                <div class="flex flex-row flex-wrap gap-4">
-                    <div class="flex justify-between items-center">
-                        <p class="">{{ __('Click to Rate:') }}</p>
+        <section id="writeAReview" class="mb-5 pt-5 border-t-2">
+            <div class="flex flex-row flex-wrap gap-4">
+                <div class="flex justify-between items-center">
+                    <p class="">{{ __('Click to Rate:') }}</p>
 
-                        <livewire:anime.star-rating :anime="$anime" :rating="$this->userRating?->rating" :star-size="'md'" />
-                    </div>
-
-                    <div class="flex justify-between">
-                        <x-simple-button class="flex gap-1" wire:click="showReviewBox">
-                            @svg('pencil', 'fill-current', ['width' => 18])
-                            {{ __('Write a Review') }}
-                        </x-simple-button>
-                    </div>
-
-                    <div></div>
+                    <livewire:anime.star-rating :anime="$anime" :rating="$this->userRating?->rating" :star-size="'md'" />
                 </div>
-            </section>
-        @endauth
+
+                <div class="flex justify-between">
+                    <x-simple-button class="flex gap-1" wire:click="showReviewBox">
+                        @svg('pencil', 'fill-current', ['width' => 18])
+                        {{ __('Write a Review') }}
+                    </x-simple-button>
+                </div>
+
+                <div></div>
+            </div>
+        </section>
 
         <x-rows.review-lockup :reviews="$this->mediaRatings" :is-row="false" />
 
