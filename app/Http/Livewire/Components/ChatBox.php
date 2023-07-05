@@ -103,7 +103,7 @@ class ChatBox extends Component
         $this->validate();
 
         // Save
-        $this->model->comment($this->comment);
+        $this->model->comment(e($this->comment));
 
         // Reset
         $this->comment = '';
@@ -124,7 +124,7 @@ class ChatBox extends Component
             return;
         }
 
-        $comment->delete();
+        $comment->forceDelete();
     }
 
     /**
