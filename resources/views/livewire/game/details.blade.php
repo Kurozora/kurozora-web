@@ -315,13 +315,13 @@
 
                     <x-information-list id="genres" title="{{ __('Genres') }}" icon="{{ asset('images/symbols/theatermasks.svg') }}">
                         <x-slot:information>
-                            {{ $game->genres?->pluck('name')->join(',  ', ' and ') ?: '-' }}
+                            {{ $game->genres?->pluck('name')->join(', ', ' and ') ?: '-' }}
                         </x-slot:information>
                     </x-information-list>
 
                     <x-information-list id="themes" title="{{ __('Themes') }}" icon="{{ asset('images/symbols/crown.svg') }}">
                         <x-slot:information>
-                            {{ $game->themes?->pluck('name')->join(',  ', ' and ') ?: '-' }}
+                            {{ $game->themes?->pluck('name')->join(', ', ' and ') ?: '-' }}
                         </x-slot:information>
                     </x-information-list>
 
@@ -398,7 +398,7 @@
 
                     <x-information-list id="languages" title="{{ __('Languages') }}" icon="{{ asset('images/symbols/globe.svg') }}">
                         <x-slot:information>
-                            {{ $game->languages->pluck('name')->join(',  ', ' and ') ?: '-' }}
+                            {{ $game->languages->pluck('name')->join(', ', ' and ') ?: '-' }}
                         </x-slot:information>
                     </x-information-list>
                 </div>

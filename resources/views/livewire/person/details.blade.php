@@ -79,7 +79,7 @@
                         @endif
 
                         @if (count(array_filter((array)$person->alternative_names)))
-                            {{ __('Nicknames: :x', ['x' => collect(array_filter((array)$person->alternative_names))->join(',  ', ' and ')]) }} <br />
+                            {{ __('Nicknames: :x', ['x' => collect(array_filter((array)$person->alternative_names))->join(', ', ' and ')]) }} <br />
                         @endif
                     </x-slot:information>
                 </x-information-list>

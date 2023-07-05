@@ -315,13 +315,13 @@
 
                     <x-information-list id="genres" title="{{ __('Genres') }}" icon="{{ asset('images/symbols/theatermasks.svg') }}">
                         <x-slot:information>
-                            {{ $anime->genres?->pluck('name')->join(',  ', ' and ') ?: '-' }}
+                            {{ $anime->genres?->pluck('name')->join(', ', ' and ') ?: '-' }}
                         </x-slot:information>
                     </x-information-list>
 
                     <x-information-list id="themes" title="{{ __('Themes') }}" icon="{{ asset('images/symbols/crown.svg') }}">
                         <x-slot:information>
-                            {{ $anime->themes?->pluck('name')->join(',  ', ' and ') ?: '-' }}
+                            {{ $anime->themes?->pluck('name')->join(', ', ' and ') ?: '-' }}
                         </x-slot:information>
                     </x-information-list>
 
@@ -408,7 +408,7 @@
 
                     <x-information-list id="languages" title="{{ __('Languages') }}" icon="{{ asset('images/symbols/globe.svg') }}">
                         <x-slot:information>
-                            {{ $anime->languages->pluck('name')->join(',  ', ' and ') ?: '-' }}
+                            {{ $anime->languages->pluck('name')->join(', ', ' and ') ?: '-' }}
                         </x-slot:information>
                     </x-information-list>
 
