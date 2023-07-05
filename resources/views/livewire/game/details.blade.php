@@ -179,7 +179,7 @@
                 @endif
 
                 <div id="rankingBadge" class="flex-grow px-12 border-l-2">
-                    <a class="flex flex-col items-center" href="#genres">
+                    <a class="flex flex-col items-center" href="{{ route('charts.top', App\Enums\ChartKind::Games) }}">
                         <p class="font-bold">{{ trans_choice('{0} -|[1,*] #:x', $game->mediaStat->rank_total ?? 0, ['x' => $game->mediaStat->rank_total]) }}</p>
                         <p class="text-orange-500">
                             @svg('chart_bar_fill', 'fill-current', ['width' => '20'])
@@ -242,6 +242,10 @@
                     <x-slot:title>
                         {{ __('Ratings & Reviews') }}
                     </x-slot:title>
+
+                    <x-slot:action>
+                        <x-section-nav-link class="whitespace-nowrap" href="{{ route('games.reviews', $game) }}">{{ __('See All') }}</x-section-nav-link>
+                    </x-slot:action>
                 </x-section-nav>
 
                 <div class="flex flex-row flex-wrap justify-between gap-4">
@@ -266,21 +270,25 @@
 
             @auth
                 <section id="writeAReview" class="pt-5 pb-8 pl-4 pr-4 border-t-2">
-                    <div class="flex flex-row flex-wrap justify-between gap-4">
+                    <div class="flex flex-row flex-wrap gap-4">
                         <div class="flex justify-between items-center">
                             <p class="">{{ __('Click to Rate:') }}</p>
 
-                            <livewire:game.star-rating :game="$game" :rating="$game->ratings()->firstWhere('user_id', auth()->user()->id)?->rating" :star-size="'md'" />
+                            <livewire:game.star-rating :game="$game" :rating="$this->userRating?->rating" :star-size="'md'" />
                         </div>
 
                         <div class="flex justify-between">
-                            <a class="flex gap-1" href="#">
+                            <x-simple-button class="flex gap-1" wire:click="showReviewBox">
                                 @svg('pencil', 'fill-current', ['width' => 18])
                                 {{ __('Write a Review') }}
-                            </a>
+                            </x-simple-button>
                         </div>
 
                         <div></div>
+                    </div>
+
+                    <div class="mt-5">
+                        <livewire:components.game.reviews-section :game="$game" />
                     </div>
                 </section>
             @endauth
@@ -435,6 +443,7 @@
                     <x-slot:title>
                         {{ $game->title . ' Official Trailer' }}
                     </x-slot:title>
+
                     <x-slot:content>
                         <iframe
                             class="w-full aspect-video lazyload"
@@ -450,8 +459,29 @@
                         >
                         </iframe>
                     </x-slot:content>
+
                     <x-slot:footer>
                         <x-button wire:click="$toggle('showPopup')">{{ __('Close') }}</x-button>
+                    </x-slot:footer>
+                @elseif ($showReviewBox)
+                    <x-slot:title>
+                        {{ __('Write a Review') }}
+                    </x-slot:title>
+
+                    <x-slot:content>
+                        <div class="flex flex-col gap-2">
+                            <div class="flex items-center">
+                                <p class="">{{ __('Click to Rate:') }}</p>
+
+                                <livewire:game.star-rating :game="$game" :rating="$this->userRating?->rating" :star-size="'md'" />
+                            </div>
+
+                            <x-textarea class="block w-full h-48 mt-1 resize-none" placeholder="{{ __('What’s on your mind?') }}" wire:model.defer="reviewText"></x-textarea>
+                        </div>
+                    </x-slot:content>
+
+                    <x-slot:footer>
+                        <x-button wire:click="submitReview">{{ __('Submit') }}</x-button>
                     </x-slot:footer>
                 @else
                     <x-slot:title>

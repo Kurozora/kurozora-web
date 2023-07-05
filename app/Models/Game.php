@@ -10,6 +10,7 @@ use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\Actionable;
 use App\Traits\Model\Favorable;
 use App\Traits\Model\HasMediaGenres;
+use App\Traits\Model\HasMediaRatings;
 use App\Traits\Model\HasMediaRelations;
 use App\Traits\Model\HasMediaSongs;
 use App\Traits\Model\HasMediaStaff;
@@ -33,7 +34,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
 use Laravel\Scout\Searchable;
@@ -52,6 +52,7 @@ class Game extends KModel implements HasMedia, Sitemapable
         Favorable,
         HasFactory,
         HasMediaGenres,
+        HasMediaRatings,
         HasMediaRelations,
         HasMediaSongs,
         HasMediaStaff,
@@ -466,17 +467,6 @@ class Game extends KModel implements HasMedia, Sitemapable
         return Cache::remember($cacheKey, self::CACHE_KEY_STUDIOS_SECONDS, function () use ($limit) {
             return $this->studios()->paginate($limit);
         });
-    }
-
-    /**
-     * Get the game's ratings
-     *
-     * @return MorphMany
-     */
-    public function ratings(): MorphMany
-    {
-        return $this->morphMany(MediaRating::class, 'model')
-            ->where('model_type', Game::class);
     }
 
     /**

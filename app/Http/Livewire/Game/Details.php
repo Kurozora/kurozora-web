@@ -4,10 +4,12 @@ namespace App\Http\Livewire\Game;
 
 use App\Events\GameViewed;
 use App\Models\Game;
+use App\Models\MediaRating;
 use App\Models\Studio;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Model;
 use Livewire\Component;
 
 class Details extends Component
@@ -34,15 +36,6 @@ class Details extends Component
     public bool $isReminded = false;
 
     /**
-     * The component's listeners.
-     *
-     * @var array
-     */
-    protected $listeners = [
-        'update-game' => 'updateGameHandler'
-    ];
-
-    /**
      * Whether the user is tracking the game.
      *
      * @var bool $isTracking
@@ -57,11 +50,25 @@ class Details extends Component
     public bool $showVideo = false;
 
     /**
+     * Whether to show the review box to the user.
+     *
+     * @var bool $showReviewBox
+     */
+    public bool $showReviewBox = false;
+
+    /**
      * Whether to show the popup to the user.
      *
      * @var bool $showPopup
      */
     public bool $showPopup = false;
+
+    /**
+     * The written review text.
+     *
+     * @var string|null $reviewText
+     */
+    public ?string $reviewText;
 
     /**
      * The data used to populate the popup.
@@ -71,6 +78,15 @@ class Details extends Component
     public array $popupData = [
         'title' => '',
         'message' => '',
+    ];
+
+    /**
+     * The component's listeners.
+     *
+     * @var array
+     */
+    protected $listeners = [
+        'update-game' => 'updateGameHandler'
     ];
 
     /**
@@ -92,7 +108,7 @@ class Details extends Component
     /**
      * Sets up the actions according to the user's settings.
      */
-    protected function setupActions()
+    protected function setupActions(): void
     {
         $user = auth()->user();
         if (!empty($user)) {
@@ -105,7 +121,7 @@ class Details extends Component
     /**
      * Handles the update game vent.
      */
-    public function updateGameHandler()
+    public function updateGameHandler(): void
     {
         $this->setupActions();
     }
@@ -113,16 +129,26 @@ class Details extends Component
     /**
      * Shows the trailer video to the user.
      */
-    public function showVideo()
+    public function showVideo(): void
     {
         $this->showVideo = true;
         $this->showPopup = true;
     }
 
     /**
+     * Shows the review text box to the user.
+     */
+    public function showReviewBox(): void
+    {
+        $this->reviewText = $this->userRating->description;
+        $this->showReviewBox = true;
+        $this->showPopup = true;
+    }
+
+    /**
      * Adds the game to the user's favorite list.
      */
-    public function favoriteGame()
+    public function favoriteGame(): void
     {
         $user = auth()->user();
 
@@ -140,7 +166,7 @@ class Details extends Component
     /**
      * Adds the game to the user's reminder list.
      */
-    public function remindGame()
+    public function remindGame(): void
     {
         $user = auth()->user();
 
@@ -170,6 +196,20 @@ class Details extends Component
     }
 
     /**
+     * Submits the written review.
+     *
+     * @return void
+     */
+    public function submitReview(): void
+    {
+        $this->userRating->update([
+            'description' => e($this->reviewText)
+        ]);
+        $this->showReviewBox = false;
+        $this->showPopup = false;
+    }
+
+    /**
      * Returns the studio relationship of the game.
      *
      * @return Studio|null
@@ -177,6 +217,16 @@ class Details extends Component
     public function getStudioProperty(): ?Studio
     {
         return $this->game->studios()?->firstWhere('is_studio', '=', true) ?? $this->game->studios->first();
+    }
+
+    /**
+     * Returns the user rating.
+     *
+     * @return MediaRating|Model|null
+     */
+    public function getUserRatingProperty(): MediaRating|Model|null
+    {
+        return $this->game->mediaRatings()->firstWhere('user_id', auth()->user()->id);
     }
 
     /**

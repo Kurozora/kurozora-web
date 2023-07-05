@@ -9,6 +9,7 @@ use App\Http\Livewire\Game\Index as GameIndex;
 use App\Http\Livewire\Game\RelatedGames;
 use App\Http\Livewire\Game\RelatedLiteratures;
 use App\Http\Livewire\Game\RelatedShows;
+use App\Http\Livewire\Game\Reviews as GameReviews;
 use App\Http\Livewire\Game\Songs as GameSongs;
 use App\Http\Livewire\Game\Staff as GameStaff;
 use App\Http\Livewire\Game\Studios as GameStudios;
@@ -75,5 +76,8 @@ Route::prefix('/games')
 
                 Route::get('/related-mangas', RelatedLiteratures::class)
                     ->name('.related-literatures');
+
+                Route::get('/reviews', GameReviews::class)
+                    ->name('.reviews');
             });
     });
