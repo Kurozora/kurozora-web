@@ -37,9 +37,9 @@ class MediaStatsResource extends JsonResource
                 round($this->resource->rating_10, 1),
             ],
             'ratingAverage' => round($this->resource->rating_average, 1),
-            'ratingCount' => $this->resource->rating_count,
-            'rankGlobal' => $this->resource->rank_global,
-            'rankTotal' => $this->resource->rank_total,
+            'ratingCount' => $this->resource->rating_count ?? 0,
+            'rankGlobal' => $this->resource->rank_global ?? 0,
+            'rankTotal' => $this->resource->rank_total ?? 0,
             'sentiment' => $this->resource->sentiment,
             'highestRatingPercentage' => $this->resource->highest_rating_percentage,
         ];
