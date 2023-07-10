@@ -28,10 +28,11 @@ final class RatingSentiment extends Enum
         return match ($value) {
             self::NotEnough => __('Not enough ratings'),
             self::OverwhelminglyPositive => __('Rated Overwhelmingly Positive'),
-            self::OverwhelminglyNegative => __('Rating Overwhelmingly Negative'),
-            self::MixedFeelings => __('Rated Mixed Feeling'),
-            self::Negative => __('Rated Negative'),
             self::Positive => __('Rated Positive'),
+            self::Average => __('Rated Average'),
+            self::MixedFeelings => __('Rated Mixed Feeling'),
+            self::OverwhelminglyNegative => __('Rating Overwhelmingly Negative'),
+            self::Negative => __('Rated Negative'),
         };
     }
 }
