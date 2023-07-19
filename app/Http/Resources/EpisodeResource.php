@@ -49,11 +49,57 @@ class EpisodeResource extends JsonResource
             ]
         ]);
 
+        if ($request->input('include')) {
+            $includes = array_unique(explode(',', $request->input('include')));
+
+            $relationships = [];
+            foreach ($includes as $include) {
+                switch ($include) {
+                    case 'show':
+                        $relationships = array_merge($relationships, $this->getShowRelationship());
+                        break;
+                    case 'season':
+                        $relationships = array_merge($relationships, $this->getSeasonRelationship());
+                        break;
+                }
+            }
+
+            $resource = array_merge($resource, ['relationships' => $relationships]);
+        }
+
         if (auth()->check()) {
             $resource['attributes'] = array_merge($resource['attributes'], $this->getUserSpecificDetails());
         }
 
         return $resource;
+    }
+
+    /**
+     * Returns the show relationship for the resource.
+     *
+     * @return array
+     */
+    protected function getShowRelationship(): array
+    {
+        return [
+            'show' => [
+                'data' => AnimeResourceBasic::collection([$this->resource->anime])
+            ]
+        ];
+    }
+
+    /**
+     * Returns the season relationship for the resource.
+     *
+     * @return array
+     */
+    protected function getSeasonRelationship(): array
+    {
+        return [
+            'season' => [
+                'data' => SeasonResource::collection([$this->resource->season])
+            ]
+        ];
     }
 
     /**
