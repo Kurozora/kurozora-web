@@ -852,6 +852,20 @@
             },
             "required": true,
             "description": "ID of the episode."
+          },
+          {
+            "in": "query",
+            "name": "include",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "uniqueItems": true
+            },
+            "explode": false,
+            "required": false,
+            "description": "The relations to include in the response. Available relations are:\n- show\n- season"
           }
         ],
         "responses": {
