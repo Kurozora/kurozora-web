@@ -23,7 +23,7 @@ class EpisodeResource extends JsonResource
      * @param Request $request
      * @return array
      */
-    public function toArray($request): array
+    public function toArray(Request $request): array
     {
         $resource = EpisodeResourceIdentity::make($this->resource)->toArray($request);
         $resource = array_merge($resource, [

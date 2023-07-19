@@ -20,7 +20,7 @@ class SettingsResource extends JsonResource
      * @param Request $request
      * @return array
      */
-    public function toArray($request): array
+    public function toArray(Request $request): array
     {
         return [
             'appleMusicDeveloperToken' => config('services.apple.client_secret'),

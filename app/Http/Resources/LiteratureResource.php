@@ -21,7 +21,7 @@ class LiteratureResource extends JsonResource
      * @param Request $request
      * @return array
      */
-    public function toArray($request): array
+    public function toArray(Request $request): array
     {
         $resource = LiteratureResourceBasic::make($this->resource)->toArray($request);
 

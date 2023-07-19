@@ -21,7 +21,7 @@ class PersonResource extends JsonResource
      * @param Request $request
      * @return array
      */
-    public function toArray($request): array
+    public function toArray(Request $request): array
     {
         $resource = PersonResourceBasic::make($this->resource)->toArray($request);
 

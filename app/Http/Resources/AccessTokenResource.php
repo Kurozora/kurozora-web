@@ -21,7 +21,7 @@ class AccessTokenResource extends JsonResource
      * @param Request $request
      * @return array
      */
-    public function toArray($request): array
+    public function toArray(Request $request): array
     {
         $resource = [
             'id'            => $this->resource->id,

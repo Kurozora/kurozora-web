@@ -19,10 +19,10 @@ class CharacterResourceBasic extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  Request  $request
+     * @param Request $request
      * @return array
      */
-    public function toArray($request): array
+    public function toArray(Request $request): array
     {
         $resource = CharacterResourceIdentity::make($this->resource)->toArray($request);
         return array_merge($resource, [

@@ -18,10 +18,10 @@ class AnimeResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  Request  $request
+     * @param Request $request
      * @return array
      */
-    public function toArray($request): array
+    public function toArray(Request $request): array
     {
         $resource = AnimeResourceBasic::make($this->resource)->toArray($request);
 
