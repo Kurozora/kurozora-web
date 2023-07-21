@@ -230,6 +230,10 @@
                     </li>
 
                     <li class="mt-2">
+                        <x-footer-link target="_blank" href="{{ config('services.open_collective.url') }}">Open Collective</x-footer-link>
+                    </li>
+
+                    <li class="mt-2">
                         <x-footer-link target="_blank" href="{{ config('services.patreon.url') }}">Patreon</x-footer-link>
                     </li>
 
