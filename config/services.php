@@ -62,6 +62,11 @@ return [
         'username' => env('KOFI_HANDLE', 'kurozora'),
     ],
 
+    'open_collective' => [
+        'url' => 'https://opencollective.com/' . env('OPEN_COLLECTIVE_HANDLE', 'kurozora'),
+        'username' => env('OPEN_COLLECTIVE_HANDLE', 'kurozora'),
+    ],
+
     'patreon' => [
         'url' => 'https://patreon.com/' . env('PATREON_HANDLE', 'kurozora'),
         'username' => env('PATREON_HANDLE', 'kurozora'),
