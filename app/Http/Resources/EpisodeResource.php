@@ -43,6 +43,7 @@ class EpisodeResource extends JsonResource
                 'isFinale'      => $this->resource->is_finale,
                 'isSpecial'     => $this->resource->is_special,
                 'isVerified'    => $this->resource->is_verified,
+                'viewCount'     => $this->resource->view_count,
                 'startedAt'     => $this->resource->started_at?->timestamp,
                 'firstAired'    => $this->resource->started_at?->timestamp,
                 'endedAt'       => $this->resource->ended_at?->timestamp,
@@ -82,7 +83,7 @@ class EpisodeResource extends JsonResource
     protected function getShowRelationship(): array
     {
         return [
-            'show' => [
+            'shows' => [
                 'data' => AnimeResourceBasic::collection([$this->resource->anime])
             ]
         ];
@@ -96,7 +97,7 @@ class EpisodeResource extends JsonResource
     protected function getSeasonRelationship(): array
     {
         return [
-            'season' => [
+            'seasons' => [
                 'data' => SeasonResource::collection([$this->resource->season])
             ]
         ];
