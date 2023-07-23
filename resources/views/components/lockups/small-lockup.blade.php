@@ -7,7 +7,7 @@
 <div {{ $attributes->merge(['class' => 'relative flex-grow w-64 md:w-80 ' . $class]) }}>
     @if(!empty($anime))
         <div class="flex flex-nowrap gap-2">
-            <picture class="relative shrink-0 w-32 h-48 rounded-lg overflow-hidden">
+            <picture class="relative shrink-0 w-28 h-40 rounded-lg overflow-hidden">
                 <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $anime->title }} Poster" title="{{ $anime->title }}">
 
                 <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-lg"></div>
@@ -54,7 +54,7 @@
         </div>
     @elseif(!empty($game))
         <div class="flex flex-nowrap gap-2">
-            <picture class="relative shrink-0 w-32 h-32 rounded-3xl overflow-hidden">
+            <picture class="relative shrink-0 w-28 h-28 rounded-3xl overflow-hidden">
                 <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $game->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $game->title }} Poster" title="{{ $game->title }}">
 
                 <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-3xl"></div>
@@ -101,8 +101,8 @@
         </div>
     @elseif(!empty($manga))
         <div class="flex flex-nowrap gap-2">
-            <svg class="relative shrink-0 w-32 h-48 overflow-hidden" width="160" height="240" viewBox="0 0 160 240">
-                <foreignObject height="240" width="160" mask="url(#svg-mask-book-cover)">
+            <svg class="relative shrink-0 w-28 h-40 overflow-hidden">
+                <foreignObject width="112" height="160" mask="url(#svg-mask-book-cover)">
                     <img class="h-full w-full object-cover lazyload" data-sizes="auto" data-src="{{ $manga->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $manga->title }} Poster" title="{{ $manga->title }}" />
                 </foreignObject>
 

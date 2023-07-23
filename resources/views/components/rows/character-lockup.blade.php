@@ -13,11 +13,11 @@
         <x-lockups.character-lockup :character="$mangaCast->character" :cast-role="$mangaCast->castRole->name" :rank="($page - 1) * $perPage + $index + 1" :is-ranked="$isRanked" :isRow="false" />
     @endforeach
 
-    <div class="w-32 flex-grow"></div>
-    <div class="w-32 flex-grow"></div>
-    <div class="w-32 flex-grow"></div>
-    <div class="w-32 flex-grow"></div>
-    <div class="w-32 flex-grow"></div>
-    <div class="w-32 flex-grow"></div>
-    <div class="w-32 flex-grow"></div>
+    <div class="w-28 flex-grow"></div>
+    <div class="w-28 flex-grow"></div>
+    <div class="w-28 flex-grow"></div>
+    <div class="w-28 flex-grow"></div>
+    <div class="w-28 flex-grow"></div>
+    <div class="w-28 flex-grow"></div>
+    <div class="w-28 flex-grow"></div>
 </div>

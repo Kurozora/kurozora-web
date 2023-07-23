@@ -100,21 +100,21 @@
             </div>
 
             <div class="md:absolute md:bottom-0 md:left-0 md:right-0 lg:px-4">
-                <div class="flex flex-nowrap pt-5 pb-8 pl-4 pr-4 md:mx-auto md:mb-8 md:p-6 md:max-w-lg md:bg-white md:bg-opacity-50 md:backdrop-filter md:backdrop-blur md:rounded-lg">
-                    <x-picture :border="true" class="w-32 h-32 mr-2 rounded-3xl overflow-hidden" border-roundness="rounded-3xl">
+                <div class="flex flex-nowrap pt-5 pb-8 pl-4 pr-4 md:mx-auto md:mb-8 md:p-2 md:max-w-lg md:bg-white md:bg-opacity-50 md:backdrop-filter md:backdrop-blur md:rounded-lg">
+                    <x-picture :border="true" border-roundness="rounded-3xl" class="w-28 h-28 mr-2 rounded-3xl overflow-hidden" style="min-width: 7rem; max-height: 7rem;">
                         <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $game->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/game_poster.webp') }}" alt="{{ $game->title }} Poster" title="{{ $game->title }}">
                     </x-picture>
 
-                    <div class="flex flex-col gap-2 justify-between w-3/4">
+                    <div class="flex flex-col gap-2 justify-between w-full">
                         <div>
                             <p class="font-semibold text-lg leading-tight break-all">{{ $game->title }}</p>
 
                             <p class="text-sm leading-tight">{{ $game->information_summary }}</p>
 
                             <div class="flex w-full justify-between mt-2 gap-1 sm:gap-4">
-                                <p class="flex-grow pt-1 pr-1 pb-1 pl-1 text-white text-center text-xs font-semibold whitespace-nowrap rounded-md sm:text-sm" style="background-color: {{ $game->status->color }};">{{ $game->status->name }}</p>
+                                <p class="flex-grow pt-1 pr-1 pb-1 pl-1 text-white text-center text-xs font-semibold whitespace-nowrap rounded-md" style="background-color: {{ $game->status->color }};">{{ $game->status->name }}</p>
 
-                                <p class="flex-grow pt-1 pr-1 pb-1 pl-1 bg-gray-100 text-center text-xs font-semibold whitespace-nowrap rounded-md sm:text-sm"> {{ trans_choice('{0} Rank -|[1,*] Rank #:x', $game->mediaStat->rank_total ?? 0, ['x' => $game->mediaStat->rank_total]) }}</p>
+                                <p class="flex-grow pt-1 pr-1 pb-1 pl-1 bg-gray-100 text-center text-xs font-semibold whitespace-nowrap rounded-md"> {{ trans_choice('{0} Rank -|[1,*] Rank #:x', $game->mediaStat->rank_total ?? 0, ['x' => $game->mediaStat->rank_total]) }}</p>
                             </div>
                         </div>
 

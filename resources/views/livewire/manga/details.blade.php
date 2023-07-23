@@ -88,9 +88,9 @@
             </div>
 
             <div class="md:absolute md:bottom-0 md:left-0 md:right-0 lg:px-4">
-                <div class="flex flex-nowrap pt-5 pb-8 pl-4 pr-4 md:mx-auto md:mb-8 md:p-6 md:max-w-lg md:bg-white md:bg-opacity-50 md:backdrop-filter md:backdrop-blur md:rounded-lg">
-                    <svg class="relative shrink-0 w-32 h-48 mr-2 overflow-hidden" width="160" height="240" viewBox="0 0 160 240">
-                        <foreignObject height="240" width="160" mask="url(#svg-mask-book-cover)">
+                <div class="flex flex-nowrap pt-5 pb-8 pl-4 pr-4 md:mx-auto md:mb-8 md:p-2 md:max-w-lg md:bg-white md:bg-opacity-50 md:backdrop-filter md:backdrop-blur md:rounded-lg">
+                    <svg class="relative shrink-0 w-28 h-40 mr-2 overflow-hidden">
+                        <foreignObject width="112" height="160" mask="url(#svg-mask-book-cover)">
                             <img class="h-full w-full object-cover lazyload" data-sizes="auto" data-src="{{ $manga->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $manga->title }} Poster" title="{{ $manga->title }}" />
                         </foreignObject>
 
@@ -101,16 +101,16 @@
                         </g>
                     </svg>
 
-                    <div class="flex flex-col gap-2 justify-between w-3/4">
+                    <div class="flex flex-col gap-2 justify-between w-full">
                         <div>
                             <p class="font-semibold text-lg leading-tight break-all">{{ $manga->title }}</p>
 
                             <p class="text-sm leading-tight">{{ $manga->information_summary }}</p>
 
                             <div class="flex w-full justify-between mt-2 gap-1 sm:gap-4">
-                                <p class="flex-grow pt-1 pr-1 pb-1 pl-1 text-white text-center text-xs font-semibold whitespace-nowrap rounded-md sm:text-sm" style="background-color: {{ $manga->status->color }};">{{ $manga->status->name }}</p>
+                                <p class="flex-grow pt-1 pr-1 pb-1 pl-1 text-white text-center text-xs font-semibold whitespace-nowrap rounded-md" style="background-color: {{ $manga->status->color }};">{{ $manga->status->name }}</p>
 
-                                <p class="flex-grow pt-1 pr-1 pb-1 pl-1 bg-gray-100 text-center text-xs font-semibold whitespace-nowrap rounded-md sm:text-sm"> {{ trans_choice('{0} Rank -|[1,*] Rank #:x', $manga->mediaStat->rank_total ?? 0, ['x' => $manga->mediaStat->rank_total]) }}</p>
+                                <p class="flex-grow pt-1 pr-1 pb-1 pl-1 bg-gray-100 text-center text-xs font-semibold whitespace-nowrap rounded-md"> {{ trans_choice('{0} Rank -|[1,*] Rank #:x', $manga->mediaStat->rank_total ?? 0, ['x' => $manga->mediaStat->rank_total]) }}</p>
                             </div>
                         </div>
 

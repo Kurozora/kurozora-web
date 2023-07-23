@@ -4,7 +4,7 @@
     $class = $isRow ? 'pb-2 shrink-0 snap-normal snap-center' : '';
 @endphp
 
-<div {{ $attributes->merge(['class' => 'relative flex-grow w-32 ' . $class]) }}>
+<div {{ $attributes->merge(['class' => 'relative flex-grow w-28 ' . $class]) }}>
     <a class="absolute w-full h-full" href="{{ route('people.details', $person) }}"></a>
 
     <div class="flex flex-col">
