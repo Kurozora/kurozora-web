@@ -311,6 +311,7 @@ class AnimeController extends Controller
 
         // Fetch the variables
         $givenRating = $data['rating'];
+        $description = $data['description'];
 
         // Try to modify the rating if it already exists
         /** @var MediaRating $foundRating */
@@ -327,17 +328,19 @@ class AnimeController extends Controller
             } else {
                 // Update the current rating
                 $foundRating->update([
-                    'rating' => $givenRating,
+                    'rating'        => $givenRating,
+                    'description'   => $description,
                 ]);
             }
         } else {
             // Only insert the rating if it's rated higher than 0
             if ($givenRating > 0) {
-                $user->episode_ratings()->create([
+                MediaRating::create([
                     'user_id'       => $user->id,
-                    'model_type'    => $anime->getMorphClass(),
                     'model_id'      => $anime->id,
-                    'rating'        => $givenRating
+                    'model_type'    => $anime->getMorphClass(),
+                    'rating'        => $givenRating,
+                    'description'   => $description
                 ]);
             }
         }
