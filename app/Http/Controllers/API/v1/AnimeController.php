@@ -311,7 +311,7 @@ class AnimeController extends Controller
 
         // Fetch the variables
         $givenRating = $data['rating'];
-        $description = $data['description'];
+        $description = $data['description'] ?? null;
 
         // Try to modify the rating if it already exists
         /** @var MediaRating $foundRating */
@@ -329,7 +329,7 @@ class AnimeController extends Controller
                 // Update the current rating
                 $foundRating->update([
                     'rating'        => $givenRating,
-                    'description'   => $description,
+                    'description'   => $description ?? $foundRating->description,
                 ]);
             }
         } else {

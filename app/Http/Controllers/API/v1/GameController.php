@@ -286,7 +286,7 @@ class GameController extends Controller
 
         // Fetch the variables
         $givenRating = $data['rating'];
-        $description = $data['description'];
+        $description = $data['description'] ?? null;
 
         // Try to modify the rating if it already exists
         /** @var MediaRating $foundRating */

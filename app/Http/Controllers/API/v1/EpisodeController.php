@@ -84,13 +84,13 @@ class EpisodeController extends Controller
 
         // Fetch the variables
         $givenRating = $data['rating'];
+        $description = $data['description'] ?? null;
 
         // Try to modify the rating if it already exists
         /** @var MediaRating $foundRating */
-        $foundRating = $user->episode_ratings()->where([
-            ['model_id', '=', $episode->id],
-            ['model_type', '=', Episode::class],
-        ])->first();
+        $foundRating = $user->episodeRatings()
+            ->where('model_id', '=', $episode->id)
+            ->first();
 
         // The rating exists
         if ($foundRating) {
@@ -101,17 +101,19 @@ class EpisodeController extends Controller
             } else {
                 // Update the current rating
                 $foundRating->update([
-                    'rating' => $givenRating
+                    'rating'        => $givenRating,
+                    'description'   => $description
                 ]);
             }
         } else {
             // Only insert the rating if it's rated higher than 0
             if ($givenRating > 0) {
-                $user->episode_ratings()->create([
-                    'user_id' => $user->id,
-                    'model_type' => Episode::class,
-                    'model_id' => $episode->id,
-                    'rating' => $givenRating,
+                MediaRating::create([
+                    'user_id'       => $user->id,
+                    'model_id'      => $episode->id,
+                    'model_type'    => $episode->getMorphClass(),
+                    'rating'        => $givenRating,
+                    'description'   => $description,
                 ]);
             }
         }
