@@ -7,6 +7,7 @@ use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GetGameCharactersRequest;
 use App\Http\Requests\GetGameMoreByStudioRequest;
+use App\Http\Requests\GetGameReviewsRequest;
 use App\Http\Requests\GetGameStudiosRequest;
 use App\Http\Requests\GetMediaCastRequest;
 use App\Http\Requests\GetMediaRelatedGamesRequest;
@@ -19,6 +20,7 @@ use App\Http\Requests\RateGameRequest;
 use App\Http\Resources\CharacterResourceIdentity;
 use App\Http\Resources\GameResource;
 use App\Http\Resources\GameResourceIdentity;
+use App\Http\Resources\MediaRatingResource;
 use App\Http\Resources\MediaRelatedResource;
 use App\Http\Resources\MediaSongResource;
 use App\Http\Resources\MediaStaffResource;
@@ -341,6 +343,27 @@ class GameController extends Controller
 
         return JSONResult::success([
             'data' => GameResourceIdentity::collection($game),
+            'next' => empty($nextPageURL) ? null : $nextPageURL
+        ]);
+    }
+
+    /**
+     * Returns the reviews of a Game.
+     *
+     * @param GetGameReviewsRequest $request
+     * @param Game $game
+     * @return JsonResponse
+     */
+    public function reviews(GetGameReviewsRequest $request, Game $game): JsonResponse
+    {
+        $reviews = $game->mediaRatings()
+            ->paginate($data['limit'] ?? 25);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $reviews->nextPageUrl());
+
+        return JSONResult::success([
+            'data' => MediaRatingResource::collection($reviews),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
