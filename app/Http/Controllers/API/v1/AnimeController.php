@@ -7,6 +7,7 @@ use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GetAnimeCharactersRequest;
 use App\Http\Requests\GetAnimeMoreByStudioRequest;
+use App\Http\Requests\GetAnimeReviewsRequest;
 use App\Http\Requests\GetAnimeSeasonsRequest;
 use App\Http\Requests\GetAnimeStudiosRequest;
 use App\Http\Requests\GetMediaCastRequest;
@@ -20,6 +21,7 @@ use App\Http\Requests\RateAnimeRequest;
 use App\Http\Resources\AnimeResource;
 use App\Http\Resources\AnimeResourceIdentity;
 use App\Http\Resources\CharacterResourceIdentity;
+use App\Http\Resources\MediaRatingResource;
 use App\Http\Resources\MediaRelatedResource;
 use App\Http\Resources\MediaSongResource;
 use App\Http\Resources\MediaStaffResource;
@@ -366,6 +368,27 @@ class AnimeController extends Controller
 
         return JSONResult::success([
             'data' => AnimeResourceIdentity::collection($anime),
+            'next' => empty($nextPageURL) ? null : $nextPageURL
+        ]);
+    }
+
+    /**
+     * Returns the reviews of an Anime.
+     *
+     * @param GetAnimeReviewsRequest $request
+     * @param Anime $anime
+     * @return JsonResponse
+     */
+    public function reviews(GetAnimeReviewsRequest $request, Anime $anime): JsonResponse
+    {
+        $reviews = $anime->mediaRatings()
+            ->paginate($data['limit'] ?? 25);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $reviews->nextPageUrl());
+
+        return JSONResult::success([
+            'data' => MediaRatingResource::collection($reviews),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
