@@ -17,5 +17,9 @@ Route::prefix('/episodes')
                 Route::post('/rate', [EpisodeController::class, 'rateEpisode'])
                     ->middleware('auth.kurozora')
                     ->name('.rate');
+
+                Route::get('/reviews', [EpisodeController::class, 'reviews'])
+                    ->middleware('auth.kurozora:optional')
+                    ->name('.reviews');
             });
     });

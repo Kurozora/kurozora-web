@@ -5,9 +5,11 @@ namespace App\Http\Controllers\API\v1;
 use App\Events\EpisodeViewed;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\GetEpisodeReviewsRequest;
 use App\Http\Requests\MarkEpisodeAsWatchedRequest;
 use App\Http\Requests\RateEpisodeRequest;
 use App\Http\Resources\EpisodeResource;
+use App\Http\Resources\MediaRatingResource;
 use App\Models\Episode;
 use App\Models\MediaRating;
 use Exception;
@@ -119,5 +121,26 @@ class EpisodeController extends Controller
         }
 
         return JSONResult::success();
+    }
+
+    /**
+     * Returns the reviews of an Episode.
+     *
+     * @param GetEpisodeReviewsRequest $request
+     * @param Episode $episode
+     * @return JsonResponse
+     */
+    public function reviews(GetEpisodeReviewsRequest $request, Episode $episode): JsonResponse
+    {
+        $reviews = $episode->mediaRatings()
+            ->paginate($data['limit'] ?? 25);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $reviews->nextPageUrl());
+
+        return JSONResult::success([
+            'data' => MediaRatingResource::collection($reviews),
+            'next' => empty($nextPageURL) ? null : $nextPageURL
+        ]);
     }
 }
