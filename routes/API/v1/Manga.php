@@ -47,5 +47,9 @@ Route::prefix('/manga')
                 Route::post('/rate', [MangaController::class, 'rateManga'])
                     ->middleware('auth.kurozora')
                 ->name('.rate');
+
+                Route::get('/reviews', [MangaController::class, 'reviews'])
+                    ->middleware('auth.kurozora:optional')
+                    ->name('.reviews');
             });
     });

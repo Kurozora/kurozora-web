@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\GetMangaCastRequest;
 use App\Http\Requests\GetMangaCharactersRequest;
 use App\Http\Requests\GetMangaMoreByStudioRequest;
+use App\Http\Requests\GetMangaReviewsRequest;
 use App\Http\Requests\GetMangaStudiosRequest;
 use App\Http\Requests\GetMediaRelatedGamesRequest;
 use App\Http\Requests\GetMediaRelatedLiteraturesRequest;
@@ -19,6 +20,7 @@ use App\Http\Resources\CharacterResourceIdentity;
 use App\Http\Resources\LiteratureResource;
 use App\Http\Resources\LiteratureResourceIdentity;
 use App\Http\Resources\MangaCastResourceIdentity;
+use App\Http\Resources\MediaRatingResource;
 use App\Http\Resources\MediaRelatedResource;
 use App\Http\Resources\MediaStaffResource;
 use App\Http\Resources\StudioResource;
@@ -315,6 +317,27 @@ class MangaController extends Controller
 
         return JSONResult::success([
             'data' => LiteratureResourceIdentity::collection($manga),
+            'next' => empty($nextPageURL) ? null : $nextPageURL
+        ]);
+    }
+
+    /**
+     * Returns the reviews of a Manga.
+     *
+     * @param GetMangaReviewsRequest $request
+     * @param Manga $manga
+     * @return JsonResponse
+     */
+    public function reviews(GetMangaReviewsRequest $request, Manga $manga): JsonResponse
+    {
+        $reviews = $manga->mediaRatings()
+            ->paginate($data['limit'] ?? 25);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $reviews->nextPageUrl());
+
+        return JSONResult::success([
+            'data' => MediaRatingResource::collection($reviews),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
