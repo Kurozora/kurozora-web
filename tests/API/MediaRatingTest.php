@@ -103,7 +103,7 @@ class MediaRatingTest extends TestCase
         $response->assertUnsuccessfulAPIResponse();
 
         // Check if episode rating does not exist
-        $this->assertTrue($this->user->episode_ratings()->count() === 0);
+        $this->assertTrue($this->user->episodeRatings()->count() === 0);
     }
 
     /**
@@ -129,7 +129,7 @@ class MediaRatingTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Check if episode rating exists
-        $this->assertTrue($this->user->episode_ratings()->count() === 1);
+        $this->assertTrue($this->user->episodeRatings()->count() === 1);
     }
 
     /**
@@ -147,7 +147,7 @@ class MediaRatingTest extends TestCase
         $this->user->episodes()->attach($episode);
 
         // Rate the anime
-        $this->user->episode_ratings()->create([
+        $this->user->episodeRatings()->create([
             'model_type' => Episode::class,
             'model_id' => $episode->id,
             'rating' => 2.5,
@@ -162,6 +162,6 @@ class MediaRatingTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Check if anime rating exists
-        $this->assertTrue($this->user->episode_ratings()->count() === 0);
+        $this->assertTrue($this->user->episodeRatings()->count() === 0);
     }
 }
