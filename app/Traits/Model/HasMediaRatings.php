@@ -25,10 +25,6 @@ trait HasMediaRatings
 
             $model->mediaRatings()->delete();
         });
-
-        static::created(function (Model $model) {
-            $model->mediaRatings()->create();
-        });
     }
 
     /**
