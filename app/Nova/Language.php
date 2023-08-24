@@ -47,6 +47,16 @@ class Language extends Resource
     public static $group = 'Localisation';
 
     /**
+     * Determine if this resource uses Laravel Scout.
+     *
+     * @return bool
+     */
+    public static function usesScout(): bool
+    {
+        return false;
+    }
+
+    /**
      * Get the fields displayed by the resource.
      *
      * @param Request $request

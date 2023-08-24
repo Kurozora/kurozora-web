@@ -53,6 +53,16 @@ class MediaType extends Resource
     public static $group = 'Media';
 
     /**
+     * Determine if this resource uses Laravel Scout.
+     *
+     * @return bool
+     */
+    public static function usesScout(): bool
+    {
+        return false;
+    }
+
+    /**
      * Get the fields displayed by the resource.
      *
      * @param Request $request
