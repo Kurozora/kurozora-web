@@ -1,11 +1,11 @@
 {
-    "/js/app.js": "/js/app.js?id=652b9c02dc340c4be7fb23bd680ee439",
+    "/js/app.js": "/js/app.js?id=0ee1792b4d551e33ba01cd6f1f11cb0a",
     "/js/debug.js": "/js/debug.js?id=a5717b71c72b7f9b23a16626f70a0528",
     "/js/chat.js": "/js/chat.js?id=263c818519671bf93ea8d2ab9039d808",
-    "/js/listen.js": "/js/listen.js?id=f49d9aaa974ad569b4ded4daf978d1d2",
-    "/js/watch.js": "/js/watch.js?id=15a0a0b07a851b16798ede18ff9f1665",
+    "/js/listen.js": "/js/listen.js?id=e3e6d6df13dcbd1dd3a2e6f387d0fe84",
+    "/js/watch.js": "/js/watch.js?id=54cdf1687bfa9e6037be79ee3acbcdb1",
     "/js/worker.js": "/js/worker.js?id=2c00d667a39012e7bf8e9df291148b49",
-    "/css/watch.css": "/css/watch.css?id=5930d109880dda4a15d439b5acfa7411",
+    "/css/watch.css": "/css/watch.css?id=33f0a3ecd09b77c6b8c931edadc42205",
     "/css/chat.css": "/css/chat.css?id=c94ecda28f343fe6f9a3f7e36744979d",
-    "/css/app.css": "/css/app.css?id=4fd8afcaed1099a6961ee2b2196a7679"
+    "/css/app.css": "/css/app.css?id=2708fe9c8699c204a456adde7497da02"
 }
