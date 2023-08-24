@@ -649,7 +649,7 @@ class AnimeProcessor extends CustomItemProcessor
     /**
      * The synopsis of the anime.
      *
-     * @param string $synopsis
+     * @param string|null $synopsis
      * @return ?string
      */
     private function getSynopsis(?string $synopsis): ?string
