@@ -10,6 +10,7 @@ use App\Nova\Actions\ScrapeNewGame;
 use App\Nova\Actions\ScrapeTopGame;
 use App\Nova\Actions\ScrapeUpcomingGame;
 use App\Nova\Filters\IsNsfw;
+use App\Nova\Filters\StartedAtYear;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
@@ -103,9 +104,9 @@ class Game extends Resource
 
             Avatar::make('Poster')
                 ->thumbnail(function () {
-                    return  $this->resource->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp');
+                    return  $this->resource->getFirstMediaFullUrl(MediaCollection::Poster());
                 })->preview(function () {
-                    return $this->resource->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp');
+                    return $this->resource->getFirstMediaFullUrl(MediaCollection::Poster());
                 })
                 ->rounded()
                 ->deletable(false)
@@ -350,6 +351,8 @@ class Game extends Resource
     public function filters(NovaRequest $request): array
     {
         return [
+            new Filters\SeasonOfYear,
+            new StartedAtYear,
             new IsNsfw
         ];
     }

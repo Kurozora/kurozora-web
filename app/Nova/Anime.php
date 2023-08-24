@@ -15,6 +15,7 @@ use App\Nova\Actions\ScrapeTopAnime;
 use App\Nova\Actions\ScrapeUpcomingAnime;
 use App\Nova\Actions\UpdateAiringAnime;
 use App\Nova\Filters\IsNsfw;
+use App\Nova\Filters\StartedAtYear;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
@@ -145,9 +146,9 @@ class Anime extends Resource
 
             Avatar::make('Poster')
                 ->thumbnail(function () {
-                    return  $this->resource->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp');
+                    return  $this->resource->getFirstMediaFullUrl(MediaCollection::Poster());
                 })->preview(function () {
-                    return $this->resource->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp');
+                    return $this->resource->getFirstMediaFullUrl(MediaCollection::Poster());
                 })
                 ->rounded()
                 ->deletable(false)
@@ -421,6 +422,8 @@ class Anime extends Resource
     public function filters(NovaRequest $request): array
     {
         return [
+            new Filters\SeasonOfYear,
+            new StartedAtYear,
             new IsNsfw
         ];
     }

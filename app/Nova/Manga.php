@@ -11,6 +11,7 @@ use App\Nova\Actions\ScrapeTopManga;
 use App\Nova\Actions\ScrapeUpcomingManga;
 use App\Nova\Actions\UpdatePublishingManga;
 use App\Nova\Filters\IsNsfw;
+use App\Nova\Filters\StartedAtYear;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
@@ -113,9 +114,9 @@ class Manga extends Resource
 
             Avatar::make('Poster')
                 ->thumbnail(function () {
-                    return  $this->resource->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp');
+                    return  $this->resource->getFirstMediaFullUrl(MediaCollection::Poster());
                 })->preview(function () {
-                    return $this->resource->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp');
+                    return $this->resource->getFirstMediaFullUrl(MediaCollection::Poster());
                 })
                 ->squared()
                 ->deletable(false)
@@ -382,6 +383,8 @@ class Manga extends Resource
     public function filters(NovaRequest $request): array
     {
         return [
+            new Filters\SeasonOfYear,
+            new StartedAtYear,
             new IsNsfw
         ];
     }
