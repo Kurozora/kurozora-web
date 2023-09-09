@@ -24,6 +24,9 @@ return new class extends Migration
         });
 
         Schema::table(UserWatchedEpisode::TABLE_NAME, function (Blueprint $table) {
+            // Set unique key constraints
+            $table->unique(['user_id', 'episode_id']);
+
             // Set foreign key constraints
             $table->foreign('user_id')
                 ->references('id')
