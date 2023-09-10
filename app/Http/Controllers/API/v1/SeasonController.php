@@ -6,6 +6,7 @@ use App\Events\SeasonViewed;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GetSeasonEpisodesRequest;
+use App\Http\Requests\MarkSeasonAsWatchedRequest;
 use App\Http\Resources\EpisodeResourceIdentity;
 use App\Http\Resources\SeasonResource;
 use App\Models\Season;
@@ -57,6 +58,42 @@ class SeasonController extends Controller
         return JSONResult::success([
             'data' => EpisodeResourceIdentity::collection($episodes),
             'next' => empty($nextPageURL) ? null : $nextPageURL
+        ]);
+    }
+
+
+    /**
+     * Marks an episode as watched or not watched.
+     *
+     * @param MarkSeasonAsWatchedRequest $request
+     * @param Season $season
+     *
+     * @return JsonResponse
+     */
+    public function watched(MarkSeasonAsWatchedRequest $request, Season $season): JSONResponse
+    {
+        $user = auth()->user();
+        $episodeIDs = $season->episodes()->pluck('id');
+
+        // Find if the user has watched the season
+        $isAlreadyWatched = $user->hasWatchedSeason($season);
+
+        // If the episode's current status is watched then detach (unwatch) it, otherwise attach (watch) it.
+        if ($isAlreadyWatched) {
+            $user->episodes()->detach($episodeIDs);
+        } else {
+            $existingIDs = $user->episodes()
+                ->whereIn('episode_id', $episodeIDs)
+                ->pluck('episode_id');
+            $diffedEpisodeIDs = $episodeIDs->diff($existingIDs);
+
+            $user->episodes()->attach($diffedEpisodeIDs);
+        }
+
+        return JSONResult::success([
+            'data' => [
+                'isWatched' => !$isAlreadyWatched
+            ]
         ]);
     }
 }

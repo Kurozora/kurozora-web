@@ -94,13 +94,6 @@ class Season extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * The name of the poster image media collection.
-     *
-     * @var string $posterImageCollectionName
-     */
-    protected string $posterImageCollectionName = 'poster';
-
-    /**
      * Returns the Anime that owns the season
      *
      * @return BelongsTo

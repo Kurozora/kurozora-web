@@ -827,6 +827,41 @@
         }
       }
     },
+    "/seasons/{seasonID}/watched": {
+      "post": {
+        "security": [
+          {
+            "bearerAuth": [
+            ]
+          }
+        ],
+        "tags": [
+          "seasons"
+        ],
+        "operationId": "postSeasonsWatched",
+        "summary": "Marks the episodes of a season as \"watched\" or \"not watched\".",
+        "description": "This endpoint will updated the watched status for the episodes of a season.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "seasonID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the season."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PostSeasonsWatchedSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
     "/episodes/{episodeID}": {
       "get": {
         "security": [
@@ -5296,6 +5331,21 @@
       },
       "PostEpisodesWatchedSuccess": {
         "description": "Successful POST Episodes Watched JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": {
+                  "isWatched": true
+                }
+              }
+            }
+          }
+        }
+      },
+      "PostSeasonsWatchedSuccess": {
+        "description": "Successful POST Seasons Watched JSON response",
         "content": {
           "application/json": {
             "schema": {

@@ -13,5 +13,9 @@ Route::prefix('/seasons')
                 Route::get('/episodes', [SeasonController::class, 'episodes'])
                     ->middleware('auth.kurozora:optional')
                     ->name('.episodes');
+
+                Route::post('/watched', [SeasonController::class, 'watched'])
+                    ->middleware('auth.kurozora')
+                    ->name('.watched');
             });
     });

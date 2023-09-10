@@ -523,6 +523,18 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     }
 
     /**
+     * Returns a boolean indicating whether the user has watched the given season.
+     *
+     * @param Season $season The season to be searched for in the user's watched list.
+     *
+     * @return bool
+     */
+    function hasWatchedSeason(Season $season): bool
+    {
+        return $this->episodes()->where('season_id', $season->id)->count() === $season->episodes()->count();
+    }
+
+    /**
      * Returns the watched Episode items.
      *
      * @return BelongsToMany
