@@ -188,13 +188,13 @@ class MediaStat extends Resource
                 ->sortable()
                 ->help('The total count of all ratings.'),
 
-            Number::make('Global Rank')
+            Number::make('Global Rank', 'rank_global')
                 ->default(0)
                 ->rules(['required', 'numeric'])
                 ->sortable()
                 ->help('The rank compared to all model types, i.e. anime, manga, game and music.'),
 
-            Number::make('Total Rank')
+            Number::make('Total Rank', 'rank_total')
                 ->default(0)
                 ->rules(['required', 'numeric'])
                 ->sortable()
