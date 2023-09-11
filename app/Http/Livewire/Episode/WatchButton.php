@@ -51,7 +51,7 @@ class WatchButton extends Component
     }
 
     /**
-     * Updates the status of the anime in the auth user's library.
+     * Marks the episode as (un)watched.
      *
      * @return Application|RedirectResponse|Redirector|null
      */
@@ -82,6 +82,7 @@ class WatchButton extends Component
 
         // Notify other components of an update in the anime's data
         $this->emitUp('update-episode');
+        $this->emitTo('season.watch-button', 'update-episode');
 
         return null;
     }

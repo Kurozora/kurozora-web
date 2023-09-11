@@ -30,6 +30,7 @@
                     </div>
 
                     <div class="flex flex-wrap justify-end items-center w-full">
+                        <livewire:season.watch-button :season="$season" />
                     </div>
                 </div>
 

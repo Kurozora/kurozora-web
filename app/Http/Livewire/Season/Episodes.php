@@ -22,6 +22,15 @@ class Episodes extends Component
     public Season $season;
 
     /**
+     * The component's listeners.
+     *
+     * @var array
+     */
+    protected $listeners = [
+        'update-season' => '$refresh'
+    ];
+
+    /**
      * Prepare the component.
      *
      * @param Season $season
