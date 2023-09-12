@@ -2,13 +2,15 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class MediaRating extends KModel
 {
-    use SoftDeletes;
+    use HasUlids,
+        SoftDeletes;
 
     // Rating boundaries
     const MIN_RATING_VALUE = 0.00;
