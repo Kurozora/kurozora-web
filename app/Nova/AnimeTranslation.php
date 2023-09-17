@@ -76,9 +76,10 @@ class AnimeTranslation extends Resource
                 ->required(),
 
             Textarea::make('Synopsis')
-                ->required(),
+                ->nullable(),
 
             Text::make('Tagline')
+                ->nullable()
                 ->rules('max:255'),
         ];
     }

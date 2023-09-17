@@ -15,7 +15,6 @@ use Laravel\Nova\Fields\MorphMany;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
-use Outl1ne\NovaColorField\Color;
 use Ramsey\Uuid\Uuid;
 use Titasgailius\SearchRelations\SearchesRelations;
 
@@ -152,17 +151,17 @@ class Episode extends Resource
                 ->rules('required')
                 ->help('The total number of the episode in regard to past episodes.'),
 
-            Text::make('Title')
+            Text::make('Title Translations', 'title')
                 ->sortable()
                 ->required()
-                ->help('The real title of the episode. If unknown, then use "Episode #" as the title in the respective locale.')
-                ->translatable(),
+                ->translatable()
+                ->help('The real title of the episode. If unknown, then use "Episode #" as the title in the respective locale.'),
 
-            Textarea::make('Synopsis')
-                ->required()
+            Textarea::make('Synopsis Translations', 'synopsis')
+                ->nullable()
                 ->hideFromIndex()
-                ->help('A short description of the episode.')
-                ->translatable(),
+                ->translatable()
+                ->help('A short description of the episode.'),
 
             Number::make('Duration')
                 ->rules('required')

@@ -76,7 +76,7 @@ class EpisodeTranslation extends Resource
                 ->required(),
 
             Textarea::make('Synopsis')
-                ->required(),
+                ->nullable(),
         ];
     }
 

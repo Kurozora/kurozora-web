@@ -76,7 +76,7 @@ class SeasonTranslation extends Resource
                 ->required(),
 
             Textarea::make('Synopsis')
-                ->required(),
+                ->nullable(),
         ];
     }
 

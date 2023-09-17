@@ -118,22 +118,24 @@ class Season extends Resource
 
             BelongsTo::make('TV rating', 'tv_rating')
                 ->sortable()
-                ->help('The TV rating of the episode. For example NR, G, PG-12, etc.')
-                ->required(),
+                ->required()
+                ->help('The TV rating of the episode. For example NR, G, PG-12, etc.'),
 
             Number::make('Season Number', 'number')
                 ->rules('required', 'min:1')
                 ->hideFromIndex()
                 ->help('The sequence in which the season starts.'),
 
-            Text::make('Title')
+            Text::make('Title Translations', 'title')
                 ->sortable()
                 ->required()
-                ->translatable('Usually the name of the arc of the story. If unknown, use "Season #" as the title.'),
+                ->translatable()
+                ->help('Usually the name of the arc of the story. If unknown, use "Season #" as the title.'),
 
-            Textarea::make('Synopsis')
-                ->help('A short description of the Season.')
-                ->translatable(),
+            Textarea::make('Synopsis Translations', 'synopsis')
+                ->nullable()
+                ->translatable()
+                ->help('A short description of the Season.'),
 
             DateTime::make('Started At')
                 ->sortable()

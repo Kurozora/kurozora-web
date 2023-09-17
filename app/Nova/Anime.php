@@ -250,42 +250,44 @@ class Anime extends Resource
             Code::make('Synonym Titles')
                 ->json()
                 ->sortable()
-                ->help('Other names the anime is known by globally.')
                 ->rules(['json'])
-                ->nullable(),
+                ->nullable()
+                ->help('Other names the anime is known by globally.'),
 
             Text::make('Title Translations', 'title')
                 ->hideFromIndex()
-                ->rules('required')
+                ->required()
                 ->translatable(),
 
             Textarea::make('Synopsis Translations', 'synopsis')
                 ->help('A short description of the Anime.')
+                ->nullable()
                 ->translatable(),
 
             Text::make('Tagline Translations', 'tagline')
                 ->hideFromIndex()
+                ->nullable()
                 ->translatable(),
 
             BelongsTo::make('Source')
                 ->sortable()
-                ->help('The adaptation source of the anime. For example Manga, Game, Original, etc. If no source is available, especially for older anime, then choose Unknown.')
-                ->required(),
+                ->required()
+                ->help('The adaptation source of the anime. For example Manga, Game, Original, etc. If no source is available, especially for older anime, then choose Unknown.'),
 
             BelongsTo::make('Media Type', 'media_type')
                 ->sortable()
-                ->help('The general type of the anime. For example TV, Movie, Music, etc.')
-                ->required(),
+                ->required()
+                ->help('The general type of the anime. For example TV, Movie, Music, etc.'),
 
             BelongsTo::make('TV rating', 'tv_rating')
                 ->sortable()
-                ->help('The TV rating of the anime. For example NR, G, PG-12, etc.')
-                ->required(),
+                ->required()
+                ->help('The TV rating of the anime. For example NR, G, PG-12, etc.'),
 
             BelongsTo::make('Status')
                 ->sortable()
-                ->help('The airing status of the anime such as.')
-                ->required(),
+                ->required()
+                ->help('The airing status of the anime such as.'),
 
             Text::make('Video URL', 'video_url')
                 ->rules('max:255')
@@ -321,8 +323,8 @@ class Anime extends Resource
 
             Number::make('Duration')
                 ->onlyOnForms()
-                ->help('For series: The average runtime in <b>seconds</b> of a single episode.<br />For movies: The total amount of seconds the movie takes.')
-                ->required(),
+                ->required()
+                ->help('For series: The average runtime in <b>seconds</b> of a single episode.<br />For movies: The total amount of seconds the movie takes.'),
 
             Text::make('Air time')
                 ->withMeta(['type' => 'time'])
@@ -330,8 +332,8 @@ class Anime extends Resource
                     return Carbon::parse($time)->format('h:i A');
                 })
                 ->hideFromIndex()
-                ->help('The exact time the show airs at in JST timezone. For example: 1:30 PM (13:30)')
-                ->nullable(),
+                ->nullable()
+                ->help('The exact time the show airs at in JST timezone. For example: 1:30 PM (13:30)'),
 
             Select::make('Air day')
                 ->options(DayOfWeek::asSelectArray())

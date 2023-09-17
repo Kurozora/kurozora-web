@@ -214,36 +214,38 @@ class Game extends Resource
 
             Text::make('Title Translations', 'title')
                 ->hideFromIndex()
-                ->rules('required')
+                ->required()
                 ->translatable(),
 
             Textarea::make('Synopsis Translations', 'synopsis')
-                ->help('A short description of the Game.')
-                ->translatable(),
+                ->nullable()
+                ->translatable()
+                ->help('A short description of the Game.'),
 
             Text::make('Tagline Translations', 'tagline')
                 ->hideFromIndex()
+                ->nullable()
                 ->translatable(),
 
             BelongsTo::make('Source')
                 ->sortable()
-                ->help('The adaptation source of the game. For example Light Novel, Game, Original, etc. If no source is available, especially for older anime, then choose Unknown.')
-                ->required(),
+                ->required()
+                ->help('The adaptation source of the game. For example Light Novel, Game, Original, etc. If no source is available, especially for older anime, then choose Unknown.'),
 
             BelongsTo::make('Media Type', 'media_type')
                 ->sortable()
-                ->help('The general type of the game. For example DLC, Mod, etc.')
-                ->required(),
+                ->required()
+                ->help('The general type of the game. For example DLC, Mod, etc.'),
 
             BelongsTo::make('TV rating', 'tv_rating')
                 ->sortable()
-                ->help('The TV rating of the game. For example NR, G, PG-12, etc.')
-                ->required(),
+                ->required()
+                ->help('The TV rating of the game. For example NR, G, PG-12, etc.'),
 
             BelongsTo::make('Status')
                 ->sortable()
-                ->help('The publication status of the game such as.')
-                ->required(),
+                ->required()
+                ->help('The publication status of the game such as.'),
 
             Boolean::make('Is NSFW')
                 ->sortable()
@@ -265,8 +267,8 @@ class Game extends Resource
 
             Number::make('Duration')
                 ->onlyOnForms()
-                ->help('The average play-time in <b>seconds</b>.')
-                ->required(),
+                ->required()
+                ->help('The average play-time in <b>seconds</b>.'),
 
             Select::make('Publication day')
                 ->options(DayOfWeek::asSelectArray())
