@@ -8,6 +8,7 @@ Route::prefix('/seasons')
         Route::prefix('{season}')
             ->group(function () {
                 Route::get('/', [SeasonController::class, 'details'])
+                    ->middleware('auth.kurozora:optional')
                     ->name('.details');
 
                 Route::get('/episodes', [SeasonController::class, 'episodes'])

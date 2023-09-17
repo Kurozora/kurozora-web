@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Enums\MediaCollection;
+use App\Enums\WatchStatus;
 use App\Models\Season;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -25,7 +26,7 @@ class SeasonResource extends JsonResource
     public function toArray(Request $request): array
     {
         $resource = SeasonResourceIdentity::make($this->resource)->toArray($request);
-        return array_merge($resource, [
+        $resource = array_merge($resource, [
             'attributes'    => [
                 'poster'        => ImageResource::make($this->resource->getFirstMedia(MediaCollection::Poster)),
                 'number'        => $this->resource->number,
@@ -37,5 +38,34 @@ class SeasonResource extends JsonResource
                 'endedAt'       => $this->resource->ended_at?->timestamp,
             ]
         ]);
+
+        if (auth()->check()) {
+            $resource['attributes'] = array_merge($resource['attributes'], $this->getUserSpecificDetails());
+        }
+
+        return $resource;
+    }
+
+
+    /**
+     * Returns the user specific details for the resource.
+     *
+     * @return array
+     */
+    protected function getUserSpecificDetails(): array
+    {
+        $user = auth()->user();
+        $anime = $this->resource->anime;
+
+        // Get watch status
+        $watchStatus = WatchStatus::Disabled();
+        if ($user->hasTracked($anime)) {
+            $watchStatus = WatchStatus::fromBool($user->hasWatchedSeason($this->resource));
+        }
+
+        // Return the array
+        return [
+            'isWatched' => $watchStatus->boolValue
+        ];
     }
 }
