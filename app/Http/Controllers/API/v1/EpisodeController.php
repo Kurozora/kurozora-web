@@ -46,6 +46,12 @@ class EpisodeController extends Controller
     public function watched(MarkEpisodeAsWatchedRequest $request, Episode $episode): JSONResponse
     {
         $user = auth()->user();
+        $hasNotTracked = $user->hasNotTracked($episode->anime);
+
+        if ($hasNotTracked) {
+            // The item could not be found
+            throw new AuthorizationException(__('Please add ":x" to your library first.', ['x' => $episode->anime->title]));
+        }
 
         // Find if the user has watched the episode
         $isAlreadyWatched = $user->hasWatched($episode);
@@ -78,7 +84,7 @@ class EpisodeController extends Controller
 
         // Check if the episode has been watched
         if (!$user->hasWatched($episode)) {
-            throw new AuthorizationException(__('Please watch :x first.', ['x' => $episode->title]));
+            throw new AuthorizationException(__('Please watch ":x" first.', ['x' => $episode->title]));
         }
 
         // Validate the request

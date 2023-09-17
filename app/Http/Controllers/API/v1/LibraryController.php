@@ -177,7 +177,7 @@ class LibraryController extends Controller
 
         if ($hasNotTracked) {
             // The item could not be found
-            throw new AuthorizationException(__(':x is not in your library.', ['x' => $model->title]));
+            throw new AuthorizationException(__('":x" is not in your library.', ['x' => $model->title]));
         }
 
         // Remove this Anime from their library if it can be found

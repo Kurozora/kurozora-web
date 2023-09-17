@@ -280,7 +280,7 @@ class GameController extends Controller
 
         // Check if the user is already tracking the anime
         if ($user->hasNotTracked($game)) {
-            throw new AuthorizationException(__('Please add :x to your library first.', ['x' => $game->title]));
+            throw new AuthorizationException(__('Please add ":x" to your library first.', ['x' => $game->title]));
         }
 
         // Validate the request
