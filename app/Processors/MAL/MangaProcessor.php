@@ -721,14 +721,14 @@ class MangaProcessor extends CustomItemProcessor
     private function getSynonymTitles(Model|Manga|null $manga): ?array
     {
         $synonymTitles = $this->getAttribute('Synonyms') ?? [];
-        $currentSynonymTitles = $manga?->synonym_titles?->toArray();
-        $newSynonymTitles = empty(count($synonymTitles)) || empty($manga?->synonym_titles?->count()) ? $currentSynonymTitles : array_merge($currentSynonymTitles, $synonymTitles);
+        $currentSynonymTitles = $manga?->synonym_titles?->toArray() ?? [];
+        $newSynonymTitles = empty(count($synonymTitles)) ? $currentSynonymTitles : array_merge($currentSynonymTitles, $synonymTitles);
 
-        return count($newSynonymTitles ?? []) ? array_unique($newSynonymTitles) : null;
+        return count($newSynonymTitles) ? array_values(array_unique($newSynonymTitles)) : null;
     }
 
     /**
-     * The synopsis of the anime.
+     * The synopsis of the manga.
      *
      * @param string|null $synopsis
      * @return ?string

@@ -640,10 +640,10 @@ class AnimeProcessor extends CustomItemProcessor
     private function getSynonymTitles(Model|Anime|null $anime): ?array
     {
         $synonymTitles = $this->getAttribute('Synonyms') ?? [];
-        $currentSynonymTitles = $anime?->synonym_titles?->toArray();
-        $newSynonymTitles = empty(count($synonymTitles)) || empty($anime?->synonym_titles?->count()) ? $currentSynonymTitles : array_merge($currentSynonymTitles, $synonymTitles);
+        $currentSynonymTitles = $anime?->synonym_titles?->toArray() ?? [];
+        $newSynonymTitles = empty(count($synonymTitles)) ? $currentSynonymTitles : array_merge($currentSynonymTitles, $synonymTitles);
 
-        return count($newSynonymTitles ?? []) ? array_unique($newSynonymTitles) : null;
+        return count($newSynonymTitles) ? array_values(array_unique($newSynonymTitles)) : null;
     }
 
     /**
