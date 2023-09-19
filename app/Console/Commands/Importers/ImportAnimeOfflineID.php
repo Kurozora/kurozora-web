@@ -9,6 +9,7 @@ use App\Models\Relation;
 use App\Models\Source;
 use App\Models\Tag;
 use App\Models\Theme;
+use DB;
 use Http;
 use Illuminate\Console\Command;
 use JsonMachine\Exception\InvalidArgumentException;
@@ -49,6 +50,7 @@ class ImportAnimeOfflineID extends Command
      */
     public function handle(): int
     {
+        DB::disableQueryLog();
         $file = storage_path('app/anime-offline-database-minified.json');
         $fileSize = filesize($file);
         $animes = Items::fromFile($file, [
@@ -56,38 +58,61 @@ class ImportAnimeOfflineID extends Command
             'decoder' => new ExtJsonDecoder,
             'debug' => true
         ]);
+//        $cutoff = 100;
 
         $progressBar = $this->output->createProgressBar($fileSize);
         $progressBar->start();
 
         foreach ($animes as $data) {
-//            if ($animes->getPosition() >= 23433173) {
-                $sources = $this->filterSources($data->sources);
+//            if ($animes->getPosition() < 34572959) {
+//                continue;
+//            }
 
-                if (array_key_exists('mal_id', $sources)) {
-                    $anime = Anime::withoutGlobalScopes()
-                        ->where('mal_id', '=', $sources['mal_id'])
+            $sources = $this->filterSources($data->sources);
+
+//            if (array_key_exists('mal_id', $sources)) {
+//                if (!Anime::withoutGlobalScopes()
+//                    ->where('mal_id', '=', $sources['mal_id'])->exists()) {
+//                    $this->output->write($sources['mal_id'] . ',');
+//                    $cutoff-=1;
+//                }
+//            }
+
+//            if ($cutoff == 0) {
+//                $cutoff = 100;
+//                $this->newLine();
+//                $this->info($animes->getPosition());
+//                $this->newLine();
+//            } else {
+//                $this->output->writeln('Sources: ' . collect($sources)->join(','));
+//            }
+
+            if (array_key_exists('mal_id', $sources)) {
+                $anime = Anime::withoutGlobalScopes()
+                    ->where('mal_id', '=', $sources['mal_id'])
 //                        ->whereDate('updated_at', '<', today())
-                        ->first();
+                    ->first();
 
-                    if (!empty($anime)
+                if (!empty($anime)
 //                        && $anime->tags()->count() == 0
-                    ) {
-                        if (!empty($anime->kitsu_id)) {
-                            unset($sources['kitsu_id']);
-                        }
-                        $anime->update($sources);
+                ) {
+                    if (!empty($anime->kitsu_id)) {
+                        unset($sources['kitsu_id']);
+                    }
+                    $anime->update($sources);
 //                        $anime->touch();
 
-                        // Add tags
-//                        $this->addTags($data->tags, $anime);
-                    }
+                    // Add tags
+                    $this->addTags($data->tags, $anime);
+                } else {
+                    $this->output->info('Missing MAL ID: ' . $sources['mal_id'] ?? 'N/A');
+                    $this->output->info('Missing anime: ' . print_r($sources, true));
                 }
+            }
 
-                $progress = $animes->getPosition();
+            $progress = $animes->getPosition();
 //                echo intval($animes->getPosition() / $fileSize * 100) . ' %' . PHP_EOL;
-                $progressBar->setProgress($progress);
-//            }
+            $progressBar->setProgress($progress);
         }
 
         $progressBar->finish();
@@ -148,7 +173,7 @@ class ImportAnimeOfflineID extends Command
      */
     protected function getIDsFromNotify(string $notifyID): array
     {
-        $response = Http::timeout(120)
+        $response = Http::timeout(5)
             ->get('https://notify.moe/api/anime/' . $notifyID);
         $cleanSources = [];
 
@@ -227,7 +252,8 @@ class ImportAnimeOfflineID extends Command
                 continue;
             }
 
-            $tag = Tag::firstOrCreate([
+            $tag = Tag::withoutGlobalScopes()
+                ->firstOrCreate([
                     'name' => $tagName
                 ], [
                     'description' => null
