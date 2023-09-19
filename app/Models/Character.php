@@ -428,7 +428,6 @@ class Character extends KModel implements HasMedia, Sitemapable
     {
         // Find location of cached data
         $cacheKey = self::cacheKey(['name' => 'character.games', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit, 'page' => $page]);
-        \App\Models\AnimeCast::where('updated_at', '<', today())->chunkById(2000, function($animeCasts) { foreach($animeCasts as $animeCast) { $animeCast->update(['id' => $animeCast->newUniqueId()]); } });
 
         // Retrieve or save cached result
         return Cache::remember($cacheKey, self::CACHE_KEY_GAMES_SECONDS, function () use ($limit) {
