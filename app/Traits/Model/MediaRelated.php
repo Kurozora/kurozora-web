@@ -2,9 +2,6 @@
 
 namespace App\Traits\Model;
 
-use App\Models\Anime;
-use App\Models\Game;
-use App\Models\Manga;
 use App\Models\MediaRelation;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -21,13 +18,20 @@ trait MediaRelated
     {
         static::deleting(function (Model $model) {
             if (in_array(SoftDeletes::class, class_uses_recursive($model))) {
-                if (!$model->forceDeleting) {
+                if ($model->forceDeleting) {
+                    $model->mediaRelated()->forceDelete();
                     return;
                 }
             }
 
             $model->mediaRelated()->delete();
         });
+
+        if (in_array(SoftDeletes::class, class_uses_recursive(static::class))) {
+            static::restoring(function (Model $model) {
+                $model->mediaRelated()->restore();
+            });
+        }
     }
 
     /**

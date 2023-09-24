@@ -20,13 +20,20 @@ trait HasMediaStaff
     {
         static::deleting(function (Model $model) {
             if (in_array(SoftDeletes::class, class_uses_recursive($model))) {
-                if (!$model->forceDeleting) {
+                if ($model->forceDeleting) {
+                    $model->mediaStaff()->forceDelete();
                     return;
                 }
             }
 
             $model->mediaStaff()->delete();
         });
+
+        if (in_array(SoftDeletes::class, class_uses_recursive(static::class))) {
+            static::restoring(function (Model $model) {
+                $model->mediaStaff()->restore();
+            });
+        }
     }
 
     /**

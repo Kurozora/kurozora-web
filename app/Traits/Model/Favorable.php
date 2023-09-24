@@ -21,13 +21,20 @@ trait Favorable
     {
         static::deleting(function (Model $model) {
             if (in_array(SoftDeletes::class, class_uses_recursive($model))) {
-                if (!$model->forceDeleting) {
+                if ($model->forceDeleting) {
+                    $model->favorites()->forceDelete();
                     return;
                 }
             }
 
             $model->favorites()->delete();
         });
+
+        if (in_array(SoftDeletes::class, class_uses_recursive(static::class))) {
+            static::restoring(function (Model $model) {
+                $model->favorites()->restore();
+            });
+        }
     }
 
     /**

@@ -2,12 +2,8 @@
 
 namespace App\Traits\Model;
 
-use App\Models\Comment;
-use App\Models\Session;
 use App\Models\SessionAttribute;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -22,13 +18,20 @@ trait HasSessionAttribute
     {
         static::deleting(function (Model $model) {
             if (in_array(SoftDeletes::class, class_uses_recursive($model))) {
-                if (!$model->forceDeleting) {
+                if ($model->forceDeleting) {
+                    $model->session_attribute()->forceDelete();
                     return;
                 }
             }
 
             $model->session_attribute()->delete();
         });
+
+        if (in_array(SoftDeletes::class, class_uses_recursive(static::class))) {
+            static::restoring(function (Model $model) {
+                $model->session_attribute()->restore();
+            });
+        }
     }
 
     /**

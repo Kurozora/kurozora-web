@@ -20,13 +20,20 @@ trait HasMediaSongs
     {
         static::deleting(function (Model $model) {
             if (in_array(SoftDeletes::class, class_uses_recursive($model))) {
-                if (!$model->forceDeleting) {
+                if ($model->forceDeleting) {
+                    $model->mediaSongs()->forceDelete();
                     return;
                 }
             }
 
             $model->mediaSongs()->delete();
         });
+
+        if (in_array(SoftDeletes::class, class_uses_recursive(static::class))) {
+            static::restoring(function (Model $model) {
+                $model->mediaSongs()->restore();
+            });
+        }
     }
 
     /**
