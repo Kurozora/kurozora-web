@@ -84,7 +84,7 @@ class AnimeSpider extends BasicSpider
      *
      * @var int $requestDelay
      */
-    public int $requestDelay = 1;
+    public int $requestDelay = 2;
 
     /**
      * @param Response $response
@@ -196,7 +196,11 @@ class AnimeSpider extends BasicSpider
 
         $scoreCount = $scoreAverage !== 'N/A' ? $response->filter('span[itemprop="ratingCount"]')->text() : 0;
 
-        yield $this->item(new AnimeStatItem($id, $scores, (float) $scoreAverage, (int) $scoreCount));
+        yield $this->item(new AnimeStatItem(
+            $id, $scores,
+            (float) $scoreAverage,
+            (int) $scoreCount
+        ));
     }
 
     /**

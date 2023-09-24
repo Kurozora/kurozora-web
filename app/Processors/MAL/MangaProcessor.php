@@ -589,7 +589,9 @@ class MangaProcessor extends CustomItemProcessor
                     'name' => $malStudioName,
                     'type' => StudioType::Manga,
                 ]);
-            $mediaStudio = $manga?->mediaStudios()->firstWhere('studio_id', '=', $studio->id);
+            $mediaStudio = $manga?->mediaStudios()
+                ->withoutGlobalScopes()
+                ->firstWhere('studio_id', '=', $studio->id);
 
             if (empty($mediaStudio)) {
                 MediaStudio::create([
@@ -738,7 +740,9 @@ class MangaProcessor extends CustomItemProcessor
         $synopsis = empty(trim($synopsis)) ? null: $synopsis;
 
         if (!empty($synopsis)) {
-            if (str($synopsis)->contains(['[Written by MAL Rewrite]'])) {
+            if (str($synopsis)->contains('No synopsis information')) {
+                $synopsis = null;
+            } else if (str($synopsis)->contains(['[Written by MAL Rewrite]'])) {
                 $synopsis = str($synopsis)->replaceLast('[Written by MAL Rewrite]', 'Source: MAL');
             } else {
                 $synopsis = preg_replace_array('/\([^ ]*|\)/i', ['Source:', ''], $synopsis);
