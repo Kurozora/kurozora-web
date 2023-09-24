@@ -139,6 +139,26 @@ class Theme extends Resource
                 ->slider()
                 ->rules('required'),
 
+            Color::make('Background Color 1')
+                ->slider()
+                ->rules('required'),
+
+            Color::make('Background Color 2')
+                ->slider()
+                ->rules('required'),
+
+            Color::make('Text Color 1')
+                ->slider()
+                ->rules('required'),
+
+            Color::make('Text Color 2')
+                ->slider()
+                ->rules('required'),
+
+            Boolean::make('Is NSFW')
+                ->rules('required')
+                ->sortable(),
+
             Boolean::make('Is NSFW')
                 ->rules('required')
                 ->sortable(),
