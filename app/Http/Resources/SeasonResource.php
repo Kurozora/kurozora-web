@@ -28,7 +28,10 @@ class SeasonResource extends JsonResource
         $resource = SeasonResourceIdentity::make($this->resource)->toArray($request);
         $resource = array_merge($resource, [
             'attributes'    => [
-                'poster'        => ImageResource::make($this->resource->getFirstMedia(MediaCollection::Poster)),
+                'poster'        => ImageResource::make(
+                    $this->resource->getFirstMedia(MediaCollection::Poster) ??
+                    $this->resource->anime->getFirstMedia(MediaCollection::Poster)
+                ),
                 'number'        => $this->resource->number,
                 'title'         => $this->resource->title,
                 'synopsis'      => $this->resource->synopsis,
