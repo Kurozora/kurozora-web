@@ -25,7 +25,8 @@ final class AnimeStatsProcessor extends CustomItemProcessor
         $malID = $item->get('id');
         logger()->channel('stderr')->info('🔄 [MAL_ID:ANIME:' . $malID . '] Processing stats');
 
-        $anime = Anime::withoutGlobalScopes()
+        $anime = Anime::with('mediaStat')
+            ->withoutGlobalScopes()
             ->firstWhere('mal_id', '=', $malID);
         $mediaStat = $anime->mediaStat;
         $scores = $this->cleanScores($item->get('scores') ?? []);

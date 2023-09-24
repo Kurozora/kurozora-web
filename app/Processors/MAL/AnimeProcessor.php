@@ -86,7 +86,7 @@ class AnimeProcessor extends CustomItemProcessor
     {
         $malID = $item->get('id');
         $this->item = $item;
-        logger()->channel('stderr')->info(print_r($item, true));
+
         logger()->channel('stderr')->info('🔄 [MAL_ID:ANIME:' . $malID . '] Processing ' . $malID);
 
         $anime = Anime::withoutGlobalScopes()
@@ -559,7 +559,9 @@ class AnimeProcessor extends CustomItemProcessor
                     'name' => $malStudioName,
                     'type' => StudioType::Anime,
                 ]);
-            $mediaStudio = $anime?->mediaStudios()->firstWhere('studio_id', '=', $studio->id);
+            $mediaStudio = $anime?->mediaStudios()
+                ->withoutGlobalScopes()
+                ->firstWhere('studio_id', '=', $studio->id);
 
             if (empty($mediaStudio)) {
                 MediaStudio::create([
@@ -657,7 +659,9 @@ class AnimeProcessor extends CustomItemProcessor
         $synopsis = empty(trim($synopsis)) ? null: $synopsis;
 
         if (!empty($synopsis)) {
-            if (str($synopsis)->contains(['[Written by MAL Rewrite]'])) {
+            if (str($synopsis)->contains('No synopsis information')) {
+                $synopsis = null;
+            } else if (str($synopsis)->contains(['[Written by MAL Rewrite]'])) {
                 $synopsis = str($synopsis)->replaceLast('[Written by MAL Rewrite]', 'Source: MAL');
             } else {
                 $synopsis = preg_replace_array('/\([^ ]*|\)/i', ['Source:', ''], $synopsis);
