@@ -300,9 +300,11 @@ class Anime extends Resource
             Heading::make('Aggregates'),
 
             Number::make('Season Count')
+                ->default(1)
                 ->help('The total number of seasons.'),
 
             Number::make('Episode Count')
+                ->default(12)
                 ->help('The total number of episodes.'),
 
             Heading::make('Schedule'),
