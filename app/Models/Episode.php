@@ -50,9 +50,6 @@ class Episode extends KModel implements HasMedia, Sitemapable
     // How long to cache certain responses
     const CACHE_KEY_STAT_SECONDS = 60 * 60 * 2;
 
-    // Minimum ratings required to calculate average
-    const MINIMUM_RATINGS_REQUIRED = 1;
-
     // Table name
     const TABLE_NAME = 'episodes';
     protected $table = self::TABLE_NAME;

@@ -77,9 +77,6 @@ class Manga extends KModel implements HasMedia, Sitemapable
         Trackable,
         TvRated;
 
-    // Minimum ratings required to calculate average
-    const MINIMUM_RATINGS_REQUIRED = 130;
-
     // Maximum relationships fetch limit
     const MAXIMUM_RELATIONSHIPS_LIMIT = 10;
 
