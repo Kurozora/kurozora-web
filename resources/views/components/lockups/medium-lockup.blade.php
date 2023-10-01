@@ -1,6 +1,6 @@
-@props(['genre' => null, 'theme' => null, 'title' => '', 'backgroundColor' => 'transparent', 'backgroundImage' => ''])
+@props(['genre' => null, 'theme' => null, 'href' => '', 'title' => '', 'backgroundColor' => 'transparent', 'backgroundImage' => ''])
 
-@if(!empty($genre))
+@if (!empty($genre))
     <a href="{{ route('genres.details', $genre) }}" class="relative pb-2 snap-normal snap-center">
         <div
             class="flex justify-center w-64 h-40 rounded-lg"
@@ -19,11 +19,11 @@
             </picture>
         </div>
 
-        @if(!empty($genre->name))
+        @if (!empty($genre->name))
             <p class="pt-3">{{ $genre->name }}</p>
         @endif
     </a>
-@elseif(!empty($theme))
+@elseif (!empty($theme))
     <a href="{{ route('themes.details', $theme) }}" class="relative pb-2 snap-normal snap-center">
         <div
             class="flex justify-center w-64 h-40 rounded-lg"
@@ -42,7 +42,7 @@
             </picture>
         </div>
 
-        @if(!empty($theme->name))
+        @if (!empty($theme->name))
             <p class="pt-3">{{ $theme->name }}</p>
         @endif
     </a>
