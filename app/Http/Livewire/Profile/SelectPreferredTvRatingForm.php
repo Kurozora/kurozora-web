@@ -34,7 +34,7 @@ class SelectPreferredTvRatingForm extends Component
      *
      * @param UpdatesUserPreferredTvRating $updater
      */
-    public function updatePreferredTvRating(UpdatesUserPreferredTvRating $updater)
+    public function updatePreferredTvRating(UpdatesUserPreferredTvRating $updater): void
     {
         $this->resetErrorBag();
 

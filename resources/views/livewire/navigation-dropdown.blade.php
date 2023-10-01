@@ -189,7 +189,7 @@
                     {{-- Right Side --}}
                     <div class="flex items-center md:justify-between md:ml-8 md:-my-px md:space-x-8">
                         {{-- Search --}}
-                        <a class="inline-flex items-center text-gray-500 cursor-pointer transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none focus:text-gray-700"
+                        <button class="inline-flex h-8 w-8 items-center justify-center text-gray-500 cursor-pointer transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none focus:text-gray-700"
                            x-show="! isSearchEnabled"
                            x-on:click="isNavOpen = false; isSearchEnabled = ! isSearchEnabled;"
                            x-transition:enter="ease-out duration-150 delay-150 transform sm:delay-300"
@@ -200,7 +200,7 @@
                            x-transition:leave-end="opacity-0 scale-75"
                         >
                             @svg('magnifyingglass', 'fill-current', ['width' => '18'])
-                        </a>
+                        </button>
 
                         {{-- Settings Dropdown --}}
                         <x-dropdown align="right" width="48" content-classes="hidden bg-white md:block">

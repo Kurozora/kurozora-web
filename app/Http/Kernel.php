@@ -16,6 +16,7 @@ use App\Http\Middleware\PreventRequestsDuringMaintenance;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Http\Middleware\TrimStrings;
 use App\Http\Middleware\TrustProxies;
+use App\Http\Middleware\TVRating;
 use App\Http\Middleware\UserIsProOrSubscribed;
 use App\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Auth\Middleware\AuthenticateWithBasicAuth;
@@ -66,6 +67,7 @@ class Kernel extends HttpKernel
             StartSession::class,
             'auth.session',
             'localization',
+            'tv-rating',
             ShareErrorsFromSession::class,
             VerifyCsrfToken::class,
             SubstituteBindings::class,
@@ -75,6 +77,7 @@ class Kernel extends HttpKernel
             EnsureAPIRequestsAreStateful::class,
             ThrottleRequests::class.':api',
             'localization',
+            'tv-rating',
             SubstituteBindings::class,
         ],
     ];
@@ -100,6 +103,7 @@ class Kernel extends HttpKernel
         'password.confirm' => RequirePassword::class,
         'signed' => ValidateSignature::class,
         'throttle' => ThrottleRequests::class,
+        'tv-rating' => TVRating::class,
         'user.is-pro-or-subscribed' => UserIsProOrSubscribed::class,
         'verified' => EnsureEmailIsVerified::class,
         'explore.always-enabled' => ExploreCategoryAlwaysEnabled::class
