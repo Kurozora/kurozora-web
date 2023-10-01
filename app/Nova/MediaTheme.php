@@ -11,6 +11,7 @@ use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\MorphTo;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Nova;
 use Validator;
 
 class MediaTheme extends Resource
@@ -109,15 +110,20 @@ class MediaTheme extends Resource
     protected static function afterValidation(NovaRequest $request, $validator): void
     {
         $resourceID = $request->resourceId;
-        $anime = $request->post('anime');
+        $modelType = Nova::modelInstanceForKey($request->post('model_type'))->getMorphClass();
+        $model = $request->post('model');
         $theme = $request->post('theme');
 
-        $unique = Rule::unique(\App\Models\MediaTheme::TABLE_NAME, 'theme_id')->where(function ($query) use($resourceID, $anime, $theme) {
+        $unique = Rule::unique(\App\Models\MediaTheme::TABLE_NAME, 'theme_id')->where(function ($query) use($request, $resourceID, $modelType, $model, $theme) {
             if ($resourceID) {
                 $query->whereNotIn('id', [$resourceID]);
             }
 
-            return $query->where('model_id', $anime)->where('theme_id', $theme);
+            $query->where([
+                ['model_type', '=', $modelType],
+                ['model_id', '=', $model],
+                ['theme_id', '=', $theme]
+            ]);
         });
 
         $uniqueValidator = Validator::make($request->only('theme'), [
