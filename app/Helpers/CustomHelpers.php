@@ -147,10 +147,14 @@ if (!function_exists('season_of_year')) {
         $date = $date ?? now();
         $year = $date->year;
 
-        $winter = Carbon::createFromDate($year, 1, 1);
-        $spring = Carbon::createFromDate($year, 4, 1);
-        $summer = Carbon::createFromDate($year, 7, 1);
-        $fall = Carbon::createFromDate($year, 10, 1);
+        $winter = Carbon::createFromDate($year, 1, 1)
+            ->setTime(0, 0);
+        $spring = Carbon::createFromDate($year, 4, 1)
+            ->setTime(0, 0);
+        $summer = Carbon::createFromDate($year, 7, 1)
+            ->setTime(0, 0);
+        $fall = Carbon::createFromDate($year, 10, 1)
+            ->setTime(0, 0);
 
         return match (true) {
             $date >= $spring && $date < $summer => SeasonOfYear::Spring(),
