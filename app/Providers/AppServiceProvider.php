@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Models\PersonalAccessToken;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
@@ -21,19 +23,38 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        /*
-         * This snippet logs the amount of executed queries per request ..
-         * .. to the config.
-         */
-        DB::listen(function ($query) {
-            $currentConfigValue = Config::get(self::$queryCountConfigKey);
+        /// Prevent model relationships from lazy loading...
+        Model::preventLazyLoading();
 
-            if ($currentConfigValue == null) {
-                Config::set(self::$queryCountConfigKey, 1);
-            } else {
-                Config::set(self::$queryCountConfigKey, $currentConfigValue + 1);
-            }
-        });
+        // ...but in production, log the violation instead of throwing an exception...
+        if (app()->isProduction()) {
+            Model::handleLazyLoadingViolationUsing(function ($model, $relation) {
+                // ...as long debug is enabled.
+                if (app()->hasDebugModeEnabled()) {
+                    $class = get_class($model);
+
+                    info("Attempted to lazy load [$relation] on model [$class].");
+                }
+            });
+        }
+
+        if ($this->app->hasDebugModeEnabled()) {
+            /// This snippet logs the amount of executed queries per request
+            /// to the config.
+            DB::listen(function (QueryExecuted $query) {
+                $currentConfigValue = Config::get(self::$queryCountConfigKey);
+
+                if ($currentConfigValue == null) {
+                    Config::set(self::$queryCountConfigKey, 1);
+                } else {
+                    // - NOTE: For local debug purposes
+//                    logger()->warning('==== Start ====');
+//                    logger()->info($query->sql);
+//                    logger()->warning('==== End ====');
+                    Config::set(self::$queryCountConfigKey, $currentConfigValue + 1);
+                }
+            });
+        }
 
         /*
          * Set the default Sanctum classes.

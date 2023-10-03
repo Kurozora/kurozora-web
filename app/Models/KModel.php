@@ -13,21 +13,21 @@ class KModel extends Model
      */
     protected $guarded = [];
 
-    protected static function boot()
+    /**
+     * The relations to eager load on every query.
+     *
+     * @var array
+     */
+    protected $with = [];
+
+    /**
+     * Bootstrap the model and its traits.
+     *
+     * @return void
+     */
+    protected static function boot(): void
     {
         parent::boot();
-
-        // Prevent lazy loading always.
-        Model::preventLazyLoading();
-
-        // But in production, log the violation instead of throwing an exception.
-        Model::handleLazyLoadingViolationUsing(function ($model, $relation) {
-            $class = get_class($model);
-
-            if (app()->isLocal()) {
-                info("Attempted to lazy load [$relation] on model [$class].");
-            }
-        });
     }
 
     /**
