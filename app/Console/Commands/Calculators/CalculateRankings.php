@@ -4,6 +4,7 @@ namespace App\Console\Commands\Calculators;
 
 use App\Models\MediaStat;
 use Artisan;
+use DB;
 use Illuminate\Console\Command;
 
 class CalculateRankings extends Command
@@ -51,13 +52,14 @@ class CalculateRankings extends Command
             return Command::FAILURE;
         }
 
+        DB::disableQueryLog();
+
         if ($class === 'all') {
             MediaStat::withoutGlobalScopes()
                 ->distinct()
                 ->select(['model_type'])
                 ->pluck('model_type')
                 ->each(function ($modelType) {
-                    logger()->channel('stderr')->info($modelType);
                     Artisan::call('calculate:rankings', ['model' => $modelType]);
                 });
 
@@ -65,6 +67,7 @@ class CalculateRankings extends Command
         }
 
         $mediaStat = MediaStat::withoutGlobalScopes()
+            ->orderBy('in_progress_count', 'desc')
             ->orderBy('rating_average', 'desc')
             ->orderBy('rating_count', 'desc');
 
@@ -75,6 +78,7 @@ class CalculateRankings extends Command
         $mediaStat->chunk($perPage, function ($mediaStats) use ($isGlobal, $perPage, &$page) {
             foreach ($mediaStats as $index => $mediaStat) {
                 $rank = ($page - 1) * $perPage + $index + 1;
+
                 if ($isGlobal) {
                     $mediaStat->rank_global = $rank;
                 } else {
@@ -90,6 +94,8 @@ class CalculateRankings extends Command
 
             $page++;
         });
+
+        DB::enableQueryLog();
 
         return Command::SUCCESS;
     }
