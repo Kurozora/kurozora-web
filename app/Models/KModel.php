@@ -75,10 +75,6 @@ class KModel extends Model
      */
     static function getTvRatingSettings(): int
     {
-        if (auth()->check()) {
-            return auth()->user()->tv_rating;
-        }
-
-        return 4;
+        return auth()->user()?->tv_rating ?? 4;
     }
 }
