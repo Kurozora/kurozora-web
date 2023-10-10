@@ -12,6 +12,7 @@
     }"
     x-show="selectedStatus.toLowerCase() === '{{ strtolower($status) }}' && loadResource()"
     x-cloak=""
+    wire:init="loadSection"
 >
     <section>
         <x-search-bar>
@@ -43,5 +44,21 @@
                 <p class="text-sm text-gray-500">{{ __('Add a show to your :x list and it will show up here.', ['x' => strtolower($status)]) }}</p>
             </section>
         @endif
+    @else
+        <section  class="mt-4 pt-5 pb-8 border-t-2">
+            <div class="flex gap-4 justify-between flex-wrap">
+                <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                <div class="w-64 md:w-80 flex-grow"></div>
+                <div class="w-64 md:w-80 flex-grow"></div>
+            </div>
+        </section>
     @endif
 </div>

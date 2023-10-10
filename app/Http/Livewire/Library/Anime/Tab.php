@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Livewire\Component;
 
@@ -42,6 +43,13 @@ class Tab extends Component
     public bool $loadResourceIsEnabled = false;
 
     /**
+     * Whether the component is ready to load.
+     *
+     * @var bool $readyToLoad
+     */
+    public bool $readyToLoad = false;
+
+    /**
      * Prepare the component.
      *
      * @param User $user
@@ -53,6 +61,16 @@ class Tab extends Component
         $status = str($status)->title();
         $this->user = $user;
         $this->status = $status;
+    }
+
+    /**
+     * Sets the property to load the section.
+     *
+     * @return void
+     */
+    public function loadSection(): void
+    {
+        $this->readyToLoad = true;
     }
 
     /**
@@ -95,7 +113,7 @@ class Tab extends Component
      */
     public function getSearchResultsProperty(): ?LengthAwarePaginator
     {
-        if (!$this->loadResourceIsEnabled) {
+        if (!$this->loadResourceIsEnabled || !$this->readyToLoad) {
             return null;
         }
 
@@ -139,6 +157,7 @@ class Tab extends Component
         if (empty($this->search) && empty($wheres) && empty($orders)) {
             $animes = $this->user
                 ->whereTracked(Anime::class)
+                ->with(['genres', 'themes', 'media', 'mediaStat', 'translations', 'tv_rating'])
                 ->wherePivot('status', $userLibraryStatus->value);
             return $animes->paginate($this->perPage);
         }
@@ -148,15 +167,17 @@ class Tab extends Component
             ->where('user_id', $this->user->id)
             ->where('trackable_type', Anime::class)
             ->where('status', $userLibraryStatus->value)
-            ->paginate(perPage: 2000, page: 1)
-            ->items()
-        )
+            ->simplePaginateRaw(perPage: 2000, page: 1)
+            ->items()['hits'] ?? [])
             ->pluck('trackable_id')
             ->toArray();
         $animes = Anime::search($this->search);
         $animes->whereIn('id', $animeIDs);
         $animes->wheres = $wheres;
         $animes->orders = $orders;
+        $animes->query(function (Builder $query) {
+            $query->with(['genres', 'themes', 'media', 'mediaStat', 'translations', 'tv_rating']);
+        });
 
         // Paginate
         return $animes->paginate($this->perPage);
