@@ -217,9 +217,9 @@
                                 >
                                     <div
                                         class="h-8 w-8 bg-cover rounded-full"
-                                        style="background-image: url({{ auth()->user()?->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/user_profile.webp') }});"
-                                        alt="{{ auth()->user()?->username ?? __('Guest') }} {{ __('Profile') }}"
-                                        title="{{ auth()->user()?->username ?? __('Guest') }}"
+                                        style="background-image: url({{ $user?->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/user_profile.webp') }});"
+                                        alt="{{ $user?->username ?? __('Guest') }} {{ __('Profile') }}"
+                                        title="{{ $user?->username ?? __('Guest') }}"
                                         role="img"
                                     ></div>
                                 </button>
@@ -238,15 +238,15 @@
                                         {{ __('Library') }}
                                     </div>
 
-                                    <x-dropdown-link href="{{ route('profile.anime-library', auth()->user()) }}">
+                                    <x-dropdown-link href="{{ route('profile.anime-library', $user) }}">
                                         {{ __('Anime Library') }}
                                     </x-dropdown-link>
 
-                                    <x-dropdown-link href="{{ route('profile.manga-library', auth()->user()) }}">
+                                    <x-dropdown-link href="{{ route('profile.manga-library', $user) }}">
                                         {{ __('Manga Library') }}
                                     </x-dropdown-link>
 
-                                    <x-dropdown-link href="{{ route('profile.games-library', auth()->user()) }}">
+                                    <x-dropdown-link href="{{ route('profile.games-library', $user) }}">
                                         {{ __('Games Library') }}
                                     </x-dropdown-link>
                                 @else
@@ -264,15 +264,15 @@
                                 </div>
 
                                 @auth
-                                    <x-dropdown-link href="{{ route('profile.favorite-anime', auth()->user()) }}">
+                                    <x-dropdown-link href="{{ route('profile.favorite-anime', $user) }}">
                                         {{ __('Favorite Anime') }}
                                     </x-dropdown-link>
 
-                                    <x-dropdown-link href="{{ route('profile.favorite-manga', auth()->user()) }}">
+                                    <x-dropdown-link href="{{ route('profile.favorite-manga', $user) }}">
                                         {{ __('Favorite Manga') }}
                                     </x-dropdown-link>
 
-                                    <x-dropdown-link href="{{ route('profile.favorite-games', auth()->user()) }}">
+                                    <x-dropdown-link href="{{ route('profile.favorite-games', $user) }}">
                                         {{ __('Favorite Game') }}
                                     </x-dropdown-link>
                                 @endauth
@@ -385,12 +385,12 @@
                 @auth
                     <div class="flex items-center pl-4 pr-4 pb-4">
                         <div class="shrink-0">
-                            <div class="h-10 w-10 bg-cover rounded-full" style="background-image: url({{ auth()->user()->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) }});" alt="{{ auth()->user()->username }}" role="img"></div>
+                            <div class="h-10 w-10 bg-cover rounded-full" style="background-image: url({{ $user->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) }});" alt="{{ $user->username }}" role="img"></div>
                         </div>
 
                         <div class="ml-3">
-                            <div class="font-medium text-base text-gray-800">{{ auth()->user()->username }}</div>
-                            <div class="font-medium text-sm text-gray-500">{{ auth()->user()->email }}</div>
+                            <div class="font-medium text-base text-gray-800">{{ $user->username }}</div>
+                            <div class="font-medium text-sm text-gray-500">{{ $user->email }}</div>
                         </div>
                     </div>
 
@@ -405,17 +405,17 @@
 
                     {{-- Library --}}
                     <div class="space-y-1">
-                        <x-responsive-nav-link href="{{ route('profile.anime-library', auth()->user()) }}"
+                        <x-responsive-nav-link href="{{ route('profile.anime-library', $user) }}"
                                                :active="request()->routeIs('profile.anime-library')">
                             {{ __('Anime Library') }}
                         </x-responsive-nav-link>
 
-                        <x-responsive-nav-link href="{{ route('profile.manga-library', auth()->user()) }}"
+                        <x-responsive-nav-link href="{{ route('profile.manga-library', $user) }}"
                                                :active="request()->routeIs('profile.manga-library')">
                             {{ __('Manga Library') }}
                         </x-responsive-nav-link>
 
-                        <x-responsive-nav-link href="{{ route('profile.games-library', auth()->user()) }}"
+                        <x-responsive-nav-link href="{{ route('profile.games-library', $user) }}"
                                                :active="request()->routeIs('profile.games-library')">
                             {{ __('Games Library') }}
                         </x-responsive-nav-link>
@@ -441,18 +441,18 @@
                 {{-- More Pages --}}
                 <div class="space-y-1">
                     @auth
-                        <x-responsive-nav-link href="{{ route('profile.favorite-anime', auth()->user()) }}"
-                                               :active="request()->routeIs('profile.favorite-anime', auth()->user())">
+                        <x-responsive-nav-link href="{{ route('profile.favorite-anime', $user) }}"
+                                               :active="request()->routeIs('profile.favorite-anime', $user)">
                             {{ __('Favorite Anime') }}
                         </x-responsive-nav-link>
 
-                        <x-responsive-nav-link href="{{ route('profile.favorite-manga', auth()->user()) }}"
-                                               :active="request()->routeIs('profile.favorite-manga', auth()->user())">
+                        <x-responsive-nav-link href="{{ route('profile.favorite-manga', $user) }}"
+                                               :active="request()->routeIs('profile.favorite-manga', $user)">
                             {{ __('Favorite Manga') }}
                         </x-responsive-nav-link>
 
-                        <x-responsive-nav-link href="{{ route('profile.favorite-games', auth()->user()) }}"
-                                               :active="request()->routeIs('profile.favorite-games', auth()->user())">
+                        <x-responsive-nav-link href="{{ route('profile.favorite-games', $user) }}"
+                                               :active="request()->routeIs('profile.favorite-games', $user)">
                             {{ __('Favorite Game') }}
                         </x-responsive-nav-link>
                     @endauth
