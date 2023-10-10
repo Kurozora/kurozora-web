@@ -13,7 +13,7 @@ use App\Models\Song;
 use App\Models\Studio;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 use Illuminate\View\View;
 use Livewire\Component;
 
@@ -27,11 +27,11 @@ class Section extends Component
     public string $chartKind;
 
     /**
-     * Whether the component is initialized.
+     * Whether the component is ready to load.
      *
-     * @var bool $isInit
+     * @var bool $readyToLoad
      */
-    public bool $isInit = false;
+    public bool $readyToLoad = false;
 
     /**
      * Prepare the component.
@@ -45,36 +45,43 @@ class Section extends Component
     }
 
     /**
-     * Loads the explore category section.
+     * Sets the property to load the section.
      *
      * @return void
      */
     public function loadSection(): void
     {
-        $this->isInit = true;
+        $this->readyToLoad = true;
     }
 
     /**
      * Returns the chart for the specified chart kind.
      *
-     * @return LengthAwarePaginator|null
+     * @return array|Collection
      */
-    public function getChartProperty(): ?LengthAwarePaginator
+    public function getChartProperty(): array|Collection
     {
+        if (!$this->readyToLoad) {
+            return [];
+        }
+
         $model = match ($this->chartKind) {
-            ChartKind::Anime => Anime::class,
-            ChartKind::Characters => Character::class,
-            ChartKind::Episodes => Episode::class,
-            ChartKind::Games => Game::class,
-            ChartKind::Manga => Manga::class,
-            ChartKind::People => Person::class,
-            ChartKind::Songs => Song::class,
-            ChartKind::Studios => Studio::class
+            ChartKind::Anime => Anime::with(['genres', 'themes', 'media', 'mediaStat', 'translations', 'tv_rating']),
+            ChartKind::Characters => Character::with(['media', 'translations']),
+            ChartKind::Episodes => Episode::with(['media', 'season' => function ($query) {
+                $query->with(['anime.translations', 'translations']);
+            }, 'translations']),
+            ChartKind::Games => Game::with(['genres', 'themes', 'media', 'mediaStat', 'translations', 'tv_rating']),
+            ChartKind::Manga => Manga::with(['genres', 'themes', 'media', 'mediaStat', 'translations', 'tv_rating']),
+            ChartKind::People => Person::with(['media']),
+            ChartKind::Songs => Song::with([]),
+            ChartKind::Studios => Studio::with(['media'])
         };
 
-        return $model::orderBy('rank_total')
-            ->where('rank_total', '!=', 0)
-            ->paginate();
+        return $model->where('rank_total', '!=', 0)
+            ->orderBy('rank_total')
+            ->limit(15)
+            ->get();
     }
 
     /**

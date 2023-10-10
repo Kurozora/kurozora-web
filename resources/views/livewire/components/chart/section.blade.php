@@ -1,4 +1,4 @@
-<section class="pt-5 pb-8 border-t-2" wire:init="loadSection">
+<section class="pt-5 pb-8 border-t-2">
     <x-section-nav class="flex flex-nowrap justify-between mb-5">
         <x-slot:title>
             {{ __(':x Top Charts', ['x' => ucfirst($chartKind)]) }}
@@ -6,18 +6,14 @@
 
         <x-slot:action>
             @hasrole('superAdmin')
-            <x-button wire:click="$refresh">{{ __('Refresh') }}</x-button>
+                <x-button wire:click="$refresh">{{ __('Refresh') }}</x-button>
             @endhasrole
             <x-section-nav-link class="whitespace-nowrap" href="{{ route('charts.details', $chartKind) }}">{{ __('See All') }}</x-section-nav-link>
         </x-slot:action>
     </x-section-nav>
 
-    <div class="flex justify-center">
-        <x-spinner />
-    </div>
-
-    @if($isInit)
-        <div class="flex flex-nowrap gap-4 snap-x overflow-x-scroll no-scrollbar">
+    <section class="flex flex-nowrap gap-4 snap-x overflow-x-scroll no-scrollbar" wire:init="loadSection">
+        @if ($readyToLoad)
             @switch($chartKind)
                 @case(App\Enums\ChartKind::Anime)
                     <x-rows.small-lockup :animes="$this->chart" :is-ranked="true" :is-row="true" />
@@ -44,6 +40,14 @@
                     <x-rows.studio-lockup :studios="$this->chart" :is-ranked="true" :is-row="true" />
                     @break
             @endswitch
-        </div>
-    @endif
+        @else
+            <div class="flex gap-4 justify-between snap-x overflow-x-scroll no-scrollbar">
+                <div class="bg-gray-200 w-64 md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
+                <div class="bg-gray-200 w-64 md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
+                <div class="bg-gray-200 w-64 md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
+                <div class="bg-gray-200 w-64 md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
+                <div class="bg-gray-200 w-64 md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
+            </div>
+        @endif
+    </section>
 </section>

@@ -30,6 +30,13 @@ class Details extends Component
     public $chartKind;
 
     /**
+     * Whether the component is ready to load.
+     *
+     * @var bool $readyToLoad
+     */
+    public bool $readyToLoad = false;
+
+    /**
      * Prepare the component.
      *
      * @param string $chart
@@ -41,26 +48,42 @@ class Details extends Component
     }
 
     /**
+     * Sets the property to load the page.
+     *
+     * @return void
+     */
+    public function loadPage(): void
+    {
+        $this->readyToLoad = true;
+    }
+
+    /**
      * The computed chart property.
      *
-     * @return ?LengthAwarePaginator
+     * @return array|LengthAwarePaginator
      */
-    public function getChartProperty(): ?LengthAwarePaginator
+    public function getChartProperty(): array|LengthAwarePaginator
     {
+        if (!$this->readyToLoad) {
+            return [];
+        }
+
         $model = match ($this->chartKind) {
-            ChartKind::Anime => Anime::class,
-            ChartKind::Characters => Character::class,
-            ChartKind::Episodes => Episode::class,
-            ChartKind::Games => Game::class,
-            ChartKind::Manga => Manga::class,
-            ChartKind::People => Person::class,
-            ChartKind::Songs => Song::class,
-            ChartKind::Studios => Studio::class
+            ChartKind::Anime => Anime::with(['genres', 'themes', 'media', 'mediaStat', 'translations', 'tv_rating']),
+            ChartKind::Characters => Character::with(['media', 'translations']),
+            ChartKind::Episodes => Episode::with(['media', 'season' => function ($query) {
+                $query->with(['anime.translations', 'translations']);
+            }, 'translations']),
+            ChartKind::Games => Game::with(['genres', 'themes', 'media', 'mediaStat', 'translations', 'tv_rating']),
+            ChartKind::Manga => Manga::with(['genres', 'themes', 'media', 'mediaStat', 'translations', 'tv_rating']),
+            ChartKind::People => Person::with(['media']),
+            ChartKind::Songs => Song::with([]),
+            ChartKind::Studios => Studio::with(['media'])
         };
 
-        return $model::orderBy('rank_total')
-                ->where('rank_total', '!=', 0)
-                ->paginate($this->perPage);
+        return $model->where('rank_total', '!=', 0)
+            ->orderBy('rank_total')
+            ->paginate($this->perPage);
     }
 
     /**

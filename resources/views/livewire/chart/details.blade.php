@@ -29,7 +29,7 @@
             </div>
         </section>
 
-        <section class="mt-4">
+        <section class="mt-4" wire:init="loadPage">
             @switch($chartKind)
                 @case(App\Enums\ChartKind::Anime)
                     <x-rows.small-lockup :animes="$this->chart" :page="$page" :per-page="$perPage" :is-ranked="true" :is-row="false" />
@@ -58,8 +58,10 @@
             @endswitch
         </section>
 
-        <section class="mt-4">
-            {{ $this->chart->links() }}
-        </section>
+        @if ($readyToLoad)
+            <section class="mt-4">
+                {{ $this->chart->links() }}
+            </section>
+        @endif
     </div>
 </main>
