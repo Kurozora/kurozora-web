@@ -109,24 +109,6 @@ class Anime extends KModel implements HasMedia, Sitemapable
     ];
 
     /**
-     * The relations to eager load on every query.
-     *
-     * @var array
-     */
-    protected $with = [
-        'genres',
-        'languages',
-        'media',
-        'mediaStat',
-        'themes',
-        'translations',
-        'tv_rating',
-        'media_type',
-        'source',
-        'status'
-    ];
-
-    /**
      * Casts rules.
      *
      * @var array
@@ -507,9 +489,14 @@ class Anime extends KModel implements HasMedia, Sitemapable
         // Retrieve or save cached result
         return Cache::remember($cacheKey, self::CACHE_KEY_SEASONS_SECONDS, function () use ($reversed, $limit) {
             if ($reversed) {
-                return $this->seasons()->orderByDesc('number')->paginate($limit);
+                return $this->seasons()
+                    ->with(['translations'])
+                    ->orderByDesc('number')
+                    ->paginate($limit);
             }
-            return $this->seasons()->orderBy('number')->paginate($limit);
+            return $this->seasons()
+                ->orderBy('number')
+                ->paginate($limit);
         });
     }
 
@@ -640,12 +627,9 @@ class Anime extends KModel implements HasMedia, Sitemapable
             $query->where(self::TABLE_NAME . '.is_nsfw', false);
         }
 
-        return $query->leftJoin(MediaStat::TABLE_NAME, MediaStat::TABLE_NAME . '.model_id', '=', self::TABLE_NAME . '.id')
-            ->where(MediaStat::TABLE_NAME . '.model_type', '=', $this->getMorphClass())
-            ->orderBy(MediaStat::TABLE_NAME . '.in_progress_count', 'desc')
-            ->orderBy(MediaStat::TABLE_NAME . '.rating_average', 'desc')
-            ->limit($limit)
-            ->select(self::TABLE_NAME . '.*');
+        return $query->where(self::TABLE_NAME . '.rank_total', '!=', 0)
+            ->orderBy(self::TABLE_NAME . '.rank_total')
+            ->limit($limit);
     }
 
     /**
@@ -653,11 +637,17 @@ class Anime extends KModel implements HasMedia, Sitemapable
      *
      * @param Builder $query
      * @param int $limit
+     * @param bool $nsfwAllowed
      * @return Builder
      */
-    public function scopeUpcomingShows(Builder $query, int $limit = 10): Builder
+    public function scopeUpcoming(Builder $query, int $limit = 10, bool $nsfwAllowed = false): Builder
     {
-        return $query->whereDate(self::TABLE_NAME . '.started_at', '>', yesterday())
+        // If NSFW is not allowed then filter it out.
+        if (!$nsfwAllowed) {
+            $query->where(self::TABLE_NAME . '.is_nsfw', false);
+        }
+
+        return $query->where(self::TABLE_NAME . '.started_at', '>=', yesterday())
             ->orderBy(self::TABLE_NAME . '.started_at')
             ->limit($limit);
     }
@@ -667,10 +657,16 @@ class Anime extends KModel implements HasMedia, Sitemapable
      *
      * @param Builder $query
      * @param int $limit
+     * @param bool $nsfwAllowed
      * @return Builder
      */
-    public function scopeNewShows(Builder $query, int $limit = 10): Builder
+    public function scopeRecentlyAdded(Builder $query, int $limit = 10, bool $nsfwAllowed = false): Builder
     {
+        // If NSFW is not allowed then filter it out.
+        if (!$nsfwAllowed) {
+            $query->where(self::TABLE_NAME . '.is_nsfw', false);
+        }
+
         return $query->orderBy(self::TABLE_NAME . '.created_at', 'desc')
             ->limit($limit);
     }
@@ -680,10 +676,16 @@ class Anime extends KModel implements HasMedia, Sitemapable
      *
      * @param Builder $query
      * @param int $limit
+     * @param bool $nsfwAllowed
      * @return Builder
      */
-    public function scopeRecentlyUpdatedShows(Builder $query, int $limit = 10): Builder
+    public function scopeRecentlyUpdated(Builder $query, int $limit = 10, bool $nsfwAllowed = false): Builder
     {
+        // If NSFW is not allowed then filter it out.
+        if (!$nsfwAllowed) {
+            $query->where(self::TABLE_NAME . '.is_nsfw', false);
+        }
+
         return $query->orderBy(self::TABLE_NAME . '.updated_at', 'desc')
             ->whereDate(self::TABLE_NAME . '.created_at', '<', today())
             ->limit($limit);
@@ -694,12 +696,18 @@ class Anime extends KModel implements HasMedia, Sitemapable
      *
      * @param Builder $query
      * @param int $limit
+     * @param bool $nsfwAllowed
      * @return Builder
      */
-    public function scopeRecentlyFinishedShows(Builder $query, int $limit = 10): Builder
+    public function scopeRecentlyFinished(Builder $query, int $limit = 10, bool $nsfwAllowed = false): Builder
     {
+        // If NSFW is not allowed then filter it out.
+        if (!$nsfwAllowed) {
+            $query->where(self::TABLE_NAME . '.is_nsfw', false);
+        }
+
         return $query->orderBy(self::TABLE_NAME . '.ended_at', 'desc')
-            ->whereDate(self::TABLE_NAME . '.ended_at', '<=', today())
+            ->where(self::TABLE_NAME . '.ended_at', '<=', today()->subDay())
             ->limit($limit);
     }
 
@@ -708,29 +716,41 @@ class Anime extends KModel implements HasMedia, Sitemapable
      *
      * @param Builder $query
      * @param int $limit
+     * @param bool $nsfwAllowed
      * @return Builder
      */
-    public function scopeAnimeContinuing(Builder $query, int $limit = 10): Builder
+    public function scopeOngoing(Builder $query, int $limit = 10, bool $nsfwAllowed = false): Builder
     {
+        // If NSFW is not allowed then filter it out.
+        if (!$nsfwAllowed) {
+            $query->where(self::TABLE_NAME . '.is_nsfw', false);
+        }
+
         return $query->where(self::TABLE_NAME . '.air_season', '!=', season_of_year()->value)
             ->whereYear(self::TABLE_NAME . '.started_at', '!=', now()->year)
-            ->whereDate(self::TABLE_NAME . '.started_at', '<=', now())
+            ->where(self::TABLE_NAME . '.started_at', '<=', now())
             ->where(self::TABLE_NAME . '.status_id', '=', 3)
             ->orderBy(self::TABLE_NAME . '.started_at', 'desc')
             ->limit($limit);
     }
 
     /**
-     * Eloquent builder scope that limits the query to upcoming shows.
+     * Eloquent builder scope that limits the query to the current season.
      *
      * @param Builder $query
      * @param int $limit
+     * @param bool $nsfwAllowed
      * @return Builder
      */
-    public function scopeAnimeSeason(Builder $query, int $limit = 10): Builder
+    public function scopeCurrentSeason(Builder $query, int $limit = 10, bool $nsfwAllowed = false): Builder
     {
-        return $query->where(self::TABLE_NAME . '.air_season', '=', season_of_year()->value)
-            ->whereYear(self::TABLE_NAME . '.started_at', '=', now()->year)
+        // If NSFW is not allowed then filter it out.
+        if (!$nsfwAllowed) {
+            $query->where(self::TABLE_NAME . '.is_nsfw', false);
+        }
+
+        return $query->where(self::TABLE_NAME . '.air_season', '=', season_of_year(today()->addDays(2))->value)
+            ->whereYear(self::TABLE_NAME . '.started_at', '=', today()->addDays(2)->year)
             ->limit($limit);
     }
 
@@ -741,7 +761,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
      */
     public function status(): BelongsTo
     {
-        return $this->belongsTo(Status::class)->where('type', 'anime');
+        return $this->belongsTo(Status::class)->where('type', '=', 'anime');
     }
 
     /**

@@ -46,7 +46,7 @@ class ReminderButton extends Component
      *
      * @return void
      */
-    public function mount(Anime $anime)
+    public function mount(Anime $anime): void
     {
         $this->anime = $anime;
 
@@ -56,9 +56,10 @@ class ReminderButton extends Component
     /**
      * Sets up the actions according to the user's settings.
      */
-    protected function setupActions()
+    protected function setupActions(): void
     {
         $user = auth()->user();
+
         if (!empty($user)) {
             $this->isTracking = $user->hasTracked($this->anime);
             $this->isReminded = $user->reminderAnime()->where('anime_id', $this->anime->id)->exists();
@@ -70,7 +71,7 @@ class ReminderButton extends Component
      * Adds the anime to the user's reminder list, and Planning library list
      * if not tracked already.
      */
-    public function remindAnime()
+    public function remindAnime(): void
     {
         if (!$this->isReminded) {
             $user = auth()->user();
