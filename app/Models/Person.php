@@ -52,15 +52,6 @@ class Person extends KModel implements HasMedia, Sitemapable
     protected $table = self::TABLE_NAME;
 
     /**
-     * The relations to eager load on every query.
-     *
-     * @var array
-     */
-    protected $with = [
-        'media',
-    ];
-
-    /**
      * The attributes that should be cast.
      *
      * @var array
@@ -370,7 +361,7 @@ class Person extends KModel implements HasMedia, Sitemapable
      * @param Builder $query
      * @param int $limit
      */
-    public function scopeBornToday(Builder $query, int $limit = 10)
+    public function scopeBornToday(Builder $query, int $limit = 10): void
     {
         $bornToday = new BornTodayScope();
         $bornToday->apply($query->limit($limit), $this);
