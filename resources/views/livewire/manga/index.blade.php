@@ -37,12 +37,16 @@
             </div>
         </section>
 
-        <section class="mt-4">
-            <x-rows.small-lockup :mangas="$this->searchResults" :is-row="false" />
-        </section>
+        <section wire:init="loadPage">
+            <div class="mt-4">
+                <x-rows.small-lockup :mangas="$this->searchResults" :is-row="false" />
+            </div>
 
-        <section class="mt-4">
-            {{ $this->searchResults->links() }}
+            @if ($readyToLoad)
+                <div class="mt-4">
+                    {{ $this->searchResults->links() }}
+                </div>
+            @endif
         </section>
     </div>
 </main>

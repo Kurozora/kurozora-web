@@ -33,7 +33,7 @@ class ReviewsSection extends Component
     public bool $showPopup = false;
 
     /**
-     * Load the reviews.
+     * Sets the property to load the section.
      *
      * @return void
      */
