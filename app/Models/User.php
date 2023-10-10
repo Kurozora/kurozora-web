@@ -106,15 +106,6 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     protected $guarded = [];
 
     /**
-     * The relations to eager load on every query.
-     *
-     * @var array
-     */
-    protected $with = [
-        'media',
-    ];
-
-    /**
      * The attributes that should be cast to native types.
      *
      * @var array
@@ -372,13 +363,11 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      */
     public function getActivityStatus(): UserActivityStatus
     {
-        /** @var PersonalAccessToken $personalAccessToken */
         $personalAccessToken = $this->tokens()
             ->orderBy('last_used_at', 'desc')
             ->first('last_used_at');
         $personalAccessTokenLastUsedAt = $personalAccessToken?->last_used_at;
 
-        /** @var Session $session */
         $session = $this->sessions()
             ->orderBy('last_activity', 'desc')
             ->first('last_activity');

@@ -13,7 +13,7 @@ class BornTodayScope implements Scope
     /**
      * @inheritDoc
      */
-    public function apply(Builder $builder, Model $model)
+    public function apply(Builder $builder, Model $model): void
     {
         if ($model instanceof Character) {
             $builder->where([
