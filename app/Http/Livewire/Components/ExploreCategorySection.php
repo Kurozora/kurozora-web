@@ -138,7 +138,7 @@ class ExploreCategorySection extends Component
                             $query->with(['genres', 'mediaStat', 'media', 'translations', 'tv_rating', 'themes']);
                         },
                         MediaSong::class => function (Builder $query) {
-                            $query->with(['model.translations']);
+                            $query->with(['song.media', 'model.translations']);
                         },
                         Theme::class => function (Builder $query) {
                             $query->with(['media']);

@@ -184,9 +184,8 @@ class Index extends Component
                             break;
                         case Person::class:
                         case Studio::class:
-                            $query->with(['media']);
-                            break;
                         case Song::class:
+                            $query->with(['media']);
                             break;
                         case User::class:
                             $query->with(['media', 'followers']);

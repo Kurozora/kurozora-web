@@ -105,10 +105,9 @@ class NavSearch extends Component
                                 break;
                             case Person::class:
                             case Studio::class:
+                            case Song::class:
                             case User::class:
                                 $query->with(['media']);
-                                break;
-                            case Song::class:
                                 break;
                         }
                     })

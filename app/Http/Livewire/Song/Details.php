@@ -3,13 +3,10 @@
 namespace App\Http\Livewire\Song;
 
 use App\Events\SongViewed;
-use App\Models\Anime;
-use App\Models\Game;
 use App\Models\Song;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Collection;
 use Livewire\Component;
 
 class Details extends Component
@@ -39,27 +36,7 @@ class Details extends Component
         // Call the SongViewed event
         SongViewed::dispatch($song);
 
-        $this->song = $song;
-    }
-
-    /**
-     * The object containing the anime data.
-     *
-     * @return Anime[]|Collection
-     */
-    public function getAnimeProperty(): array|Collection
-    {
-        return $this->song->anime;
-    }
-
-    /**
-     * The object containing the games data.
-     *
-     * @return Game[]|Collection
-     */
-    public function getGamesProperty(): array|Collection
-    {
-        return $this->song->games;
+        $this->song = $song->load(['media']);
     }
 
     /**

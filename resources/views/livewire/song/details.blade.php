@@ -161,29 +161,9 @@
             </div>
         </section>
 
-        @if ($this->anime?->count())
-            <section class="pt-5 pb-8 pl-4 pr-4 border-t-2">
-                <x-section-nav>
-                    <x-slot:title>
-                        {{ __('As Heard On Shows') }}
-                    </x-slot:title>
-                </x-section-nav>
+        <livewire:components.song.media-section :song="$song" :type="\App\Models\Anime::class" />
 
-                <x-rows.small-lockup :animes="$this->anime" :is-row="false" />
-            </section>
-        @endif
-
-        @if ($this->games?->count())
-            <section class="pt-5 pb-8 pl-4 pr-4 border-t-2">
-                <x-section-nav>
-                    <x-slot:title>
-                        {{ __('As Heard On Games') }}
-                    </x-slot:title>
-                </x-section-nav>
-
-                <x-rows.small-lockup :games="$this->games" :is-row="false" />
-            </section>
-        @endif
+        <livewire:components.song.media-section :song="$song" :type="\App\Models\Game::class" />
     </div>
 
     <x-share-modal

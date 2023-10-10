@@ -77,7 +77,7 @@ class Details extends Component
             ChartKind::Games => Game::with(['genres', 'themes', 'media', 'mediaStat', 'translations', 'tv_rating']),
             ChartKind::Manga => Manga::with(['genres', 'themes', 'media', 'mediaStat', 'translations', 'tv_rating']),
             ChartKind::People => Person::with(['media']),
-            ChartKind::Songs => Song::with([]),
+            ChartKind::Songs => Song::with(['media']),
             ChartKind::Studios => Studio::with(['media'])
         };
 
