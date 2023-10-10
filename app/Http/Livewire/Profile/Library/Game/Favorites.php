@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Livewire\Component;
 
@@ -22,6 +23,13 @@ class Favorites extends Component
      * @var User $user
      */
     public User $user;
+
+    /**
+     * Whether the component is ready to load.
+     *
+     * @var bool $readyToLoad
+     */
+    public bool $readyToLoad = false;
 
     /**
      * Prepare the component.
@@ -49,12 +57,26 @@ class Favorites extends Component
     }
 
     /**
+     * Sets the property to load the page.
+     *
+     * @return void
+     */
+    public function loadPage(): void
+    {
+        $this->readyToLoad = true;
+    }
+
+    /**
      * The computed search results property.
      *
      * @return ?LengthAwarePaginator
      */
     public function getSearchResultsProperty(): ?LengthAwarePaginator
     {
+        if (!$this->readyToLoad) {
+            return null;
+        }
+
         // Order
         $orders = [];
         foreach ($this->order as $attribute => $order) {
@@ -90,7 +112,8 @@ class Favorites extends Component
         // If no search was performed, return all games
         if (empty($this->search) && empty($wheres) && empty($orders)) {
             $games = $this->user
-                ->whereFavorited(Game::class);
+                ->whereFavorited(Game::class)
+                ->with(['genres', 'themes', 'media', 'mediaStat', 'translations', 'tv_rating']);
             return $games->paginate($this->perPage);
         }
 
@@ -103,6 +126,9 @@ class Favorites extends Component
         $games->whereIn('id', $gameIDs);
         $games->wheres = $wheres;
         $games->orders = $orders;
+        $games->query(function (Builder $query) {
+            $query->with(['genres', 'themes', 'media', 'mediaStat', 'translations', 'tv_rating']);
+        });
 
         // Paginate
         return $games->paginate($this->perPage);
