@@ -3,10 +3,11 @@
 namespace App\Http\Livewire\Profile\Followers;
 
 use App\Models\User;
+use App\Models\UserFollow;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\CursorPaginator;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -22,6 +23,29 @@ class Index extends Component
     public User $user;
 
     /**
+     * The current page parameter's alias.
+     *
+     * @var string $frc
+     */
+    public string $frc = '';
+
+    /**
+     * The current page query parameter.
+     *
+     * @var string $cursor
+     */
+    public string $cursor = '';
+
+    /**
+     * The query strings of the component.
+     *
+     * @var string[] $queryString
+     */
+    protected $queryString = [
+        'cursor' => ['except' => '', 'as' => 'frc']
+    ];
+
+    /**
      * Prepare the component.
      *
      * @param User $user
@@ -34,13 +58,23 @@ class Index extends Component
     }
 
     /**
-     * The user's badges.
+     * The user's followers list.
      *
-     * @return LengthAwarePaginator
+     * @return CursorPaginator
      */
-    public function getFollowersProperty(): LengthAwarePaginator
+    public function getFollowersProperty(): CursorPaginator
     {
-        return $this->user->followers()->paginate(25);
+        // We're aliasing `cursorName` as `frc`, and setting
+        // query rule to never show `cursor` param when it's
+        // empty. Since `cursor` is also aliased as `frc` in
+        // query rules, and we always keep it empty, as far
+        // as Livewire is concerned, `frc` is also empty. So,
+        // `frc` doesn't show up in the query params in the
+        // browser.
+        return $this->user->followers()
+            ->with(['media'])
+            ->orderBy(UserFollow::TABLE_NAME . '.created_at', 'desc')
+            ->cursorPaginate(25, ['*'], 'frc');
     }
 
     /**
