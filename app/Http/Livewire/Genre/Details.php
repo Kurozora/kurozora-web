@@ -13,18 +13,18 @@ use Livewire\Component;
 class Details extends Component
 {
     /**
+     * Determines whether to load the page.
+     *
+     * @var bool $readyToLoad
+     */
+    public $readyToLoad = false;
+
+    /**
      * The object containing the genre data.
      *
      * @var Genre $genre
      */
     public Genre $genre;
-
-    /**
-     * The object containing the collection of explore category data.
-     *
-     * @var ExploreCategory[]|Collection $exploreCategories
-     */
-    public array|Collection $exploreCategories;
 
     /**
      * Prepare the component.
@@ -34,8 +34,31 @@ class Details extends Component
      */
     public function mount(Genre $genre): void
     {
-        $this->genre = $genre;
-        $this->exploreCategories = ExploreCategory::where('is_global', true)
+        $this->genre = $genre->load(['media']);
+    }
+
+    /**
+     * Sets the property to load the page.
+     *
+     * @return void
+     */
+    public function loadPage(): void
+    {
+        $this->readyToLoad = true;
+    }
+
+    /**
+     * The object containing the collection of explore category data.
+     *
+     * @return array|Collection
+     */
+    function getExploreCategoriesProperty(): array|Collection
+    {
+        if (!$this->readyToLoad) {
+            return collect();
+        }
+
+        return ExploreCategory::where('is_global', true)
             ->orderBy('position')
             ->get();
     }
