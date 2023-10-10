@@ -54,6 +54,7 @@ trait HasMediaStaff
     public function people(): BelongsToMany
     {
         return $this->belongsToMany(Person::class, MediaStaff::class, 'model_id')
+            ->where('model_type', '=', $this->getMorphClass())
             ->withTimestamps();
     }
 }
