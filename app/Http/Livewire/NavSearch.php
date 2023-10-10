@@ -16,6 +16,7 @@ use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Builder;
 use Livewire\Component;
 
 class NavSearch extends Component
@@ -87,7 +88,33 @@ class NavSearch extends Component
         if (!empty($this->searchQuery)) {
             foreach ($this->searchableModels as $searchableModel) {
                 $results = $searchableModel::search($this->searchQuery)
-                    ->paginate(5);
+                    ->query(function (Builder $query) use ($searchableModel) {
+                        switch ($searchableModel) {
+                            case Anime::class:
+                            case Game::class:
+                            case Manga::class:
+                                $query->with(['genres', 'themes', 'media', 'mediaStat', 'translations', 'tv_rating']);
+                                break;
+                            case Character::class:
+                                $query->with(['media', 'translations']);
+                                break;
+                            case Episode::class:
+                                $query->with(['media', 'season' => function ($query) {
+                                    $query->with(['anime.translations', 'translations']);
+                                }, 'translations']);
+                                break;
+                            case Person::class:
+                            case Studio::class:
+                            case User::class:
+                                $query->with(['media']);
+                                break;
+                            case Song::class:
+                                break;
+                        }
+                    })
+                    ->take(5)
+                    ->get();
+
                 if ($results->count()) {
                     $result = [];
                     $result['title'] = str($searchableModel::TABLE_NAME)->title();
