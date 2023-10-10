@@ -41,10 +41,16 @@
             </div>
         </section>
 
-        <x-rows.studio-lockup :studios="$this->searchResults" :is-row="false" />
+        <section wire:init="loadPage">
+            <div class="mt-4">
+                <x-rows.studio-lockup :studios="$this->searchResults" :is-row="false" />
+            </div>
 
-        <section class="mt-4">
-            {{ $this->searchResults->links() }}
+            @if ($readyToLoad)
+                <div class="mt-4">
+                    {{ $this->searchResults?->links() }}
+                </div>
+            @endif
         </section>
     </div>
 </main>
