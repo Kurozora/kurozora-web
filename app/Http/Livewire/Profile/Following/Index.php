@@ -3,10 +3,11 @@
 namespace App\Http\Livewire\Profile\Following;
 
 use App\Models\User;
+use App\Models\UserFollow;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\CursorPaginator;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -22,25 +23,58 @@ class Index extends Component
     public User $user;
 
     /**
+     * The current page query parameter's alias.
+     *
+     * @var string $fnc
+     */
+    public string $fnc = '';
+
+    /**
+     * The current page query parameter.
+     *
+     * @var string $cursor
+     */
+    public string $cursor = '';
+
+    /**
+     * The query strings of the component.
+     *
+     * @var string[] $queryString
+     */
+    protected $queryString = [
+        'cursor' => ['except' => '', 'as' => 'fnc']
+    ];
+
+    /**
      * Prepare the component.
      *
      * @param User $user
      *
      * @return void
      */
-    public function mount(User $user)
+    public function mount(User $user): void
     {
         $this->user = $user;
     }
 
     /**
-     * The user's badges.
+     * The user's following list.
      *
-     * @return LengthAwarePaginator
+     * @return CursorPaginator
      */
-    public function getFollowingsProperty(): LengthAwarePaginator
+    public function getFollowingsProperty(): CursorPaginator
     {
-        return $this->user->following()->paginate(25);
+        // We're aliasing `cursorName` as `fnc`, and setting
+        // query rule to never show `cursor` param when it's
+        // empty. Since `cursor` is also aliased as `fnc` in
+        // query rules, and we always keep it empty, as far
+        // as Livewire is concerned, `fnc` is also empty. So,
+        // `fnc` doesn't show up in the query params in the
+        // browser.
+        return $this->user->following()
+            ->with(['media'])
+            ->orderBy(UserFollow::TABLE_NAME . '.created_at', 'desc')
+            ->cursorPaginate(25, ['*'], 'fnc');
     }
 
     /**
