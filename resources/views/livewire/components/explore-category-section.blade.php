@@ -1,48 +1,48 @@
 <div>
-    @if ($exploreCategoryCount)
-        <section class="pt-5 pb-8 border-t-2" wire:init="loadExploreCategoryItems">
-            <x-section-nav class="flex flex-nowrap justify-between mb-5">
-                <x-slot:title>
-                    @switch($exploreCategory->type)
-                    @case(\App\Enums\ExploreCategoryTypes::ShowsSeason)
-                    @case(\App\Enums\ExploreCategoryTypes::LiteraturesSeason)
-                    @case(\App\Enums\ExploreCategoryTypes::GamesSeason)
-                        {{ season_of_year()->key . ' ' . now()->year }}
-                    @break
-                    @default
-                        {{ $exploreCategory->title }}
-                    @endswitch
-                </x-slot:title>
+    <div wire:init="loadSection">
+        @if ($this->exploreCategoryItems->count())
+            <section class="pt-5 pb-8 border-t-2">
+                <x-section-nav class="flex flex-nowrap justify-between mb-5">
+                    <x-slot:title>
+                        @switch($exploreCategory->type)
+                        @case(\App\Enums\ExploreCategoryTypes::ShowsSeason)
+                        @case(\App\Enums\ExploreCategoryTypes::LiteraturesSeason)
+                        @case(\App\Enums\ExploreCategoryTypes::GamesSeason)
+                            {{ season_of_year(today()->addDays(2))->key . ' ' . today()->addDays(2)->year }}
+                        @break
+                        @default
+                            {{ $exploreCategory->title }}
+                        @endswitch
+                    </x-slot:title>
 
-                <x-slot:description>
-                    {{ $exploreCategory->description }}
-                </x-slot:description>
+                    <x-slot:description>
+                        {{ $exploreCategory->description }}
+                    </x-slot:description>
 
-                <x-slot:action>
-                    @hasrole('superAdmin')
-                        <x-button wire:click="$refresh">{{ __('Refresh') }}</x-button>
-                    @endhasrole
-                    <x-section-nav-link class="whitespace-nowrap" href="{{ $exploreCategory->secondary_slug ? url($exploreCategory->secondary_slug) : route('explore.details', $exploreCategory) }}">{{ __('See All') }}</x-section-nav-link>
-                </x-slot:action>
-            </x-section-nav>
+                    <x-slot:action>
+                        @hasrole('superAdmin')
+                            <x-button wire:click="$refresh">{{ __('Refresh') }}</x-button>
+                        @endhasrole
+                        <x-section-nav-link class="whitespace-nowrap" href="{{ $exploreCategory->secondary_slug ? url($exploreCategory->secondary_slug) : route('explore.details', $exploreCategory) }}">{{ __('See All') }}</x-section-nav-link>
+                    </x-slot:action>
+                </x-section-nav>
 
-            <div class="flex justify-center">
-                <x-spinner />
-            </div>
+                <div class="flex justify-center">
+                    <x-spinner />
+                </div>
 
-            @if($isInit)
                 @switch($exploreCategory->type)
                     @case(\App\Enums\ExploreCategoryTypes::MostPopularShows)
                         <div class="flex flex-nowrap gap-4 snap-x overflow-x-scroll no-scrollbar">
-                            @foreach($this->exploreCategoryItems as $categoryItem)
-                                <x-lockups.banner-lockup :anime="$categoryItem->model" />
+                            @foreach($this->exploreCategoryItems as $show)
+                                <x-lockups.banner-lockup :anime="$show" />
                             @endforeach
                         </div>
                     @break
                     @case(\App\Enums\ExploreCategoryTypes::UpcomingShows)
                         <div class="flex flex-nowrap gap-4 snap-x overflow-x-scroll no-scrollbar">
-                            @foreach($this->exploreCategoryItems as $categoryItem)
-                                <x-lockups.upcoming-lockup :anime="$categoryItem->model" />
+                            @foreach($this->exploreCategoryItems as $shows)
+                                <x-lockups.upcoming-lockup :anime="$shows" />
                             @endforeach
                         </div>
                     @break
@@ -68,8 +68,8 @@
                             @case(\App\Enums\ExploreCategorySize::Video)
                                 <div class="flex overflow-x-scroll no-scrollbar">
                                     <div class="flex flex-nowrap gap-4">
-                                    @foreach($this->exploreCategoryItems as $categoryItem)
-                                        <x-lockups.video-lockup :anime="$categoryItem->model" />
+                                    @foreach($this->exploreCategoryItems as $aniem)
+                                        <x-lockups.video-lockup :anime="$aniem" />
                                     @endforeach
                                 </div>
                             @break
@@ -81,8 +81,8 @@
                     @break
                     @case(\App\Enums\ExploreCategoryTypes::UpcomingLiteratures)
                         <div class="flex flex-nowrap gap-4 snap-x overflow-x-scroll no-scrollbar">
-                            @foreach($this->exploreCategoryItems as $categoryItem)
-                                <x-lockups.upcoming-lockup :manga="$categoryItem->model" />
+                            @foreach($this->exploreCategoryItems as $literature)
+                                <x-lockups.upcoming-lockup :manga="$literature" />
                             @endforeach
                         </div>
                     @break
@@ -96,8 +96,8 @@
                     @break
                     @case(\App\Enums\ExploreCategoryTypes::UpcomingGames)
                         <div class="flex flex-nowrap gap-4 snap-x overflow-x-scroll no-scrollbar">
-                            @foreach($this->exploreCategoryItems as $categoryItem)
-                                <x-lockups.upcoming-lockup :game="$categoryItem->model" />
+                            @foreach($this->exploreCategoryItems as $game)
+                                <x-lockups.upcoming-lockup :game="$game" />
                             @endforeach
                         </div>
                     @break
@@ -109,15 +109,15 @@
                     @break
                     @case(\App\Enums\ExploreCategoryTypes::Genres)
                         <div class="flex flex-nowrap gap-4 snap-x overflow-x-scroll no-scrollbar">
-                            @foreach($this->exploreCategoryItems as $categoryItem)
-                                <x-lockups.medium-lockup :genre="$categoryItem->model" />
+                            @foreach($this->exploreCategoryItems as $genre)
+                                <x-lockups.medium-lockup :genre="$genre" />
                             @endforeach
                         </div>
                     @break
                     @case(\App\Enums\ExploreCategoryTypes::Themes)
                         <div class="flex flex-nowrap gap-4 snap-x overflow-x-scroll no-scrollbar">
-                            @foreach($this->exploreCategoryItems as $categoryItem)
-                                <x-lockups.medium-lockup :theme="$categoryItem->model" />
+                            @foreach($this->exploreCategoryItems as $theme)
+                                <x-lockups.medium-lockup :theme="$theme" />
                             @endforeach
                         </div>
                     @break
@@ -135,7 +135,30 @@
                             {{ 'Unhandled type: ' . $exploreCategory->type }}
                         @endif
                 @endswitch
-            @endif
+            </section>
+        @endif
+    </div>
+
+    @if (!$readyToLoad)
+        <section  class="pt-5 pb-8 border-t-2">
+            <div style="height: 314px">
+                <div class="flex gap-2 justify-between mb-5">
+                    <div>
+                        <p class="bg-gray-200" style="width: 168px; height: 28px"></p>
+                        <p class="bg-gray-200" style="width: 228px; height: 22px"></p>
+                    </div>
+
+                    <div class="flex flex-wrap gap-2 justify-end"></div>
+                </div>
+
+                <div class="flex gap-4 justify-between snap-x overflow-x-scroll no-scrollbar">
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
+                </div>
+            </div>
         </section>
     @endif
 </div>

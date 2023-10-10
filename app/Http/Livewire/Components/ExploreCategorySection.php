@@ -5,17 +5,18 @@ namespace App\Http\Livewire\Components;
 use App\Enums\ExploreCategorySize;
 use App\Enums\ExploreCategoryTypes;
 use App\Models\Anime;
-use App\Models\Character;
 use App\Models\ExploreCategory;
 use App\Models\Game;
 use App\Models\Genre;
 use App\Models\Manga;
-use App\Models\Person;
+use App\Models\MediaSong;
 use App\Models\Theme;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 
 class ExploreCategorySection extends Component
@@ -49,11 +50,11 @@ class ExploreCategorySection extends Component
     public int $exploreCategoryCount = 0;
 
     /**
-     * Whether the component is initialized.
+     * Determines whether to load the page.
      *
-     * @var bool $isInit
+     * @var bool $readyToLoad
      */
-    public bool $isInit = false;
+    public bool $readyToLoad = false;
 
     /**
      * Prepare the component.
@@ -63,178 +64,29 @@ class ExploreCategorySection extends Component
      * @param Theme|null $theme
      * @return void
      */
-    public function mount(ExploreCategory $exploreCategory, ?Genre $genre = null, ?Theme $theme = null): void
+    public function mount(ExploreCategory $exploreCategory, ?Genre $genre, ?Theme $theme): void
     {
         $this->exploreCategory = $exploreCategory;
 
+        // Cause Livewire inits a new Model when null.
+        // Can't have fucking optionals in Detroit... ffs...
         if (!empty($genre->id)) {
             $this->genre = $genre;
-            $this->exploreCategoryCount = match ($exploreCategory->type) {
-                ExploreCategoryTypes::MostPopularShows => Anime::whereGenre($genre)
-                    ->mostPopular()
-                    ->count(),
-                ExploreCategoryTypes::UpcomingShows => Anime::whereGenre($genre)
-                    ->upcomingShows()
-                    ->count(),
-                ExploreCategoryTypes::NewShows => Anime::whereGenre($genre)
-                    ->newShows()
-                    ->count(),
-                ExploreCategoryTypes::RecentlyUpdateShows => Anime::whereGenre($genre)
-                    ->recentlyUpdatedShows()
-                    ->count(),
-                ExploreCategoryTypes::RecentlyFinishedShows => Anime::whereGenre($genre)
-                    ->recentlyFinishedShows()
-                    ->count(),
-                ExploreCategoryTypes::ContinuingShows => Anime::whereGenre($genre)
-                    ->animeContinuing()
-                    ->count(),
-                ExploreCategoryTypes::ShowsSeason => Anime::whereGenre($genre)
-                    ->animeSeason()
-                    ->count(),
-                ExploreCategoryTypes::MostPopularLiteratures => Manga::whereGenre($genre)
-                    ->mostPopular()
-                    ->count(),
-                ExploreCategoryTypes::UpcomingLiteratures => Manga::whereGenre($genre)
-                    ->upcomingManga()
-                    ->count(),
-                ExploreCategoryTypes::NewLiteratures => Manga::whereGenre($genre)
-                    ->newManga()
-                    ->count(),
-                ExploreCategoryTypes::RecentlyUpdateLiteratures => Manga::whereGenre($genre)
-                    ->recentlyUpdatedManga()
-                    ->count(),
-                ExploreCategoryTypes::RecentlyFinishedLiteratures => Manga::whereGenre($genre)
-                    ->recentlyFinishedManga()
-                    ->count(),
-                ExploreCategoryTypes::ContinuingLiteratures => Manga::whereGenre($genre)
-                    ->mangaContinuing()
-                    ->count(),
-                ExploreCategoryTypes::LiteraturesSeason => Manga::whereGenre($genre)
-                    ->mangaSeason()
-                    ->count(),
-                ExploreCategoryTypes::MostPopularGames => Game::whereGenre($genre)
-                    ->mostPopular()
-                    ->count(),
-                ExploreCategoryTypes::UpcomingGames => Game::whereGenre($genre)
-                    ->upcomingGames()
-                    ->count(),
-                ExploreCategoryTypes::NewGames => Game::whereGenre($genre)
-                    ->newGames()
-                    ->count(),
-                ExploreCategoryTypes::RecentlyUpdateGames => Game::whereGenre($genre)
-                    ->recentlyUpdatedGames()
-                    ->count(),
-                ExploreCategoryTypes::GamesSeason => Game::whereGenre($genre)
-                    ->gamesSeason()
-                    ->count(),
-                default => 0
-            };
-            return;
-        } else {
-            $this->genre = null;
         }
 
         if (!empty($theme->id)) {
             $this->theme = $theme;
-            $this->exploreCategoryCount = match ($exploreCategory->type) {
-                ExploreCategoryTypes::MostPopularShows => Anime::whereTheme($theme)
-                    ->mostPopular()
-                    ->count(),
-                ExploreCategoryTypes::UpcomingShows => Anime::whereTheme($theme)
-                    ->upcomingShows()
-                    ->count(),
-                ExploreCategoryTypes::NewShows => Anime::whereTheme($theme)
-                    ->newShows()
-                    ->count(),
-                ExploreCategoryTypes::RecentlyUpdateShows => Anime::whereTheme($theme)
-                    ->recentlyUpdatedShows()
-                    ->count(),
-                ExploreCategoryTypes::RecentlyFinishedShows => Anime::whereTheme($theme)
-                    ->recentlyFinishedShows()
-                    ->count(),
-                ExploreCategoryTypes::ContinuingShows => Anime::whereTheme($theme)
-                    ->animeContinuing()
-                    ->count(),
-                ExploreCategoryTypes::ShowsSeason => Anime::whereTheme($theme)
-                    ->animeSeason()
-                    ->count(),
-                ExploreCategoryTypes::MostPopularLiteratures => Manga::whereTheme($theme)
-                    ->mostPopular()
-                    ->count(),
-                ExploreCategoryTypes::UpcomingLiteratures => Manga::whereTheme($theme)
-                    ->upcomingManga()
-                    ->count(),
-                ExploreCategoryTypes::NewLiteratures => Manga::whereTheme($theme)
-                    ->newManga()
-                    ->count(),
-                ExploreCategoryTypes::RecentlyUpdateLiteratures => Manga::whereTheme($theme)
-                    ->recentlyUpdatedManga()
-                    ->count(),
-                ExploreCategoryTypes::RecentlyFinishedLiteratures => Manga::whereTheme($theme)
-                    ->recentlyFinishedManga()
-                    ->count(),
-                ExploreCategoryTypes::ContinuingLiteratures => Manga::whereTheme($theme)
-                    ->mangaContinuing()
-                    ->count(),
-                ExploreCategoryTypes::LiteraturesSeason => Manga::whereTheme($theme)
-                    ->mangaSeason()
-                    ->count(),
-                ExploreCategoryTypes::MostPopularGames => Game::whereTheme($theme)
-                    ->mostPopular()
-                    ->count(),
-                ExploreCategoryTypes::UpcomingGames => Game::whereTheme($theme)
-                    ->upcomingGames()
-                    ->count(),
-                ExploreCategoryTypes::NewGames => Game::whereTheme($theme)
-                    ->newGames()
-                    ->count(),
-                ExploreCategoryTypes::RecentlyUpdateGames => Game::whereTheme($theme)
-                    ->recentlyUpdatedGames()
-                    ->count(),
-                ExploreCategoryTypes::GamesSeason => Game::whereTheme($theme)
-                    ->gamesSeason()
-                    ->count(),
-                default => 0
-            };
-            return;
-        } else {
-            $this->theme = null;
         }
-
-        $this->exploreCategoryCount = match ($exploreCategory->type) {
-            ExploreCategoryTypes::MostPopularShows => Anime::mostPopular()->count(),
-            ExploreCategoryTypes::UpcomingShows => Anime::upcomingShows()->count(),
-            ExploreCategoryTypes::NewShows => Anime::newShows()->count(),
-            ExploreCategoryTypes::RecentlyUpdateShows => Anime::recentlyUpdatedShows()->count(),
-            ExploreCategoryTypes::RecentlyFinishedShows => Anime::recentlyFinishedShows()->count(),
-            ExploreCategoryTypes::ContinuingShows => Anime::animeContinuing()->count(),
-            ExploreCategoryTypes::ShowsSeason => Anime::animeSeason()->count(),
-            ExploreCategoryTypes::MostPopularLiteratures => Manga::mostPopular()->count(),
-            ExploreCategoryTypes::UpcomingLiteratures => Manga::upcomingManga()->count(),
-            ExploreCategoryTypes::NewLiteratures => Manga::newManga()->count(),
-            ExploreCategoryTypes::RecentlyUpdateLiteratures => Manga::recentlyUpdatedManga()->count(),
-            ExploreCategoryTypes::RecentlyFinishedLiteratures => Manga::recentlyFinishedManga()->count(),
-            ExploreCategoryTypes::ContinuingLiteratures => Manga::mangaContinuing()->count(),
-            ExploreCategoryTypes::LiteraturesSeason => Manga::mangaSeason()->count(),
-            ExploreCategoryTypes::MostPopularGames => Game::mostPopular()->count(),
-            ExploreCategoryTypes::UpcomingGames => Game::upcomingGames()->count(),
-            ExploreCategoryTypes::NewGames => Game::newGames()->count(),
-            ExploreCategoryTypes::RecentlyUpdateGames => Game::recentlyUpdatedGames()->count(),
-            ExploreCategoryTypes::GamesSeason => Game::gamesSeason()->count(),
-            ExploreCategoryTypes::Characters => Character::bornToday()->count(),
-            ExploreCategoryTypes::People => Person::bornToday()->count(),
-            default => $exploreCategory->exploreCategoryItems()->count()
-        };
     }
 
     /**
-     * Loads the explore category section.
+     * Sets the property to load the section.
      *
      * @return void
      */
-    public function loadExploreCategoryItems(): void
+    public function loadSection(): void
     {
-        $this->isInit = true;
+        $this->readyToLoad = true;
     }
 
     /**
@@ -244,69 +96,74 @@ class ExploreCategorySection extends Component
      */
     public function getExploreCategoryItemsProperty(): array|Collection
     {
-        $exploreCategoryItems = match ($this->exploreCategory->type) {
-            ExploreCategoryTypes::MostPopularShows, ExploreCategoryTypes::MostPopularLiteratures, ExploreCategoryTypes::MostPopularGames => $this->exploreCategory->mostPopularShows($this->genre ?? $this->theme)->exploreCategoryItems,
-            ExploreCategoryTypes::UpcomingShows => $this->exploreCategory->upcomingShows($this->genre ?? $this->theme)->exploreCategoryItems,
-            ExploreCategoryTypes::NewShows => $this->exploreCategory->newShows($this->genre ?? $this->theme)->exploreCategoryItems->map(function ($exploreCategoryItem) {
-                return $exploreCategoryItem->model;
-            }),
-            ExploreCategoryTypes::RecentlyUpdateShows => $this->exploreCategory->recentlyUpdatedShows($this->genre ?? $this->theme)->exploreCategoryItems->map(function ($exploreCategoryItem) {
-                return $exploreCategoryItem->model;
-            }),
-            ExploreCategoryTypes::RecentlyFinishedShows => $this->exploreCategory->recentlyFinishedShows($this->genre ?? $this->theme)->exploreCategoryItems->map(function ($exploreCategoryItem) {
-                return $exploreCategoryItem->model;
-            }),
-            ExploreCategoryTypes::ContinuingShows => $this->exploreCategory->animeContinuing($this->genre ?? $this->theme)->exploreCategoryItems->map(function ($exploreCategoryItem) {
-                return $exploreCategoryItem->model;
-            }),
-            ExploreCategoryTypes::ShowsSeason => $this->exploreCategory->animeSeason($this->genre ?? $this->theme)->exploreCategoryItems->map(function ($exploreCategoryItem) {
-                return $exploreCategoryItem->model;
-            }),
-            ExploreCategoryTypes::UpcomingLiteratures => $this->exploreCategory->upcomingLiterature($this->genre ?? $this->theme)->exploreCategoryItems,
-            ExploreCategoryTypes::NewLiteratures => $this->exploreCategory->newLiterature($this->genre ?? $this->theme)->exploreCategoryItems->map(function ($exploreCategoryItem) {
-                return $exploreCategoryItem->model;
-            }),
-            ExploreCategoryTypes::RecentlyUpdateLiteratures => $this->exploreCategory->recentlyUpdatedLiterature($this->genre ?? $this->theme)->exploreCategoryItems->map(function ($exploreCategoryItem) {
-                return $exploreCategoryItem->model;
-            }),
-            ExploreCategoryTypes::RecentlyFinishedLiteratures => $this->exploreCategory->recentlyFinishedLiterature($this->genre ?? $this->theme)->exploreCategoryItems->map(function ($exploreCategoryItem) {
-                return $exploreCategoryItem->model;
-            }),
-            ExploreCategoryTypes::ContinuingLiteratures => $this->exploreCategory->literatureContinuing($this->genre ?? $this->theme)->exploreCategoryItems->map(function ($exploreCategoryItem) {
-                return $exploreCategoryItem->model;
-            }),
-            ExploreCategoryTypes::LiteraturesSeason => $this->exploreCategory->literatureSeason($this->genre ?? $this->theme)->exploreCategoryItems->map(function ($exploreCategoryItem) {
-                return $exploreCategoryItem->model;
-            }),
-            ExploreCategoryTypes::UpcomingGames => $this->exploreCategory->upcomingGames($this->genre ?? $this->theme)->exploreCategoryItems,
-            ExploreCategoryTypes::NewGames => $this->exploreCategory->newGames($this->genre ?? $this->theme)->exploreCategoryItems->map(function ($exploreCategoryItem) {
-                return $exploreCategoryItem->model;
-            }),
-            ExploreCategoryTypes::RecentlyUpdateGames => $this->exploreCategory->recentlyUpdatedGames($this->genre ?? $this->theme)->exploreCategoryItems->map(function ($exploreCategoryItem) {
-                return $exploreCategoryItem->model;
-            }),
-            ExploreCategoryTypes::GamesSeason => $this->exploreCategory->literatureSeason($this->genre ?? $this->theme)->exploreCategoryItems->map(function ($exploreCategoryItem) {
-                return $exploreCategoryItem->model;
-            }),
-            ExploreCategoryTypes::Characters => $this->exploreCategory->charactersBornToday()->exploreCategoryItems->map(function ($exploreCategoryItem) {
-                return $exploreCategoryItem->model;
-            }),
-            ExploreCategoryTypes::People => $this->exploreCategory->peopleBornToday()->exploreCategoryItems->map(function ($exploreCategoryItem) {
-                return $exploreCategoryItem->model;
-            }),
-            ExploreCategoryTypes::Songs => $this->exploreCategory->exploreCategoryItems()->limit(10)->get()->map(function ($exploreCategoryItem) {
-                return $exploreCategoryItem->model;
-            }),
-            default => $this->exploreCategory->exploreCategoryItems()->limit(10)->get()
+        if (!$this->readyToLoad) {
+            return collect();
+        }
+
+        $exploreCategory = match ($this->exploreCategory->type) {
+            ExploreCategoryTypes::MostPopularShows => $this->exploreCategory->mostPopular(Anime::class, $this->genre ?? $this->theme),
+            ExploreCategoryTypes::UpcomingShows => $this->exploreCategory->upcoming(Anime::class, $this->genre ?? $this->theme),
+            ExploreCategoryTypes::NewShows => $this->exploreCategory->recentlyAdded(Anime::class, $this->genre ?? $this->theme),
+            ExploreCategoryTypes::RecentlyUpdateShows => $this->exploreCategory->recentlyUpdated(Anime::class, $this->genre ?? $this->theme),
+            ExploreCategoryTypes::RecentlyFinishedShows => $this->exploreCategory->recentlyFinished(Anime::class, $this->genre ?? $this->theme),
+            ExploreCategoryTypes::ContinuingShows => $this->exploreCategory->ongoing(Anime::class, $this->genre ?? $this->theme),
+            ExploreCategoryTypes::ShowsSeason => $this->exploreCategory->currentSeason(Anime::class, $this->genre ?? $this->theme),
+            ExploreCategoryTypes::MostPopularLiteratures => $this->exploreCategory->mostPopular(Manga::class, $this->genre ?? $this->theme),
+            ExploreCategoryTypes::UpcomingLiteratures => $this->exploreCategory->upcoming(Manga::class, $this->genre ?? $this->theme),
+            ExploreCategoryTypes::NewLiteratures => $this->exploreCategory->recentlyAdded(Manga::class, $this->genre ?? $this->theme),
+            ExploreCategoryTypes::RecentlyUpdateLiteratures => $this->exploreCategory->recentlyUpdated(Manga::class, $this->genre ?? $this->theme),
+            ExploreCategoryTypes::RecentlyFinishedLiteratures => $this->exploreCategory->recentlyFinished(Manga::class, $this->genre ?? $this->theme),
+            ExploreCategoryTypes::ContinuingLiteratures => $this->exploreCategory->ongoing(Manga::class, $this->genre ?? $this->theme),
+            ExploreCategoryTypes::LiteraturesSeason => $this->exploreCategory->currentSeason(Manga::class, $this->genre ?? $this->theme),
+            ExploreCategoryTypes::MostPopularGames => $this->exploreCategory->mostPopular(Game::class, $this->genre ?? $this->theme),
+            ExploreCategoryTypes::UpcomingGames => $this->exploreCategory->upcoming(Game::class, $this->genre ?? $this->theme),
+            ExploreCategoryTypes::NewGames => $this->exploreCategory->recentlyAdded(Game::class, $this->genre ?? $this->theme),
+            ExploreCategoryTypes::RecentlyUpdateGames => $this->exploreCategory->recentlyUpdated(Game::class, $this->genre ?? $this->theme),
+            ExploreCategoryTypes::GamesSeason => $this->exploreCategory->currentSeason(Game::class, $this->genre ?? $this->theme),
+            ExploreCategoryTypes::Characters => $this->exploreCategory->charactersBornToday(),
+            ExploreCategoryTypes::People => $this->exploreCategory->peopleBornToday(),
+            default => $this->exploreCategory->load([
+                'exploreCategoryItems.model' => function (MorphTo $morphTo) {
+                    $morphTo->constrain([
+                        Anime::class => function (Builder $query) {
+                            $query->with(['genres', 'mediaStat', 'media', 'translations', 'tv_rating', 'themes']);
+                        },
+                        Game::class => function (Builder $query) {
+                            $query->with(['genres', 'mediaStat', 'media', 'translations', 'tv_rating', 'themes']);
+                        },
+                        Genre::class => function (Builder $query) {
+                            $query->with(['media']);
+                        },
+                        Manga::class => function (Builder $query) {
+                            $query->with(['genres', 'mediaStat', 'media', 'translations', 'tv_rating', 'themes']);
+                        },
+                        MediaSong::class => function (Builder $query) {
+                            $query->with(['model.translations']);
+                        },
+                        Theme::class => function (Builder $query) {
+                            $query->with(['media']);
+                        }
+                    ]);
+                }
+            ])
         };
 
         if ($this->exploreCategory->type === ExploreCategoryTypes::Shows && $this->exploreCategory->size == ExploreCategorySize::Small) {
-            return $exploreCategoryItems->map(function ($exploreCategoryItem) {
-                return $exploreCategoryItem->model;
-            });
+            return $exploreCategory->exploreCategoryItems->map(function ($exploreCategoryItem) {
+                return $exploreCategoryItem?->model;
+            })->filter();
+        } else if ($this->exploreCategory->type === ExploreCategoryTypes::Songs) {
+            return $exploreCategory->exploreCategoryItems->map(function ($exploreCategoryItem) {
+                if ($exploreCategoryItem?->model->model != null) {
+                    return $exploreCategoryItem->model;
+                }
+                return null;
+            })->filter();
         }
 
-        return $exploreCategoryItems;
+        return $exploreCategory->exploreCategoryItems->map(function ($exploreCategoryItem) {
+            return $exploreCategoryItem->model;
+        })->filter();
     }
 
     /**

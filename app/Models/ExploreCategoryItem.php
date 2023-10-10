@@ -19,15 +19,6 @@ class ExploreCategoryItem extends KModel implements Sortable
     protected $table = self::TABLE_NAME;
 
     /**
-     * The relations to eager load on every query.
-     *
-     * @var array
-     */
-    protected $with = [
-        'model',
-    ];
-
-    /**
      * The sortable configurations.
      *
      * @var array
