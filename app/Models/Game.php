@@ -107,19 +107,6 @@ class Game extends KModel implements HasMedia, Sitemapable
     ];
 
     /**
-     * The relations to eager load on every query.
-     *
-     * @var array
-     */
-    protected $with = [
-        'genres',
-        'media',
-        'mediaStat',
-        'translations',
-        'tv_rating',
-    ];
-
-    /**
      * Casts rules.
      *
      * @var array
@@ -742,10 +729,16 @@ class Game extends KModel implements HasMedia, Sitemapable
      *
      * @param Builder $query
      * @param int $limit
+     * @param bool $nsfwAllowed
      * @return Builder
      */
-    public function scopeUpcomingGames(Builder $query, int $limit = 10): Builder
+    public function scopeUpcoming(Builder $query, int $limit = 10, bool $nsfwAllowed = false): Builder
     {
+        // If NSFW is not allowed then filter it out.
+        if (!$nsfwAllowed) {
+            $query->where(self::TABLE_NAME . '.is_nsfw', false);
+        }
+
         return $query->whereDate(self::TABLE_NAME . '.published_at', '>', yesterday())
             ->orderBy(self::TABLE_NAME . '.published_at')
             ->limit($limit);
@@ -756,10 +749,16 @@ class Game extends KModel implements HasMedia, Sitemapable
      *
      * @param Builder $query
      * @param int $limit
+     * @param bool $nsfwAllowed
      * @return Builder
      */
-    public function scopeNewGames(Builder $query, int $limit = 10): Builder
+    public function scopeRecentlyAdded(Builder $query, int $limit = 10, bool $nsfwAllowed = false): Builder
     {
+        // If NSFW is not allowed then filter it out.
+        if (!$nsfwAllowed) {
+            $query->where(self::TABLE_NAME . '.is_nsfw', false);
+        }
+
         return $query->orderBy(self::TABLE_NAME . '.created_at', 'desc')
             ->limit($limit);
     }
@@ -769,10 +768,16 @@ class Game extends KModel implements HasMedia, Sitemapable
      *
      * @param Builder $query
      * @param int $limit
+     * @param bool $nsfwAllowed
      * @return Builder
      */
-    public function scopeRecentlyUpdatedGames(Builder $query, int $limit = 10): Builder
+    public function scopeRecentlyUpdated(Builder $query, int $limit = 10, bool $nsfwAllowed = false): Builder
     {
+        // If NSFW is not allowed then filter it out.
+        if (!$nsfwAllowed) {
+            $query->where(self::TABLE_NAME . '.is_nsfw', false);
+        }
+
         return $query->orderBy(self::TABLE_NAME . '.updated_at', 'desc')
             ->whereDate(self::TABLE_NAME . '.created_at', '<', today())
             ->limit($limit);
@@ -783,12 +788,18 @@ class Game extends KModel implements HasMedia, Sitemapable
      *
      * @param Builder $query
      * @param int $limit
+     * @param bool $nsfwAllowed
      * @return Builder
      */
-    public function scopeGamesSeason(Builder $query, int $limit = 10): Builder
+    public function scopeCurrentSeason(Builder $query, int $limit = 10, bool $nsfwAllowed = false): Builder
     {
-        return $query->where(self::TABLE_NAME . '.publication_season', '=', season_of_year()->value)
-            ->whereYear(self::TABLE_NAME . '.published_at', '=', now()->year)
+        // If NSFW is not allowed then filter it out.
+        if (!$nsfwAllowed) {
+            $query->where(self::TABLE_NAME . '.is_nsfw', false);
+        }
+
+        return $query->where(self::TABLE_NAME . '.publication_season', '=', season_of_year(today()->addDays(2))->value)
+            ->whereYear(self::TABLE_NAME . '.published_at', '=', today()->addDays(2)->year)
             ->limit($limit);
     }
 
