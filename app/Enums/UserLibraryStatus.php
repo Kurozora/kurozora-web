@@ -12,6 +12,7 @@ use BenSampo\Enum\Exceptions\InvalidEnumMemberException;
  * @method static UserLibraryStatus Completed()
  * @method static UserLibraryStatus OnHold()
  * @method static UserLibraryStatus Dropped()
+ * @method static UserLibraryStatus Ignored()
  */
 final class UserLibraryStatus extends Enum
 {
@@ -20,6 +21,7 @@ final class UserLibraryStatus extends Enum
     const Completed     = 3;
     const OnHold        = 4;
     const Dropped       = 1;
+    const Ignored       = 5;
 
     /**
      * Make an enum instance from a given key.
