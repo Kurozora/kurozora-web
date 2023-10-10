@@ -133,7 +133,7 @@ class Index extends Component
                 return null;
             }
 
-            $models = match ($this->type) {
+            $searchableModel = match ($this->type) {
                 SearchType::Literatures => Manga::class,
                 SearchType::Games => Game::class,
                 SearchType::Episodes => Episode::class,
@@ -147,6 +147,7 @@ class Index extends Component
 
             // Filter
             $wheres = [];
+
             foreach ($this->filter as $attribute => $filter) {
                 $attribute = str_replace(':', '.', $attribute);
                 $selected = $filter['selected'];
@@ -165,17 +166,46 @@ class Index extends Component
             }
 
             // Search
-            $models = $models::search($this->q);
+            $models = $searchableModel::search($this->q)
+                ->query(function ($query) use ($searchableModel) {
+                    switch ($searchableModel) {
+                        case Anime::class:
+                        case Game::class:
+                        case Manga::class:
+                            $query->with(['genres', 'themes', 'media', 'mediaStat', 'translations', 'tv_rating']);
+                            break;
+                        case Character::class:
+                            $query->with(['media', 'translations']);
+                            break;
+                        case Episode::class:
+                            $query->with(['media', 'season' => function ($query) {
+                                $query->with(['anime.translations', 'translations']);
+                            }, 'translations']);
+                            break;
+                        case Person::class:
+                        case Studio::class:
+                            $query->with(['media']);
+                            break;
+                        case Song::class:
+                            break;
+                        case User::class:
+                            $query->with(['media', 'followers']);
+                            break;
+                    }
+                });
+
             $models->wheres = $wheres;
+
             if ($this->scope == SearchScope::Library) {
-                $trackableIDs = UserLibrary::search($this->q)
+                $trackableIDs = collect(UserLibrary::search($this->q)
                     ->where('user_id', auth()->user()->id)
-                    ->take(2000)
-                    ->get()
+                    ->simplePaginateRaw(perPage: 2000, page: 1)
+                    ->items()['hits'] ?? [])
                     ->pluck('trackable_id')
                     ->toArray();
                 $models->whereIn('id', $trackableIDs);
             }
+
             return $models->paginate($this->perPage);
         } catch (Exception $e) {
             return null;
@@ -250,7 +280,7 @@ class Index extends Component
                 'Kirito',
                 'Usopp',
                 'Kuro-chan',
-                'TheNaughtyOne',
+                'Fejrix',
             ],
             default => [],
         };
