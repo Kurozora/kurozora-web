@@ -1,7 +1,20 @@
+@php
+    $bannerImage = $user->getFirstMedia(\App\Enums\MediaCollection::Banner);
+@endphp
+
 <div class="flex">
-    @if ($user->getFirstMedia(\App\Enums\MediaCollection::Banner))
-        <picture class="relative w-full overflow-hidden">
-            <img class="inline-block w-full h-40 object-cover sm:h-80" style="background-color: {{ $user->getFirstMedia(\App\Enums\MediaCollection::Banner)?->custom_properties['background_color'] ?? '#FF9300' }}" src="{{ $user->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) }}" alt="{{ $user->username }} Banner Image">
+    @if ($bannerImage)
+        <picture
+            class="relative w-full overflow-hidden"
+            style="background-color: {{ $bannerImage?->custom_properties['background_color'] ?? '#FF9300' }}"
+        >
+            <img
+                class="inline-block w-full h-40 object-cover sm:h-80"
+                src="{{ $bannerImage->getFullUrl() }}"
+                alt="{{ $user->username }} Banner Image"
+                width="{{ $bannerImage->custom_properties['width'] ?? 450 }}"
+                height="{{ $bannerImage->custom_properties['height'] ?? 160 }}"
+            >
 
             <div class="absolute top-0 left-0 h-full w-full"></div>
         </picture>

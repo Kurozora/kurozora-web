@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Components;
 
+use App\Enums\UserActivityStatus;
 use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -44,6 +45,16 @@ class ProfileImageView extends Component
     {
         $this->user = $user;
         $this->onProfile = $onProfile;
+    }
+
+    /**
+     * Returns the user's anime library.
+     *
+     * @return UserActivityStatus
+     */
+    public function getActivityStatusProperty(): UserActivityStatus
+    {
+        return $this->user->getActivityStatus();
     }
 
     /**
