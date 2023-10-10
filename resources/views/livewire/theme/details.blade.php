@@ -38,22 +38,105 @@
             </div>
         </section>
 
-        @foreach($exploreCategories as $key => $exploreCategory)
-            @switch($exploreCategory->type)
+        <section wire:init="loadPage">
+            @foreach($this->exploreCategories as $key => $exploreCategory)
+                @switch($exploreCategory->type)
                 @case(\App\Enums\ExploreCategoryTypes::MostPopularShows)
                     <section class="pb-8">
-                        <div class="flex overflow-x-scroll no-scrollbar">
-                            <div class="flex flex-nowrap gap-4">
-                                @foreach($exploreCategory->mostPopularShows($theme)->exploreCategoryItems as $categoryItem)
-                                    <x-lockups.banner-lockup :anime="$categoryItem->model" />
-                                @endforeach
-                            </div>
+                        <div class="flex flex-nowrap gap-4 mt-5 snap-x overflow-x-scroll no-scrollbar">
+                            @foreach($exploreCategory->mostPopular(\App\Models\Anime::class, $theme)->exploreCategoryItems as $categoryItem)
+                                <x-lockups.banner-lockup :anime="$categoryItem->model" />
+                            @endforeach
                         </div>
                     </section>
                     @break
                 @default
                     <livewire:components.explore-category-section :exploreCategory="$exploreCategory" :theme="$theme" />
-            @endswitch
-        @endforeach
+                @endswitch
+            @endforeach
+        </section>
+
+        @if (!$readyToLoad)
+            <section  class="pt-5 pb-8 border-t-2">
+                <div style="height: 314px">
+                    <div class="flex gap-2 justify-between mb-5">
+                        <div>
+                            <p class="bg-gray-200" style="width: 168px; height: 28px"></p>
+                            <p class="bg-gray-200" style="width: 228px; height: 22px"></p>
+                        </div>
+
+                        <div class="flex flex-wrap gap-2 justify-end"></div>
+                    </div>
+
+                    <div class="flex gap-4 justify-between snap-x overflow-x-scroll no-scrollbar">
+                        <div class="bg-gray-200 w-64 md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
+                        <div class="bg-gray-200 w-64 md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
+                        <div class="bg-gray-200 w-64 md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
+                        <div class="bg-gray-200 w-64 md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
+                        <div class="bg-gray-200 w-64 md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
+                    </div>
+                </div>
+            </section>
+            <section  class="pt-5 pb-8 border-t-2">
+                <div style="height: 314px">
+                    <div class="flex gap-2 justify-between mb-5">
+                        <div>
+                            <p class="bg-gray-200" style="width: 168px; height: 28px"></p>
+                            <p class="bg-gray-200" style="width: 228px; height: 22px"></p>
+                        </div>
+
+                        <div class="flex flex-wrap gap-2 justify-end"></div>
+                    </div>
+
+                    <div class="flex gap-4 justify-between snap-x overflow-x-scroll no-scrollbar">
+                        <div class="bg-gray-200 w-64 md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
+                        <div class="bg-gray-200 w-64 md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
+                        <div class="bg-gray-200 w-64 md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
+                        <div class="bg-gray-200 w-64 md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
+                        <div class="bg-gray-200 w-64 md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
+                    </div>
+                </div>
+            </section>
+            <section  class="pt-5 pb-8 border-t-2">
+                <div style="height: 314px">
+                    <div class="flex gap-2 justify-between mb-5">
+                        <div>
+                            <p class="bg-gray-200" style="width: 168px; height: 28px"></p>
+                            <p class="bg-gray-200" style="width: 228px; height: 22px"></p>
+                        </div>
+
+                        <div class="flex flex-wrap gap-2 justify-end"></div>
+                    </div>
+
+                    <div class="flex gap-4 justify-between snap-x overflow-x-scroll no-scrollbar">
+                        <div class="bg-gray-200 w-64 md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
+                        <div class="bg-gray-200 w-64 md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
+                        <div class="bg-gray-200 w-64 md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
+                        <div class="bg-gray-200 w-64 md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
+                        <div class="bg-gray-200 w-64 md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
+                    </div>
+                </div>
+            </section>
+            <section  class="pt-5 pb-8 border-t-2">
+                <div style="height: 314px">
+                    <div class="flex gap-2 justify-between mb-5">
+                        <div>
+                            <p class="bg-gray-200" style="width: 168px; height: 28px"></p>
+                            <p class="bg-gray-200" style="width: 228px; height: 22px"></p>
+                        </div>
+
+                        <div class="flex flex-wrap gap-2 justify-end"></div>
+                    </div>
+
+                    <div class="flex gap-4 justify-between snap-x overflow-x-scroll no-scrollbar">
+                        <div class="bg-gray-200 w-64 md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
+                        <div class="bg-gray-200 w-64 md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
+                        <div class="bg-gray-200 w-64 md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
+                        <div class="bg-gray-200 w-64 md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
+                        <div class="bg-gray-200 w-64 md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
+                    </div>
+                </div>
+            </section>
+        @endif
     </div>
 </main>

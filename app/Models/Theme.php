@@ -31,16 +31,6 @@ class Theme extends KModel implements HasMedia, Sitemapable
     protected $table = self::TABLE_NAME;
 
     /**
-     * The relations to eager load on every query.
-     *
-     * @var array
-     */
-    protected $with = [
-        'media',
-        'tv_rating',
-    ];
-
-    /**
      * Get the route key for the model.
      *
      * @return string
@@ -117,6 +107,7 @@ class Theme extends KModel implements HasMedia, Sitemapable
     {
         return [
             'id' => $this->id,
+            'tv_rating_id' => $this->tv_rating_id,
             'name' => $this->name,
             'description' => $this->description,
             'is_nsfw' => $this->is_nsfw,

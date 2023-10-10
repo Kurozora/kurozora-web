@@ -6,7 +6,7 @@ use App\Models\MediaTheme;
 use App\Models\Theme;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -50,22 +50,23 @@ trait HasMediaThemes
     /**
      * Get the model's themes.
      *
-     * @return HasManyThrough
+     * @return BelongsToMany
      */
-    public function themes(): HasManyThrough
+    public function themes(): BelongsToMany
     {
-        return $this->hasManyThrough(Theme::class, MediaTheme::class, 'model_id', 'id', 'id', 'theme_id')
-            ->where('model_type', '=', $this->getMorphClass());
+        return $this->belongsToMany(Theme::class, MediaTheme::class, 'model_id')
+            ->where('model_type', '=', $this->getMorphClass())
+            ->withTimestamps();
     }
 
     /**
      * Eloquent builder scope that limits the query to the given theme.
      *
      * @param Builder $query
-     * @param int|Theme $theme
+     * @param string|int|Theme $theme
      * @return Builder
      */
-    public function scopeWhereTheme(Builder $query, int|Theme $theme): Builder
+    public function scopeWhereTheme(Builder $query, string|int|Theme $theme): Builder
     {
         if (is_numeric($theme)) {
             $themeID = $theme;
