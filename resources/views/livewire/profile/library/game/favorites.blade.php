@@ -56,7 +56,7 @@
                     <p class="text-sm text-gray-500">{{ __('Favorite a game and it will show up here.') }}</p>
                 </section>
             @endif
-        @else
+        @elseif (!$readyToLoad)
             <section  class="mt-4 pt-5 pb-8 border-t-2">
                 <div class="flex gap-4 justify-between flex-wrap">
                     <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
