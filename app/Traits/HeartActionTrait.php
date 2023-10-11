@@ -4,7 +4,6 @@ namespace App\Traits;
 
 use App\Enums\FeedVoteType;
 use Cog\Contracts\Love\Reactable\Models\Reactable;
-use Cog\Contracts\Love\Reacterable\Models\Reacterable;
 
 trait HeartActionTrait {
     /**
@@ -18,7 +17,6 @@ trait HeartActionTrait {
      */
     public function getCurrentHeartValueFor(Reactable $reactable): int
     {
-        /** @var Reacterable $reacterable */
         $reacterable = $this;
         $hasHearted = $reacterable->viaLoveReacter()->hasReactedTo($reactable, FeedVoteType::Heart()->description);
 
@@ -33,7 +31,6 @@ trait HeartActionTrait {
      */
     public function toggleHeart(Reactable $reactable): int
     {
-        /** @var Reacterable $reacterable */
         $reacterable = $this;
         $reacter = $reacterable->viaLoveReacter();
 
