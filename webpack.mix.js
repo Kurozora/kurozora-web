@@ -17,7 +17,8 @@ mix.options({
     }
 })
 
-mix.js('resources/js/app.js', 'public/js/app.js')
+mix.extract()
+    .js('resources/js/app.js', 'public/js/app.js')
     .js('resources/js/debug.js', 'public/js/debug.js')
     .js('resources/js/chat.js', 'public/js/chat.js')
     .js('resources/js/listen.js', 'public/js/listen.js')

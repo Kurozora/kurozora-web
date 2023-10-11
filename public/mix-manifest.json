@@ -1,11 +1,13 @@
 {
-    "/js/app.js": "/js/app.js?id=191fdf9e22b64d2fc27da0c3a80ce1ae",
-    "/js/debug.js": "/js/debug.js?id=a5717b71c72b7f9b23a16626f70a0528",
-    "/js/chat.js": "/js/chat.js?id=263c818519671bf93ea8d2ab9039d808",
-    "/js/listen.js": "/js/listen.js?id=0dd5314e43ba9dc55e53caea9f264c70",
-    "/js/watch.js": "/js/watch.js?id=54cdf1687bfa9e6037be79ee3acbcdb1",
-    "/js/worker.js": "/js/worker.js?id=2c00d667a39012e7bf8e9df291148b49",
+    "/js/app.js": "/js/app.js?id=873611a971c1de17dba08af74f1dfa39",
+    "/js/debug.js": "/js/debug.js?id=36e1d89113d3e2b8718aabbe0174c5ad",
+    "/js/chat.js": "/js/chat.js?id=a25154c2e7485a89cb113b7b0a044288",
+    "/js/listen.js": "/js/listen.js?id=be71876c015718c668380711c1023b54",
+    "/js/watch.js": "/js/watch.js?id=0cbb29a66651c690811e83b585629179",
+    "/js/worker.js": "/js/worker.js?id=81c3a4104ec6904078743eadcdc5e8e9",
+    "/js/manifest.js": "/js/manifest.js?id=9cc4ba42188c795a63dcbbed1e2c564d",
     "/css/watch.css": "/css/watch.css?id=33f0a3ecd09b77c6b8c931edadc42205",
     "/css/chat.css": "/css/chat.css?id=c94ecda28f343fe6f9a3f7e36744979d",
-    "/css/app.css": "/css/app.css?id=899dd03b1e21acfc4208b911bc73c508"
+    "/css/app.css": "/css/app.css?id=899dd03b1e21acfc4208b911bc73c508",
+    "/js/vendor.js": "/js/vendor.js?id=1177f3a465d5fc82b6dae43e19a1d9a0"
 }
