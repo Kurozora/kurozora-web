@@ -82,7 +82,6 @@ class FavoritesSection extends Component
         $this->readyToLoad = true;
     }
 
-
     /**
      * Returns the user's feed messages.
      *

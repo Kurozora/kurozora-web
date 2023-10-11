@@ -39,19 +39,6 @@ class FeedMessage extends KModel implements ReactableContract
     ];
 
     /**
-     * The relations to eager load on every query.
-     *
-     * @var array
-     */
-    protected $with = [
-        'user',
-        'loveReactant.reactions.reacter.reacterable',
-        'loveReactant.reactions.type',
-        'loveReactant.reactionCounters',
-        'loveReactant.reactionTotal',
-    ];
-
-    /**
      * Bootstrap the model and its traits.
      *
      * @return void
