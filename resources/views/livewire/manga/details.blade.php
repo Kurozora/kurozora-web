@@ -66,7 +66,7 @@
         manga/{{ $manga->id }}
     </x-slot:appArgument>
 
-    <div class="grid grid-rows-[repeat(2,minmax(0,min-content))] h-full xl:grid-rows-none xl:grid-cols-2 2xl:grid-cols-3 xl:mb-0">
+    <div class="grid grid-rows-[repeat(2,minmax(0,min-content))] h-full xl:grid-rows-none xl:grid-cols-2 2xl:grid-cols-3 xl:mb-0" wire:init="loadPage">
         <div class="relative">
             <div class="relative flex flex-nowrap aspect-video md:relative md:h-full xl:aspect-auto">
                 <x-picture class="w-full overflow-hidden">
@@ -428,29 +428,31 @@
                 </div>
             </section>
 
-            <livewire:components.manga-cast-section :manga="$manga" />
+            @if ($readyToLoad)
+                <livewire:components.manga-cast-section :manga="$manga" />
 
-            <livewire:components.manga-staff-section :manga="$manga" />
+                <livewire:components.manga-staff-section :manga="$manga" />
 
-            <livewire:components.manga-studios-section :manga="$manga" />
+                <livewire:components.manga-studios-section :manga="$manga" />
 
-            <div class="bg-orange-50">
-                @if(!empty($this->studio))
-                    <livewire:components.manga-more-by-studio-section :studio="$this->studio" />
-                @endif
+                <div class="bg-orange-50">
+                    @if(!empty($this->studio))
+                        <livewire:components.manga-more-by-studio-section :manga="$manga" :studio="$this->studio" />
+                    @endif
 
-                <livewire:components.manga.manga-relations-section :manga="$manga" />
+                    <livewire:components.manga.manga-relations-section :manga="$manga" />
 
-                <livewire:components.manga.anime-relations-section :manga="$manga" />
+                    <livewire:components.manga.anime-relations-section :manga="$manga" />
 
-                <livewire:components.manga.game-relations-section :manga="$manga" />
+                    <livewire:components.manga.game-relations-section :manga="$manga" />
 
-                @if (!empty($manga->copyright))
-                    <section class="pt-4 pr-4 pb-4 pl-4 border-t">
-                        <p class="text-sm text-gray-400">{{ $manga->copyright }}</p>
-                    </section>
-                @endif
-            </div>
+                    @if (!empty($manga->copyright))
+                        <section class="pt-4 pr-4 pb-4 pl-4 border-t">
+                            <p class="text-sm text-gray-400">{{ $manga->copyright }}</p>
+                        </section>
+                    @endif
+                </div>
+            @endif
 
             <x-dialog-modal maxWidth="md" model="showPopup">
                 @if ($showReviewBox)

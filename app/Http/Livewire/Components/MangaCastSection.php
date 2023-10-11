@@ -6,6 +6,7 @@ use App\Models\Manga;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 
 class MangaCastSection extends Component
@@ -18,18 +19,11 @@ class MangaCastSection extends Component
     public Manga $manga;
 
     /**
-     * The array containing the cast data.
+     * Whether the component is ready to load.
      *
-     * @var array $mangaCast
+     * @var bool $readyToLoad
      */
-    public array $mangaCast = [];
-
-    /**
-     * The number of cast the manga has.
-     *
-     * @var int $castCount
-     */
-    public int $castCount;
+    public bool $readyToLoad = false;
 
     /**
      * Prepare the component.
@@ -41,17 +35,38 @@ class MangaCastSection extends Component
     public function mount(Manga $manga): void
     {
         $this->manga = $manga;
-        $this->castCount = $manga->cast()->count();
+    }
+
+    /**
+     * Sets the property to load the section.
+     *
+     * @return void
+     */
+    public function loadSection(): void
+    {
+        $this->readyToLoad = true;
     }
 
     /**
      * Loads the manga cast section.
      *
-     * @return void
+     * @return Collection
      */
-    public function loadMangaCast(): void
+    public function getMangaCastProperty(): Collection
     {
-        $this->mangaCast = $this->manga->getCast(Manga::MAXIMUM_RELATIONSHIPS_LIMIT)->items() ?? [];
+        if (!$this->readyToLoad) {
+            return collect();
+        }
+
+        return $this->manga->cast()
+            ->with([
+                'character' => function ($query) {
+                    $query->with(['media', 'translations']);
+                },
+                'castRole'
+            ])
+            ->limit(Manga::MAXIMUM_RELATIONSHIPS_LIMIT)
+            ->get();
     }
 
     /**

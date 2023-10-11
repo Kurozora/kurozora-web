@@ -6,6 +6,7 @@ use App\Models\Manga;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 
 class GameRelationsSection extends Component
@@ -18,18 +19,11 @@ class GameRelationsSection extends Component
     public Manga $manga;
 
     /**
-     * The array containing the game relations data.
+     * Whether the component is ready to load.
      *
-     * @var array $gameRelations
+     * @var bool $readyToLoad
      */
-    public array $gameRelations = [];
-
-    /**
-     * The number of relations the manga has.
-     *
-     * @var int $gameRelationsCount
-     */
-    public int $gameRelationsCount;
+    public bool $readyToLoad = false;
 
     /**
      * Prepare the component.
@@ -41,17 +35,38 @@ class GameRelationsSection extends Component
     public function mount(Manga $manga): void
     {
         $this->manga = $manga;
-        $this->gameRelationsCount = $this->manga->gameRelations()->count();
+    }
+
+    /**
+     * Sets the property to load the section.
+     *
+     * @return void
+     */
+    public function loadSection(): void
+    {
+        $this->readyToLoad = true;
     }
 
     /**
      * Loads the game relations section.
      *
-     * @return void
+     * @return Collection
      */
-    public function loadGameRelations(): void
+    public function getGameRelationsProperty(): Collection
     {
-        $this->gameRelations = $this->manga->getGameRelations(Manga::MAXIMUM_RELATIONSHIPS_LIMIT)->items() ?? [];
+        if (!$this->readyToLoad) {
+            return collect();
+        }
+
+        return $this->manga->gameRelations()
+            ->with([
+                'related' => function ($query) {
+                    $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating']);
+                },
+                'relation'
+            ])
+            ->limit(Manga::MAXIMUM_RELATIONSHIPS_LIMIT)
+            ->get();
     }
 
     /**
