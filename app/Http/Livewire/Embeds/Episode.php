@@ -4,11 +4,11 @@ namespace App\Http\Livewire\Embeds;
 
 use App\Enums\VideoSource;
 use App\Models\Anime;
-use App\Models\Season;
 use App\Models\Video;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Livewire\Component;
 
 class Episode extends Component
@@ -44,7 +44,21 @@ class Episode extends Component
      */
     public function mount(\App\Models\Episode $episode): void
     {
-        $this->episode = $episode;
+        $this->episode = $episode->load([
+            'anime' => function (HasOneThrough $hasOneThrough) {
+                $hasOneThrough->with([
+                    'genres',
+                    'studios',
+                    'translations',
+                    'orderedVideos'
+                ]);
+            },
+            'media',
+            'mediaStat',
+            'translations',
+            'tv_rating',
+            'videos',
+        ]);
     }
 
     /**
@@ -56,15 +70,15 @@ class Episode extends Component
     {
         $videoSource = VideoSource::Default();
 
-        if ($video = $this->episode->videos()->firstWhere('source', $videoSource->value)) {
+        if ($video = $this->episode->videos->firstWhere('source', '=', $videoSource->value)) {
             return $video;
         }
 
-        if ($video = $this->episode->videos()->first()) {
+        if ($video = $this->episode->videos->first()) {
             return $video;
         }
 
-        return $this->anime?->orderedVideos()->first();
+        return $this->anime?->orderedVideos->first();
     }
 
     /**
@@ -75,16 +89,6 @@ class Episode extends Component
     public function getAnimeProperty(): ?Anime
     {
         return $this->episode->anime;
-    }
-
-    /**
-     * The object containing the season data.
-     *
-     * @return Season|null
-     */
-    public function getSeasonProperty(): ?Season
-    {
-        return $this->episode->season;
     }
 
     /**
