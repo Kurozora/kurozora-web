@@ -27,7 +27,6 @@ class AnimeCast extends KModel implements Sitemapable
     public function anime(): BelongsTo
     {
         return $this->belongsTo(Anime::class);
-//            ->withoutGlobalScope(new TvRatingScope());
     }
 
     /**

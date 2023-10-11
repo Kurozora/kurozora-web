@@ -83,6 +83,13 @@ class Details extends Component
     ];
 
     /**
+     * Whether the component is ready to load.
+     *
+     * @var bool $readyToLoad
+     */
+    public bool $readyToLoad = false;
+
+    /**
      * The component's listeners.
      *
      * @var array
@@ -103,8 +110,19 @@ class Details extends Component
         // Call the AnimeViewed event
         AnimeViewed::dispatch($anime);
 
-        $this->anime = $anime;
+        $this->anime = $anime->load(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating']);
+
         $this->setupActions();
+    }
+
+    /**
+     * Sets the property to load the page.
+     *
+     * @return void
+     */
+    public function loadPage(): void
+    {
+        $this->readyToLoad = true;
     }
 
     /**

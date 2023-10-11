@@ -78,7 +78,7 @@
         anime/{{ $anime->id }}
     </x-slot:appArgument>
 
-    <div class="grid grid-rows-[repeat(2,minmax(0,min-content))] h-full xl:grid-rows-none xl:grid-cols-2 2xl:grid-cols-3 xl:mb-0">
+    <div class="grid grid-rows-[repeat(2,minmax(0,min-content))] h-full xl:grid-rows-none xl:grid-cols-2 2xl:grid-cols-3 xl:mb-0" wire:init="loadPage">
         <div class="relative">
             <div class="relative flex flex-nowrap aspect-video md:relative md:h-full xl:aspect-auto">
                 <x-picture class="w-full overflow-hidden">
@@ -432,33 +432,35 @@
                 </div>
             </section>
 
-{{--            <livewire:components.anime-seasons-section :anime="$anime" />--}}
+            @if ($readyToLoad)
+                <livewire:components.anime-seasons-section :anime="$anime" />
 
-{{--            <livewire:components.anime-cast-section :anime="$anime" />--}}
+                <livewire:components.anime-cast-section :anime="$anime" />
 
-{{--            <livewire:components.anime-staff-section :anime="$anime" />--}}
+                <livewire:components.anime-staff-section :anime="$anime" />
 
-{{--            <livewire:components.anime-songs-section :anime="$anime" />--}}
+                <livewire:components.anime-songs-section :anime="$anime" />
 
-{{--            <livewire:components.anime-studios-section :anime="$anime" />--}}
+                <livewire:components.anime-studios-section :anime="$anime" />
 
-{{--            <div class="bg-orange-50">--}}
-{{--                @if(!empty($this->studio))--}}
-{{--                    <livewire:components.anime-more-by-studio-section :studio="$this->studio" />--}}
-{{--                @endif--}}
+                <div class="bg-orange-50">
+                    @if(!empty($this->studio))
+                        <livewire:components.anime-more-by-studio-section :anime="$anime" :studio="$this->studio" />
+                    @endif
 
-{{--                <livewire:components.anime.anime-relations-section :anime="$anime" />--}}
+                    <livewire:components.anime.anime-relations-section :anime="$anime" />
 
-{{--                <livewire:components.anime.manga-relations-section :anime="$anime" />--}}
+                    <livewire:components.anime.manga-relations-section :anime="$anime" />
 
-{{--                <livewire:components.anime.game-relations-section :anime="$anime" />--}}
+                    <livewire:components.anime.game-relations-section :anime="$anime" />
 
-{{--                @if (!empty($anime->copyright))--}}
-{{--                    <section class="pt-4 pr-4 pb-4 pl-4 border-t">--}}
-{{--                        <p class="text-sm text-gray-400">{{ $anime->copyright }}</p>--}}
-{{--                    </section>--}}
-{{--                @endif--}}
-{{--            </div>--}}
+                    @if (!empty($anime->copyright))
+                        <section class="pt-4 pr-4 pb-4 pl-4 border-t">
+                            <p class="text-sm text-gray-400">{{ $anime->copyright }}</p>
+                        </section>
+                    @endif
+                </div>
+            @endif
 
             <x-dialog-modal maxWidth="md" model="showPopup">
                 @if ($showVideo)

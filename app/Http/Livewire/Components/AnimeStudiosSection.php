@@ -6,6 +6,7 @@ use App\Models\Anime;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 
 class AnimeStudiosSection extends Component
@@ -18,18 +19,11 @@ class AnimeStudiosSection extends Component
     public Anime $anime;
 
     /**
-     * The array containing the studios data.
+     * Whether the component is ready to load.
      *
-     * @var array $studios
+     * @var bool $readyToLoad
      */
-    public array $studios = [];
-
-    /**
-     * The number of studios the anime has.
-     *
-     * @var int $studiosCount
-     */
-    public int $studiosCount;
+    public bool $readyToLoad = false;
 
     /**
      * Prepare the component.
@@ -41,17 +35,33 @@ class AnimeStudiosSection extends Component
     public function mount(Anime $anime): void
     {
         $this->anime = $anime;
-        $this->studiosCount = $anime->studios()->count();
+    }
+
+    /**
+     * Sets the property to load the section.
+     *
+     * @return void
+     */
+    public function loadSection(): void
+    {
+        $this->readyToLoad = true;
     }
 
     /**
      * Loads the media studios section.
      *
-     * @return void
+     * @return Collection
      */
-    public function loadAnimeStudios(): void
+    public function getStudiosProperty(): Collection
     {
-        $this->studios = $this->anime->getStudios(Anime::MAXIMUM_RELATIONSHIPS_LIMIT)->items() ?? [];
+        if (!$this->readyToLoad) {
+            return collect();
+        }
+
+        return $this->anime->studios()
+            ->with('media')
+            ->limit(Anime::MAXIMUM_RELATIONSHIPS_LIMIT)
+            ->get();
     }
 
     /**

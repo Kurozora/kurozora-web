@@ -29,7 +29,7 @@
 
                 <div class="flex flex-wrap w-full justify-between">
                     <p class="text-sm text-black/60">{{ __('Episodes') }}</p>
-                    <p class="text-sm">{{ $season->episodes()->count() }}</p>
+                    <p class="text-sm">{{ $season->episodes_count }}</p>
                 </div>
                 <x-hr />
 

@@ -6,6 +6,7 @@ use App\Models\Anime;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 
 class AnimeSongsSection extends Component
@@ -18,18 +19,11 @@ class AnimeSongsSection extends Component
     public Anime $anime;
 
     /**
-     * The array containing the anime songs data.
+     * Whether the component is ready to load.
      *
-     * @var array $mediaSongs
+     * @var bool $readyToLoad
      */
-    public array $mediaSongs = [];
-
-    /**
-     * The number of songs the anime has.
-     *
-     * @var int $mediaSongsCount
-     */
-    public int $mediaSongsCount;
+    public bool $readyToLoad = false;
 
     /**
      * Prepare the component.
@@ -41,17 +35,38 @@ class AnimeSongsSection extends Component
     public function mount(Anime $anime): void
     {
         $this->anime = $anime;
-        $this->mediaSongsCount = $anime->getMediaSongs()->count();
+    }
+
+    /**
+     * Sets the property to load the section.
+     *
+     * @return void
+     */
+    public function loadSection(): void
+    {
+        $this->readyToLoad = true;
     }
 
     /**
      * Loads the media songs section.
      *
-     * @return void
+     * @return Collection
      */
-    public function loadMediaSongs(): void
+    public function getMediaSongsProperty(): Collection
     {
-        $this->mediaSongs = $this->anime->getMediaSongs(Anime::MAXIMUM_RELATIONSHIPS_LIMIT)->items() ?? [];
+        if (!$this->readyToLoad) {
+            return collect();
+        }
+
+        return $this->anime->mediaSongs()
+            ->with([
+                'song' => function ($query) {
+                    $query->with(['media']);
+                }
+            ])
+            ->limit(Anime::MAXIMUM_RELATIONSHIPS_LIMIT)
+            ->orderBy('episodes')
+            ->get();
     }
 
     /**

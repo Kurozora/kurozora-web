@@ -17,16 +17,6 @@ class MediaRelation extends KModel
     protected $table = self::TABLE_NAME;
 
     /**
-     * The relations to eager load on every query.
-     *
-     * @var array
-     */
-    protected $with = [
-        'relation',
-        'related',
-    ];
-
-    /**
      * Returns the parent anime in the relationship.
      *
      * @return MorphTo

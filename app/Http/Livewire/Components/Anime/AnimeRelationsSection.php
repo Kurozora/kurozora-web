@@ -6,6 +6,7 @@ use App\Models\Anime;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 
 class AnimeRelationsSection extends Component
@@ -18,18 +19,11 @@ class AnimeRelationsSection extends Component
     public Anime $anime;
 
     /**
-     * The array containing the anime relations data.
+     * Whether the component is ready to load.
      *
-     * @var array $animeRelations
+     * @var bool $readyToLoad
      */
-    public array $animeRelations = [];
-
-    /**
-     * The number of relations the anime has.
-     *
-     * @var int $animeRelationsCount
-     */
-    public int $animeRelationsCount;
+    public bool $readyToLoad = false;
 
     /**
      * Prepare the component.
@@ -41,17 +35,38 @@ class AnimeRelationsSection extends Component
     public function mount(Anime $anime): void
     {
         $this->anime = $anime;
-        $this->animeRelationsCount = $this->anime->animeRelations()->count();
+    }
+
+    /**
+     * Sets the property to load the section.
+     *
+     * @return void
+     */
+    public function loadSection(): void
+    {
+        $this->readyToLoad = true;
     }
 
     /**
      * Loads the anime relations section.
      *
-     * @return void
+     * @return Collection
      */
-    public function loadAnimeRelations(): void
+    public function getAnimeRelationsProperty(): Collection
     {
-        $this->animeRelations = $this->anime->getAnimeRelations(Anime::MAXIMUM_RELATIONSHIPS_LIMIT)->items() ?? [];
+        if (!$this->readyToLoad) {
+            return collect();
+        }
+
+        return $this->anime->animeRelations()
+            ->with([
+                'related' => function ($query) {
+                    $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating']);
+                },
+                'relation'
+            ])
+            ->limit(Anime::MAXIMUM_RELATIONSHIPS_LIMIT)
+            ->get();
     }
 
     /**

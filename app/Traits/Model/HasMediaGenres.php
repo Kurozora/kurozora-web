@@ -63,10 +63,10 @@ trait HasMediaGenres
      * Eloquent builder scope that limits the query to the given genre.
      *
      * @param Builder $query
-     * @param int|Genre $genre
+     * @param string|int|Genre $genre
      * @return Builder
      */
-    public function scopeWhereGenre(Builder $query, int|Genre $genre): Builder
+    public function scopeWhereGenre(Builder $query, string|int|Genre $genre): Builder
     {
         if (is_numeric($genre)) {
             $genreID = $genre;

@@ -1,28 +1,39 @@
-<div>
-    @if ($castCount)
-        <section class="pt-5 pb-8 pl-4 pr-4 border-t-2" wire:init="loadAnimeCast">
-            <x-section-nav>
-                <x-slot:title>
-                    {{ __('Cast') }}
-                </x-slot:title>
+<section class="pt-5 pb-8 pl-4 pr-4 border-t-2" wire:init="loadSection">
+    @if ($this->animeCast->count())
+        <x-section-nav>
+            <x-slot:title>
+                {{ __('Cast') }}
+            </x-slot:title>
 
-                <x-slot:action>
-                    @hasrole('superAdmin')
-                        <x-button wire:click="loadAnimeCast">{{ __('Refresh') }}</x-button>
-                    @endhasrole
-                    <x-section-nav-link href="{{ route('anime.cast', $anime) }}">{{ __('See All') }}</x-section-nav-link>
-                </x-slot:action>
-            </x-section-nav>
+            <x-slot:action>
+                @hasrole('superAdmin')
+                    <x-button wire:click="$refresh">{{ __('Refresh') }}</x-button>
+                @endhasrole
+                <x-section-nav-link href="{{ route('anime.cast', $anime) }}">{{ __('See All') }}</x-section-nav-link>
+            </x-slot:action>
+        </x-section-nav>
 
-            <div class="flex justify-center">
-                <x-spinner />
+        <div class="grid grid-flow-col-dense gap-4 justify-start overflow-x-scroll no-scrollbar">
+            @foreach($this->animeCast as $cast)
+                <x-lockups.cast-lockup :cast="$cast" />
+            @endforeach
+        </div>
+    @elseif (!$readyToLoad)
+        <div class="flex gap-2 justify-between mb-5">
+            <div>
+                <p class="bg-gray-200" style="width: 168px; height: 28px"></p>
+                <p class="bg-gray-200" style="width: 228px; height: 22px"></p>
             </div>
 
-            <div class="grid grid-flow-col-dense gap-4 justify-start overflow-x-scroll no-scrollbar">
-                @foreach($animeCast as $cast)
-                    <x-lockups.cast-lockup :cast="$cast" />
-                @endforeach
-            </div>
-        </section>
+            <div class="flex flex-wrap gap-2 justify-end"></div>
+        </div>
+
+        <div class="flex gap-4 justify-between snap-x overflow-x-scroll no-scrollbar">
+            <div class="bg-gray-200 w-64 md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
+            <div class="bg-gray-200 w-64 md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
+            <div class="bg-gray-200 w-64 md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
+            <div class="bg-gray-200 w-64 md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
+            <div class="bg-gray-200 w-64 md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
+        </div>
     @endif
-</div>
+</section>

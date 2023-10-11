@@ -6,6 +6,7 @@ use App\Models\Anime;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 
 class AnimeStaffSection extends Component
@@ -18,11 +19,11 @@ class AnimeStaffSection extends Component
     public Anime $anime;
 
     /**
-     * The number of staff the anime has.
+     * Whether the component is ready to load.
      *
-     * @var int $staffCount
+     * @var bool $readyToLoad
      */
-    public int $staffCount;
+    public bool $readyToLoad = false;
 
     /**
      * Prepare the component.
@@ -34,17 +35,37 @@ class AnimeStaffSection extends Component
     public function mount(Anime $anime): void
     {
         $this->anime = $anime;
-        $this->staffCount = $anime->mediaStaff()->count();
+    }
+
+    /**
+     * Sets the property to load the section.
+     *
+     * @return void
+     */
+    public function loadSection(): void
+    {
+        $this->readyToLoad = true;
     }
 
     /**
      * Loads the media staff section.
      *
-     * @return array
+     * @return Collection
      */
-    public function getMediaStaffProperty(): array
+    public function getMediaStaffProperty(): Collection
     {
-        return $this->anime->getMediaStaff(Anime::MAXIMUM_RELATIONSHIPS_LIMIT)->items() ?? [];
+        if (!$this->readyToLoad) {
+            return collect();
+        }
+
+        return $this->anime->mediaStaff()
+            ->with([
+                'person' => function ($query) {
+                    $query->with(['media']);
+                }
+            ])
+            ->limit(Anime::MAXIMUM_RELATIONSHIPS_LIMIT)
+            ->get();
     }
 
     /**

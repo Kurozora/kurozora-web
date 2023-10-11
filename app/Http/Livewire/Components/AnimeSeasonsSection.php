@@ -6,7 +6,7 @@ use App\Models\Anime;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 
 class AnimeSeasonsSection extends Component
@@ -19,11 +19,11 @@ class AnimeSeasonsSection extends Component
     public Anime $anime;
 
     /**
-     * The number of seasons the anime has.
+     * Whether the component is ready to load.
      *
-     * @var int $seasonsCount
+     * @var bool $readyToLoad
      */
-    public int $seasonsCount;
+    public bool $readyToLoad = false;
 
     /**
      * Prepare the component.
@@ -35,17 +35,35 @@ class AnimeSeasonsSection extends Component
     public function mount(Anime $anime): void
     {
         $this->anime = $anime;
-        $this->seasonsCount = $anime->seasons()->count();
+    }
+
+    /**
+     * Sets the property to load the section.
+     *
+     * @return void
+     */
+    public function loadSection(): void
+    {
+        $this->readyToLoad = true;
     }
 
     /**
      * Get the anime seasons.
      *
-     * @return array|LengthAwarePaginator
+     * @return Collection
      */
-    public function getSeasonsProperty(): array|LengthAwarePaginator
+    public function getSeasonsProperty(): Collection
     {
-        return $this->anime->getSeasons(Anime::MAXIMUM_RELATIONSHIPS_LIMIT, reversed: true);
+        if (!$this->readyToLoad) {
+            return collect();
+        }
+
+        return $this->anime->seasons()
+            ->with(['media', 'translations'])
+            ->withCount(['episodes'])
+            ->orderBy('number', 'desc')
+            ->limit(Anime::MAXIMUM_RELATIONSHIPS_LIMIT)
+            ->get();
     }
 
     /**

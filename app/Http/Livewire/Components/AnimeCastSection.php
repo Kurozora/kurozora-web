@@ -6,6 +6,7 @@ use App\Models\Anime;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 
 class AnimeCastSection extends Component
@@ -18,18 +19,11 @@ class AnimeCastSection extends Component
     public Anime $anime;
 
     /**
-     * The array containing the cast data.
+     * Whether the component is ready to load.
      *
-     * @var array $animeCast
+     * @var bool $readyToLoad
      */
-    public array $animeCast = [];
-
-    /**
-     * The number of cast the anime has.
-     *
-     * @var int $castCount
-     */
-    public int $castCount;
+    public bool $readyToLoad = false;
 
     /**
      * Prepare the component.
@@ -41,17 +35,41 @@ class AnimeCastSection extends Component
     public function mount(Anime $anime): void
     {
         $this->anime = $anime;
-        $this->castCount = $anime->cast()->count();
+    }
+
+    /**
+     * Sets the property to load the section.
+     *
+     * @return void
+     */
+    public function loadSection(): void
+    {
+        $this->readyToLoad = true;
     }
 
     /**
      * Loads the anime cast section.
      *
-     * @return void
+     * @return Collection
      */
-    public function loadAnimeCast(): void
+    public function getAnimeCastProperty(): Collection
     {
-        $this->animeCast = $this->anime->getCast(Anime::MAXIMUM_RELATIONSHIPS_LIMIT)->items() ?? [];
+        if (!$this->readyToLoad) {
+            return collect();
+        }
+
+        return $this->anime->cast()
+            ->with([
+                'person' => function ($query) {
+                    $query->with(['media']);
+                },
+                'character' => function ($query) {
+                    $query->with(['media', 'translations']);
+                },
+                'castRole'
+            ])
+            ->limit(Anime::MAXIMUM_RELATIONSHIPS_LIMIT)
+            ->get();
     }
 
     /**

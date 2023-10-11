@@ -65,21 +65,6 @@ class Episode extends KModel implements HasMedia, Sitemapable
     ];
 
     /**
-     * The relations to eager load on every query.
-     *
-     * @var array
-     */
-    protected $with = [
-        'anime',
-        'season',
-        'media',
-        'mediaStat',
-        'translations',
-        'tv_rating',
-        'videos',
-    ];
-
-    /**
      * The attributes that should be cast.
      *
      * @var array
