@@ -6,6 +6,7 @@ use App\Models\Game;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 
 class GameCastSection extends Component
@@ -18,18 +19,11 @@ class GameCastSection extends Component
     public Game $game;
 
     /**
-     * The array containing the cast data.
+     * Whether the component is ready to load.
      *
-     * @var array $gameCast
+     * @var bool $readyToLoad
      */
-    public array $gameCast = [];
-
-    /**
-     * The number of cast the game has.
-     *
-     * @var int $castCount
-     */
-    public int $castCount;
+    public bool $readyToLoad = false;
 
     /**
      * Prepare the component.
@@ -41,17 +35,41 @@ class GameCastSection extends Component
     public function mount(Game $game): void
     {
         $this->game = $game;
-        $this->castCount = $game->cast()->count();
+    }
+
+    /**
+     * Sets the property to load the section.
+     *
+     * @return void
+     */
+    public function loadSection(): void
+    {
+        $this->readyToLoad = true;
     }
 
     /**
      * Loads the game cast section.
      *
-     * @return void
+     * @return Collection
      */
-    public function loadGameCast(): void
+    public function getGameCastProperty(): Collection
     {
-        $this->gameCast = $this->game->getCast(Game::MAXIMUM_RELATIONSHIPS_LIMIT)->items() ?? [];
+        if (!$this->readyToLoad) {
+            return collect();
+        }
+
+        return $this->game->cast()
+            ->with([
+                'person' => function ($query) {
+                    $query->with(['media']);
+                },
+                'character' => function ($query) {
+                    $query->with(['media', 'translations']);
+                },
+                'castRole'
+            ])
+            ->limit(Game::MAXIMUM_RELATIONSHIPS_LIMIT)
+            ->get();
     }
 
     /**

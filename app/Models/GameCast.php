@@ -27,7 +27,6 @@ class GameCast extends KModel implements Sitemapable
     public function game(): BelongsTo
     {
         return $this->belongsTo(Game::class);
-//            ->withoutGlobalScope(new TvRatingScope());
     }
 
     /**

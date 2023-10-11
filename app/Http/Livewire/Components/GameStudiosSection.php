@@ -6,6 +6,7 @@ use App\Models\Game;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 
 class GameStudiosSection extends Component
@@ -18,18 +19,11 @@ class GameStudiosSection extends Component
     public Game $game;
 
     /**
-     * The array containing the studios data.
+     * Whether the component is ready to load.
      *
-     * @var array $studios
+     * @var bool $readyToLoad
      */
-    public array $studios = [];
-
-    /**
-     * The number of studios the game has.
-     *
-     * @var int $studiosCount
-     */
-    public int $studiosCount;
+    public bool $readyToLoad = false;
 
     /**
      * Prepare the component.
@@ -41,17 +35,33 @@ class GameStudiosSection extends Component
     public function mount(Game $game): void
     {
         $this->game = $game;
-        $this->studiosCount = $game->studios()->count();
+    }
+
+    /**
+     * Sets the property to load the section.
+     *
+     * @return void
+     */
+    public function loadSection(): void
+    {
+        $this->readyToLoad = true;
     }
 
     /**
      * Loads the media studios section.
      *
-     * @return void
+     * @return Collection
      */
-    public function loadGameStudios(): void
+    public function getStudiosProperty(): Collection
     {
-        $this->studios = $this->game->getStudios(Game::MAXIMUM_RELATIONSHIPS_LIMIT)->items() ?? [];
+        if (!$this->readyToLoad) {
+            return collect();
+        }
+
+        return $this->game->studios()
+            ->with('media')
+            ->limit(Game::MAXIMUM_RELATIONSHIPS_LIMIT)
+            ->get();
     }
 
     /**

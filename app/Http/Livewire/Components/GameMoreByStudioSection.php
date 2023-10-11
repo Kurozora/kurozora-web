@@ -2,14 +2,23 @@
 
 namespace App\Http\Livewire\Components;
 
+use App\Models\Game;
 use App\Models\Studio;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 
 class GameMoreByStudioSection extends Component
 {
+    /**
+     * The object containing the game data.
+     *
+     * @var Game
+     */
+    public Game $game;
+
     /**
      * The object containing the studio data.
      *
@@ -18,40 +27,52 @@ class GameMoreByStudioSection extends Component
     public Studio $studio;
 
     /**
-     * The array containing the more by studio data.
+     * Whether the component is ready to load.
      *
-     * @var array $moreByStudio
+     * @var bool $readyToLoad
      */
-    public array $moreByStudio = [];
-
-    /**
-     * The number of game the studio has.
-     *
-     * @var int $moreByStudioCount
-     */
-    public int $moreByStudioCount;
+    public bool $readyToLoad = false;
 
     /**
      * Prepare the component.
      *
+     * @param Game $game
      * @param Studio $studio
      *
      * @return void
      */
-    public function mount(Studio $studio): void
+    public function mount(Game $game, Studio $studio): void
     {
+        $this->game = $game;
         $this->studio = $studio;
-        $this->moreByStudioCount = $this->studio->mediaStudios()->count();
+    }
+
+    /**
+     * Sets the property to load the section.
+     *
+     * @return void
+     */
+    public function loadSection(): void
+    {
+        $this->readyToLoad = true;
     }
 
     /**
      * Loads the more by studio section.
      *
-     * @return void
+     * @return Collection
      */
-    public function loadMoreByStudio(): void
+    public function getMoreByStudioProperty(): Collection
     {
-        $this->moreByStudio = $this->studio->getGame(Studio::MAXIMUM_RELATIONSHIPS_LIMIT)->items() ?? [];
+        if (!$this->readyToLoad) {
+            return collect();
+        }
+
+        return $this->studio->games()
+            ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
+            ->where('model_id', '!=', $this->game->id)
+            ->limit(Studio::MAXIMUM_RELATIONSHIPS_LIMIT)
+            ->get();
     }
 
     /**

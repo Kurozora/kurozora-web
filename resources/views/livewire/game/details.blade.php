@@ -78,7 +78,7 @@
         games/{{ $game->id }}
     </x-slot:appArgument>
 
-    <div class="grid grid-rows-[repeat(2,minmax(0,min-content))] h-full xl:grid-rows-none xl:grid-cols-2 2xl:grid-cols-3 xl:mb-0">
+    <div class="grid grid-rows-[repeat(2,minmax(0,min-content))] h-full xl:grid-rows-none xl:grid-cols-2 2xl:grid-cols-3 xl:mb-0" wire:init="loadPage">
         <div class="relative">
             <div class="relative flex flex-nowrap aspect-video md:relative md:h-full xl:aspect-auto">
                 <x-picture class="w-full overflow-hidden">
@@ -410,31 +410,33 @@
                 </div>
             </section>
 
-            <livewire:components.game-cast-section :game="$game" />
+            @if ($readyToLoad)
+                <livewire:components.game-cast-section :game="$game" />
 
-            <livewire:components.game-staff-section :game="$game" />
+                <livewire:components.game-staff-section :game="$game" />
 
-            <livewire:components.game-songs-section :game="$game" />
+                <livewire:components.game-songs-section :game="$game" />
 
-            <livewire:components.game-studios-section :game="$game" />
+                <livewire:components.game-studios-section :game="$game" />
 
-            <div class="bg-orange-50">
-                @if(!empty($this->studio))
-                    <livewire:components.game-more-by-studio-section :studio="$this->studio" />
-                @endif
+                <div class="bg-orange-50">
+                    @if(!empty($this->studio))
+                        <livewire:components.game-more-by-studio-section :game="$game" :studio="$this->studio" />
+                    @endif
 
-                <livewire:components.game.game-relations-section :game="$game" />
+                    <livewire:components.game.game-relations-section :game="$game" />
 
-                <livewire:components.game.anime-relations-section :game="$game" />
+                    <livewire:components.game.anime-relations-section :game="$game" />
 
-                <livewire:components.game.manga-relations-section :game="$game" />
+                    <livewire:components.game.manga-relations-section :game="$game" />
 
-                @if (!empty($game->copyright))
-                    <section class="pt-4 pr-4 pb-4 pl-4 border-t">
-                        <p class="text-sm text-gray-400">{{ $game->copyright }}</p>
-                    </section>
-                @endif
-            </div>
+                    @if (!empty($game->copyright))
+                        <section class="pt-4 pr-4 pb-4 pl-4 border-t">
+                            <p class="text-sm text-gray-400">{{ $game->copyright }}</p>
+                        </section>
+                    @endif
+                </div>
+            @endif
 
             <x-dialog-modal maxWidth="md" model="showPopup">
                 @if($showVideo)
