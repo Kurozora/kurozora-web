@@ -27,7 +27,6 @@ class MangaCast extends KModel implements Sitemapable
     public function manga(): BelongsTo
     {
         return $this->belongsTo(Manga::class);
-//            ->withoutGlobalScope(new TvRatingScope());
     }
 
     /**
