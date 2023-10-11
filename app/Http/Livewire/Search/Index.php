@@ -178,9 +178,16 @@ class Index extends Component
                             $query->with(['media', 'translations']);
                             break;
                         case Episode::class:
-                            $query->with(['media', 'season' => function ($query) {
-                                $query->with(['anime.translations', 'translations']);
-                            }, 'translations']);
+                            $query->with([
+                                'anime' => function ($query) {
+                                    $query->with(['media', 'translations']);
+                                },
+                                'media',
+                                'season' => function ($query) {
+                                    $query->with(['translations']);
+                                },
+                                'translations'
+                            ]);
                             break;
                         case Person::class:
                         case Studio::class:

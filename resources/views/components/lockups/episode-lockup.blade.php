@@ -29,7 +29,7 @@
                 </a>
 
                 <div class="mt-1">
-                    <a class="text-xs text-orange-500 font-semibold line-clamp-2" href="{{ route('anime.details', $episode->season->anime) }}">{{ $episode->season->anime->title }}</a>
+                    <a class="text-xs text-orange-500 font-semibold line-clamp-2" href="{{ route('anime.details', $episode->anime) }}">{{ $episode->anime->title }}</a>
 
                     <p class="text-xs line-clamp-2" title="{{ $episode->started_at?->format('F d, Y H:i:s') }}">{{ __(':x views', ['x' => number_format($episode->view_count)]) . ' · ' . $episode->started_at?->toFormattedDateString() }}</p>
                 </div>
