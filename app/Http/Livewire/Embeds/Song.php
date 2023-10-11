@@ -24,7 +24,7 @@ class Song extends Component
      */
     public function mount(\App\Models\Song $song): void
     {
-        $this->song = $song;
+        $this->song = $song->load(['media']);
     }
 
     /**
