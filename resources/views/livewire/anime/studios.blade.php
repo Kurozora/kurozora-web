@@ -21,12 +21,12 @@
         anime/{{ $anime->id }}/studios
     </x-slot:appArgument>
 
-    <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6">
+    <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6" wire:init="loadPage">
         <section class="mb-4">
             <div>
                 <div class="flex gap-1">
                     <div class="flex flex-wrap items-center w-full">
-                        <h1 class="text-2xl font-bold">{{ __(':x’s Studios', ['x' => $anime->title]) }}</p>
+                        <h1 class="text-2xl font-bold">{{ __(':x’s Studios', ['x' => $anime->title]) }}</h1>
                     </div>
 
                     <div class="flex flex-wrap justify-end items-center w-full">
@@ -35,10 +35,28 @@
             </div>
         </section>
 
-        <x-rows.studio-lockup :studios="$this->studios" :is-row="false" />
+        @if ($this->studios->count())
+            <x-rows.studio-lockup :studios="$this->studios" :is-row="false" />
 
-        <section class="mt-4">
-            {{ $this->studios->links() }}
-        </section>
+            <section class="mt-4">
+                {{ $this->studios->links() }}
+            </section>
+        @elseif (!$readyToLoad)
+            <section  class="mt-4 pt-5 pb-8 border-t-2">
+                <div class="flex gap-4 justify-between flex-wrap">
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="w-64 md:w-80 flex-grow"></div>
+                    <div class="w-64 md:w-80 flex-grow"></div>
+                </div>
+            </section>
+        @endif
     </div>
 </main>

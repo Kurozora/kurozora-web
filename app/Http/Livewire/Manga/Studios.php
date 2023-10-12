@@ -7,16 +7,27 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class Studios extends Component
 {
+    use WithPagination;
+
     /**
      * The object containing the manga data.
      *
      * @var Manga $manga
      */
     public Manga $manga;
+
+    /**
+     * Whether the component is ready to load.
+     *
+     * @var bool $readyToLoad
+     */
+    public bool $readyToLoad = false;
 
     /**
      * Prepare the component.
@@ -27,17 +38,33 @@ class Studios extends Component
      */
     public function mount(Manga $manga): void
     {
-        $this->manga = $manga;
+        $this->manga = $manga->load(['media', 'translations']);
+    }
+
+    /**
+     * Sets the property to load the page.
+     *
+     * @return void
+     */
+    public function loadPage(): void
+    {
+        $this->readyToLoad = true;
     }
 
     /**
      * Get the list of studios.
      *
-     * @return array|LengthAwarePaginator
+     * @return Collection|LengthAwarePaginator
      */
-    public function getStudiosProperty(): array|LengthAwarePaginator
+    public function getStudiosProperty(): Collection|LengthAwarePaginator
     {
-        return $this->manga->studios()->paginate(25);
+        if (!$this->readyToLoad) {
+            return collect();
+        }
+
+        return $this->manga->studios()
+            ->with('media')
+            ->paginate(25);
     }
 
     /**

@@ -1,4 +1,4 @@
-<div class="pt-5 pb-8 pl-4 pr-4 border-t-2" wire:init="loadSection">
+<div wire:init="loadSection">
     @if ($this->seasons->count())
         <section class="pt-5 pb-8 pl-4 pr-4 border-t-2">
             <x-section-nav>
