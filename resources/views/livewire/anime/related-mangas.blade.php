@@ -4,12 +4,12 @@
     </x-slot:title>
 
     <x-slot:description>
-        {{ __('An extensive list of manga, manhua, manhwa, and light novel adaptations to :x only on Kurozora, the largest, free online anime, manga, game & music database in the world.', ['x' => $anime->title]) }}
+        {{ __('An extensive list of manga, manhua, manhwa, and light novel adaptations of :x only on Kurozora, the largest, free online anime, manga, game & music database in the world.', ['x' => $anime->title]) }}
     </x-slot:description>
 
     <x-slot:meta>
         <meta property="og:title" content="{{ __('Adaptations') }} | {{ $anime->title }} — {{ config('app.name') }}" />
-        <meta property="og:description" content="{{ __('An extensive list of manga, manhua, manhwa, and light novel adaptations to :x only on Kurozora, the largest, free online anime, manga, game & music database in the world.', ['x' => $anime->title]) }}" />
+        <meta property="og:description" content="{{ __('An extensive list of manga, manhua, manhwa, and light novel adaptations of :x only on Kurozora, the largest, free online anime, manga, game & music database in the world.', ['x' => $anime->title]) }}" />
         <meta property="og:image" content="{{ $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp') }}" />
         <meta property="og:type" content="video.tv_show" />
         <meta property="video:duration" content="{{ $anime->duration }}" />
@@ -21,7 +21,7 @@
         anime/{{ $anime->id }}/related-mangas
     </x-slot:appArgument>
 
-    <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6">
+    <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6" wire:init="loadPage">
         <section class="mb-4">
             <div>
                 <div class="flex gap-1">
@@ -35,10 +35,28 @@
             </div>
         </section>
 
-        <x-rows.small-lockup :related-mangas="$this->mangaRelations" :is-row="false" />
+        @if ($readyToLoad)
+            <x-rows.small-lockup :related-mangas="$this->mangaRelations" :is-row="false" />
 
-        <section class="mt-4">
-            {{ $this->mangaRelations->links() }}
-        </section>
+            <section class="mt-4">
+                {{ $this->mangaRelations->links() }}
+            </section>
+        @else
+            <section  class="mt-4 pt-5 pb-8 border-t-2">
+                <div class="flex gap-4 justify-between flex-wrap">
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="w-64 md:w-80 flex-grow"></div>
+                    <div class="w-64 md:w-80 flex-grow"></div>
+                </div>
+            </section>
+        @endif
     </div>
 </main>

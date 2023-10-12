@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Livewire\Anime;
+namespace App\Http\Livewire\Game;
 
-use App\Models\Anime;
+use App\Models\Game;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -16,11 +16,11 @@ class RelatedMangas extends Component
     use WithPagination;
 
     /**
-     * The object containing the anime data.
+     * The object containing the game data.
      *
-     * @var Anime $anime
+     * @var Game $game
      */
-    public Anime $anime;
+    public Game $game;
 
     /**
      * Whether the component is ready to load.
@@ -32,13 +32,13 @@ class RelatedMangas extends Component
     /**
      * Prepare the component.
      *
-     * @param Anime $anime
+     * @param Game $game
      *
      * @return void
      */
-    public function mount(Anime $anime): void
+    public function mount(Game $game): void
     {
-        $this->anime = $anime->load(['media']);
+        $this->game = $game->load(['media']);
     }
 
     /**
@@ -62,7 +62,7 @@ class RelatedMangas extends Component
             return collect();
         }
 
-        return $this->anime->mangaRelations()
+        return $this->game->mangaRelations()
             ->with([
                 'related' => function ($query) {
                     $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating']);
@@ -79,6 +79,6 @@ class RelatedMangas extends Component
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.anime.related-mangas');
+        return view('livewire.game.related-mangas');
     }
 }
