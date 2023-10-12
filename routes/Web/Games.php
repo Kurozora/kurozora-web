@@ -7,7 +7,7 @@ use App\Http\Livewire\Game\Cast as GameCast;
 use App\Http\Livewire\Game\Details as GameDetails;
 use App\Http\Livewire\Game\Index as GameIndex;
 use App\Http\Livewire\Game\RelatedGames;
-use App\Http\Livewire\Game\RelatedLiteratures;
+use App\Http\Livewire\Game\RelatedMangas;
 use App\Http\Livewire\Game\RelatedShows;
 use App\Http\Livewire\Game\Reviews as GameReviews;
 use App\Http\Livewire\Game\Songs as GameSongs;
@@ -74,7 +74,7 @@ Route::prefix('/games')
                 Route::get('/related-shows', RelatedShows::class)
                     ->name('.related-shows');
 
-                Route::get('/related-mangas', RelatedLiteratures::class)
+                Route::get('/related-mangas', RelatedMangas::class)
                     ->name('.related-literatures');
 
                 Route::get('/reviews', GameReviews::class)

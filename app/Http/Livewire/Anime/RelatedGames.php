@@ -7,6 +7,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -22,6 +23,13 @@ class RelatedGames extends Component
     public Anime $anime;
 
     /**
+     * Whether the component is ready to load.
+     *
+     * @var bool $readyToLoad
+     */
+    public bool $readyToLoad = false;
+
+    /**
      * Prepare the component.
      *
      * @param Anime $anime
@@ -30,17 +38,38 @@ class RelatedGames extends Component
      */
     public function mount(Anime $anime): void
     {
-        $this->anime = $anime;
+        $this->anime = $anime->load(['media']);
+    }
+
+    /**
+     * Sets the property to load the page.
+     *
+     * @return void
+     */
+    public function loadPage(): void
+    {
+        $this->readyToLoad = true;
     }
 
     /**
      * The object containing the related games.
      *
-     * @return LengthAwarePaginator
+     * @return Collection|LengthAwarePaginator
      */
-    public function getGameRelationsProperty(): LengthAwarePaginator
+    public function getGameRelationsProperty(): Collection|LengthAwarePaginator
     {
-        return $this->anime->gameRelations()->paginate(25);
+        if (!$this->readyToLoad) {
+            return collect();
+        }
+
+        return $this->anime->gameRelations()
+            ->with([
+                'related' => function ($query) {
+                    $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating']);
+                },
+                'relation'
+            ])
+            ->paginate(25);
     }
 
     /**
