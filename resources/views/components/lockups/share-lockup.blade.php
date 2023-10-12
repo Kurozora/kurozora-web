@@ -185,7 +185,7 @@
     </div>
 
     <div x-show="shouldEmbed">
-        @switch ($type)
+        @switch($type)
             @case('episode')
                 <iframe scrolling="no" frameborder="no" marginwidth=0 marginheight=0 width="853" height="480" src="{{ $embedLink }}" title="{{ $title }}" class="w-full"></iframe>
                 @break

@@ -7,7 +7,7 @@ use App\Models\Studio;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 
 class Details extends Component
@@ -18,6 +18,13 @@ class Details extends Component
      * @var Studio $studio
      */
     public Studio $studio;
+
+    /**
+     * Whether the component is ready to load.
+     *
+     * @var bool $readyToLoad
+     */
+    public bool $readyToLoad = false;
 
     /**
      * Prepare the component.
@@ -31,37 +38,68 @@ class Details extends Component
         // Call the StudioViewed event
         StudioViewed::dispatch($studio);
 
-        $this->studio = $studio;
+        $this->studio = $studio->load(['media']);
+    }
+
+    /**
+     * Sets the property to load the page.
+     *
+     * @return void
+     */
+    public function loadPage(): void
+    {
+        $this->readyToLoad = true;
     }
 
     /**
      * The studio's animes.
      *
-     * @return LengthAwarePaginator
+     * @return Collection
      */
-    public function getAnimesProperty(): LengthAwarePaginator
+    public function getAnimesProperty(): Collection
     {
-        return $this->studio->anime()->paginate(Studio::MAXIMUM_RELATIONSHIPS_LIMIT);
+        if (!$this->readyToLoad) {
+            return collect();
+        }
+
+        return $this->studio->anime()
+            ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
+            ->limit(Studio::MAXIMUM_RELATIONSHIPS_LIMIT)
+            ->get();
     }
 
     /**
      * The studio's mangas.
      *
-     * @return LengthAwarePaginator
+     * @return Collection
      */
-    public function getMangasProperty(): LengthAwarePaginator
+    public function getMangasProperty(): Collection
     {
-        return $this->studio->manga()->paginate(Studio::MAXIMUM_RELATIONSHIPS_LIMIT);
+        if (!$this->readyToLoad) {
+            return collect();
+        }
+
+        return $this->studio->manga()
+            ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
+            ->limit(Studio::MAXIMUM_RELATIONSHIPS_LIMIT)
+            ->get();
     }
 
     /**
      * The studio's games.
      *
-     * @return LengthAwarePaginator
+     * @return Collection
      */
-    public function getGamesProperty(): LengthAwarePaginator
+    public function getGamesProperty(): Collection
     {
-        return $this->studio->games()->paginate(Studio::MAXIMUM_RELATIONSHIPS_LIMIT);
+        if (!$this->readyToLoad) {
+            return collect();
+        }
+
+        return $this->studio->games()
+            ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
+            ->limit(Studio::MAXIMUM_RELATIONSHIPS_LIMIT)
+            ->get();
     }
 
     /**

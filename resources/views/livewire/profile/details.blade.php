@@ -90,7 +90,7 @@
         <livewire:components.user.feed-messages-section :user="$user" />
     </div>
 
-    @switch ($selectedPopupType)
+    @switch($selectedPopupType)
     @case('edit')
         @auth
             <x-modal-form-section model="showPopup" submit="">

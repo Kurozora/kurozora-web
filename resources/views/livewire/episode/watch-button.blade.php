@@ -1,4 +1,4 @@
-@switch ($buttonStyle)
+@switch($buttonStyle)
     @case('circle')
         @php
             $class = match ($hasWatched) {

@@ -23,7 +23,7 @@
                     <div class="absolute top-0 left-0 h-full w-full"></div>
                 </foreignObject>
 
-                @switch ($this->activityStatus->value)
+                @switch($this->activityStatus->value)
                     @case(\App\Enums\UserActivityStatus::SeenRecently)
                         <rect width="18" height="18" x="72" y="72" mask="url(#svg-mask-status-online)" class="text-yellow-500 fill-current"></rect>
                         @break

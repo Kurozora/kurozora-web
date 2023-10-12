@@ -20,7 +20,7 @@
         studio/{{ $studio->id }}
     </x-slot:appArgument>
 
-    <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6">
+    <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6" wire:init="loadPage">
         <section class="pt-5 pb-8">
             <div class="relative pb-2">
                 <div class="flex flex-col flex-wrap text-center items-center">
@@ -109,52 +109,16 @@
             </div>
         </section>
 
-        @if (!empty($this->animes->total()))
-            <section class="pt-5 pb-8 border-t-2">
-                <x-section-nav>
-                    <x-slot:title>
-                        {{ __('Shows') }}
-                    </x-slot:title>
+        @if ($readyToLoad)
+            <livewire:components.studio.media-section :studio="$studio" :type="\App\Models\Anime::class" />
 
-                    <x-slot:action>
-                        <x-section-nav-link href="{{ route('studios.anime', $studio) }}">{{ __('See All') }}</x-section-nav-link>
-                    </x-slot:action>
-                </x-section-nav>
+            <livewire:components.studio.media-section :studio="$studio" :type="\App\Models\Manga::class" />
 
-                <x-rows.small-lockup :animes="$this->animes" />
-            </section>
-        @endif
-
-        @if (!empty($this->mangas->total()))
-            <section class="pt-5 pb-8 border-t-2">
-                <x-section-nav>
-                    <x-slot:title>
-                        {{ __('Mangas') }}
-                    </x-slot:title>
-
-                    <x-slot:action>
-                        <x-section-nav-link href="{{ route('studios.manga', $studio) }}">{{ __('See All') }}</x-section-nav-link>
-                    </x-slot:action>
-                </x-section-nav>
-
-                <x-rows.small-lockup :mangas="$this->mangas" />
-            </section>
-        @endif
-
-        @if (!empty($this->games->total()))
-            <section class="pt-5 pb-8 border-t-2">
-                <x-section-nav>
-                    <x-slot:title>
-                        {{ __('Games') }}
-                    </x-slot:title>
-
-                    <x-slot:action>
-                        <x-section-nav-link href="{{ route('studios.games', $studio) }}">{{ __('See All') }}</x-section-nav-link>
-                    </x-slot:action>
-                </x-section-nav>
-
-                <x-rows.small-lockup :games="$this->games" />
-            </section>
+            <livewire:components.studio.media-section :studio="$studio" :type="\App\Models\Game::class" />
+        @else
+            <x-skeletons.small-lockup />
+            <x-skeletons.small-lockup />
+            <x-skeletons.small-lockup />
         @endif
     </div>
 </main>
