@@ -3,11 +3,11 @@
 namespace App\Http\Livewire\Anime;
 
 use App\Models\Anime;
-use App\Models\AnimeCast;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -23,6 +23,13 @@ class Cast extends Component
     public Anime $anime;
 
     /**
+     * Whether the component is ready to load.
+     *
+     * @var bool $readyToLoad
+     */
+    public bool $readyToLoad = false;
+
+    /**
      * Prepare the component.
      *
      * @param Anime $anime
@@ -31,17 +38,41 @@ class Cast extends Component
      */
     public function mount(Anime $anime): void
     {
-        $this->anime = $anime;
+        $this->anime = $anime->load(['media', 'translations']);
+    }
+
+    /**
+     * Sets the property to load the page.
+     *
+     * @return void
+     */
+    public function loadPage(): void
+    {
+        $this->readyToLoad = true;
     }
 
     /**
      * Get the list of cast.
      *
-     * @return AnimeCast[]|LengthAwarePaginator
+     * @return Collection|LengthAwarePaginator
      */
-    public function getCastProperty(): array|LengthAwarePaginator
+    public function getCastProperty(): Collection|LengthAwarePaginator
     {
-        return $this->anime->cast()->paginate(25);
+        if (!$this->readyToLoad) {
+            return collect();
+        }
+
+        return $this->anime->cast()
+            ->with([
+                'person' => function ($query) {
+                    $query->with(['media']);
+                },
+                'character' => function ($query) {
+                    $query->with(['media', 'translations']);
+                },
+                'castRole'
+            ])
+            ->paginate(25);
     }
 
     /**

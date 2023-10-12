@@ -3,11 +3,11 @@
 namespace App\Http\Livewire\Game;
 
 use App\Models\Game;
-use App\Models\GameCast;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -23,6 +23,13 @@ class Cast extends Component
     public Game $game;
 
     /**
+     * Whether the component is ready to load.
+     *
+     * @var bool $readyToLoad
+     */
+    public bool $readyToLoad = false;
+
+    /**
      * Prepare the component.
      *
      * @param Game $game
@@ -31,17 +38,41 @@ class Cast extends Component
      */
     public function mount(Game $game): void
     {
-        $this->game = $game;
+        $this->game = $game->load(['media', 'translations']);
+    }
+
+    /**
+     * Sets the property to load the page.
+     *
+     * @return void
+     */
+    public function loadPage(): void
+    {
+        $this->readyToLoad = true;
     }
 
     /**
      * Get the list of cast.
      *
-     * @return GameCast[]|LengthAwarePaginator
+     * @return Collection|LengthAwarePaginator
      */
-    public function getCastProperty(): array|LengthAwarePaginator
+    public function getCastProperty(): Collection|LengthAwarePaginator
     {
-        return $this->game->cast()->paginate(25);
+        if (!$this->readyToLoad) {
+            return collect();
+        }
+
+        return $this->game->cast()
+            ->with([
+                'person' => function ($query) {
+                    $query->with(['media']);
+                },
+                'character' => function ($query) {
+                    $query->with(['media', 'translations']);
+                },
+                'castRole'
+            ])
+            ->paginate(25);
     }
 
     /**
