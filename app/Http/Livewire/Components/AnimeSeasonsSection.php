@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Components;
 
 use App\Models\Anime;
+use App\Models\Season;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -63,7 +64,10 @@ class AnimeSeasonsSection extends Component
             ->withCount(['episodes'])
             ->orderBy('number', 'desc')
             ->limit(Anime::MAXIMUM_RELATIONSHIPS_LIMIT)
-            ->get();
+            ->get()
+            ->map(function(Season $season) {
+                $season->setRelation('anime', $this->anime);
+            });
     }
 
     /**
