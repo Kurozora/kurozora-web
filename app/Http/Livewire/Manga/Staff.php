@@ -3,11 +3,11 @@
 namespace App\Http\Livewire\Manga;
 
 use App\Models\Manga;
-use App\Models\MediaStaff;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -23,6 +23,13 @@ class Staff extends Component
     public Manga $manga;
 
     /**
+     * Whether the component is ready to load.
+     *
+     * @var bool $readyToLoad
+     */
+    public bool $readyToLoad = false;
+
+    /**
      * Prepare the component.
      *
      * @param Manga $manga
@@ -31,17 +38,37 @@ class Staff extends Component
      */
     public function mount(Manga $manga): void
     {
-        $this->manga = $manga;
+        $this->manga = $manga->load(['media', 'translations']);
+    }
+
+    /**
+     * Sets the property to load the page.
+     *
+     * @return void
+     */
+    public function loadPage(): void
+    {
+        $this->readyToLoad = true;
     }
 
     /**
      * Get the list of media staff.
      *
-     * @return MediaStaff[]|LengthAwarePaginator
+     * @return Collection|LengthAwarePaginator
      */
-    public function getMediaStaffProperty(): array|LengthAwarePaginator
+    public function getMediaStaffProperty(): Collection|LengthAwarePaginator
     {
-        return $this->manga->mediaStaff()->paginate(25);
+        if (!$this->readyToLoad) {
+            return collect();
+        }
+
+        return $this->manga->mediaStaff()
+            ->with([
+                'person' => function ($query) {
+                    $query->with(['media']);
+                }
+            ])
+            ->paginate(25);
     }
 
     /**
