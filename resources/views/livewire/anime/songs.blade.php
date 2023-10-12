@@ -1,9 +1,3 @@
-@php
-    /** @var \Illuminate\Database\Eloquent\Collection $mediaSongs */
-    $mediaSongGroups = $mediaSongs->sortBy(['type.value', 'position'])
-                                  ->groupBy('type.description');
-@endphp
-
 <main>
     <x-slot:title>
         {{ __('Songs') }} | {!! $anime->title !!}
@@ -21,8 +15,8 @@
         <meta property="music:musician" content="{{ route('anime.details', $anime) }}" />
         <meta property="music:song:disc" content="1" />
         <meta property="music:album" content="{{ route('anime.details', $anime) }}" />
-        <meta property="music:album:track" content="{{ $mediaSongs->count() }}" />
-        <meta property="music:duration" content="{{ $mediaSongs->count() * 3 }}" />
+        <meta property="music:album:track" content="{{ $this->mediaSongs->count() }}" />
+        <meta property="music:duration" content="{{ $this->mediaSongs->count() * 3 }}" />
         <link rel="canonical" href="{{ route('anime.songs', $anime) }}">
     </x-slot:meta>
 
@@ -30,7 +24,7 @@
         anime/{{ $anime->id }}/songs
     </x-slot:appArgument>
 
-    <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6 space-y-10">
+    <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6 space-y-10" wire:init="loadPage">
         <section class="mb-4">
             <div>
                 <div class="flex gap-1">
@@ -44,16 +38,34 @@
             </div>
         </section>
 
-        @foreach($mediaSongGroups as $mediaSongType => $mediaSongs)
-            <section id="#{{ $mediaSongType }}">
-                <x-section-nav>
-                    <x-slot:title>
-                        {{ $mediaSongType . ' (' . $mediaSongs->count() . ')' }}
-                    </x-slot:title>
-                </x-section-nav>
+        @if ($this->mediaSongs->count())
+            @foreach($this->mediaSongs as $mediaSongType => $mediaSongs)
+                <section id="#{{ $mediaSongType }}">
+                    <x-section-nav>
+                        <x-slot:title>
+                            {{ $mediaSongType . ' (' . $mediaSongs->count() . ')' }}
+                        </x-slot:title>
+                    </x-section-nav>
 
-                <x-rows.music-lockup :media-songs="$mediaSongs" :is-row="false" />
+                    <x-rows.music-lockup :media-songs="$mediaSongs" :is-row="false" />
+                </section>
+            @endforeach
+        @elseif (!$readyToLoad)
+            <section  class="mt-4 pt-5 pb-8 border-t-2">
+                <div class="flex gap-4 justify-between flex-wrap">
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="w-64 md:w-80 flex-grow"></div>
+                    <div class="w-64 md:w-80 flex-grow"></div>
+                </div>
             </section>
-        @endforeach
+        @endif
     </div>
 </main>
