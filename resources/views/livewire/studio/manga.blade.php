@@ -41,7 +41,7 @@
                 {{ $this->mangas->links() }}
             </section>
         @else
-            <section  class="mt-4 pt-5 pb-8 border-t-2">
+            <section>
                 <div class="flex gap-4 justify-between flex-wrap">
                     <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
                     <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>

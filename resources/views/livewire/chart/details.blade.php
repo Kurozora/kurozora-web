@@ -15,7 +15,7 @@
         <link rel="canonical" href="{{ route('charts.details', ['chart' => $chartKind]) }}">
     </x-slot:meta>
 
-    <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6">
+    <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6" wire:init="loadPage">
         <section class="mb-4">
             <div>
                 <div class="flex gap-1">
@@ -29,41 +29,41 @@
             </div>
         </section>
 
-        <section class="mt-4" wire:init="loadPage">
-            @switch($chartKind)
-                @case(App\Enums\ChartKind::Anime)
-                    <x-rows.small-lockup :animes="$this->chart" :page="$page" :per-page="$perPage" :is-ranked="true" :is-row="false" />
-                @break
-                @case(App\Enums\ChartKind::Characters)
-                    <x-rows.character-lockup :characters="$this->chart" :page="$page" :per-page="$perPage" :is-ranked="true" :is-row="false" />
-                @break
-                @case(App\Enums\ChartKind::Episodes)
-                    <x-rows.episode-lockup :episodes="$this->chart" :page="$page" :per-page="$perPage" :is-ranked="true" :is-row="false" />
-                @break
-                @case(App\Enums\ChartKind::Games)
-                    <x-rows.small-lockup :games="$this->chart" :page="$page" :per-page="$perPage" :is-ranked="true" :is-row="false" />
-                @break
-                @case(App\Enums\ChartKind::Manga)
-                    <x-rows.small-lockup :mangas="$this->chart" :page="$page" :per-page="$perPage" :is-ranked="true" :is-row="false" />
-                @break
-                @case(App\Enums\ChartKind::People)
-                    <x-rows.person-lockup :people="$this->chart" :page="$page" :per-page="$perPage" :is-ranked="true" :is-row="false" />
-                @break
-                @case(App\Enums\ChartKind::Songs)
-                    <x-rows.music-lockup :songs="$this->chart" :page="$page" :per-page="$perPage" :is-ranked="true" :is-row="false" />
-                @break
-                @case(App\Enums\ChartKind::Studios)
-                    <x-rows.studio-lockup :studios="$this->chart" :page="$page" :per-page="$perPage" :is-ranked="true" :is-row="false" />
-                @break
-            @endswitch
-        </section>
-
         @if ($readyToLoad)
+            <section class="mt-4">
+                @switch($chartKind)
+                    @case(App\Enums\ChartKind::Anime)
+                        <x-rows.small-lockup :animes="$this->chart" :page="$page" :per-page="$perPage" :is-ranked="true" :is-row="false" />
+                    @break
+                    @case(App\Enums\ChartKind::Characters)
+                        <x-rows.character-lockup :characters="$this->chart" :page="$page" :per-page="$perPage" :is-ranked="true" :is-row="false" />
+                    @break
+                    @case(App\Enums\ChartKind::Episodes)
+                        <x-rows.episode-lockup :episodes="$this->chart" :page="$page" :per-page="$perPage" :is-ranked="true" :is-row="false" />
+                    @break
+                    @case(App\Enums\ChartKind::Games)
+                        <x-rows.small-lockup :games="$this->chart" :page="$page" :per-page="$perPage" :is-ranked="true" :is-row="false" />
+                    @break
+                    @case(App\Enums\ChartKind::Manga)
+                        <x-rows.small-lockup :mangas="$this->chart" :page="$page" :per-page="$perPage" :is-ranked="true" :is-row="false" />
+                    @break
+                    @case(App\Enums\ChartKind::People)
+                        <x-rows.person-lockup :people="$this->chart" :page="$page" :per-page="$perPage" :is-ranked="true" :is-row="false" />
+                    @break
+                    @case(App\Enums\ChartKind::Songs)
+                        <x-rows.music-lockup :songs="$this->chart" :page="$page" :per-page="$perPage" :is-ranked="true" :is-row="false" />
+                    @break
+                    @case(App\Enums\ChartKind::Studios)
+                        <x-rows.studio-lockup :studios="$this->chart" :page="$page" :per-page="$perPage" :is-ranked="true" :is-row="false" />
+                    @break
+                @endswitch
+            </section>
+
             <section class="mt-4">
                 {{ $this->chart->links() }}
             </section>
         @else
-            <section  class="mt-4 pt-5 pb-8">
+            <section>
                 <div class="flex gap-4 justify-between flex-wrap">
                     <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
                     <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
