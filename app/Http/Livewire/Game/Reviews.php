@@ -10,8 +10,9 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\CursorPaginator;
 use Illuminate\Routing\Redirector;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 
 class Reviews extends Component
@@ -22,6 +23,13 @@ class Reviews extends Component
      * @var Game $game
      */
     public Game $game;
+
+    /**
+     * Whether the component is ready to load.
+     *
+     * @var bool $readyToLoad
+     */
+    public bool $readyToLoad = false;
 
     /**
      * Whether to show the review box to the user.
@@ -63,7 +71,17 @@ class Reviews extends Component
      */
     public function mount(Game $game): void
     {
-        $this->game = $game;
+        $this->game = $game->load(['media']);
+    }
+
+    /**
+     * Sets the property to load the page.
+     *
+     * @return void
+     */
+    public function loadPage(): void
+    {
+        $this->readyToLoad = true;
     }
 
     /**
@@ -96,14 +114,19 @@ class Reviews extends Component
     /**
      * Get the media stats.
      *
-     * @return LengthAwarePaginator
+     * @return Collection|CursorPaginator
      */
-    public function getMediaRatingsProperty(): LengthAwarePaginator
+    public function getMediaRatingsProperty(): Collection|CursorPaginator
     {
+        if (!$this->readyToLoad) {
+            return collect();
+        }
+
         return $this->game->mediaRatings()
+            ->with(['user.media'])
             ->where('description', '!=', null)
             ->orderBy('created_at')
-            ->paginate();
+            ->cursorPaginate();
     }
 
     /**

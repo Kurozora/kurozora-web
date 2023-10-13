@@ -75,11 +75,29 @@
             </div>
         </section>
 
-        <x-rows.review-lockup :reviews="$this->mediaRatings" :is-row="false" />
+        @if ($this->mediaRatings->count())
+            <x-rows.review-lockup :reviews="$this->mediaRatings" :is-row="false" />
 
-        <section class="mt-4">
-            {{ $this->mediaRatings->links() }}
-        </section>
+            <section class="mt-4">
+                {{ $this->mediaRatings->links() }}
+            </section>
+        @elseif (!$readyToLoad)
+            <section>
+                <div class="flex gap-4 justify-between flex-wrap">
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="w-64 md:w-80 flex-grow"></div>
+                    <div class="w-64 md:w-80 flex-grow"></div>
+                </div>
+            </section>
+        @endif
 
         <x-dialog-modal maxWidth="md" model="showPopup">
             @if ($showReviewBox)

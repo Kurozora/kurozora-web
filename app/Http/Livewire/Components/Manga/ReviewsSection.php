@@ -6,7 +6,7 @@ use App\Models\Manga;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 
 class ReviewsSection extends Component
@@ -33,11 +33,23 @@ class ReviewsSection extends Component
     public bool $showPopup = false;
 
     /**
+     * Prepare the component.
+     *
+     * @param Manga $manga
+     *
+     * @return void
+     */
+    public function mount(Manga $manga): void
+    {
+        $this->manga = $manga;
+    }
+
+    /**
      * Sets the property to load the section.
      *
      * @return void
      */
-    public function loadReviews(): void
+    public function loadSection(): void
     {
         $this->readyToLoad = true;
     }
@@ -55,19 +67,20 @@ class ReviewsSection extends Component
     /**
      * The array of reviews.
      *
-     * @return LengthAwarePaginator|array
+     * @return Collection
      */
-    public function getReviewsProperty(): LengthAwarePaginator|array
+    public function getReviewsProperty(): Collection
     {
         if (!$this->readyToLoad) {
-            return [];
+            return collect();
         }
 
         return $this->manga->mediaRatings()
+            ->with(['user.media'])
             ->where('description', '!=', null)
             ->orderBy('created_at')
             ->limit(6)
-            ->paginate();
+            ->get();
     }
 
     /**
