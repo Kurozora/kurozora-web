@@ -44,6 +44,16 @@ class MangaCast extends Resource
     ];
 
     /**
+     * The relationships that should be eager loaded on index queries.
+     *
+     * @var array
+     */
+    public static $with = [
+        'manga.translations',
+        'character.translations'
+    ];
+
+    /**
      * The logical group associated with the resource.
      *
      * @var string

@@ -53,6 +53,16 @@ class Episode extends Resource
     ];
 
     /**
+     * The relationships that should be eager loaded on index queries.
+     *
+     * @var array
+     */
+    public static $with = [
+        'anime',
+        'translation'
+    ];
+
+    /**
      * The logical group associated with the resource.
      *
      * @var string
@@ -118,6 +128,7 @@ class Episode extends Resource
             Heading::make('Meta information'),
 
             HasOneThrough::make('Anime')
+                ->onlyOnDetail()
                 ->readonly(),
 
             BelongsTo::make('Season')
