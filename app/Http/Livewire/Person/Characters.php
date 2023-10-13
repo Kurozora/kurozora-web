@@ -6,6 +6,8 @@ use App\Models\Person;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -21,15 +23,48 @@ class Characters extends Component
     public Person $person;
 
     /**
+     * Whether the component is ready to load.
+     *
+     * @var bool $readyToLoad
+     */
+    public bool $readyToLoad = false;
+
+    /**
      * Prepare the component.
      *
      * @param Person $person
      *
      * @return void
      */
-    public function mount(Person $person)
+    public function mount(Person $person): void
     {
-        $this->person = $person;
+        $this->person = $person->load(['media']);
+    }
+
+    /**
+     * Sets the property to load the page.
+     *
+     * @return void
+     */
+    public function loadPage(): void
+    {
+        $this->readyToLoad = true;
+    }
+
+    /**
+     * Get the manga property.
+     *
+     * @return Collection|LengthAwarePaginator
+     */
+    public function getCharactersProperty(): Collection|LengthAwarePaginator
+    {
+        if (!$this->readyToLoad) {
+            return collect();
+        }
+
+        return $this->person->characters()
+            ->with(['media', 'translations'])
+            ->paginate(25);
     }
 
     /**
@@ -39,8 +74,6 @@ class Characters extends Component
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.person.characters', [
-            'personCharacters' => $this->person->characters()->paginate(25)
-        ]);
+        return view('livewire.person.characters');
     }
 }

@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
 use Laravel\Scout\Searchable;
@@ -232,12 +233,24 @@ class Person extends KModel implements HasMedia, Sitemapable
     /**
      * Returns the anime the person belongs to.
      *
-     * @return BelongsToMany
+     * @return HasManyThrough
      */
-    function anime(): BelongsToMany
+    function anime(): HasManyThrough
     {
-        return $this->belongsToMany(Anime::class, AnimeCast::class)
-            ->distinct();
+        /** @var Builder $union */ // To silence IDE warning for not matching type
+        $union = $this->hasManyThrough(Anime::class, MediaStaff::class, 'person_id', 'id', 'id', 'model_id')
+            ->where('model_type', '=', Anime::class)
+            ->select(Anime::TABLE_NAME . '.*', MediaStaff::TABLE_NAME . '.person_id as laravel_through_key');
+        // Second select above isn't used, but SQL will
+        // complain if number of selected columns in a union
+        // don't match. So since hasManyThrough for a non-morphic
+        // relation uses a similar select structure, we fake
+        // the number of columns in the morphic one using
+        // an unnecessary select. It should have no performance
+        // penalties, but it would be nice to improve this.
+
+        return $this->hasManyThrough(Anime::class, AnimeCast::class, 'person_id', 'id', 'id', 'anime_id')
+            ->union($union);
     }
 
     /**
@@ -261,12 +274,12 @@ class Person extends KModel implements HasMedia, Sitemapable
     /**
      * Returns the manga the person belongs to.
      *
-     * @return BelongsToMany
+     * @return HasManyThrough
      */
-    function manga(): BelongsToMany
+    function manga(): HasManyThrough
     {
-        return $this->belongsToMany(Manga::class, MediaStaff::class, 'person_id', 'model_id')
-            ->distinct();
+        return $this->hasManyThrough(Manga::class, MediaStaff::class, 'person_id', 'id', 'id', 'model_id')
+            ->where('model_type', '=', Manga::class);
     }
 
     /**
@@ -290,12 +303,24 @@ class Person extends KModel implements HasMedia, Sitemapable
     /**
      * Returns the game the person belongs to.
      *
-     * @return BelongsToMany
+     * @return HasManyThrough
      */
-    function games(): BelongsToMany
+    function games(): HasManyThrough
     {
-        return $this->belongsToMany(Game::class, GameCast::class)
-            ->distinct();
+        /** @var Builder $union */ // To silence IDE warning for not matching type
+        $union = $this->hasManyThrough(Game::class, MediaStaff::class, 'person_id', 'id', 'id', 'model_id')
+            ->where('model_type', '=', Game::class)
+            ->select(Game::TABLE_NAME . '.*', MediaStaff::TABLE_NAME . '.person_id as laravel_through_key');
+        // Second select above isn't used, but SQL will
+        // complain if number of selected columns in a union
+        // don't match. So since hasManyThrough for a non-morphic
+        // relation uses a similar select structure, we fake
+        // the number of columns in the morphic one using
+        // an unnecessary select. It should have no performance
+        // penalties, but it would be nice to improve this.
+
+        return $this->hasManyThrough(Game::class, GameCast::class, 'person_id', 'id', 'id', 'game_id')
+            ->union($union);
     }
 
     /**

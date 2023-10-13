@@ -7,6 +7,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -22,6 +23,13 @@ class Anime extends Component
     public Person $person;
 
     /**
+     * Whether the component is ready to load.
+     *
+     * @var bool $readyToLoad
+     */
+    public bool $readyToLoad = false;
+
+    /**
      * Prepare the component.
      *
      * @param Person $person
@@ -30,17 +38,33 @@ class Anime extends Component
      */
     public function mount(Person $person): void
     {
-        $this->person = $person;
+        $this->person = $person->load(['media']);
+    }
+
+    /**
+     * Sets the property to load the page.
+     *
+     * @return void
+     */
+    public function loadPage(): void
+    {
+        $this->readyToLoad = true;
     }
 
     /**
      * Get the anime property.
      *
-     * @return LengthAwarePaginator
+     * @return Collection|LengthAwarePaginator
      */
-    public function getAnimeProperty(): LengthAwarePaginator
+    public function getAnimeProperty(): Collection|LengthAwarePaginator
     {
-        return $this->person->anime()->paginate(25);
+        if (!$this->readyToLoad) {
+            return collect();
+        }
+
+        return $this->person->anime()
+            ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
+            ->paginate(25);
     }
 
     /**

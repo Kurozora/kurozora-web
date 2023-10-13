@@ -2,17 +2,21 @@
 
 namespace App\Http\Livewire\Person;
 
-use App\Events\PersonViewed;
 use App\Models\Person;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 use Livewire\Component;
+use Livewire\WithPagination;
 
-class Details extends Component
+class Games extends Component
 {
+    use WithPagination;
+
     /**
-     * The object containing the character data.
+     * The object containing the person data.
      *
      * @var Person $person
      */
@@ -34,9 +38,6 @@ class Details extends Component
      */
     public function mount(Person $person): void
     {
-        // Call the PersonViewed event
-        PersonViewed::dispatch($person);
-
         $this->person = $person->load(['media']);
     }
 
@@ -51,12 +52,28 @@ class Details extends Component
     }
 
     /**
+     * The object containing the person’s games.
+     *
+     * @return Collection|LengthAwarePaginator
+     */
+    public function getGamesProperty(): Collection|LengthAwarePaginator
+    {
+        if (!$this->readyToLoad) {
+            return collect();
+        }
+
+        return $this->person->games()
+            ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
+            ->paginate(25);
+    }
+
+    /**
      * Render the component.
      *
      * @return Application|Factory|View
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.person.details');
+        return view('livewire.person.games');
     }
 }
