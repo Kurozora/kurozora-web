@@ -66,7 +66,7 @@ class AnimeSeasonsSection extends Component
             ->limit(Anime::MAXIMUM_RELATIONSHIPS_LIMIT)
             ->get()
             ->map(function(Season $season) {
-                $season->setRelation('anime', $this->anime);
+                return $season->setRelation('anime', $this->anime);
             });
     }
 

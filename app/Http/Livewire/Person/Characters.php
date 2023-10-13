@@ -52,7 +52,7 @@ class Characters extends Component
     }
 
     /**
-     * Get the manga property.
+     * Get the characters property.
      *
      * @return Collection|LengthAwarePaginator
      */

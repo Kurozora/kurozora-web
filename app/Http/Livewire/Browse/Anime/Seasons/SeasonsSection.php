@@ -60,7 +60,7 @@ class SeasonsSection extends Component
     /**
      * Get the anime with the given Media Type ID.
      */
-    public function getAnimeForMediaType()
+    public function getAnimeForMediaType(): void
     {
         $this->animes = Anime::where([
             ['air_season', '=', $this->seasonOfYear],
