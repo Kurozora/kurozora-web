@@ -316,8 +316,10 @@ class Character extends KModel implements HasMedia, Sitemapable
      */
     function people(): BelongsToMany
     {
+        // Pagination take distinct into account if we don't specify
+        // a column explicitly. Noice.
         return $this->belongsToMany(Person::class, AnimeCast::class)
-            ->distinct();
+            ->distinct([Person::TABLE_NAME . '.id']);
     }
 
     /**
@@ -345,8 +347,10 @@ class Character extends KModel implements HasMedia, Sitemapable
      */
     function anime(): BelongsToMany
     {
+        // Pagination take distinct into account if we don't specify
+        // a column explicitly. Noice.
         return $this->belongsToMany(Anime::class, AnimeCast::class)
-            ->distinct();
+            ->distinct([Anime::TABLE_NAME . '.id']);
     }
 
     /**
@@ -374,8 +378,10 @@ class Character extends KModel implements HasMedia, Sitemapable
      */
     function manga(): BelongsToMany
     {
+        // Pagination take distinct into account if we don't specify
+        // a column explicitly. Noice.
         return $this->belongsToMany(Manga::class, MangaCast::class)
-            ->distinct();
+            ->distinct([Manga::TABLE_NAME . '.id']);
     }
 
     /**
@@ -403,8 +409,10 @@ class Character extends KModel implements HasMedia, Sitemapable
      */
     function games(): BelongsToMany
     {
+        // Pagination take distinct into account if we don't specify
+        // a column explicitly. Noice.
         return $this->belongsToMany(Game::class, GameCast::class)
-            ->distinct();
+            ->distinct([Game::TABLE_NAME . '.id']);
     }
 
     /**
@@ -451,7 +459,7 @@ class Character extends KModel implements HasMedia, Sitemapable
      * @param Builder $query
      * @param int $limit
      */
-    public function scopeBornToday(Builder $query, int $limit = 10)
+    public function scopeBornToday(Builder $query, int $limit = 10): void
     {
         $bornToday = new BornTodayScope();
         $bornToday->apply($query->limit($limit), $this);

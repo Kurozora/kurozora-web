@@ -1,23 +1,23 @@
 <main>
     <x-slot:title>
-        Anime | {!! $character->name !!}
+        {{  __('Games') }} | {!! $character->name !!}
     </x-slot:title>
 
     <x-slot:description>
-        {{ __('Discover the extensive list of anime that :x appears in only on Kurozora, the largest, free online anime, manga, game & music database in the world.', ['x', $character->name]) }}
+        {{ __('Discover the extensive list of games that :x appears in only on Kurozora, the largest, free online anime, manga, game & music database in the world.', ['x', $character->name]) }}
     </x-slot:description>
 
     <x-slot:meta>
-        <meta property="og:title" content="Anime | {{ $character->name }} — {{ config('app.name') }}" />
-        <meta property="og:description" content="{{ __('Discover the extensive list of anime that :x appears in only on Kurozora, the largest, free online anime, manga, game & music database in the world.', ['x', $character->name]) }}" />
+        <meta property="og:title" content="{{  __('Games') }} | {{ $character->name }} — {{ config('app.name') }}" />
+        <meta property="og:description" content="{{ __('Discover the extensive list of games that :x appears in only on Kurozora, the largest, free online anime, manga, game & music database in the world.', ['x', $character->name]) }}" />
         <meta property="og:image" content="{{ $character->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/character_poster.webp') }}" />
         <meta property="og:type" content="profile" />
         <meta property="og:profile:username" content="{{ $character->name }}" />
-        <link rel="canonical" href="{{ route('characters.anime', $character) }}">
+        <link rel="canonical" href="{{ route('characters.games', $character) }}">
     </x-slot:meta>
 
     <x-slot:appArgument>
-        character/{{ $character->id }}/shows
+        character/{{ $character->id }}/games
     </x-slot:appArgument>
 
     <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6" wire:init="loadPage">
@@ -25,7 +25,7 @@
             <div>
                 <div class="flex gap-1">
                     <div class="flex flex-wrap items-center w-full">
-                        <h1 class="text-2xl font-bold">{{ __(':x’s Anime', ['x' => $character->name]) }}</h1>
+                        <h1 class="text-2xl font-bold">{{ __(':x’s Games', ['x' => $character->name]) }}</h1>
                     </div>
 
                     <div class="flex flex-wrap justify-end items-center w-full">
@@ -35,10 +35,10 @@
         </section>
 
         @if ($readyToLoad)
-            <x-rows.small-lockup :animes="$this->anime" :is-row="false" />
+            <x-rows.small-lockup :games="$this->games" :is-row="false" />
 
             <section class="mt-4">
-                {{ $this->anime->links() }}
+                {{ $this->games->links() }}
             </section>
         @else
             <section>

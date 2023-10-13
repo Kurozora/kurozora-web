@@ -20,7 +20,7 @@
         character/{{ $character->id }}/people
     </x-slot:appArgument>
 
-    <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6">
+    <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6" wire:init="loadPage">
         <section class="mb-4">
             <div>
                 <div class="flex gap-1">
@@ -34,10 +34,28 @@
             </div>
         </section>
 
-        <x-rows.person-lockup :people="$characterPeople" :is-row="false" />
+        @if ($readyToLoad)
+            <x-rows.person-lockup :people="$this->people" :is-row="false" />
 
-        <section class="mt-4">
-            {{ $characterPeople->links() }}
-        </section>
+            <section class="mt-4">
+                {{ $this->people->links() }}
+            </section>
+        @else
+            <section>
+                <div class="flex gap-4 justify-between flex-wrap">
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="w-64 md:w-80 flex-grow"></div>
+                    <div class="w-64 md:w-80 flex-grow"></div>
+                </div>
+            </section>
+        @endif
     </div>
 </main>

@@ -20,7 +20,7 @@
         character/{{ $character->id }}
     </x-slot:appArgument>
 
-    <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6">
+    <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6" wire:init="loadPage">
         <section class="pt-5 pb-8">
             <div class="relative pb-2">
                 <div class="flex flex-col flex-wrap text-center items-center">
@@ -73,9 +73,11 @@
                         {{ $character->debut ?? '-' }}
                     </x-slot:information>
 
-                    @if($character->status)
+                    @if ($character->status)
                         <x-slot:footer>
-                            {{ __('The character is :x.', ['x' => $character->status->description]) }}
+                            @if ($character->status != \App\Enums\CharacterStatus::Unknown())
+                                {{ __('The character is :x.', ['x' => strtolower($character->status->description)]) }}
+                            @endif
                         </x-slot:footer>
                     @endif
                 </x-information-list>
@@ -128,52 +130,19 @@
             </div>
         </section>
 
-        @if (!empty($characterAnime->total()))
-            <section class="pt-5 pb-8 border-t-2">
-                <x-section-nav>
-                    <x-slot:title>
-                        {{ __('Shows') }}
-                    </x-slot:title>
+        @if ($readyToLoad)
+            <livewire:components.character.media-section :character="$character" :type="\App\Models\Anime::class" />
 
-                    <x-slot:action>
-                        <x-section-nav-link href="{{ route('characters.anime', $character) }}">{{ __('See All') }}</x-section-nav-link>
-                    </x-slot:action>
-                </x-section-nav>
+            <livewire:components.character.media-section :character="$character" :type="\App\Models\Manga::class" />
 
-                <x-rows.small-lockup :animes="$characterAnime" />
-            </section>
-        @endif
+            <livewire:components.character.media-section :character="$character" :type="\App\Models\Game::class" />
 
-        @if (!empty($characterManga->total()))
-            <section class="pt-5 pb-8 border-t-2">
-                <x-section-nav>
-                    <x-slot:title>
-                        {{ __('Mangas') }}
-                    </x-slot:title>
-
-                    <x-slot:action>
-                        <x-section-nav-link href="{{ route('characters.manga', $character) }}">{{ __('See All') }}</x-section-nav-link>
-                    </x-slot:action>
-                </x-section-nav>
-
-                <x-rows.small-lockup :mangas="$characterManga" />
-            </section>
-        @endif
-
-        @if (!empty($characterPeople->total()))
-            <section class="pt-5 pb-8 border-t-2">
-                <x-section-nav>
-                    <x-slot:title>
-                        {{ __('People') }}
-                    </x-slot:title>
-
-                    <x-slot:action>
-                        <x-section-nav-link href="{{ route('characters.people', $character) }}">{{ __('See All') }}</x-section-nav-link>
-                    </x-slot:action>
-                </x-section-nav>
-
-                <x-rows.person-lockup :people="$characterPeople" />
-            </section>
+            <livewire:components.character.media-section :character="$character" :type="\App\Models\Person::class" />
+        @else
+            <x-skeletons.small-lockup />
+            <x-skeletons.small-lockup />
+            <x-skeletons.small-lockup />
+            <x-skeletons.small-lockup />
         @endif
     </div>
 </main>

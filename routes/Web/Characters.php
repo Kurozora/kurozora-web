@@ -2,9 +2,10 @@
 
 use App\Http\Livewire\Character\Anime as CharacterAnime;
 use App\Http\Livewire\Character\Details as CharacterDetails;
+use App\Http\Livewire\Character\Games as CharacterGames;
 use App\Http\Livewire\Character\Index as CharacterIndex;
-use App\Http\Livewire\Character\People as CharacterPeople;
 use App\Http\Livewire\Character\Manga as CharacterManga;
+use App\Http\Livewire\Character\People as CharacterPeople;
 
 Route::prefix('/characters')
     ->name('characters')
@@ -19,6 +20,9 @@ Route::prefix('/characters')
 
                 Route::get('/anime', CharacterAnime::class)
                     ->name('.anime');
+
+                Route::get('/games', CharacterGames::class)
+                    ->name('.games');
 
                 Route::get('/manga', CharacterManga::class)
                     ->name('.manga');

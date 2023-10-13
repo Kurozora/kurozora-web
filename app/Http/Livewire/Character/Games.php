@@ -11,7 +11,7 @@ use Illuminate\Support\Collection;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class Anime extends Component
+class Games extends Component
 {
     use WithPagination;
 
@@ -52,17 +52,17 @@ class Anime extends Component
     }
 
     /**
-     * Get the anime property.
+     * Get the games property.
      *
      * @return Collection|LengthAwarePaginator
      */
-    public function getAnimeProperty(): Collection|LengthAwarePaginator
+    public function getGamesProperty(): Collection|LengthAwarePaginator
     {
         if (!$this->readyToLoad) {
             return collect();
         }
 
-        return $this->character->anime()
+        return $this->character->games()
             ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
             ->paginate(25);
     }
@@ -74,6 +74,6 @@ class Anime extends Component
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.character.anime');
+        return view('livewire.character.games');
     }
 }

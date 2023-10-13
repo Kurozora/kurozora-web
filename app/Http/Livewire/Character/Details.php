@@ -19,6 +19,13 @@ class Details extends Component
     public Character $character;
 
     /**
+     * Whether the component is ready to load.
+     *
+     * @var bool $readyToLoad
+     */
+    public bool $readyToLoad = false;
+
+    /**
      * Prepare the component.
      *
      * @param Character $character
@@ -30,9 +37,17 @@ class Details extends Component
         // Call the CharacterViewed event
         CharacterViewed::dispatch($character);
 
-        $character->generateSlug();
-        $character->save();
-        $this->character = $character;
+        $this->character = $character->load(['media']);
+    }
+
+    /**
+     * Sets the property to load the page.
+     *
+     * @return void
+     */
+    public function loadPage(): void
+    {
+        $this->readyToLoad = true;
     }
 
     /**
@@ -42,10 +57,6 @@ class Details extends Component
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.character.details', [
-            'characterAnime' => $this->character->getAnime(Character::MAXIMUM_RELATIONSHIPS_LIMIT),
-            'characterManga' => $this->character->getManga(Character::MAXIMUM_RELATIONSHIPS_LIMIT),
-            'characterPeople' => $this->character->getPeople(Character::MAXIMUM_RELATIONSHIPS_LIMIT),
-        ]);
+        return view('livewire.character.details');
     }
 }
