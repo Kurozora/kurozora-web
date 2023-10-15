@@ -12,7 +12,7 @@ use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Livewire\Component;
 
 class Details extends Component
@@ -48,9 +48,9 @@ class Details extends Component
     /**
      * The start time of the video.
      *
-     * @var int $t
+     * @var int $timestamp
      */
-    public $t = 0;
+    public $timestamp = 0;
 
     /**
      * Whether to show the video to the user.
@@ -74,13 +74,11 @@ class Details extends Component
     public bool $showSharePopup = false;
 
     /**
-     * The query strings of the component.
+     * Whether the component is ready to load.
      *
-     * * @var string[] $queryString
+     * @var bool $readyToLoad
      */
-    protected $queryString = [
-        't' => ['except' => 0],
-    ];
+    public bool $readyToLoad = false;
 
     /**
      * The data used to populate the popup.
@@ -94,6 +92,24 @@ class Details extends Component
     ];
 
     /**
+     * The query strings of the component.
+     *
+     * * @var string[] $queryString
+     */
+    protected $queryString = [
+        'timestamp' => ['except' => 0, 'as' => 't'],
+    ];
+
+    /**
+     * The component's listeners.
+     *
+     * @var array
+     */
+    protected $listeners = [
+        'preferredVideoSourceChanged' => 'selectPreferredSource'
+    ];
+
+    /**
      * Prepare the component.
      *
      * @param Episode $episode
@@ -104,16 +120,42 @@ class Details extends Component
         // Call the EpisodeViewed event
         EpisodeViewed::dispatch($episode);
 
-        $this->episode = $episode;
+        $this->episode = $episode->load([
+            'anime' => function (HasOneThrough $hasOneThrough) {
+                $hasOneThrough->with([
+                    'studios',
+                    'translations',
+                    'orderedVideos'
+                ]);
+            },
+            'media',
+            'mediaStat',
+            'season' => function ($query) {
+                $query->with(['media', 'translations']);
+            },
+            'translations',
+            'tv_rating',
+        ]);
         $this->setupActions();
+    }
+
+    /**
+     * Sets the property to load the page.
+     *
+     * @return void
+     */
+    public function loadPage(): void
+    {
+        $this->readyToLoad = true;
     }
 
     /**
      * Sets up the actions according to the user's settings.
      */
-    protected function setupActions()
+    protected function setupActions(): void
     {
         $user = auth()->user();
+
         if (!empty($user)) {
             $this->isTracking = $user->hasTracked($this->anime);
             $this->isReminded = $user->reminderAnime()->where('anime_id', $this->anime->id)->exists();
@@ -147,26 +189,40 @@ class Details extends Component
      * @return Video|null
      * @throws InvalidEnumKeyException
      */
-    public function getVideoProperty(): Video|null
+    public function getVideoProperty(): ?Video
     {
+        if (!$this->readyToLoad) {
+            return null;
+        }
+
         $videoSource = VideoSource::fromKey($this->preferredVideoSource);
 
-        if ($video = $this->episode->videos()->firstWhere('source', $videoSource->value)) {
-            return $video;
+        if ($video = $this->episode->videos->firstWhere('source', '=', $videoSource->value)) {
+            $episode = $this->episode->withoutRelations();
+            $episode = $episode->setRelation('media', $this->episode->media);
+
+            return $video->setRelation('videoable', $episode);
         }
 
-        if ($video = $this->episode->videos()->first()) {
+        if ($video = $this->episode->videos->first()) {
             $this->selectPreferredSource($video->source->key);
-            return $video;
+            $episode = $this->episode->withoutRelations();
+            $episode = $episode->setRelation('media', $this->episode->media);
+
+            return $video->setRelation('videoable', $episode);
         }
 
-        return $this->anime->orderedVideos()->first();
+        $anime = $this->anime->withoutRelations();
+        $anime = $anime->setRelation('media', $this->anime->media);
+
+        return $this->anime->orderedVideos->first()
+            ?->setRelation('videoable', $anime);
     }
 
     /**
      * Adds the anime to the user's reminder list.
      */
-    public function remindAnime()
+    public function remindAnime(): void
     {
         $user = auth()->user();
 
@@ -215,27 +271,6 @@ class Details extends Component
     public function getSeasonProperty(): ?Season
     {
         return $this->episode->season;
-    }
-
-    /**
-     * Get the next episode.
-     *
-     * @return Episode|null
-     */
-    public function getNextEpisodeProperty(): Episode|null
-    {
-        return $this->episode->next_episode;
-    }
-
-    /**
-     * A list of episode suggestions based on current episode.
-     *
-     * @return LengthAwarePaginator
-     */
-    public function getSuggestedEpisodesProperty(): LengthAwarePaginator
-    {
-        return Episode::search(mb_convert_encoding(substr($this->episode->title, 0, 20), 'UTF-8', mb_list_encodings()))
-            ->paginate(10);
     }
 
     /**

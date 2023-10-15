@@ -48,21 +48,21 @@
                 "ratingValue": {{ $episode->mediaStat->rating_average ?? 2.5 }}
             },
             "contentRating": "{{ $this->anime->tv_rating->name }}",
-            "genre": {!! $this->anime->genres()->pluck('name') !!},
+            "genre": {!! $this->anime->genres->pluck('name') !!},
             "datePublished": "{{ $episode->started_at?->format('Y-m-d') }}",
             "keywords": "anime,episode{{ (',' . $this->anime->keywords) ?? '' }}",
             "creator":[
                 {
                     "@type":"Organization",
-                    "url":"/studio/{{ $this->anime->studios?->firstWhere('is_studio', '=', true)?->id ?? $this->anime->studios->first()?->id }}/"
+                    "url":"/studio/{{ $this->anime->studios?->firstWhere('is_studio', '=', true)?->id ?? $this->anime->studios?->first()?->id }}/"
                 }
             ]
-            @if(!empty($episode->videos()->first()?->getUrl()) || !empty($this->anime->videos()->first()?->getUrl()))
+            @if(!empty($episode->videos->first()?->getUrl()) || !empty($this->anime->videos->first()?->getUrl()))
                 ,"trailer": {
                     "@type":"VideoObject",
                     "name":"{{ $episode->title }}",
                     "description":"Official Trailer",
-                    "embedUrl": "{{ $episode->videos()->first()->getUrl() ?? $this->anime->videos()->first()->getUrl() }}",
+                    "embedUrl": "{{ $episode->videos->first()->getUrl() ?? $this->anime->videos->first()->getUrl() }}",
                     "thumbnailUrl": "{{ $episode->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $this->anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}",
                     "uploadDate": "{{ $episode->started_at?->format('Y-m-d') }}"
                 }
@@ -97,6 +97,7 @@
             theaterMode: $persist(false),
             showChat: $persist(false)
         }"
+        wire:init="loadPage"
     >
         <div
             class="flex flex-col lg:flex-row"
@@ -120,8 +121,8 @@
                         style="background-color: {{ $episode->getFirstMedia(\App\Enums\MediaCollection::Banner)?->custom_properties['background_color'] ?? '#000000' }};"
                     >
                         <div class="relative w-full h-full overflow-hidden z-10">
-                            @if (!empty($this->video))
-                                {!! $this->video->getEmbed(['currentTime' => $t]) !!}
+                            @if ($this->video)
+                                {!! $this->video->getEmbed(['currentTime' => $this->timestamp]) !!}
                             @else
                                 <x-picture class="h-full">
                                     <img class="w-full h-full aspect-video object-cover lazyload" data-sizes="auto" data-src="{{ $episode->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $this->season->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $episode->title }} Banner" title="{{ $episode->title }}">
@@ -204,29 +205,9 @@
                                 </template>
                             </x-circle-button>
 
-                            {{-- Video Source --}}
-                            @if (!empty($episode->videos()->count()))
-                                <x-dropdown align="right" width="48">
-                                    <x-slot:trigger>
-                                        <x-circle-button
-                                            title="{{ __('Source') }}"
-                                        >
-                                            @svg('list_and_film', 'fill-current', ['width' => '28'])
-                                        </x-circle-button>
-                                    </x-slot:trigger>
-
-                                    <x-slot:content>
-                                        @foreach ($episode->videos as $video)
-                                            <button
-                                                :class="{'bg-white text-gray-400 hover:bg-gray-50 focus:bg-gray-200': preferredVideoSource !== '{{ $video->source->key }}', 'bg-orange-500 text-white': preferredVideoSource === '{{ $video->source->key }}'}"
-                                                class="block w-full pl-4 pr-4 pt-2 pb-2 text-xs text-center font-semibold"
-                                                wire:click="selectPreferredSource('{{ $video->source->key }}')"
-                                            >
-                                                {{ $video->source->description }}
-                                            </button>
-                                        @endforeach
-                                    </x-slot:content>
-                                </x-dropdown>
+                            @if ($readyToLoad)
+                                {{-- Video Source --}}
+                                <livewire:components.episode.video-sources :model="$episode" />
                             @endif
 
                             {{-- Theater Mode --}}
@@ -301,15 +282,6 @@
                             </a>
                         </div>
                     @endif
-
-{{--                    @if($episode->next_episode_id)--}}
-{{--                        <div id="episodeBadge" class="flex-grow px-12 border-l-2">--}}
-{{--                            <a href="{{ route('episodes.details', $episode->next_episode_id) }}">--}}
-{{--                                <p class="font-bold">{{ __('Episode :x', ['x' => $episode->next_episode->number_total]) }}</p>--}}
-{{--                                <p class="text-sm text-gray-500">{{ __('Up Next') }}</p>--}}
-{{--                            </a>--}}
-{{--                        </div>--}}
-{{--                    @endif--}}
 
                     <div id="animeBadge" class="flex-grow px-12 border-l-2">
                         <a href="{{ route('anime.details', $this->anime) }}">
@@ -408,29 +380,11 @@
             </div>
 
             <div class="flex flex-col gap-4 pb-4 lg:w-1/4">
-                @if (!empty($this->episode->next_episode_id))
-                    <section class="pl-4 pr-4">
-                        <x-section-nav>
-                            <x-slot:title>
-                                {{ __('Up Next') }}
-                            </x-slot:title>
-                        </x-section-nav>
+                @if ($readyToLoad)
+                    <livewire:components.episode.up-next :episode="$this->episode" />
 
-                        <x-rows.episode-lockup :episodes="[$this->nextEpisode]" :is-row="false" />
-                    </section>
+                    <livewire:components.episode.suggested-episodes :title="$this->episode->title" :next-episode-id="$this->episode->next_episode_id" />
                 @endif
-
-                <section class="pt-5 pb-8 pl-4 pr-4 {{ !empty($this->episode->next_episode_id) ? 'border-t-2' : '' }}">
-                    @if ($this->suggestedEpisodes->count())
-                        <x-section-nav>
-                            <x-slot:title>
-                                {{ __('See Also') }}
-                            </x-slot:title>
-                        </x-section-nav>
-                    @endif
-
-                    <x-rows.episode-lockup :episodes="$this->suggestedEpisodes" :is-row="false" />
-                </section>
             </div>
         </div>
     </div>
