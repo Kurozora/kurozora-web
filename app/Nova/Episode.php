@@ -12,6 +12,7 @@ use Laravel\Nova\Fields\HasOneThrough;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\MorphMany;
+use Laravel\Nova\Fields\MorphOne;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
@@ -225,6 +226,8 @@ class Episode extends Resource
             MorphMany::make('Videos'),
 
             HasMany::make('Translations', 'translations', EpisodeTranslation::class),
+
+            MorphOne::make('Stats', 'mediaStat', MediaStat::class),
         ];
     }
 

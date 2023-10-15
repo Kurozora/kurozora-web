@@ -54,6 +54,7 @@ class GenerateEpisodes extends Command
                 ['season_count', '=', 1],
                 ['episode_count', '!=', null]
             ])
+            ->with(['translations'])
             ->chunkById(500, function (Collection $animes) use (&$totalSeasonsAdded, &$totalEpisodesAdded) {
                 $animes->each(function (Anime $anime) use (&$totalSeasonsAdded, &$totalEpisodesAdded) {
                     echo '[] generating for anime: ' . $anime->id . PHP_EOL;
@@ -84,6 +85,8 @@ class GenerateEpisodes extends Command
                         $sameDayRelease = $anime->started_at->equalTo($anime->ended_at) ?? false;
 
                         foreach (range(1, $anime->episode_count) as $count) {
+                            $startedAt = $sameDayRelease ? $season->started_at->setTimezone('UTC') : $season->started_at->addWeeks($count - 1)->setTimezone('UTC');
+
                             $episode = $season->episodes()
                                 ->withoutGlobalScopes()
                                 ->firstOrCreate([
@@ -101,7 +104,8 @@ class GenerateEpisodes extends Command
                                     'is_verified' => false,
                                     'is_premiere' => $count == 1,
                                     'is_finale' => $count == $anime->episode_count,
-                                    'started_at' => $sameDayRelease ? $season->started_at->setTimezone('UTC') : $season->started_at->addWeeks($count - 1)->setTimezone('UTC'),
+                                    'started_at' => $startedAt,
+                                    'ended_at' => $startedAt->addSeconds($anime->duration),
                                 ]);
                             $episodes[] = $episode;
 
