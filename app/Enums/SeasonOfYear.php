@@ -4,6 +4,7 @@ namespace App\Enums;
 
 use BenSampo\Enum\Enum;
 use BladeUI\Icons\Svg;
+use Carbon\Carbon;
 
 /**
  * @method static SeasonOfYear Winter()
@@ -39,7 +40,8 @@ final class SeasonOfYear extends Enum
      * @param int $steps
      * @return SeasonOfYear
      */
-    public function next(int $steps = 1): SeasonOfYear {
+    public function next(int $steps = 1): SeasonOfYear
+    {
         $seasonOfYear = $this;
 
         foreach (range(0, $steps - 1) as $ignored) {
@@ -60,7 +62,8 @@ final class SeasonOfYear extends Enum
      * @param int $steps
      * @return SeasonOfYear
      */
-    public function previous(int $steps = 1): SeasonOfYear {
+    public function previous(int $steps = 1): SeasonOfYear
+    {
         $seasonOfYear = $this;
 
         foreach (range(0, $steps - 1) as $ignored) {
@@ -73,5 +76,35 @@ final class SeasonOfYear extends Enum
         }
 
         return $seasonOfYear;
+    }
+
+    /**
+     * Returns the start date of the season.
+     *
+     * @return Carbon
+     */
+    public function startDate(): Carbon
+    {
+        return match ($this->value) {
+            self::Spring => Carbon::create(0, 4),
+            self::Summer => Carbon::create(0, 7),
+            self::Fall => Carbon::create(0, 10),
+            default => Carbon::create(),
+        };
+    }
+
+    /**
+     * Returns the end date of the season.
+     *
+     * @return Carbon
+     */
+    public function endDate(): Carbon
+    {
+        return match ($this->value) {
+            self::Spring => Carbon::create(0, 6, 30),
+            self::Summer => Carbon::create(0, 9, 30),
+            self::Fall => Carbon::create(0, 12, 31),
+            default => Carbon::create(0, 3, 31),
+        };
     }
 }

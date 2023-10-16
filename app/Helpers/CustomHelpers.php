@@ -139,22 +139,22 @@ if (!function_exists('season_of_year')) {
     /**
      * Get season of year value.
      *
+     * Seasons aren’t year specific, but month specific.
+     * As such, any date passed will have its year set
+     * to `0`.
+     *
      * @param Carbon|null $date
      * @return SeasonOfYear
      */
     function season_of_year(?Carbon $date = null): SeasonOfYear
     {
-        $date = $date ?? now();
-        $year = $date->year;
+        $date = ($date ?? now())
+            ->setYear(0);
 
-        $winter = Carbon::createFromDate($year, 1, 1)
-            ->setTime(0, 0);
-        $spring = Carbon::createFromDate($year, 4, 1)
-            ->setTime(0, 0);
-        $summer = Carbon::createFromDate($year, 7, 1)
-            ->setTime(0, 0);
-        $fall = Carbon::createFromDate($year, 10, 1)
-            ->setTime(0, 0);
+        $winter = SeasonOfYear::Winter()->startDate();
+        $spring = SeasonOfYear::Spring()->startDate();
+        $summer = SeasonOfYear::Summer()->startDate();
+        $fall = SeasonOfYear::Fall()->startDate();
 
         return match (true) {
             $date >= $spring && $date < $summer => SeasonOfYear::Spring(),
