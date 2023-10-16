@@ -36,26 +36,14 @@
             </div>
         </section>
 
-        @if(!empty($this->searchResults))
-            @if(!empty($this->searchResults->total()))
-                <section class="mt-4">
-                    <x-rows.small-lockup :mangas="$this->searchResults" :is-row="false" />
-                </section>
+        @if($this->searchResults->count())
+            <section class="mt-4">
+                <x-rows.small-lockup :mangas="$this->searchResults" :is-row="false" />
+            </section>
 
-                <section class="mt-4">
-                    {{ $this->searchResults->links() }}
-                </section>
-            @else
-                <section class="flex flex-col items-center mt-4 text-center">
-                    <x-picture>
-                        <img class="w-full max-w-sm" src="{{ asset('images/static/placeholders/empty_manga_library.webp') }}" alt="Empty Favorite Manga" title="Empty Favorite Manga">
-                    </x-picture>
-
-                    <p class="font-bold">{{ __('No Favorite Mangas') }}</p>
-
-                    <p class="text-sm text-gray-500">{{ __('Favorite a manga and it will show up here.') }}</p>
-                </section>
-            @endif
+            <section class="mt-4">
+                {{ $this->searchResults->links() }}
+            </section>
         @elseif (!$readyToLoad)
             <section>
                 <div class="flex gap-4 justify-between flex-wrap">
@@ -71,6 +59,16 @@
                     <div class="w-64 md:w-80 flex-grow"></div>
                     <div class="w-64 md:w-80 flex-grow"></div>
                 </div>
+            </section>
+        @else
+            <section class="flex flex-col items-center mt-4 text-center">
+                <x-picture>
+                    <img class="w-full max-w-sm" src="{{ asset('images/static/placeholders/empty_manga_library.webp') }}" alt="Empty Favorite Manga" title="Empty Favorite Manga">
+                </x-picture>
+
+                <p class="font-bold">{{ __('No Favorite Mangas') }}</p>
+
+                <p class="text-sm text-gray-500">{{ __('Favorite a manga and it will show up here.') }}</p>
             </section>
         @endif
     </div>

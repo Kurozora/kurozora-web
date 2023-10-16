@@ -11,6 +11,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 
 class Favorites extends Component
@@ -69,12 +70,12 @@ class Favorites extends Component
     /**
      * The computed search results property.
      *
-     * @return ?LengthAwarePaginator
+     * @return Collection|LengthAwarePaginator
      */
-    public function getSearchResultsProperty(): ?LengthAwarePaginator
+    public function getSearchResultsProperty(): Collection|LengthAwarePaginator
     {
         if (!$this->readyToLoad) {
-            return null;
+            return collect();
         }
 
         // Order
@@ -113,7 +114,7 @@ class Favorites extends Component
         if (empty($this->search) && empty($wheres) && empty($orders)) {
             $animes = $this->user
                 ->whereFavorited(Anime::class)
-                ->with(['genres', 'themes', 'media', 'mediaStat', 'translations', 'tv_rating']);
+                ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating']);
             return $animes->paginate($this->perPage);
         }
 
@@ -127,7 +128,7 @@ class Favorites extends Component
         $animes->wheres = $wheres;
         $animes->orders = $orders;
         $animes->query(function (Builder $query) {
-            $query->with(['genres', 'themes', 'media', 'mediaStat', 'translations', 'tv_rating']);
+            $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating']);
         });
 
         // Paginate

@@ -155,7 +155,7 @@ class Tab extends Component
         // If no search was performed, return all manga
         if (empty($this->search) && empty($wheres) && empty($orders)) {
             $mangas = $this->user->whereTracked(Manga::class)
-                ->with(['genres', 'themes', 'media', 'mediaStat', 'translations', 'tv_rating'])
+                ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
                 ->wherePivot('status', $userLibraryStatus->value);
             return $mangas->paginate($this->perPage);
         }
@@ -174,7 +174,7 @@ class Tab extends Component
         $mangas->wheres = $wheres;
         $mangas->orders = $orders;
         $mangas->query(function (Builder $query) {
-            $query->with(['genres', 'themes', 'media', 'mediaStat', 'translations', 'tv_rating']);
+            $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating']);
         });
 
         // Paginate

@@ -157,7 +157,7 @@ class Tab extends Component
         if (empty($this->search) && empty($wheres) && empty($orders)) {
             $animes = $this->user
                 ->whereTracked(Anime::class)
-                ->with(['genres', 'themes', 'media', 'mediaStat', 'translations', 'tv_rating'])
+                ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
                 ->wherePivot('status', $userLibraryStatus->value);
             return $animes->paginate($this->perPage);
         }
@@ -176,7 +176,7 @@ class Tab extends Component
         $animes->wheres = $wheres;
         $animes->orders = $orders;
         $animes->query(function (Builder $query) {
-            $query->with(['genres', 'themes', 'media', 'mediaStat', 'translations', 'tv_rating']);
+            $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating']);
         });
 
         // Paginate
