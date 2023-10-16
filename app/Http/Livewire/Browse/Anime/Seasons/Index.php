@@ -9,6 +9,7 @@ use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 
 class Index extends Component
@@ -16,52 +17,75 @@ class Index extends Component
     /**
      * Thes selected year.
      *
-     * @var $year
+     * @var int $year
      */
-    public $year;
+    public int $year;
 
     /**
      * The selected season.
      *
-     * @var $season
+     * @var string $season
      */
-    public $season;
-
-    /**
-     * The selected season of year type.
-     *
-     * @var SeasonOfYear $seasonOfYear
-     */
-    protected SeasonOfYear $seasonOfYear;
+    public string $season;
 
     /**
      * Prepare the component.
      *
-     * @param int $year
      * @param string $season
+     * @param int $year
      *
      * @return void
      */
-    public function mount(int $year, string $season): void
+    public function mount(string $season, int $year): void
     {
-        if (!is_numeric($year)) {
-            to_route('anime.seasons.index');
-            return;
-        }
-
         if ($year < 1917) {
             to_route('anime.seasons.index');
             return;
         }
 
-        $this->year = $year;
-        $this->season = str($season)->ucfirst();
+        if (!is_numeric($year)) {
+            to_route('anime.seasons.index');
+            return;
+        }
 
         try {
-            $this->seasonOfYear = SeasonOfYear::fromKey(str($season)->ucfirst());
+            $this->season = SeasonOfYear::fromKey(str($season)->ucfirst())->key;
         } catch (InvalidEnumKeyException $e) {
-            to_route('anime.seasons.index');
+            to_route('manga.seasons.index');
+            return;
         }
+        $this->year = $year;
+    }
+
+    /**
+     * Get the SeasonOfYear object.
+     *
+     * @return SeasonOfYear
+     * @throws InvalidEnumKeyException
+     */
+    public function getSeasonOfYearProperty(): SeasonOfYear
+    {
+        return SeasonOfYear::fromKey(str($this->season)->ucfirst());
+    }
+
+    /**
+     * Get the available Media Types.
+     *
+     * @return Collection
+     */
+    public function getMediaTypesProperty(): Collection
+    {
+        return MediaType::select(MediaType::TABLE_NAME . '.*')
+            ->join(Anime::TABLE_NAME, function ($join) {
+                $join->on(Anime::TABLE_NAME . '.media_type_id', '=', MediaType::TABLE_NAME . '.id')
+                    ->where([
+                        ['air_season', '=', $this->seasonOfYear->value],
+                        ['started_at', '>=', $this->year . '-01-01'],
+                        ['started_at', '<=', $this->year . '-12-31'],
+                    ]);
+            })
+            ->groupBy('id', 'name', 'description')
+            ->get();
     }
 
     /**
@@ -71,16 +95,6 @@ class Index extends Component
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.browse.anime.seasons.index', [
-            'seasonOfYear' => $this->seasonOfYear,
-            'mediaTypes' => MediaType::select(MediaType::TABLE_NAME . '.*')
-                ->join(Anime::TABLE_NAME, function ($join) {
-                    $join->on(Anime::TABLE_NAME . '.media_type_id', '=', MediaType::TABLE_NAME . '.id')
-                        ->where('air_season', '=', $this->seasonOfYear->value)
-                        ->whereYear('started_at', '=', $this->year);
-                })
-                ->groupBy('id', 'name', 'description')
-                ->get()
-        ]);
+        return view('livewire.browse.anime.seasons.index');
     }
 }

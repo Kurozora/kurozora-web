@@ -94,7 +94,7 @@ class FavoritesSection extends Component
         }
 
         return $this->user->whereFavorited($this->type)
-            ->with(['genres', 'themes', 'media', 'mediaStat', 'translations', 'tv_rating'])
+            ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
             ->orderBy('created_at', 'desc')
             ->limit(10)
             ->get();

@@ -81,10 +81,10 @@ class MediaSection extends Component
 
         return match ($this->type) {
             Anime::class => $this->song->anime()
-                ->with(['genres', 'themes', 'media', 'mediaStat', 'translations', 'tv_rating'])
+                ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
                 ->get(),
             Game::class => $this->song->games()
-                ->with(['genres', 'themes', 'media', 'mediaStat', 'translations', 'tv_rating'])
+                ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
                 ->get()
         };
     }

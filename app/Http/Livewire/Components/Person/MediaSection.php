@@ -98,7 +98,7 @@ class MediaSection extends Component
 
         return match ($this->type) {
             Anime::class => $this->person->anime()
-                ->with(['genres', 'themes', 'media', 'mediaStat', 'translations', 'tv_rating'])
+                ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
                 ->limit(Person::MAXIMUM_RELATIONSHIPS_LIMIT)
                 ->get(),
             Character::class => $this->person->characters()
@@ -106,11 +106,11 @@ class MediaSection extends Component
                 ->limit(Person::MAXIMUM_RELATIONSHIPS_LIMIT)
                 ->get(),
             Manga::class => $this->person->manga()
-                ->with(['genres', 'themes', 'media', 'mediaStat', 'translations', 'tv_rating'])
+                ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
                 ->limit(Person::MAXIMUM_RELATIONSHIPS_LIMIT)
                 ->get(),
             Game::class => $this->person->games()
-                ->with(['genres', 'themes', 'media', 'mediaStat', 'translations', 'tv_rating'])
+                ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
                 ->limit(Person::MAXIMUM_RELATIONSHIPS_LIMIT)
                 ->get(),
         };

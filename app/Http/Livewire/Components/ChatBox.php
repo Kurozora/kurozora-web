@@ -19,7 +19,7 @@ class ChatBox extends Component
      *
      * @var string[] $rules
      */
-    protected $rules = [
+    protected array $rules = [
         'comment' => ['required', 'string', 'min:1'],
     ];
 

@@ -66,7 +66,7 @@ class Section extends Component
         }
 
         $model = match ($this->chartKind) {
-            ChartKind::Anime => Anime::with(['genres', 'themes', 'media', 'mediaStat', 'translations', 'tv_rating']),
+            ChartKind::Anime => Anime::with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating']),
             ChartKind::Characters => Character::with(['media', 'translations']),
             ChartKind::Episodes => Episode::with([
                 'anime' => function ($query) {
@@ -78,8 +78,8 @@ class Section extends Component
                 },
                 'translations'
             ]),
-            ChartKind::Games => Game::with(['genres', 'themes', 'media', 'mediaStat', 'translations', 'tv_rating']),
-            ChartKind::Manga => Manga::with(['genres', 'themes', 'media', 'mediaStat', 'translations', 'tv_rating']),
+            ChartKind::Games => Game::with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating']),
+            ChartKind::Manga => Manga::with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating']),
             ChartKind::People => Person::with(['media']),
             ChartKind::Songs => Song::with(['media']),
             ChartKind::Studios => Studio::with(['media'])

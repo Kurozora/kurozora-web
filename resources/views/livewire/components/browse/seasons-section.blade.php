@@ -1,34 +1,32 @@
 <div wire:init="loadSection">
-    @if ($this->anime->count())
     <section id="#{{ $mediaType->name }}" class="pt-5 pb-8 pl-4 pr-4 border-t-2">
-        <x-section-nav>
-            <x-slot:title>
-                {{ $mediaType->name . ' (' . $this->anime->count() . ')' }}
-            </x-slot:title>
+        @if ($this->models->count())
+            <x-section-nav>
+                <x-slot:title>
+                    {{ $mediaType->name . ' (' . $this->models->count() . ')' }}
+                </x-slot:title>
 
-            <x-slot:action>
-                <x-spinner />
+                <x-slot:action>
+                    <x-spinner />
 
-                @hasrole('superAdmin')
-                    <x-button wire:click="$refresh">{{ __('Refresh') }}</x-button>
-                @endhasrole
-            </x-slot:action>
-        </x-section-nav>
+                    @hasrole('superAdmin')
+                        <x-button wire:click="$refresh">{{ __('Refresh') }}</x-button>
+                    @endhasrole
+                </x-slot:action>
+            </x-section-nav>
 
-        @switch($class)
-            @case(\App\Models\Anime::class)
-                <x-rows.small-lockup :animes="$this->models" :is-row="false" />
-                @break
-            @case(\App\Models\Game::class)
-                <x-rows.small-lockup :games="$this->models" :is-row="false" />
-                @break
-            @case(\App\Models\Manga::class)
-                <x-rows.small-lockup :mangas="$this->models" :is-row="false" />
-                @break
-        @endswitch
-    </section>
-    @elseif (!$readyToLoad)
-        <section id="#{{ $mediaType->name }}" class="pt-5 pb-8 pl-4 pr-4 border-t-2">
+            @switch($class)
+                @case(\App\Models\Anime::class)
+                    <x-rows.small-lockup :animes="$this->models" :is-row="false" />
+                    @break
+                @case(\App\Models\Game::class)
+                    <x-rows.small-lockup :games="$this->models" :is-row="false" />
+                    @break
+                @case(\App\Models\Manga::class)
+                    <x-rows.small-lockup :mangas="$this->models" :is-row="false" />
+                    @break
+            @endswitch
+        @elseif (!$readyToLoad)
             <x-section-nav>
                 <x-slot:title>
                     {{ $mediaType->name }}
@@ -56,6 +54,6 @@
                 <div class="w-64 md:w-80 flex-grow"></div>
                 <div class="w-64 md:w-80 flex-grow"></div>
             </div>
-        </section>
-    @endif
+        @endif
+    </section>
 </div>

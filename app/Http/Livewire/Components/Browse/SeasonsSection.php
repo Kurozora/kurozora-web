@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Http\Livewire\Browse\Anime\Seasons;
+namespace App\Http\Livewire\Components\Browse;
 
 use App\Models\Anime;
+use App\Models\Game;
+use App\Models\Manga;
 use App\Models\MediaType;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -12,6 +14,13 @@ use Livewire\Component;
 
 class SeasonsSection extends Component
 {
+    /**
+     * The object containing the media type data.
+     *
+     * @var string $class
+     */
+    public string $class;
+
     /**
      * The object containing the media type data.
      *
@@ -41,16 +50,27 @@ class SeasonsSection extends Component
     public bool $readyToLoad = false;
 
     /**
+     * The rules of the components.
+     *
+     * @var string[] $rules
+     */
+    protected array $rules = [
+        'class' => 'required|in:' . Anime::class . ',' . Manga::class . ',' . Game::class
+    ];
+
+    /**
      * Prepare the component.
      *
+     * @param string $class
      * @param MediaType $mediaType
      * @param int $seasonOfYear
      * @param int $year
      *
      * @return void
      */
-    public function mount(MediaType $mediaType, int $seasonOfYear, int $year): void
+    public function mount(string $class, MediaType $mediaType, int $seasonOfYear, int $year): void
     {
+        $this->class = $class;
         $this->mediaType = $mediaType;
         $this->seasonOfYear = $seasonOfYear;
         $this->year = $year;
@@ -71,17 +91,26 @@ class SeasonsSection extends Component
      *
      * @return Collection
      */
-    public function getAnimeProperty(): Collection
+    public function getModelsProperty(): Collection
     {
         if (!$this->readyToLoad) {
             return collect();
         }
 
-        return Anime::where([
-            ['air_season', '=', $this->seasonOfYear],
+        $seasonOfYearKey = match($this->class) {
+           Game::class, Manga::class => 'publication_season',
+            default => 'air_season'
+        };
+        $startedAtKey = match($this->class) {
+           Game::class => 'published_at',
+            default => 'started_at'
+        };
+
+        return $this->class::where([
+            [$seasonOfYearKey, '=', $this->seasonOfYear],
             ['media_type_id', '=', $this->mediaType->id],
-            ['started_at', '>=', $this->year . '-01-01'],
-            ['started_at', '<=', $this->year . '-12-31'],
+            [$startedAtKey, '>=', $this->year . '-01-01'],
+            [$startedAtKey, '<=', $this->year . '-12-31'],
         ])
             ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
             ->get();
@@ -94,6 +123,6 @@ class SeasonsSection extends Component
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.browse.anime.seasons.seasons-section');
+        return view('livewire.components.browse.seasons-section');
     }
 }

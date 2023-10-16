@@ -8,12 +8,22 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Laravel\Scout\Builder as ScoutBuilder;
 use Livewire\Component;
 
 class Index extends Component
 {
-    use WithAnimeSearch;
+    use WithAnimeSearch {
+        getSearchResultsProperty as protected getParentSearchResultsProperty;
+    }
+
+    /**
+     * Whether the component is ready to load.
+     *
+     * @var bool $readyToLoad
+     */
+    public bool $readyToLoad = false;
 
     /**
      * Redirect the user to a random anime.
@@ -22,13 +32,11 @@ class Index extends Component
      */
     public function randomAnime(): void
     {
-        $anime = Anime::search()
-            ->where('air_season', ['!=', season_of_year()->value])
-            ->where('started_at', ['<=', now()])
-            ->where('started_at', ['!=', now()->year])
-            ->where('status_id', ['=', 3])
-            ->get()
-            ->random(1)
+        $anime = Anime::where([
+            ['status_id', '=', 3],
+            ['started_at', '<=', season_of_year()->startDate()->toDateString()],
+        ])
+            ->inRandomOrder()
             ->first();
 
         $this->redirectRoute('anime.details', $anime);
@@ -42,9 +50,18 @@ class Index extends Component
      */
     public function searchIndexQuery(EloquentBuilder $query): EloquentBuilder
     {
-        return $query->where('air_season', '!=', season_of_year()->value)
-            ->whereDate('started_at', '<=', now())
-            ->where('status_id', '=', 3)
+        // Season of Year is calculated on month level, so the year value is `0`.
+        // Here we require the start date of the current year's season, so we have
+        // to manually set the year.
+        $seasonStartDate = season_of_year()
+            ->startDate()
+            ->setYear(now()->year);
+
+        return $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
+            ->where([
+                ['status_id', '=', 3],
+                ['started_at', '<=', $seasonStartDate->toDateString()],
+            ])
             ->orderBy('started_at', 'desc');
     }
 
@@ -56,9 +73,42 @@ class Index extends Component
      */
     public function searchQuery(ScoutBuilder $query): ScoutBuilder
     {
-        return $query->where('air_season', ['!=', season_of_year()->value])
-            ->where('started_at', ['<=', now()->timestamp])
-            ->where('status_id', ['=', 3]);
+        // Season of Year is calculated on month level, so the year value is `0`.
+        // Here we require the start date of the current year's season, so we have
+        // to manually set the year.
+        $seasonStartDate = season_of_year()
+            ->startDate()
+            ->setYear(now()->year);
+
+        return $query->where('status_id', ['=', 3])
+            ->where('started_at', ['<=', $seasonStartDate->timestamp])
+            ->query(function (EloquentBuilder $query) {
+                $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating']);
+            });
+    }
+
+    /**
+     * Sets the property to load the page.
+     *
+     * @return void
+     */
+    public function loadPage(): void
+    {
+        $this->readyToLoad = true;
+    }
+
+    /**
+     * The computed search results property.
+     *
+     * @return array|LengthAwarePaginator
+     */
+    public function getSearchResultsProperty(): array|LengthAwarePaginator
+    {
+        if (!$this->readyToLoad) {
+            return [];
+        }
+
+        return $this->getParentSearchResultsProperty();
     }
 
     /**

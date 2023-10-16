@@ -94,7 +94,7 @@ class LibrarySection extends Component
         }
 
         return $this->user->whereTracked($this->type)
-            ->with(['genres', 'themes', 'media', 'mediaStat', 'translations', 'tv_rating'])
+            ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
             ->orderBy('updated_at', 'desc')
             ->limit(10)
             ->get();

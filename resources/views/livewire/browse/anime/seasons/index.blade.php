@@ -1,15 +1,15 @@
 <main>
     <x-slot:title>
-        {{ $seasonOfYear->key . ' ' . $year }} | {{ __('Anime') }}
+        {{ $this->seasonOfYear->key . ' ' . $year }} | {{ __('Anime') }}
     </x-slot:title>
 
     <x-slot:description>
-        {{ __('Browse the :x :y anime season. Join the Kurozora community and create your anime, manga and game list. Discover songs, episodes and read reviews and news!', ['x' => $seasonOfYear->key, 'y' => $year]) }}
+        {{ __('Browse the :x :y anime season. Join the Kurozora community and create your anime, manga and game list. Discover songs, episodes and read reviews and news!', ['x' => $this->seasonOfYear->key, 'y' => $year]) }}
     </x-slot:description>
 
     <x-slot:meta>
-        <meta property="og:title" content="{{ $seasonOfYear->key . ' ' . $year }} | {{ __('Anime') }} — {{ config('app.name') }}" />
-        <meta property="og:description" content="{{ __('Browse the :x :y anime season. Join the Kurozora community and create your anime, manga and game list. Discover songs, episodes and read reviews and news!', ['x' => $seasonOfYear->key, 'y' => $year]) }}" />
+        <meta property="og:title" content="{{ $this->seasonOfYear->key . ' ' . $year }} | {{ __('Anime') }} — {{ config('app.name') }}" />
+        <meta property="og:description" content="{{ __('Browse the :x :y anime season. Join the Kurozora community and create your anime, manga and game list. Discover songs, episodes and read reviews and news!', ['x' => $this->seasonOfYear->key, 'y' => $year]) }}" />
         <meta property="og:image" content="{{ asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="og:type" content="website" />
         <link rel="canonical" href="{{ route('anime.seasons.year.season', [$year, $season]) }}">
@@ -31,7 +31,7 @@
         </section>
 
         <section id="mediaTypeHeader" class="bg-white pt-4 pb-4 z-10">
-            <x-season-pagination :type="App\Models\Anime::class" :season-of-year="$seasonOfYear" :year="$year" :on-each-side="2" />
+            <x-season-pagination :type="App\Models\Anime::class" :season-of-year="$this->seasonOfYear" :year="$year" />
 
             <x-hr class="mt-4 mb-4" />
 
@@ -44,7 +44,7 @@
                     <x-outlined-button x-on:click="selectedMediaType = null">{{ __('All') }}</x-outlined-button>
                 </template>
 
-                @foreach($mediaTypes as $mediaType)
+                @foreach($this->mediaTypes as $mediaType)
                     <template x-if="selectedMediaType === '{{ $mediaType->name }}'">
                         <x-button>{{ $mediaType->name }}</x-button>
                     </template>
@@ -57,11 +57,9 @@
         </section>
 
         <section class="space-y-10">
-            @foreach($mediaTypes as $mediaType)
-                <div
-                    x-show="selectedMediaType === '{{ $mediaType->name }}' || selectedMediaType === null"
-                >
-                    <livewire:browse.anime.seasons.seasons-section :media-type="$mediaType" :season-of-year="$seasonOfYear->value" :year="$year" />
+            @foreach($this->mediaTypes as $mediaType)
+                <div x-show="selectedMediaType === '{{ $mediaType->name }}' || selectedMediaType === null">
+                    <livewire:components.browse.seasons-section :class="\App\Models\Anime::class" :media-type="$mediaType" :season-of-year="$this->seasonOfYear->value" :year="$year" />
                 </div>
             @endforeach
         </section>

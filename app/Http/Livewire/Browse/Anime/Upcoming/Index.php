@@ -8,12 +8,23 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 use Laravel\Scout\Builder as ScoutBuilder;
 use Livewire\Component;
 
 class Index extends Component
 {
-    use WithAnimeSearch;
+    use WithAnimeSearch {
+        getSearchResultsProperty as protected getParentSearchResultsProperty;
+    }
+
+    /**
+     * Whether the component is ready to load.
+     *
+     * @var bool $readyToLoad
+     */
+    public bool $readyToLoad = false;
 
     /**
      * Prepare the component.
@@ -25,15 +36,24 @@ class Index extends Component
     }
 
     /**
+     * Sets the property to load the page.
+     *
+     * @return void
+     */
+    public function loadPage(): void
+    {
+        $this->readyToLoad = true;
+    }
+
+    /**
      * Redirect the user to a random anime.
      *
      * @return void
      */
     public function randomAnime(): void
     {
-        $anime = Anime::search()->where('started_at', ['>=', yesterday()->timestamp])
-            ->get()
-            ->random(1)
+        $anime = Anime::where('started_at', '>=', yesterday())
+            ->inRandomOrder()
             ->first();
         $this->redirectRoute('anime.details', $anime);
     }
@@ -46,7 +66,8 @@ class Index extends Component
      */
     public function searchIndexQuery(EloquentBuilder $query): EloquentBuilder
     {
-        return $query->whereDate('started_at', '>=', yesterday());
+        return $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
+            ->where('started_at', '>=', yesterday());
     }
 
     /**
@@ -57,7 +78,24 @@ class Index extends Component
      */
     public function searchQuery(ScoutBuilder $query): ScoutBuilder
     {
-        return $query->where('started_at', ['>=', yesterday()->timestamp]);
+        return $query->where('started_at', ['>=', yesterday()->timestamp])
+            ->query(function (EloquentBuilder $query) {
+                $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating']);
+            });
+    }
+
+    /**
+     * The computed search results property.
+     *
+     * @return Collection|LengthAwarePaginator
+     */
+    public function getSearchResultsProperty(): Collection|LengthAwarePaginator
+    {
+        if (!$this->readyToLoad) {
+            return collect();
+        }
+
+        return $this->getParentSearchResultsProperty();
     }
 
     /**
