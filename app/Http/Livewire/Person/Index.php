@@ -8,6 +8,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 use Laravel\Scout\Builder as ScoutBuilder;
 use Livewire\Component;
 
@@ -70,12 +71,12 @@ class Index extends Component
     /**
      * The computed search results property.
      *
-     * @return array|LengthAwarePaginator
+     * @return Collection|LengthAwarePaginator
      */
-    public function getSearchResultsProperty(): array|LengthAwarePaginator
+    public function getSearchResultsProperty(): Collection|LengthAwarePaginator
     {
         if (!$this->readyToLoad) {
-            return [];
+            return collect();
         }
 
         return $this->getParentSearchResultsProperty();
