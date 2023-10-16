@@ -35,6 +35,16 @@ class Index extends Component
     }
 
     /**
+     * Sets the property to load the page.
+     *
+     * @return void
+     */
+    public function loadPage(): void
+    {
+        $this->readyToLoad = true;
+    }
+
+    /**
      * Build an 'search index' query for the given resource.
      *
      * @param EloquentBuilder $query
@@ -56,16 +66,6 @@ class Index extends Component
         return $query->query(function (EloquentBuilder $query) {
             $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating']);
         });
-    }
-
-    /**
-     * Sets the property to load the page.
-     *
-     * @return void
-     */
-    public function loadPage(): void
-    {
-        $this->readyToLoad = true;
     }
 
     /**
