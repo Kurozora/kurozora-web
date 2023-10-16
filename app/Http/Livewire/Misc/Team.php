@@ -20,7 +20,9 @@ class Team extends Component
     {
         $users = User::whereIn('id', [
             1, 2, 380, 461, 668, 1110
-        ])->get();
+        ])
+            ->with(['media'])
+            ->get();
 
         return [
             $users[1],
