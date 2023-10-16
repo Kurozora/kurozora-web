@@ -93,7 +93,7 @@ class NavSearch extends Component
                             case Anime::class:
                             case Game::class:
                             case Manga::class:
-                                $query->with(['genres', 'themes', 'media', 'mediaStat', 'translations', 'tv_rating']);
+                                $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating']);
                                 break;
                             case Character::class:
                                 $query->with(['media', 'translations']);

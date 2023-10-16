@@ -63,7 +63,7 @@ class Games extends Component
         }
 
         return $this->studio->games()
-            ->with(['genres', 'themes', 'media', 'mediaStat', 'translations', 'tv_rating'])
+            ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
             ->paginate(25);
     }
 

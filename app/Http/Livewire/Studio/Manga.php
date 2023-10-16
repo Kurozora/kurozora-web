@@ -63,7 +63,7 @@ class Manga extends Component
         }
 
         return $this->studio->manga()
-            ->with(['genres', 'themes', 'media', 'mediaStat', 'translations', 'tv_rating'])
+            ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
             ->paginate(25);
     }
 

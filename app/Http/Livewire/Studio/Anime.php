@@ -63,7 +63,7 @@ class Anime extends Component
         }
 
         return $this->studio->anime()
-            ->with(['genres', 'themes', 'media', 'mediaStat', 'translations', 'tv_rating'])
+            ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
             ->paginate(25);
     }
 
