@@ -19,7 +19,7 @@
         theme-store
     </x-slot:appArgument>
 
-    <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6">
+    <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6" wire:init="loadPage">
         <section class="mb-4">
             <div>
                 <div class="flex gap-1">
@@ -36,14 +36,42 @@
             </div>
         </section>
 
-        <section class="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-            @foreach($this->searchResults as $platformTheme)
-                <x-lockups.platform-theme-lockup :theme="$platformTheme" />
-            @endforeach
-        </section>
+        @if ($this->searchResults->count())
+            <section class="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+                @foreach($this->searchResults as $platformTheme)
+                    <x-lockups.platform-theme-lockup :theme="$platformTheme" />
+                @endforeach
+            </section>
 
-        <section class="mt-4">
-            {{ $this->searchResults->links() }}
-        </section>
+            <section class="mt-4">
+                {{ $this->searchResults->links() }}
+            </section>
+        @elseif (!$readyToLoad)
+            <section class="mt-4">
+                <div class="flex gap-4 justify-between flex-wrap">
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    <div class="w-64 md:w-80 flex-grow"></div>
+                    <div class="w-64 md:w-80 flex-grow"></div>
+                </div>
+            </section>
+        @else
+            <section class="flex flex-col items-center mt-4 text-center">
+                <x-picture>
+                    <img class="w-full max-w-sm" src="{{ asset('images/static/placeholders/empty_anime_library.webp') }}" alt="Empty Anime Index" title="Empty Anime Index">
+                </x-picture>
+
+                <p class="font-bold">{{ __('Anime Not Found') }}</p>
+
+                <p class="text-sm text-gray-500">{{ __('No anime found with the selected criteria.') }}</p>
+            </section>
+        @endif
     </div>
 </main>

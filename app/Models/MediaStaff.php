@@ -19,16 +19,6 @@ class MediaStaff extends KModel implements Sitemapable
     protected $table = self::TABLE_NAME;
 
     /**
-     * The relations to eager load on every query.
-     *
-     * @var array
-     */
-    protected $with = [
-        'person',
-        'staff_role'
-    ];
-
-    /**
      * The anime relationship of anime staff.
      *
      * @return MorphTo

@@ -23,15 +23,6 @@ class MediaTheme extends MorphPivot
     public $incrementing = true;
 
     /**
-     * The relations to eager load on every query.
-     *
-     * @var array
-     */
-    protected $with = [
-        'theme'
-    ];
-
-    /**
      * Returns the model in the media theme.
      *
      * @return MorphTo

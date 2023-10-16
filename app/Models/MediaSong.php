@@ -31,16 +31,6 @@ class MediaSong extends KModel implements Sitemapable
     public $incrementing = false;
 
     /**
-     * The relations to eager load on every query.
-     *
-     * @var array
-     */
-    protected $with = [
-        'model',
-        'song',
-    ];
-
-    /**
      * The sortable configurations.
      *
      * @var array

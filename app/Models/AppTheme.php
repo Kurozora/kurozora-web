@@ -28,15 +28,6 @@ class AppTheme extends KModel implements HasMedia
     protected $table = self::TABLE_NAME;
 
     /**
-     * The relations to eager load on every query.
-     *
-     * @var array
-     */
-    protected $with = [
-        'media',
-    ];
-
-    /**
      * The accessors to append to the model's array form.
      *
      * @var array
