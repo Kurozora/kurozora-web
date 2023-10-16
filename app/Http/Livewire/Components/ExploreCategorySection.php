@@ -2,7 +2,6 @@
 
 namespace App\Http\Livewire\Components;
 
-use App\Enums\ExploreCategorySize;
 use App\Enums\ExploreCategoryTypes;
 use App\Models\Anime;
 use App\Models\ExploreCategory;
@@ -92,9 +91,9 @@ class ExploreCategorySection extends Component
     /**
      * The array containing the explore category item data.
      *
-     * @return array|Collection
+     * @return Collection
      */
-    public function getExploreCategoryItemsProperty(): array|Collection
+    public function getExploreCategoryItemsProperty(): Collection
     {
         if (!$this->readyToLoad) {
             return collect();
@@ -148,11 +147,7 @@ class ExploreCategorySection extends Component
             ])
         };
 
-        if ($this->exploreCategory->type === ExploreCategoryTypes::Shows && $this->exploreCategory->size == ExploreCategorySize::Small) {
-            return $exploreCategory->exploreCategoryItems->map(function ($exploreCategoryItem) {
-                return $exploreCategoryItem?->model;
-            })->filter();
-        } else if ($this->exploreCategory->type === ExploreCategoryTypes::Songs) {
+        if ($this->exploreCategory->type === ExploreCategoryTypes::Songs) {
             return $exploreCategory->exploreCategoryItems->map(function ($exploreCategoryItem) {
                 if ($exploreCategoryItem?->model->model != null) {
                     return $exploreCategoryItem->model;
@@ -162,7 +157,7 @@ class ExploreCategorySection extends Component
         }
 
         return $exploreCategory->exploreCategoryItems->map(function ($exploreCategoryItem) {
-            return $exploreCategoryItem->model;
+            return $exploreCategoryItem?->model;
         })->filter();
     }
 

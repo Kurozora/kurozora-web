@@ -2,7 +2,6 @@
 
 namespace App\Http\Livewire\Components\Browse;
 
-use App\Models\Anime;
 use App\Models\Game;
 use App\Models\Manga;
 use App\Models\MediaType;
@@ -48,15 +47,6 @@ class SeasonsSection extends Component
      * @var bool $readyToLoad
      */
     public bool $readyToLoad = false;
-
-    /**
-     * The rules of the components.
-     *
-     * @var string[] $rules
-     */
-    protected array $rules = [
-        'class' => 'required|in:' . Anime::class . ',' . Manga::class . ',' . Game::class
-    ];
 
     /**
      * Prepare the component.

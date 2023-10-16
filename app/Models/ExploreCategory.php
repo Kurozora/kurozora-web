@@ -191,25 +191,26 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
      *
      * @param string|null $class
      * @param Genre|Theme|null $genreOrTheme
+     * @param int $limit
      * @return ExploreCategory
      */
-    public function upcoming(string|null $class = null, Genre|Theme|null $genreOrTheme = null): ExploreCategory
+    public function upcoming(string|null $class = null, Genre|Theme|null $genreOrTheme = null, int $limit = 10): ExploreCategory
     {
-        $cacheKey = self::cacheKey(['name' => 'explore.upcomingShows', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'class' => $class, 'modelType' => $genreOrTheme?->getMorphClass(), 'model' => $genreOrTheme?->id]);
+        $cacheKey = self::cacheKey(['name' => 'explore.upcomingShows', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'class' => $class, 'modelType' => $genreOrTheme?->getMorphClass(), 'model' => $genreOrTheme?->id, 'limit' => $limit]);
 
         // Retrieve or save cached result
-        return Cache::remember($cacheKey, 60*60*12, function () use ($class, $genreOrTheme) {
+        return Cache::remember($cacheKey, 60*60*12, function () use ($class, $genreOrTheme, $limit) {
             $models = match($class) {
                 Anime::class => $this->anime($genreOrTheme)
-                    ->upcoming(10, (bool)$genreOrTheme?->is_nsfw)
+                    ->upcoming($limit, (bool)$genreOrTheme?->is_nsfw)
                     ->with(['translations', 'media'])
                     ->get(),
                 Game::class => $this->game($genreOrTheme)
-                    ->upcoming(10, (bool)$genreOrTheme?->is_nsfw)
+                    ->upcoming($limit, (bool)$genreOrTheme?->is_nsfw)
                     ->with(['translations', 'media'])
                     ->get(),
                 Manga::class => $this->manga($genreOrTheme)
-                    ->upcoming(10, (bool)$genreOrTheme?->is_nsfw)
+                    ->upcoming($limit, (bool)$genreOrTheme?->is_nsfw)
                     ->with(['translations', 'media'])
                     ->get(),
                 // No default, so it errors out, and we can fix it.
