@@ -310,7 +310,7 @@ class Manga extends KModel implements HasMedia, Sitemapable
             ],
         ];
 
-        if (auth()->user()?->tv_rating >= 4) {
+        if (config('app.tv_rating') >= 4) {
             $filter['is_nsfw'] = [
                 'title' => __('NSFW'),
                 'type' => 'bool',
@@ -560,7 +560,8 @@ class Manga extends KModel implements HasMedia, Sitemapable
      */
     public function characters(): BelongsToMany
     {
-        return $this->belongsToMany(Character::class, MangaCast::class);
+        return $this->belongsToMany(Character::class, MangaCast::class)
+            ->distinct(['character_id']);
     }
 
     /**
@@ -797,7 +798,7 @@ class Manga extends KModel implements HasMedia, Sitemapable
             $query->where(self::TABLE_NAME . '.is_nsfw', false);
         }
 
-        return $query->whereDate(self::TABLE_NAME . '.started_at', '>', yesterday())
+        return $query->where(self::TABLE_NAME . '.started_at', '>=', yesterday())
             ->orderBy(self::TABLE_NAME . '.started_at')
             ->limit($limit);
     }
@@ -837,7 +838,7 @@ class Manga extends KModel implements HasMedia, Sitemapable
         }
 
         return $query->orderBy(self::TABLE_NAME . '.updated_at', 'desc')
-            ->whereDate(self::TABLE_NAME . '.created_at', '<', today())
+            ->where(self::TABLE_NAME . '.created_at', '<', today())
             ->limit($limit);
     }
 
@@ -857,7 +858,7 @@ class Manga extends KModel implements HasMedia, Sitemapable
         }
 
         return $query->orderBy(self::TABLE_NAME . '.ended_at', 'desc')
-            ->whereDate(self::TABLE_NAME . '.ended_at', '<=', today())
+            ->where(self::TABLE_NAME . '.ended_at', '<=', today())
             ->limit($limit);
     }
 
@@ -878,7 +879,7 @@ class Manga extends KModel implements HasMedia, Sitemapable
 
         return $query->where(self::TABLE_NAME . '.publication_season', '!=', season_of_year()->value)
             ->whereYear(self::TABLE_NAME . '.started_at', '!=', now()->year)
-            ->whereDate(self::TABLE_NAME . '.started_at', '<=', now())
+            ->where(self::TABLE_NAME . '.started_at', '<=', now())
             ->where(self::TABLE_NAME . '.status_id', '=', 3)
             ->orderBy(self::TABLE_NAME . '.started_at', 'desc')
             ->limit($limit);

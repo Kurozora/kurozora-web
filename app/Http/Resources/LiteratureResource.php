@@ -40,8 +40,11 @@ class LiteratureResource extends JsonResource
                     case 'related-shows':
                         $relationships = array_merge($relationships, $this->getRelatedShowsRelationship());
                         break;
-                    case 'related-mangas':
+                    case 'related-literatures':
                         $relationships = array_merge($relationships, $this->getRelatedMangasRelationship());
+                        break;
+                    case 'related-games':
+                        $relationships = array_merge($relationships, $this->getRelatedGamesRelationship());
                         break;
                     case 'staff':
                         $relationships = array_merge($relationships, $this->getStaffRelationship());
@@ -70,7 +73,7 @@ class LiteratureResource extends JsonResource
         return [
             'cast' => [
                 'href' => route('api.manga.cast', $this->resource, false),
-                'data' => MangaCastResourceIdentity::collection($this->resource->getCast(Manga::MAXIMUM_RELATIONSHIPS_LIMIT))
+                'data' => MangaCastResourceIdentity::collection($this->resource->cast)
             ]
         ];
     }
@@ -85,7 +88,7 @@ class LiteratureResource extends JsonResource
         return [
             'characters' => [
                 'href' => route('api.manga.characters', $this->resource, false),
-                'data' => CharacterResourceBasic::collection($this->resource->getCharacters(Manga::MAXIMUM_RELATIONSHIPS_LIMIT))
+                'data' => CharacterResourceBasic::collection($this->resource->characters)
             ]
         ];
     }
@@ -100,7 +103,7 @@ class LiteratureResource extends JsonResource
         return [
             'relatedShows' => [
                 'href' => route('api.manga.related-shows', $this->resource, false),
-                'data' => MediaRelatedResource::collection($this->resource->getMangaRelations(Manga::MAXIMUM_RELATIONSHIPS_LIMIT))
+                'data' => MediaRelatedResource::collection($this->resource->animeRelations)
             ]
         ];
     }
@@ -115,7 +118,22 @@ class LiteratureResource extends JsonResource
         return [
             'relatedMangas' => [
                 'href' => route('api.manga.related-literatures', $this->resource, false),
-                'data' => MediaRelatedResource::collection($this->resource->getMangaRelations(Manga::MAXIMUM_RELATIONSHIPS_LIMIT))
+                'data' => MediaRelatedResource::collection($this->resource->mangaRelations)
+            ]
+        ];
+    }
+
+    /**
+     * Returns the related-games relationship for the resource.
+     *
+     * @return array
+     */
+    protected function getRelatedGamesRelationship(): array
+    {
+        return [
+            'relatedGames' => [
+                'href' => route('api.manga.related-games', $this->resource, false),
+                'data' => MediaRelatedResource::collection($this->resource->gameRelations)
             ]
         ];
     }
@@ -130,7 +148,7 @@ class LiteratureResource extends JsonResource
         return [
             'staff' => [
                 'href' => route('api.manga.staff', $this->resource, false),
-                'data' => MediaStaffResource::collection($this->resource->getMediaStaff(Manga::MAXIMUM_RELATIONSHIPS_LIMIT))
+                'data' => MediaStaffResource::collection($this->resource->mediaStaff)
             ]
         ];
     }
@@ -145,7 +163,7 @@ class LiteratureResource extends JsonResource
         return [
             'studios' => [
                 'href' => route('api.manga.studios', $this->resource, false),
-                'data' => StudioResourceIdentity::collection($this->resource->getStudios(Manga::MAXIMUM_RELATIONSHIPS_LIMIT))
+                'data' => StudioResourceIdentity::collection($this->resource->studios)
             ]
         ];
     }

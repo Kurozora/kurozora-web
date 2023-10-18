@@ -25,7 +25,7 @@ class LiteratureResourceBasic extends JsonResource
     public function toArray(Request $request): array
     {
         $resource = LiteratureResourceIdentity::make($this->resource)->toArray($request);
-        $studio = $this->resource->studios();
+        $studio = $this->resource->studios;
         $studio = $studio->firstWhere('is_publisher', '=', true) ?? $studio->first();
         $resource = array_merge($resource, [
             'attributes'    => [
@@ -55,7 +55,7 @@ class LiteratureResourceBasic extends JsonResource
                 'volumeCount'           => $this->resource->volume_count,
                 'chapterCount'          => $this->resource->chapter_count,
                 'pageCount'             => $this->resource->page_count,
-                'stats'                 => MediaStatsResource::make($this->resource->getMediaStat()),
+                'stats'                 => MediaStatsResource::make($this->resource->mediaStat),
                 'startedAt'             => $this->resource->started_at?->timestamp,
                 'endedAt'               => $this->resource->ended_at?->timestamp,
                 'duration'              => $this->resource->duration_string,
