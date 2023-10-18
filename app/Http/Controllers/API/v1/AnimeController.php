@@ -33,6 +33,7 @@ use App\Models\MediaRating;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class AnimeController extends Controller
@@ -40,13 +41,101 @@ class AnimeController extends Controller
     /**
      * Returns detailed information of an Anime.
      *
+     * @param Request $request
      * @param Anime $anime
      * @return JsonResponse
      */
-    public function view(Anime $anime): JsonResponse
+    public function view(Request $request, Anime $anime): JsonResponse
     {
         // Call the AnimeViewed event
         AnimeViewed::dispatch($anime);
+
+        $anime->load(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating']);
+
+        $includeArray = [];
+        if ($request->input('include')) {
+            $includes = array_unique(explode(',', $request->input('include')));
+            foreach ($includes as $include) {
+                switch ($include) {
+                    case 'cast':
+                        $includeArray['cast'] = function ($query) {
+                            $query->with([
+                                'person' => function ($query) {
+                                    $query->with(['media']);
+                                },
+                                'character' => function ($query) {
+                                    $query->with(['media', 'translations']);
+                                },
+                                'castRole'
+                            ])
+                            ->limit(Anime::MAXIMUM_RELATIONSHIPS_LIMIT);
+                        };
+                        break;
+                    case 'characters':
+                        $includeArray['characters'] = function ($query) {
+                            $query->with(['media', 'translations'])
+                                ->limit(Anime::MAXIMUM_RELATIONSHIPS_LIMIT);
+                        };
+                        break;
+                    case 'related-shows':
+                        $includeArray['animeRelations'] = function ($query) {
+                            $query->with([
+                                'related' => function ($query) {
+                                    $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating']);
+                                },
+                                'relation'
+                            ])
+                                ->limit(Anime::MAXIMUM_RELATIONSHIPS_LIMIT);
+                        };
+                        break;
+                    case 'related-literatures':
+                        $includeArray['mangaRelations'] = function ($query) {
+                            $query->with([
+                                'related' => function ($query) {
+                                    $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating']);
+                                },
+                                'relation'
+                            ])
+                                ->limit(Anime::MAXIMUM_RELATIONSHIPS_LIMIT);
+                        };
+                        break;
+                    case 'related-games':
+                        $includeArray['gameRelations'] = function ($query) {
+                            $query->with([
+                                'related' => function ($query) {
+                                    $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating']);
+                                },
+                                'relation'
+                            ])
+                                ->limit(Anime::MAXIMUM_RELATIONSHIPS_LIMIT);
+                        };
+                        break;
+                    case 'seasons':
+                        $includeArray['seasons'] = function ($query) {
+                            $query->limit(Anime::MAXIMUM_RELATIONSHIPS_LIMIT);
+                        };
+                        break;
+                    case 'songs':
+                        $includeArray['mediaSongs'] = function ($query) {
+                            $query->with(['song.media', 'song.mediaStat', 'model'])
+                                ->limit(Anime::MAXIMUM_RELATIONSHIPS_LIMIT);
+                        };
+                        break;
+                    case 'staff':
+                        $includeArray['mediaStaff'] = function ($query) {
+                            $query->with(['model', 'staff_role', 'person.media'])
+                                ->limit(Anime::MAXIMUM_RELATIONSHIPS_LIMIT);
+                        };
+                        break;
+                    case 'studios':
+                        $includeArray['studios'] = function ($query) {
+                            $query->limit(Anime::MAXIMUM_RELATIONSHIPS_LIMIT);
+                        };
+                        break;
+                }
+            }
+        }
+        $anime->loadMissing($includeArray);
 
         // Show the Anime details response
         return JSONResult::success([
@@ -66,7 +155,8 @@ class AnimeController extends Controller
         $data = $request->validated();
 
         // Get the characters
-        $characters = $anime->getCharacters($data['limit'] ?? 25, $data['page'] ?? 1);
+        $characters = $anime->characters()
+            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $characters->nextPageUrl());
@@ -89,7 +179,8 @@ class AnimeController extends Controller
         $data = $request->validated();
 
         // Get the anime cast
-        $animeCast = $anime->getCast($data['limit'] ?? 25, $data['page'] ?? 1);
+        $animeCast = $anime->cast()
+            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $animeCast->nextPageUrl());
@@ -112,7 +203,14 @@ class AnimeController extends Controller
         $data = $request->validated();
 
         // Get the related shows
-        $relatedShows = $anime->getAnimeRelations($data['limit'] ?? 25, $data['page'] ?? 1);
+        $relatedShows = $anime->animeRelations()
+            ->with([
+                'related' => function ($query) {
+                    $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating']);
+                },
+                'relation'
+            ])
+            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $relatedShows->nextPageUrl());
@@ -135,7 +233,14 @@ class AnimeController extends Controller
         $data = $request->validated();
 
         // Get the related literatures
-        $relatedLiterature = $anime->getMangaRelations($data['limit'] ?? 25, $data['page'] ?? 1);
+        $relatedLiterature = $anime->mangaRelations()
+            ->with([
+                'related' => function ($query) {
+                    $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating']);
+                },
+                'relation'
+            ])
+            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $relatedLiterature->nextPageUrl());
@@ -158,7 +263,14 @@ class AnimeController extends Controller
         $data = $request->validated();
 
         // Get the related literatures
-        $relatedGame = $anime->getGameRelations($data['limit'] ?? 25, $data['page'] ?? 1);
+        $relatedGame = $anime->gameRelations()
+            ->with([
+                'related' => function ($query) {
+                    $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating']);
+                },
+                'relation'
+            ])
+            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $relatedGame->nextPageUrl());
@@ -179,9 +291,12 @@ class AnimeController extends Controller
     public function seasons(GetAnimeSeasonsRequest $request, Anime $anime): JsonResponse
     {
         $data = $request->validated();
+        $reversed = $data['reversed'] ?? false;
 
         // Get the seasons
-        $seasons = $anime->getSeasons($data['limit'] ?? 25, $data['page'] ?? 1, $data['reversed'] ?? false);
+        $seasons = $anime->seasons()
+            ->orderBy('number', $reversed ? 'desc' : 'asc')
+            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $seasons->nextPageUrl());
@@ -203,9 +318,11 @@ class AnimeController extends Controller
     {
         $data = $request->validated();
 
-        // Get the seasons
+        // Get the media songs
         $limit = ($data['limit'] ?? -1) == -1 ? 150 : $data['limit'];
-        $mediaSongs = $anime->getMediaSongs($limit, $data['page'] ?? 1);
+        $mediaSongs = $anime->mediaSongs()
+            ->with(['song.media', 'song.mediaStat', 'model'])
+            ->paginate($limit, page: $data['page'] ?? 1);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $mediaSongs->nextPageUrl());
@@ -228,7 +345,15 @@ class AnimeController extends Controller
         $data = $request->validated();
 
         // Get the staff
-        $staff = $anime->getMediaStaff($data['limit'] ?? 25, $data['page'] ?? 1);
+        $staff = $anime->mediaStaff()
+            ->with([
+                'model',
+                'person' => function ($query) {
+                    $query->with(['media']);
+                },
+                'staff_role'
+            ])
+            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $staff->nextPageUrl());
@@ -251,7 +376,9 @@ class AnimeController extends Controller
         $data = $request->validated();
 
         // Get the anime studios
-        $mediaStudios = $anime->getStudios($data['limit'] ?? 25, $data['page'] ?? 1);
+        $mediaStudios = $anime->studios()
+            ->with(['media'])
+            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $mediaStudios->nextPageUrl());
@@ -276,9 +403,13 @@ class AnimeController extends Controller
 
         // Get the anime studios
         if ($mediaStudio = $anime->studios()->firstWhere('is_studio', '=', true)) {
-            $studioAnimes = $mediaStudio->getAnime($data['limit'] ?? 25, $data['page'] ?? 1);
+            $studioAnimes = $mediaStudio->anime()
+                ->where('model_id', '!=', $anime->id)
+                ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
         } else if ($mediaStudio = $anime->studios()->first()) {
-            $studioAnimes = $mediaStudio->getAnime($data['limit'] ?? 25, $data['page'] ?? 1);
+            $studioAnimes = $mediaStudio->anime()
+                ->where('model_id', '!=', $anime->id)
+                ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
         }
 
         // Get next page url minus domain
@@ -360,8 +491,8 @@ class AnimeController extends Controller
     {
         $data = $request->validated();
 
-        $anime = Anime::upcomingShows(-1)
-            ->paginate($data['limit'] ?? 25);
+        $anime = Anime::upcoming(-1)
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $anime->nextPageUrl());
@@ -382,7 +513,13 @@ class AnimeController extends Controller
     public function reviews(GetAnimeReviewsRequest $request, Anime $anime): JsonResponse
     {
         $reviews = $anime->mediaRatings()
-            ->paginate($data['limit'] ?? 25);
+            ->with([
+                'user' => function ($query) {
+                    $query->with(['media'])
+                        ->withCount(['followers', 'following']);
+                }
+            ])
+            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $reviews->nextPageUrl());

@@ -25,7 +25,7 @@ class AnimeResourceBasic extends JsonResource
     public function toArray(Request $request): array
     {
         $resource = AnimeResourceIdentity::make($this->resource)->toArray($request);
-        $studio = $this->resource->studios();
+        $studio = $this->resource->studios;
         $studio = $studio->firstWhere('is_studio', '=', true) ?? $studio->first();
         $resource = array_merge($resource, [
             'attributes'    => [
@@ -42,9 +42,9 @@ class AnimeResourceBasic extends JsonResource
                 'tvdbID'                => $this->resource->tvdb_id,
                 'slug'                  => $this->resource->slug,
                 'videoUrl'              => $this->resource->video_url,
-                'poster'                => ImageResource::make($this->resource->getFirstMedia(MediaCollection::Poster)),
-                'banner'                => ImageResource::make($this->resource->getFirstMedia(MediaCollection::Banner)),
-                'logo'                  => ImageResource::make($this->resource->getFirstMedia(MediaCollection::Logo)),
+                'poster'                => ImageResource::make($this->resource->media->firstWhere('collection_name', '=', MediaCollection::Poster)),
+                'banner'                => ImageResource::make($this->resource->media->firstWhere('collection_name', '=', MediaCollection::Banner)),
+                'logo'                  => ImageResource::make($this->resource->media->firstWhere('collection_name', '=', MediaCollection::Logo)),
                 'originalTitle'         => $this->resource->original_title,
                 'title'                 => $this->resource->title,
                 'synonymTitles'         => $this->resource->synonym_titles,
@@ -60,7 +60,7 @@ class AnimeResourceBasic extends JsonResource
                 'status'                => $this->resource->status->only(['name', 'description', 'color']),
                 'episodeCount'          => $this->resource->episode_count,
                 'seasonCount'           => $this->resource->season_count,
-                'stats'                 => MediaStatsResource::make($this->resource->getMediaStat()),
+                'stats'                 => MediaStatsResource::make($this->resource->mediaStat),
                 'startedAt'             => $this->resource->started_at?->timestamp,
                 'firstAired'            => $this->resource->started_at?->timestamp,
                 'endedAt'               => $this->resource->ended_at?->timestamp,

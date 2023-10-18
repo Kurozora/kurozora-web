@@ -408,7 +408,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
     public function characters(): BelongsToMany
     {
         return $this->belongsToMany(Character::class, AnimeCast::class)
-            ->distinct();
+            ->distinct(['character_id']);
     }
 
     /**
@@ -687,7 +687,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
         }
 
         return $query->orderBy(self::TABLE_NAME . '.updated_at', 'desc')
-            ->whereDate(self::TABLE_NAME . '.created_at', '<', today())
+            ->where(self::TABLE_NAME . '.created_at', '<', today())
             ->limit($limit);
     }
 

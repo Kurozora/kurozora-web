@@ -50,7 +50,7 @@ class MediaRatingResource extends JsonResource
 
         return [
             'users' => [
-                'data' => UserResource::collection([$mediaRating->user]),
+                'data' => UserResourceBasic::collection([$mediaRating->user]),
             ]
         ];
     }
