@@ -10,10 +10,10 @@ set -e
 
 ## Check if the artisan file exists
 if [ -f /var/www/html/artisan ]; then
-    # Optimize Laravel
-    # Clear expired password reset tokens
-    #php artisan auth:clear-resets && \
-    #php artisan migrate --force
+    # Optimize and update Laravel
+    php /var/www/html/artisan auth:clear-resets
+#    php /var/www/html/artisan migrate --force
+
     php /var/www/html/artisan down
     php /var/www/html/artisan config:cache
     php /var/www/html/artisan view:cache
