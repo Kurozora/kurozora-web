@@ -25,7 +25,7 @@ class GameResourceBasic extends JsonResource
     public function toArray(Request $request): array
     {
         $resource = GameResourceIdentity::make($this->resource)->toArray($request);
-        $studio = $this->resource->studios();
+        $studio = $this->resource->studios;
         $studio = $studio->firstWhere('is_studio', '=', true) ?? $studio->first();
         $resource = array_merge($resource, [
             'attributes'    => [
@@ -50,7 +50,7 @@ class GameResourceBasic extends JsonResource
                 'source'                => $this->resource->source->only(['name', 'description']),
                 'status'                => $this->resource->status->only(['name', 'description', 'color']),
                 'editionCount'          => $this->resource->edition_count,
-                'stats'                 => MediaStatsResource::make($this->resource->getMediaStat()),
+                'stats'                 => MediaStatsResource::make($this->resource->mediaStat),
                 'publishedAt'           => $this->resource->published_at?->timestamp,
                 'duration'              => $this->resource->duration_string,
                 'durationTotal'         => $this->resource->duration_total,

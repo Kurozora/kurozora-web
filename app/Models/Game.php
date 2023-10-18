@@ -282,7 +282,7 @@ class Game extends KModel implements HasMedia, Sitemapable
             ],
         ];
 
-        if (auth()->user()?->tv_rating >= 4) {
+        if (config('app.tv_rating') >= 4) {
             $filter['is_nsfw'] = [
                 'title' => __('NSFW'),
                 'type' => 'bool',
@@ -478,7 +478,8 @@ class Game extends KModel implements HasMedia, Sitemapable
      */
     public function characters(): BelongsToMany
     {
-        return $this->belongsToMany(Character::class, GameCast::class);
+        return $this->belongsToMany(Character::class, GameCast::class)
+            ->distinct(['character_id']);
     }
 
     /**
@@ -739,7 +740,7 @@ class Game extends KModel implements HasMedia, Sitemapable
             $query->where(self::TABLE_NAME . '.is_nsfw', false);
         }
 
-        return $query->whereDate(self::TABLE_NAME . '.published_at', '>', yesterday())
+        return $query->where(self::TABLE_NAME . '.published_at', '>=', yesterday())
             ->orderBy(self::TABLE_NAME . '.published_at')
             ->limit($limit);
     }
@@ -779,7 +780,7 @@ class Game extends KModel implements HasMedia, Sitemapable
         }
 
         return $query->orderBy(self::TABLE_NAME . '.updated_at', 'desc')
-            ->whereDate(self::TABLE_NAME . '.created_at', '<', today())
+            ->where(self::TABLE_NAME . '.created_at', '<', today())
             ->limit($limit);
     }
 
