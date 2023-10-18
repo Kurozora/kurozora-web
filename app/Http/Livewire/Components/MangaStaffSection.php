@@ -62,7 +62,8 @@ class MangaStaffSection extends Component
             ->with([
                 'person' => function ($query) {
                     $query->with(['media']);
-                }
+                },
+                'staff_role'
             ])
             ->limit(Manga::MAXIMUM_RELATIONSHIPS_LIMIT)
             ->get();

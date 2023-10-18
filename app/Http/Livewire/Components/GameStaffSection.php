@@ -62,7 +62,8 @@ class GameStaffSection extends Component
             ->with([
                 'person' => function ($query) {
                     $query->with(['media']);
-                }
+                },
+                'staff_role'
             ])
             ->limit(Game::MAXIMUM_RELATIONSHIPS_LIMIT)
             ->get();

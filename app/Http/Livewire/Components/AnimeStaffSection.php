@@ -62,7 +62,8 @@ class AnimeStaffSection extends Component
             ->with([
                 'person' => function ($query) {
                     $query->with(['media']);
-                }
+                },
+                'staff_role'
             ])
             ->limit(Anime::MAXIMUM_RELATIONSHIPS_LIMIT)
             ->get();
