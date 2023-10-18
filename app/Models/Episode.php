@@ -20,7 +20,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Cache;
 use Laravel\Scout\Searchable;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -237,7 +236,7 @@ class Episode extends KModel implements HasMedia, Sitemapable
             ],
         ];
 
-        if (auth()->user()?->tv_rating >= 4) {
+        if (config('app.tv_rating') >= 4) {
             $filter['is_nsfw'] = [
                 'title' => __('NSFW'),
                 'type' => 'bool',
@@ -316,22 +315,6 @@ class Episode extends KModel implements HasMedia, Sitemapable
     function previous_episode(): BelongsTo
     {
         return $this->belongsTo(Episode::class);
-    }
-
-    /**
-     * Returns the media stat.
-     *
-     * @return mixed
-     */
-    public function getMediaStats(): mixed
-    {
-        // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'episode.media-stat', 'id' => $this->id]);
-
-        // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_STAT_SECONDS, function () {
-            return $this->mediaStat;
-        });
     }
 
     /**

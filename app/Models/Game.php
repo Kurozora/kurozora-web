@@ -666,22 +666,6 @@ class Game extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * Returns the media stat.
-     *
-     * @return mixed
-     */
-    public function getMediaStat(): mixed
-    {
-        // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'game.media-stat', 'id' => $this->id]);
-
-        // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_STAT_SECONDS, function () {
-            return $this->mediaStat;
-        });
-    }
-
-    /**
      * Get the indexable data array for the model.
      *
      * @return array

@@ -591,22 +591,6 @@ class Anime extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * Returns the media stat.
-     *
-     * @return mixed
-     */
-    public function getMediaStat(): mixed
-    {
-        // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'anime.media-stat', 'id' => $this->id]);
-
-        // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_STATS_SECONDS, function () {
-            return $this->mediaStat;
-        });
-    }
-
-    /**
      * Eloquent builder scope that limits the query to the most popular shows.
      *
      * @param Builder $query
@@ -1030,7 +1014,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
             ],
         ];
 
-        if (auth()->user()?->tv_rating >= 4) {
+        if (config('app.tv_rating') >= 4) {
             $filter['is_nsfw'] = [
                 'title' => __('NSFW'),
                 'type' => 'bool',

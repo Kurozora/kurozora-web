@@ -37,7 +37,7 @@ class SongResourceBasic extends JsonResource
                 'artwork'   => ImageResource::make($this->resource->getFirstMedia(MediaCollection::Artwork)),
                 'title'     => $this->resource->title,
                 'artist'    => $this->resource->artist ?? 'Unknown',
-                'stats'     => MediaStatsResource::make($this->resource->getMediaStat()),
+                'stats'     => MediaStatsResource::make($this->resource->mediaStat),
             ]
         ]);
     }

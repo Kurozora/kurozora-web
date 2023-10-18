@@ -42,7 +42,7 @@ class EpisodeResource extends JsonResource
                 'title'         => $this->resource->title,
                 'synopsis'      => $this->resource->synopsis,
                 'duration'      => $this->resource->duration_string,
-                'stats'         => MediaStatsResource::make($this->resource->getMediaStats()),
+                'stats'         => MediaStatsResource::make($this->resource->mediaStats),
                 'videos'        => VideoResource::collection($this->resource->videos),
                 'isFiller'      => $this->resource->is_filler,
                 'isNsfw'        => $this->resource->is_nsfw,

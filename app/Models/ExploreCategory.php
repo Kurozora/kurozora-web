@@ -196,7 +196,7 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
      */
     public function upcoming(string|null $class = null, Genre|Theme|null $genreOrTheme = null, int $limit = 10): ExploreCategory
     {
-        $cacheKey = self::cacheKey(['name' => 'explore.upcomingShows', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'class' => $class, 'modelType' => $genreOrTheme?->getMorphClass(), 'model' => $genreOrTheme?->id, 'limit' => $limit]);
+        $cacheKey = self::cacheKey(['name' => 'explore.upcoming', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'class' => $class, 'modelType' => $genreOrTheme?->getMorphClass(), 'model' => $genreOrTheme?->id, 'limit' => $limit]);
 
         // Retrieve or save cached result
         return Cache::remember($cacheKey, 60*60*12, function () use ($class, $genreOrTheme, $limit) {

@@ -149,7 +149,7 @@ class Studio extends KModel implements HasMedia, Sitemapable
             ],
         ];
 
-        if (auth()->user()?->tv_rating >= 4) {
+        if (config('app.tv_rating') >= 4) {
             $filter['is_nsfw'] = [
                 'title' => __('NSFW'),
                 'type' => 'bool',
@@ -289,22 +289,6 @@ class Studio extends KModel implements HasMedia, Sitemapable
         // Retrieve or save cached result
         return Cache::remember($cacheKey, self::CACHE_KEY_GAME_SECONDS, function () use ($limit, $where) {
             return $this->games()->where($where)->paginate($limit);
-        });
-    }
-
-    /**
-     * Returns the media stat.
-     *
-     * @return mixed
-     */
-    public function getMediaStat(): mixed
-    {
-        // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'studio.media-stat', 'id' => $this->id]);
-
-        // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_STATS_SECONDS, function () {
-            return $this->mediaStat;
         });
     }
 
