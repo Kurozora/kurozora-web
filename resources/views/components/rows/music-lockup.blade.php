@@ -10,7 +10,7 @@
     @endforeach
 
     @foreach($mediaSongs as $index => $mediaSong)
-        <x-lockups.music-lockup :song="$mediaSong->song" :anime="$mediaSong->model" :type="$mediaSong->type" :position="$mediaSong->position" :episodes="$mediaSong->episodes" :show-episodes="$showEpisodes" :show-model="$showModel" :rank="($page - 1) * $perPage + $index + 1" :is-ranked="$isRanked" :is-row="$isRow" />
+        <x-lockups.music-lockup :song="$mediaSong->song" :anime="$showModel ? $mediaSong->model : null" :type="$mediaSong->type" :position="$mediaSong->position" :episodes="$mediaSong->episodes" :show-episodes="$showEpisodes" :show-model="$showModel" :rank="($page - 1) * $perPage + $index + 1" :is-ranked="$isRanked" :is-row="$isRow" />
     @endforeach
 
     <div class="w-64 flex-grow"></div>
