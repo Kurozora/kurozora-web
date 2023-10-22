@@ -26,7 +26,7 @@ class ExplorePageController extends Controller
      * @param GetExplorePageRequest $request
      * @return JsonResponse
      */
-    function index(GetExplorePageRequest $request)
+    function index(GetExplorePageRequest $request): JsonResponse
     {
         // Get explore categories
         $exploreCategories = ExploreCategory::with([
