@@ -18,6 +18,17 @@ class GameCastController extends Controller
      */
     public function details(GameCast $cast): JsonResponse
     {
+        $cast->load([
+            'person' => function ($query) {
+                $query->with(['media']);
+            },
+            'character' => function ($query) {
+                $query->with(['media', 'translations']);
+            },
+            'castRole',
+            'language'
+        ]);
+
         // Return cast details
         return JSONResult::success([
             'data' => GameCastResource::collection([$cast])

@@ -1,7 +1,7 @@
 @props(['autoresize' => false, 'rounded' => 'md', 'disabled' => false, 'readonly' => false])
 
 @php
-    $rounded = match($rounded) {
+    $rounded = match ($rounded) {
         'full' => 'rounded-3xl',
         default => 'rounded-md'
     };

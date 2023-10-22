@@ -1,5 +1,5 @@
 @php
-    $gridClass = match($exploreCategory->type) {
+    $gridClass = match ($exploreCategory->type) {
         \App\Enums\ExploreCategoryTypes::Genres, \App\Enums\ExploreCategoryTypes::Themes => 'grid sm:grid-cols-2 lg:grid-cols-4 gap-4',
         default => '',
     };

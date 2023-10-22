@@ -1,17 +1,17 @@
 @props(['type', 'seasonOfYear' => season_of_year(), 'year' => now()->year, 'onEachSide' => 2])
 
 @php
-    $seasonIndexRouteName = match($type) {
+    $seasonIndexRouteName = match ($type) {
         App\Models\Game::class => 'games.seasons.index',
         App\Models\Manga::class => 'manga.seasons.index',
         default => 'anime.seasons.index'
     };
-    $seasonYearRouteName = match($type) {
+    $seasonYearRouteName = match ($type) {
         App\Models\Game::class => 'games.seasons.year.season',
         App\Models\Manga::class => 'manga.seasons.year.season',
         default => 'anime.seasons.year.season'
     };
-    $seasonArchiveRouteName = match($type) {
+    $seasonArchiveRouteName = match ($type) {
         App\Models\Game::class => 'games.seasons.archive',
         App\Models\Manga::class => 'manga.seasons.archive',
         default => 'anime.seasons.archive'

@@ -53,22 +53,14 @@ class AnimeController extends Controller
         $anime->load(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating']);
 
         $includeArray = [];
-        if ($request->input('include')) {
-            $includes = array_unique(explode(',', $request->input('include')));
+        if ($includeInput = $request->input('include')) {
+            $includes = array_unique(explode(',', $includeInput));
+
             foreach ($includes as $include) {
                 switch ($include) {
                     case 'cast':
                         $includeArray['cast'] = function ($query) {
-                            $query->with([
-                                'person' => function ($query) {
-                                    $query->with(['media']);
-                                },
-                                'character' => function ($query) {
-                                    $query->with(['media', 'translations']);
-                                },
-                                'castRole'
-                            ])
-                            ->limit(Anime::MAXIMUM_RELATIONSHIPS_LIMIT);
+                            $query->limit(Anime::MAXIMUM_RELATIONSHIPS_LIMIT);
                         };
                         break;
                     case 'characters':

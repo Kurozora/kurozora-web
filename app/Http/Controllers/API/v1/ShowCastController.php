@@ -18,6 +18,17 @@ class ShowCastController extends Controller
      */
     public function details(AnimeCast $cast): JsonResponse
     {
+        $cast->load([
+            'person' => function ($query) {
+                $query->with(['media']);
+            },
+            'character' => function ($query) {
+                $query->with(['media', 'translations']);
+            },
+            'castRole',
+            'language'
+        ]);
+
         // Return cast details
         return JSONResult::success([
             'data' => ShowCastResource::collection([$cast])

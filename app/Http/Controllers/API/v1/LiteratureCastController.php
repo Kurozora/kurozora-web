@@ -18,6 +18,13 @@ class LiteratureCastController extends Controller
      */
     public function details(MangaCast $cast): JsonResponse
     {
+        $cast->load([
+            'character' => function ($query) {
+                $query->with(['media', 'translations']);
+            },
+            'castRole'
+        ]);
+
         // Return cast details
         return JSONResult::success([
             'data' => LiteratureCastResource::collection([$cast])

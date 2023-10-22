@@ -49,19 +49,14 @@ class MangaController extends Controller
         $manga->load(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating']);
 
         $includeArray = [];
-        if ($request->input('include')) {
-            $includes = array_unique(explode(',', $request->input('include')));
+        if ($includeInput = $request->input('include')) {
+            $includes = array_unique(explode(',', $includeInput));
+
             foreach ($includes as $include) {
                 switch ($include) {
                     case 'cast':
                         $includeArray['cast'] = function ($query) {
-                            $query->with([
-                                'character' => function ($query) {
-                                    $query->with(['media', 'translations']);
-                                },
-                                'castRole'
-                            ])
-                                ->limit(Manga::MAXIMUM_RELATIONSHIPS_LIMIT);
+                            $query->limit(Manga::MAXIMUM_RELATIONSHIPS_LIMIT);
                         };
                         break;
                     case 'characters':
