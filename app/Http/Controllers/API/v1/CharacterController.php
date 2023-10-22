@@ -16,19 +16,58 @@ use App\Http\Resources\LiteratureResourceIdentity;
 use App\Http\Resources\PersonResourceIdentity;
 use App\Models\Character;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class CharacterController extends Controller
 {
     /**
      * Shows character details.
      *
+     * @param Request $request
      * @param Character $character
      * @return JsonResponse
      */
-    public function details(Character $character): JsonResponse
+    public function details(Request $request, Character $character): JsonResponse
     {
         // Call the CharacterViewed event
         CharacterViewed::dispatch($character);
+
+        $character->load(['media', 'translations']);
+
+        $includeArray = [];
+        if ($includeInput = $request->input('include')) {
+            $includes = array_unique(explode(',', $includeInput));
+
+            foreach ($includes as $include) {
+                switch ($include) {
+                    case 'people':
+                        $includeArray['people'] = function ($query) {
+                            $query->with(['media'])
+                                ->limit(Character::MAXIMUM_RELATIONSHIPS_LIMIT);
+                        };
+                        break;
+                    case 'shows':
+                        $includeArray['anime'] = function ($query) {
+                            $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating'])
+                                ->limit(Character::MAXIMUM_RELATIONSHIPS_LIMIT);
+                        };
+                        break;
+                    case 'literatures':
+                        $includeArray['manga'] = function ($query) {
+                            $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating'])
+                                ->limit(Character::MAXIMUM_RELATIONSHIPS_LIMIT);
+                        };
+                        break;
+                    case 'games':
+                        $includeArray['games'] = function ($query) {
+                            $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating'])
+                                ->limit(Character::MAXIMUM_RELATIONSHIPS_LIMIT);
+                        };
+                        break;
+                }
+            }
+        }
+        $character->loadMissing($includeArray);
 
         // Return character details
         return JSONResult::success([
@@ -48,7 +87,8 @@ class CharacterController extends Controller
         $data = $request->validated();
 
         // Get the people
-        $people = $character->getPeople($data['limit'] ?? 25, $data['page'] ?? 1);
+        $people = $character->people()
+            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $people->nextPageUrl());
@@ -72,7 +112,8 @@ class CharacterController extends Controller
         $data = $request->validated();
 
         // Get the anime
-        $anime = $character->getAnime($data['limit'] ?? 25, $data['page'] ?? 1);
+        $anime = $character->anime()
+            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $anime->nextPageUrl());
@@ -96,7 +137,8 @@ class CharacterController extends Controller
         $data = $request->validated();
 
         // Get the literatures
-        $literatures = $character->getManga($data['limit'] ?? 25, $data['page'] ?? 1);
+        $literatures = $character->manga()
+            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $literatures->nextPageUrl());
@@ -120,7 +162,8 @@ class CharacterController extends Controller
         $data = $request->validated();
 
         // Get the games
-        $games = $character->getGames($data['limit'] ?? 25, $data['page'] ?? 1);
+        $games = $character->games()
+            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $games->nextPageUrl());

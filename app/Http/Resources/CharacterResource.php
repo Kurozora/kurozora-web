@@ -25,14 +25,20 @@ class CharacterResource extends JsonResource
     {
         $resource = CharacterResourceBasic::make($this->resource)->toArray($request);
 
-        if ($request->input('include')) {
-            $includes = array_unique(explode(',', $request->input('include')));
+        if ($includeInput = $request->input('include')) {
+            // Include relation propagates to nested Resource objects.
+            // To avoid loading unnecessary relations, we set it to
+            // an empty value.
+            $request->merge(['include' => '']);
+            $includes = array_unique(explode(',', $includeInput));
 
             $relationships = [];
             foreach ($includes as $include) {
                 $relationships = match ($include) {
                     'people' => array_merge($relationships, $this->getPeopleRelationship()),
                     'shows' => array_merge($relationships, $this->getAnimeRelationship()),
+                    'literatures' => array_merge($relationships, $this->getMangaRelationship()),
+                    'games' => array_merge($relationships, $this->getGamesRelationship()),
                     default => $relationships,
                 };
             }
@@ -53,7 +59,7 @@ class CharacterResource extends JsonResource
         return [
             'people' => [
                 'href' => route('api.characters.people', $this->resource, false),
-                'data' => PersonResource::collection($this->resource->getPeople(Character::MAXIMUM_RELATIONSHIPS_LIMIT))
+                'data' => PersonResource::collection($this->resource->people)
             ]
         ];
     }
@@ -68,7 +74,37 @@ class CharacterResource extends JsonResource
         return [
             'shows' => [
                 'href' => route('api.characters.anime', $this->resource, false),
-                'data' => AnimeResourceBasic::collection($this->resource->getAnime(Character::MAXIMUM_RELATIONSHIPS_LIMIT))
+                'data' => AnimeResourceBasic::collection($this->resource->anime)
+            ]
+        ];
+    }
+
+    /**
+     * Returns the manga relationship for the resource.
+     *
+     * @return array
+     */
+    protected function getMangaRelationship(): array
+    {
+        return [
+            'shows' => [
+                'href' => route('api.characters.literatures', $this->resource, false),
+                'data' => LiteratureResourceBasic::collection($this->resource->manga)
+            ]
+        ];
+    }
+
+    /**
+     * Returns the games relationship for the resource.
+     *
+     * @return array
+     */
+    protected function getGamesRelationship(): array
+    {
+        return [
+            'shows' => [
+                'href' => route('api.characters.games', $this->resource, false),
+                'data' => GameResourceBasic::collection($this->resource->games)
             ]
         ];
     }
