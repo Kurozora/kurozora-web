@@ -184,7 +184,7 @@ class Index extends Command
                 $attributes[] = implode(PHP_EOL, $index->getFilterableAttributes());
                 $rows = [$attributes];
             } else {
-                $allIndexes = $client->getAllIndexes();
+                $allIndexes = $client->getIndexes();
                 $rows = [];
 
                 foreach ($allIndexes as $key => $index) {
