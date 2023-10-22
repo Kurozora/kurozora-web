@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Genre;
 use Illuminate\Foundation\Http\FormRequest;
 
 class GetExplorePageRequest extends FormRequest
@@ -15,7 +14,8 @@ class GetExplorePageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'genre_id' => ['integer', 'exists:' . Genre::TABLE_NAME . ',id']
+            'genre_id' => ['bail', 'nullable', 'string'],
+            'theme_id' => ['bail', 'nullable', 'string'],
         ];
     }
 }

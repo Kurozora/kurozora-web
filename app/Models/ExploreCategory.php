@@ -151,27 +151,29 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
      *
      * @param string|null $class
      * @param Genre|Theme|null $genreOrTheme
+     * @param int $limit
+     * @param bool $withRelations
      * @return ExploreCategory
      */
-    public function mostPopular(string|null $class = null, Genre|Theme|null $genreOrTheme = null): ExploreCategory
+    public function mostPopular(string|null $class = null, Genre|Theme|null $genreOrTheme = null, int $limit = 10, bool $withRelations = true): ExploreCategory
     {
         // Find location of cached data
-//        $cacheKey = self::cacheKey(['name' => 'explore.mostPopular', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'class' => $class, 'modelType' => $genreOrTheme?->getMorphClass(), 'model' => $genreOrTheme?->id]);
+        $cacheKey = self::cacheKey(['name' => 'mostPopular', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'class' => $class, 'modelType' => $genreOrTheme?->getMorphClass(), 'modelID' => $genreOrTheme?->id, 'limit' => $limit, 'withRelations' => $withRelations]);
 
         // Retrieve or save cached result
-//        return Cache::remember($cacheKey, 60*60*12, function () use ($class, $genreOrTheme) {
-            $models = match($class) {
+        return Cache::remember($cacheKey, 60*60*12, function () use ($class, $genreOrTheme, $limit, $withRelations) {
+            $models = match ($class) {
                 Anime::class => $this->anime($genreOrTheme)
-                    ->mostPopular(10, 3, (bool) $genreOrTheme?->is_nsfw)
-                    ->with(['genres', 'media', 'themes', 'translations'])
+                    ->mostPopular($limit, 3, (bool) $genreOrTheme?->is_nsfw)
+                    ->with($withRelations ? ['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'] : [])
                     ->get(),
                 Game::class => $this->game($genreOrTheme)
-                    ->mostPopular(10, 3, (bool)$genreOrTheme?->is_nsfw)
-                    ->with(['genres', 'media', 'themes', 'translations'])
+                    ->mostPopular($limit, 3, (bool)$genreOrTheme?->is_nsfw)
+                    ->with($withRelations ? ['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'] : [])
                     ->get(),
                 Manga::class => $this->manga($genreOrTheme)
-                    ->mostPopular(10, 3, (bool)$genreOrTheme?->is_nsfw)
-                    ->with(['genres', 'media', 'themes', 'translations'])
+                    ->mostPopular($limit, 3, (bool)$genreOrTheme?->is_nsfw)
+                    ->with($withRelations ? ['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'] : [])
                     ->get(),
                 // No default, so it errors out, and we can fix it.
             };
@@ -183,7 +185,7 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
             });
 
             return $this;
-//        });
+        });
     }
 
     /**
@@ -192,26 +194,27 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
      * @param string|null $class
      * @param Genre|Theme|null $genreOrTheme
      * @param int $limit
+     * @param bool $withRelations
      * @return ExploreCategory
      */
-    public function upcoming(string|null $class = null, Genre|Theme|null $genreOrTheme = null, int $limit = 10): ExploreCategory
+    public function upcoming(string|null $class = null, Genre|Theme|null $genreOrTheme = null, int $limit = 10, bool $withRelations = true): ExploreCategory
     {
-        $cacheKey = self::cacheKey(['name' => 'explore.upcoming', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'class' => $class, 'modelType' => $genreOrTheme?->getMorphClass(), 'model' => $genreOrTheme?->id, 'limit' => $limit]);
+        $cacheKey = self::cacheKey(['name' => 'upcoming', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'class' => $class, 'modelType' => $genreOrTheme?->getMorphClass(), 'modelID' => $genreOrTheme?->id, 'limit' => $limit, 'withRelations' => $withRelations]);
 
         // Retrieve or save cached result
-        return Cache::remember($cacheKey, 60*60*12, function () use ($class, $genreOrTheme, $limit) {
-            $models = match($class) {
+        return Cache::remember($cacheKey, 60*60*12, function () use ($class, $genreOrTheme, $limit, $withRelations) {
+            $models = match ($class) {
                 Anime::class => $this->anime($genreOrTheme)
                     ->upcoming($limit, (bool)$genreOrTheme?->is_nsfw)
-                    ->with(['translations', 'media'])
+                    ->with($withRelations ? ['translations', 'media'] : [])
                     ->get(),
                 Game::class => $this->game($genreOrTheme)
                     ->upcoming($limit, (bool)$genreOrTheme?->is_nsfw)
-                    ->with(['translations', 'media'])
+                    ->with($withRelations ? ['translations', 'media'] : [])
                     ->get(),
                 Manga::class => $this->manga($genreOrTheme)
                     ->upcoming($limit, (bool)$genreOrTheme?->is_nsfw)
-                    ->with(['translations', 'media'])
+                    ->with($withRelations ? ['translations', 'media'] : [])
                     ->get(),
                 // No default, so it errors out, and we can fix it.
             };
@@ -232,22 +235,23 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
      * @param string|null $class
      * @param Genre|Theme|null $genreOrTheme
      * @param int $limit
+     * @param bool $withRelations
      * @return ExploreCategory
      */
-    public function recentlyAdded(string|null $class = null, Genre|Theme|null $genreOrTheme = null, int $limit = 10): ExploreCategory
+    public function recentlyAdded(string|null $class = null, Genre|Theme|null $genreOrTheme = null, int $limit = 10, bool $withRelations = true): ExploreCategory
     {
         $models = match ($class) {
             Anime::class => $this->anime($genreOrTheme)
                 ->recentlyAdded($limit, (bool) $genreOrTheme?->is_nsfw)
-                ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
+                ->with($withRelations ? ['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'] : [])
                 ->get(),
             Game::class => $this->game($genreOrTheme)
                 ->recentlyAdded($limit, (bool) $genreOrTheme?->is_nsfw)
-                ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
+                ->with($withRelations ? ['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'] : [])
                 ->get(),
             Manga::class => $this->manga($genreOrTheme)
                 ->recentlyAdded($limit, (bool) $genreOrTheme?->is_nsfw)
-                ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
+                ->with($withRelations ? ['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'] : [])
                 ->get(),
         };
 
@@ -266,22 +270,23 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
      * @param string|null $class
      * @param Genre|Theme|null $genreOrTheme
      * @param int $limit
+     * @param bool $withRelations
      * @return ExploreCategory
      */
-    public function recentlyUpdated(string|null $class = null, Genre|Theme|null $genreOrTheme = null, int $limit = 10): ExploreCategory
+    public function recentlyUpdated(string|null $class = null, Genre|Theme|null $genreOrTheme = null, int $limit = 10, bool $withRelations = true): ExploreCategory
     {
-        $models = match($class) {
+        $models = match ($class) {
             Anime::class => $this->anime($genreOrTheme)
                 ->recentlyUpdated($limit, (bool) $genreOrTheme?->is_nsfw)
-                ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
+                ->with($withRelations ? ['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'] : [])
                 ->get(),
             Game::class => $this->game($genreOrTheme)
                 ->recentlyUpdated($limit, (bool) $genreOrTheme?->is_nsfw)
-                ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
+                ->with($withRelations ? ['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'] : [])
                 ->get(),
             Manga::class => $this->manga($genreOrTheme)
                 ->recentlyUpdated($limit, (bool) $genreOrTheme?->is_nsfw)
-                ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
+                ->with($withRelations ? ['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'] : [])
                 ->get(),
         };
 
@@ -300,18 +305,19 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
      * @param string|null $class
      * @param Genre|Theme|null $genreOrTheme
      * @param int $limit
+     * @param bool $withRelations
      * @return ExploreCategory
      */
-    public function recentlyFinished(string|null $class = null, Genre|Theme|null $genreOrTheme = null, int $limit = 10): ExploreCategory
+    public function recentlyFinished(string|null $class = null, Genre|Theme|null $genreOrTheme = null, int $limit = 10, bool $withRelations = true): ExploreCategory
     {
         $models = match ($class) {
             Anime::class => $this->anime($genreOrTheme)
                 ->recentlyFinished($limit, (bool) $genreOrTheme?->is_nsfw)
-                ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
+                ->with($withRelations ? ['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'] : [])
                 ->get(),
             Manga::class => $this->manga($genreOrTheme)
                 ->recentlyFinished($limit, (bool) $genreOrTheme?->is_nsfw)
-                ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
+                ->with($withRelations ? ['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'] : [])
                 ->get(),
         };
 
@@ -330,23 +336,24 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
      * @param string|null $class
      * @param Genre|Theme|null $genreOrTheme
      * @param int $limit
+     * @param bool $withRelations
      * @return ExploreCategory
      */
-    public function ongoing(string|null $class = null, Genre|Theme|null $genreOrTheme = null, int $limit = 10): ExploreCategory
+    public function ongoing(string|null $class = null, Genre|Theme|null $genreOrTheme = null, int $limit = 10, bool $withRelations = true): ExploreCategory
     {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'explore.animeContinuing', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'class' => $class, 'modelType' => $genreOrTheme?->getMorphClass(), 'model' => $genreOrTheme?->id]);
+        $cacheKey = self::cacheKey(['name' => 'ongoing', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'class' => $class, 'modelType' => $genreOrTheme?->getMorphClass(), 'modelID' => $genreOrTheme?->id, 'withRelations' => $withRelations]);
 
         // Retrieve or save cached result
-        return Cache::remember($cacheKey, 60*60*12, function () use ($class, $genreOrTheme, $limit) {
-            $models = match($class) {
+        return Cache::remember($cacheKey, 60*60*12, function () use ($class, $genreOrTheme, $limit, $withRelations) {
+            $models = match ($class) {
                 Anime::class => $this->anime($genreOrTheme)
                     ->ongoing($limit, (bool) $genreOrTheme?->is_nsfw)
-                    ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
+                    ->with($withRelations ? ['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'] : [])
                     ->get(),
                 Manga::class => $this->manga($genreOrTheme)
                     ->ongoing($limit, (bool) $genreOrTheme?->is_nsfw)
-                    ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
+                    ->with($withRelations ? ['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'] : [])
                     ->get(),
             };
 
@@ -366,27 +373,28 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
      * @param string|null $class
      * @param Genre|Theme|null $genreOrTheme
      * @param int $limit
+     * @param bool $withRelations
      * @return ExploreCategory
      */
-    public function currentSeason(string|null $class = null, Genre|Theme|null $genreOrTheme = null, int $limit = 10): ExploreCategory
+    public function currentSeason(string|null $class = null, Genre|Theme|null $genreOrTheme = null, int $limit = 10, bool $withRelations = true): ExploreCategory
     {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'explore.animeSeason', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'class' => $class, 'modelType' => $genreOrTheme?->getMorphClass(), 'model' => $genreOrTheme?->id]);
+        $cacheKey = self::cacheKey(['name' => 'currentSeason', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'class' => $class, 'modelType' => $genreOrTheme?->getMorphClass(), 'modelID' => $genreOrTheme?->id, 'withRelations' => $withRelations]);
 
         // Retrieve or save cached result
-        return Cache::remember($cacheKey, 60*60*12, function () use ($class, $genreOrTheme, $limit) {
-            $animeSeason = match($class) {
+        return Cache::remember($cacheKey, 60*60*12, function () use ($class, $genreOrTheme, $limit, $withRelations) {
+            $animeSeason = match ($class) {
                 Anime::class => $this->anime($genreOrTheme)
                     ->currentSeason($limit, (bool) $genreOrTheme?->is_nsfw)
-                    ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
+                    ->with($withRelations ? ['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'] : [])
                     ->get(),
                 Game::class => $this->game($genreOrTheme)
                     ->currentSeason($limit, (bool) $genreOrTheme?->is_nsfw)
-                    ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
+                    ->with($withRelations ? ['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'] : [])
                     ->get(),
                 Manga::class => $this->manga($genreOrTheme)
                     ->currentSeason($limit, (bool) $genreOrTheme?->is_nsfw)
-                    ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
+                    ->with($withRelations ? ['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'] : [])
                     ->get(),
             };
 
@@ -404,12 +412,13 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
      * Append the characters born today to the category's items.
      *
      * @param int $limit
+     * @param bool $withRelations
      * @return ExploreCategory
      */
-    public function charactersBornToday(int $limit = 10): ExploreCategory
+    public function charactersBornToday(int $limit = 10, bool $withRelations = true): ExploreCategory
     {
         $models = Character::bornToday($limit)
-            ->with(['media', 'translations'])
+            ->with($withRelations ? ['media', 'translations'] : [])
             ->get();
 
         $this->exploreCategoryItems = $models->map(function ($model) {
@@ -425,12 +434,13 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
      * Append the people born today to the category's items
      *
      * @param int $limit
+     * @param bool $withRelations
      * @return ExploreCategory
      */
-    public function peopleBornToday(int $limit = 10): ExploreCategory
+    public function peopleBornToday(int $limit = 10, bool $withRelations = true): ExploreCategory
     {
         $models = Person::bornToday($limit)
-            ->with(['media'])
+            ->with($withRelations ? ['media'] : [])
             ->get();
 
         $this->exploreCategoryItems = $models->map(function ($model) {

@@ -4,8 +4,6 @@ namespace App\Http\Resources;
 
 use App\Enums\ExploreCategoryTypes;
 use App\Models\ExploreCategory;
-use App\Models\Genre;
-use App\Models\Theme;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -79,9 +77,8 @@ class ExploreCategoryResource extends JsonResource
                 return [
                     'people' => [
                         'data' => PersonResourceIdentity::collection($this->resource
-                            ->peopleBornToday()
                             ->exploreCategoryItems
-                            ->pluck('model_id')
+                            ->pluck('model')
                         )
                     ]
                 ];
@@ -89,9 +86,8 @@ class ExploreCategoryResource extends JsonResource
                 return [
                     'characters' => [
                         'data' => CharacterResourceIdentity::collection($this->resource
-                            ->charactersBornToday()
                             ->exploreCategoryItems
-                            ->pluck('model_id')
+                            ->pluck('model')
                         )
                     ]
                 ];
@@ -100,7 +96,7 @@ class ExploreCategoryResource extends JsonResource
                     'genres' => [
                         'data' => GenreResourceIdentity::collection($this->resource
                             ->exploreCategoryItems
-                            ->pluck('model_id')
+                            ->pluck('model')
                         )
                     ]
                 ];
@@ -109,7 +105,7 @@ class ExploreCategoryResource extends JsonResource
                     'themes' => [
                         'data' => ThemeResourceIdentity::collection($this->resource
                             ->exploreCategoryItems
-                            ->pluck('model_id')
+                            ->pluck('model')
                         )
                     ]
                 ];
@@ -125,141 +121,22 @@ class ExploreCategoryResource extends JsonResource
                     ]
                 ];
 
-                $request->offsetUnset('include');
+                $request->merge(['include' => '']);
 
                 return $showSongs;
+            case ExploreCategoryTypes::UpcomingShows:
+            case ExploreCategoryTypes::NewShows:
+            case ExploreCategoryTypes::RecentlyUpdateShows:
+            case ExploreCategoryTypes::RecentlyFinishedShows:
+            case ExploreCategoryTypes::ContinuingShows:
+            case ExploreCategoryTypes::ShowsSeason:
+            case ExploreCategoryTypes::MostPopularShows:
             case ExploreCategoryTypes::Shows:
                 return [
                     'shows' => [
                         'data' => AnimeResourceIdentity::collection($this->resource
                             ->exploreCategoryItems
-                            ->pluck('model_id')
-                        )
-                    ]
-                ];
-            case ExploreCategoryTypes::UpcomingShows:
-                $model = null;
-
-                if (!empty($request->input('genre_id'))) {
-                    $model = Genre::find($request->input('genre_id'));
-                } else if (!empty($request->input('theme_id'))) {
-                    $model = Theme::find($request->input('theme_id'));
-                }
-
-                return [
-                    'shows' => [
-                        'data' => AnimeResourceIdentity::collection($this->resource
-                            ->upcomingShows($model)
-                            ->exploreCategoryItems
-                            ->pluck('model_id')
-                        )
-                    ]
-                ];
-            case ExploreCategoryTypes::NewShows:
-                $model = null;
-
-                if (!empty($request->input('genre_id'))) {
-                    $model = Genre::find($request->input('genre_id'));
-                } else if (!empty($request->input('theme_id'))) {
-                    $model = Theme::find($request->input('theme_id'));
-                }
-
-                return [
-                    'shows' => [
-                        'data' => AnimeResourceIdentity::collection($this->resource
-                            ->newShows($model)
-                            ->exploreCategoryItems
-                            ->pluck('model_id')
-                        )
-                    ]
-                ];
-            case ExploreCategoryTypes::RecentlyUpdateShows:
-                $model = null;
-
-                if (!empty($request->input('genre_id'))) {
-                    $model = Genre::find($request->input('genre_id'));
-                } else if (!empty($request->input('theme_id'))) {
-                    $model = Theme::find($request->input('theme_id'));
-                }
-
-                return [
-                    'shows' => [
-                        'data' => AnimeResourceIdentity::collection($this->resource
-                            ->recentlyUpdatedShows($model)
-                            ->exploreCategoryItems
-                            ->pluck('model_id')
-                        )
-                    ]
-                ];
-            case ExploreCategoryTypes::RecentlyFinishedShows:
-                $model = null;
-
-                if (!empty($request->input('genre_id'))) {
-                    $model = Genre::find($request->input('genre_id'));
-                } else if (!empty($request->input('theme_id'))) {
-                    $model = Theme::find($request->input('theme_id'));
-                }
-
-                return [
-                    'shows' => [
-                        'data' => AnimeResourceIdentity::collection($this->resource
-                            ->recentlyFinishedShows($model)
-                            ->exploreCategoryItems
-                            ->pluck('model_id')
-                        )
-                    ]
-                ];
-            case ExploreCategoryTypes::ContinuingShows:
-                $model = null;
-
-                if (!empty($request->input('genre_id'))) {
-                    $model = Genre::find($request->input('genre_id'));
-                } else if (!empty($request->input('theme_id'))) {
-                    $model = Theme::find($request->input('theme_id'));
-                }
-
-                return [
-                    'shows' => [
-                        'data' => AnimeResourceIdentity::collection($this->resource
-                            ->animeContinuing($model)
-                            ->exploreCategoryItems
-                            ->pluck('model_id')
-                        )
-                    ]
-                ];
-            case ExploreCategoryTypes::ShowsSeason:
-                $model = null;
-
-                if (!empty($request->input('genre_id'))) {
-                    $model = Genre::find($request->input('genre_id'));
-                } else if (!empty($request->input('theme_id'))) {
-                    $model = Theme::find($request->input('theme_id'));
-                }
-
-                return [
-                    'shows' => [
-                        'data' => AnimeResourceIdentity::collection($this->resource
-                            ->animeSeason($model)
-                            ->exploreCategoryItems
-                            ->pluck('model_id')
-                        )
-                    ]
-                ];
-            case ExploreCategoryTypes::MostPopularShows:
-                $model = null;
-
-                if (!empty($request->input('genre_id'))) {
-                   $model = Genre::find($request->input('genre_id'));
-                } else if (!empty($request->input('theme_id'))) {
-                    $model = Theme::find($request->input('theme_id'));
-                }
-
-                return [
-                    'shows' => [
-                        'data' => AnimeResourceIdentity::collection($this->resource
-                            ->mostPopularShows($model)
-                            ->exploreCategoryItems
-                            ->pluck('model_id')
+                            ->pluck('model')
                         )
                     ]
                 ];
@@ -267,134 +144,22 @@ class ExploreCategoryResource extends JsonResource
                 return [
                     'literatures' => [
                         'data' => LiteratureResourceIdentity::collection($this->resource
-                            ->exploreCategoryItems
-                            ->pluck('model_id')
-                        )
-                    ]
-                ];
-            case ExploreCategoryTypes::UpcomingLiteratures:
-                $model = null;
-
-                if (!empty($request->input('genre_id'))) {
-                    $model = Genre::find($request->input('genre_id'));
-                } else if (!empty($request->input('theme_id'))) {
-                    $model = Theme::find($request->input('theme_id'));
-                }
-
-                return [
-                    'literatures' => [
-                        'data' => LiteratureResourceIdentity::collection($this->resource
-                            ->upcomingLiterature($model)
-                            ->exploreCategoryItems
-                            ->pluck('model_id')
+                            ->pluck('model')
                         )
                     ]
                 ];
             case ExploreCategoryTypes::NewLiteratures:
-                $model = null;
-
-                if (!empty($request->input('genre_id'))) {
-                    $model = Genre::find($request->input('genre_id'));
-                } else if (!empty($request->input('theme_id'))) {
-                    $model = Theme::find($request->input('theme_id'));
-                }
-
-                return [
-                    'literatures' => [
-                        'data' => LiteratureResourceIdentity::collection($this->resource
-                            ->newLiterature($model)
-                            ->exploreCategoryItems
-                            ->pluck('model_id')
-                        )
-                    ]
-                ];
             case ExploreCategoryTypes::RecentlyUpdateLiteratures:
-                $model = null;
-
-                if (!empty($request->input('genre_id'))) {
-                    $model = Genre::find($request->input('genre_id'));
-                } else if (!empty($request->input('theme_id'))) {
-                    $model = Theme::find($request->input('theme_id'));
-                }
-
-                return [
-                    'literatures' => [
-                        'data' => LiteratureResourceIdentity::collection($this->resource
-                            ->recentlyUpdatedLiterature($model)
-                            ->exploreCategoryItems
-                            ->pluck('model_id')
-                        )
-                    ]
-                ];
             case ExploreCategoryTypes::RecentlyFinishedLiteratures:
-                $model = null;
-
-                if (!empty($request->input('genre_id'))) {
-                    $model = Genre::find($request->input('genre_id'));
-                } else if (!empty($request->input('theme_id'))) {
-                    $model = Theme::find($request->input('theme_id'));
-                }
-
-                return [
-                    'literatures' => [
-                        'data' => LiteratureResourceIdentity::collection($this->resource
-                            ->recentlyFinishedLiterature($model)
-                            ->exploreCategoryItems
-                            ->pluck('model_id')
-                        )
-                    ]
-                ];
             case ExploreCategoryTypes::ContinuingLiteratures:
-                $model = null;
-
-                if (!empty($request->input('genre_id'))) {
-                    $model = Genre::find($request->input('genre_id'));
-                } else if (!empty($request->input('theme_id'))) {
-                    $model = Theme::find($request->input('theme_id'));
-                }
-
-                return [
-                    'literatures' => [
-                        'data' => LiteratureResourceIdentity::collection($this->resource
-                            ->literatureContinuing($model)
-                            ->exploreCategoryItems
-                            ->pluck('model_id')
-                        )
-                    ]
-                ];
             case ExploreCategoryTypes::LiteraturesSeason:
-                $model = null;
-
-                if (!empty($request->input('genre_id'))) {
-                    $model = Genre::find($request->input('genre_id'));
-                } else if (!empty($request->input('theme_id'))) {
-                    $model = Theme::find($request->input('theme_id'));
-                }
-
-                return [
-                    'literatures' => [
-                        'data' => LiteratureResourceIdentity::collection($this->resource
-                            ->literatureSeason($model)
-                            ->exploreCategoryItems
-                            ->pluck('model_id')
-                        )
-                    ]
-                ];
             case ExploreCategoryTypes::MostPopularLiteratures:
-                $model = null;
-
-                if (!empty($request->input('genre_id'))) {
-                   $model = Genre::find($request->input('genre_id'));
-                } else if (!empty($request->input('theme_id'))) {
-                    $model = Theme::find($request->input('theme_id'));
-                }
-
+            case ExploreCategoryTypes::UpcomingLiteratures:
                 return [
                     'literatures' => [
                         'data' => LiteratureResourceIdentity::collection($this->resource
-                            ->mostPopularLiterature($model)
                             ->exploreCategoryItems
-                            ->pluck('model_id')
+                            ->pluck('model')
                         )
                     ]
                 ];
@@ -402,98 +167,20 @@ class ExploreCategoryResource extends JsonResource
                 return [
                     'games' => [
                         'data' => GameResourceIdentity::collection($this->resource
-                            ->exploreCategoryItems
-                            ->pluck('model_id')
-                        )
-                    ]
-                ];
-            case ExploreCategoryTypes::UpcomingGames:
-                $model = null;
-
-                if (!empty($request->input('genre_id'))) {
-                    $model = Genre::find($request->input('genre_id'));
-                } else if (!empty($request->input('theme_id'))) {
-                    $model = Theme::find($request->input('theme_id'));
-                }
-
-                return [
-                    'games' => [
-                        'data' => GameResourceIdentity::collection($this->resource
-                            ->upcomingGames($model)
-                            ->exploreCategoryItems
-                            ->pluck('model_id')
+                            ->pluck('model')
                         )
                     ]
                 ];
             case ExploreCategoryTypes::NewGames:
-                $model = null;
-
-                if (!empty($request->input('genre_id'))) {
-                    $model = Genre::find($request->input('genre_id'));
-                } else if (!empty($request->input('theme_id'))) {
-                    $model = Theme::find($request->input('theme_id'));
-                }
-
-                return [
-                    'games' => [
-                        'data' => GameResourceIdentity::collection($this->resource
-                            ->newGames($model)
-                            ->exploreCategoryItems
-                            ->pluck('model_id')
-                        )
-                    ]
-                ];
             case ExploreCategoryTypes::RecentlyUpdateGames:
-                $model = null;
-
-                if (!empty($request->input('genre_id'))) {
-                    $model = Genre::find($request->input('genre_id'));
-                } else if (!empty($request->input('theme_id'))) {
-                    $model = Theme::find($request->input('theme_id'));
-                }
-
-                return [
-                    'games' => [
-                        'data' => GameResourceIdentity::collection($this->resource
-                            ->recentlyUpdatedGames($model)
-                            ->exploreCategoryItems
-                            ->pluck('model_id')
-                        )
-                    ]
-                ];
             case ExploreCategoryTypes::GamesSeason:
-                $model = null;
-
-                if (!empty($request->input('genre_id'))) {
-                    $model = Genre::find($request->input('genre_id'));
-                } else if (!empty($request->input('theme_id'))) {
-                    $model = Theme::find($request->input('theme_id'));
-                }
-
-                return [
-                    'games' => [
-                        'data' => GameResourceIdentity::collection($this->resource
-                            ->gamesSeason($model)
-                            ->exploreCategoryItems
-                            ->pluck('model_id')
-                        )
-                    ]
-                ];
             case ExploreCategoryTypes::MostPopularGames:
-                $model = null;
-
-                if (!empty($request->input('genre_id'))) {
-                   $model = Genre::find($request->input('genre_id'));
-                } else if (!empty($request->input('theme_id'))) {
-                    $model = Theme::find($request->input('theme_id'));
-                }
-
+            case ExploreCategoryTypes::UpcomingGames:
                 return [
                     'games' => [
                         'data' => GameResourceIdentity::collection($this->resource
-                            ->mostPopularGames($model)
                             ->exploreCategoryItems
-                            ->pluck('model_id')
+                            ->pluck('model')
                         )
                     ]
                 ];
