@@ -316,7 +316,7 @@ class Character extends KModel implements HasMedia, Sitemapable
      */
     function people(): BelongsToMany
     {
-        // Pagination take distinct into account if we don't specify
+        // Pagination doesn't take distinct into account if we don't specify
         // a column explicitly. Noice.
         return $this->belongsToMany(Person::class, AnimeCast::class)
             ->distinct([Person::TABLE_NAME . '.id']);
@@ -347,7 +347,7 @@ class Character extends KModel implements HasMedia, Sitemapable
      */
     function anime(): BelongsToMany
     {
-        // Pagination take distinct into account if we don't specify
+        // Pagination doesn't take distinct into account if we don't specify
         // a column explicitly. Noice.
         return $this->belongsToMany(Anime::class, AnimeCast::class)
             ->distinct([Anime::TABLE_NAME . '.id']);
@@ -378,7 +378,7 @@ class Character extends KModel implements HasMedia, Sitemapable
      */
     function manga(): BelongsToMany
     {
-        // Pagination take distinct into account if we don't specify
+        // Pagination doesn't take distinct into account if we don't specify
         // a column explicitly. Noice.
         return $this->belongsToMany(Manga::class, MangaCast::class)
             ->distinct([Manga::TABLE_NAME . '.id']);
@@ -409,7 +409,7 @@ class Character extends KModel implements HasMedia, Sitemapable
      */
     function games(): BelongsToMany
     {
-        // Pagination take distinct into account if we don't specify
+        // Pagination doesn't take distinct into account if we don't specify
         // a column explicitly. Noice.
         return $this->belongsToMany(Game::class, GameCast::class)
             ->distinct([Game::TABLE_NAME . '.id']);

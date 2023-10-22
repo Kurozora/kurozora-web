@@ -39,33 +39,28 @@ class KModel extends Model
     static function cacheKey(array $options = []): string
     {
         // Start with the table name
-        $key = get_called_class()::TABLE_NAME;
+        $keyParts = [get_called_class()::TABLE_NAME];
 
-        // Add a name
-        if (isset($options['name'])) $key .= '-' . $options['name'];
+        // Iterate through the $options array
+        foreach ($options as $key => $value) {
+            // Skip keys with empty values (excluding false, -1, etc.)
+            if ($value === null || $value === '') {
+                continue;
+            }
 
-        // Add an ID
-        if (isset($options['id'])) $key .= '-' . $options['id'];
+            // If the value is an array, convert it to a string representation
+            if (is_array($value)) {
+                $value = implode(',', $value);
+            }
 
-        // Add a tv rating
-        if (isset($options['tvRating'])) $key .= '-' . $options['tvRating'];
+            // Append the key and value to $keyParts
+            $keyParts[] = $key . '=' . $value;
+        }
 
-        // Add a limit
-        if (isset($options['limit'])) $key .= '-' . $options['limit'];
+        // Concatenate the key parts
+        $key = implode(';', $keyParts);
 
-        // Add a page
-        if (isset($options['page'])) $key .= '-' . $options['page'];
-
-        // Add a reversed
-        if (isset($options['reversed'])) $key .= '-' . $options['reversed'];
-
-        // Add a where
-        if (isset($options['where'])) $key .= '-' . implode(',', array_map('implode', $options['where']));
-
-        // Add a whereBetween
-        if (isset($options['whereBetween'])) $key .= '-' . implode(',', $options['whereBetween']);
-
-        return $key;
+        return md5($key);
     }
 
     /**
@@ -75,6 +70,6 @@ class KModel extends Model
      */
     static function getTvRatingSettings(): int
     {
-        return auth()->user()?->tv_rating ?? 4;
+        return config('app.tv_rating') ?? 4;
     }
 }

@@ -87,11 +87,11 @@ class SeasonsSection extends Component
             return collect();
         }
 
-        $seasonOfYearKey = match($this->class) {
+        $seasonOfYearKey = match ($this->class) {
            Game::class, Manga::class => 'publication_season',
             default => 'air_season'
         };
-        $startedAtKey = match($this->class) {
+        $startedAtKey = match ($this->class) {
            Game::class => 'published_at',
             default => 'started_at'
         };

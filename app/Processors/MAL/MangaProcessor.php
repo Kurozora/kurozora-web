@@ -392,7 +392,7 @@ class MangaProcessor extends CustomItemProcessor
      */
     private function getStatus(string $value): int
     {
-        $value = match(strtolower($value)) {
+        $value = match (strtolower($value)) {
             'not yet published' => 'Not Published Yet',
             'publishing' => 'Currently Publishing',
             'finished' => 'Finished Publishing',
