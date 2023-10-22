@@ -25,42 +25,27 @@ class AnimeResource extends JsonResource
     {
         $resource = AnimeResourceBasic::make($this->resource)->toArray($request);
 
-        if ($request->input('include')) {
-            $includes = array_unique(explode(',', $request->input('include')));
+        if ($includeInput = $request->input('include')) {
+            // Include relation propagates to nested Resource objects.
+            // To avoid loading unnecessary relations, we set it to
+            // an empty value.
+            $request->merge(['include' => '']);
+            $includes = array_unique(explode(',', $includeInput));
 
             $relationships = [];
             foreach ($includes as $include) {
-                switch ($include) {
-                    case 'cast':
-                        $relationships = array_merge($relationships, $this->getCastRelationship());
-                        break;
-                    case 'characters':
-                        $relationships = array_merge($relationships, $this->getCharactersRelationship());
-                        break;
-                    case 'related-shows':
-                        $relationships = array_merge($relationships, $this->getRelatedShowsRelationship());
-                        break;
-                    case 'related-literatures':
-                        $relationships = array_merge($relationships, $this->getRelatedLiteraturesRelationship());
-                        break;
-                    case 'related-games':
-                        $relationships = array_merge($relationships, $this->getRelatedGamesRelationship());
-                        break;
-                    case 'seasons':
-                        $relationships = array_merge($relationships, $this->getSeasonsRelationship());
-                        break;
-                    case 'songs':
-                        $relationships = array_merge($relationships, $this->getSongsRelationship());
-                        break;
-                    case 'staff':
-                        $relationships = array_merge($relationships, $this->getStaffRelationship());
-                        break;
-                    case 'studios':
-                        $request->merge(['include' => 'shows']);
-                        $request->merge(['anime' => $this->resource]);
-                        $relationships = array_merge($relationships, $this->getStudiosRelationship());
-                        break;
-                }
+                $relationships = match ($include) {
+                    'cast' => array_merge($relationships, $this->getCastRelationship()),
+                    'characters' => array_merge($relationships, $this->getCharactersRelationship()),
+                    'related-shows' => array_merge($relationships, $this->getRelatedShowsRelationship()),
+                    'related-literatures' => array_merge($relationships, $this->getRelatedLiteraturesRelationship()),
+                    'related-games' => array_merge($relationships, $this->getRelatedGamesRelationship()),
+                    'seasons' => array_merge($relationships, $this->getSeasonsRelationship()),
+                    'songs' => array_merge($relationships, $this->getSongsRelationship()),
+                    'staff' => array_merge($relationships, $this->getStaffRelationship()),
+                    'studios' => array_merge($relationships, $this->getStudiosRelationship()),
+                    default => $relationships
+                };
             }
 
             $resource = array_merge($resource, ['relationships' => $relationships]);
