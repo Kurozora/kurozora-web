@@ -29,20 +29,20 @@ class EpisodeResource extends JsonResource
         $resource = array_merge($resource, [
             'attributes'    => [
                 'poster'        => ImageResource::make(
-                    $this->resource->season->getFirstMedia(MediaCollection::Poster) ??
-                    $this->resource->anime->getFirstMedia(MediaCollection::Poster)
+                    $this->resource->season->media->firstWhere('collection_name', '=', MediaCollection::Poster) ??
+                    $this->resource->anime->media->firstWhere('collection_name', '=', MediaCollection::Poster)
                 ),
                 'banner'        => ImageResource::make(
-                    $this->resource->getFirstMedia(MediaCollection::Banner) ??
-                    $this->resource->anime->getFirstMedia(MediaCollection::Banner) ??
-                    $this->resource->anime->getFirstMedia(MediaCollection::Poster)
+                    $this->resource->media->firstWhere('collection_name', '=', MediaCollection::Banner) ??
+                    $this->resource->anime->media->firstWhere('collection_name', '=', MediaCollection::Banner) ??
+                    $this->resource->anime->media->firstWhere('collection_name', '=', MediaCollection::Poster)
                 ),
                 'number'        => $this->resource->number,
                 'numberTotal'   => $this->resource->number_total,
                 'title'         => $this->resource->title,
                 'synopsis'      => $this->resource->synopsis,
                 'duration'      => $this->resource->duration_string,
-                'stats'         => MediaStatsResource::make($this->resource->mediaStats),
+                'stats'         => MediaStatsResource::make($this->resource->mediaStat),
                 'videos'        => VideoResource::collection($this->resource->videos),
                 'isFiller'      => $this->resource->is_filler,
                 'isNsfw'        => $this->resource->is_nsfw,
@@ -57,19 +57,20 @@ class EpisodeResource extends JsonResource
             ]
         ]);
 
-        if ($request->input('include')) {
-            $includes = array_unique(explode(',', $request->input('include')));
+        if ($includeInput = $request->input('include')) {
+            // Include relation propagates to nested Resource objects.
+            // To avoid loading unnecessary relations, we set it to
+            // an empty value.
+            $request->merge(['include' => '']);
+            $includes = array_unique(explode(',', $includeInput));
 
             $relationships = [];
             foreach ($includes as $include) {
-                switch ($include) {
-                    case 'show':
-                        $relationships = array_merge($relationships, $this->getShowRelationship());
-                        break;
-                    case 'season':
-                        $relationships = array_merge($relationships, $this->getSeasonRelationship());
-                        break;
-                }
+                $relationships = match ($include) {
+                    'show' => array_merge($relationships, $this->getShowRelationship()),
+                    'season' => array_merge($relationships, $this->getSeasonRelationship()),
+                    default => $relationships
+                };
             }
 
             $resource = array_merge($resource, ['relationships' => $relationships]);

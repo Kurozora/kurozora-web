@@ -15,19 +15,54 @@ use App\Models\MediaRating;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class EpisodeController extends Controller
 {
     /**
      * Returns the information for an episode.
      *
+     * @param Request $request
      * @param Episode $episode
      * @return JsonResponse
      */
-    public function details(Episode $episode): JsonResponse
+    public function details(Request $request, Episode $episode): JsonResponse
     {
         // Call the EpisodeViewed event
         EpisodeViewed::dispatch($episode);
+
+        $episode->load([
+            'anime' => function ($query) {
+                $query->with(['media']);
+            },
+            'media',
+            'mediaStat',
+            'season' => function ($query) {
+                $query->with(['media']);
+            },
+            'translations',
+            'videos',
+        ]);
+
+        $includeArray = [];
+        if ($includeInput = $request->input('include')) {
+            $includes = array_unique(explode(',', $includeInput));
+            foreach ($includes as $include) {
+                switch ($include) {
+                    case 'show':
+                        $includeArray['anime'] = function ($query) {
+                            $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating']);
+                        };
+                        break;
+                    case 'season':
+                        $includeArray['season'] = function ($query) {
+                            $query->with(['media', 'translations']);
+                        };
+                        break;
+                };
+            }
+        }
+        $episode->loadMissing($includeArray);
 
         return JSONResult::success([
             'data' => EpisodeResource::collection([$episode])
@@ -139,7 +174,13 @@ class EpisodeController extends Controller
     public function reviews(GetEpisodeReviewsRequest $request, Episode $episode): JsonResponse
     {
         $reviews = $episode->mediaRatings()
-            ->paginate($data['limit'] ?? 25);
+            ->with([
+                'user' => function ($query) {
+                    $query->with(['media'])
+                        ->withCount(['followers', 'following']);
+                }
+            ])
+            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $reviews->nextPageUrl());
