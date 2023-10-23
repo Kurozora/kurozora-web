@@ -17,8 +17,9 @@ class GenreController extends Controller
      */
     public function index(): JsonResponse
     {
-        // Get all genres and format them
+        // Get all genres
         $genres = Genre::orderBy('name')
+            ->with(['media'])
             ->get();
 
         // Show genres in response
@@ -35,6 +36,8 @@ class GenreController extends Controller
      */
     public function details(Genre $genre): JsonResponse
     {
+        $genre->load(['media']);
+
         // Show genre details
         return JSONResult::success([
             'data' => GenreResource::collection([$genre])
