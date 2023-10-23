@@ -17,8 +17,9 @@ class ThemeController extends Controller
      */
     public function index(): JsonResponse
     {
-        // Get all themes and format them
+        // Get all themes
         $themes = Theme::orderBy('name')
+            ->with(['media'])
             ->get();
 
         // Show themes in response
@@ -35,6 +36,8 @@ class ThemeController extends Controller
      */
     public function details(Theme $theme): JsonResponse
     {
+        $theme->load(['media']);
+
         // Show theme details
         return JSONResult::success([
             'data' => ThemeResource::collection([$theme])

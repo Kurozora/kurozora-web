@@ -17,13 +17,13 @@ class LanguageController extends Controller
      */
     public function index(): JsonResponse
     {
-        // Get all languages and format them
-        $allLanguages = Language::get()->map(function($language) {
-            return LanguageResource::make($language);
-        });
+        // Get all languages
+        $languages = Language::get();
 
         // Show languages in response
-        return JSONResult::success(['data' => $allLanguages]);
+        return JSONResult::success([
+            'data' => LanguageResource::collection($languages)
+        ]);
     }
 
     /**
