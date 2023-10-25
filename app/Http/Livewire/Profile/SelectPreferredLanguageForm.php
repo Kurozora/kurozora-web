@@ -3,8 +3,10 @@
 namespace App\Http\Livewire\Profile;
 
 use App\Contracts\Web\Profile\UpdatesUserPreferredLanguage;
+use App\Models\Language;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Support\Collection;
 use Illuminate\View\View;
 use Livewire\Component;
 
@@ -16,6 +18,13 @@ class SelectPreferredLanguageForm extends Component
      * @var array
      */
     public array $state = [];
+
+    /**
+     * Determines whether to load the section.
+     *
+     * @var bool $readyToLoad
+     */
+    public $readyToLoad = false;
 
     /**
      * Prepare the component.
@@ -34,13 +43,37 @@ class SelectPreferredLanguageForm extends Component
      *
      * @param UpdatesUserPreferredLanguage $updater
      */
-    public function updatePreferredLanguage(UpdatesUserPreferredLanguage $updater)
+    public function updatePreferredLanguage(UpdatesUserPreferredLanguage $updater): void
     {
         $this->resetErrorBag();
 
         $updater->update(auth()->user(), $this->state);
 
         $this->emit('saved');
+    }
+
+    /**
+     * Sets the property to load the section.
+     *
+     * @return void
+     */
+    public function loadSection(): void
+    {
+        $this->readyToLoad = true;
+    }
+
+    /**
+     * Get the languages.
+     *
+     * @return Collection
+     */
+    public function getLanguagesProperty(): Collection
+    {
+        if (!$this->readyToLoad) {
+            return collect();
+        }
+
+        return Language::all();
     }
 
     /**

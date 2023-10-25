@@ -31,6 +31,23 @@ class SignOutOtherSessionsForm extends Component
     public string $password = '';
 
     /**
+     * Determines whether to load the section.
+     *
+     * @var bool $readyToLoad
+     */
+    public $readyToLoad = false;
+
+    /**
+     * Sets the property to load the section.
+     *
+     * @return void
+     */
+    public function loadSection(): void
+    {
+        $this->readyToLoad = true;
+    }
+
+    /**
      * Confirm that the user would like to sign out from other browser sessions.
      *
      * @return void
@@ -101,17 +118,27 @@ class SignOutOtherSessionsForm extends Component
      */
     public function getSessionsProperty(): Collection
     {
+        if (!$this->readyToLoad) {
+            return collect();
+        }
+
         if (config('session.driver') !== 'database') {
             return collect();
         }
 
-        $otherSessions = Session::where('user_id', auth()->user()->getAuthIdentifier())
-            ->where('id', '!=', request()->session()->getId())
+        $otherSessions = Session::with(['session_attribute'])
+            ->where([
+                ['id', '!=', request()->session()->getId()],
+                ['user_id', '=', auth()->user()->getAuthIdentifier()],
+            ])
             ->orderBy('last_activity', 'desc')
             ->get();
 
-        $currentSession = Session::where('user_id', auth()->user()->getAuthIdentifier())
-            ->where('id', request()->session()->getId())
+        $currentSession = Session::with(['session_attribute'])
+            ->where([
+                ['id', '=', request()->session()->getId()],
+                ['user_id', '=', auth()->user()->getAuthIdentifier()],
+            ])
             ->first();
 
         return $otherSessions->prepend($currentSession)

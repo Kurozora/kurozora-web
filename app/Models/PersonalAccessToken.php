@@ -18,15 +18,6 @@ class PersonalAccessToken extends SanctumPersonalAccessToken
     protected $table = self::TABLE_NAME;
 
     /**
-     * The relations to eager load on every query.
-     *
-     * @var array
-     */
-    protected $with = [
-        'session_attribute',
-    ];
-
-    /**
      * The user relationship of the access token.
      *
      * @return BelongsTo

@@ -3,8 +3,10 @@
 namespace App\Http\Livewire\Profile;
 
 use App\Contracts\Web\Profile\UpdatesUserPreferredTvRating;
+use App\Models\TvRating;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Support\Collection;
 use Illuminate\View\View;
 use Livewire\Component;
 
@@ -16,6 +18,13 @@ class SelectPreferredTvRatingForm extends Component
      * @var array
      */
     public array $state = [];
+
+    /**
+     * Determines whether to load the section.
+     *
+     * @var bool $readyToLoad
+     */
+    public $readyToLoad = false;
 
     /**
      * Prepare the component.
@@ -30,6 +39,16 @@ class SelectPreferredTvRatingForm extends Component
     }
 
     /**
+     * Sets the property to load the section.
+     *
+     * @return void
+     */
+    public function loadSection(): void
+    {
+        $this->readyToLoad = true;
+    }
+
+    /**
      * Update the user's preferred TV rating.
      *
      * @param UpdatesUserPreferredTvRating $updater
@@ -41,6 +60,21 @@ class SelectPreferredTvRatingForm extends Component
         $updater->update(auth()->user(), $this->state);
 
         $this->emit('saved');
+    }
+
+    /**
+     * Get the tv ratings.
+     *
+     * @return Collection
+     */
+    public function getTvRatingsProperty(): Collection
+    {
+        if (!$this->readyToLoad) {
+            return collect();
+        }
+
+        return TvRating::where('id', '!=', 1)
+            ->get();
     }
 
     /**

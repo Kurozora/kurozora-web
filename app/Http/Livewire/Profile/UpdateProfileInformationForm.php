@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Profile;
 
 use App\Contracts\UpdatesUserProfileInformation;
 use App\Enums\MediaCollection;
+use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\View\View;
@@ -58,6 +59,17 @@ class UpdateProfileInformationForm extends Component
             'nickname' => $state['username'],
             'biography' => $state['biography']
         ];
+    }
+
+    /**
+     * Get the current user of the application.
+     *
+     * @return User|null
+     */
+    public function getUserProperty(): User|null
+    {
+        return auth()->user()
+            ->load(['media']);
     }
 
     /**

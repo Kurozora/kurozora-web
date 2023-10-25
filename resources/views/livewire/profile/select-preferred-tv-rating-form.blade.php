@@ -1,4 +1,4 @@
-<x-form-section submit="updatePreferredTvRating">
+<x-form-section submit="updatePreferredTvRating" wire:init="loadSection">
     <x-slot:title>
         {{ __('Update TV Rating') }}
     </x-slot:title>
@@ -18,7 +18,7 @@
             <div class="mt-5">
                 <x-select id="tv_rating" wire:model.defer="state.tv_rating">
                     <option value="-1">{{ __('Allow All Shows') }}</option>
-                    @foreach (App\Models\TvRating::all()->where('id', '!=', 1) as $tvRating)
+                    @foreach ($this->tvRatings as $tvRating)
                         <option value="{{ $tvRating->weight }}">{{ $tvRating->full_name }}</option>
                     @endforeach
                 </x-select>

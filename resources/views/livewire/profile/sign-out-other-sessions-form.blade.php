@@ -1,4 +1,4 @@
-<x-action-section>
+<x-action-section wire:init="loadSection">
     <x-slot:title>
         {{ __('Browser Sessions') }}
     </x-slot:title>

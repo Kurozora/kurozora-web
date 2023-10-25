@@ -33,15 +33,6 @@ class Session extends KModel
     public $timestamps = false;
 
     /**
-     * The relations to eager load on every query.
-     *
-     * @var array
-     */
-    protected $with = [
-        'session_attribute',
-    ];
-
-    /**
      * Returns the user that owns the session.
      *
      * @return BelongsTo

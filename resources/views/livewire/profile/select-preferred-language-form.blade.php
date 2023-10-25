@@ -1,4 +1,4 @@
-<x-form-section submit="updatePreferredLanguage">
+<x-form-section submit="updatePreferredLanguage" wire:init="loadSection">
     <x-slot:title>
         {{ __('Update Language') }}
     </x-slot:title>
@@ -18,7 +18,7 @@
 
             <div class="mt-5">
                 <x-select id="language" wire:model.defer="state.language">
-                    @foreach (App\Models\Language::all() as $language)
+                    @foreach ($this->languages as $language)
                         <option value="{{ $language->code }}">{{ $language->name }}</option>
                     @endforeach
                 </x-select>

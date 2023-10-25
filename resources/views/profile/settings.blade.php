@@ -21,7 +21,7 @@
         <x-hr class="hidden sm:block" />
 
         <div class="sm:mt-0">
-            <livewire:profile.select-preferred-language-form />
+            <livewire:profile.select-preferred-language-form  />
         </div>
 
         <x-hr class="hidden sm:block" />

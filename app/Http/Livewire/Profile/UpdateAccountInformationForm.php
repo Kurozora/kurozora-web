@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Profile;
 
 use App\Contracts\UpdatesUserAccountInformation;
+use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\View\View;
@@ -10,7 +11,6 @@ use Livewire\Component;
 
 class UpdateAccountInformationForm extends Component
 {
-
     /**
      * The component's state.
      *
@@ -58,6 +58,16 @@ class UpdateAccountInformationForm extends Component
         $updater->update(auth()->user(), $attributes);
 
         $this->emit('saved');
+    }
+
+    /**
+     * Get the current user of the application.
+     *
+     * @return User|null
+     */
+    public function getUserProperty(): User|null
+    {
+        return auth()->user();
     }
 
     /**
