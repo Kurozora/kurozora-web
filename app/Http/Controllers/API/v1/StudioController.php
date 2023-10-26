@@ -14,19 +14,49 @@ use App\Http\Resources\LiteratureResourceIdentity;
 use App\Http\Resources\StudioResource;
 use App\Models\Studio;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class StudioController extends Controller
 {
     /**
      * Shows studio details
      *
+     * @param Request $request
      * @param Studio $studio
      * @return JsonResponse
      */
-    public function details(Studio $studio): JsonResponse
+    public function details(Request $request, Studio $studio): JsonResponse
     {
         // Call the StudioViewed event
         StudioViewed::dispatch($studio);
+
+        $studio->load(['media']);
+
+        $includeArray = [];
+        if ($includeInput = $request->input('include')) {
+            $includes = array_unique(explode(',', $includeInput));
+
+            foreach ($includes as $include) {
+                switch ($include) {
+                    case 'shows':
+                        $includeArray['anime'] = function ($query) {
+                            $query->limit(Studio::MAXIMUM_RELATIONSHIPS_LIMIT);
+                        };
+                        break;
+                    case 'literatures':
+                        $includeArray['manga'] = function ($query) {
+                            $query->limit(Studio::MAXIMUM_RELATIONSHIPS_LIMIT);
+                        };
+                        break;
+                    case 'games':
+                        $includeArray['games'] = function ($query) {
+                            $query->limit(Studio::MAXIMUM_RELATIONSHIPS_LIMIT);
+                        };
+                        break;
+                }
+            }
+        }
+        $studio->loadMissing($includeArray);
 
         // Show studio details
         return JSONResult::success([
@@ -46,7 +76,9 @@ class StudioController extends Controller
         $data = $request->validated();
 
         // Get the anime
-        $anime = $studio->getAnime($data['limit'] ?? 25, $data['page'] ?? 1);
+        $anime = $studio->anime()
+            ->orderBy('started_at')
+            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $anime->nextPageUrl());
@@ -69,7 +101,9 @@ class StudioController extends Controller
         $data = $request->validated();
 
         // Get the literatures
-        $literatures = $studio->getManga($data['limit'] ?? 25, $data['page'] ?? 1);
+        $literatures = $studio->manga()
+            ->orderBy('started_at')
+            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $literatures->nextPageUrl());
@@ -92,7 +126,9 @@ class StudioController extends Controller
         $data = $request->validated();
 
         // Get the games
-        $games = $studio->getGame($data['limit'] ?? 25, $data['page'] ?? 1);
+        $games = $studio->games()
+            ->orderBy('published_at')
+            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $games->nextPageUrl());

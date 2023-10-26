@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Anime;
 use App\Models\Studio;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -32,7 +31,9 @@ class StudioResource extends JsonResource
             $relationships = [];
             foreach ($includes as $include) {
                 $relationships = match ($include) {
-                    'shows' => array_merge($relationships, $this->getAnimeRelationship($request->input('anime'))),
+                    'shows' => array_merge($relationships, $this->getAnimeRelationship()),
+                    'games' => array_merge($relationships, $this->getGamesRelationship()),
+                    'literatures' => array_merge($relationships, $this->getMangaRelationship()),
                     default => $relationships,
                 };
             }
@@ -46,20 +47,44 @@ class StudioResource extends JsonResource
     /**
      * Returns the anime relationship for the resource.
      *
-     * @param ?Anime $excludingAnime
      * @return array
      */
-    protected function getAnimeRelationship(?Anime $excludingAnime = null): array
+    protected function getAnimeRelationship(): array
     {
-        $whereRules = [];
-        if ($excludingAnime) {
-            array_push($whereRules, ['animes.id', '!=', $excludingAnime->id]);
-        }
-
         return [
             'shows' => [
                 'href' => route('api.studios.anime', $this->resource, false),
-                'data' => AnimeResourceIdentity::collection($this->resource->getAnime(Studio::MAXIMUM_RELATIONSHIPS_LIMIT, where: $whereRules))
+                'data' => AnimeResourceIdentity::collection($this->resource->anime)
+            ]
+        ];
+    }
+
+    /**
+     * Returns the manga relationship for the resource.
+     *
+     * @return array
+     */
+    protected function getMangaRelationship(): array
+    {
+        return [
+            'literatures' => [
+                'href' => route('api.studios.literatures', $this->resource, false),
+                'data' => LiteratureResourceIdentity::collection($this->resource->manga)
+            ]
+        ];
+    }
+
+    /**
+     * Returns the games relationship for the resource.
+     *
+     * @return array
+     */
+    protected function getGamesRelationship(): array
+    {
+        return [
+            'games' => [
+                'href' => route('api.studios.games', $this->resource, false),
+                'data' => GameResourceIdentity::collection($this->resource->games)
             ]
         ];
     }

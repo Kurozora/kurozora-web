@@ -26,25 +26,26 @@ class StudioResourceBasic extends JsonResource
     public function toArray(Request $request): array
     {
         $resource = StudioResourceIdentity::make($this->resource)->toArray($request);
+
         return array_merge($resource, [
             'attributes'    => [
                 'slug'          => $this->resource->slug,
-                'profile'       => ImageResource::make($this->resource->getFirstMedia(MediaCollection::Profile)),
-                'banner'        => ImageResource::make($this->resource->getFirstMedia(MediaCollection::Banner)),
-                'logo'          => ImageResource::make($this->resource->getFirstMedia(MediaCollection::Logo)),
+                'profile'       => ImageResource::make($this->resource->media->firstWhere('collection_name','=', MediaCollection::Profile)),
+                'banner'        => ImageResource::make($this->resource->media->firstWhere('collection_name','=', MediaCollection::Banner)),
+                'logo'          => ImageResource::make($this->resource->media->firstWhere('collection_name','=', MediaCollection::Logo)),
                 'name'          => $this->resource->name,
                 'about'         => $this->resource->about,
                 'address'       => $this->resource->address,
                 'founded'       => $this->resource->founded?->timestamp,
                 'websiteUrls'   => $this->resource->website_urls,
                 'isProducer'    => $this->whenPivotLoaded(MediaStudio::TABLE_NAME, function () {
-                    return $this->pivot->is_producer;
+                    return $this->resource->pivot->is_producer;
                 }),
                 'isStudio'      => $this->whenPivotLoaded(MediaStudio::TABLE_NAME, function () {
-                    return $this->pivot->is_studio;
+                    return $this->resource->pivot->is_studio;
                 }),
                 'isLicensor'    => $this->whenPivotLoaded(MediaStudio::TABLE_NAME, function () {
-                    return $this->pivot->is_licensor;
+                    return $this->resource->pivot->is_licensor;
                 }),
             ]
         ]);
