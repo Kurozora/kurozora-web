@@ -12,7 +12,7 @@ class ExploreCategoryResource extends JsonResource
     /**
      * The resource instance.
      *
-     * @var ExploreCategory
+     * @var ExploreCategory $resource
      */
     public $resource;
 

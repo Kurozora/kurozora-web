@@ -89,30 +89,15 @@ class AnimeResourceBasic extends JsonResource
      */
     protected function getUserSpecificDetails(): array
     {
-        $user = auth()->user();
-
         // Get the user rating for this Anime
-        $givenRating = $this->resource->mediaRatings()
-            ->firstWhere('user_id', $user->id);
-
-        // Get the current library status
-        $libraryEntry = $user->whereTracked(Anime::class)
-            ->firstWhere([
-                ['trackable_id', $this->resource->id],
-                ['trackable_type', $this->resource->getMorphClass()]
-            ]);
-
-        // Get various statuses
-        $currentLibraryStatus = $libraryEntry ? $libraryEntry->pivot->status : null;
-        $favoriteStatus = $libraryEntry ? $this->resource->isFavoritedBy($user) : null;
-        $reminderStatus = $libraryEntry ? $user->reminderAnime()->wherePivot('anime_id', $this->resource->id)->exists() : null;
+        $givenRating = $this->resource->mediaRatings->first();
 
         // Return the array
         return [
             'givenRating'       => (double) $givenRating?->rating,
-            'libraryStatus'     => $currentLibraryStatus,
-            'isFavorited'       => $favoriteStatus,
-            'isReminded'        => $reminderStatus
+            'libraryStatus'     => $this->resource->pivot->status ?? $this->resource->library->first()->status,
+            'isFavorited'       => (bool) $this->resource->isFavorited,
+            'isReminded'        => $this->resource->isReminded,
         ];
     }
 }

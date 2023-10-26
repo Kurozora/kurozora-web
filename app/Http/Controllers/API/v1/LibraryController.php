@@ -20,6 +20,7 @@ use App\Models\Anime;
 use App\Models\Game;
 use App\Models\Manga;
 use App\Models\UserLibrary;
+use App\Traits\Model\Remindable;
 use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
 use BenSampo\Enum\Exceptions\InvalidEnumMemberException;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -62,7 +63,27 @@ class LibraryController extends Controller
         // Retrieve the model from the user's library with the correct status
         $model = $user->whereTracked($morphClass)
             ->sortViaRequest($request)
+            ->with([
+                'genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating', 'mediaRatings' => function ($query) use ($user) {
+                    $query->where([
+                        ['user_id', '=', $user->id]
+                    ]);
+                }
+            ])
             ->wherePivot('status', '=', $userLibraryStatus->value)
+            ->withExists([
+                'favoriters as isFavorited' => function ($query) use ($user) {
+                    $query->where('user_id', '=', $user->id);
+                },
+            ])
+            ->when(in_array(Remindable::class, class_uses_recursive($morphClass)), function ($query) use ($user) {
+                // Add your logic here if the trait is used
+                $query->withExists([
+                    'reminderers as isReminded' => function ($query) use ($user) {
+                        $query->where('user_id', '=', $user->id);
+                    },
+                ]);
+            })
             ->paginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
