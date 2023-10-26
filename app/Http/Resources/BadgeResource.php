@@ -33,7 +33,7 @@ class BadgeResource extends JsonResource
                 'description'       => $this->resource->description,
                 'textColor'         => $this->resource->text_color,
                 'backgroundColor'   => $this->resource->background_color,
-                'symbol'            => ImageResource::make($this->resource->getFirstMedia(MediaCollection::Symbol)),
+                'symbol'            => ImageResource::make($this->resource->media->firstWhere('collection_name', '=', MediaCollection::Symbol)),
             ]
         ];
     }

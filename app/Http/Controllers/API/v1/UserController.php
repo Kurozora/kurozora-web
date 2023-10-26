@@ -14,6 +14,8 @@ use App\Http\Resources\UserResource;
 use App\Http\Resources\UserResourceIdentity;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
@@ -30,6 +32,14 @@ class UserController extends Controller
     {
         // Call the UserViewed event
         UserViewed::dispatch($user);
+
+        $user->load([
+            'badges' => function ($query) {
+                $query->with(['media']);
+            },
+            'media'
+        ])
+            ->loadCount(['followers', 'following']);
 
         // Show profile response
         return JSONResult::success([
