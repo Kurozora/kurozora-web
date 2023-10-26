@@ -8,6 +8,7 @@ use App\Rules\ValidateVendorName;
 use App\Traits\Model\HasSessionAttribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class Session extends KModel
 {
@@ -40,6 +41,16 @@ class Session extends KModel
     function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * The session attribute of the personal access token.
+     *
+     * @return morphOne
+     */
+    public function session_attribute(): MorphOne
+    {
+        return $this->morphOne(SessionAttribute::class, 'model', localKey: 'token');
     }
 
     /**
