@@ -2090,7 +2090,7 @@
         }
       }
     },
-    "/me/favorite-anime": {
+    "/me/favorites": {
       "get": {
         "security": [
           {
@@ -2101,10 +2101,19 @@
         "tags": [
           "me"
         ],
-        "operationId": "getMeFavoriteAnime",
-        "summary": "Get an overview of favorites.",
-        "description": "This endpoint will retrieve the list of anime in the authenticated user's favorites.",
+        "operationId": "getMeFavorites",
+        "summary": "Get an overview of the user's favorites.",
+        "description": "This endpoint will retrieve the list of objects in the authenticated user's favorites.",
         "parameters": [
+          {
+            "in": "query",
+            "name": "library",
+            "schema": {
+              "$ref": "#/components/schemas/LibraryKind"
+            },
+            "required": true,
+            "description": "The kind of favorite items to retrieve."
+          },
           {
             "in": "query",
             "name": "limit",
@@ -2335,8 +2344,17 @@
         ],
         "operationId": "getMeLibrary",
         "summary": "Get an overview of the library.",
-        "description": "This endpoint will retrieve the list of anime in the authenticated user's library.",
+        "description": "This endpoint will retrieve the list of objects in the authenticated user's library.",
         "parameters": [
+          {
+            "in": "query",
+            "name": "library",
+            "schema": {
+              "$ref": "#/components/schemas/LibraryKind"
+            },
+            "required": true,
+            "description": "The kind of library items to retrieve."
+          },
           {
             "in": "query",
             "name": "status",
@@ -2406,16 +2424,20 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "anime_id": {
-                    "type": "integer",
-                    "description": "The ID of the Anime to add."
+                  "library": {
+                    "$ref": "#/components/schemas/LibraryKind"
+                  },
+                  "model_id": {
+                    "type": "string",
+                    "description": "The ID of the model to add."
                   },
                   "status": {
                     "$ref": "#/components/schemas/LibraryStatus"
                   }
                 },
                 "required": [
-                  "anime_id",
+                  "library",
+                  "model_id",
                   "status"
                 ]
               }
@@ -2432,7 +2454,7 @@
         }
       }
     },
-    "/me/library/mal-import": {
+    "/me/library/import": {
       "post": {
         "security": [
           {
@@ -2443,9 +2465,9 @@
         "tags": [
           "me"
         ],
-        "operationId": "postMeLibraryAnimeImport",
-        "summary": "Import an anime export file.",
-        "description": "This endpoint will import an anime export file into the authenticated user's library.",
+        "operationId": "postMeLibraryImport",
+        "summary": "Import a library export file.",
+        "description": "This endpoint will import a library export file into the authenticated user's library.",
         "requestBody": {
           "content": {
             "multipart/form-data": {
@@ -2455,7 +2477,10 @@
                   "file": {
                     "type": "string",
                     "format": "binary",
-                    "description": "The anime export file"
+                    "description": "The library export file"
+                  },
+                  "library": {
+                    "$ref": "#/components/schemas/LibraryKind"
                   },
                   "service": {
                     "$ref": "#/components/schemas/ImportService"
@@ -2466,6 +2491,7 @@
                 },
                 "required": [
                   "file",
+                  "library",
                   "service",
                   "behavior"
                 ]
@@ -2495,21 +2521,25 @@
           "me"
         ],
         "operationId": "postMeLibraryDelete",
-        "summary": "Remove an anime from library.",
-        "description": "This endpoint will remove an anime from the authenticated user's library.",
+        "summary": "Remove an object from library.",
+        "description": "This endpoint will remove an object from the authenticated user's library.",
         "requestBody": {
           "content": {
             "application/x-www-form-urlencoded": {
               "schema": {
                 "type": "object",
                 "properties": {
-                  "anime_id": {
-                    "type": "integer",
-                    "description": "The ID of the Anime to remove."
+                  "library": {
+                    "$ref": "#/components/schemas/LibraryKind"
+                  },
+                  "model_id": {
+                    "type": "string",
+                    "description": "The ID of the model to remove."
                   }
                 },
                 "required": [
-                  "anime_id"
+                  "library",
+                  "model_id"
                 ]
               }
             }
@@ -3283,7 +3313,7 @@
         }
       }
     },
-    "/users/{userID}/favorite-anime": {
+    "/users/{userID}/favorites": {
       "get": {
         "security": [
           {
@@ -3294,9 +3324,9 @@
         "tags": [
           "users"
         ],
-        "operationId": "getUsersFavoriteAnime",
-        "summary": "Get an overview of the user's favorite Anime",
-        "description": "This endpoint will retrieve the list of Anime in the user's favorites list.",
+        "operationId": "getUsersFavorites",
+        "summary": "Get an overview of the user's favorites",
+        "description": "This endpoint will retrieve the list of objects in the user's favorites list.",
         "parameters": [
           {
             "in": "path",
@@ -3306,6 +3336,15 @@
             },
             "required": true,
             "description": "ID of the user."
+          },
+          {
+            "in": "query",
+            "name": "library",
+            "schema": {
+              "$ref": "#/components/schemas/LibraryKind"
+            },
+            "required": true,
+            "description": "The kind of favorite items to retrieve."
           },
           {
             "in": "query",
@@ -3772,6 +3811,16 @@
         ],
         "default": 1,
         "description": "The set of available import behavior types.\n- 0 = overwrite\n- 1 = merge"
+      },
+      "LibraryKind": {
+        "type": "integer",
+        "enum": [
+          0,
+          1,
+          2
+        ],
+        "default": 0,
+        "description": "The set of available library kind types.\n- 0 = anime\n- 1 = manga\n- 2 = game"
       },
       "LibraryStatus": {
         "type": "string",
