@@ -64,8 +64,44 @@ class UserController extends Controller
 
         // Get the feed messages
         $feedMessages = $user->feed_messages()
-            ->orderByDesc('created_at')
-            ->paginate($data['limit'] ?? 25);
+            ->with([
+                'user' => fn($query) => $this->eagerLoadUser($query),
+                'loveReactant' => function (BelongsTo $query) {
+                    $query->with([
+                        'reactionCounters',
+                        'reactions' => function (HasMany $hasMany) {
+                            $hasMany->with(['reacter', 'type']);
+                        }
+                    ]);
+                },
+                'parentMessage' => function ($query) {
+                    $query->with([
+                        'user' => fn($query) => $this->eagerLoadUser($query),
+                        'loveReactant' => function (BelongsTo $query) {
+                            $query->with([
+                                'reactionCounters',
+                                'reactions' => function (HasMany $hasMany) {
+                                    $hasMany->with(['reacter', 'type']);
+                                }
+                            ]);
+                        }
+                    ])
+                        ->withCount(['replies', 'reShares'])
+                        ->when(auth()->check(), function ($query) {
+                            $query->withExists(['reShares as isReShared' => function ($query) {
+                                $query->where('user_id', '=', auth()->user()->id);
+                            }]);
+                        });
+                }
+            ])
+            ->withCount(['replies', 'reShares'])
+            ->when(auth()->check(), function ($query) {
+                $query->withExists(['reShares as isReShared' => function ($query) {
+                    $query->where('user_id', '=', auth()->user()->id);
+                }]);
+            })
+            ->orderBy('created_at', 'desc')
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $feedMessages->nextPageUrl());
@@ -77,7 +113,36 @@ class UserController extends Controller
     }
 
     /**
-     * Requests a password reset link to be sent to the email address
+     * The closure for eager loading user relations on feed messages.
+     *
+     * @param BelongsTo $belongsTo
+     */
+    private function eagerLoadUser(BelongsTo $belongsTo)
+    {
+        $belongsTo->with([
+            'badges' => function ($query) {
+                $query->with(['media']);
+            },
+            'media',
+            'tokens' => function ($query) {
+                $query
+                    ->orderBy('last_used_at', 'desc')
+                    ->limit(1);
+            },
+            'sessions' => function ($query) {
+                $query
+                    ->orderBy('last_activity', 'desc')
+                    ->limit(1);
+            },
+        ])->when(auth()->check(), function ($query) {
+            $query->withExists(['followers as isFollowed' => function ($query) {
+                $query->where('user_id', '=', auth()->user()->id);
+            }]);
+        });
+    }
+
+    /**
+     * Requests a password reset link to be sent to the email address.
      *
      * @param ResetPassword $request
      * @return JsonResponse

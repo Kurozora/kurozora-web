@@ -9,6 +9,13 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class FeedMessageResource extends JsonResource
 {
     /**
+     * The resource instance.
+     *
+     * @var FeedMessage $resource
+     */
+    public $resource;
+
+    /**
      * Transform the resource into an array.
      *
      * @param Request $request
@@ -16,16 +23,13 @@ class FeedMessageResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        /** @var FeedMessage $feedMessage */
-        $feedMessage = $this->resource;
-
         // Get basic response
-        $resource = FeedMessageResourceBasic::make($feedMessage)->toArray($request);
+        $resource = FeedMessageResourceBasic::make($this->resource)->toArray($request);
 
         // Add relationships
         $relationships = $resource['relationships'];
 
-        if ($feedMessage->is_reshare || $feedMessage->is_reply) {
+        if ($this->resource->is_reshare || $this->resource->is_reply) {
             $relationships = array_merge($relationships, $this->getParentMessage());
         }
 
@@ -39,12 +43,9 @@ class FeedMessageResource extends JsonResource
      */
     private function getParentMessage(): array
     {
-        /** @var FeedMessage $feedMessage */
-        $feedMessage = $this->resource;
-
         return [
             'parent' => [
-                'data' => FeedMessageResource::collection([$feedMessage->parentMessage])
+                'data' => FeedMessageResourceBasic::collection([$this->resource->parentMessage])
             ]
         ];
     }
@@ -56,13 +57,10 @@ class FeedMessageResource extends JsonResource
      */
     private function getReShares(): array
     {
-        /** @var FeedMessage $feedMessage */
-        $feedMessage = $this->resource;
-
         return [
             'messages' => [
                 'data' => FeedMessageResourceBasic::collection(
-                   $feedMessage->reShares()
+                   $this->resource->reShares()
                        ->orderByDesc('created_at')
                        ->paginate(25)
                 )
@@ -77,13 +75,10 @@ class FeedMessageResource extends JsonResource
      */
     private function getReplies(): array
     {
-        /** @var FeedMessage $feedMessage */
-        $feedMessage = $this->resource;
-
         return [
             'messages' => [
                 'data' => FeedMessageResource::collection(
-                    $feedMessage->replies()
+                    $this->resource->replies()
                         ->orderByDesc('created_at')
                         ->paginate(25))
             ]

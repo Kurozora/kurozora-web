@@ -10,6 +10,13 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class FeedMessageResourceBasic extends JsonResource
 {
     /**
+     * The resource instance.
+     *
+     * @var FeedMessage $resource
+     */
+    public $resource;
+
+    /**
      * Transform the resource into an array.
      *
      * @param Request $request
@@ -17,35 +24,29 @@ class FeedMessageResourceBasic extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        /** @var FeedMessage $feedMessage */
-        $feedMessage = $this->resource;
-
-        $totalHearts = $feedMessage->viaLoveReactant()->getReactionCounterOfType(FeedVoteType::Heart()->description);
-
-        $user = auth()->user();
-        $isReShared = $user && $feedMessage->reShares()->where('user_id', $user->id)->exists();
+        $totalHearts = $this->resource->viaLoveReactant()->getReactionCounterOfType(FeedVoteType::Heart()->description);
 
         $resource = [
-            'id'            => (int) $feedMessage->id,
-            'uuid'          => (string) $feedMessage->id,
+            'id'            => (int) $this->resource->id,
+            'uuid'          => (string) $this->resource->id,
             'type'          => 'feed-messages',
-            'href'          => route('api.feed.messages.details', $feedMessage, false),
+            'href'          => route('api.feed.messages.details', $this->resource, false),
             'attributes'    => [
-                'body'              => $feedMessage->content,
-                'content'           => $feedMessage->content,
-                'contentHTML'       => $feedMessage->content_html ?? '',
-                'contentMarkdown'   => $feedMessage->content_markdown ?? '',
+                'body'              => $this->resource->content,
+                'content'           => $this->resource->content,
+                'contentHTML'       => $this->resource->content_html ?? '',
+                'contentMarkdown'   => $this->resource->content_markdown ?? '',
                 'metrics'           => [
                     'heartCount'        => $totalHearts->getCount(),
-                    'replyCount'        => $feedMessage->replies()->count(),
-                    'reShareCount'      => $feedMessage->reShares()->count()
+                    'replyCount'        => $this->resource->replies_count,
+                    'reShareCount'      => $this->resource->re_shares_count
                 ],
-                'isReply'           => $feedMessage->is_reply,
-                'isReShare'         => $feedMessage->is_reshare,
-                'isReShared'        => $isReShared,
-                'isNSFW'            => $feedMessage->is_nsfw,
-                'isSpoiler'         => $feedMessage->is_spoiler,
-                'createdAt'         => $feedMessage->created_at->timestamp,
+                'isReply'           => $this->resource->is_reply,
+                'isReShare'         => $this->resource->is_reshare,
+                'isReShared'        => (bool) $this->resource->isReShared,
+                'isNSFW'            => $this->resource->is_nsfw,
+                'isSpoiler'         => $this->resource->is_spoiler,
+                'createdAt'         => $this->resource->created_at->timestamp,
             ]
         ];
 
@@ -67,13 +68,10 @@ class FeedMessageResourceBasic extends JsonResource
      */
     protected function getUserSpecificDetails(): array
     {
-        /** @var FeedMessage $feedMessage */
-        $feedMessage = $this->resource;
-
         $user = auth()->user();
 
         return [
-            'isHearted' => $user->getCurrentHeartValueFor($feedMessage) == FeedVoteType::Heart
+            'isHearted' => $user->getCurrentHeartValueFor($this->resource) == FeedVoteType::Heart
         ];
     }
 
@@ -84,12 +82,9 @@ class FeedMessageResourceBasic extends JsonResource
      */
     private function getUserDetails(): array
     {
-        /** @var FeedMessage $feedMessage */
-        $feedMessage = $this->resource;
-
         return [
             'users' => [
-                'data' => UserResource::collection([$feedMessage->user]),
+                'data' => UserResource::collection([$this->resource->user]),
             ]
         ];
     }
