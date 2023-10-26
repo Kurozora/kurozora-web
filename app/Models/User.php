@@ -361,16 +361,18 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      *
      * @return UserActivityStatus
      */
-    public function getActivityStatus(): UserActivityStatus
+    public function getActivityStatusAttribute(): UserActivityStatus
     {
-        $personalAccessToken = $this->tokens()
-            ->orderBy('last_used_at', 'desc')
-            ->first('last_used_at');
+        // The token relation is eager loaded elsewhere with
+        // the following constraints: orderBy('last_used_at', 'desc'),
+        // limit(1), and select('last_used_at').
+        $personalAccessToken = $this->tokens->first();
         $personalAccessTokenLastUsedAt = $personalAccessToken?->last_used_at;
 
-        $session = $this->sessions()
-            ->orderBy('last_activity', 'desc')
-            ->first('last_activity');
+        // The session relation is eager loaded elsewhere with
+        // the following constraints: orderBy('last_activity', 'desc'),
+        // limit(1), and select('last_activity').
+        $session = $this->sessions->first();
         $sessionLastActivity = Carbon::createFromTimestamp($session?->last_activity);
 
         $activity = max($sessionLastActivity, $personalAccessTokenLastUsedAt);

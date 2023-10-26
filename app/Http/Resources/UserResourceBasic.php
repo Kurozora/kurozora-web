@@ -42,7 +42,7 @@ class UserResourceBasic extends JsonResource
                 'biography'         => $this->resource->biography,
                 'biographyHTML'     => $this->resource->biography_html,
                 'biographyMarkdown' => $this->resource->biography_markdown,
-                'activityStatus'    => $this->resource->getActivityStatus()->description,
+                'activityStatus'    => $this->resource->activityStatus->description,
                 'followerCount'     => $this->resource->followers_count,
                 'followingCount'    => $this->resource->following_count,
                 'reputationCount'   => 0, // - TODO: add $this->resource->getReputationCount(),
@@ -81,7 +81,7 @@ class UserResourceBasic extends JsonResource
 
         $isFollowed = null;
         if ($followedUser->id != $user->id) {
-            $isFollowed = $this->resource->followers()->where('user_id', $user->id)->exists();
+            $isFollowed = (bool) $this->resource->isFollowed;
         }
 
         return [

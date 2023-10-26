@@ -12,4 +12,3 @@ if (trait_exists('Laravel\Nova\Auth\Impersonatable')) {
 } else {
     trait Impersonatable {}
 }
-
