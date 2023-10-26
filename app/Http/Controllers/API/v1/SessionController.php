@@ -4,12 +4,40 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\GetAccessTokensRequest;
 use App\Http\Resources\SessionResource;
 use App\Models\Session;
 use Illuminate\Http\JsonResponse;
 
 class SessionController extends Controller
 {
+    /**
+     * Returns the current active sessions for a user
+     *
+     * @param GetAccessTokensRequest $request
+     * @return JsonResponse
+     */
+    public function index(GetAccessTokensRequest $request): JsonResponse
+    {
+        $data = $request->validated();
+
+        // Get the authenticated user
+        $user = auth()->user();
+
+        // Get paginated sessions except current session
+        $sessions = $user->sessions()
+            ->with(['session_attribute'])
+            ->paginate($data['limit'] ?? 25);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $sessions->nextPageUrl());
+
+        return JSONResult::success([
+            'data' => SessionResource::collection($sessions),
+            'next' => empty($nextPageURL) ? null : $nextPageURL
+        ]);
+    }
+
     /**
      * Displays token information
      *

@@ -1,12 +1,11 @@
 <?php
 
-use App\Http\Controllers\API\v1\MeController;
 use App\Http\Controllers\API\v1\SessionController;
 
 Route::prefix('/sessions')
     ->name('.sessions')
     ->group(function () {
-        Route::get('/', [MeController::class, 'getSessions'])
+        Route::get('/', [SessionController::class, 'index'])
             ->middleware('auth.kurozora')
             ->name('.index');
 
