@@ -76,9 +76,9 @@ trait Favorable
             $this->relationLoaded('favoriters')
                 ? $this->favoriters
                 : $this->favoriters()
-            )
-                ->where('user_id', '=', $user->id)
-                ->exists();
+        )
+            ->where('user_id', '=', $user->id)
+            ->exists();
     }
 
     /**
