@@ -21,7 +21,8 @@ class AppThemeController extends Controller
      */
     function index(): JsonResponse
     {
-        $appThemes = AppTheme::with('media')->get();
+        $appThemes = AppTheme::with(['media'])
+            ->get();
 
         return JSONResult::success([
             'data' => AppThemeResource::collection($appThemes)
@@ -36,6 +37,8 @@ class AppThemeController extends Controller
      */
     public function details(AppTheme $appTheme): JsonResponse
     {
+        $appTheme->load(['media']);
+
         return JSONResult::success([
             'data' => AppThemeResource::collection([$appTheme])
         ]);
