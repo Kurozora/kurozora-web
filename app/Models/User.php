@@ -600,28 +600,6 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     }
 
     /**
-     * Returns a list of badges that the user has assigned to them
-     *
-     * @return array
-     */
-    public function getBadges(): array
-    {
-        // Find location of cached data
-        $cacheKey = sprintf(self::CACHE_KEY_BADGES, $this->id);
-
-        // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_BADGES_SECONDS, function () {
-            return Badge::join(UserBadge::TABLE_NAME, function ($join) {
-                $join->on(UserBadge::TABLE_NAME . '.badge_id', '=', Badge::TABLE_NAME . '.id');
-            })
-                ->where([
-                    [UserBadge::TABLE_NAME . '.user_id', '=', $this->id]
-                ])
-                ->get();
-        });
-    }
-
-    /**
      * Get the user's followers
      *
      * @return BelongsToMany

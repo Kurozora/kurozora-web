@@ -11,13 +11,11 @@ use App\Traits\Model\HasMediaStat;
 use App\Traits\Model\HasViews;
 use App\Traits\SearchFilterable;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Cache;
 use Laravel\Scout\Searchable;
 use Request;
 use Spatie\MediaLibrary\HasMedia;
@@ -254,24 +252,6 @@ class Person extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * Retrieves the anime for a person item in an array.
-     *
-     * @param int $limit
-     * @param int $page
-     * @return mixed
-     */
-    public function getAnime(int $limit = 25, int $page = 1): mixed
-    {
-        // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'person.anime', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit, 'page' => $page]);
-
-        // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_ANIME_SECONDS, function () use ($limit) {
-            return $this->anime()->paginate($limit);
-        });
-    }
-
-    /**
      * Returns the manga the person belongs to.
      *
      * @return HasManyThrough
@@ -280,24 +260,6 @@ class Person extends KModel implements HasMedia, Sitemapable
     {
         return $this->hasManyThrough(Manga::class, MediaStaff::class, 'person_id', 'id', 'id', 'model_id')
             ->where('model_type', '=', Manga::class);
-    }
-
-    /**
-     * Retrieves the manga for a person item in an array.
-     *
-     * @param int $limit
-     * @param int $page
-     * @return mixed
-     */
-    public function getManga(int $limit = 25, int $page = 1): mixed
-    {
-        // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'person.manga', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit, 'page' => $page]);
-
-        // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_MANGA_SECONDS, function () use ($limit) {
-            return $this->manga()->paginate($limit);
-        });
     }
 
     /**
@@ -324,24 +286,6 @@ class Person extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * Retrieves the game for a person item in an array.
-     *
-     * @param int $limit
-     * @param int $page
-     * @return mixed
-     */
-    public function getGames(int $limit = 25, int $page = 1): mixed
-    {
-        // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'person.games', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit, 'page' => $page]);
-
-        // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_GAMES_SECONDS, function () use ($limit) {
-            return $this->games()->paginate($limit);
-        });
-    }
-
-    /**
      * Returns the characters the person belongs to.
      *
      * @return BelongsToMany
@@ -350,24 +294,6 @@ class Person extends KModel implements HasMedia, Sitemapable
     {
         return $this->belongsToMany(Character::class, AnimeCast::class)
             ->distinct();
-    }
-
-    /**
-     * Retrieves the characters for a person item in an array.
-     *
-     * @param int $limit
-     * @param int $page
-     * @return Collection
-     */
-    public function getCharacters(int $limit = 25, int $page = 1): mixed
-    {
-        // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'person.characters', 'id' => $this->id, 'limit' => $limit, 'page' => $page]);
-
-        // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_CHARACTERS_SECONDS, function () use ($limit) {
-            return $this->characters()->paginate($limit);
-        });
     }
 
     /**

@@ -365,42 +365,6 @@ class Anime extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * Retrieves the studios for an Anime item in an array
-     *
-     * @param int $limit
-     * @param int $page
-     * @return mixed
-     */
-    public function getStudios(int $limit = 25, int $page = 1): mixed
-    {
-        // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'anime.studios', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit, 'page' => $page]);
-
-        // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_STUDIOS_SECONDS, function () use ($limit) {
-            return $this->studios()->paginate($limit);
-        });
-    }
-
-    /**
-     * Retrieves the characters for an Anime item in an array
-     *
-     * @param int $limit
-     * @param int $page
-     * @return mixed
-     */
-    public function getCharacters(int $limit = 25, int $page = 1): mixed
-    {
-        // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'anime.characters', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit, 'page' => $page]);
-
-        // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_CHARACTERS_SECONDS, function () use ($limit) {
-            return $this->characters()->paginate($limit);
-        });
-    }
-
-    /**
      * Get the Anime's characters.
      *
      * @return BelongsToMany
@@ -409,24 +373,6 @@ class Anime extends KModel implements HasMedia, Sitemapable
     {
         return $this->belongsToMany(Character::class, AnimeCast::class)
             ->distinct(['character_id']);
-    }
-
-    /**
-     * Retrieves the cast for an Anime item in an array
-     *
-     * @param int $limit
-     * @param int $page
-     * @return mixed
-     */
-    public function getCast(int $limit = 25, int $page = 1): mixed
-    {
-        // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'anime.cast', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit, 'page' => $page]);
-
-        // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_ANIME_CAST_SECONDS, function () use ($limit) {
-            return $this->cast()->paginate($limit);
-        });
     }
 
     /**
@@ -474,33 +420,6 @@ class Anime extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * Returns this anime's seasons
-     *
-     * @param int $limit
-     * @param int $page
-     * @param bool $reversed
-     * @return mixed
-     */
-    public function getSeasons(int $limit = 25, int $page = 1, bool $reversed = false): mixed
-    {
-        // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'anime.seasons', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit, 'page' => $page, 'reversed' => $reversed]);
-
-        // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_SEASONS_SECONDS, function () use ($reversed, $limit) {
-            if ($reversed) {
-                return $this->seasons()
-                    ->with(['translations'])
-                    ->orderByDesc('number')
-                    ->paginate($limit);
-            }
-            return $this->seasons()
-                ->orderBy('number')
-                ->paginate($limit);
-        });
-    }
-
-    /**
      * Get the Anime's seasons
      *
      * @return HasMany
@@ -518,76 +437,6 @@ class Anime extends KModel implements HasMedia, Sitemapable
     public function languages(): HasManyThrough
     {
         return $this->hasManyThrough(Language::class, AnimeTranslation::class, 'anime_id', 'code', 'id', 'locale');
-    }
-
-    /**
-     * Returns this anime's languages
-     *
-     * @return mixed
-     */
-    public function getLanguages(): mixed
-    {
-        // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'anime.languages', 'id' => $this->id]);
-
-        // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_LANGUAGES_SECONDS, function () {
-            return $this->languages;
-        });
-    }
-
-    /**
-     * Returns the anime relations.
-     *
-     * @param int $limit
-     * @param int $page
-     * @return mixed
-     */
-    public function getAnimeRelations(int $limit = 25, int $page = 1): mixed
-    {
-        // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'anime.anime_relations', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit, 'page' => $page]);
-
-        // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_RELATIONS_SECONDS, function () use ($limit) {
-            return $this->animeRelations()->paginate($limit);
-        });
-    }
-
-    /**
-     * Returns the manga relations.
-     *
-     * @param int $limit
-     * @param int $page
-     * @return mixed
-     */
-    public function getMangaRelations(int $limit = 25, int $page = 1): mixed
-    {
-        // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'anime.manga_relations', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit, 'page' => $page]);
-
-        // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_RELATIONS_SECONDS, function () use ($limit) {
-            return $this->mangaRelations()->paginate($limit);
-        });
-    }
-
-    /**
-     * Returns the game relations.
-     *
-     * @param int $limit
-     * @param int $page
-     * @return mixed
-     */
-    public function getGameRelations(int $limit = 25, int $page = 1): mixed
-    {
-        // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'anime.game_relations', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit, 'page' => $page]);
-
-        // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_RELATIONS_SECONDS, function () use ($limit) {
-            return $this->gameRelations()->paginate($limit);
-        });
     }
 
     /**
@@ -769,42 +618,6 @@ class Anime extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * Returns the songs relations.
-     *
-     * @param int $limit
-     * @param int $page
-     * @return mixed
-     */
-    public function getSongs(int $limit = 25, int $page = 1): mixed
-    {
-        // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'anime.songs', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit, 'page' => $page]);
-
-        // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_SONGS_SECONDS, function () use ($limit) {
-            return $this->songs()->paginate($limit);
-        });
-    }
-
-    /**
-     * Returns the songs relations.
-     *
-     * @param int $limit
-     * @param int $page
-     * @return mixed
-     */
-    public function getMediaSongs(int $limit = 25, int $page = 1): mixed
-    {
-        // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'anime.media-songs', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit, 'page' => $page]);
-
-        // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_MEDIA_SONGS_SECONDS, function () use ($limit) {
-            return $this->mediaSongs()->paginate($limit);
-        });
-    }
-
-    /**
      * The anime's adaptation source.
      *
      * @return BelongsTo
@@ -812,24 +625,6 @@ class Anime extends KModel implements HasMedia, Sitemapable
     public function source(): BelongsTo
     {
         return $this->belongsTo(Source::class);
-    }
-
-    /**
-     * Returns the media staff relations.
-     *
-     * @param int $limit
-     * @param int $page
-     * @return mixed
-     */
-    public function getMediaStaff(int $limit = 25, int $page = 1): mixed
-    {
-        // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'anime.media-staff', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit, 'page' => $page]);
-
-        // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_STAFF_SECONDS, function () use ($limit) {
-            return $this->mediaStaff()->paginate($limit);
-        });
     }
 
     /**

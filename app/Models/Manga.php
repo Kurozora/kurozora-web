@@ -38,7 +38,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Cache;
 use Laravel\Scout\Searchable;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -518,42 +517,6 @@ class Manga extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * Retrieves the studios for a Manga item in an array
-     *
-     * @param int $limit
-     * @param int $page
-     * @return mixed
-     */
-    public function getStudios(int $limit = 25, int $page = 1): mixed
-    {
-        // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'manga.studios', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit, 'page' => $page]);
-
-        // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_STUDIOS_SECONDS, function () use ($limit) {
-            return $this->studios()->paginate($limit);
-        });
-    }
-
-    /**
-     * Retrieves the characters for a Manga item in an array
-     *
-     * @param int $limit
-     * @param int $page
-     * @return mixed
-     */
-    public function getCharacters(int $limit = 25, int $page = 1): mixed
-    {
-        // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'manga.characters', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit, 'page' => $page]);
-
-        // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_CHARACTERS_SECONDS, function () use ($limit) {
-            return $this->characters()->paginate($limit);
-        });
-    }
-
-    /**
      * Get the Manga's characters.
      *
      * @return BelongsToMany
@@ -562,24 +525,6 @@ class Manga extends KModel implements HasMedia, Sitemapable
     {
         return $this->belongsToMany(Character::class, MangaCast::class)
             ->distinct(['character_id']);
-    }
-
-    /**
-     * Retrieves the cast for a Manga item in an array
-     *
-     * @param int $limit
-     * @param int $page
-     * @return mixed
-     */
-    public function getCast(int $limit = 25, int $page = 1): mixed
-    {
-        // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'manga.cast', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit, 'page' => $page]);
-
-        // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_MANGA_CAST_SECONDS, function () use ($limit) {
-            return $this->cast()->paginate($limit);
-        });
     }
 
     /**
@@ -600,94 +545,6 @@ class Manga extends KModel implements HasMedia, Sitemapable
     public function languages(): HasManyThrough
     {
         return $this->hasManyThrough(Language::class, MangaTranslation::class, 'manga_id', 'code', 'id', 'locale');
-    }
-
-    /**
-     * Returns this manga's languages
-     *
-     * @return mixed
-     */
-    public function getLanguages(): mixed
-    {
-        // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'manga.languages', 'id' => $this->id]);
-
-        // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_LANGUAGES_SECONDS, function () {
-            return $this->languages;
-        });
-    }
-
-    /**
-     * Returns the media staff relations.
-     *
-     * @param int $limit
-     * @param int $page
-     * @return mixed
-     */
-    public function getMediaStaff(int $limit = 25, int $page = 1): mixed
-    {
-        // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'manga.media-staff', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit, 'page' => $page]);
-
-        // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_STAFF_SECONDS, function () use ($limit) {
-            return $this->mediaStaff()->paginate($limit);
-        });
-    }
-
-    /**
-     * Returns the anime relations.
-     *
-     * @param int $limit
-     * @param int $page
-     * @return mixed
-     */
-    public function getAnimeRelations(int $limit = 25, int $page = 1): mixed
-    {
-        // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'manga.anime_relations', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit, 'page' => $page]);
-
-        // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_RELATIONS_SECONDS, function () use ($limit) {
-            return $this->animeRelations()->paginate($limit);
-        });
-    }
-
-    /**
-     * Returns the manga relations.
-     *
-     * @param int $limit
-     * @param int $page
-     * @return mixed
-     */
-    public function getMangaRelations(int $limit = 25, int $page = 1): mixed
-    {
-        // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'manga.manga_relations', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit, 'page' => $page]);
-
-        // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_RELATIONS_SECONDS, function () use ($limit) {
-            return $this->mangaRelations()->paginate($limit);
-        });
-    }
-
-    /**
-     * Returns the game relations.
-     *
-     * @param int $limit
-     * @param int $page
-     * @return mixed
-     */
-    public function getGameRelations(int $limit = 25, int $page = 1): mixed
-    {
-        // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'manga.game_relations', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit, 'page' => $page]);
-
-        // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_RELATIONS_SECONDS, function () use ($limit) {
-            return $this->gameRelations()->paginate($limit);
-        });
     }
 
     /**

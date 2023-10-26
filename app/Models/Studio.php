@@ -15,7 +15,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Cache;
 use Laravel\Scout\Searchable;
 use Request;
 use Spatie\MediaLibrary\HasMedia;
@@ -212,25 +211,6 @@ class Studio extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * Retrieves the anime for a Studio item in an array
-     *
-     * @param int $limit
-     * @param int $page
-     * @param array $where
-     * @return mixed
-     */
-    public function getAnime(int $limit = 25, int $page = 1, array $where = []): mixed
-    {
-        // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'studios.anime', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit, 'page' => $page, 'where' => $where]);
-
-        // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_ANIME_SECONDS, function () use ($limit, $where) {
-            return $this->anime()->where($where)->paginate($limit);
-        });
-    }
-
-    /**
      * Returns the manga that belongs to the studio
      *
      * @return BelongsToMany
@@ -243,25 +223,6 @@ class Studio extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * Retrieves the manga for a Studio item in an array
-     *
-     * @param int $limit
-     * @param int $page
-     * @param array $where
-     * @return mixed
-     */
-    public function getManga(int $limit = 25, int $page = 1, array $where = []): mixed
-    {
-        // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'studios.manga', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit, 'page' => $page, 'where' => $where]);
-
-        // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_MANGA_SECONDS, function () use ($limit, $where) {
-            return $this->manga()->where($where)->paginate($limit);
-        });
-    }
-
-    /**
      * Returns the games that belongs to the studio
      *
      * @return BelongsToMany
@@ -271,25 +232,6 @@ class Studio extends KModel implements HasMedia, Sitemapable
         return $this->belongsToMany(Game::class, MediaStudio::class, 'studio_id', 'model_id')
             ->where('model_type', '=', Game::class)
             ->withTimestamps();
-    }
-
-    /**
-     * Retrieves the games for a Studio item in an array
-     *
-     * @param int $limit
-     * @param int $page
-     * @param array $where
-     * @return mixed
-     */
-    public function getGame(int $limit = 25, int $page = 1, array $where = []): mixed
-    {
-        // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'studios.games', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit, 'page' => $page, 'where' => $where]);
-
-        // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_GAME_SECONDS, function () use ($limit, $where) {
-            return $this->games()->where($where)->paginate($limit);
-        });
     }
 
     /**
