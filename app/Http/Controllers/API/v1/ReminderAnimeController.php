@@ -13,6 +13,7 @@ use App\Http\Resources\LiteratureResourceBasic;
 use App\Models\Anime;
 use App\Models\Game;
 use App\Models\Manga;
+use App\Traits\Model\Remindable;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -42,6 +43,26 @@ class ReminderAnimeController extends Controller
 
         // Paginate the reminder anime
         $userReminders = $user->reminderAnime()
+            ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating', 'mediaRatings' => function ($query) use ($user) {
+                $query->where([
+                    ['user_id', '=', $user->id]
+                ]);
+            }, 'library' => function ($query) use ($user) {
+                $query->where('user_id', '=', $user->id);
+            }])
+            ->withExists([
+                'favoriters as isFavorited' => function ($query) use ($user) {
+                    $query->where('user_id', '=', $user->id);
+                },
+            ])
+            ->when(in_array(Remindable::class, class_uses_recursive($morphClass)), function ($query) use ($user) {
+                // Add your logic here if the trait is used
+                $query->withExists([
+                    'reminderers as isReminded' => function ($query) use ($user) {
+                        $query->where('user_id', '=', $user->id);
+                    },
+                ]);
+            })
             ->paginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
