@@ -21,6 +21,7 @@ use App\Traits\Model\HasMediaThemes;
 use App\Traits\Model\HasVideos;
 use App\Traits\Model\HasViews;
 use App\Traits\Model\MediaRelated;
+use App\Traits\Model\Remindable;
 use App\Traits\Model\Trackable;
 use App\Traits\Model\TvRated;
 use App\Traits\SearchFilterable;
@@ -53,6 +54,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
 {
     use Actionable,
         Favorable,
+        Remindable,
         HasFactory,
         HasSlug,
         HasMediaGenres,
@@ -81,17 +83,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
     const MAXIMUM_RELATIONSHIPS_LIMIT = 10;
 
     // How long to cache certain responses
-    const CACHE_KEY_ANIME_CAST_SECONDS = 60 * 60 * 2;
-    const CACHE_KEY_MEDIA_SONGS_SECONDS = 60 * 60 * 2;
-    const CACHE_KEY_CHARACTERS_SECONDS = 60 * 60 * 2;
     const CACHE_KEY_EPISODES_SECONDS = 60 * 60 * 2;
-    const CACHE_KEY_LANGUAGES_SECONDS = 60 * 60 * 24;
-    const CACHE_KEY_RELATIONS_SECONDS = 60 * 60 * 2;
-    const CACHE_KEY_SEASONS_SECONDS = 60 * 60 * 24;
-    const CACHE_KEY_SONGS_SECONDS = 60 * 60 * 2;
-    const CACHE_KEY_STAFF_SECONDS = 60 * 60 * 2;
-    const CACHE_KEY_STATS_SECONDS = 60 * 60 * 2;
-    const CACHE_KEY_STUDIOS_SECONDS = 60 * 60 * 2;
 
     // Table name
     const TABLE_NAME = 'animes';
