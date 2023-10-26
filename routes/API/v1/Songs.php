@@ -13,7 +13,7 @@ Route::prefix('/songs')
                 Route::get('/anime', [SongController::class, 'anime'])
                     ->name('.anime');
 
-                Route::get('/game', [SongController::class, 'game'])
-                    ->name('.game');
+                Route::get('/games', [SongController::class, 'games'])
+                    ->name('.games');
             });
     });

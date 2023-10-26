@@ -26,6 +26,8 @@ class SongController extends Controller
         // Call the SongViewed event
         SongViewed::dispatch($song);
 
+        $song->load(['media', 'mediaStat']);
+
         return JSONResult::success([
             'data' => SongResource::collection([$song])
         ]);
@@ -42,8 +44,10 @@ class SongController extends Controller
     {
         $data = $request->validated();
 
-        // Get the seasons
-        $animes = $song->getAnime($data['limit'] ?? 25, $data['page'] ?? 1);
+        // Get the anime
+        $animes = $song->anime()
+            ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating'])
+            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $animes->nextPageUrl());
@@ -61,12 +65,14 @@ class SongController extends Controller
      * @param Song $song
      * @return JsonResponse
      */
-    public function game(GetSongGamesRequest $request, Song $song): JsonResponse
+    public function games(GetSongGamesRequest $request, Song $song): JsonResponse
     {
         $data = $request->validated();
 
-        // Get the seasons
-        $games = $song->getGames($data['limit'] ?? 25, $data['page'] ?? 1);
+        // Get the games
+        $games = $song->games()
+            ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating'])
+            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $games->nextPageUrl());

@@ -13,7 +13,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Cache;
 use Laravel\Scout\Searchable;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -126,24 +125,6 @@ class Song extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * Returns the anime relations.
-     *
-     * @param int $limit
-     * @param int $page
-     * @return mixed
-     */
-    public function getAnime(int $limit = 25, int $page = 1): mixed
-    {
-        // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'song.anime', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit, 'page' => $page]);
-
-        // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_ANIMES_SECONDS, function () use ($limit) {
-            return $this->anime()->paginate($limit);
-        });
-    }
-
-    /**
      * Get the game-songs relationship.
      *
      * @return BelongsToMany
@@ -153,24 +134,6 @@ class Song extends KModel implements HasMedia, Sitemapable
         return $this->belongsToMany(Game::class, MediaSong::class, 'song_id', 'model_id')
             ->where('model_type', '=', Game::class)
             ->withTimestamps();
-    }
-
-    /**
-     * Returns the game relations.
-     *
-     * @param int $limit
-     * @param int $page
-     * @return mixed
-     */
-    public function getGames(int $limit = 25, int $page = 1): mixed
-    {
-        // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'song.games', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit, 'page' => $page]);
-
-        // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_GAMES_SECONDS, function () use ($limit) {
-            return $this->games()->paginate($limit);
-        });
     }
 
     /**
