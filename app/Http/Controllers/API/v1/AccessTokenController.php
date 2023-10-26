@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Helpers\JSONResult;
 use App\Http\Requests\CreateSessionAttributeRequest;
+use App\Http\Requests\GetAccessTokensRequest;
 use App\Http\Requests\UpdateSessionAttributeRequest;
 use App\Http\Resources\AccessTokenResource;
 use App\Http\Resources\UserResource;
@@ -18,6 +19,33 @@ use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 class AccessTokenController
 {
     /**
+     * Returns the current active access tokens for a user
+     *
+     * @param GetAccessTokensRequest $request
+     * @return JsonResponse
+     */
+    public function index(GetAccessTokensRequest $request): JsonResponse
+    {
+        $data = $request->validated();
+
+        // Get the authenticated user
+        $user = auth()->user();
+
+        // Get paginated sessions except current session
+        $tokens = $user->tokens()
+            ->with(['session_attribute'])
+            ->paginate($data['limit'] ?? 25);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $tokens->nextPageUrl());
+
+        return JSONResult::success([
+            'data' => AccessTokenResource::collection($tokens),
+            'next' => empty($nextPageURL) ? null : $nextPageURL
+        ]);
+    }
+
+    /**
      * Displays token information
      *
      * @param PersonalAccessToken $personalAccessToken
@@ -25,6 +53,8 @@ class AccessTokenController
      */
     public function details(PersonalAccessToken $personalAccessToken): JsonResponse
     {
+        $personalAccessToken->load(['session_attribute']);
+
         return JSONResult::success([
             'data' => AccessTokenResource::collection([$personalAccessToken])
         ]);
@@ -48,7 +78,14 @@ class AccessTokenController
         }
 
         // Find the user
-        $user = User::where('email', $data['email'])->first();
+        $user = User::where('email', $data['email'])
+            ->with([
+                'badges' => function ($query) {
+                    $query->with(['media']);
+                },
+                'media'
+            ])
+            ->first();
 
         // Compare the passwords
         if (!$user || !Hash::check($data['password'], $user->password)) {

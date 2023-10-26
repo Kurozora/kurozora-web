@@ -1,12 +1,11 @@
 <?php
 
 use App\Http\Controllers\API\v1\AccessTokenController;
-use App\Http\Controllers\API\v1\MeController;
 
 Route::prefix('/access-tokens')
     ->name('.access-tokens')
     ->group(function () {
-        Route::get('/', [MeController::class, 'getAccessTokens'])
+        Route::get('/', [AccessTokenController::class, 'index'])
             ->middleware('auth.kurozora')
             ->name('.index');
 
