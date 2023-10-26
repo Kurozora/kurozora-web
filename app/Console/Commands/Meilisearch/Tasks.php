@@ -3,7 +3,7 @@
 namespace App\Console\Commands\Meilisearch;
 
 use Illuminate\Console\Command;
-use MeiliSearch\Client;
+use Meilisearch\Client;
 
 class Tasks extends Command
 {
@@ -54,7 +54,7 @@ class Tasks extends Command
 
         if (empty($uid)) {
             // Filter results according to options
-            $results = array_filter($results, function($result) use ($status) {
+            $results = array_filter($results, function ($result) use ($status) {
                 return $result['status'] == $status;
             });
         }
@@ -65,7 +65,7 @@ class Tasks extends Command
 
         // Make sure the results aren't too long for the screen
         foreach ($results as $result) {
-            array_walk($result, function(&$id) {
+            array_walk($result, function (&$id) {
                 $id = substr(json_encode($id), 0, 25);
             });
             $tasks[] = $result;

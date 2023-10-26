@@ -164,10 +164,10 @@ class ExplorePageController extends Controller
                         },
                         MediaSong::class => function (Builder $query) {
                             $query->with([
-                                'song' => function($query) {
+                                'song' => function ($query) {
                                     $query->with(['media', 'mediaStat']);
                                 },
-                                'model' => function($query) {
+                                'model' => function ($query) {
                                     $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating']);
                                 }
                             ]);

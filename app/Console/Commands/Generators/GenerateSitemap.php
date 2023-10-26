@@ -114,7 +114,7 @@ class GenerateSitemap extends Command
         $this->info('- Generating episodes...');
         Episode::withoutGlobalScopes()
             ->select(['id'])
-            ->chunk(20000, function($episodes, int $page) use ($sitemapIndex) {
+            ->chunk(20000, function ($episodes, int $page) use ($sitemapIndex) {
                 $path = 'sitemaps/episodes_' . $page . '_sitemap.xml';
                 $this->info($path);
                 Sitemap::create()
@@ -157,7 +157,7 @@ class GenerateSitemap extends Command
         $this->info('- Generating genres...');
         Genre::withoutGlobalScopes()
             ->select(['slug'])
-            ->chunk(20000, function($genres, int $page) use ($sitemapIndex) {
+            ->chunk(20000, function ($genres, int $page) use ($sitemapIndex) {
                 $path = 'sitemaps/genres_' . $page . '_sitemap.xml';
                 $this->info($path);
                 Sitemap::create()
@@ -170,7 +170,7 @@ class GenerateSitemap extends Command
         $this->info('- Generating themes...');
         Theme::withoutGlobalScopes()
             ->select(['slug'])
-            ->chunk(20000, function($genres, int $page) use ($sitemapIndex) {
+            ->chunk(20000, function ($genres, int $page) use ($sitemapIndex) {
                 $path = 'sitemaps/themes_' . $page . '_sitemap.xml';
                 $this->info($path);
                 Sitemap::create()
@@ -264,7 +264,7 @@ class GenerateSitemap extends Command
         $this->info('- Generating people...');
         Person::withoutGlobalScopes()
             ->select(['slug'])
-            ->chunk(20000, function($people, int $page) use ($sitemapIndex) {
+            ->chunk(20000, function ($people, int $page) use ($sitemapIndex) {
                 $path = 'sitemaps/people_' . $page . '_sitemap.xml';
                 $this->info($path);
                 Sitemap::create()
@@ -277,7 +277,7 @@ class GenerateSitemap extends Command
         $this->info('- Generating season...');
         Season::withoutGlobalScopes()
             ->select(['id'])
-            ->chunk(20000, function($seasons, int $page) use ($sitemapIndex) {
+            ->chunk(20000, function ($seasons, int $page) use ($sitemapIndex) {
                 $path = 'sitemaps/season_episodes_' . $page . '_sitemap.xml';
                 $this->info($path);
                 Sitemap::create()
@@ -290,7 +290,7 @@ class GenerateSitemap extends Command
         $this->info('- Generating songs...');
         Song::withoutGlobalScopes()
             ->select(['id'])
-            ->chunk(20000, function($songs, int $page) use ($sitemapIndex) {
+            ->chunk(20000, function ($songs, int $page) use ($sitemapIndex) {
                 $path = 'sitemaps/songs_' . $page . '_sitemap.xml';
                 $this->info($path);
                 Sitemap::create()
@@ -303,7 +303,7 @@ class GenerateSitemap extends Command
         $this->info('- Generating studios...');
         Studio::withoutGlobalScopes()
             ->select(['slug'])
-            ->chunk(20000, function($studios, int $page) use ($sitemapIndex) {
+            ->chunk(20000, function ($studios, int $page) use ($sitemapIndex) {
                 $path = 'sitemaps/studios_' . $page . '_sitemap.xml';
                 $this->info($path);
                 Sitemap::create()
@@ -316,7 +316,7 @@ class GenerateSitemap extends Command
         $this->info('- Generating users...');
         User::withoutGlobalScopes()
             ->select(['slug'])
-            ->chunk(20000, function($users, int $page) use ($sitemapIndex) {
+            ->chunk(20000, function ($users, int $page) use ($sitemapIndex) {
                 $path = 'sitemaps/users_' . $page . '_sitemap.xml';
                 $this->info($path);
                 Sitemap::create()

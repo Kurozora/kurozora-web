@@ -4,7 +4,7 @@ namespace App\Console\Commands\Meilisearch;
 
 use Exception;
 use Illuminate\Console\Command;
-use MeiliSearch\Client;
+use Meilisearch\Client;
 
 class Index extends Command
 {
@@ -155,7 +155,7 @@ class Index extends Command
                 foreach ($statIndexes as $index => $statIndex) {
                     $row = ['index' => $index] + $statIndex;
 
-                    array_walk($row, function(&$stat) {
+                    array_walk($row, function (&$stat) {
                         if (is_array($stat)) {
                             foreach ($stat as $key => $value) {
                                 $stat[$key] = sprintf('%-\'.42s%\'.42s', $key, $value);

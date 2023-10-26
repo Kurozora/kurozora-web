@@ -5,23 +5,23 @@ namespace App\Extensions;
 use Exception;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Laravel\Scout\EngineManager;
-use MeiliSearch\Client as MeiliSearch;
+use Meilisearch\Client as Meilisearch;
 
 class KEngineManager extends EngineManager
 {
     /**
-     * Create an MeiliSearch engine instance.
+     * Create a Meilisearch engine instance.
      *
-     * @return KMeiliSearchEngine
+     * @return KMeilisearchEngine
      * @throws BindingResolutionException
      * @throws Exception
      */
-    public function createMeilisearchDriver(): KMeiliSearchEngine
+    public function createMeilisearchDriver(): KMeilisearchEngine
     {
-        $this->ensureMeiliSearchClientIsInstalled();
+        $this->ensureMeilisearchClientIsInstalled();
 
-        return new KMeiliSearchEngine(
-            $this->container->make(MeiliSearch::class),
+        return new KMeilisearchEngine(
+            $this->container->make(Meilisearch::class),
             config('scout.soft_delete', false)
         );
     }

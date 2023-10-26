@@ -80,7 +80,7 @@ class Index extends Component
             ->startDate()
             ->setYear(now()->year);
 
-        return $query->where('status_id', ['=', 3])
+        return $query->where('status_id', 3)
             ->where('started_at', ['<=', $seasonStartDate->timestamp])
             ->query(function (EloquentBuilder $query) {
                 $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating']);
