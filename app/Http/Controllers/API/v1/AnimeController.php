@@ -104,7 +104,8 @@ class AnimeController extends Controller
                         break;
                     case 'seasons':
                         $includeArray['seasons'] = function ($query) {
-                            $query->limit(Anime::MAXIMUM_RELATIONSHIPS_LIMIT);
+                            $query->orderBy('number', 'desc')
+                                ->limit(Anime::MAXIMUM_RELATIONSHIPS_LIMIT);
                         };
                         break;
                     case 'songs':
