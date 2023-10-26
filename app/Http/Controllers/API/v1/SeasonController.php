@@ -25,6 +25,9 @@ class SeasonController extends Controller
         // Call the SeasonViewed event
         SeasonViewed::dispatch($season);
 
+        $season->load(['anime', 'media'])
+            ->loadCount(['episodes']);
+
         return JSONResult::success([
             'data' => SeasonResource::collection([$season])
         ]);
