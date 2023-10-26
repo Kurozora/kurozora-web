@@ -13,7 +13,7 @@ class MediaRelatedResource extends JsonResource
     /**
      * The resource instance.
      *
-     * @var MediaRelation
+     * @var MediaRelation $resource
      */
     public $resource;
 

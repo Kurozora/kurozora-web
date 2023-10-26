@@ -11,7 +11,7 @@ class PlatformResource extends JsonResource
     /**
      * The resource instance.
      *
-     * @var SessionAttribute
+     * @var SessionAttribute $resource
      */
     public $resource;
 

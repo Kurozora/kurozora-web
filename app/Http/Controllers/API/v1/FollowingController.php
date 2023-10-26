@@ -8,6 +8,7 @@ use App\Http\Requests\GetFollowersRequest;
 use App\Http\Requests\GetFollowingRequest;
 use App\Http\Resources\UserResourceIdentity;
 use App\Models\User;
+use App\Models\UserFollow;
 use App\Notifications\NewFollower;
 use Illuminate\Http\JsonResponse;
 
@@ -23,7 +24,9 @@ class FollowingController extends Controller
     {
         $authUser = auth()->user();
 
-        $isAlreadyFollowing = $user->followers()->where('user_id', $authUser->id)->exists();
+        $isAlreadyFollowing = $user->followers()
+            ->where('user_id', '=', $authUser->id)
+            ->exists();
 
         if ($isAlreadyFollowing) {
             // Delete follow
@@ -56,7 +59,9 @@ class FollowingController extends Controller
         $data = $request->validated();
 
         // Get the followers
-        $followers = $user->followers()->paginate($data['limit'] ?? 25);
+        $followers = $user->followers()
+            ->orderBy(UserFollow::TABLE_NAME . '.created_at', 'desc')
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $followers->nextPageUrl());
@@ -79,7 +84,9 @@ class FollowingController extends Controller
         $data = $request->validated();
 
         // Get the following
-        $following = $user->following()->paginate($data['limit'] ?? 25);
+        $following = $user->following()
+            ->orderBy(UserFollow::TABLE_NAME . '.created_at', 'desc')
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $following->nextPageUrl());
