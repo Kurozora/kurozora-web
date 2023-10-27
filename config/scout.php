@@ -179,8 +179,9 @@ return [
                 'filterableAttributes'=> ['id', 'address', 'founded', 'is_nsfw', 'type'],
             ],
             \App\Models\UserLibrary::TABLE_NAME => [
+                'searchableAttributes' => ['trackable.original_title', 'trackable.title', 'trackable.synonym_titles', 'trackable.translations', 'trackable.synopsis', 'trackable.tagline'],
                 'sortableAttributes'=> ['ended_at', 'started_at', 'status', 'created_at', 'update_at'],
-                'filterableAttributes'=> ['id', 'anime', 'manga', 'trackable_id', 'trackable_type', 'started_at', 'ended_at', 'status', 'user_id'],
+                'filterableAttributes'=> ['id', 'trackable_id', 'trackable_type', 'started_at', 'ended_at', 'status', 'user_id'],
             ],
             \App\Models\User::TABLE_NAME => [
                 'searchableAttributes' => ['slug', 'username', 'biography'],

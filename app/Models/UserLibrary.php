@@ -66,10 +66,10 @@ class UserLibrary extends KModel
     /**
      * Modify the query used to retrieve models when making all of the models searchable.
      *
-     * @param  Builder  $query
+     * @param Builder $query
      * @return Builder
      */
-    protected function makeAllSearchableUsing($query): Builder
+    protected function makeAllSearchableUsing(Builder $query): Builder
     {
         return $query->withoutEagerLoads()
             ->withoutGlobalScopes();

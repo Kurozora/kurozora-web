@@ -10,7 +10,7 @@ use App\Http\Requests\SearchRequest;
 use App\Http\Resources\AnimeResourceIdentity;
 use App\Http\Resources\CharacterResourceIdentity;
 use App\Http\Resources\EpisodeResourceIdentity;
-use App\Http\Resources\GameResource;
+use App\Http\Resources\GameResourceIdentity;
 use App\Http\Resources\LiteratureResourceIdentity;
 use App\Http\Resources\PersonResourceIdentity;
 use App\Http\Resources\SongResourceIdentity;
@@ -68,7 +68,7 @@ class SearchController extends Controller
                     break;
                 case SearchType::Episodes:
                     $resource = Episode::search($data['query']);
-                    $this->filter(Episode::class, $request, $resource);;
+                    $this->filter(Episode::class, $request, $resource);
                     $resource = $resource->paginate($data['limit'] ?? 20)
                         ->appends($data);
 
@@ -88,7 +88,7 @@ class SearchController extends Controller
                             ->query(function ($query) {
                                 $query->with(['trackable', 'user']);
                             });
-                        $this->filter(Game::class, $request, $resource);;
+                        $this->filter(Game::class, $request, $resource);
                         $resource = $resource->paginate($data['limit'] ?? 5)
                             ->appends($data);
 
@@ -107,7 +107,7 @@ class SearchController extends Controller
                     }
 
                     $response[$type] = [
-                        'data' => GameResource::collection($resource),
+                        'data' => GameResourceIdentity::collection($resource),
                         'next' => empty($nextPageURL) ? null : $nextPageURL
                     ];
                     break;
