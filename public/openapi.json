@@ -29,6 +29,14 @@
       "description": "Everything anime related"
     },
     {
+      "name": "games",
+      "description": "Everything games related"
+    },
+    {
+      "name": "manga",
+      "description": "Everything manga related"
+    },
+    {
       "name": "cast",
       "description": "Everything cast related"
     },
@@ -189,24 +197,19 @@
             "in": "path",
             "name": "animeID",
             "schema": {
-              "type": "integer"
+              "type": "string"
             },
             "required": true,
             "description": "ID of the anime."
           },
           {
             "in": "query",
-            "name": "include",
+            "name": "include[]",
             "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              },
-              "uniqueItems": true
+              "$ref": "#/components/schemas/AnimeRelation"
             },
-            "explode": false,
             "required": false,
-            "description": "The relations to include in the response. Available relations are:\n- cast\n- characters\n- related-shows\n- seasons\n- staff\n- studios"
+            "description": "The relations to include in the response."
           }
         ],
         "responses": {
@@ -232,7 +235,7 @@
             "in": "path",
             "name": "animeID",
             "schema": {
-              "type": "integer"
+              "type": "string"
             },
             "required": true,
             "description": "ID of the anime."
@@ -283,7 +286,7 @@
             "in": "path",
             "name": "animeID",
             "schema": {
-              "type": "integer"
+              "type": "string"
             },
             "required": true,
             "description": "ID of the anime."
@@ -342,7 +345,7 @@
             "in": "path",
             "name": "animeID",
             "schema": {
-              "type": "integer"
+              "type": "string"
             },
             "required": true,
             "description": "ID of the anime."
@@ -373,6 +376,124 @@
         "responses": {
           "200": {
             "$ref": "#/components/responses/GetAnimeRelatedShowsSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/anime/{animeID}/related-literatures": {
+      "get": {
+        "security": [
+          {
+          },
+          {
+            "bearerAuth": [
+            ]
+          }
+        ],
+        "tags": [
+          "anime"
+        ],
+        "operationId": "getAnimeRelatedLiteratures",
+        "summary": "Anime related-literatures information.",
+        "description": "This endpoint will retrieve the related-literatures of an Anime item.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "animeID",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "ID of the anime."
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "string",
+              "example": 25,
+              "minimum": 1,
+              "maximum": 100
+            },
+            "required": false,
+            "description": "The limit on the number of objects, or number of objects in the specified relationship, that are returned. The default value is 25 and the maximum value is 100."
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            },
+            "required": false,
+            "description": "The next page or group of objects to fetch. The default value is 1."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetAnimeRelatedLiteraturesSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/anime/{animeID}/related-games": {
+      "get": {
+        "security": [
+          {
+          },
+          {
+            "bearerAuth": [
+            ]
+          }
+        ],
+        "tags": [
+          "anime"
+        ],
+        "operationId": "getAnimeRelatedGames",
+        "summary": "Anime related-games information.",
+        "description": "This endpoint will retrieve the related-games of an Anime item.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "animeID",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "ID of the anime."
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "string",
+              "example": 25,
+              "minimum": 1,
+              "maximum": 100
+            },
+            "required": false,
+            "description": "The limit on the number of objects, or number of objects in the specified relationship, that are returned. The default value is 25 and the maximum value is 100."
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            },
+            "required": false,
+            "description": "The next page or group of objects to fetch. The default value is 1."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetAnimeRelatedGamesSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -425,7 +546,7 @@
             "in": "path",
             "name": "animeID",
             "schema": {
-              "type": "integer"
+              "type": "string"
             },
             "required": true,
             "description": "ID of the anime."
@@ -454,7 +575,7 @@
             "in": "path",
             "name": "animeID",
             "schema": {
-              "type": "integer"
+              "type": "string"
             },
             "required": true,
             "description": "ID of the anime."
@@ -505,7 +626,7 @@
             "in": "path",
             "name": "animeID",
             "schema": {
-              "type": "integer"
+              "type": "string"
             },
             "required": true,
             "description": "ID of the anime."
@@ -556,7 +677,7 @@
             "in": "path",
             "name": "animeID",
             "schema": {
-              "type": "integer"
+              "type": "string"
             },
             "required": true,
             "description": "ID of the anime."
@@ -637,6 +758,1082 @@
         "responses": {
           "200": {
             "$ref": "#/components/responses/GetAnimeUpcomingSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/games/{gameID}": {
+      "get": {
+        "security": [
+          {
+          },
+          {
+            "bearerAuth": [
+            ]
+          }
+        ],
+        "tags": [
+          "games"
+        ],
+        "operationId": "getGame",
+        "summary": "(optional authentication) Game details.",
+        "description": "This endpoint will retrieve the details of an Game item.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "gameID",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "ID of the game."
+          },
+          {
+            "in": "query",
+            "name": "include[]",
+            "schema": {
+              "$ref": "#/components/schemas/GameRelation"
+            },
+            "required": false,
+            "description": "The relations to include in the response."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetGameSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/games/{gameID}/cast": {
+      "get": {
+        "tags": [
+          "games"
+        ],
+        "operationId": "getGameCast",
+        "summary": "Game cast information.",
+        "description": "This endpoint will retrieve the casts of an Game item.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "gameID",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "ID of the game."
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "string",
+              "example": 25,
+              "minimum": 1,
+              "maximum": 100
+            },
+            "required": false,
+            "description": "The limit on the number of objects, or number of objects in the specified relationship, that are returned. The default value is 25 and the maximum value is 100."
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            },
+            "required": false,
+            "description": "The next page or group of objects to fetch. The default value is 1."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetGameCastSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/games/{gameID}/characters": {
+      "get": {
+        "tags": [
+          "games"
+        ],
+        "operationId": "getGameCharacters",
+        "summary": "Game character information.",
+        "description": "This endpoint will retrieve the characters of an Game item.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "gameID",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "ID of the game."
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "string",
+              "example": 25,
+              "minimum": 1,
+              "maximum": 100
+            },
+            "required": false,
+            "description": "The limit on the number of objects, or number of objects in the specified relationship, that are returned. The default value is 25 and the maximum value is 100."
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            },
+            "required": false,
+            "description": "The next page or group of objects to fetch. The default value is 1."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetGameCharactersSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/games/{gameID}/related-shows": {
+      "get": {
+        "security": [
+          {
+          },
+          {
+            "bearerAuth": [
+            ]
+          }
+        ],
+        "tags": [
+          "games"
+        ],
+        "operationId": "getGameRelatedShows",
+        "summary": "Game related-shows information.",
+        "description": "This endpoint will retrieve the related-shows of an Game item.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "gameID",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "ID of the game."
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "string",
+              "example": 25,
+              "minimum": 1,
+              "maximum": 100
+            },
+            "required": false,
+            "description": "The limit on the number of objects, or number of objects in the specified relationship, that are returned. The default value is 25 and the maximum value is 100."
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            },
+            "required": false,
+            "description": "The next page or group of objects to fetch. The default value is 1."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetGameRelatedShowsSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/games/{gameID}/related-literatures": {
+      "get": {
+        "security": [
+          {
+          },
+          {
+            "bearerAuth": [
+            ]
+          }
+        ],
+        "tags": [
+          "games"
+        ],
+        "operationId": "getGameRelatedLiteratures",
+        "summary": "Game related-literatures information.",
+        "description": "This endpoint will retrieve the related-literatures of an Game item.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "gameID",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "ID of the game."
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "string",
+              "example": 25,
+              "minimum": 1,
+              "maximum": 100
+            },
+            "required": false,
+            "description": "The limit on the number of objects, or number of objects in the specified relationship, that are returned. The default value is 25 and the maximum value is 100."
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            },
+            "required": false,
+            "description": "The next page or group of objects to fetch. The default value is 1."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetGameRelatedLiteraturesSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/games/{gameID}/related-games": {
+      "get": {
+        "security": [
+          {
+          },
+          {
+            "bearerAuth": [
+            ]
+          }
+        ],
+        "tags": [
+          "games"
+        ],
+        "operationId": "getGameRelatedGames",
+        "summary": "Game related-games information.",
+        "description": "This endpoint will retrieve the related-games of an Game item.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "gameID",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "ID of the game."
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "string",
+              "example": 25,
+              "minimum": 1,
+              "maximum": 100
+            },
+            "required": false,
+            "description": "The limit on the number of objects, or number of objects in the specified relationship, that are returned. The default value is 25 and the maximum value is 100."
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            },
+            "required": false,
+            "description": "The next page or group of objects to fetch. The default value is 1."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetGameRelatedGamesSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/games/{gameID}/rate": {
+      "post": {
+        "security": [
+          {
+            "bearerAuth": [
+            ]
+          }
+        ],
+        "tags": [
+          "games"
+        ],
+        "operationId": "postGameRate",
+        "summary": "Rate an Game.",
+        "description": "This endpoint will allow user's to leave a rating for an Game.",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "rating": {
+                    "type": "number",
+                    "format": "double",
+                    "description": "The rating to leave.",
+                    "example": 2.5,
+                    "minimum": 0,
+                    "maximum": 5
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "The description accompanying the rating."
+                  }
+                },
+                "required": [
+                  "rating"
+                ]
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "gameID",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "ID of the game."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/games/{gameID}/staff": {
+      "get": {
+        "tags": [
+          "games"
+        ],
+        "operationId": "getGameStaff",
+        "summary": "Game staff information.",
+        "description": "This endpoint will retrieve the staff of an Game item.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "gameID",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "ID of the game."
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "string",
+              "example": 25,
+              "minimum": 1,
+              "maximum": 100
+            },
+            "required": false,
+            "description": "The limit on the number of objects, or number of objects in the specified relationship, that are returned. The default value is 25 and the maximum value is 100."
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            },
+            "required": false,
+            "description": "The next page or group of objects to fetch. The default value is 1."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetGameStaffSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/games/{gameID}/studios": {
+      "get": {
+        "tags": [
+          "games"
+        ],
+        "operationId": "getGameStudios",
+        "summary": "Game studio information.",
+        "description": "This endpoint will retrieve the studios of an Game item.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "gameID",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "ID of the game."
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "string",
+              "example": 25,
+              "minimum": 1,
+              "maximum": 100
+            },
+            "required": false,
+            "description": "The limit on the number of objects, or number of objects in the specified relationship, that are returned. The default value is 25 and the maximum value is 100."
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            },
+            "required": false,
+            "description": "The next page or group of objects to fetch. The default value is 1."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetGameStudiosSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/games/upcoming": {
+      "get": {
+        "security": [
+          {
+          },
+          {
+            "bearerAuth": [
+            ]
+          }
+        ],
+        "tags": [
+          "games"
+        ],
+        "operationId": "getGameUpcoming",
+        "summary": "Upcoming game information.",
+        "description": "This endpoint will retrieve the upcoming Game items.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "string",
+              "example": 25,
+              "minimum": 1,
+              "maximum": 100
+            },
+            "required": false,
+            "description": "The limit on the number of objects, or number of objects in the specified relationship, that are returned. The default value is 25 and the maximum value is 100."
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            },
+            "required": false,
+            "description": "The next page or group of objects to fetch. The default value is 1."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetGameUpcomingSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/manga/{mangaID}": {
+      "get": {
+        "security": [
+          {
+          },
+          {
+            "bearerAuth": [
+            ]
+          }
+        ],
+        "tags": [
+          "manga"
+        ],
+        "operationId": "getManga",
+        "summary": "(optional authentication) Manga details.",
+        "description": "This endpoint will retrieve the details of an Manga item.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "mangaID",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "ID of the manga."
+          },
+          {
+            "in": "query",
+            "name": "include[]",
+            "schema": {
+              "$ref": "#/components/schemas/MangaRelation"
+            },
+            "required": false,
+            "description": "The relations to include in the response."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetMangaSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/manga/{mangaID}/cast": {
+      "get": {
+        "tags": [
+          "manga"
+        ],
+        "operationId": "getMangaCast",
+        "summary": "Manga cast information.",
+        "description": "This endpoint will retrieve the casts of an Manga item.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "mangaID",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "ID of the manga."
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "string",
+              "example": 25,
+              "minimum": 1,
+              "maximum": 100
+            },
+            "required": false,
+            "description": "The limit on the number of objects, or number of objects in the specified relationship, that are returned. The default value is 25 and the maximum value is 100."
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            },
+            "required": false,
+            "description": "The next page or group of objects to fetch. The default value is 1."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetMangaCastSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/manga/{mangaID}/characters": {
+      "get": {
+        "tags": [
+          "manga"
+        ],
+        "operationId": "getMangaCharacters",
+        "summary": "Manga character information.",
+        "description": "This endpoint will retrieve the characters of an Manga item.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "mangaID",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "ID of the manga."
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "string",
+              "example": 25,
+              "minimum": 1,
+              "maximum": 100
+            },
+            "required": false,
+            "description": "The limit on the number of objects, or number of objects in the specified relationship, that are returned. The default value is 25 and the maximum value is 100."
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            },
+            "required": false,
+            "description": "The next page or group of objects to fetch. The default value is 1."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetMangaCharactersSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/manga/{mangaID}/related-shows": {
+      "get": {
+        "security": [
+          {
+          },
+          {
+            "bearerAuth": [
+            ]
+          }
+        ],
+        "tags": [
+          "manga"
+        ],
+        "operationId": "getMangaRelatedShows",
+        "summary": "Manga related-shows information.",
+        "description": "This endpoint will retrieve the related-shows of an Manga item.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "mangaID",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "ID of the manga."
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "string",
+              "example": 25,
+              "minimum": 1,
+              "maximum": 100
+            },
+            "required": false,
+            "description": "The limit on the number of objects, or number of objects in the specified relationship, that are returned. The default value is 25 and the maximum value is 100."
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            },
+            "required": false,
+            "description": "The next page or group of objects to fetch. The default value is 1."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetMangaRelatedShowsSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/manga/{mangaID}/related-literatures": {
+      "get": {
+        "security": [
+          {
+          },
+          {
+            "bearerAuth": [
+            ]
+          }
+        ],
+        "tags": [
+          "manga"
+        ],
+        "operationId": "getMangaRelatedLiteratures",
+        "summary": "Manga related-literatures information.",
+        "description": "This endpoint will retrieve the related-literatures of an Manga item.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "mangaID",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "ID of the manga."
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "string",
+              "example": 25,
+              "minimum": 1,
+              "maximum": 100
+            },
+            "required": false,
+            "description": "The limit on the number of objects, or number of objects in the specified relationship, that are returned. The default value is 25 and the maximum value is 100."
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            },
+            "required": false,
+            "description": "The next page or group of objects to fetch. The default value is 1."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetMangaRelatedLiteraturesSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/manga/{mangaID}/related-games": {
+      "get": {
+        "security": [
+          {
+          },
+          {
+            "bearerAuth": [
+            ]
+          }
+        ],
+        "tags": [
+          "manga"
+        ],
+        "operationId": "getMangaRelatedGames",
+        "summary": "Manga related-games information.",
+        "description": "This endpoint will retrieve the related-games of an Manga item.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "mangaID",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "ID of the manga."
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "string",
+              "example": 25,
+              "minimum": 1,
+              "maximum": 100
+            },
+            "required": false,
+            "description": "The limit on the number of objects, or number of objects in the specified relationship, that are returned. The default value is 25 and the maximum value is 100."
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            },
+            "required": false,
+            "description": "The next page or group of objects to fetch. The default value is 1."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetMangaRelatedGamesSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/manga/{mangaID}/rate": {
+      "post": {
+        "security": [
+          {
+            "bearerAuth": [
+            ]
+          }
+        ],
+        "tags": [
+          "manga"
+        ],
+        "operationId": "postMangaRate",
+        "summary": "Rate an Manga.",
+        "description": "This endpoint will allow user's to leave a rating for an Manga.",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "rating": {
+                    "type": "number",
+                    "format": "double",
+                    "description": "The rating to leave.",
+                    "example": 2.5,
+                    "minimum": 0,
+                    "maximum": 5
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "The description accompanying the rating."
+                  }
+                },
+                "required": [
+                  "rating"
+                ]
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "mangaID",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "ID of the manga."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/manga/{mangaID}/staff": {
+      "get": {
+        "tags": [
+          "manga"
+        ],
+        "operationId": "getMangaStaff",
+        "summary": "Manga staff information.",
+        "description": "This endpoint will retrieve the staff of an Manga item.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "mangaID",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "ID of the manga."
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "string",
+              "example": 25,
+              "minimum": 1,
+              "maximum": 100
+            },
+            "required": false,
+            "description": "The limit on the number of objects, or number of objects in the specified relationship, that are returned. The default value is 25 and the maximum value is 100."
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            },
+            "required": false,
+            "description": "The next page or group of objects to fetch. The default value is 1."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetMangaStaffSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/manga/{mangaID}/studios": {
+      "get": {
+        "tags": [
+          "manga"
+        ],
+        "operationId": "getMangaStudios",
+        "summary": "Manga studio information.",
+        "description": "This endpoint will retrieve the studios of an Manga item.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "mangaID",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "ID of the manga."
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "string",
+              "example": 25,
+              "minimum": 1,
+              "maximum": 100
+            },
+            "required": false,
+            "description": "The limit on the number of objects, or number of objects in the specified relationship, that are returned. The default value is 25 and the maximum value is 100."
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            },
+            "required": false,
+            "description": "The next page or group of objects to fetch. The default value is 1."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetMangaStudiosSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/manga/upcoming": {
+      "get": {
+        "security": [
+          {
+          },
+          {
+            "bearerAuth": [
+            ]
+          }
+        ],
+        "tags": [
+          "manga"
+        ],
+        "operationId": "getMangaUpcoming",
+        "summary": "Upcoming manga information.",
+        "description": "This endpoint will retrieve the upcoming Manga items.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "string",
+              "example": 25,
+              "minimum": 1,
+              "maximum": 100
+            },
+            "required": false,
+            "description": "The limit on the number of objects, or number of objects in the specified relationship, that are returned. The default value is 25 and the maximum value is 100."
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            },
+            "required": false,
+            "description": "The next page or group of objects to fetch. The default value is 1."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetMangaUpcomingSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -890,17 +2087,12 @@
           },
           {
             "in": "query",
-            "name": "include",
+            "name": "include[]",
             "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              },
-              "uniqueItems": true
+              "$ref": "#/components/schemas/EpisodeRelation"
             },
-            "explode": false,
             "required": false,
-            "description": "The relations to include in the response. Available relations are:\n- show\n- season"
+            "description": "The relations to include in the response."
           }
         ],
         "responses": {
@@ -1037,17 +2229,12 @@
           },
           {
             "in": "query",
-            "name": "include",
+            "name": "include[]",
             "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              },
-              "uniqueItems": true
+              "$ref": "#/components/schemas/CharacterRelation"
             },
-            "explode": false,
             "required": false,
-            "description": "The relations to include in the response. Available relations are:\n- shows\n- people"
+            "description": "The relations to include in the response."
           }
         ],
         "responses": {
@@ -1274,17 +2461,12 @@
           },
           {
             "in": "query",
-            "name": "include",
+            "name": "include[]",
             "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              },
-              "uniqueItems": true
+              "$ref": "#/components/schemas/PersonRelation"
             },
-            "explode": false,
             "required": false,
-            "description": "The relations to include in the response. Available relations are:\n- characters\n- shows"
+            "description": "The relations to include in the response."
           }
         ],
         "responses": {
@@ -2955,17 +4137,12 @@
           },
           {
             "in": "query",
-            "name": "include",
+            "name": "include[]",
             "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              },
-              "uniqueItems": true
+              "$ref": "#/components/schemas/StudioRelation"
             },
-            "explode": false,
             "required": false,
-            "description": "The relations to include in the response. Available relations are:\n- shows"
+            "description": "The relations to include in the response."
           }
         ],
         "responses": {
@@ -3794,6 +4971,65 @@
   },
   "components": {
     "schemas": {
+      "AnimeRelation": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": [
+            "cast",
+            "characters",
+            "related-shows",
+            "related-games",
+            "related-literatures",
+            "seasons",
+            "songs",
+            "staff",
+            "studios"
+          ]
+        },
+        "description": "The relations to include in the response."
+      },
+      "CharacterRelation": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": [
+            "people",
+            "shows",
+            "games",
+            "literatures"
+          ]
+        },
+        "description": "The relations to include in the response."
+      },
+      "EpisodeRelation": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": [
+            "show",
+            "season"
+          ]
+        },
+        "description": "The relations to include in the response."
+      },
+      "GameRelation": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": [
+            "cast",
+            "characters",
+            "related-shows",
+            "related-games",
+            "related-literatures",
+            "songs",
+            "staff",
+            "studios"
+          ]
+        },
+        "description": "The relations to include in the response."
+      },
       "ImportService": {
         "type": "integer",
         "enum": [
@@ -3834,6 +5070,22 @@
         "default": "Watching",
         "description": "The set of available library status types."
       },
+      "MangaRelation": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": [
+            "cast",
+            "characters",
+            "related-shows",
+            "related-games",
+            "related-literatures",
+            "staff",
+            "studios"
+          ]
+        },
+        "description": "The relations to include in the response."
+      },
       "NotificationReadStatus": {
         "type": "integer",
         "enum": [
@@ -3851,6 +5103,19 @@
         ],
         "default": 0,
         "description": "Whether the message contains NSFW material.\n- 0 = no NSFW\n- 1 = NSFW"
+      },
+      "PersonRelation": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": [
+            "characters",
+            "shows",
+            "games",
+            "literatures"
+          ]
+        },
+        "description": "The relations to include in the response."
       },
       "Re-shareStatus": {
         "type": "integer",
@@ -3916,6 +5181,18 @@
           3
         ],
         "description": "The set of available store product types.\n- 0: Consumable\n- 1: Non-Consumable\n- 2: Non-Renewing Subscription\n- 3: Auto-Renewing Subscription"
+      },
+      "StudioRelation": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": [
+            "shows",
+            "games",
+            "literatures"
+          ]
+        },
+        "description": "The relations to include in the response."
       },
       "VoteType": {
         "type": "integer",
@@ -5069,6 +6346,244 @@
           }
         }
       },
+      "GetAnimeRelatedGamesSuccess": {
+        "description": "Successful GET Anime Related Games JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "show": {
+                      "id": 217,
+                      "type": "show",
+                      "href": "/v1/anime/217",
+                      "attributes": {
+                        "anidbID": null,
+                        "anilistID": null,
+                        "kitsuID": null,
+                        "imdbID": null,
+                        "malID": null,
+                        "title": "Omnis odit hic dolorem itaque.",
+                        "synopsis": "Aspernatur aperiam corrupti similique voluptatibus qui. Voluptas eum ea doloribus qui inventore hic. Voluptas accusantium libero autem ipsum molestiae aut nobis. Aliquam unde voluptates corrupti ut temporibus eum.",
+                        "tagline": "Sunt error hic quod sint.",
+                        "tvRating": {
+                          "name": "R18+",
+                          "description": "Adults Only"
+                        },
+                        "mediaType": {
+                          "name": "Special",
+                          "description": "A standalone series with a self-contained story."
+                        },
+                        "source": {
+                          "name": "4-Koma Manga",
+                          "description": "Adapted from comic strips that generally consists of four panels per page."
+                        },
+                        "network": null,
+                        "studio": [],
+                        "status": "Tba",
+                        "episodes": 0,
+                        "seasons": 0,
+                        "averageRating": 0,
+                        "ratingCount": 0,
+                        "runtime": 25,
+                        "videoURL": null,
+                        "poster": null,
+                        "background": null,
+                        "isNSFW": true,
+                        "genres": [],
+                        "themes": [],
+                        "startedAt": "2014-12-10",
+                        "endedAt": "2015-05-27",
+                        "airTime": "16:49:00",
+                        "airDay": 7,
+                        "copyright": "℗ 1997 Kulas-Baumbach",
+                        "givenRating": 0,
+                        "libraryStatus": null,
+                        "isFavorited": false,
+                        "isReminded": false
+                      }
+                    },
+                    "attributes": {
+                      "type": "Full story"
+                    }
+                  },
+                  {
+                    "show": {
+                      "id": 219,
+                      "type": "show",
+                      "href": "/v1/anime/219",
+                      "attributes": {
+                        "title": "Nam voluptatum voluptas optio qui.",
+                        "type": "Unknown",
+                        "source": "Original",
+                        "anidbID": null,
+                        "anilistID": null,
+                        "kitsuID": null,
+                        "imdbID": null,
+                        "malID": null,
+                        "network": null,
+                        "studio": [],
+                        "status": "Tba",
+                        "episodes": 0,
+                        "seasons": 0,
+                        "averageRating": 0,
+                        "ratingCount": 0,
+                        "synopsis": "Rerum distinctio quibusdam porro et. Modi natus iusto ut qui praesentium dicta sed ratione. Porro excepturi et qui laudantium tenetur non iure.",
+                        "runtime": 25,
+
+                        "tvRating": {
+                          "name": "G",
+                          "description": "All Ages"
+                        },
+                        "tagline": "Expedita esse et cupiditate id impedit qui ut.",
+                        "videoURL": null,
+                        "poster": null,
+                        "background": null,
+                        "isNSFW": false,
+                        "genres": [],
+                        "themes": [],
+                        "startedAt": "2015-02-10",
+                        "endedAt": "2015-05-05",
+                        "airTime": "18:32:00",
+                        "airDay": 6,
+                        "copyright": "® 1976 Swift Ltd",
+                        "givenRating": 0,
+                        "libraryStatus": null,
+                        "isFavorited": false,
+                        "isReminded": false
+                      }
+                    },
+                    "attributes": {
+                      "type": "Adaptation"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "GetAnimeRelatedLiteraturesSuccess": {
+        "description": "Successful GET Anime Related Literatures JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "show": {
+                      "id": 217,
+                      "type": "show",
+                      "href": "/v1/anime/217",
+                      "attributes": {
+                        "anidbID": null,
+                        "anilistID": null,
+                        "kitsuID": null,
+                        "imdbID": null,
+                        "malID": null,
+                        "title": "Omnis odit hic dolorem itaque.",
+                        "synopsis": "Aspernatur aperiam corrupti similique voluptatibus qui. Voluptas eum ea doloribus qui inventore hic. Voluptas accusantium libero autem ipsum molestiae aut nobis. Aliquam unde voluptates corrupti ut temporibus eum.",
+                        "tagline": "Sunt error hic quod sint.",
+                        "tvRating": {
+                          "name": "R18+",
+                          "description": "Adults Only"
+                        },
+                        "mediaType": {
+                          "name": "Special",
+                          "description": "A standalone series with a self-contained story."
+                        },
+                        "source": {
+                          "name": "4-Koma Manga",
+                          "description": "Adapted from comic strips that generally consists of four panels per page."
+                        },
+                        "network": null,
+                        "studio": [],
+                        "status": "Tba",
+                        "episodes": 0,
+                        "seasons": 0,
+                        "averageRating": 0,
+                        "ratingCount": 0,
+                        "runtime": 25,
+                        "videoURL": null,
+                        "poster": null,
+                        "background": null,
+                        "isNSFW": true,
+                        "genres": [],
+                        "themes": [],
+                        "startedAt": "2014-12-10",
+                        "endedAt": "2015-05-27",
+                        "airTime": "16:49:00",
+                        "airDay": 7,
+                        "copyright": "℗ 1997 Kulas-Baumbach",
+                        "givenRating": 0,
+                        "libraryStatus": null,
+                        "isFavorited": false,
+                        "isReminded": false
+                      }
+                    },
+                    "attributes": {
+                      "type": "Full story"
+                    }
+                  },
+                  {
+                    "show": {
+                      "id": 219,
+                      "type": "show",
+                      "href": "/v1/anime/219",
+                      "attributes": {
+                        "title": "Nam voluptatum voluptas optio qui.",
+                        "type": "Unknown",
+                        "source": "Original",
+                        "anidbID": null,
+                        "anilistID": null,
+                        "kitsuID": null,
+                        "imdbID": null,
+                        "malID": null,
+                        "network": null,
+                        "studio": [],
+                        "status": "Tba",
+                        "episodes": 0,
+                        "seasons": 0,
+                        "averageRating": 0,
+                        "ratingCount": 0,
+                        "synopsis": "Rerum distinctio quibusdam porro et. Modi natus iusto ut qui praesentium dicta sed ratione. Porro excepturi et qui laudantium tenetur non iure.",
+                        "runtime": 25,
+
+                        "tvRating": {
+                          "name": "G",
+                          "description": "All Ages"
+                        },
+                        "tagline": "Expedita esse et cupiditate id impedit qui ut.",
+                        "videoURL": null,
+                        "poster": null,
+                        "background": null,
+                        "isNSFW": false,
+                        "genres": [],
+                        "themes": [],
+                        "startedAt": "2015-02-10",
+                        "endedAt": "2015-05-05",
+                        "airTime": "18:32:00",
+                        "airDay": 6,
+                        "copyright": "® 1976 Swift Ltd",
+                        "givenRating": 0,
+                        "libraryStatus": null,
+                        "isFavorited": false,
+                        "isReminded": false
+                      }
+                    },
+                    "attributes": {
+                      "type": "Adaptation"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
       "GetSeasonsSuccess": {
         "description": "Successful GET Seasons JSON response",
         "content": {
@@ -5146,6 +6661,2328 @@
       },
       "GetAnimeStudiosSuccess": {
         "description": "Successful GET Anime Studios JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "id":8,
+                    "type": "studios",
+                    "href": "/v1/studios/8",
+                    "attributes": {
+                      "name": "Bogan, Medhurst and Stamm",
+                      "logo": {
+                        "url": "https://via.placeholder.com/640x480.png/006655?text=ratione"
+                      },
+                      "about": "Corporis quia ducimus eveniet beatae. Aut repellat voluptates porro esse ea. Similique quos nemo voluptas beatae enim molestias. Qui perspiciatis unde ipsa ipsam rerum veniam. Non explicabo hic incidunt quibusdam nobis accusantium. Voluptatum vero vel et animi et amet. Quis autem quod enim ut incidunt odio. Tenetur omnis amet qui delectus. Temporibus cupiditate ullam similique harum voluptas. Nostrum deserunt eum voluptas ex ut similique omnis. Ipsa illo voluptates nobis quisquam fugit rerum voluptatem dolore. Voluptatem ratione ut veritatis illum eveniet aliquam. Eaque maxime nemo maiores dolor hic.",
+                      "founded": "2007-02-25",
+                      "websiteUrl": "https://streich.net/blanditiis-tempora-molestiae-in-aut"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "GetGameSuccess": {
+        "description": "Successful GET Game JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "id": 1,
+                    "type": "show",
+                    "href": "/v1/anime/1",
+                    "attributes": {
+                      "title": "\"0\"",
+                      "type": "Tv",
+                      "source": "Unknown",
+                      "anidbID": 10143,
+                      "anilistID": 102416,
+                      "kitsuID": 8925,
+                      "imdbID": null,
+                      "malID": 20707,
+                      "network": null,
+                      "studio": [
+                        {
+                          "id": 1,
+                          "type": "studios",
+                          "href": "/v1/studios/1",
+                          "attributes": {
+                            "name": null,
+                            "logoURL": null,
+                            "about": null,
+                            "founded": null,
+                            "websiteURL": null
+                          }
+                        }
+                      ],
+                      "status": "Continuing",
+                      "episodes": 0,
+                      "seasons": 0,
+                      "averageRating": 0,
+                      "ratingCount": 0,
+                      "synopsis": "Error ipsa eos et rem recusandae voluptate sunt corrupti. Qui est est autem sit pariatur laudantium. Suscipit laboriosam enim modi quae quia aperiam excepturi sunt. Temporibus est hic adipisci.",
+                      "runtime": 25,
+                      "tvRating": {
+                        "name": "PG-12",
+                        "description": ""
+                      },
+                      "tagline": "Voluptatem rerum quos quidem aut.",
+                      "videoURL": null,
+                      "poster": {
+                        "url": "https://place-hold.it/680x1000",
+                        "height": 1000,
+                        "width": 680,
+                        "backgroundColor": "#acacac",
+                        "textColor1": "#171717",
+                        "textColor2": "#545454",
+                        "textColor3": "#6e6e6e",
+                        "textColor4": "#5c5c5c"
+                      },
+                      "background": {
+                        "url": "https://place-hold.it/1920x1080",
+                        "height": 1080,
+                        "width": 1920,
+                        "backgroundColor": "#acacac",
+                        "textColor1": "#171717",
+                        "textColor2": "#545454",
+                        "textColor3": "#6d6d6d",
+                        "textColor4": "#5c5c5c"
+                      },
+                      "isNSFW": false,
+                      "genres": [],
+                      "themes": [],
+                      "startedAt": "1973-11-15",
+                      "endedAt": "1974-02-07",
+                      "airTime": "20:00:00",
+                      "airDay": 3,
+                      "copyright": "® 2003 Watsica-Kling",
+                      "givenRating": 3.5,
+                      "libraryStatus": "Watching",
+                      "isFavorited": true,
+                      "isReminded": true
+                    },
+                    "relationships": {
+                      "people": {
+                        "data": [
+                          {
+                            "id": 10,
+                            "type": "people",
+                            "href": "/v1/people/10",
+                            "attributes": {
+                              "firstName": "Leatha",
+                              "lastName": "Dietrich",
+                              "occupation": "Installation and Repair Technician",
+                              "imageURL": "https://lorempixel.com/640/480/?22657"
+                            }
+                          },
+                          {
+                            "id": 1,
+                            "type": "people",
+                            "href": "/v1/people/1",
+                            "attributes": {
+                              "firstName": "Aniyah",
+                              "lastName": "Waelchi",
+                              "occupation": "Government Property Inspector",
+                              "imageURL": "https://lorempixel.com/640/480/?66477"
+                            }
+                          },
+                          {
+                            "id": 2,
+                            "type": "people",
+                            "href": "/v1/people/2",
+                            "attributes": {
+                              "firstName": "Ashley",
+                              "lastName": "Carroll",
+                              "occupation": "Inspector",
+                              "imageURL": "https://lorempixel.com/640/480/?48504"
+                            }
+                          }
+                        ],
+                        "href": "/v1/anime/1/people"
+                      },
+                      "characters": {
+                        "data": [
+                          {
+                            "id": 10,
+                            "type": "characters",
+                            "href": "/v1/characters/10",
+                            "attributes": {
+                              "name": "Savion Strosin",
+                              "about": "Quae rerum delectus neque et officiis fuga incidunt et. Exercitationem et consequatur quae sunt molestias repellat dolorem. Necessitatibus iusto voluptatem ea dolor quasi. Rerum voluptas vel voluptate. Aut est dignissimos et molestias dolores sed perspiciatis. Aperiam eveniet omnis quo vel ipsum incidunt earum. Maxime veritatis eligendi sit. Quae et placeat earum quos. Et ut possimus in cumque. Omnis veniam distinctio officia minus. Et aut quia vel pariatur. Sint ut natus quia vitae sed quia. Numquam voluptatem quis beatae optio facere animi voluptatem. Quidem ullam ipsa velit totam debitis enim. Eos nesciunt aut dolores vitae consequuntur voluptas. Molestiae illo repellendus necessitatibus voluptatem. Optio labore necessitatibus incidunt. Non quia molestiae dolores repudiandae. Quam sapiente ea sed delectus molestiae deleniti maiores.",
+                              "imageURL": "https://lorempixel.com/640/480/?82757",
+                              "debut": "Episode 65",
+                              "status": "Deceased",
+                              "bloodType": "H",
+                              "favoriteFood": "beatae",
+                              "bust": null,
+                              "waist": null,
+                              "hip": null,
+                              "height": "616",
+                              "age": 233,
+                              "birthDay": 1,
+                              "birthMonth": 7,
+                              "astrologicalSign": "Aquarius ♒️"
+                            }
+                          },
+                          {
+                            "id": 1,
+                            "type": "characters",
+                            "href": "/v1/characters/1",
+                            "attributes": {
+                              "name": "Tyra Armstrong IV",
+                              "about": "Aspernatur odio ab laborum neque voluptatem quia amet aliquam. Quaerat autem quo quis reprehenderit iure nostrum. Explicabo nam dignissimos ut consequatur. Veniam sapiente explicabo laborum sit harum optio enim sed. Ex corrupti fuga esse quia voluptatibus. Sit in qui ut saepe adipisci reiciendis. Consequatur aspernatur molestiae est saepe mollitia qui. Laudantium eligendi odio adipisci illo. Culpa delectus maxime aperiam nemo impedit eos. Dicta et aliquid ratione est alias autem possimus. Aut repellendus beatae ipsum ipsum numquam animi. Nam et et est pariatur. Facilis sed et sit quia quam quo. A quae repudiandae pariatur mollitia. Exercitationem earum deserunt voluptate dolore facilis impedit fuga. Hic delectus consequatur quidem. Quia dolorum et voluptatum consectetur quis. Voluptatum hic in deleniti voluptates sunt. Qui perspiciatis rerum et porro.",
+                              "imageURL": "https://lorempixel.com/640/480/?46141",
+                              "debut": "Episode 05",
+                              "status": "Deceased",
+                              "bloodType": "W",
+                              "favoriteFood": "numquam",
+                              "bust": "27.70",
+                              "waist": "78.44",
+                              "hip": "53.99",
+                              "height": "875",
+                              "age": 265,
+                              "birthDay": 1,
+                              "birthMonth": 7,
+                              "astrologicalSign": "Virgo ♍️"
+                            }
+                          },
+                          {
+                            "id": 2,
+                            "type": "characters",
+                            "href": "/v1/characters/2",
+                            "attributes": {
+                              "name": "Lorna Pollich",
+                              "about": "Est vitae et voluptas ullam unde id ea. Quo non distinctio ipsa blanditiis aspernatur. Perferendis aut officia sit similique soluta odit eum. Sunt quo delectus est quis sapiente. A natus voluptatem omnis distinctio quis quas. Molestiae ut aut voluptas incidunt necessitatibus nihil culpa. Molestiae dolores illo dignissimos amet sit. Sit non et enim doloremque ratione exercitationem. Hic voluptas ab eos quia quia quia. Hic expedita est distinctio quaerat accusamus.",
+                              "imageURL": "https://lorempixel.com/640/480/?51170",
+                              "debut": "Episode 82",
+                              "status": "Deceased",
+                              "bloodType": "A",
+                              "favoriteFood": "hic",
+                              "bust": "22.62",
+                              "waist": "33.46",
+                              "hip": "37.65",
+                              "height": "704",
+                              "age": 292,
+                              "birthDay": 1,
+                              "birthMonth": 2,
+                              "astrologicalSign": "Cancer ♋️"
+                            }
+                          }
+                        ],
+                        "href": "/v1/anime/1/characters"
+                      },
+                      "cast": {
+                        "data": [
+                          {
+                            "person": {
+                              "id": 10,
+                              "type": "people",
+                              "href": "/v1/people/10",
+                              "attributes": {
+                                "firstName": "Leatha",
+                                "lastName": "Dietrich",
+                                "occupation": "Installation and Repair Technician",
+                                "imageURL": "https://lorempixel.com/640/480/?22657"
+                              }
+                            },
+                            "character": {
+                              "id": 10,
+                              "type": "characters",
+                              "href": "/v1/characters/10",
+                              "attributes": {
+                                "name": "Savion Strosin",
+                                "about": "Quae rerum delectus neque et officiis fuga incidunt et. Exercitationem et consequatur quae sunt molestias repellat dolorem. Necessitatibus iusto voluptatem ea dolor quasi. Rerum voluptas vel voluptate. Aut est dignissimos et molestias dolores sed perspiciatis. Aperiam eveniet omnis quo vel ipsum incidunt earum. Maxime veritatis eligendi sit. Quae et placeat earum quos. Et ut possimus in cumque. Omnis veniam distinctio officia minus. Et aut quia vel pariatur. Sint ut natus quia vitae sed quia. Numquam voluptatem quis beatae optio facere animi voluptatem. Quidem ullam ipsa velit totam debitis enim. Eos nesciunt aut dolores vitae consequuntur voluptas. Molestiae illo repellendus necessitatibus voluptatem. Optio labore necessitatibus incidunt. Non quia molestiae dolores repudiandae. Quam sapiente ea sed delectus molestiae deleniti maiores.",
+                                "imageURL": "https://lorempixel.com/640/480/?82757",
+                                "debut": "Episode 65",
+                                "status": "Deceased",
+                                "bloodType": "H",
+                                "favoriteFood": "beatae",
+                                "bust": null,
+                                "waist": null,
+                                "hip": null,
+                                "height": "616",
+                                "age": 233,
+                                "birthDay": 1,
+                                "birthMonth": 7,
+                                "astrologicalSign": "Aquarius ♒️"
+                              }
+                            },
+                            "role": "Protagonist"
+                          },
+                          {
+                            "person": {
+                              "id": 1,
+                              "type": "people",
+                              "href": "/v1/people/1",
+                              "attributes": {
+                                "firstName": "Aniyah",
+                                "lastName": "Waelchi",
+                                "occupation": "Government Property Inspector",
+                                "imageURL": "https://lorempixel.com/640/480/?66477"
+                              }
+                            },
+                            "character": {
+                              "id": 1,
+                              "type": "characters",
+                              "href": "/v1/characters/1",
+                              "attributes": {
+                                "name": "Tyra Armstrong IV",
+                                "about": "Aspernatur odio ab laborum neque voluptatem quia amet aliquam. Quaerat autem quo quis reprehenderit iure nostrum. Explicabo nam dignissimos ut consequatur. Veniam sapiente explicabo laborum sit harum optio enim sed. Ex corrupti fuga esse quia voluptatibus. Sit in qui ut saepe adipisci reiciendis. Consequatur aspernatur molestiae est saepe mollitia qui. Laudantium eligendi odio adipisci illo. Culpa delectus maxime aperiam nemo impedit eos. Dicta et aliquid ratione est alias autem possimus. Aut repellendus beatae ipsum ipsum numquam animi. Nam et et est pariatur. Facilis sed et sit quia quam quo. A quae repudiandae pariatur mollitia. Exercitationem earum deserunt voluptate dolore facilis impedit fuga. Hic delectus consequatur quidem. Quia dolorum et voluptatum consectetur quis. Voluptatum hic in deleniti voluptates sunt. Qui perspiciatis rerum et porro.",
+                                "imageURL": "https://lorempixel.com/640/480/?46141",
+                                "debut": "Episode 05",
+                                "status": "Deceased",
+                                "bloodType": "W",
+                                "favoriteFood": "numquam",
+                                "bust": "27.70",
+                                "waist": "78.44",
+                                "hip": "53.99",
+                                "height": "875",
+                                "age": 265,
+                                "birthDay": 1,
+                                "birthMonth": 7,
+                                "astrologicalSign": "Virgo ♍️"
+                              }
+                            },
+                            "role": "Deuteragonist"
+                          },
+                          {
+                            "person": {
+                              "id": 2,
+                              "type": "people",
+                              "href": "/v1/people/2",
+                              "attributes": {
+                                "firstName": "Ashley",
+                                "lastName": "Carroll",
+                                "occupation": "Inspector",
+                                "imageURL": "https://lorempixel.com/640/480/?48504"
+                              }
+                            },
+                            "character": {
+                              "id": 2,
+                              "type": "characters",
+                              "href": "/v1/characters/2",
+                              "attributes": {
+                                "name": "Lorna Pollich",
+                                "about": "Est vitae et voluptas ullam unde id ea. Quo non distinctio ipsa blanditiis aspernatur. Perferendis aut officia sit similique soluta odit eum. Sunt quo delectus est quis sapiente. A natus voluptatem omnis distinctio quis quas. Molestiae ut aut voluptas incidunt necessitatibus nihil culpa. Molestiae dolores illo dignissimos amet sit. Sit non et enim doloremque ratione exercitationem. Hic voluptas ab eos quia quia quia. Hic expedita est distinctio quaerat accusamus.",
+                                "imageURL": "https://lorempixel.com/640/480/?51170",
+                                "debut": "Episode 82",
+                                "status": "Deceased",
+                                "bloodType": "A",
+                                "favoriteFood": "hic",
+                                "bust": "22.62",
+                                "waist": "33.46",
+                                "hip": "37.65",
+                                "height": "704",
+                                "age": 292,
+                                "birthDay": 1,
+                                "birthMonth": 2,
+                                "astrologicalSign": "Cancer ♋️"
+                              }
+                            },
+                            "role": "Tritagonist"
+                          }
+                        ],
+                        "href": "/v1/anime/1/cast"
+                      },
+                      "relatedShows": {
+                        "data": [
+                          {
+                            "show": {
+                              "id": 217,
+                              "type": "show",
+                              "href": "/v1/anime/217",
+                              "attributes": {
+                                "anidbID": null,
+                                "anilistID": null,
+                                "kitsuID": null,
+                                "imdbID": null,
+                                "malID": null,
+                                "title": "Omnis odit hic dolorem itaque.",
+                                "synopsis": "Aspernatur aperiam corrupti similique voluptatibus qui. Voluptas eum ea doloribus qui inventore hic. Voluptas accusantium libero autem ipsum molestiae aut nobis. Aliquam unde voluptates corrupti ut temporibus eum.",
+                                "tagline": "Sunt error hic quod sint.",
+                                "tvRating": {
+                                  "name": "R18+",
+                                  "description": "Adults Only"
+                                },
+                                "type": {
+                                  "name": "Special",
+                                  "description": "A standalone series with a self-contained story."
+                                },
+                                "source": {
+                                  "name": "4-Koma Manga",
+                                  "description": "Adapted from comic strips that generally consists of four panels per page."
+                                },
+                                "network": null,
+                                "studio": [],
+                                "status": "Tba",
+                                "episodes": 0,
+                                "seasons": 0,
+                                "averageRating": 0,
+                                "ratingCount": 0,
+                                "runtime": 25,
+                                "videoURL": null,
+                                "poster": null,
+                                "background": null,
+                                "isNSFW": true,
+                                "genres": [],
+                                "themes": [],
+                                "startedAt": "2014-12-10",
+                                "endedAt": "2015-05-27",
+                                "airTime": "16:49:00",
+                                "airDay": 7,
+                                "copyright": "℗ 1997 Kulas-Baumbach",
+                                "givenRating": 0,
+                                "libraryStatus": null,
+                                "isFavorited": false,
+                                "isReminded": false
+                              }
+                            },
+                            "attributes": {
+                              "type": "Full story"
+                            }
+                          },
+                          {
+                            "show": {
+                              "id": 219,
+                              "type": "show",
+                              "href": "/v1/anime/219",
+                              "attributes": {
+                                "title": "Nam voluptatum voluptas optio qui.",
+                                "type": "Unknown",
+                                "source": "Original",
+                                "anidbID": null,
+                                "anilistID": null,
+                                "kitsuID": null,
+                                "imdbID": null,
+                                "malID": null,
+                                "network": null,
+                                "studio": [],
+                                "status": "Tba",
+                                "episodes": 0,
+                                "seasons": 0,
+                                "averageRating": 0,
+                                "ratingCount": 0,
+                                "synopsis": "Rerum distinctio quibusdam porro et. Modi natus iusto ut qui praesentium dicta sed ratione. Porro excepturi et qui laudantium tenetur non iure.",
+                                "runtime": 25,
+                                "tvRating": {
+                                  "name": "G",
+                                  "description": "All Ages"
+                                },
+                                "tagline": "Expedita esse et cupiditate id impedit qui ut.",
+                                "videoURL": null,
+                                "poster": null,
+                                "background": null,
+                                "isNSFW": false,
+                                "genres": [],
+                                "themes": [],
+                                "startedAt": "2015-02-10",
+                                "endedAt": "2015-05-05",
+                                "airTime": "18:32:00",
+                                "airDay": 6,
+                                "copyright": "® 1976 Swift Ltd",
+                                "givenRating": 0,
+                                "libraryStatus": null,
+                                "isFavorited": false,
+                                "isReminded": false
+                              }
+                            },
+                            "attributes": {
+                              "type": "Adaptation"
+                            }
+                          }
+                        ],
+                        "href": "/v1/anime/1/related-shows"
+                      },
+                      "seasons": {
+                        "data": [
+                          {
+                            "id": 1,
+                            "type": "seasons",
+                            "href": "/v1/seasons/1",
+                            "attributes": {
+                              "animeID": 1,
+                              "number": 1,
+                              "posterURL": "https://via.placeholder.com/640x480.png/006655?text=ratione",
+                              "title": "Season 1",
+                              "synopsis": "This is a short description of the season's story.",
+                              "episodeCount": 2,
+                              "startedAt": "2020-07-29"
+                            }
+                          }
+                        ],
+                        "href": "/v1/anime/1/seasons"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "GetGameCastSuccess": {
+        "description": "Successful GET Game Cast JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "person": {
+                      "id": 10,
+                      "type": "people",
+                      "href": "/v1/people/10",
+                      "attributes": {
+                        "firstName": "Leatha",
+                        "lastName": "Dietrich",
+                        "occupation": "Installation and Repair Technician",
+                        "imageURL": "https://lorempixel.com/640/480/?22657"
+                      }
+                    },
+                    "character": {
+                      "id": 10,
+                      "type": "characters",
+                      "href": "/v1/characters/10",
+                      "attributes": {
+                        "name": "Savion Strosin",
+                        "about": "Quae rerum delectus neque et officiis fuga incidunt et. Exercitationem et consequatur quae sunt molestias repellat dolorem. Necessitatibus iusto voluptatem ea dolor quasi. Rerum voluptas vel voluptate. Aut est dignissimos et molestias dolores sed perspiciatis. Aperiam eveniet omnis quo vel ipsum incidunt earum. Maxime veritatis eligendi sit. Quae et placeat earum quos. Et ut possimus in cumque. Omnis veniam distinctio officia minus. Et aut quia vel pariatur. Sint ut natus quia vitae sed quia. Numquam voluptatem quis beatae optio facere animi voluptatem. Quidem ullam ipsa velit totam debitis enim. Eos nesciunt aut dolores vitae consequuntur voluptas. Molestiae illo repellendus necessitatibus voluptatem. Optio labore necessitatibus incidunt. Non quia molestiae dolores repudiandae. Quam sapiente ea sed delectus molestiae deleniti maiores.",
+                        "imageURL": "https://lorempixel.com/640/480/?82757",
+                        "debut": "Episode 65",
+                        "status": "Deceased",
+                        "bloodType": "H",
+                        "favoriteFood": "beatae",
+                        "bust": null,
+                        "waist": null,
+                        "hip": null,
+                        "height": "616",
+                        "age": 233,
+                        "birthDay": 1,
+                        "birthMonth": 7,
+                        "astrologicalSign": "Aquarius ♒️"
+                      }
+                    },
+                    "role": "Protagonist"
+                  },
+                  {
+                    "person": {
+                      "id": 1,
+                      "type": "people",
+                      "href": "/v1/people/1",
+                      "attributes": {
+                        "firstName": "Aniyah",
+                        "lastName": "Waelchi",
+                        "occupation": "Government Property Inspector",
+                        "imageURL": "https://lorempixel.com/640/480/?66477"
+                      }
+                    },
+                    "character": {
+                      "id": 1,
+                      "type": "characters",
+                      "href": "/v1/characters/1",
+                      "attributes": {
+                        "name": "Tyra Armstrong IV",
+                        "about": "Aspernatur odio ab laborum neque voluptatem quia amet aliquam. Quaerat autem quo quis reprehenderit iure nostrum. Explicabo nam dignissimos ut consequatur. Veniam sapiente explicabo laborum sit harum optio enim sed. Ex corrupti fuga esse quia voluptatibus. Sit in qui ut saepe adipisci reiciendis. Consequatur aspernatur molestiae est saepe mollitia qui. Laudantium eligendi odio adipisci illo. Culpa delectus maxime aperiam nemo impedit eos. Dicta et aliquid ratione est alias autem possimus. Aut repellendus beatae ipsum ipsum numquam animi. Nam et et est pariatur. Facilis sed et sit quia quam quo. A quae repudiandae pariatur mollitia. Exercitationem earum deserunt voluptate dolore facilis impedit fuga. Hic delectus consequatur quidem. Quia dolorum et voluptatum consectetur quis. Voluptatum hic in deleniti voluptates sunt. Qui perspiciatis rerum et porro.",
+                        "imageURL": "https://lorempixel.com/640/480/?46141",
+                        "debut": "Episode 05",
+                        "status": "Deceased",
+                        "bloodType": "W",
+                        "favoriteFood": "numquam",
+                        "bust": "27.70",
+                        "waist": "78.44",
+                        "hip": "53.99",
+                        "height": "875",
+                        "age": 265,
+                        "birthDay": 1,
+                        "birthMonth": 7,
+                        "astrologicalSign": "Virgo ♍️"
+                      }
+                    },
+                    "role": "Deuteragonist"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "GetGameCharactersSuccess": {
+        "description": "Successful GET Game Characters JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "id": 1,
+                    "type": "characters",
+                    "href": "/v1/characters/1",
+                    "attributes": {
+                      "name": "Tyra Armstrong IV",
+                      "about": "Aspernatur odio ab laborum neque voluptatem quia amet aliquam. Quaerat autem quo quis reprehenderit iure nostrum. Explicabo nam dignissimos ut consequatur. Veniam sapiente explicabo laborum sit harum optio enim sed. Ex corrupti fuga esse quia voluptatibus. Sit in qui ut saepe adipisci reiciendis. Consequatur aspernatur molestiae est saepe mollitia qui. Laudantium eligendi odio adipisci illo. Culpa delectus maxime aperiam nemo impedit eos. Dicta et aliquid ratione est alias autem possimus. Aut repellendus beatae ipsum ipsum numquam animi. Nam et et est pariatur. Facilis sed et sit quia quam quo. A quae repudiandae pariatur mollitia. Exercitationem earum deserunt voluptate dolore facilis impedit fuga. Hic delectus consequatur quidem. Quia dolorum et voluptatum consectetur quis. Voluptatum hic in deleniti voluptates sunt. Qui perspiciatis rerum et porro.",
+                      "imageURL": "https://lorempixel.com/640/480/?46141",
+                      "debut": "Episode 05",
+                      "status": "Deceased",
+                      "bloodType": "W",
+                      "favoriteFood": "numquam",
+                      "bust": "27.70",
+                      "waist": "78.44",
+                      "hip": "53.99",
+                      "height": "875",
+                      "age": 265,
+                      "birthDay": 1,
+                      "birthMonth": 7,
+                      "astrologicalSign": "Virgo ♍️"
+                    }
+                  },
+                  {
+                    "id": 2,
+                    "type": "characters",
+                    "href": "/v1/characters/2",
+                    "attributes": {
+                      "name": "Lorna Pollich",
+                      "about": "Est vitae et voluptas ullam unde id ea. Quo non distinctio ipsa blanditiis aspernatur. Perferendis aut officia sit similique soluta odit eum. Sunt quo delectus est quis sapiente. A natus voluptatem omnis distinctio quis quas. Molestiae ut aut voluptas incidunt necessitatibus nihil culpa. Molestiae dolores illo dignissimos amet sit. Sit non et enim doloremque ratione exercitationem. Hic voluptas ab eos quia quia quia. Hic expedita est distinctio quaerat accusamus.",
+                      "imageURL": "https://lorempixel.com/640/480/?51170",
+                      "debut": "Episode 82",
+                      "status": "Deceased",
+                      "bloodType": "A",
+                      "favoriteFood": "hic",
+                      "bust": "22.62",
+                      "waist": "33.46",
+                      "hip": "37.65",
+                      "height": "704",
+                      "age": 292,
+                      "birthDay": 1,
+                      "birthMonth": 2,
+                      "astrologicalSign": "Cancer ♋️"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "GetGameUpcomingSuccess": {
+        "description": "Successful GET Upcoming Game JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "id": 1,
+                    "type": "show",
+                    "href": "/v1/anime/1",
+                    "attributes": {
+                      "title": "\"0\"",
+                      "type": "Tv",
+                      "source": "Unknown",
+                      "anidbID": 10143,
+                      "anilistID": 102416,
+                      "kitsuID": 8925,
+                      "imdbID": null,
+                      "malID": 20707,
+                      "network": null,
+                      "studio": [
+                        {
+                          "id": 1,
+                          "type": "studios",
+                          "href": "/v1/studios/1",
+                          "attributes": {
+                            "name": "Watsica-Kling",
+                            "logoURL": "https://place-hold.it/512x512",
+                            "about": "Error ipsa eos et rem recusandae rerum quos quidem aut.",
+                            "founded": "1963-11-15",
+                            "websiteURL": "https://watsica-kling.com/"
+                          }
+                        }
+                      ],
+                      "status": "Continuing",
+                      "episodes": 0,
+                      "seasons": 0,
+                      "averageRating": 0,
+                      "ratingCount": 0,
+                      "synopsis": "Error ipsa eos et rem recusandae voluptate sunt corrupti. Qui est est autem sit pariatur laudantium. Suscipit laboriosam enim modi quae quia aperiam excepturi sunt. Temporibus est hic adipisci.",
+                      "runtime": 25,
+                      "tvRating": {
+                        "name": "G",
+                        "description": "All Ages"
+                      },
+                      "tagline": "Voluptatem rerum quos quidem aut.",
+                      "videoURL": null,
+                      "poster": {
+                        "url": "https://place-hold.it/680x1000",
+                        "height": 1000,
+                        "width": 680,
+                        "backgroundColor": "#acacac",
+                        "textColor1": "#171717",
+                        "textColor2": "#545454",
+                        "textColor3": "#6e6e6e",
+                        "textColor4": "#5c5c5c"
+                      },
+                      "background": {
+                        "url": "https://place-hold.it/1920x1080",
+                        "height": 1080,
+                        "width": 1920,
+                        "backgroundColor": "#acacac",
+                        "textColor1": "#171717",
+                        "textColor2": "#545454",
+                        "textColor3": "#6d6d6d",
+                        "textColor4": "#5c5c5c"
+                      },
+                      "isNSFW": false,
+                      "genres": [
+                        "Action",
+                        "Adventure"
+                      ],
+                      "themes": [
+                        "Cars",
+                        "Demons"
+                      ],
+                      "startedAt": "1973-11-15",
+                      "endedAt": "1974-02-07",
+                      "airTime": "20:00:00",
+                      "airDay": 3,
+                      "copyright": "® 2003 Watsica-Kling"
+                    }
+                  },
+                  {
+                    "id": 2,
+                    "type": "show",
+                    "href": "/v1/anime/2",
+                    "attributes": {
+                      "title": "\"Aesop\" no Ohanashi yori: Ushi to Kaeru, Yokubatta Inu",
+                      "type": "Tv",
+                      "source": "Digital manga",
+                      "anidbID": 3689,
+                      "anilistID": null,
+                      "kitsuID": 9179,
+                      "imdbID": null,
+                      "malID": 25627,
+                      "network": null,
+                      "studio": [
+                        {
+                          "id": 2,
+                          "type": "studios",
+                          "href": "/v1/studios/2",
+                          "attributes": {
+                            "name": null,
+                            "logoURL": null,
+                            "about": null,
+                            "founded": null,
+                            "websiteURL": null
+                          }
+                        }
+                      ],
+                      "status": "Ended",
+                      "episodes": 0,
+                      "seasons": 0,
+                      "averageRating": 0,
+                      "ratingCount": 0,
+                      "synopsis": "Totam ex non eaque rem. Suscipit eos recusandae et. Pariatur reprehenderit aliquid reprehenderit nisi quae. Fuga enim atque ratione occaecati sequi iste dignissimos.",
+                      "runtime": 25,
+                      "tvRating": {
+                        "name": "G",
+                        "description": "All Ages"
+                      },
+                      "tagline": "Vel facilis dignissimos suscipit veritatis enim nemo ut.",
+                      "videoURL": null,
+                      "poster": null,
+                      "background": null,
+                      "isNSFW": false,
+                      "genres": [],
+                      "themes": [],
+                      "startedAt": "2014-09-28",
+                      "endedAt": "2014-12-21",
+                      "airTime": "19:24:00",
+                      "airDay": 4,
+                      "copyright": "® 1985 Fadel, Sipes and McGlynn"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "GetGameRelatedShowsSuccess": {
+        "description": "Successful GET Game Related Shows JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "show": {
+                      "id": 217,
+                      "type": "show",
+                      "href": "/v1/anime/217",
+                      "attributes": {
+                        "anidbID": null,
+                        "anilistID": null,
+                        "kitsuID": null,
+                        "imdbID": null,
+                        "malID": null,
+                        "title": "Omnis odit hic dolorem itaque.",
+                        "synopsis": "Aspernatur aperiam corrupti similique voluptatibus qui. Voluptas eum ea doloribus qui inventore hic. Voluptas accusantium libero autem ipsum molestiae aut nobis. Aliquam unde voluptates corrupti ut temporibus eum.",
+                        "tagline": "Sunt error hic quod sint.",
+                        "tvRating": {
+                          "name": "R18+",
+                          "description": "Adults Only"
+                        },
+                        "mediaType": {
+                          "name": "Special",
+                          "description": "A standalone series with a self-contained story."
+                        },
+                        "source": {
+                          "name": "4-Koma Manga",
+                          "description": "Adapted from comic strips that generally consists of four panels per page."
+                        },
+                        "network": null,
+                        "studio": [],
+                        "status": "Tba",
+                        "episodes": 0,
+                        "seasons": 0,
+                        "averageRating": 0,
+                        "ratingCount": 0,
+                        "runtime": 25,
+                        "videoURL": null,
+                        "poster": null,
+                        "background": null,
+                        "isNSFW": true,
+                        "genres": [],
+                        "themes": [],
+                        "startedAt": "2014-12-10",
+                        "endedAt": "2015-05-27",
+                        "airTime": "16:49:00",
+                        "airDay": 7,
+                        "copyright": "℗ 1997 Kulas-Baumbach",
+                        "givenRating": 0,
+                        "libraryStatus": null,
+                        "isFavorited": false,
+                        "isReminded": false
+                      }
+                    },
+                    "attributes": {
+                      "type": "Full story"
+                    }
+                  },
+                  {
+                    "show": {
+                      "id": 219,
+                      "type": "show",
+                      "href": "/v1/anime/219",
+                      "attributes": {
+                        "title": "Nam voluptatum voluptas optio qui.",
+                        "type": "Unknown",
+                        "source": "Original",
+                        "anidbID": null,
+                        "anilistID": null,
+                        "kitsuID": null,
+                        "imdbID": null,
+                        "malID": null,
+                        "network": null,
+                        "studio": [],
+                        "status": "Tba",
+                        "episodes": 0,
+                        "seasons": 0,
+                        "averageRating": 0,
+                        "ratingCount": 0,
+                        "synopsis": "Rerum distinctio quibusdam porro et. Modi natus iusto ut qui praesentium dicta sed ratione. Porro excepturi et qui laudantium tenetur non iure.",
+                        "runtime": 25,
+
+                        "tvRating": {
+                          "name": "G",
+                          "description": "All Ages"
+                        },
+                        "tagline": "Expedita esse et cupiditate id impedit qui ut.",
+                        "videoURL": null,
+                        "poster": null,
+                        "background": null,
+                        "isNSFW": false,
+                        "genres": [],
+                        "themes": [],
+                        "startedAt": "2015-02-10",
+                        "endedAt": "2015-05-05",
+                        "airTime": "18:32:00",
+                        "airDay": 6,
+                        "copyright": "® 1976 Swift Ltd",
+                        "givenRating": 0,
+                        "libraryStatus": null,
+                        "isFavorited": false,
+                        "isReminded": false
+                      }
+                    },
+                    "attributes": {
+                      "type": "Adaptation"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "GetGameRelatedGamesSuccess": {
+        "description": "Successful GET Game Related Games JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "show": {
+                      "id": 217,
+                      "type": "show",
+                      "href": "/v1/anime/217",
+                      "attributes": {
+                        "anidbID": null,
+                        "anilistID": null,
+                        "kitsuID": null,
+                        "imdbID": null,
+                        "malID": null,
+                        "title": "Omnis odit hic dolorem itaque.",
+                        "synopsis": "Aspernatur aperiam corrupti similique voluptatibus qui. Voluptas eum ea doloribus qui inventore hic. Voluptas accusantium libero autem ipsum molestiae aut nobis. Aliquam unde voluptates corrupti ut temporibus eum.",
+                        "tagline": "Sunt error hic quod sint.",
+                        "tvRating": {
+                          "name": "R18+",
+                          "description": "Adults Only"
+                        },
+                        "mediaType": {
+                          "name": "Special",
+                          "description": "A standalone series with a self-contained story."
+                        },
+                        "source": {
+                          "name": "4-Koma Manga",
+                          "description": "Adapted from comic strips that generally consists of four panels per page."
+                        },
+                        "network": null,
+                        "studio": [],
+                        "status": "Tba",
+                        "episodes": 0,
+                        "seasons": 0,
+                        "averageRating": 0,
+                        "ratingCount": 0,
+                        "runtime": 25,
+                        "videoURL": null,
+                        "poster": null,
+                        "background": null,
+                        "isNSFW": true,
+                        "genres": [],
+                        "themes": [],
+                        "startedAt": "2014-12-10",
+                        "endedAt": "2015-05-27",
+                        "airTime": "16:49:00",
+                        "airDay": 7,
+                        "copyright": "℗ 1997 Kulas-Baumbach",
+                        "givenRating": 0,
+                        "libraryStatus": null,
+                        "isFavorited": false,
+                        "isReminded": false
+                      }
+                    },
+                    "attributes": {
+                      "type": "Full story"
+                    }
+                  },
+                  {
+                    "show": {
+                      "id": 219,
+                      "type": "show",
+                      "href": "/v1/anime/219",
+                      "attributes": {
+                        "title": "Nam voluptatum voluptas optio qui.",
+                        "type": "Unknown",
+                        "source": "Original",
+                        "anidbID": null,
+                        "anilistID": null,
+                        "kitsuID": null,
+                        "imdbID": null,
+                        "malID": null,
+                        "network": null,
+                        "studio": [],
+                        "status": "Tba",
+                        "episodes": 0,
+                        "seasons": 0,
+                        "averageRating": 0,
+                        "ratingCount": 0,
+                        "synopsis": "Rerum distinctio quibusdam porro et. Modi natus iusto ut qui praesentium dicta sed ratione. Porro excepturi et qui laudantium tenetur non iure.",
+                        "runtime": 25,
+
+                        "tvRating": {
+                          "name": "G",
+                          "description": "All Ages"
+                        },
+                        "tagline": "Expedita esse et cupiditate id impedit qui ut.",
+                        "videoURL": null,
+                        "poster": null,
+                        "background": null,
+                        "isNSFW": false,
+                        "genres": [],
+                        "themes": [],
+                        "startedAt": "2015-02-10",
+                        "endedAt": "2015-05-05",
+                        "airTime": "18:32:00",
+                        "airDay": 6,
+                        "copyright": "® 1976 Swift Ltd",
+                        "givenRating": 0,
+                        "libraryStatus": null,
+                        "isFavorited": false,
+                        "isReminded": false
+                      }
+                    },
+                    "attributes": {
+                      "type": "Adaptation"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "GetGameRelatedLiteraturesSuccess": {
+        "description": "Successful GET Game Related Literatures JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "show": {
+                      "id": 217,
+                      "type": "show",
+                      "href": "/v1/anime/217",
+                      "attributes": {
+                        "anidbID": null,
+                        "anilistID": null,
+                        "kitsuID": null,
+                        "imdbID": null,
+                        "malID": null,
+                        "title": "Omnis odit hic dolorem itaque.",
+                        "synopsis": "Aspernatur aperiam corrupti similique voluptatibus qui. Voluptas eum ea doloribus qui inventore hic. Voluptas accusantium libero autem ipsum molestiae aut nobis. Aliquam unde voluptates corrupti ut temporibus eum.",
+                        "tagline": "Sunt error hic quod sint.",
+                        "tvRating": {
+                          "name": "R18+",
+                          "description": "Adults Only"
+                        },
+                        "mediaType": {
+                          "name": "Special",
+                          "description": "A standalone series with a self-contained story."
+                        },
+                        "source": {
+                          "name": "4-Koma Manga",
+                          "description": "Adapted from comic strips that generally consists of four panels per page."
+                        },
+                        "network": null,
+                        "studio": [],
+                        "status": "Tba",
+                        "episodes": 0,
+                        "seasons": 0,
+                        "averageRating": 0,
+                        "ratingCount": 0,
+                        "runtime": 25,
+                        "videoURL": null,
+                        "poster": null,
+                        "background": null,
+                        "isNSFW": true,
+                        "genres": [],
+                        "themes": [],
+                        "startedAt": "2014-12-10",
+                        "endedAt": "2015-05-27",
+                        "airTime": "16:49:00",
+                        "airDay": 7,
+                        "copyright": "℗ 1997 Kulas-Baumbach",
+                        "givenRating": 0,
+                        "libraryStatus": null,
+                        "isFavorited": false,
+                        "isReminded": false
+                      }
+                    },
+                    "attributes": {
+                      "type": "Full story"
+                    }
+                  },
+                  {
+                    "show": {
+                      "id": 219,
+                      "type": "show",
+                      "href": "/v1/anime/219",
+                      "attributes": {
+                        "title": "Nam voluptatum voluptas optio qui.",
+                        "type": "Unknown",
+                        "source": "Original",
+                        "anidbID": null,
+                        "anilistID": null,
+                        "kitsuID": null,
+                        "imdbID": null,
+                        "malID": null,
+                        "network": null,
+                        "studio": [],
+                        "status": "Tba",
+                        "episodes": 0,
+                        "seasons": 0,
+                        "averageRating": 0,
+                        "ratingCount": 0,
+                        "synopsis": "Rerum distinctio quibusdam porro et. Modi natus iusto ut qui praesentium dicta sed ratione. Porro excepturi et qui laudantium tenetur non iure.",
+                        "runtime": 25,
+
+                        "tvRating": {
+                          "name": "G",
+                          "description": "All Ages"
+                        },
+                        "tagline": "Expedita esse et cupiditate id impedit qui ut.",
+                        "videoURL": null,
+                        "poster": null,
+                        "background": null,
+                        "isNSFW": false,
+                        "genres": [],
+                        "themes": [],
+                        "startedAt": "2015-02-10",
+                        "endedAt": "2015-05-05",
+                        "airTime": "18:32:00",
+                        "airDay": 6,
+                        "copyright": "® 1976 Swift Ltd",
+                        "givenRating": 0,
+                        "libraryStatus": null,
+                        "isFavorited": false,
+                        "isReminded": false
+                      }
+                    },
+                    "attributes": {
+                      "type": "Adaptation"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "GetGameStaffSuccess": {
+        "description": "Successful GET Game Staff JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "id": 10,
+                    "type": "staff",
+                    "href": "/v1/anime/138/staff",
+                    "attributes": {
+                      "role": {
+                        "name": "Digital Colouring",
+                        "description": ""
+                      }
+                    },
+                    "relationships": {
+                      "person": {
+                        "href": "/v1/people/10",
+                        "data": {
+                          "id": 1,
+                          "type": "people",
+                          "href": "/v1/people/1",
+                          "attributes": {
+                            "firstName": "Aubrey",
+                            "lastName": "Littel",
+                            "givenName": "結衣",
+                            "familyName": null,
+                            "alternativeNames": [
+                              "Suki"
+                            ],
+                            "about": "Eveniet voluptatibus atque commodi reprehenderit voluptate enim. Non distinctio qui et corporis quae et aut. Ullam qui aperiam similique aperiam. Quibusdam incidunt nemo ut laboriosam sapiente. Assumenda autem placeat quia quo. Velit occaecati sit tempora doloremque reiciendis ea. Et molestiae id id minus. Similique qui sed molestiae velit voluptas. Ut atque illum harum. Voluptatum aut ea ab dignissimos. Corporis assumenda omnis sequi aut deleniti. Laudantium nobis sit ea tenetur quo rerum. Fugiat soluta vel sed adipisci corporis quaerat aut quibusdam. Reiciendis porro alias labore est nesciunt. Omnis reprehenderit corporis voluptas nemo aspernatur id. Aut provident explicabo voluptatem sunt accusantium. Repellendus consequatur laudantium incidunt voluptas reprehenderit cupiditate vel. Excepturi ut ea et fuga totam. Ut voluptas eum voluptatem. Placeat in tempora sunt exercitationem qui inventore quibusdam est. Dolores et voluptas quia qui saepe. Est corporis quas iusto et sint. Ut dignissimos nostrum quia. Qui hic et est autem. Cum libero magni animi odit vero molestiae nobis molestiae.",
+                            "imageURL": null,
+                            "websiteURL": null
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "GetGameStudiosSuccess": {
+        "description": "Successful GET Game Studios JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "id":8,
+                    "type": "studios",
+                    "href": "/v1/studios/8",
+                    "attributes": {
+                      "name": "Bogan, Medhurst and Stamm",
+                      "logo": {
+                        "url": "https://via.placeholder.com/640x480.png/006655?text=ratione"
+                      },
+                      "about": "Corporis quia ducimus eveniet beatae. Aut repellat voluptates porro esse ea. Similique quos nemo voluptas beatae enim molestias. Qui perspiciatis unde ipsa ipsam rerum veniam. Non explicabo hic incidunt quibusdam nobis accusantium. Voluptatum vero vel et animi et amet. Quis autem quod enim ut incidunt odio. Tenetur omnis amet qui delectus. Temporibus cupiditate ullam similique harum voluptas. Nostrum deserunt eum voluptas ex ut similique omnis. Ipsa illo voluptates nobis quisquam fugit rerum voluptatem dolore. Voluptatem ratione ut veritatis illum eveniet aliquam. Eaque maxime nemo maiores dolor hic.",
+                      "founded": "2007-02-25",
+                      "websiteUrl": "https://streich.net/blanditiis-tempora-molestiae-in-aut"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "GetMangaSuccess": {
+        "description": "Successful GET Manga JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "id": 1,
+                    "type": "show",
+                    "href": "/v1/anime/1",
+                    "attributes": {
+                      "title": "\"0\"",
+                      "type": "Tv",
+                      "source": "Unknown",
+                      "anidbID": 10143,
+                      "anilistID": 102416,
+                      "kitsuID": 8925,
+                      "imdbID": null,
+                      "malID": 20707,
+                      "network": null,
+                      "studio": [
+                        {
+                          "id": 1,
+                          "type": "studios",
+                          "href": "/v1/studios/1",
+                          "attributes": {
+                            "name": null,
+                            "logoURL": null,
+                            "about": null,
+                            "founded": null,
+                            "websiteURL": null
+                          }
+                        }
+                      ],
+                      "status": "Continuing",
+                      "episodes": 0,
+                      "seasons": 0,
+                      "averageRating": 0,
+                      "ratingCount": 0,
+                      "synopsis": "Error ipsa eos et rem recusandae voluptate sunt corrupti. Qui est est autem sit pariatur laudantium. Suscipit laboriosam enim modi quae quia aperiam excepturi sunt. Temporibus est hic adipisci.",
+                      "runtime": 25,
+                      "tvRating": {
+                        "name": "PG-12",
+                        "description": ""
+                      },
+                      "tagline": "Voluptatem rerum quos quidem aut.",
+                      "videoURL": null,
+                      "poster": {
+                        "url": "https://place-hold.it/680x1000",
+                        "height": 1000,
+                        "width": 680,
+                        "backgroundColor": "#acacac",
+                        "textColor1": "#171717",
+                        "textColor2": "#545454",
+                        "textColor3": "#6e6e6e",
+                        "textColor4": "#5c5c5c"
+                      },
+                      "background": {
+                        "url": "https://place-hold.it/1920x1080",
+                        "height": 1080,
+                        "width": 1920,
+                        "backgroundColor": "#acacac",
+                        "textColor1": "#171717",
+                        "textColor2": "#545454",
+                        "textColor3": "#6d6d6d",
+                        "textColor4": "#5c5c5c"
+                      },
+                      "isNSFW": false,
+                      "genres": [],
+                      "themes": [],
+                      "startedAt": "1973-11-15",
+                      "endedAt": "1974-02-07",
+                      "airTime": "20:00:00",
+                      "airDay": 3,
+                      "copyright": "® 2003 Watsica-Kling",
+                      "givenRating": 3.5,
+                      "libraryStatus": "Watching",
+                      "isFavorited": true,
+                      "isReminded": true
+                    },
+                    "relationships": {
+                      "people": {
+                        "data": [
+                          {
+                            "id": 10,
+                            "type": "people",
+                            "href": "/v1/people/10",
+                            "attributes": {
+                              "firstName": "Leatha",
+                              "lastName": "Dietrich",
+                              "occupation": "Installation and Repair Technician",
+                              "imageURL": "https://lorempixel.com/640/480/?22657"
+                            }
+                          },
+                          {
+                            "id": 1,
+                            "type": "people",
+                            "href": "/v1/people/1",
+                            "attributes": {
+                              "firstName": "Aniyah",
+                              "lastName": "Waelchi",
+                              "occupation": "Government Property Inspector",
+                              "imageURL": "https://lorempixel.com/640/480/?66477"
+                            }
+                          },
+                          {
+                            "id": 2,
+                            "type": "people",
+                            "href": "/v1/people/2",
+                            "attributes": {
+                              "firstName": "Ashley",
+                              "lastName": "Carroll",
+                              "occupation": "Inspector",
+                              "imageURL": "https://lorempixel.com/640/480/?48504"
+                            }
+                          }
+                        ],
+                        "href": "/v1/anime/1/people"
+                      },
+                      "characters": {
+                        "data": [
+                          {
+                            "id": 10,
+                            "type": "characters",
+                            "href": "/v1/characters/10",
+                            "attributes": {
+                              "name": "Savion Strosin",
+                              "about": "Quae rerum delectus neque et officiis fuga incidunt et. Exercitationem et consequatur quae sunt molestias repellat dolorem. Necessitatibus iusto voluptatem ea dolor quasi. Rerum voluptas vel voluptate. Aut est dignissimos et molestias dolores sed perspiciatis. Aperiam eveniet omnis quo vel ipsum incidunt earum. Maxime veritatis eligendi sit. Quae et placeat earum quos. Et ut possimus in cumque. Omnis veniam distinctio officia minus. Et aut quia vel pariatur. Sint ut natus quia vitae sed quia. Numquam voluptatem quis beatae optio facere animi voluptatem. Quidem ullam ipsa velit totam debitis enim. Eos nesciunt aut dolores vitae consequuntur voluptas. Molestiae illo repellendus necessitatibus voluptatem. Optio labore necessitatibus incidunt. Non quia molestiae dolores repudiandae. Quam sapiente ea sed delectus molestiae deleniti maiores.",
+                              "imageURL": "https://lorempixel.com/640/480/?82757",
+                              "debut": "Episode 65",
+                              "status": "Deceased",
+                              "bloodType": "H",
+                              "favoriteFood": "beatae",
+                              "bust": null,
+                              "waist": null,
+                              "hip": null,
+                              "height": "616",
+                              "age": 233,
+                              "birthDay": 1,
+                              "birthMonth": 7,
+                              "astrologicalSign": "Aquarius ♒️"
+                            }
+                          },
+                          {
+                            "id": 1,
+                            "type": "characters",
+                            "href": "/v1/characters/1",
+                            "attributes": {
+                              "name": "Tyra Armstrong IV",
+                              "about": "Aspernatur odio ab laborum neque voluptatem quia amet aliquam. Quaerat autem quo quis reprehenderit iure nostrum. Explicabo nam dignissimos ut consequatur. Veniam sapiente explicabo laborum sit harum optio enim sed. Ex corrupti fuga esse quia voluptatibus. Sit in qui ut saepe adipisci reiciendis. Consequatur aspernatur molestiae est saepe mollitia qui. Laudantium eligendi odio adipisci illo. Culpa delectus maxime aperiam nemo impedit eos. Dicta et aliquid ratione est alias autem possimus. Aut repellendus beatae ipsum ipsum numquam animi. Nam et et est pariatur. Facilis sed et sit quia quam quo. A quae repudiandae pariatur mollitia. Exercitationem earum deserunt voluptate dolore facilis impedit fuga. Hic delectus consequatur quidem. Quia dolorum et voluptatum consectetur quis. Voluptatum hic in deleniti voluptates sunt. Qui perspiciatis rerum et porro.",
+                              "imageURL": "https://lorempixel.com/640/480/?46141",
+                              "debut": "Episode 05",
+                              "status": "Deceased",
+                              "bloodType": "W",
+                              "favoriteFood": "numquam",
+                              "bust": "27.70",
+                              "waist": "78.44",
+                              "hip": "53.99",
+                              "height": "875",
+                              "age": 265,
+                              "birthDay": 1,
+                              "birthMonth": 7,
+                              "astrologicalSign": "Virgo ♍️"
+                            }
+                          },
+                          {
+                            "id": 2,
+                            "type": "characters",
+                            "href": "/v1/characters/2",
+                            "attributes": {
+                              "name": "Lorna Pollich",
+                              "about": "Est vitae et voluptas ullam unde id ea. Quo non distinctio ipsa blanditiis aspernatur. Perferendis aut officia sit similique soluta odit eum. Sunt quo delectus est quis sapiente. A natus voluptatem omnis distinctio quis quas. Molestiae ut aut voluptas incidunt necessitatibus nihil culpa. Molestiae dolores illo dignissimos amet sit. Sit non et enim doloremque ratione exercitationem. Hic voluptas ab eos quia quia quia. Hic expedita est distinctio quaerat accusamus.",
+                              "imageURL": "https://lorempixel.com/640/480/?51170",
+                              "debut": "Episode 82",
+                              "status": "Deceased",
+                              "bloodType": "A",
+                              "favoriteFood": "hic",
+                              "bust": "22.62",
+                              "waist": "33.46",
+                              "hip": "37.65",
+                              "height": "704",
+                              "age": 292,
+                              "birthDay": 1,
+                              "birthMonth": 2,
+                              "astrologicalSign": "Cancer ♋️"
+                            }
+                          }
+                        ],
+                        "href": "/v1/anime/1/characters"
+                      },
+                      "cast": {
+                        "data": [
+                          {
+                            "person": {
+                              "id": 10,
+                              "type": "people",
+                              "href": "/v1/people/10",
+                              "attributes": {
+                                "firstName": "Leatha",
+                                "lastName": "Dietrich",
+                                "occupation": "Installation and Repair Technician",
+                                "imageURL": "https://lorempixel.com/640/480/?22657"
+                              }
+                            },
+                            "character": {
+                              "id": 10,
+                              "type": "characters",
+                              "href": "/v1/characters/10",
+                              "attributes": {
+                                "name": "Savion Strosin",
+                                "about": "Quae rerum delectus neque et officiis fuga incidunt et. Exercitationem et consequatur quae sunt molestias repellat dolorem. Necessitatibus iusto voluptatem ea dolor quasi. Rerum voluptas vel voluptate. Aut est dignissimos et molestias dolores sed perspiciatis. Aperiam eveniet omnis quo vel ipsum incidunt earum. Maxime veritatis eligendi sit. Quae et placeat earum quos. Et ut possimus in cumque. Omnis veniam distinctio officia minus. Et aut quia vel pariatur. Sint ut natus quia vitae sed quia. Numquam voluptatem quis beatae optio facere animi voluptatem. Quidem ullam ipsa velit totam debitis enim. Eos nesciunt aut dolores vitae consequuntur voluptas. Molestiae illo repellendus necessitatibus voluptatem. Optio labore necessitatibus incidunt. Non quia molestiae dolores repudiandae. Quam sapiente ea sed delectus molestiae deleniti maiores.",
+                                "imageURL": "https://lorempixel.com/640/480/?82757",
+                                "debut": "Episode 65",
+                                "status": "Deceased",
+                                "bloodType": "H",
+                                "favoriteFood": "beatae",
+                                "bust": null,
+                                "waist": null,
+                                "hip": null,
+                                "height": "616",
+                                "age": 233,
+                                "birthDay": 1,
+                                "birthMonth": 7,
+                                "astrologicalSign": "Aquarius ♒️"
+                              }
+                            },
+                            "role": "Protagonist"
+                          },
+                          {
+                            "person": {
+                              "id": 1,
+                              "type": "people",
+                              "href": "/v1/people/1",
+                              "attributes": {
+                                "firstName": "Aniyah",
+                                "lastName": "Waelchi",
+                                "occupation": "Government Property Inspector",
+                                "imageURL": "https://lorempixel.com/640/480/?66477"
+                              }
+                            },
+                            "character": {
+                              "id": 1,
+                              "type": "characters",
+                              "href": "/v1/characters/1",
+                              "attributes": {
+                                "name": "Tyra Armstrong IV",
+                                "about": "Aspernatur odio ab laborum neque voluptatem quia amet aliquam. Quaerat autem quo quis reprehenderit iure nostrum. Explicabo nam dignissimos ut consequatur. Veniam sapiente explicabo laborum sit harum optio enim sed. Ex corrupti fuga esse quia voluptatibus. Sit in qui ut saepe adipisci reiciendis. Consequatur aspernatur molestiae est saepe mollitia qui. Laudantium eligendi odio adipisci illo. Culpa delectus maxime aperiam nemo impedit eos. Dicta et aliquid ratione est alias autem possimus. Aut repellendus beatae ipsum ipsum numquam animi. Nam et et est pariatur. Facilis sed et sit quia quam quo. A quae repudiandae pariatur mollitia. Exercitationem earum deserunt voluptate dolore facilis impedit fuga. Hic delectus consequatur quidem. Quia dolorum et voluptatum consectetur quis. Voluptatum hic in deleniti voluptates sunt. Qui perspiciatis rerum et porro.",
+                                "imageURL": "https://lorempixel.com/640/480/?46141",
+                                "debut": "Episode 05",
+                                "status": "Deceased",
+                                "bloodType": "W",
+                                "favoriteFood": "numquam",
+                                "bust": "27.70",
+                                "waist": "78.44",
+                                "hip": "53.99",
+                                "height": "875",
+                                "age": 265,
+                                "birthDay": 1,
+                                "birthMonth": 7,
+                                "astrologicalSign": "Virgo ♍️"
+                              }
+                            },
+                            "role": "Deuteragonist"
+                          },
+                          {
+                            "person": {
+                              "id": 2,
+                              "type": "people",
+                              "href": "/v1/people/2",
+                              "attributes": {
+                                "firstName": "Ashley",
+                                "lastName": "Carroll",
+                                "occupation": "Inspector",
+                                "imageURL": "https://lorempixel.com/640/480/?48504"
+                              }
+                            },
+                            "character": {
+                              "id": 2,
+                              "type": "characters",
+                              "href": "/v1/characters/2",
+                              "attributes": {
+                                "name": "Lorna Pollich",
+                                "about": "Est vitae et voluptas ullam unde id ea. Quo non distinctio ipsa blanditiis aspernatur. Perferendis aut officia sit similique soluta odit eum. Sunt quo delectus est quis sapiente. A natus voluptatem omnis distinctio quis quas. Molestiae ut aut voluptas incidunt necessitatibus nihil culpa. Molestiae dolores illo dignissimos amet sit. Sit non et enim doloremque ratione exercitationem. Hic voluptas ab eos quia quia quia. Hic expedita est distinctio quaerat accusamus.",
+                                "imageURL": "https://lorempixel.com/640/480/?51170",
+                                "debut": "Episode 82",
+                                "status": "Deceased",
+                                "bloodType": "A",
+                                "favoriteFood": "hic",
+                                "bust": "22.62",
+                                "waist": "33.46",
+                                "hip": "37.65",
+                                "height": "704",
+                                "age": 292,
+                                "birthDay": 1,
+                                "birthMonth": 2,
+                                "astrologicalSign": "Cancer ♋️"
+                              }
+                            },
+                            "role": "Tritagonist"
+                          }
+                        ],
+                        "href": "/v1/anime/1/cast"
+                      },
+                      "relatedShows": {
+                        "data": [
+                          {
+                            "show": {
+                              "id": 217,
+                              "type": "show",
+                              "href": "/v1/anime/217",
+                              "attributes": {
+                                "anidbID": null,
+                                "anilistID": null,
+                                "kitsuID": null,
+                                "imdbID": null,
+                                "malID": null,
+                                "title": "Omnis odit hic dolorem itaque.",
+                                "synopsis": "Aspernatur aperiam corrupti similique voluptatibus qui. Voluptas eum ea doloribus qui inventore hic. Voluptas accusantium libero autem ipsum molestiae aut nobis. Aliquam unde voluptates corrupti ut temporibus eum.",
+                                "tagline": "Sunt error hic quod sint.",
+                                "tvRating": {
+                                  "name": "R18+",
+                                  "description": "Adults Only"
+                                },
+                                "type": {
+                                  "name": "Special",
+                                  "description": "A standalone series with a self-contained story."
+                                },
+                                "source": {
+                                  "name": "4-Koma Manga",
+                                  "description": "Adapted from comic strips that generally consists of four panels per page."
+                                },
+                                "network": null,
+                                "studio": [],
+                                "status": "Tba",
+                                "episodes": 0,
+                                "seasons": 0,
+                                "averageRating": 0,
+                                "ratingCount": 0,
+                                "runtime": 25,
+                                "videoURL": null,
+                                "poster": null,
+                                "background": null,
+                                "isNSFW": true,
+                                "genres": [],
+                                "themes": [],
+                                "startedAt": "2014-12-10",
+                                "endedAt": "2015-05-27",
+                                "airTime": "16:49:00",
+                                "airDay": 7,
+                                "copyright": "℗ 1997 Kulas-Baumbach",
+                                "givenRating": 0,
+                                "libraryStatus": null,
+                                "isFavorited": false,
+                                "isReminded": false
+                              }
+                            },
+                            "attributes": {
+                              "type": "Full story"
+                            }
+                          },
+                          {
+                            "show": {
+                              "id": 219,
+                              "type": "show",
+                              "href": "/v1/anime/219",
+                              "attributes": {
+                                "title": "Nam voluptatum voluptas optio qui.",
+                                "type": "Unknown",
+                                "source": "Original",
+                                "anidbID": null,
+                                "anilistID": null,
+                                "kitsuID": null,
+                                "imdbID": null,
+                                "malID": null,
+                                "network": null,
+                                "studio": [],
+                                "status": "Tba",
+                                "episodes": 0,
+                                "seasons": 0,
+                                "averageRating": 0,
+                                "ratingCount": 0,
+                                "synopsis": "Rerum distinctio quibusdam porro et. Modi natus iusto ut qui praesentium dicta sed ratione. Porro excepturi et qui laudantium tenetur non iure.",
+                                "runtime": 25,
+                                "tvRating": {
+                                  "name": "G",
+                                  "description": "All Ages"
+                                },
+                                "tagline": "Expedita esse et cupiditate id impedit qui ut.",
+                                "videoURL": null,
+                                "poster": null,
+                                "background": null,
+                                "isNSFW": false,
+                                "genres": [],
+                                "themes": [],
+                                "startedAt": "2015-02-10",
+                                "endedAt": "2015-05-05",
+                                "airTime": "18:32:00",
+                                "airDay": 6,
+                                "copyright": "® 1976 Swift Ltd",
+                                "givenRating": 0,
+                                "libraryStatus": null,
+                                "isFavorited": false,
+                                "isReminded": false
+                              }
+                            },
+                            "attributes": {
+                              "type": "Adaptation"
+                            }
+                          }
+                        ],
+                        "href": "/v1/anime/1/related-shows"
+                      },
+                      "seasons": {
+                        "data": [
+                          {
+                            "id": 1,
+                            "type": "seasons",
+                            "href": "/v1/seasons/1",
+                            "attributes": {
+                              "animeID": 1,
+                              "number": 1,
+                              "posterURL": "https://via.placeholder.com/640x480.png/006655?text=ratione",
+                              "title": "Season 1",
+                              "synopsis": "This is a short description of the season's story.",
+                              "episodeCount": 2,
+                              "startedAt": "2020-07-29"
+                            }
+                          }
+                        ],
+                        "href": "/v1/anime/1/seasons"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "GetMangaCastSuccess": {
+        "description": "Successful GET Manga Cast JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "person": {
+                      "id": 10,
+                      "type": "people",
+                      "href": "/v1/people/10",
+                      "attributes": {
+                        "firstName": "Leatha",
+                        "lastName": "Dietrich",
+                        "occupation": "Installation and Repair Technician",
+                        "imageURL": "https://lorempixel.com/640/480/?22657"
+                      }
+                    },
+                    "character": {
+                      "id": 10,
+                      "type": "characters",
+                      "href": "/v1/characters/10",
+                      "attributes": {
+                        "name": "Savion Strosin",
+                        "about": "Quae rerum delectus neque et officiis fuga incidunt et. Exercitationem et consequatur quae sunt molestias repellat dolorem. Necessitatibus iusto voluptatem ea dolor quasi. Rerum voluptas vel voluptate. Aut est dignissimos et molestias dolores sed perspiciatis. Aperiam eveniet omnis quo vel ipsum incidunt earum. Maxime veritatis eligendi sit. Quae et placeat earum quos. Et ut possimus in cumque. Omnis veniam distinctio officia minus. Et aut quia vel pariatur. Sint ut natus quia vitae sed quia. Numquam voluptatem quis beatae optio facere animi voluptatem. Quidem ullam ipsa velit totam debitis enim. Eos nesciunt aut dolores vitae consequuntur voluptas. Molestiae illo repellendus necessitatibus voluptatem. Optio labore necessitatibus incidunt. Non quia molestiae dolores repudiandae. Quam sapiente ea sed delectus molestiae deleniti maiores.",
+                        "imageURL": "https://lorempixel.com/640/480/?82757",
+                        "debut": "Episode 65",
+                        "status": "Deceased",
+                        "bloodType": "H",
+                        "favoriteFood": "beatae",
+                        "bust": null,
+                        "waist": null,
+                        "hip": null,
+                        "height": "616",
+                        "age": 233,
+                        "birthDay": 1,
+                        "birthMonth": 7,
+                        "astrologicalSign": "Aquarius ♒️"
+                      }
+                    },
+                    "role": "Protagonist"
+                  },
+                  {
+                    "person": {
+                      "id": 1,
+                      "type": "people",
+                      "href": "/v1/people/1",
+                      "attributes": {
+                        "firstName": "Aniyah",
+                        "lastName": "Waelchi",
+                        "occupation": "Government Property Inspector",
+                        "imageURL": "https://lorempixel.com/640/480/?66477"
+                      }
+                    },
+                    "character": {
+                      "id": 1,
+                      "type": "characters",
+                      "href": "/v1/characters/1",
+                      "attributes": {
+                        "name": "Tyra Armstrong IV",
+                        "about": "Aspernatur odio ab laborum neque voluptatem quia amet aliquam. Quaerat autem quo quis reprehenderit iure nostrum. Explicabo nam dignissimos ut consequatur. Veniam sapiente explicabo laborum sit harum optio enim sed. Ex corrupti fuga esse quia voluptatibus. Sit in qui ut saepe adipisci reiciendis. Consequatur aspernatur molestiae est saepe mollitia qui. Laudantium eligendi odio adipisci illo. Culpa delectus maxime aperiam nemo impedit eos. Dicta et aliquid ratione est alias autem possimus. Aut repellendus beatae ipsum ipsum numquam animi. Nam et et est pariatur. Facilis sed et sit quia quam quo. A quae repudiandae pariatur mollitia. Exercitationem earum deserunt voluptate dolore facilis impedit fuga. Hic delectus consequatur quidem. Quia dolorum et voluptatum consectetur quis. Voluptatum hic in deleniti voluptates sunt. Qui perspiciatis rerum et porro.",
+                        "imageURL": "https://lorempixel.com/640/480/?46141",
+                        "debut": "Episode 05",
+                        "status": "Deceased",
+                        "bloodType": "W",
+                        "favoriteFood": "numquam",
+                        "bust": "27.70",
+                        "waist": "78.44",
+                        "hip": "53.99",
+                        "height": "875",
+                        "age": 265,
+                        "birthDay": 1,
+                        "birthMonth": 7,
+                        "astrologicalSign": "Virgo ♍️"
+                      }
+                    },
+                    "role": "Deuteragonist"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "GetMangaCharactersSuccess": {
+        "description": "Successful GET Manga Characters JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "id": 1,
+                    "type": "characters",
+                    "href": "/v1/characters/1",
+                    "attributes": {
+                      "name": "Tyra Armstrong IV",
+                      "about": "Aspernatur odio ab laborum neque voluptatem quia amet aliquam. Quaerat autem quo quis reprehenderit iure nostrum. Explicabo nam dignissimos ut consequatur. Veniam sapiente explicabo laborum sit harum optio enim sed. Ex corrupti fuga esse quia voluptatibus. Sit in qui ut saepe adipisci reiciendis. Consequatur aspernatur molestiae est saepe mollitia qui. Laudantium eligendi odio adipisci illo. Culpa delectus maxime aperiam nemo impedit eos. Dicta et aliquid ratione est alias autem possimus. Aut repellendus beatae ipsum ipsum numquam animi. Nam et et est pariatur. Facilis sed et sit quia quam quo. A quae repudiandae pariatur mollitia. Exercitationem earum deserunt voluptate dolore facilis impedit fuga. Hic delectus consequatur quidem. Quia dolorum et voluptatum consectetur quis. Voluptatum hic in deleniti voluptates sunt. Qui perspiciatis rerum et porro.",
+                      "imageURL": "https://lorempixel.com/640/480/?46141",
+                      "debut": "Episode 05",
+                      "status": "Deceased",
+                      "bloodType": "W",
+                      "favoriteFood": "numquam",
+                      "bust": "27.70",
+                      "waist": "78.44",
+                      "hip": "53.99",
+                      "height": "875",
+                      "age": 265,
+                      "birthDay": 1,
+                      "birthMonth": 7,
+                      "astrologicalSign": "Virgo ♍️"
+                    }
+                  },
+                  {
+                    "id": 2,
+                    "type": "characters",
+                    "href": "/v1/characters/2",
+                    "attributes": {
+                      "name": "Lorna Pollich",
+                      "about": "Est vitae et voluptas ullam unde id ea. Quo non distinctio ipsa blanditiis aspernatur. Perferendis aut officia sit similique soluta odit eum. Sunt quo delectus est quis sapiente. A natus voluptatem omnis distinctio quis quas. Molestiae ut aut voluptas incidunt necessitatibus nihil culpa. Molestiae dolores illo dignissimos amet sit. Sit non et enim doloremque ratione exercitationem. Hic voluptas ab eos quia quia quia. Hic expedita est distinctio quaerat accusamus.",
+                      "imageURL": "https://lorempixel.com/640/480/?51170",
+                      "debut": "Episode 82",
+                      "status": "Deceased",
+                      "bloodType": "A",
+                      "favoriteFood": "hic",
+                      "bust": "22.62",
+                      "waist": "33.46",
+                      "hip": "37.65",
+                      "height": "704",
+                      "age": 292,
+                      "birthDay": 1,
+                      "birthMonth": 2,
+                      "astrologicalSign": "Cancer ♋️"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "GetMangaUpcomingSuccess": {
+        "description": "Successful GET Upcoming Manga JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "id": 1,
+                    "type": "show",
+                    "href": "/v1/anime/1",
+                    "attributes": {
+                      "title": "\"0\"",
+                      "type": "Tv",
+                      "source": "Unknown",
+                      "anidbID": 10143,
+                      "anilistID": 102416,
+                      "kitsuID": 8925,
+                      "imdbID": null,
+                      "malID": 20707,
+                      "network": null,
+                      "studio": [
+                        {
+                          "id": 1,
+                          "type": "studios",
+                          "href": "/v1/studios/1",
+                          "attributes": {
+                            "name": "Watsica-Kling",
+                            "logoURL": "https://place-hold.it/512x512",
+                            "about": "Error ipsa eos et rem recusandae rerum quos quidem aut.",
+                            "founded": "1963-11-15",
+                            "websiteURL": "https://watsica-kling.com/"
+                          }
+                        }
+                      ],
+                      "status": "Continuing",
+                      "episodes": 0,
+                      "seasons": 0,
+                      "averageRating": 0,
+                      "ratingCount": 0,
+                      "synopsis": "Error ipsa eos et rem recusandae voluptate sunt corrupti. Qui est est autem sit pariatur laudantium. Suscipit laboriosam enim modi quae quia aperiam excepturi sunt. Temporibus est hic adipisci.",
+                      "runtime": 25,
+                      "tvRating": {
+                        "name": "G",
+                        "description": "All Ages"
+                      },
+                      "tagline": "Voluptatem rerum quos quidem aut.",
+                      "videoURL": null,
+                      "poster": {
+                        "url": "https://place-hold.it/680x1000",
+                        "height": 1000,
+                        "width": 680,
+                        "backgroundColor": "#acacac",
+                        "textColor1": "#171717",
+                        "textColor2": "#545454",
+                        "textColor3": "#6e6e6e",
+                        "textColor4": "#5c5c5c"
+                      },
+                      "background": {
+                        "url": "https://place-hold.it/1920x1080",
+                        "height": 1080,
+                        "width": 1920,
+                        "backgroundColor": "#acacac",
+                        "textColor1": "#171717",
+                        "textColor2": "#545454",
+                        "textColor3": "#6d6d6d",
+                        "textColor4": "#5c5c5c"
+                      },
+                      "isNSFW": false,
+                      "genres": [
+                        "Action",
+                        "Adventure"
+                      ],
+                      "themes": [
+                        "Cars",
+                        "Demons"
+                      ],
+                      "startedAt": "1973-11-15",
+                      "endedAt": "1974-02-07",
+                      "airTime": "20:00:00",
+                      "airDay": 3,
+                      "copyright": "® 2003 Watsica-Kling"
+                    }
+                  },
+                  {
+                    "id": 2,
+                    "type": "show",
+                    "href": "/v1/anime/2",
+                    "attributes": {
+                      "title": "\"Aesop\" no Ohanashi yori: Ushi to Kaeru, Yokubatta Inu",
+                      "type": "Tv",
+                      "source": "Digital manga",
+                      "anidbID": 3689,
+                      "anilistID": null,
+                      "kitsuID": 9179,
+                      "imdbID": null,
+                      "malID": 25627,
+                      "network": null,
+                      "studio": [
+                        {
+                          "id": 2,
+                          "type": "studios",
+                          "href": "/v1/studios/2",
+                          "attributes": {
+                            "name": null,
+                            "logoURL": null,
+                            "about": null,
+                            "founded": null,
+                            "websiteURL": null
+                          }
+                        }
+                      ],
+                      "status": "Ended",
+                      "episodes": 0,
+                      "seasons": 0,
+                      "averageRating": 0,
+                      "ratingCount": 0,
+                      "synopsis": "Totam ex non eaque rem. Suscipit eos recusandae et. Pariatur reprehenderit aliquid reprehenderit nisi quae. Fuga enim atque ratione occaecati sequi iste dignissimos.",
+                      "runtime": 25,
+                      "tvRating": {
+                        "name": "G",
+                        "description": "All Ages"
+                      },
+                      "tagline": "Vel facilis dignissimos suscipit veritatis enim nemo ut.",
+                      "videoURL": null,
+                      "poster": null,
+                      "background": null,
+                      "isNSFW": false,
+                      "genres": [],
+                      "themes": [],
+                      "startedAt": "2014-09-28",
+                      "endedAt": "2014-12-21",
+                      "airTime": "19:24:00",
+                      "airDay": 4,
+                      "copyright": "® 1985 Fadel, Sipes and McGlynn"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "GetMangaRelatedShowsSuccess": {
+        "description": "Successful GET Manga Related Shows JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "show": {
+                      "id": 217,
+                      "type": "show",
+                      "href": "/v1/anime/217",
+                      "attributes": {
+                        "anidbID": null,
+                        "anilistID": null,
+                        "kitsuID": null,
+                        "imdbID": null,
+                        "malID": null,
+                        "title": "Omnis odit hic dolorem itaque.",
+                        "synopsis": "Aspernatur aperiam corrupti similique voluptatibus qui. Voluptas eum ea doloribus qui inventore hic. Voluptas accusantium libero autem ipsum molestiae aut nobis. Aliquam unde voluptates corrupti ut temporibus eum.",
+                        "tagline": "Sunt error hic quod sint.",
+                        "tvRating": {
+                          "name": "R18+",
+                          "description": "Adults Only"
+                        },
+                        "mediaType": {
+                          "name": "Special",
+                          "description": "A standalone series with a self-contained story."
+                        },
+                        "source": {
+                          "name": "4-Koma Manga",
+                          "description": "Adapted from comic strips that generally consists of four panels per page."
+                        },
+                        "network": null,
+                        "studio": [],
+                        "status": "Tba",
+                        "episodes": 0,
+                        "seasons": 0,
+                        "averageRating": 0,
+                        "ratingCount": 0,
+                        "runtime": 25,
+                        "videoURL": null,
+                        "poster": null,
+                        "background": null,
+                        "isNSFW": true,
+                        "genres": [],
+                        "themes": [],
+                        "startedAt": "2014-12-10",
+                        "endedAt": "2015-05-27",
+                        "airTime": "16:49:00",
+                        "airDay": 7,
+                        "copyright": "℗ 1997 Kulas-Baumbach",
+                        "givenRating": 0,
+                        "libraryStatus": null,
+                        "isFavorited": false,
+                        "isReminded": false
+                      }
+                    },
+                    "attributes": {
+                      "type": "Full story"
+                    }
+                  },
+                  {
+                    "show": {
+                      "id": 219,
+                      "type": "show",
+                      "href": "/v1/anime/219",
+                      "attributes": {
+                        "title": "Nam voluptatum voluptas optio qui.",
+                        "type": "Unknown",
+                        "source": "Original",
+                        "anidbID": null,
+                        "anilistID": null,
+                        "kitsuID": null,
+                        "imdbID": null,
+                        "malID": null,
+                        "network": null,
+                        "studio": [],
+                        "status": "Tba",
+                        "episodes": 0,
+                        "seasons": 0,
+                        "averageRating": 0,
+                        "ratingCount": 0,
+                        "synopsis": "Rerum distinctio quibusdam porro et. Modi natus iusto ut qui praesentium dicta sed ratione. Porro excepturi et qui laudantium tenetur non iure.",
+                        "runtime": 25,
+
+                        "tvRating": {
+                          "name": "G",
+                          "description": "All Ages"
+                        },
+                        "tagline": "Expedita esse et cupiditate id impedit qui ut.",
+                        "videoURL": null,
+                        "poster": null,
+                        "background": null,
+                        "isNSFW": false,
+                        "genres": [],
+                        "themes": [],
+                        "startedAt": "2015-02-10",
+                        "endedAt": "2015-05-05",
+                        "airTime": "18:32:00",
+                        "airDay": 6,
+                        "copyright": "® 1976 Swift Ltd",
+                        "givenRating": 0,
+                        "libraryStatus": null,
+                        "isFavorited": false,
+                        "isReminded": false
+                      }
+                    },
+                    "attributes": {
+                      "type": "Adaptation"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "GetMangaRelatedGamesSuccess": {
+        "description": "Successful GET Manga Related Games JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "show": {
+                      "id": 217,
+                      "type": "show",
+                      "href": "/v1/anime/217",
+                      "attributes": {
+                        "anidbID": null,
+                        "anilistID": null,
+                        "kitsuID": null,
+                        "imdbID": null,
+                        "malID": null,
+                        "title": "Omnis odit hic dolorem itaque.",
+                        "synopsis": "Aspernatur aperiam corrupti similique voluptatibus qui. Voluptas eum ea doloribus qui inventore hic. Voluptas accusantium libero autem ipsum molestiae aut nobis. Aliquam unde voluptates corrupti ut temporibus eum.",
+                        "tagline": "Sunt error hic quod sint.",
+                        "tvRating": {
+                          "name": "R18+",
+                          "description": "Adults Only"
+                        },
+                        "mediaType": {
+                          "name": "Special",
+                          "description": "A standalone series with a self-contained story."
+                        },
+                        "source": {
+                          "name": "4-Koma Manga",
+                          "description": "Adapted from comic strips that generally consists of four panels per page."
+                        },
+                        "network": null,
+                        "studio": [],
+                        "status": "Tba",
+                        "episodes": 0,
+                        "seasons": 0,
+                        "averageRating": 0,
+                        "ratingCount": 0,
+                        "runtime": 25,
+                        "videoURL": null,
+                        "poster": null,
+                        "background": null,
+                        "isNSFW": true,
+                        "genres": [],
+                        "themes": [],
+                        "startedAt": "2014-12-10",
+                        "endedAt": "2015-05-27",
+                        "airTime": "16:49:00",
+                        "airDay": 7,
+                        "copyright": "℗ 1997 Kulas-Baumbach",
+                        "givenRating": 0,
+                        "libraryStatus": null,
+                        "isFavorited": false,
+                        "isReminded": false
+                      }
+                    },
+                    "attributes": {
+                      "type": "Full story"
+                    }
+                  },
+                  {
+                    "show": {
+                      "id": 219,
+                      "type": "show",
+                      "href": "/v1/anime/219",
+                      "attributes": {
+                        "title": "Nam voluptatum voluptas optio qui.",
+                        "type": "Unknown",
+                        "source": "Original",
+                        "anidbID": null,
+                        "anilistID": null,
+                        "kitsuID": null,
+                        "imdbID": null,
+                        "malID": null,
+                        "network": null,
+                        "studio": [],
+                        "status": "Tba",
+                        "episodes": 0,
+                        "seasons": 0,
+                        "averageRating": 0,
+                        "ratingCount": 0,
+                        "synopsis": "Rerum distinctio quibusdam porro et. Modi natus iusto ut qui praesentium dicta sed ratione. Porro excepturi et qui laudantium tenetur non iure.",
+                        "runtime": 25,
+
+                        "tvRating": {
+                          "name": "G",
+                          "description": "All Ages"
+                        },
+                        "tagline": "Expedita esse et cupiditate id impedit qui ut.",
+                        "videoURL": null,
+                        "poster": null,
+                        "background": null,
+                        "isNSFW": false,
+                        "genres": [],
+                        "themes": [],
+                        "startedAt": "2015-02-10",
+                        "endedAt": "2015-05-05",
+                        "airTime": "18:32:00",
+                        "airDay": 6,
+                        "copyright": "® 1976 Swift Ltd",
+                        "givenRating": 0,
+                        "libraryStatus": null,
+                        "isFavorited": false,
+                        "isReminded": false
+                      }
+                    },
+                    "attributes": {
+                      "type": "Adaptation"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "GetMangaRelatedLiteraturesSuccess": {
+        "description": "Successful GET Manga Related Literatures JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "show": {
+                      "id": 217,
+                      "type": "show",
+                      "href": "/v1/anime/217",
+                      "attributes": {
+                        "anidbID": null,
+                        "anilistID": null,
+                        "kitsuID": null,
+                        "imdbID": null,
+                        "malID": null,
+                        "title": "Omnis odit hic dolorem itaque.",
+                        "synopsis": "Aspernatur aperiam corrupti similique voluptatibus qui. Voluptas eum ea doloribus qui inventore hic. Voluptas accusantium libero autem ipsum molestiae aut nobis. Aliquam unde voluptates corrupti ut temporibus eum.",
+                        "tagline": "Sunt error hic quod sint.",
+                        "tvRating": {
+                          "name": "R18+",
+                          "description": "Adults Only"
+                        },
+                        "mediaType": {
+                          "name": "Special",
+                          "description": "A standalone series with a self-contained story."
+                        },
+                        "source": {
+                          "name": "4-Koma Manga",
+                          "description": "Adapted from comic strips that generally consists of four panels per page."
+                        },
+                        "network": null,
+                        "studio": [],
+                        "status": "Tba",
+                        "episodes": 0,
+                        "seasons": 0,
+                        "averageRating": 0,
+                        "ratingCount": 0,
+                        "runtime": 25,
+                        "videoURL": null,
+                        "poster": null,
+                        "background": null,
+                        "isNSFW": true,
+                        "genres": [],
+                        "themes": [],
+                        "startedAt": "2014-12-10",
+                        "endedAt": "2015-05-27",
+                        "airTime": "16:49:00",
+                        "airDay": 7,
+                        "copyright": "℗ 1997 Kulas-Baumbach",
+                        "givenRating": 0,
+                        "libraryStatus": null,
+                        "isFavorited": false,
+                        "isReminded": false
+                      }
+                    },
+                    "attributes": {
+                      "type": "Full story"
+                    }
+                  },
+                  {
+                    "show": {
+                      "id": 219,
+                      "type": "show",
+                      "href": "/v1/anime/219",
+                      "attributes": {
+                        "title": "Nam voluptatum voluptas optio qui.",
+                        "type": "Unknown",
+                        "source": "Original",
+                        "anidbID": null,
+                        "anilistID": null,
+                        "kitsuID": null,
+                        "imdbID": null,
+                        "malID": null,
+                        "network": null,
+                        "studio": [],
+                        "status": "Tba",
+                        "episodes": 0,
+                        "seasons": 0,
+                        "averageRating": 0,
+                        "ratingCount": 0,
+                        "synopsis": "Rerum distinctio quibusdam porro et. Modi natus iusto ut qui praesentium dicta sed ratione. Porro excepturi et qui laudantium tenetur non iure.",
+                        "runtime": 25,
+
+                        "tvRating": {
+                          "name": "G",
+                          "description": "All Ages"
+                        },
+                        "tagline": "Expedita esse et cupiditate id impedit qui ut.",
+                        "videoURL": null,
+                        "poster": null,
+                        "background": null,
+                        "isNSFW": false,
+                        "genres": [],
+                        "themes": [],
+                        "startedAt": "2015-02-10",
+                        "endedAt": "2015-05-05",
+                        "airTime": "18:32:00",
+                        "airDay": 6,
+                        "copyright": "® 1976 Swift Ltd",
+                        "givenRating": 0,
+                        "libraryStatus": null,
+                        "isFavorited": false,
+                        "isReminded": false
+                      }
+                    },
+                    "attributes": {
+                      "type": "Adaptation"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "GetMangaStaffSuccess": {
+        "description": "Successful GET Manga Staff JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "id": 10,
+                    "type": "staff",
+                    "href": "/v1/anime/138/staff",
+                    "attributes": {
+                      "role": {
+                        "name": "Digital Colouring",
+                        "description": ""
+                      }
+                    },
+                    "relationships": {
+                      "person": {
+                        "href": "/v1/people/10",
+                        "data": {
+                          "id": 1,
+                          "type": "people",
+                          "href": "/v1/people/1",
+                          "attributes": {
+                            "firstName": "Aubrey",
+                            "lastName": "Littel",
+                            "givenName": "結衣",
+                            "familyName": null,
+                            "alternativeNames": [
+                              "Suki"
+                            ],
+                            "about": "Eveniet voluptatibus atque commodi reprehenderit voluptate enim. Non distinctio qui et corporis quae et aut. Ullam qui aperiam similique aperiam. Quibusdam incidunt nemo ut laboriosam sapiente. Assumenda autem placeat quia quo. Velit occaecati sit tempora doloremque reiciendis ea. Et molestiae id id minus. Similique qui sed molestiae velit voluptas. Ut atque illum harum. Voluptatum aut ea ab dignissimos. Corporis assumenda omnis sequi aut deleniti. Laudantium nobis sit ea tenetur quo rerum. Fugiat soluta vel sed adipisci corporis quaerat aut quibusdam. Reiciendis porro alias labore est nesciunt. Omnis reprehenderit corporis voluptas nemo aspernatur id. Aut provident explicabo voluptatem sunt accusantium. Repellendus consequatur laudantium incidunt voluptas reprehenderit cupiditate vel. Excepturi ut ea et fuga totam. Ut voluptas eum voluptatem. Placeat in tempora sunt exercitationem qui inventore quibusdam est. Dolores et voluptas quia qui saepe. Est corporis quas iusto et sint. Ut dignissimos nostrum quia. Qui hic et est autem. Cum libero magni animi odit vero molestiae nobis molestiae.",
+                            "imageURL": null,
+                            "websiteURL": null
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "GetMangaStudiosSuccess": {
+        "description": "Successful GET Manga Studios JSON response",
         "content": {
           "application/json": {
             "schema": {
