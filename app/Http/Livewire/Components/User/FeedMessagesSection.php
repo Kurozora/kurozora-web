@@ -102,9 +102,9 @@ class FeedMessagesSection extends Component
                 }
             ])
             ->withCount(['replies', 'reShares'])
-            ->when(auth()->check(), function ($query) {
-                $query->withExists(['reShares as isReShared' => function ($query) {
-                    $query->where('user_id', '=', auth()->user()->id);
+            ->when(auth()->user(), function ($query, $user) {
+                $query->withExists(['reShares as isReShared' => function ($query) use ($user) {
+                    $query->where('user_id', '=', $user->id);
                 }]);
             })
             ->orderBy('created_at', 'desc')
