@@ -30,7 +30,10 @@ class GameResource extends JsonResource
             // To avoid loading unnecessary relations, we set it to
             // an empty value.
             $request->merge(['include' => '']);
-            $includes = array_unique(explode(',', $includeInput));
+            if (is_string($includeInput)) {
+                $includeInput = explode(',', $includeInput);
+            }
+            $includes = array_unique($includeInput);
 
             $relationships = [];
             foreach ($includes as $include) {

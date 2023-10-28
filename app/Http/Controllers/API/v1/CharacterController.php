@@ -36,7 +36,10 @@ class CharacterController extends Controller
 
         $includeArray = [];
         if ($includeInput = $request->input('include')) {
-            $includes = array_unique(explode(',', $includeInput));
+            if (is_string($includeInput)) {
+                $includeInput = explode(',', $includeInput);
+            }
+            $includes = array_unique($includeInput);
 
             foreach ($includes as $include) {
                 switch ($include) {

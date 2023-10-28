@@ -48,11 +48,30 @@ class GameController extends Controller
         // Call the GameViewed event
         GameViewed::dispatch($game);
 
-        $game->load(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating']);
+        $user = auth()->user();
+
+        $game->load(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating'])
+            ->when($user, function ($query, $user) use ($game) {
+                $game->load(['mediaRatings' => function ($query) use ($user) {
+                    $query->where([
+                        ['user_id', '=', $user->id]
+                    ]);
+                }, 'library' => function ($query) use ($user) {
+                    $query->where('user_id', '=', $user->id);
+                }])
+                    ->loadExists([
+                        'favoriters as isFavorited' => function ($query) use ($user) {
+                            $query->where('user_id', '=', $user->id);
+                        }
+                    ]);
+            });
 
         $includeArray = [];
         if ($includeInput = $request->input('include')) {
-            $includes = array_unique(explode(',', $includeInput));
+            if (is_string($includeInput)) {
+                $includeInput = explode(',', $includeInput);
+            }
+            $includes = array_unique($includeInput);
 
             foreach ($includes as $include) {
                 switch ($include) {
@@ -191,7 +210,24 @@ class GameController extends Controller
         $relatedShows = $game->animeRelations()
             ->with([
                 'related' => function ($query) {
-                    $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating']);
+                    $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating'])
+                        ->when(auth()->user(), function ($query, $user) {
+                            $query->with(['mediaRatings' => function ($query) use ($user) {
+                                $query->where([
+                                    ['user_id', '=', $user->id]
+                                ]);
+                            }, 'library' => function ($query) use ($user) {
+                                $query->where('user_id', '=', $user->id);
+                            }])
+                                ->withExists([
+                                    'favoriters as isFavorited' => function ($query) use ($user) {
+                                        $query->where('user_id', '=', $user->id);
+                                    },
+                                    'reminderers as isReminded' => function ($query) use ($user) {
+                                        $query->where('user_id', '=', $user->id);
+                                    },
+                                ]);
+                        });
                 },
                 'relation'
             ])
@@ -221,7 +257,21 @@ class GameController extends Controller
         $relatedLiterature = $game->mangaRelations()
             ->with([
                 'related' => function ($query) {
-                    $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating']);
+                    $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating'])
+                        ->when(auth()->user(), function ($query, $user) {
+                            $query->with(['mediaRatings' => function ($query) use ($user) {
+                                $query->where([
+                                    ['user_id', '=', $user->id]
+                                ]);
+                            }, 'library' => function ($query) use ($user) {
+                                $query->where('user_id', '=', $user->id);
+                            }])
+                                ->withExists([
+                                    'favoriters as isFavorited' => function ($query) use ($user) {
+                                        $query->where('user_id', '=', $user->id);
+                                    }
+                                ]);
+                        });
                 },
                 'relation'
             ])
@@ -251,7 +301,21 @@ class GameController extends Controller
         $relatedGame = $game->gameRelations()
             ->with([
                 'related' => function ($query) {
-                    $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating']);
+                    $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating'])
+                        ->when(auth()->user(), function ($query, $user) {
+                            $query->with(['mediaRatings' => function ($query) use ($user) {
+                                $query->where([
+                                    ['user_id', '=', $user->id]
+                                ]);
+                            }, 'library' => function ($query) use ($user) {
+                                $query->where('user_id', '=', $user->id);
+                            }])
+                                ->withExists([
+                                    'favoriters as isFavorited' => function ($query) use ($user) {
+                                        $query->where('user_id', '=', $user->id);
+                                    }
+                                ]);
+                        });
                 },
                 'relation'
             ])
