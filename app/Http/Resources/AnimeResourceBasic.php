@@ -89,13 +89,13 @@ class AnimeResourceBasic extends JsonResource
      */
     protected function getUserSpecificDetails(): array
     {
-        // Get the user rating for this Anime
         $givenRating = $this->resource->mediaRatings->first();
+        $libraryStatus = $this->resource->pivot?->status ?? $this->resource->library->first()?->status;
 
         // Return the array
         return [
             'givenRating'       => (double) $givenRating?->rating,
-            'libraryStatus'     => $this->resource->pivot->status ?? $this->resource->library->first()->status,
+            'libraryStatus'     => $libraryStatus,
             'isFavorited'       => (bool) $this->resource->isFavorited,
             'isReminded'        => $this->resource->isReminded,
         ];
