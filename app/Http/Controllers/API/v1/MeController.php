@@ -44,6 +44,7 @@ class MeController extends Controller
                         ->limit(1);
                 },
             ])
+            ->loadCount(['followers', 'following'])
             // Since we already have the latest access token, we
             // simply set the relation here instead of loading
             // the same relation on the user again.

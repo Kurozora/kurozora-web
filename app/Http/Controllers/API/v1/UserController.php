@@ -37,7 +37,17 @@ class UserController extends Controller
             'badges' => function ($query) {
                 $query->with(['media']);
             },
-            'media'
+            'media',
+            'tokens' => function ($query) {
+                $query
+                    ->orderBy('last_used_at', 'desc')
+                    ->limit(1);
+            },
+            'sessions' => function ($query) {
+                $query
+                    ->orderBy('last_activity', 'desc')
+                    ->limit(1);
+            },
         ])
             ->loadCount(['followers', 'following']);
 
@@ -97,17 +107,17 @@ class UserController extends Controller
                         }
                     ])
                         ->withCount(['replies', 'reShares'])
-                        ->when(auth()->check(), function ($query) {
-                            $query->withExists(['reShares as isReShared' => function ($query) {
-                                $query->where('user_id', '=', auth()->user()->id);
+                        ->when(auth()->user(), function ($query, $user) {
+                            $query->withExists(['reShares as isReShared' => function ($query) use ($user) {
+                                $query->where('user_id', '=', $user->id);
                             }]);
                         });
                 }
             ])
             ->withCount(['replies', 'reShares'])
-            ->when(auth()->check(), function ($query) {
-                $query->withExists(['reShares as isReShared' => function ($query) {
-                    $query->where('user_id', '=', auth()->user()->id);
+            ->when(auth()->user(), function ($query, $user) {
+                $query->withExists(['reShares as isReShared' => function ($query) use ($user) {
+                    $query->where('user_id', '=', $user->id);
                 }]);
             })
             ->orderBy('created_at', 'desc')
@@ -144,11 +154,13 @@ class UserController extends Controller
                     ->orderBy('last_activity', 'desc')
                     ->limit(1);
             },
-        ])->when(auth()->check(), function ($query) {
-            $query->withExists(['followers as isFollowed' => function ($query) {
-                $query->where('user_id', '=', auth()->user()->id);
-            }]);
-        });
+        ])
+            ->withCount(['followers', 'following'])
+            ->when(auth()->check(), function ($query) {
+                $query->withExists(['followers as isFollowed' => function ($query) {
+                    $query->where('user_id', '=', auth()->user()->id);
+                }]);
+            });
     }
 
     /**

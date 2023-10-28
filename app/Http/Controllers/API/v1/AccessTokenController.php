@@ -83,8 +83,17 @@ class AccessTokenController
                 'badges' => function ($query) {
                     $query->with(['media']);
                 },
-                'media'
+                'media',
+                'tokens' => function ($query) {
+                    $query->orderBy('last_used_at', 'desc')
+                        ->limit(1);
+                },
+                'sessions' => function ($query) {
+                    $query->orderBy('last_activity', 'desc')
+                        ->limit(1);
+                },
             ])
+            ->withCount(['followers', 'following'])
             ->first();
 
         // Compare the passwords
