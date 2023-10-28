@@ -53,22 +53,22 @@
             <div class="flex justify-between">
                 <x-profile-information-badge>
                     <x-slot:title>{{ __('Reputation') }}</x-slot:title>
-                    <x-slot:description>0</x-slot:description>
+                    <x-slot:description>{{ $user->getReputationCount() }}</x-slot:description>
                 </x-profile-information-badge>
 
                 <x-profile-information-badge wire:click="togglePopupFor('badges')">
                     <x-slot:title>{{ __('Badges') }}</x-slot:title>
-                    <x-slot:description>{{ $user->badges()->count() }}</x-slot:description>
+                    <x-slot:description>{{ $counts['badges_count'] }}</x-slot:description>
                 </x-profile-information-badge>
 
                 <x-profile-information-badge wire:click="togglePopupFor('following')">
                     <x-slot:title>{{ __('Following') }}</x-slot:title>
-                    <x-slot:description>{{ $user->following()->count() }}</x-slot:description>
+                    <x-slot:description>{{ $counts['following_count'] }}</x-slot:description>
                 </x-profile-information-badge>
 
                 <x-profile-information-badge wire:click="togglePopupFor('followers')">
                     <x-slot:title>{{ __('Followers') }}</x-slot:title>
-                    <x-slot:description>{{ $user->followers()->count() }}</x-slot:description>
+                    <x-slot:description>{{ $counts['followers_count'] }}</x-slot:description>
                 </x-profile-information-badge>
             </div>
 

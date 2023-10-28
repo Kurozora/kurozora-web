@@ -43,6 +43,17 @@ class Details extends Component
     ];
 
     /**
+     * The array off counts.
+     *
+     * @var array|int[]
+     */
+    public array $counts = [
+        'badges_count' => 0,
+        'followers_count' => 0,
+        'following_count' => 0,
+    ];
+
+    /**
      * List of acceptable popup types.
      *
      * @var array|string[]
@@ -52,6 +63,15 @@ class Details extends Component
         'badges',
         'following',
         'followers',
+    ];
+
+    /**
+     * The component's listeners.
+     *
+     * @var array
+     */
+    protected $listeners = [
+        'followers-badge-refresh' => 'followersCountUpdated'
     ];
 
     /**
@@ -66,7 +86,14 @@ class Details extends Component
         // Call the UserViewed event
         UserViewed::dispatch($user);
 
-        $this->user = $user->load(['media']);
+        $this->user = $user->load(['media'])
+            ->loadCount(['followers', 'following', 'badges']);
+
+        $this->counts = [
+            'badges_count' => $user->badges_count,
+            'followers_count' => $user->followers_count,
+            'following_count' => $user->following_count,
+        ];
     }
 
     /**
@@ -96,6 +123,20 @@ class Details extends Component
             ->followers()
             ->where('user_id', auth()->user()->id)
             ->exists();
+    }
+
+    /**
+     * Updates the user's followers count.
+     *
+     * @param int $newCount
+     * @param $userID
+     * @return void
+     */
+    public function followersCountUpdated(int $newCount, $userID): void
+    {
+        if ($this->user->id == $userID) {
+            $this->counts['followers_count'] += $newCount;
+        }
     }
 
     /**

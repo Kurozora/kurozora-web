@@ -21,15 +21,23 @@ class FollowButton extends Component
     public User $user;
 
     /**
+     * Whether the auth user is following the user.
+     *
+     * @var bool $isFollowing
+     */
+    public bool $isFollowing;
+
+    /**
      * Prepare the component.
      *
      * @param User $user
-     *
+     * @param bool $isFollowing
      * @return void
      */
-    public function mount(User $user)
+    public function mount(User $user, bool $isFollowing): void
     {
         $this->user = $user;
+        $this->isFollowing = $isFollowing;
     }
 
     /**
@@ -40,27 +48,28 @@ class FollowButton extends Component
     public function toggleFollow(): Application|RedirectResponse|Redirector|null
     {
         $authUser = auth()->user();
+        $followersCount = 0;
 
         // Require user to authenticate if necessary.
         if (empty($authUser)) {
             return redirect(route('sign-in'));
         }
 
-        // Determine if the user is already followed
-        $isAlreadyFollowing = $this->user->followers()->where('user_id', $authUser->id)->exists();
-
-        if ($isAlreadyFollowing) {
+        if ($this->isFollowing) {
             // Delete follow
             $this->user->followers()->detach($authUser);
+            $followersCount--;
         } else {
             // Follow the user
             $this->user->followers()->attach($authUser);
+            $followersCount++;
 
             // Send notification
             $this->user->notify(new NewFollower($authUser));
         }
 
-        $this->emit('followers-badge-refresh');
+        $this->isFollowing = !$this->isFollowing;
+        $this->emit('followers-badge-refresh', $followersCount, $this->user->id);
 
         return null;
     }
