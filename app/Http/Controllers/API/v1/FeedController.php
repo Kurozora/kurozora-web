@@ -13,6 +13,8 @@ use App\Models\User;
 use App\Notifications\NewFeedMessageReply;
 use App\Notifications\NewFeedMessageReShare;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\JsonResponse;
 
 class FeedController extends Controller
@@ -71,9 +73,71 @@ class FeedController extends Controller
             }
         }
 
+        $feedMessage->load([
+            'user' => fn($query) => $this->eagerLoadUser($query),
+            'loveReactant' => function (BelongsTo $query) {
+                $query->with([
+                    'reactionCounters',
+                    'reactions' => function (HasMany $hasMany) {
+                        $hasMany->with(['reacter', 'type']);
+                    }
+                ]);
+            },
+            'parentMessage' => function ($query) {
+                $query->with([
+                    'user' => fn($query) => $this->eagerLoadUser($query),
+                    'loveReactant' => function (BelongsTo $query) {
+                        $query->with([
+                            'reactionCounters',
+                            'reactions' => function (HasMany $hasMany) {
+                                $hasMany->with(['reacter', 'type']);
+                            }
+                        ]);
+                    }
+                ])
+                    ->withCount(['replies', 'reShares'])
+                    ->when(auth()->user(), function ($query, $user) {
+                        $query->withExists(['reShares as isReShared' => function ($query) use ($user) {
+                            $query->where('user_id', '=', $user->id);
+                        }]);
+                    });
+            }
+        ]);
+
         return JSONResult::success([
             'data' => FeedMessageResource::collection([$feedMessage]),
         ]);
+    }
+
+    /**
+     * The closure for eager loading user relations on feed messages.
+     *
+     * @param BelongsTo $belongsTo
+     */
+    private function eagerLoadUser(BelongsTo $belongsTo)
+    {
+        $belongsTo->with([
+            'badges' => function ($query) {
+                $query->with(['media']);
+            },
+            'media',
+            'tokens' => function ($query) {
+                $query
+                    ->orderBy('last_used_at', 'desc')
+                    ->limit(1);
+            },
+            'sessions' => function ($query) {
+                $query
+                    ->orderBy('last_activity', 'desc')
+                    ->limit(1);
+            },
+        ])
+            ->withCount(['followers', 'following'])
+            ->when(auth()->check(), function ($query) {
+                $query->withExists(['followers as isFollowed' => function ($query) {
+                    $query->where('user_id', '=', auth()->user()->id);
+                }]);
+            });
     }
 
     /**
@@ -97,12 +161,44 @@ class FeedController extends Controller
         // Get paginated feed messages that are not a reply
         $feed = FeedMessage::noReplies()
             ->with([
-                'loveReactant.reactions.reacter.reacterable',
-                'loveReactant.reactionCounters',
+                'user' => fn($query) => $this->eagerLoadUser($query),
+                'loveReactant' => function (BelongsTo $query) {
+                    $query->with([
+                        'reactionCounters',
+                        'reactions' => function (HasMany $hasMany) {
+                            $hasMany->with(['reacter', 'type']);
+                        }
+                    ]);
+                },
+                'parentMessage' => function ($query) {
+                    $query->with([
+                        'user' => fn($query) => $this->eagerLoadUser($query),
+                        'loveReactant' => function (BelongsTo $query) {
+                            $query->with([
+                                'reactionCounters',
+                                'reactions' => function (HasMany $hasMany) {
+                                    $hasMany->with(['reacter', 'type']);
+                                }
+                            ]);
+                        }
+                    ])
+                        ->withCount(['replies', 'reShares'])
+                        ->when(auth()->user(), function ($query, $user) {
+                            $query->withExists(['reShares as isReShared' => function ($query) use ($user) {
+                                $query->where('user_id', '=', $user->id);
+                            }]);
+                        });
+                }
             ])
+            ->withCount(['replies', 'reShares'])
+            ->when(auth()->user(), function ($query, $user) {
+                $query->withExists(['reShares as isReShared' => function ($query) use ($user) {
+                    $query->where('user_id', '=', $user->id);
+                }]);
+            })
             ->whereIn('user_id', $userIDs)
             ->orderByDesc('created_at')
-            ->paginate($data['limit'] ?? 25);
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $feed->nextPageUrl());
@@ -126,11 +222,43 @@ class FeedController extends Controller
         // Get paginated global feed messages that are not a reply
         $feed = FeedMessage::noReplies()
             ->with([
-                'loveReactant.reactions.reacter.reacterable',
-                'loveReactant.reactionCounters',
+                'user' => fn($query) => $this->eagerLoadUser($query),
+                'loveReactant' => function (BelongsTo $query) {
+                    $query->with([
+                        'reactionCounters',
+                        'reactions' => function (HasMany $hasMany) {
+                            $hasMany->with(['reacter', 'type']);
+                        }
+                    ]);
+                },
+                'parentMessage' => function ($query) {
+                    $query->with([
+                        'user' => fn($query) => $this->eagerLoadUser($query),
+                        'loveReactant' => function (BelongsTo $query) {
+                            $query->with([
+                                'reactionCounters',
+                                'reactions' => function (HasMany $hasMany) {
+                                    $hasMany->with(['reacter', 'type']);
+                                }
+                            ]);
+                        }
+                    ])
+                        ->withCount(['replies', 'reShares'])
+                        ->when(auth()->user(), function ($query, $user) {
+                            $query->withExists(['reShares as isReShared' => function ($query) use ($user) {
+                                $query->where('user_id', '=', $user->id);
+                            }]);
+                        });
+                }
             ])
+            ->withCount(['replies', 'reShares'])
+            ->when(auth()->user(), function ($query, $user) {
+                $query->withExists(['reShares as isReShared' => function ($query) use ($user) {
+                    $query->where('user_id', '=', $user->id);
+                }]);
+            })
             ->orderByDesc('created_at')
-            ->paginate($data['limit'] ?? 25);
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $feed->nextPageUrl());

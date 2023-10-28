@@ -38,8 +38,8 @@ class FeedMessageResourceBasic extends JsonResource
                 'contentMarkdown'   => $this->resource->content_markdown ?? '',
                 'metrics'           => [
                     'heartCount'        => $totalHearts->getCount(),
-                    'replyCount'        => $this->resource->replies_count,
-                    'reShareCount'      => $this->resource->re_shares_count
+                    'replyCount'        => (int) $this->resource->replies_count,
+                    'reShareCount'      => (int) $this->resource->re_shares_count
                 ],
                 'isReply'           => $this->resource->is_reply,
                 'isReShare'         => $this->resource->is_reshare,
