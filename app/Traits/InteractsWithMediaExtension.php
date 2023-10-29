@@ -21,7 +21,12 @@ trait InteractsWithMediaExtension {
     function getFirstMediaFullUrl(?MediaCollection $collectionName = null, string $conversionName = ''): ?string
     {
         $collectionName = $collectionName ?? MediaCollection::Default();
-        $media = $this->getFirstMedia($collectionName->value);
+
+        if ($this->relationLoaded('media')) {
+            $media = $this->media->where('collection_name', '=', $collectionName->value)->first();
+        } else {
+            $media = $this->getFirstMedia($collectionName->value);
+        }
 
         if (empty($media)) {
             return $this->getFallbackMediaUrl($collectionName->value) ?: null;
