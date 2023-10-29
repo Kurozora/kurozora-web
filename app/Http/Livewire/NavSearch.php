@@ -113,8 +113,16 @@ class NavSearch extends Component
                             case Person::class:
                             case Studio::class:
                             case Song::class:
-                            case User::class:
                                 $query->with(['media']);
+                                break;
+                            case User::class:
+                                $query->with(['media'])
+                                    ->withCount(['followers'])
+                                    ->when(auth()->user(), function ($query, $user) {
+                                        $query->withExists(['followers as isFollowed' => function ($query) use ($user) {
+                                            $query->where('user_id', '=', $user->id);
+                                        }]);
+                                    });
                                 break;
                         }
                     })

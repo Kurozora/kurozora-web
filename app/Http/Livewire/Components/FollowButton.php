@@ -21,23 +21,23 @@ class FollowButton extends Component
     public User $user;
 
     /**
-     * Whether the auth user is following the user.
+     * Whether the user is being followed by the auth user.
      *
-     * @var bool $isFollowing
+     * @var bool $isFollowed
      */
-    public bool $isFollowing;
+    public bool $isFollowed;
 
     /**
      * Prepare the component.
      *
      * @param User $user
-     * @param bool $isFollowing
+     * @param bool $isFollowed
      * @return void
      */
-    public function mount(User $user, bool $isFollowing): void
+    public function mount(User $user, bool $isFollowed): void
     {
         $this->user = $user;
-        $this->isFollowing = $isFollowing;
+        $this->isFollowed = $isFollowed;
     }
 
     /**
@@ -55,7 +55,7 @@ class FollowButton extends Component
             return redirect(route('sign-in'));
         }
 
-        if ($this->isFollowing) {
+        if ($this->isFollowed) {
             // Delete follow
             $this->user->followers()->detach($authUser);
             $followersCount--;
@@ -68,7 +68,9 @@ class FollowButton extends Component
             $this->user->notify(new NewFollower($authUser));
         }
 
-        $this->isFollowing = !$this->isFollowing;
+        $this->isFollowed = !$this->isFollowed;
+
+        // Notify relevant components to increment or decrement count by 1
         $this->emit('followers-badge-refresh', $followersCount, $this->user->id);
 
         return null;

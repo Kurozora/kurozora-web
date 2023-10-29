@@ -113,16 +113,20 @@ class Details extends Component
     }
 
     /**
-     * Whether the auth user is following the user.
+     * Whether the user is followed by the auth user.
      *
      * @return bool
      */
-    public function getIsFollowingProperty(): bool
+    public function getIsFollowedProperty(): bool
     {
-        return $this->user
-            ->followers()
-            ->where('user_id', auth()->user()->id)
-            ->exists();
+        if ($authUser = auth()->user()) {
+            return $this->user
+                ->followers()
+                ->where('user_id', '=', $authUser->id)
+                ->exists();
+        }
+
+        return false;
     }
 
     /**

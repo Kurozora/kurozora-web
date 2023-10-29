@@ -73,6 +73,12 @@ class Index extends Component
         // browser.
         return $this->user->followers()
             ->with(['media'])
+            ->withCount(['followers'])
+            ->when(auth()->user(), function ($query, $user) {
+                $query->withExists(['followers as isFollowed' => function ($query) use ($user) {
+                    $query->where('user_id', '=', $user->id);
+                }]);
+            })
             ->orderBy(UserFollow::TABLE_NAME . '.created_at', 'desc')
             ->cursorPaginate(25, ['*'], 'frc');
     }

@@ -64,6 +64,13 @@ class Index extends Component
     public array $filter = [];
 
     /**
+     * Whether the component is ready to load.
+     *
+     * @var bool $readyToLoad
+     */
+    public bool $readyToLoad = false;
+
+    /**
      * The query strings of the component.
      *
      * @var string[] $queryString
@@ -103,6 +110,16 @@ class Index extends Component
     }
 
     /**
+     * Sets the property to load the page.
+     *
+     * @return void
+     */
+    public function loadPage(): void
+    {
+        $this->readyToLoad = true;
+    }
+
+    /**
      * Called when a property is updated.
      *
      * @param $propertyName
@@ -126,6 +143,10 @@ class Index extends Component
      */
     public function getSearchResultsProperty(): ?LengthAwarePaginator
     {
+        if (!$this->readyToLoad) {
+            return null;
+        }
+
         try {
             $this->validate();
 
@@ -195,7 +216,13 @@ class Index extends Component
                             $query->with(['media']);
                             break;
                         case User::class:
-                            $query->with(['media', 'followers']);
+                            $query->with(['media'])
+                                ->withCount(['followers'])
+                                ->when(auth()->user(), function ($query, $user) {
+                                    $query->withExists(['followers as isFollowed' => function ($query) use ($user) {
+                                        $query->where('user_id', '=', $user->id);
+                                    }]);
+                                });
                             break;
                     }
                 });

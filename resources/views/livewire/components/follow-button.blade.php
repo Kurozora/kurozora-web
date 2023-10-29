@@ -2,16 +2,16 @@
     <x-tinted-pill-button
         color="orange"
         wire:click="toggleFollow"
-        :title="$this->isFollowing ? __('Unfollow :x', ['x' => $user->username]) : __('Follow :x', ['x' => $user->username])"
+        :title="$this->isFollowed ? __('Unfollow :x', ['x' => $user->username]) : __('Follow :x', ['x' => $user->username])"
     >
-        @auth
-            @if ($this->isFollowing)
+{{--        @auth--}}
+            @if ($this->isFollowed)
                 {{ __('Following') }}
             @else
                 {{ __('Follow') }}
             @endif
-        @else
-            {{ __('Follow') }}
-        @endauth
+{{--        @else--}}
+{{--            {{ __('Follow') }}--}}
+{{--        @endauth--}}
     </x-tinted-pill-button>
 </div>

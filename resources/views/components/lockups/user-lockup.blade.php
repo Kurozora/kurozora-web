@@ -2,7 +2,8 @@
 
 @php
     $class = $isRow ? 'pb-2 shrink-0' : '';
-    $followersCount = $user->followers()->count();
+    $isFollowed = (bool) $user->isFollowed;
+    $followersCount = $user->followers_count;
 @endphp
 
 <div {{ $attributes->merge(['class' => 'relative flex-grow w-64 md:w-80 ' . $class]) }}>
@@ -37,7 +38,7 @@
                                 {{ __('Followed by you... and one fan!') }}
                             @else
                                 {{
-                                   $user->followers()->where('user_id', auth()->user()->id)->exists() ?
+                                   $isFollowed ?
                                    __('Followed by you.') :
                                    __('Followed by one user.')
                                 }}
@@ -47,7 +48,7 @@
                                 {{ __('Followed by you and :x fans.', ['x' => $followersCount]) }}
                             @else
                                 {{
-                                    $user->followers()->where('user_id', auth()->user()->id)->exists() ?
+                                    $isFollowed ?
                                     __('Followed by you and :x users.', ['x' => $followersCount - 1]) :
                                     __('Followed by :x users.', ['x' => $followersCount])
                                 }}
@@ -57,7 +58,7 @@
                                 {{ __('Followed by :x fans.', ['x' => number_shorten($followersCount)]) }}
                             @else
                                 {{
-                                    $user->followers()->where('user_id', auth()->user()->id)->exists() ?
+                                    $isFollowed ?
                                     __('Followed by you and :x users.', ['x' => number_shorten($followersCount - 1)]) :
                                     __('Followed by :x users.', ['x' => number_shorten($followersCount)])
                                 }}
@@ -73,13 +74,9 @@
         <a class="absolute w-full h-full" href="{{ route('profile.details', $user) }}"></a>
 
         <div class="flex flex-row flex-nowrap items-center justify-between z-10 whitespace-nowrap">
-            @auth
-                @if ($user->id != auth()->user()->id)
-                    <livewire:components.follow-button :user='$user' wire:key="{{ uniqid(more_entropy: true) }}" />
-                @endif
-            @else
-                <livewire:components.follow-button :user='$user' wire:key="{{ uniqid(more_entropy: true) }}" />
-            @endauth
+            @if ($user->id != auth()->user()?->id)
+                <livewire:components.follow-button :user="$user" :is-followed="$isFollowed" wire:key="{{ uniqid(more_entropy: true) }}" />
+            @endif
         </div>
     </div>
 </div>

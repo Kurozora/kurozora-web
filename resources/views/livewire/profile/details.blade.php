@@ -39,13 +39,17 @@
                     </div>
                 </div>
 
-                @auth
-                    @if ($user->id == auth()->user()->id)
-                        <x-button wire:click="togglePopupFor('edit')">{{ __('Edit') }}</x-button>
-                    @else
-                        <livewire:components.follow-button :user="$user" :is-following="$this->isFollowing" wire:key="{{ uniqid(more_entropy: true) }}" />
+                <div class="flex gap-2 items-end">
+                    @auth
+                        @if ($user->id == auth()->user()->id)
+                            <x-button wire:click="togglePopupFor('edit')">{{ __('Edit') }}</x-button>
+                        @endif
                     @endif
-                @endif
+
+                    @if ($user->id != auth()->user()?->id)
+                        <livewire:components.follow-button :user="$user" :is-followed="$this->isFollowed" wire:key="{{ uniqid(more_entropy: true) }}" />
+                    @endif
+                </div>
             </div>
 
             <div class="mt-2 pt-2 pb-2 px-3">{!! $user->biography_html !!}</div>
