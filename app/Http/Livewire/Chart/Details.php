@@ -69,7 +69,12 @@ class Details extends Component
         }
 
         $model = match ($this->chartKind) {
-            ChartKind::Anime => Anime::with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating']),
+            ChartKind::Anime => Anime::with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
+                ->when(auth()->user(), function ($query, $user) {
+                    $query->with(['library' => function ($query) use ($user) {
+                        $query->where('user_id', '=', $user->id);
+                    }]);
+                }),
             ChartKind::Characters => Character::with(['media', 'translations']),
             ChartKind::Episodes => Episode::with([
                 'anime' => function ($query) {
@@ -81,8 +86,18 @@ class Details extends Component
                 },
                 'translations'
             ]),
-            ChartKind::Games => Game::with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating']),
-            ChartKind::Manga => Manga::with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating']),
+            ChartKind::Games => Game::with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
+                ->when(auth()->user(), function ($query, $user) {
+                    $query->with(['library' => function ($query) use ($user) {
+                        $query->where('user_id', '=', $user->id);
+                    }]);
+                }),
+            ChartKind::Manga => Manga::with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
+                ->when(auth()->user(), function ($query, $user) {
+                    $query->with(['library' => function ($query) use ($user) {
+                        $query->where('user_id', '=', $user->id);
+                    }]);
+                }),
             ChartKind::People => Person::with(['media']),
             ChartKind::Songs => Song::with(['media']),
             ChartKind::Studios => Studio::with(['media'])

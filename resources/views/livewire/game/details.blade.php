@@ -81,7 +81,11 @@
     <div class="grid grid-rows-[repeat(2,minmax(0,min-content))] h-full xl:grid-rows-none xl:grid-cols-2 2xl:grid-cols-3 xl:mb-0" wire:init="loadPage">
         <div class="relative">
             <div class="relative flex flex-nowrap aspect-video md:relative md:h-full xl:aspect-auto">
-                <x-picture class="w-full overflow-hidden">
+                <x-picture
+                    class="w-full overflow-hidden"
+                    style="background-color: {{ ($game->getFirstMedia(\App\Enums\MediaCollection::Banner) ?? $game->getFirstMedia(\App\Enums\MediaCollection::Poster))?->custom_properties['background_color'] }};"
+                    wire:ignore
+                >
                     <img class="w-full h-full aspect-video object-cover lazyload" data-sizes="auto" data-src="{{ $game->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $game->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/game_banner.webp') }}" alt="{{ $game->title }} Banner" title="{{ $game->title }}">
                 </x-picture>
 
@@ -101,7 +105,13 @@
 
             <div class="md:absolute md:bottom-0 md:left-0 md:right-0 lg:px-4">
                 <div class="flex flex-nowrap pt-5 pb-8 pl-4 pr-4 md:mx-auto md:mb-8 md:p-2 md:max-w-lg md:bg-white md:bg-opacity-50 md:backdrop-filter md:backdrop-blur md:rounded-lg">
-                    <x-picture :border="true" border-roundness="rounded-3xl" class="w-28 h-28 mr-2 rounded-3xl overflow-hidden" style="min-width: 7rem; max-height: 7rem;">
+                    <x-picture
+                        :border="true"
+                        border-roundness="rounded-3xl"
+                        class="w-28 h-28 mr-2 rounded-3xl overflow-hidden"
+                        style="min-width: 7rem; max-height: 10rem; background-color: {{ $game->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] }};"
+                        wire:ignore
+                    >
                         <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $game->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/game_poster.webp') }}" alt="{{ $game->title }} Poster" title="{{ $game->title }}">
                     </x-picture>
 
@@ -120,7 +130,7 @@
 
                         <div class="flex flex-wrap gap-1 justify-between">
                             <div class="flex gap-2">
-                                <livewire:game.library-button :game="$game" wire:key="{{ uniqid($game->id, true) }}" />
+                                <livewire:components.library-button :model="$game" wire:key="{{ uniqid($game->id, true) }}" />
 
                                 <x-nova-link :resource="\App\Nova\Game::class" :model="$game">
                                     @svg('pencil', 'fill-current', ['width' => '44'])
@@ -128,7 +138,7 @@
                             </div>
 
                             <div class="flex gap-2">
-                                @if($isTracking)
+                                @if ($isTracking)
 {{--                                    <x-circle-button color="yellow" wire:click="remindGame">--}}
 {{--                                        @if($isReminded)--}}
 {{--                                            @svg('bell_fill', 'fill-current', ['width' => '44'])--}}
@@ -138,7 +148,7 @@
 {{--                                    </x-circle-button>--}}
 
                                     <x-circle-button color="red" wire:click="favoriteGame">
-                                        @if($isFavorited)
+                                        @if ($isFavorited)
                                             @svg('heart_fill', 'fill-current', ['width' => '44'])
                                         @else
                                             @svg('heart', 'fill-current', ['width' => '44'])
@@ -273,7 +283,7 @@
                     <div class="flex justify-between items-center">
                         <p class="">{{ __('Click to Rate:') }}</p>
 
-                        <livewire:game.star-rating :game="$game" :rating="$this->userRating?->rating" :star-size="'md'" />
+                        <livewire:game.star-rating :game="$game" :rating="$game->mediaRatings->first()?->rating" :star-size="'md'" />
                     </div>
 
                     <div class="flex justify-between">
@@ -473,7 +483,7 @@
                             <div class="flex items-center">
                                 <p class="">{{ __('Click to Rate:') }}</p>
 
-                                <livewire:game.star-rating :game="$game" :rating="$this->userRating?->rating" :star-size="'md'" />
+                                <livewire:game.star-rating :game="$game" :rating="$game->mediaRatings->first()?->rating" :star-size="'md'" />
                             </div>
 
                             <x-textarea class="block w-full h-48 mt-1 resize-none" placeholder="{{ __('What’s on your mind?') }}" wire:model.defer="reviewText"></x-textarea>

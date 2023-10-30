@@ -82,9 +82,19 @@ class MediaSection extends Component
         return match ($this->type) {
             Anime::class => $this->song->anime()
                 ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
+                ->when(auth()->user(), function ($query, $user) {
+                    $query->with(['library' => function ($query) use ($user) {
+                        $query->where('user_id', '=', $user->id);
+                    }]);
+                })
                 ->get(),
             Game::class => $this->song->games()
                 ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
+                ->when(auth()->user(), function ($query, $user) {
+                    $query->with(['library' => function ($query) use ($user) {
+                        $query->where('user_id', '=', $user->id);
+                    }]);
+                })
                 ->get()
         };
     }

@@ -99,6 +99,11 @@ class MediaSection extends Component
         return match ($this->type) {
             Anime::class => $this->person->anime()
                 ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
+                ->when(auth()->user(), function ($query, $user) {
+                    $query->with(['library' => function ($query) use ($user) {
+                        $query->where('user_id', '=', $user->id);
+                    }]);
+                })
                 ->limit(Person::MAXIMUM_RELATIONSHIPS_LIMIT)
                 ->get(),
             Character::class => $this->person->characters()
@@ -107,10 +112,20 @@ class MediaSection extends Component
                 ->get(),
             Manga::class => $this->person->manga()
                 ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
+                ->when(auth()->user(), function ($query, $user) {
+                    $query->with(['library' => function ($query) use ($user) {
+                        $query->where('user_id', '=', $user->id);
+                    }]);
+                })
                 ->limit(Person::MAXIMUM_RELATIONSHIPS_LIMIT)
                 ->get(),
             Game::class => $this->person->games()
                 ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
+                ->when(auth()->user(), function ($query, $user) {
+                    $query->with(['library' => function ($query) use ($user) {
+                        $query->where('user_id', '=', $user->id);
+                    }]);
+                })
                 ->limit(Person::MAXIMUM_RELATIONSHIPS_LIMIT)
                 ->get(),
         };

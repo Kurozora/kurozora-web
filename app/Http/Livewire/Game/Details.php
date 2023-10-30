@@ -4,12 +4,10 @@ namespace App\Http\Livewire\Game;
 
 use App\Events\GameViewed;
 use App\Models\Game;
-use App\Models\MediaRating;
 use App\Models\Studio;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;
 use Livewire\Component;
@@ -110,7 +108,14 @@ class Details extends Component
         // Call the GameViewed event
         GameViewed::dispatch($game);
 
-        $this->game = $game->load(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating']);
+        $this->game = $game->load(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
+            ->when(auth()->user(), function ($query, $user) use ($game) {
+                return $game->load(['mediaRatings' => function ($query) use ($user) {
+                    $query->where([
+                        ['user_id', '=', $user->id]
+                    ]);
+                }]);
+            });
 
         $this->setupActions();
     }
@@ -197,7 +202,7 @@ class Details extends Component
     {
         $user = auth()->user();
 
-        if ($user->is_pro) {
+        if ($user->is_subscribed) {
             if ($this->isTracking) {
                 if ($this->isReminded) { // Don't remind the user
                     $user->reminderGame()->detach($this->game->id);
@@ -243,17 +248,11 @@ class Details extends Component
      */
     public function getStudioProperty(): ?Studio
     {
-        return $this->game->studios()?->firstWhere('is_studio', '=', true) ?? $this->game->studios->first();
-    }
+        if (!$this->readyToLoad) {
+            return null;
+        }
 
-    /**
-     * Returns the user rating.
-     *
-     * @return MediaRating|Model|null
-     */
-    public function getUserRatingProperty(): MediaRating|Model|null
-    {
-        return $this->game->mediaRatings()->firstWhere('user_id', auth()->user()?->id);
+        return $this->game->studios()?->firstWhere('is_studio', '=', true) ?? $this->game->studios->first();
     }
 
     /**

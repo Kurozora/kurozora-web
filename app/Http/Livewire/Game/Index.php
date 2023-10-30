@@ -42,7 +42,12 @@ class Index extends Component
      */
     public function searchIndexQuery(EloquentBuilder $query): EloquentBuilder
     {
-        return $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating']);
+        return $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
+            ->when(auth()->user(), function ($query, $user) {
+                $query->with(['library' => function ($query) use ($user) {
+                    $query->where('user_id', '=', $user->id);
+                }]);
+            });
     }
 
     /**
@@ -54,7 +59,12 @@ class Index extends Component
     public function searchQuery(ScoutBuilder $query): ScoutBuilder
     {
         return $query->query(function (EloquentBuilder $query) {
-            $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating']);
+            $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
+                ->when(auth()->user(), function ($query, $user) {
+                    $query->with(['library' => function ($query) use ($user) {
+                        $query->where('user_id', '=', $user->id);
+                    }]);
+                });
         });
     }
 

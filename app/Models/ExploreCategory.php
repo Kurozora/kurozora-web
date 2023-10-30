@@ -6,7 +6,6 @@ use App\Scopes\ExploreCategoryIsEnabledScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Cache;
 use Request;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
@@ -158,22 +157,46 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
     public function mostPopular(string|null $class = null, Genre|Theme|null $genreOrTheme = null, int $limit = 10, bool $withRelations = true): ExploreCategory
     {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'mostPopular', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'class' => $class, 'modelType' => $genreOrTheme?->getMorphClass(), 'modelID' => $genreOrTheme?->id, 'limit' => $limit, 'withRelations' => $withRelations]);
+//        $cacheKey = self::cacheKey(['name' => 'mostPopular', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'class' => $class, 'modelType' => $genreOrTheme?->getMorphClass(), 'modelID' => $genreOrTheme?->id, 'limit' => $limit, 'withRelations' => $withRelations]);
 
         // Retrieve or save cached result
-        return Cache::remember($cacheKey, 60*60*12, function () use ($class, $genreOrTheme, $limit, $withRelations) {
+//        return Cache::remember($cacheKey, 60*60*12, function () use ($class, $genreOrTheme, $limit, $withRelations) {
             $models = match ($class) {
                 Anime::class => $this->anime($genreOrTheme)
                     ->mostPopular($limit, 3, (bool) $genreOrTheme?->is_nsfw)
-                    ->with($withRelations ? ['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'] : [])
+                    ->when($withRelations, function ($query) {
+                        $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating']);
+
+                        if ($user = auth()->user()) {
+                            $query->with(['library' => function ($query) use ($user) {
+                                $query->where('user_id', '=', $user->id);
+                            }]);
+                        }
+                    })
                     ->get(),
                 Game::class => $this->game($genreOrTheme)
                     ->mostPopular($limit, 3, (bool)$genreOrTheme?->is_nsfw)
-                    ->with($withRelations ? ['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'] : [])
+                    ->when($withRelations, function ($query) {
+                        $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating']);
+
+                        if ($user = auth()->user()) {
+                            $query->with(['library' => function ($query) use ($user) {
+                                $query->where('user_id', '=', $user->id);
+                            }]);
+                        }
+                    })
                     ->get(),
                 Manga::class => $this->manga($genreOrTheme)
                     ->mostPopular($limit, 3, (bool)$genreOrTheme?->is_nsfw)
-                    ->with($withRelations ? ['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'] : [])
+                    ->when($withRelations, function ($query) {
+                        $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating']);
+
+                        if ($user = auth()->user()) {
+                            $query->with(['library' => function ($query) use ($user) {
+                                $query->where('user_id', '=', $user->id);
+                            }]);
+                        }
+                    })
                     ->get(),
                 // No default, so it errors out, and we can fix it.
             };
@@ -185,7 +208,7 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
             });
 
             return $this;
-        });
+//        });
     }
 
     /**
@@ -199,22 +222,61 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
      */
     public function upcoming(string|null $class = null, Genre|Theme|null $genreOrTheme = null, int $limit = 10, bool $withRelations = true): ExploreCategory
     {
-        $cacheKey = self::cacheKey(['name' => 'upcoming', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'class' => $class, 'modelType' => $genreOrTheme?->getMorphClass(), 'modelID' => $genreOrTheme?->id, 'limit' => $limit, 'withRelations' => $withRelations]);
+//        $cacheKey = self::cacheKey(['name' => 'upcoming', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'class' => $class, 'modelType' => $genreOrTheme?->getMorphClass(), 'modelID' => $genreOrTheme?->id, 'limit' => $limit, 'withRelations' => $withRelations]);
 
         // Retrieve or save cached result
-        return Cache::remember($cacheKey, 60*60*12, function () use ($class, $genreOrTheme, $limit, $withRelations) {
+//        return Cache::remember($cacheKey, 60*60*12, function () use ($class, $genreOrTheme, $limit, $withRelations) {
             $models = match ($class) {
                 Anime::class => $this->anime($genreOrTheme)
                     ->upcoming($limit, (bool)$genreOrTheme?->is_nsfw)
-                    ->with($withRelations ? ['translations', 'media'] : [])
+                    ->when($withRelations, function ($query) {
+                        $query->with(['translations', 'media']);
+
+                        if ($user = auth()->user()) {
+                            $query->with(['library' => function ($query) use ($user) {
+                                $query->where('user_id', '=', $user->id);
+                            }])
+                                ->withExists([
+                                    'reminderers as isReminded' => function ($query) use ($user) {
+                                        $query->where('user_id', '=', $user->id);
+                                    },
+                                ]);
+                        }
+                    })
                     ->get(),
                 Game::class => $this->game($genreOrTheme)
                     ->upcoming($limit, (bool)$genreOrTheme?->is_nsfw)
-                    ->with($withRelations ? ['translations', 'media'] : [])
+                    ->when($withRelations, function ($query) {
+                        $query->with(['translations', 'media']);
+
+                        if ($user = auth()->user()) {
+                            $query->with(['library' => function ($query) use ($user) {
+                                $query->where('user_id', '=', $user->id);
+                            }])
+                                ->withExists([
+                                    'reminderers as isReminded' => function ($query) use ($user) {
+                                        $query->where('user_id', '=', $user->id);
+                                    },
+                                ]);
+                        }
+                    })
                     ->get(),
                 Manga::class => $this->manga($genreOrTheme)
                     ->upcoming($limit, (bool)$genreOrTheme?->is_nsfw)
-                    ->with($withRelations ? ['translations', 'media'] : [])
+                    ->when($withRelations, function ($query) {
+                        $query->with(['translations', 'media']);
+
+                        if ($user = auth()->user()) {
+                            $query->with(['library' => function ($query) use ($user) {
+                                $query->where('user_id', '=', $user->id);
+                            }])
+                                ->withExists([
+                                    'reminderers as isReminded' => function ($query) use ($user) {
+                                        $query->where('user_id', '=', $user->id);
+                                    },
+                                ]);
+                        }
+                    })
                     ->get(),
                 // No default, so it errors out, and we can fix it.
             };
@@ -226,7 +288,7 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
             });
 
             return $this;
-        });
+//        });
     }
 
     /**
@@ -243,15 +305,39 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
         $models = match ($class) {
             Anime::class => $this->anime($genreOrTheme)
                 ->recentlyAdded($limit, (bool) $genreOrTheme?->is_nsfw)
-                ->with($withRelations ? ['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'] : [])
+                ->when($withRelations, function ($query) {
+                        $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating']);
+
+                        if ($user = auth()->user()) {
+                            $query->with(['library' => function ($query) use ($user) {
+                                $query->where('user_id', '=', $user->id);
+                            }]);
+                        }
+                    })
                 ->get(),
             Game::class => $this->game($genreOrTheme)
                 ->recentlyAdded($limit, (bool) $genreOrTheme?->is_nsfw)
-                ->with($withRelations ? ['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'] : [])
+                ->when($withRelations, function ($query) {
+                        $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating']);
+
+                        if ($user = auth()->user()) {
+                            $query->with(['library' => function ($query) use ($user) {
+                                $query->where('user_id', '=', $user->id);
+                            }]);
+                        }
+                    })
                 ->get(),
             Manga::class => $this->manga($genreOrTheme)
                 ->recentlyAdded($limit, (bool) $genreOrTheme?->is_nsfw)
-                ->with($withRelations ? ['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'] : [])
+                ->when($withRelations, function ($query) {
+                        $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating']);
+
+                        if ($user = auth()->user()) {
+                            $query->with(['library' => function ($query) use ($user) {
+                                $query->where('user_id', '=', $user->id);
+                            }]);
+                        }
+                    })
                 ->get(),
         };
 
@@ -278,15 +364,39 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
         $models = match ($class) {
             Anime::class => $this->anime($genreOrTheme)
                 ->recentlyUpdated($limit, (bool) $genreOrTheme?->is_nsfw)
-                ->with($withRelations ? ['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'] : [])
+                ->when($withRelations, function ($query) {
+                        $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating']);
+
+                        if ($user = auth()->user()) {
+                            $query->with(['library' => function ($query) use ($user) {
+                                $query->where('user_id', '=', $user->id);
+                            }]);
+                        }
+                    })
                 ->get(),
             Game::class => $this->game($genreOrTheme)
                 ->recentlyUpdated($limit, (bool) $genreOrTheme?->is_nsfw)
-                ->with($withRelations ? ['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'] : [])
+                ->when($withRelations, function ($query) {
+                        $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating']);
+
+                        if ($user = auth()->user()) {
+                            $query->with(['library' => function ($query) use ($user) {
+                                $query->where('user_id', '=', $user->id);
+                            }]);
+                        }
+                    })
                 ->get(),
             Manga::class => $this->manga($genreOrTheme)
                 ->recentlyUpdated($limit, (bool) $genreOrTheme?->is_nsfw)
-                ->with($withRelations ? ['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'] : [])
+                ->when($withRelations, function ($query) {
+                        $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating']);
+
+                        if ($user = auth()->user()) {
+                            $query->with(['library' => function ($query) use ($user) {
+                                $query->where('user_id', '=', $user->id);
+                            }]);
+                        }
+                    })
                 ->get(),
         };
 
@@ -313,11 +423,27 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
         $models = match ($class) {
             Anime::class => $this->anime($genreOrTheme)
                 ->recentlyFinished($limit, (bool) $genreOrTheme?->is_nsfw)
-                ->with($withRelations ? ['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'] : [])
+                ->when($withRelations, function ($query) {
+                        $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating']);
+
+                        if ($user = auth()->user()) {
+                            $query->with(['library' => function ($query) use ($user) {
+                                $query->where('user_id', '=', $user->id);
+                            }]);
+                        }
+                    })
                 ->get(),
             Manga::class => $this->manga($genreOrTheme)
                 ->recentlyFinished($limit, (bool) $genreOrTheme?->is_nsfw)
-                ->with($withRelations ? ['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'] : [])
+                ->when($withRelations, function ($query) {
+                        $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating']);
+
+                        if ($user = auth()->user()) {
+                            $query->with(['library' => function ($query) use ($user) {
+                                $query->where('user_id', '=', $user->id);
+                            }]);
+                        }
+                    })
                 ->get(),
         };
 
@@ -342,18 +468,34 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
     public function ongoing(string|null $class = null, Genre|Theme|null $genreOrTheme = null, int $limit = 10, bool $withRelations = true): ExploreCategory
     {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'ongoing', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'class' => $class, 'modelType' => $genreOrTheme?->getMorphClass(), 'modelID' => $genreOrTheme?->id, 'withRelations' => $withRelations]);
+//        $cacheKey = self::cacheKey(['name' => 'ongoing', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'class' => $class, 'modelType' => $genreOrTheme?->getMorphClass(), 'modelID' => $genreOrTheme?->id, 'withRelations' => $withRelations]);
 
         // Retrieve or save cached result
-        return Cache::remember($cacheKey, 60*60*12, function () use ($class, $genreOrTheme, $limit, $withRelations) {
+//        return Cache::remember($cacheKey, 60*60*12, function () use ($class, $genreOrTheme, $limit, $withRelations) {
             $models = match ($class) {
                 Anime::class => $this->anime($genreOrTheme)
                     ->ongoing($limit, (bool) $genreOrTheme?->is_nsfw)
-                    ->with($withRelations ? ['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'] : [])
+                    ->when($withRelations, function ($query) {
+                        $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating']);
+
+                        if ($user = auth()->user()) {
+                            $query->with(['library' => function ($query) use ($user) {
+                                $query->where('user_id', '=', $user->id);
+                            }]);
+                        }
+                    })
                     ->get(),
                 Manga::class => $this->manga($genreOrTheme)
                     ->ongoing($limit, (bool) $genreOrTheme?->is_nsfw)
-                    ->with($withRelations ? ['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'] : [])
+                    ->when($withRelations, function ($query) {
+                        $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating']);
+
+                        if ($user = auth()->user()) {
+                            $query->with(['library' => function ($query) use ($user) {
+                                $query->where('user_id', '=', $user->id);
+                            }]);
+                        }
+                    })
                     ->get(),
             };
 
@@ -364,7 +506,7 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
             });
 
             return $this;
-        });
+//        });
     }
 
     /**
@@ -379,22 +521,46 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
     public function currentSeason(string|null $class = null, Genre|Theme|null $genreOrTheme = null, int $limit = 10, bool $withRelations = true): ExploreCategory
     {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'currentSeason', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'class' => $class, 'modelType' => $genreOrTheme?->getMorphClass(), 'modelID' => $genreOrTheme?->id, 'withRelations' => $withRelations]);
+//        $cacheKey = self::cacheKey(['name' => 'currentSeason', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'class' => $class, 'modelType' => $genreOrTheme?->getMorphClass(), 'modelID' => $genreOrTheme?->id, 'withRelations' => $withRelations]);
 
         // Retrieve or save cached result
-        return Cache::remember($cacheKey, 60*60*12, function () use ($class, $genreOrTheme, $limit, $withRelations) {
+//        return Cache::remember($cacheKey, 60*60*12, function () use ($class, $genreOrTheme, $limit, $withRelations) {
             $animeSeason = match ($class) {
                 Anime::class => $this->anime($genreOrTheme)
                     ->currentSeason($limit, (bool) $genreOrTheme?->is_nsfw)
-                    ->with($withRelations ? ['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'] : [])
+                    ->when($withRelations, function ($query) {
+                        $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating']);
+
+                        if ($user = auth()->user()) {
+                            $query->with(['library' => function ($query) use ($user) {
+                                $query->where('user_id', '=', $user->id);
+                            }]);
+                        }
+                    })
                     ->get(),
                 Game::class => $this->game($genreOrTheme)
                     ->currentSeason($limit, (bool) $genreOrTheme?->is_nsfw)
-                    ->with($withRelations ? ['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'] : [])
+                    ->when($withRelations, function ($query) {
+                        $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating']);
+
+                        if ($user = auth()->user()) {
+                            $query->with(['library' => function ($query) use ($user) {
+                                $query->where('user_id', '=', $user->id);
+                            }]);
+                        }
+                    })
                     ->get(),
                 Manga::class => $this->manga($genreOrTheme)
                     ->currentSeason($limit, (bool) $genreOrTheme?->is_nsfw)
-                    ->with($withRelations ? ['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'] : [])
+                    ->when($withRelations, function ($query) {
+                        $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating']);
+
+                        if ($user = auth()->user()) {
+                            $query->with(['library' => function ($query) use ($user) {
+                                $query->where('user_id', '=', $user->id);
+                            }]);
+                        }
+                    })
                     ->get(),
             };
 
@@ -405,7 +571,7 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
             });
 
             return $this;
-        });
+//        });
     }
 
     /**

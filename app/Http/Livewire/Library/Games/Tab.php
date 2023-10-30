@@ -157,6 +157,11 @@ class Tab extends Component
             $games = $this->user
                 ->whereTracked(Game::class)
                 ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
+                ->when(auth()->user(), function ($query, $user) {
+                    $query->with(['library' => function ($query) use ($user) {
+                        $query->where('user_id', '=', $user->id);
+                    }]);
+                })
                 ->wherePivot('status', $userLibraryStatus->value);
             return $games->paginate($this->perPage);
         }
@@ -175,7 +180,12 @@ class Tab extends Component
         $games->wheres = $wheres;
         $games->orders = $orders;
         $games->query(function (Builder $query) {
-            $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating']);
+            $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
+                ->when(auth()->user(), function ($query, $user) {
+                    $query->with(['library' => function ($query) use ($user) {
+                        $query->where('user_id', '=', $user->id);
+                    }]);
+                });
         });
 
         // Paginate

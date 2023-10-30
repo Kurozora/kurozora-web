@@ -6,7 +6,7 @@
     @if ($bannerImage)
         <picture
             class="relative w-full overflow-hidden"
-            style="background-color: {{ $bannerImage?->custom_properties['background_color'] ?? '#FF9300' }}"
+            style="background-color: {{ $bannerImage->custom_properties['background_color'] ?? '#FF9300' }}"
         >
             <img
                 class="inline-block w-full h-40 object-cover sm:h-80"

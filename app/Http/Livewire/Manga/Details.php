@@ -181,7 +181,7 @@ class Details extends Component
     {
         $user = auth()->user();
 
-        if ($user->is_pro) {
+        if ($user->is_subscribed) {
             if ($this->isTracking) {
 //                if ($this->isReminded) { // Don't remind the user
 //                    $user->reminderManga()->detach($this->manga->id);
@@ -227,6 +227,10 @@ class Details extends Component
      */
     public function getStudioProperty(): ?Studio
     {
+        if (!$this->readyToLoad) {
+            return null;
+        }
+
         return $this->manga->studios()?->firstWhere('is_studio', '=', true) ?? $this->manga->studios->first();
     }
 

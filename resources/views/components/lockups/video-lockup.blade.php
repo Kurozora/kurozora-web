@@ -43,7 +43,7 @@
                     <p class="text-xs leading-tight text-black/60 line-clamp-2">{{ $anime->genres?->pluck('name')->join(', ', ' and ') }}</p>
                 </div>
 
-                <livewire:anime.library-button :anime="$anime" wire:key="{{ uniqid($anime->id, true) }}" />
+                <livewire:components.library-button :model="$anime" wire:key="{{ uniqid($anime->id, true) }}" />
             </div>
         </div>
 

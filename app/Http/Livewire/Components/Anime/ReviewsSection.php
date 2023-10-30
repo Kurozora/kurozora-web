@@ -41,7 +41,7 @@ class ReviewsSection extends Component
      */
     public function mount(Anime $anime): void
     {
-        $this->anime = $anime;
+        $this->anime = $anime->withoutRelations();
     }
 
     /**

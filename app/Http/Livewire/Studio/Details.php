@@ -7,7 +7,6 @@ use App\Models\Studio;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Collection;
 use Livewire\Component;
 
 class Details extends Component
@@ -49,57 +48,6 @@ class Details extends Component
     public function loadPage(): void
     {
         $this->readyToLoad = true;
-    }
-
-    /**
-     * The studio's animes.
-     *
-     * @return Collection
-     */
-    public function getAnimesProperty(): Collection
-    {
-        if (!$this->readyToLoad) {
-            return collect();
-        }
-
-        return $this->studio->anime()
-            ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
-            ->limit(Studio::MAXIMUM_RELATIONSHIPS_LIMIT)
-            ->get();
-    }
-
-    /**
-     * The studio's mangas.
-     *
-     * @return Collection
-     */
-    public function getMangasProperty(): Collection
-    {
-        if (!$this->readyToLoad) {
-            return collect();
-        }
-
-        return $this->studio->manga()
-            ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
-            ->limit(Studio::MAXIMUM_RELATIONSHIPS_LIMIT)
-            ->get();
-    }
-
-    /**
-     * The studio's games.
-     *
-     * @return Collection
-     */
-    public function getGamesProperty(): Collection
-    {
-        if (!$this->readyToLoad) {
-            return collect();
-        }
-
-        return $this->studio->games()
-            ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
-            ->limit(Studio::MAXIMUM_RELATIONSHIPS_LIMIT)
-            ->get();
     }
 
     /**

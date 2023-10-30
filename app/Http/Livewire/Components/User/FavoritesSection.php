@@ -95,6 +95,11 @@ class FavoritesSection extends Component
 
         return $this->user->whereFavorited($this->type)
             ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
+            ->when(auth()->user(), function ($query, $user) {
+                $query->with(['library' => function ($query) use ($user) {
+                    $query->where('user_id', '=', $user->id);
+                }]);
+            })
             ->orderBy('created_at', 'desc')
             ->limit(10)
             ->get();

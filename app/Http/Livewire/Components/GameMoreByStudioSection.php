@@ -70,6 +70,11 @@ class GameMoreByStudioSection extends Component
 
         return $this->studio->games()
             ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
+            ->when(auth()->user(), function ($query, $user) {
+                $query->with(['library' => function ($query) use ($user) {
+                    $query->where('user_id', '=', $user->id);
+                }]);
+            })
             ->where('model_id', '!=', $this->game->id)
             ->limit(Studio::MAXIMUM_RELATIONSHIPS_LIMIT)
             ->get();

@@ -6,12 +6,13 @@ use App\Events\AnimeViewed;
 use App\Models\Anime;
 use App\Models\MediaRating;
 use App\Models\Studio;
+use App\Models\UserLibrary;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 
 class Details extends Component
@@ -22,6 +23,20 @@ class Details extends Component
      * @var Anime $anime
      */
     public Anime $anime;
+
+    /**
+     * The object containing the user's rating data.
+     *
+     * @var Collection|MediaRating[] $userRating
+     */
+    public Collection|array $userRating;
+
+    /**
+     * The object containing the user's library data.
+     *
+     * @var Collection|UserLibrary[] $library
+     */
+    public Collection|array $library;
 
     /**
      * Whether the user has favorited the anime.
@@ -110,9 +125,48 @@ class Details extends Component
         // Call the AnimeViewed event
         AnimeViewed::dispatch($anime);
 
-        $this->anime = $anime->load(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating']);
+        $this->anime = $anime->load(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
+            ->when(auth()->user(), function ($query, $user) use ($anime) {
+                return $anime->loadMissing(['mediaRatings' => function ($query) {
+                    $query->where('user_id', '=', auth()->user()->id);
+                }])
+                    ->loadExists([
+                        'favoriters as isFavorited' => function ($query) use ($user) {
+                            $query->where('user_id', '=', $user->id);
+                        },
+                        'reminderers as isReminded' => function ($query) use ($user) {
+                            $query->where('user_id', '=', $user->id);
+                        },
+                    ]);
+            });
+        $this->anime->setRelation('library', UserLibrary::where([
+            ['trackable_type', '=', $anime->getMorphClass()],
+            ['trackable_id', '=', $anime->id],
+            ['user_id', '=', auth()->user()->id],
+        ])->get());
 
-        $this->setupActions();
+        $this->isFavorited = $anime->isFavorited;
+        $this->isReminded = $anime->isReminded;
+        $this->isTracking = $anime->library->isNotEmpty();
+        $this->userRating = $anime->mediaRatings;
+        $this->library = $anime->library;
+    }
+
+    public function dehydrateAnime($value): void
+    {
+        // For some reason the library relation isn't hydrated correctly.
+        // The relation is hydrated without the `where` constraint on the
+        // user's ID. So it hydrates all UserLibrary models from the database
+        // for the given model. Bad performance. The fix is to unset the
+        // relation here, then set it back in the hydrate method.
+        $value->unsetRelation('library');
+        $value->unsetRelation('mediaRatings');
+    }
+
+    public function hydrateAnime($value): void
+    {
+        $value->setRelation('library', $this->library);
+        $value->setRelation('mediaRatings', $this->userRating);
     }
 
     /**
@@ -126,24 +180,13 @@ class Details extends Component
     }
 
     /**
-     * Sets up the actions according to the user's settings.
-     */
-    protected function setupActions(): void
-    {
-        $user = auth()->user();
-        if (!empty($user)) {
-            $this->isTracking = $user->hasTracked($this->anime);
-            $this->isFavorited = $user->hasFavorited($this->anime);
-            $this->isReminded = $user->reminderAnime()->where('anime_id', $this->anime->id)->exists();
-        }
-    }
-
-    /**
      * Handles the update anime vent.
      */
-    public function updateAnimeHandler(): void
+    public function updateAnimeHandler($animeID): void
     {
-        $this->setupActions();
+        if ($this->anime->id == $animeID) {
+            $this->setupActions();
+        }
     }
 
     /**
@@ -167,7 +210,7 @@ class Details extends Component
             return redirect(route('sign-in'));
         }
 
-        $this->reviewText = $this->userRating->description;
+        $this->reviewText = $this->anime->mediaRatings->first()?->description;
         $this->showReviewBox = true;
         $this->showPopup = true;
     }
@@ -197,7 +240,7 @@ class Details extends Component
     {
         $user = auth()->user();
 
-        if ($user->is_pro) {
+        if ($user->is_subscribed) {
             if ($this->isTracking) {
                 if ($this->isReminded) { // Don't remind the user
                     $user->reminderAnime()->detach($this->anime->id);
@@ -229,7 +272,7 @@ class Details extends Component
      */
     public function submitReview(): void
     {
-        $this->userRating->update([
+        $this->userRating->first()?->update([
             'description' => strip_tags($this->reviewText)
         ]);
         $this->showReviewBox = false;
@@ -243,17 +286,11 @@ class Details extends Component
      */
     public function getStudioProperty(): ?Studio
     {
-        return $this->anime->studios()?->firstWhere('is_studio', '=', true) ?? $this->anime->studios->first();
-    }
+        if (!$this->readyToLoad) {
+            return null;
+        }
 
-    /**
-     * Returns the user rating.
-     *
-     * @return MediaRating|Model|null
-     */
-    public function getUserRatingProperty(): MediaRating|Model|null
-    {
-        return $this->anime->mediaRatings()->firstWhere('user_id', auth()->user()?->id);
+        return $this->anime->studios()?->firstWhere('is_studio', '=', true) ?? $this->anime->studios->first();
     }
 
     /**

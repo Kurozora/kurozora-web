@@ -114,7 +114,12 @@ class Favorites extends Component
         if (empty($this->search) && empty($wheres) && empty($orders)) {
             $mangas = $this->user
                 ->whereFavorited(Manga::class)
-                ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating']);
+                ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
+                ->when(auth()->user(), function ($query, $user) {
+                    $query->with(['library' => function ($query) use ($user) {
+                        $query->where('user_id', '=', $user->id);
+                    }]);
+                });
             return $mangas->paginate($this->perPage);
         }
 
@@ -128,7 +133,12 @@ class Favorites extends Component
         $mangas->wheres = $wheres;
         $mangas->orders = $orders;
         $mangas->query(function (Builder $query) {
-            $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating']);
+            $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
+                ->when(auth()->user(), function ($query, $user) {
+                    $query->with(['library' => function ($query) use ($user) {
+                        $query->where('user_id', '=', $user->id);
+                    }]);
+                });
         });
 
         // Paginate
