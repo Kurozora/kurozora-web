@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\MediaCollection;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\TvRated;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -89,6 +90,18 @@ class Theme extends KModel implements HasMedia, Sitemapable
     }
 
     /**
+     * Returns the Game with the theme
+     *
+     * @return BelongsToMany
+     */
+    function games(): BelongsToMany
+    {
+        return $this->belongsToMany(Game::class, MediaTheme::class, 'theme_id', 'model_id')
+            ->where('model_type', Game::class)
+            ->withTimestamps();
+    }
+
+    /**
      * The theme's TV rating.
      *
      * @return BelongsTo
@@ -96,6 +109,19 @@ class Theme extends KModel implements HasMedia, Sitemapable
     public function tv_rating(): BelongsTo
     {
         return $this->belongsTo(TvRating::class);
+    }
+
+    /**
+     * Dispatch the job to make the given models searchable.
+     *
+     * @param  Collection  $models
+     * @return void
+     */
+    public function queueMakeSearchable($models)
+    {
+        // We just want the `toSearchableArray` method to be available,
+        // hence we're using the `Searchable` trait. By keeping this
+        // method empty, we avoid queueing created/updated models.
     }
 
     /**

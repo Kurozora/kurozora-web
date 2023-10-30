@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -25,6 +26,39 @@ class MediaType extends KModel
     public function anime(): HasMany
     {
         return $this->hasMany(Anime::class);
+    }
+
+    /**
+     * The literature that the media type has.
+     *
+     * @return HasMany
+     */
+    public function literatures(): HasMany
+    {
+        return $this->hasMany(Manga::class);
+    }
+
+    /**
+     * The games that the media type has.
+     *
+     * @return HasMany
+     */
+    public function games(): HasMany
+    {
+        return $this->hasMany(Game::class);
+    }
+
+    /**
+     * Dispatch the job to make the given models searchable.
+     *
+     * @param  Collection  $models
+     * @return void
+     */
+    public function queueMakeSearchable($models)
+    {
+        // We just want the `toSearchableArray` method to be available,
+        // hence we're using the `Searchable` trait. By keeping this
+        // method empty, we avoid queueing created/updated models.
     }
 
     /**

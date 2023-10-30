@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -32,6 +33,19 @@ class Tag extends KModel
     public function mediaTags(): HasMany
     {
         return $this->hasMany(MediaTag::class);
+    }
+
+    /**
+     * Dispatch the job to make the given models searchable.
+     *
+     * @param  Collection  $models
+     * @return void
+     */
+    public function queueMakeSearchable($models)
+    {
+        // We just want the `toSearchableArray` method to be available,
+        // hence we're using the `Searchable` trait. By keeping this
+        // method empty, we avoid queueing created/updated models.
     }
 
     /**

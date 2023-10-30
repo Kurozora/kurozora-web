@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Scout\Searchable;
@@ -15,6 +16,19 @@ class Language extends KModel
     // Table name
     const TABLE_NAME = 'languages';
     protected $table = self::TABLE_NAME;
+
+    /**
+     * Dispatch the job to make the given models searchable.
+     *
+     * @param  Collection  $models
+     * @return void
+     */
+    public function queueMakeSearchable($models)
+    {
+        // We just want the `toSearchableArray` method to be available,
+        // hence we're using the `Searchable` trait. By keeping this
+        // method empty, we avoid queueing created/updated models.
+    }
 
     /**
      * Get the indexable data array for the model.

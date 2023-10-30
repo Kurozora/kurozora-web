@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -78,6 +79,16 @@ class TvRating extends KModel
     }
 
     /**
+     * The games belonging to the TV rating.
+     *
+     * @return HasMany
+     */
+    public function games(): HasMany
+    {
+        return $this->hasMany(Game::class);
+    }
+
+    /**
      * The genres belonging to the TV rating.
      *
      * @return HasMany
@@ -95,6 +106,19 @@ class TvRating extends KModel
     public function themes(): HasMany
     {
         return $this->hasMany(Theme::class);
+    }
+
+    /**
+     * Dispatch the job to make the given models searchable.
+     *
+     * @param  Collection  $models
+     * @return void
+     */
+    public function queueMakeSearchable($models)
+    {
+        // We just want the `toSearchableArray` method to be available,
+        // hence we're using the `Searchable` trait. By keeping this
+        // method empty, we avoid queueing created/updated models.
     }
 
     /**

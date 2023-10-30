@@ -42,8 +42,8 @@ trait Tracker
     public function hasTracked(Model $model): bool
     {
         return ($this->relationLoaded('library') ? $this->library : $this->library())
-            ->where('trackable_id', $model->getKey())
-            ->where('trackable_type', $model->getMorphClass())
+            ->where('trackable_id', '=', $model->getKey())
+            ->where('trackable_type', '=', $model->getMorphClass())
             ->exists();
     }
 
