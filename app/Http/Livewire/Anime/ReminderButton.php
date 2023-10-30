@@ -19,13 +19,6 @@ class ReminderButton extends Component
     public Anime $anime;
 
     /**
-     * Whether the button is disabled.
-     *
-     * @var bool $disabled
-     */
-    public bool $disabled = true;
-
-    /**
      * Whether the user is tracking the anime.
      *
      * @var bool $isTracking
@@ -50,21 +43,8 @@ class ReminderButton extends Component
     {
         $this->anime = $anime;
 
-        $this->setupActions();
-    }
-
-    /**
-     * Sets up the actions according to the user's settings.
-     */
-    protected function setupActions(): void
-    {
-        $user = auth()->user();
-
-        if (!empty($user)) {
-            $this->isTracking = $user->hasTracked($this->anime);
-            $this->isReminded = $user->reminderAnime()->where('anime_id', $this->anime->id)->exists();
-            $this->disabled = $this->isReminded;
-        }
+        $this->isTracking = $anime->library->isNotEmpty();
+        $this->isReminded = $anime->isReminded;
     }
 
     /**
@@ -73,21 +53,22 @@ class ReminderButton extends Component
      */
     public function remindAnime(): void
     {
-        if (!$this->isReminded) {
-            $user = auth()->user();
-
-            if (!$user->is_pro) {
-                if (!$this->isTracking) {
-                    $user->track($this->anime, UserLibraryStatus::Planning());
-                }
-
-                $user->reminderAnime()->attach($this->anime->id);
-                $this->isReminded = true;
-                $this->disabled = true;
-            }
-        } else {
-            dd('gotcha, you sneaky bastard');
+        if ($this->isReminded) {
+            return;
         }
+
+        $user = auth()->user();
+
+        if (!$user->is_subscribed) {
+            return;
+        }
+
+        if (!$this->isTracking) {
+            $user->track($this->anime, UserLibraryStatus::Planning());
+        }
+
+        $user->reminderAnime()->attach($this->anime->id);
+        $this->isReminded = true;
     }
 
     /**
