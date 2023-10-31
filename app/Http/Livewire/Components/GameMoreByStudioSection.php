@@ -43,7 +43,9 @@ class GameMoreByStudioSection extends Component
      */
     public function mount(Game $game, Studio $studio): void
     {
-        $this->game = $game;
+        $translations = $game->translations;
+        $this->game = $game->withoutRelations()
+            ->setRelation('translations', $translations);
         $this->studio = $studio;
     }
 

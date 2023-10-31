@@ -34,7 +34,9 @@ class GameStaffSection extends Component
      */
     public function mount(Game $game): void
     {
-        $this->game = $game;
+        $translations = $game->translations;
+        $this->game = $game->withoutRelations()
+            ->setRelation('translations', $translations);
     }
 
     /**
