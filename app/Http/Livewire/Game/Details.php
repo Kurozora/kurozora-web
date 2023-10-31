@@ -129,15 +129,23 @@ class Details extends Component
 //                            $query->where('user_id', '=', $user->id);
 //                        },
                     ]);
+            }, function() use ($game) {
+                return $game;
             });
-        $this->game->setRelation('library', UserLibrary::where([
-            ['trackable_type', '=', $game->getMorphClass()],
-            ['trackable_id', '=', $game->id],
-            ['user_id', '=', auth()->user()->id],
-        ])->get());
 
-        $this->isFavorited = $game->isFavorited;
-//        $this->isReminded = $game->isReminded;
+        if ($user = auth()->user()) {
+            $this->game->setRelation('library', UserLibrary::where([
+                ['trackable_type', '=', $game->getMorphClass()],
+                ['trackable_id', '=', $game->id],
+                ['user_id', '=', $user->id],
+            ])->get());
+        } else {
+            $this->game->setRelation('library', collect());
+            $this->game->setRelation('mediaRatings', collect());
+        }
+
+        $this->isFavorited = (bool) $game->isFavorited;
+//        $this->isReminded = (bool) $game->isReminded;
         $this->isTracking = $game->library->isNotEmpty();
         $this->userRating = $game->mediaRatings;
         $this->library = $game->library;

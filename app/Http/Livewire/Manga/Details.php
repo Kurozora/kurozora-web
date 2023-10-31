@@ -122,15 +122,23 @@ class Details extends Component
 //                            $query->where('user_id', '=', $user->id);
 //                        },
                     ]);
+            }, function() use ($manga) {
+                return $manga;
             });
-        $this->manga->setRelation('library', UserLibrary::where([
-            ['trackable_type', '=', $manga->getMorphClass()],
-            ['trackable_id', '=', $manga->id],
-            ['user_id', '=', auth()->user()->id],
-        ])->get());
 
-        $this->isFavorited = $manga->isFavorited;
-//        $this->isReminded = $manga->isReminded;
+        if ($user = auth()->user()) {
+            $this->manga->setRelation('library', UserLibrary::where([
+                ['trackable_type', '=', $manga->getMorphClass()],
+                ['trackable_id', '=', $manga->id],
+                ['user_id', '=', $user->id],
+            ])->get());
+        } else {
+            $this->manga->setRelation('library', collect());
+            $this->manga->setRelation('mediaRatings', collect());
+        }
+
+        $this->isFavorited = (bool) $manga->isFavorited;
+//        $this->isReminded = (bool) $manga->isReminded;
         $this->isTracking = $manga->library->isNotEmpty();
         $this->userRating = $manga->mediaRatings;
         $this->library = $manga->library;
