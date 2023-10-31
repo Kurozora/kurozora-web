@@ -6,12 +6,13 @@ use App\Events\MangaViewed;
 use App\Models\Manga;
 use App\Models\MediaRating;
 use App\Models\Studio;
+use App\Models\UserLibrary;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 
 class Details extends Component
@@ -22,6 +23,20 @@ class Details extends Component
      * @var Manga $manga
      */
     public Manga $manga;
+
+    /**
+     * The object containing the user's rating data.
+     *
+     * @var Collection|MediaRating[] $userRating
+     */
+    public Collection|array $userRating;
+
+    /**
+     * The object containing the user's library data.
+     *
+     * @var Collection|UserLibrary[] $library
+     */
+    public Collection|array $library;
 
     /**
      * Whether the user has favorited the manga.
@@ -83,15 +98,6 @@ class Details extends Component
     public bool $readyToLoad = false;
 
     /**
-     * The component's listeners.
-     *
-     * @var array
-     */
-    protected $listeners = [
-        'update-manga' => 'updateMangaHandler'
-    ];
-
-    /**
      * Prepare the component.
      *
      * @param Manga $manga
@@ -103,9 +109,48 @@ class Details extends Component
         // Call the MangaViewed event
         MangaViewed::dispatch($manga);
 
-        $this->manga = $manga->load(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating']);
+        $this->manga = $manga->loadMissing(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'themes', 'translations', 'status', 'tv_rating'])
+            ->when(auth()->user(), function ($query, $user) use ($manga) {
+                return $manga->loadMissing(['mediaRatings' => function ($query) {
+                    $query->where('user_id', '=', auth()->user()->id);
+                }])
+                    ->loadExists([
+                        'favoriters as isFavorited' => function ($query) use ($user) {
+                            $query->where('user_id', '=', $user->id);
+                        },
+//                        'reminderers as isReminded' => function ($query) use ($user) {
+//                            $query->where('user_id', '=', $user->id);
+//                        },
+                    ]);
+            });
+        $this->manga->setRelation('library', UserLibrary::where([
+            ['trackable_type', '=', $manga->getMorphClass()],
+            ['trackable_id', '=', $manga->id],
+            ['user_id', '=', auth()->user()->id],
+        ])->get());
 
-        $this->setupActions();
+        $this->isFavorited = $manga->isFavorited;
+//        $this->isReminded = $manga->isReminded;
+        $this->isTracking = $manga->library->isNotEmpty();
+        $this->userRating = $manga->mediaRatings;
+        $this->library = $manga->library;
+    }
+
+    public function dehydrateManga($value): void
+    {
+        // For some reason the library relation isn't hydrated correctly.
+        // The relation is hydrated without the `where` constraint on the
+        // user's ID. So it hydrates all UserLibrary models from the database
+        // for the given model. Bad performance. The fix is to unset the
+        // relation here, then set it back in the hydrate method.
+        $value->unsetRelation('library');
+        $value->unsetRelation('mediaRatings');
+    }
+
+    public function hydrateManga($value): void
+    {
+        $value->setRelation('library', $this->library);
+        $value->setRelation('mediaRatings', $this->userRating);
     }
 
     /**
@@ -116,27 +161,6 @@ class Details extends Component
     public function loadPage(): void
     {
         $this->readyToLoad = true;
-    }
-
-    /**
-     * Sets up the actions according to the user's settings.
-     */
-    protected function setupActions(): void
-    {
-        $user = auth()->user();
-        if (!empty($user)) {
-            $this->isTracking = $user->hasTracked($this->manga);
-            $this->isFavorited = $user->hasFavorited($this->manga);
-//            $this->isReminded = $user->reminderManga()->where('manga_id', $this->manga->id)->exists();
-        }
-    }
-
-    /**
-     * Handles the update manga vent.
-     */
-    public function updateMangaHandler(): void
-    {
-        $this->setupActions();
     }
 
     /**
@@ -151,7 +175,7 @@ class Details extends Component
             return redirect(route('sign-in'));
         }
 
-        $this->reviewText = $this->userRating->description;
+        $this->reviewText = $this->manga->mediaRatings->first()?->description;
         $this->showReviewBox = true;
         $this->showPopup = true;
     }
@@ -213,9 +237,22 @@ class Details extends Component
      */
     public function submitReview(): void
     {
-        $this->userRating->update([
-            'description' => strip_tags($this->reviewText)
-        ]);
+        $reviewText = strip_tags($this->reviewText);
+
+        if ($userRating = $this->userRating->first()) {
+            $userRating->update([
+                'description' => $reviewText
+            ]);
+        } else {
+            MediaRating::create([
+                'rating' => 5,
+                'description' => $reviewText,
+                'user_id' => auth()->user()->id,
+                'model_type' => $this->manga->getMorphClass(),
+                'model_id' => $this->manga->id
+            ]);
+        }
+
         $this->showReviewBox = false;
         $this->showPopup = false;
     }
@@ -232,16 +269,6 @@ class Details extends Component
         }
 
         return $this->manga->studios()?->firstWhere('is_studio', '=', true) ?? $this->manga->studios->first();
-    }
-
-    /**
-     * Returns the user rating.
-     *
-     * @return MediaRating|Model|null
-     */
-    public function getUserRatingProperty(): MediaRating|Model|null
-    {
-        return $this->manga->mediaRatings()->firstWhere('user_id', auth()->user()?->id);
     }
 
     /**

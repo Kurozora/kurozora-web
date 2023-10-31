@@ -34,7 +34,9 @@ class AnimeRelationsSection extends Component
      */
     public function mount(Manga $manga): void
     {
-        $this->manga = $manga;
+        $translations = $manga->translations;
+        $this->manga = $manga->withoutRelations()
+            ->setRelation('translations', $translations);
     }
 
     /**

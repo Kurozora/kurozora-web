@@ -132,9 +132,9 @@
                             </div>
 
                             <div class="flex gap-2">
-                                @if($isTracking)
+                                @if ($isTracking)
 {{--                                    <x-circle-button color="yellow" wire:click="remindManga">--}}
-{{--                                        @if($isReminded)--}}
+{{--                                        @if ($isReminded)--}}
 {{--                                            @svg('bell_fill', 'fill-current', ['width' => '44'])--}}
 {{--                                        @else--}}
 {{--                                            @svg('bell', 'fill-current', ['width' => '44'])--}}
@@ -142,7 +142,7 @@
 {{--                                    </x-circle-button>--}}
 
                                     <x-circle-button color="red" wire:click="favoriteManga">
-                                        @if($isFavorited)
+                                        @if ($isFavorited)
                                             @svg('heart_fill', 'fill-current', ['width' => '44'])
                                         @else
                                             @svg('heart', 'fill-current', ['width' => '44'])
@@ -277,7 +277,7 @@
                     <div class="flex justify-between items-center">
                         <p class="">{{ __('Click to Rate:') }}</p>
 
-                        <livewire:manga.star-rating :manga="$manga" :rating="$this->userRating?->rating" :star-size="'md'" />
+                        <livewire:manga.star-rating :manga="$manga" :rating="$userRating->first()?->rating" :star-size="'md'" />
                     </div>
 
                     <div class="flex justify-between">
@@ -444,7 +444,7 @@
                 <livewire:components.manga-studios-section :manga="$manga" />
 
                 <div class="bg-orange-50">
-                    @if(!empty($this->studio))
+                    @if (!empty($this->studio))
                         <livewire:components.manga-more-by-studio-section :manga="$manga" :studio="$this->studio" />
                     @endif
 
@@ -473,7 +473,7 @@
                             <div class="flex items-center">
                                 <p class="">{{ __('Click to Rate:') }}</p>
 
-                                <livewire:manga.star-rating :manga="$manga" :rating="$this->userRating?->rating" :star-size="'md'" />
+                                <livewire:manga.star-rating :manga="$manga" :rating="$userRating->first()?->rating" :star-size="'md'" />
                             </div>
 
                             <x-textarea class="block w-full h-48 mt-1 resize-none" placeholder="{{ __('What’s on your mind?') }}" wire:model.defer="reviewText"></x-textarea>

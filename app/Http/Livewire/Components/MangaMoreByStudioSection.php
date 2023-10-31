@@ -43,7 +43,9 @@ class MangaMoreByStudioSection extends Component
      */
     public function mount(Manga $manga, Studio $studio): void
     {
-        $this->manga = $manga;
+        $translations = $manga->translations;
+        $this->manga = $manga->withoutRelations()
+            ->setRelation('translations', $translations);
         $this->studio = $studio;
     }
 

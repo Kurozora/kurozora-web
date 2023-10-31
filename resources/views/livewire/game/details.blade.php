@@ -61,7 +61,7 @@
                     }
                 ]
             @endif
-            @if(!empty($game->video_url))
+            @if (!empty($game->video_url))
                 ,"trailer": {
                     "@type":"VideoObject",
                     "name":"{{ $game->title }}",
@@ -140,7 +140,7 @@
                             <div class="flex gap-2">
                                 @if ($isTracking)
 {{--                                    <x-circle-button color="yellow" wire:click="remindGame">--}}
-{{--                                        @if($isReminded)--}}
+{{--                                        @if ($isReminded)--}}
 {{--                                            @svg('bell_fill', 'fill-current', ['width' => '44'])--}}
 {{--                                        @else--}}
 {{--                                            @svg('bell', 'fill-current', ['width' => '44'])--}}
@@ -283,7 +283,7 @@
                     <div class="flex justify-between items-center">
                         <p class="">{{ __('Click to Rate:') }}</p>
 
-                        <livewire:game.star-rating :game="$game" :rating="$game->mediaRatings->first()?->rating" :star-size="'md'" />
+                        <livewire:game.star-rating :game="$game" :rating="$userRating->first()?->rating" :star-size="'md'" />
                     </div>
 
                     <div class="flex justify-between">
@@ -430,7 +430,7 @@
                 <livewire:components.game-studios-section :game="$game" />
 
                 <div class="bg-orange-50">
-                    @if(!empty($this->studio))
+                    @if (!empty($this->studio))
                         <livewire:components.game-more-by-studio-section :game="$game" :studio="$this->studio" />
                     @endif
 
@@ -449,7 +449,7 @@
             @endif
 
             <x-dialog-modal maxWidth="md" model="showPopup">
-                @if($showVideo)
+                @if ($showVideo)
                     <x-slot:title>
                         {{ $game->title . ' Official Trailer' }}
                     </x-slot:title>
@@ -483,7 +483,7 @@
                             <div class="flex items-center">
                                 <p class="">{{ __('Click to Rate:') }}</p>
 
-                                <livewire:game.star-rating :game="$game" :rating="$game->mediaRatings->first()?->rating" :star-size="'md'" />
+                                <livewire:game.star-rating :game="$game" :rating="$userRating->first()?->rating" :star-size="'md'" />
                             </div>
 
                             <x-textarea class="block w-full h-48 mt-1 resize-none" placeholder="{{ __('What’s on your mind?') }}" wire:model.defer="reviewText"></x-textarea>
