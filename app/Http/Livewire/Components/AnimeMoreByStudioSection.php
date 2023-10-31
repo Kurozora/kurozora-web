@@ -43,7 +43,9 @@ class AnimeMoreByStudioSection extends Component
      */
     public function mount(Anime $anime, Studio $studio): void
     {
-        $this->anime = $anime->withoutRelations();
+        $translations = $anime->translations;
+        $this->anime = $anime->withoutRelations()
+            ->setRelation('translations', $translations);
         $this->studio = $studio;
     }
 

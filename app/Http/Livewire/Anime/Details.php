@@ -105,15 +105,6 @@ class Details extends Component
     public bool $readyToLoad = false;
 
     /**
-     * The component's listeners.
-     *
-     * @var array
-     */
-    protected $listeners = [
-        'update-anime' => 'updateAnimeHandler'
-    ];
-
-    /**
      * Prepare the component.
      *
      * @param Anime $anime
@@ -125,7 +116,7 @@ class Details extends Component
         // Call the AnimeViewed event
         AnimeViewed::dispatch($anime);
 
-        $this->anime = $anime->load(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
+        $this->anime = $anime->loadMissing(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'themes', 'translations', 'status', 'tv_rating'])
             ->when(auth()->user(), function ($query, $user) use ($anime) {
                 return $anime->loadMissing(['mediaRatings' => function ($query) {
                     $query->where('user_id', '=', auth()->user()->id);
@@ -177,16 +168,6 @@ class Details extends Component
     public function loadPage(): void
     {
         $this->readyToLoad = true;
-    }
-
-    /**
-     * Handles the update anime vent.
-     */
-    public function updateAnimeHandler($animeID): void
-    {
-        if ($this->anime->id == $animeID) {
-            $this->setupActions();
-        }
     }
 
     /**
@@ -272,9 +253,22 @@ class Details extends Component
      */
     public function submitReview(): void
     {
-        $this->userRating->first()?->update([
-            'description' => strip_tags($this->reviewText)
-        ]);
+        $reviewText = strip_tags($this->reviewText);
+
+        if ($userRating = $this->userRating->first()) {
+            $userRating->update([
+                'description' => $reviewText
+            ]);
+        } else {
+            MediaRating::create([
+                'rating' => 5,
+                'description' => $reviewText,
+                'user_id' => auth()->user()->id,
+                'model_type' => $this->anime->getMorphClass(),
+                'model_id' => $this->anime->id
+            ]);
+        }
+
         $this->showReviewBox = false;
         $this->showPopup = false;
     }

@@ -61,7 +61,7 @@
                     }
                 ]
             @endif
-            @if(!empty($anime->video_url))
+            @if (!empty($anime->video_url))
                 ,"trailer": {
                     "@type":"VideoObject",
                     "name":"{{ $anime->title }}",
@@ -453,7 +453,7 @@
                 <livewire:components.anime-studios-section :anime="$anime" />
 
                 <div class="bg-orange-50">
-                    @if(!empty($this->studio))
+                    @if (!empty($this->studio))
                         <livewire:components.anime-more-by-studio-section :anime="$anime" :studio="$this->studio" />
                     @endif
 

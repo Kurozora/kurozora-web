@@ -35,7 +35,9 @@ class AnimeSeasonsSection extends Component
      */
     public function mount(Anime $anime): void
     {
-        $this->anime = $anime->withoutRelations();
+        $translations = $anime->translations;
+        $this->anime = $anime->withoutRelations()
+            ->setRelation('translations', $translations);
     }
 
     /**

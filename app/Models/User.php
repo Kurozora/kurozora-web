@@ -297,7 +297,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      *
      * @return HasMany
      */
-    public function media_ratings(): HasMany
+    public function mediaRatings(): HasMany
     {
         return $this->hasMany(MediaRating::class);
     }
