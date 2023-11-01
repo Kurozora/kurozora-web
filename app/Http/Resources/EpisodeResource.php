@@ -39,6 +39,8 @@ class EpisodeResource extends JsonResource
                 ),
                 'number'        => $this->resource->number,
                 'numberTotal'   => $this->resource->number_total,
+                'seasonNumber'  => $this->resource->season->number,
+                'showTitle'     => $this->resource->anime->title,
                 'title'         => $this->resource->title,
                 'synopsis'      => $this->resource->synopsis,
                 'duration'      => $this->resource->duration_string,
@@ -95,7 +97,7 @@ class EpisodeResource extends JsonResource
     {
         return [
             'shows' => [
-                'data' => AnimeResourceBasic::collection([$this->resource->anime])
+                'data' => AnimeResourceIdentity::collection([$this->resource->anime])
             ]
         ];
     }
@@ -109,7 +111,7 @@ class EpisodeResource extends JsonResource
     {
         return [
             'seasons' => [
-                'data' => SeasonResource::collection([$this->resource->season])
+                'data' => SeasonResourceIdentity::collection([$this->resource->season])
             ]
         ];
     }

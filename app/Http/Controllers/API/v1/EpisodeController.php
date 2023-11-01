@@ -31,20 +31,16 @@ class EpisodeController extends Controller
         // Call the EpisodeViewed event
         EpisodeViewed::dispatch($episode);
 
-        $episode->load([
-            'anime' => function ($query) {
-                $query->with(['media']);
-            },
+        $includeArray = [
             'media',
             'mediaStat',
-            'season' => function ($query) {
-                $query->with(['media']);
-            },
             'translations',
             'videos',
-        ]);
+        ];
 
-        $includeArray = [];
+        // Skeleton in case this logic ever changes.
+        // For now both relations are already included,
+        // so nothing else needs to be done.
         if ($includeInput = $request->input('include')) {
             if (is_string($includeInput)) {
                 $includeInput = explode(',', $includeInput);
@@ -54,18 +50,21 @@ class EpisodeController extends Controller
             foreach ($includes as $include) {
                 switch ($include) {
                     case 'show':
-                        $includeArray['anime'] = function ($query) {
-                            $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating']);
-                        };
-                        break;
+                        // Already included.
                     case 'season':
-                        $includeArray['season'] = function ($query) {
-                            $query->with(['media', 'translations']);
-                        };
+                        // Already included.
                         break;
-                };
+                }
             }
         }
+
+        $includeArray['anime'] = function ($query) {
+            $query->with(['media', 'translations']);
+        };
+        $includeArray['season'] = function ($query) {
+            $query->with(['media']);
+        };
+
         $episode->loadMissing($includeArray);
 
         return JSONResult::success([
