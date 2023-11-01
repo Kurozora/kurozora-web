@@ -4,8 +4,9 @@ namespace App\Listeners;
 
 use App\Events\SeasonViewed;
 use App\Models\View;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
-class SeasonViewedListener
+class SeasonViewedListener implements ShouldQueue
 {
     /**
      * Create the event listener.

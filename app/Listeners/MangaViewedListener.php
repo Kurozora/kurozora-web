@@ -4,8 +4,9 @@ namespace App\Listeners;
 
 use App\Events\MangaViewed;
 use App\Models\View;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
-class MangaViewedListener
+class MangaViewedListener implements ShouldQueue
 {
     /**
      * Create the event listener.

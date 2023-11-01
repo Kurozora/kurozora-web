@@ -4,8 +4,9 @@ namespace App\Listeners;
 
 use App\Events\AnimeViewed;
 use App\Models\View;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
-class AnimeViewedListener
+class AnimeViewedListener implements ShouldQueue
 {
     /**
      * Create the event listener.

@@ -4,8 +4,9 @@ namespace App\Listeners;
 
 use App\Events\StudioViewed;
 use App\Models\View;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
-class StudioViewedListener
+class StudioViewedListener implements ShouldQueue
 {
     /**
      * Create the event listener.

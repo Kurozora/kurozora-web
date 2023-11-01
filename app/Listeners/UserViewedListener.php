@@ -4,8 +4,9 @@ namespace App\Listeners;
 
 use App\Events\UserViewed;
 use App\Models\View;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
-class UserViewedListener
+class UserViewedListener implements ShouldQueue
 {
     /**
      * Create the event listener.
