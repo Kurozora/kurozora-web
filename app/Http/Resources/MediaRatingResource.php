@@ -26,7 +26,7 @@ class MediaRatingResource extends JsonResource
         $resource = MediaRatingResourceIdentity::make($this->resource)->toArray($request);
         $resource = array_merge($resource, [
             'attributes'    => [
-                'rating' => $this->resource->rating,
+                'score' => $this->resource->rating,
                 'description' => $this->resource->description,
                 'createdAt' => $this->resource->created_at->timestamp
             ]
