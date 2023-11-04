@@ -471,7 +471,7 @@ class GameController extends Controller
 
         // Try to modify the rating if it already exists
         /** @var MediaRating $foundRating */
-        $foundRating = $user->episodeRatings()
+        $foundRating = $user->gameRatings()
             ->where('model_id', '=', $game->id)
             ->first();
 
