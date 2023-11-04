@@ -81,6 +81,7 @@ class GameResourceBasic extends JsonResource
         // Return the array
         return [
             'givenRating'       => (double) $givenRating?->rating,
+            'givenReview'       => $givenRating?->description,
             'libraryStatus'     => $libraryStatus,
             'isFavorited'       => (bool) $this->resource->isFavorited,
             'isReminded'        => $this->resource->isReminded,
