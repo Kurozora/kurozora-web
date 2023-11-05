@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Enums\SearchScope;
 use App\Enums\SearchType;
+use App\Rules\ValidateBase64;
 use Illuminate\Foundation\Http\FormRequest;
 
 class SearchRequest extends FormRequest
@@ -31,7 +32,9 @@ class SearchRequest extends FormRequest
             'types.*'   => ['bail', 'required', 'string', 'distinct', 'in:' . implode(',', SearchType::getValues())],
             'query'     => ['bail', 'required', 'string', 'min:1'],
             'limit'     => ['bail', 'integer', 'min:1', 'max:25'],
-            'page'      => ['bail', 'integer', 'min:1']
+            'page'      => ['bail', 'integer', 'min:1'],
+            'filter'    => ['bail', 'nullable', new ValidateBase64()],
+            'sort'      => ['bail', 'nullable', new ValidateBase64()],
         ];
     }
 }

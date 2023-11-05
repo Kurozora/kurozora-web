@@ -248,13 +248,16 @@ class SearchController extends Controller
      */
     private function filter($model, SearchRequest $request, Builder $resource)
     {
-        $filters = $model::searchFilters();
+        if ($filters = $request->input('filter')) {
+            $filters = json_decode(base64_decode($filters), true);
+            $searchFilters = $model::searchFilters();
 
-        // Apply filters
-        foreach ($filters as $filterName) {
-            if ($request->has($filterName)) {
-                $value = $request->input($filterName);
-                $resource->where($filterName, $value);
+            // Apply filters
+            foreach ($searchFilters as $searchFilter) {
+                if (isset($filters[$searchFilter])) {
+                    $value = $filters[$searchFilter];
+                    $resource->where($searchFilter, $value);
+                }
             }
         }
     }
