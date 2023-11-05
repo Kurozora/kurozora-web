@@ -449,7 +449,7 @@ class MangaController extends Controller
                 // Update the current rating
                 $foundRating->update([
                     'rating'        => $givenRating,
-                    'description'   => $description,
+                    'description'   => $description ?? $foundRating->description,
                 ]);
             }
         } else {
