@@ -84,7 +84,7 @@ class SearchController extends Controller
                     if ($scope == SearchScope::Library) {
                         $resource = UserLibrary::search($data['query'])
                             ->where('user_id', auth()->id())
-                            ->where('trackable_type', Game::class)
+                            ->where('trackable_type', addslashes(Game::class))
                             ->query(function ($query) {
                                 $query->with(['trackable', 'user']);
                             });
@@ -115,7 +115,7 @@ class SearchController extends Controller
                     if ($scope == SearchScope::Library) {
                         $resource = UserLibrary::search($data['query'])
                             ->where('user_id', auth()->id())
-                            ->where('trackable_type', Manga::class)
+                            ->where('trackable_type', addslashes(Manga::class))
                             ->query(function ($query) {
                                 $query->with(['trackable', 'user']);
                             });
@@ -160,7 +160,7 @@ class SearchController extends Controller
                     if ($scope == SearchScope::Library) {
                         $resource = UserLibrary::search($data['query'])
                             ->where('user_id', auth()->id())
-                            ->where('trackable_type', Anime::class)
+                            ->where('trackable_type', addslashes(Anime::class))
                             ->query(function ($query) {
                                 $query->with(['trackable', 'user']);
                             });

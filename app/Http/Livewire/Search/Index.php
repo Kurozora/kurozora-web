@@ -237,6 +237,7 @@ class Index extends Component
             if ($this->scope == SearchScope::Library) {
                 $trackableIDs = collect(UserLibrary::search($this->q)
                     ->where('user_id', auth()->user()->id)
+                    ->where('trackable_type', addslashes($searchableModel))
                     ->simplePaginateRaw(perPage: 2000, page: 1)
                     ->items()['hits'] ?? [])
                     ->pluck('trackable_id')
