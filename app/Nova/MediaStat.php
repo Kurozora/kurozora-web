@@ -78,8 +78,13 @@ class MediaStat extends Resource
             MorphTo::make('Model')
                 ->types([
                     Anime::class,
+                    Character::class,
+                    Episode::class,
                     Game::class,
                     Manga::class,
+                    Person::class,
+                    Song::class,
+                    Studio::class,
                 ])
                 ->searchable(),
 
