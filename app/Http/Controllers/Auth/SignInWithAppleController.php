@@ -186,15 +186,63 @@ class SignInWithAppleController extends Controller
     protected function getUser(JWTPayload $payload, ?string $siwaID = null): ?User
     {
         if (!empty($siwaID)) {
-            $user = User::firstWhere('siwa_id', $siwaID);
+            $user = User::where('siwa_id', $siwaID)
+                ->with([
+                    'badges' => function ($query) {
+                        $query->with(['media']);
+                    },
+                    'media',
+                    'tokens' => function ($query) {
+                        $query->orderBy('last_used_at', 'desc')
+                            ->limit(1);
+                    },
+                    'sessions' => function ($query) {
+                        $query->orderBy('last_activity', 'desc')
+                            ->limit(1);
+                    },
+                ])
+                ->withCount(['followers', 'following'])
+                ->first();
         } else {
             try {
                 $email = $payload->get('email');
-                $user = User::firstWhere('email', $email);
+                $user = User::where('email', $email)
+                    ->with([
+                        'badges' => function ($query) {
+                            $query->with(['media']);
+                        },
+                        'media',
+                        'tokens' => function ($query) {
+                            $query->orderBy('last_used_at', 'desc')
+                                ->limit(1);
+                        },
+                        'sessions' => function ($query) {
+                            $query->orderBy('last_activity', 'desc')
+                                ->limit(1);
+                        },
+                    ])
+                    ->withCount(['followers', 'following'])
+                    ->first();
             } catch (Exception $exception) {
                 try {
                     $subject = $payload->get('sub');
-                    $user = User::firstWhere('siwa_id', $subject);
+                    $user = User::where('siwa_id', $subject)
+                        ->with([
+                            'badges' => function ($query) {
+                                $query->with(['media']);
+                            },
+                            'media',
+                            'tokens' => function ($query) {
+                                $query->orderBy('last_used_at', 'desc')
+                                    ->limit(1);
+                            },
+                            'sessions' => function ($query) {
+                                $query->orderBy('last_activity', 'desc')
+                                    ->limit(1);
+                            },
+                        ])
+                        ->withCount(['followers', 'following'])
+                        ->first();
                 } catch (Exception $exception) {
                     return null;
                 }
@@ -202,7 +250,12 @@ class SignInWithAppleController extends Controller
         }
 
         if (empty($user)) {
-            $user = $this->signUpUser($payload);
+            $user = $this->signUpUser($payload)
+                ->setRelation('badges', collect())
+                ->setRelation('tokens', collect())
+                ->setRelation('sessions', collect())
+                ->setAttribute('followers_count', 0)
+                ->setAttribute('following_count', 0);
         }
 
         return $user;
