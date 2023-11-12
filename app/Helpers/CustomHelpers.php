@@ -149,6 +149,7 @@ if (!function_exists('season_of_year')) {
     function season_of_year(?Carbon $date = null): SeasonOfYear
     {
         $date = ($date ?? now())
+            ->copy()
             ->setYear(0);
 
         $winter = SeasonOfYear::Winter()->startDate();
