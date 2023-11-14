@@ -13,7 +13,7 @@
                     >
                         <img
                             class="w-full h-full object-cover"
-                            src="{{ $profileImage?->getFullUrl() }}"
+                            src="{{ $profileImage?->getFullUrl() ?? $user->getFallbackMediaUrl(\App\Enums\MediaCollection::Profile) }}"
                             alt="{{ $user->username }} Profile Image"
                             width="{{ $profileImage?->custom_properties['width'] ?? 96 }}"
                             height="{{ $profileImage?->custom_properties['height'] ?? 96 }}"
@@ -42,7 +42,7 @@
         >
             <img
                 class="w-16 h-16 object-cover rounded-full sm:w-24 sm:h-24"
-                src="{{ $profileImage?->getFullUrl() }}"
+                src="{{ $profileImage?->getFullUrl() ?? $user->getFallbackMediaUrl(\App\Enums\MediaCollection::Profile) }}"
                 alt="{{ $user->username }} Profile Image"
                 width="{{ $profileImage?->custom_properties['width'] ?? 96 }}"
                 height="{{ $profileImage?->custom_properties['height'] ?? 96 }}"
