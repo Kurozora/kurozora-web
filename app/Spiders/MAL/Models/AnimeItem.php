@@ -15,7 +15,8 @@ final class AnimeItem extends AbstractItem
         readonly ?string $videoUrl,
         readonly array $studios,
         readonly array $genres,
+        readonly array $relations,
         readonly array $openings,
-        readonly array $ending,
+        readonly array $endings,
     ) {}
 }

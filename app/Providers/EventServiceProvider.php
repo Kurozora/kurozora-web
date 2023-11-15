@@ -57,6 +57,9 @@ class EventServiceProvider extends ServiceProvider
         AnimeViewed::class => [
             AnimeViewedListener::class
         ],
+        BareBonesAnimeAdded::class => [
+            BareBonesAnimeAddedListener::class
+        ],
 
         // Character events
         CharacterViewed::class => [

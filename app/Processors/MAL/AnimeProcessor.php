@@ -5,13 +5,18 @@ namespace App\Processors\MAL;
 use App\Enums\MediaCollection;
 use App\Enums\SongType;
 use App\Enums\StudioType;
+use App\Events\BareBonesAnimeAdded;
+use App\Events\BareBonesMangaAdded;
 use App\Models\Anime;
 use App\Models\Genre;
+use App\Models\Manga;
 use App\Models\MediaGenre;
+use App\Models\MediaRelation;
 use App\Models\MediaSong;
 use App\Models\MediaStudio;
 use App\Models\MediaTheme;
 use App\Models\MediaType;
+use App\Models\Relation;
 use App\Models\Song;
 use App\Models\Source;
 use App\Models\Status;
@@ -124,6 +129,7 @@ class AnimeProcessor extends CustomItemProcessor
         $broadcast = $this->getAttribute('Broadcast');
         $airTime = $this->getAirTime($broadcast);
         $airSeason = $this->getAirSeason($startedAt);
+        $relations = $item->get('relations');
         $openingSongs = $item->get('openings');
         $endingSongs = $item->get('endings');
         $attributes = [];
@@ -258,6 +264,11 @@ class AnimeProcessor extends CustomItemProcessor
         $this->addGenres($demographics, $anime);
         $this->addThemes($themes, $anime);
         logger()->channel('stderr')->info('✅️ [MAL_ID:ANIME:' . $malID . '] Done adding genres');
+
+        // Add relations
+        logger()->channel('stderr')->info('↔️ [MAL_ID:ANIME:' . $malID . '] Adding relations');
+        $this->addRelations($relations, $anime);
+        logger()->channel('stderr')->info('✅️ [MAL_ID:ANIME:' . $malID . '] Done adding relations');
 
         // Add songs
         logger()->channel('stderr')->info('🎸 [MAL_ID:ANIME:' . $malID . '] Adding songs');
@@ -714,6 +725,78 @@ class AnimeProcessor extends CustomItemProcessor
     private function getAirSeason(?Carbon $startedAt): int
     {
         return season_of_year($startedAt)->value;
+    }
+
+    /**
+     * Add related media.
+     *
+     * @param array|null $relations
+     * @param Model|Anime|null $anime
+     * @return void
+     */
+    private function addRelations(?array $relations, Model|Anime|null $anime): void
+    {
+        $anime = clone $anime;
+
+        if (empty($relations)) {
+            return;
+        }
+
+        foreach ($relations as $relationTypeKey => $relationsArray) {
+            $relationType = Relation::firstOrCreate([
+                'name' => $relationTypeKey
+            ]);
+            $mediaRelations = [];
+
+            foreach ($relationsArray as $key => $relation) {
+                $malID = $relation['mal_id'];
+                $originalTitle = $relation['original_title'];
+                $relatedModel = null;
+
+                switch ($relation['type']) {
+                    case 'anime':
+                        if ($foundAnime = Anime::firstWhere([
+                            'mal_id' => $malID,
+                        ])) {
+                            $relatedModel = $foundAnime;
+                        } else {
+                            $relatedModel = Anime::create([
+                                'mal_id' => $malID,
+                                'original_title' => $originalTitle
+                            ]);
+
+                            event(new BareBonesAnimeAdded($relatedModel));
+                        }
+                        break;
+                    case 'manga':
+                        if ($foundManga = Manga::firstWhere([
+                            'mal_id' => $malID,
+                        ])) {
+                            $relatedModel = $foundManga;
+                        } else {
+                            $relatedModel = Manga::create([
+                                'mal_id' => $malID,
+                                'original_title' => $originalTitle
+                            ]);
+
+                            event(new BareBonesMangaAdded($relatedModel));
+                        }
+                        break;
+                    default:
+                        break;
+                }
+
+                $mediaRelations[] = [
+                    'model_id' => $anime->id,
+                    'model_type' => $anime->getMorphClass(),
+                    'relation_id' => $relationType->id,
+                    'related_id' => $relatedModel->id,
+                    'related_type' => $relatedModel->getMorphClass(),
+                ];
+            }
+
+            MediaRelation::upsert($mediaRelations, ['model_type', 'model_id', 'relation_id', 'related_type', 'related_id']);
+        }
     }
 
     /**

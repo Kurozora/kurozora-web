@@ -140,8 +140,9 @@ class AnimeSpider extends BasicSpider
 
         $imageUrl = $this->cleanImageUrl($response, 'div.leftside div a img[itemprop="image"]');
         $videoUrl = $this->cleanVideoUrl($response, 'div.video-promotion a');
+        $relations = $this->cleanRelations($response, 'table[class*="anime_detail_related_anime"]');
         $openings = $this->cleanSongs($response, 'div[class*="theme-songs opnening"] table'); // typo on the website
-        $ending = $this->cleanSongs($response, 'div[class*="theme-songs ending"] table');
+        $endings = $this->cleanSongs($response, 'div[class*="theme-songs ending"] table');
 
         logger()->channel('stderr')->info('✅️ [MAL_ID:ANIME:' . $id . '] Done parsing');
 
@@ -154,8 +155,9 @@ class AnimeSpider extends BasicSpider
             $videoUrl,
             array_replace([], ...$studios),
             array_replace([], ...$genres),
+            $relations,
             $openings,
-            $ending
+            $endings
         ));
 
         // Stats
@@ -282,6 +284,51 @@ class AnimeSpider extends BasicSpider
 
         // Return clean url
         return $clearVideoURL->replace('embed/', 'watch?v=');
+    }
+
+    /**
+     * Clean relations response.
+     *
+     * @param Response $response
+     * @param string $div
+     * @return array
+     */
+    private function cleanRelations(Response $response, string $div): array
+    {
+        $relations = [];
+
+        $response->filter($div)
+            ->filter('tr')
+            ->each(function(Crawler $item, int $index) use (&$relations) {
+                $relationType = str($item->children('td')->first()->innerText())
+                    ->replaceLast(':', '')
+                    ->value();
+                $relationItems = [];
+
+                $item->children('td')
+                    ->last()
+                    ->children('a')
+                    ->each(function (Crawler $item, int $index) use (&$relationItems) {
+                        $digitRegex = '/(\d+)\//';
+                        $wordRegex = '/(\w+)\//';
+
+                        $relationItems[] = [
+                            'mal_id' => str($item->attr('href'))
+                                ->match($digitRegex)
+                                ->value(),
+                            'type' => str($item->attr('href'))
+                                ->match($wordRegex)
+                                ->value(),
+                            'original_title' => str($item->text())
+                                ->trim()
+                                ->value()
+                        ];
+                });
+
+                $relations[$relationType] = $relationItems;
+            });
+
+        return $relations;
     }
 
     /**
