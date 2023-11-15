@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Parsers\MentionParser;
 use Cog\Contracts\Love\Reactable\Models\Reactable as ReactableContract;
 use Cog\Laravel\Love\Reactable\Models\Traits\Reactable;
-use DB;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -55,9 +54,10 @@ class FeedMessage extends KModel implements ReactableContract
             // to the `saved` static method, but then the parsed
             // content won't be available by the time we use the
             // created model. Also, one less query this way.
-            $id = DB::select("SHOW TABLE STATUS LIKE '" . self::TABLE_NAME . "'");
-            $next_id = $id[0]->Auto_increment;
-            $feedMessage->id = (int) $next_id;
+            if (empty($feedMessage->id)) {
+                $id = FeedMessage::max('id');
+                $feedMessage->id = (int)$id + 1;
+            }
 
             // Strip HTML tags
             $feedMessage->content = strip_tags(trim(Markdown::parse(nl2br($feedMessage->content))));
