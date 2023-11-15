@@ -83,7 +83,7 @@
             <div class="relative flex flex-nowrap aspect-video md:relative md:h-full xl:aspect-auto">
                 <x-picture
                     class="w-full overflow-hidden"
-                    style="background-color: {{ ($game->getFirstMedia(\App\Enums\MediaCollection::Banner) ?? $game->getFirstMedia(\App\Enums\MediaCollection::Poster))?->custom_properties['background_color'] }};"
+                    style="background-color: {{ ($game->getFirstMedia(\App\Enums\MediaCollection::Banner) ?? $game->getFirstMedia(\App\Enums\MediaCollection::Poster))?->custom_properties['background_color'] ?? '#FFFFFF' }};"
                     wire:ignore
                 >
                     <img class="w-full h-full aspect-video object-cover lazyload" data-sizes="auto" data-src="{{ $game->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $game->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/game_banner.webp') }}" alt="{{ $game->title }} Banner" title="{{ $game->title }}">
