@@ -399,12 +399,12 @@ class AnimeProcessor extends CustomItemProcessor
     private function getSource(string $value): int
     {
         $value = empty($value) ? 'Unknown' : $value;
-        $status = Source::firstOrCreate([
+        $source = Source::firstOrCreate([
             'name' => trim($value)
         ], [
             'description' => ''
         ]);
-        return $status->id;
+        return $source->id;
     }
 
     /**
@@ -814,38 +814,48 @@ class AnimeProcessor extends CustomItemProcessor
         }
 
         foreach ($malSongs as $key => $malSong) {
-            if (empty($malSongs['title'])) {
+            if (empty($malSong['title'])) {
                 continue;
             }
 
-            $whereAttributes = [
-                'mal_id' => $malSong['mal_id'],
-            ];
-            if (!empty($malSong['am_id'])) {
-                $whereAttributes['am_id'] = $malSong['am_id'];
+            $song = Song::where('mal_id', '=', $malSong['mal_id']);
+
+            if (!empty($malSong['amazon_id'])) {
+                $song->orWhere('amazon_id', '=', $malSong['amazon_id']);
             }
-            $song = Song::firstWhere($whereAttributes, 'OR');
+            if (!empty($malSong['am_id'])) {
+                $song->orWhere('am_id', '=', $malSong['am_id']);
+            }
+            if (!empty($malSong['spotify_id'])) {
+                $song->orWhere('spotify_id', '=', $malSong['spotify_id']);
+            }
+            if (!empty($malSong['youtube_id'])) {
+                $song->orWhere('youtube_id', '=', $malSong['youtube_id']);
+            }
+
+            $song = $song->first();
 
             if (empty($song)) {
                 $song = Song::create([
                     'mal_id' => $malSong['mal_id'],
+                    'amazon_id' => $malSong['amazon_id'],
                     'am_id' => $malSong['am_id'],
+                    'spotify_id' => $malSong['spotify_id'],
+                    'youtube_id' => $malSong['youtube_id'],
                     'title' => $malSong['title'],
                     'artist' => $malSong['artist'],
                 ]);
             }
 
-            $mediaSongs = $anime?->mediaSongs()->firstWhere('song_id', '=', $song->id);
-
-            if (empty($mediaSongs)) {
-                MediaSong::create([
-                    'anime_id' => $anime?->id,
-                    'song_id' => $song->id,
-                    'position' => $key,
-                    'type' => $songType->value,
-                    'episodes' => $malSong['episodes'],
-                ]);
-            }
+            MediaSong::updateOrCreate([
+                'model_type' => $anime?->getMorphClass(),
+                'model_id' => $anime?->id,
+                'song_id' => $song->id,
+                'type' => $songType->value,
+            ], [
+                'position' => $key + 1,
+                'episodes' => $malSong['episodes']
+            ]);
         }
     }
 

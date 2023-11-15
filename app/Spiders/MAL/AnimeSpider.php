@@ -353,17 +353,55 @@ class AnimeSpider extends BasicSpider
                     ->each(function (Crawler $item) use (&$malSong) {
                         $id = str($item->attr('id'));
 
-                        if ($id->startsWith('apple_url_')) {
+                        if ($id->startsWith('amazon_url_')) {
                             // Get song MAL ID
-                            $malSong['id'] = (int) $id->replace('apple_url_', '')->value();
+                            if (empty($malSong['mal_id'])) {
+                                $malSong['mal_id'] = (int) $id->replace('amazon_url_', '')->value();
+                            }
+
+                            // Get Apple Music ID
+                            $regex = '/.+?albums\/(.+?)\?.+?(trackAsin=B[\dA-Z]{9}|\d{9}(X|\d))/i';
+                            preg_match($regex, $item->attr('value'), $amazonID);
+                            $malSong['amazon_id'] = empty($amazonID) ? null : trim($amazonID[1] . '&' . $amazonID[2]);
+                        } else if ($id->startsWith('apple_url_')) {
+                            // Get song MAL ID
+                            if (empty($malSong['mal_id'])) {
+                                $malSong['mal_id'] = (int) $id->replace('apple_url_', '')
+                                    ->value();
+                            }
 
                             // Get Apple Music ID
                             $regex = '/.+?i=/';
                             $amID = preg_replace($regex, '', $item->attr('value'));
                             $malSong['am_id'] = empty($amID) ? null : trim($amID);
+                        } else if ($id->startsWith('spotify_url_')) {
+                            // Get song MAL ID
+                            if (empty($malSong['mal_id'])) {
+                                $malSong['mal_id'] = (int) $id->replace('spotify_url_', '')
+                                    ->value();
+                            }
+
+                            // Get Apple Music ID
+                            $regex = '/.+?track\//';
+                            $spotifyID = preg_replace($regex, '', $item->attr('value'));
+                            $malSong['spotify_id'] = empty($spotifyID) ? null : trim($spotifyID);
+                        } else if ($id->startsWith('youtube_url_')) {
+                            // Get song MAL ID
+                            if (empty($malSong['mal_id'])) {
+                                $malSong['mal_id'] = (int) $id->replace('youtube_url_', '')
+                                    ->value();
+                            }
+
+                            // Get Apple Music ID
+                            $regex = '/(.*?)(^|\/|v=)([a-z0-9_-]{11})(.*)?/i';
+                            preg_match($regex, $item->attr('value'), $youtubeID);
+                            $malSong['youtube_id'] = empty($youtubeID[3]) ? null : trim($youtubeID[3]);
                         } else {
-                            $malSong['id'] = null;
+                            $malSong['mal_id'] = null;
+                            $malSong['amazon_id'] = null;
                             $malSong['am_id'] = null;
+                            $malSong['spotify_id'] = null;
+                            $malSong['youtube_id'] = null;
                         }
                     });
 
@@ -371,6 +409,11 @@ class AnimeSpider extends BasicSpider
                 $regex = '/\".+\"/';
                 preg_match($regex, $item->text(), $title);
                 $title = empty($title) ? '' : trim($title[0]);
+                // Here we `replaceFirst/Last` instead of `remove`, so we don't
+                // accidentally remove quotes that are part of the official title.
+                $title = str($title)
+                    ->replaceFirst('"', '')
+                    ->replaceLast('"', '');
 
                 // Get artist
                 $regex = '/by.+/';
@@ -384,7 +427,9 @@ class AnimeSpider extends BasicSpider
                 $episodes = str($episodes)->remove(['(', 'eps', ')']);
 
                 // Done with episode, clean artist string
-                $artist = str($artist)->replaceMatches($regex, '')->remove(['by', ' ']);
+                $artist = str($artist)
+                    ->replaceMatches($regex, '')
+                    ->remove(['by', ' ']);
 
                 $malSong['title'] = empty($title) ? null : trim($title);
                 $malSong['artist'] = empty($artist) ? null : trim($artist);
