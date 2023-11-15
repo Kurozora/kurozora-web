@@ -64,6 +64,16 @@ class MediaSong extends Resource
     public static $title = 'id';
 
     /**
+     * The relationships that should be eager loaded on index queries.
+     *
+     * @var array
+     */
+    public static $with = [
+        'song',
+        'model'
+    ];
+
+    /**
      * The columns that should be searched.
      *
      * @var array
