@@ -121,6 +121,7 @@ class MangaProcessor extends CustomItemProcessor
         $chapterCount = $this->getAttribute('Chapters');
         $mediaType = $this->getAttribute('Type');
         $status = $this->getAttribute('Status');
+        $source = $this->getAttribute('Source');
         $studios = $this->getAttribute('Serialization');
         $authors = $this->getAttribute('Authors');
         $genre = $this->getAttribute('Genre') ?? [];
@@ -211,8 +212,8 @@ class MangaProcessor extends CustomItemProcessor
                     'page_count' => $chapterCount * 18,
                     'media_type_id' => $mediaType,
                     'status_id' => $status,
-                    'source_id' => 2, // Original
-                    'duration' => 240, // Default 240 seconds / 4 minutes
+                    'source_id' => 2, // 2 = Original
+                    'duration' => 240, // Default 240 seconds (4 minutes)
                     'started_at' => $startedAt,
                     'ended_at' => $endedAt,
                     'publication_day' => $publicationDay,
@@ -227,6 +228,8 @@ class MangaProcessor extends CustomItemProcessor
             $newTitle = $title ?? $originalTitle;
             $newVolumeCount = empty($volumeCount) ? $manga->volume_count : $volumeCount;
             $newChapterCount = empty($chapterCount) ? $manga->chapter_count : $chapterCount;
+            $newPageCount = empty($manga->page_count) ? $newChapterCount * 18 : $manga->page_count;
+            $newDuration = empty($manga->duration) ? 240 : $manga->duration;
             $newEndedAt = $manga->ended_at ?? $endedAt;
             $newPublicationDay = empty($manga->publication_day) ? $publicationDay : $manga->publication_day->value;
 
@@ -238,9 +241,11 @@ class MangaProcessor extends CustomItemProcessor
                 'synopsis' => $synopsis,
                 'volume_count' => $newVolumeCount,
                 'chapter_count' => $newChapterCount,
-                'page_count' => $newChapterCount * 18,
+                'page_count' => $newPageCount,
                 'media_type_id' => $mediaType,
                 'status_id' => $status,
+                'source_id' => $source ?? 2, // 2 = Original
+                'duration' => $newDuration,
                 'started_at' => $startedAt,
                 'ended_at' => $newEndedAt,
                 'publication_day' => $newPublicationDay,
@@ -425,12 +430,12 @@ class MangaProcessor extends CustomItemProcessor
     private function getSource(string $value): int
     {
         $value = empty($value) ? 'Unknown' : $value;
-        $status = Source::firstOrCreate([
+        $source = Source::firstOrCreate([
             'name' => trim($value)
         ], [
             'description' => ''
         ]);
-        return $status->id;
+        return $source->id;
     }
 
     /**
