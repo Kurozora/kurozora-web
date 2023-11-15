@@ -149,6 +149,7 @@ class MangaSpider extends BasicSpider
             });
 
         $imageUrl = $this->cleanImageUrl($response, 'div.leftside div a img[itemprop="image"]');
+        $relations = $this->cleanRelations($response, 'table[class*="anime_detail_related_anime"]');
 
         logger()->channel('stderr')->info('✅️ [MAL_ID:MANGA:' . $id . '] Done parsing');
 
@@ -158,6 +159,7 @@ class MangaSpider extends BasicSpider
             $attributes,
             $synopsis,
             $imageUrl,
+            $relations,
             array_replace([], ...$studios),
             array_replace([], ...$genres),
             array_replace([], ...$authors),
@@ -250,5 +252,50 @@ class MangaSpider extends BasicSpider
 
         // Return clean url
         return preg_replace($regex, '', $cleanImageUrl);
+    }
+
+    /**
+     * Clean relations response.
+     *
+     * @param Response $response
+     * @param string $div
+     * @return array
+     */
+    private function cleanRelations(Response $response, string $div): array
+    {
+        $relations = [];
+
+        $response->filter($div)
+            ->filter('tr')
+            ->each(function(Crawler $item, int $index) use (&$relations) {
+                $relationType = str($item->children('td')->first()->innerText())
+                    ->replaceLast(':', '')
+                    ->value();
+                $relationItems = [];
+
+                $item->children('td')
+                    ->last()
+                    ->children('a')
+                    ->each(function (Crawler $item, int $index) use (&$relationItems) {
+                        $digitRegex = '/(\d+)\//';
+                        $wordRegex = '/(\w+)\//';
+
+                        $relationItems[] = [
+                            'mal_id' => str($item->attr('href'))
+                                ->match($digitRegex)
+                                ->value(),
+                            'type' => str($item->attr('href'))
+                                ->match($wordRegex)
+                                ->value(),
+                            'original_title' => str($item->text())
+                                ->trim()
+                                ->value()
+                        ];
+                    });
+
+                $relations[$relationType] = $relationItems;
+            });
+
+        return $relations;
     }
 }

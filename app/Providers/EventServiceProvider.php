@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Events\AnimeViewed;
+use App\Events\BareBonesAnimeAdded;
+use App\Events\BareBonesMangaAdded;
 use App\Events\CharacterViewed;
 use App\Events\EpisodeViewed;
 use App\Events\Event;
@@ -14,6 +16,8 @@ use App\Events\SongViewed;
 use App\Events\StudioViewed;
 use App\Events\UserViewed;
 use App\Listeners\AnimeViewedListener;
+use App\Listeners\BareBonesAnimeAddedListener;
+use App\Listeners\BareBonesMangaAddedListener;
 use App\Listeners\CharacterViewedListener;
 use App\Listeners\EpisodeViewedListener;
 use App\Listeners\EventListener;
@@ -72,6 +76,9 @@ class EventServiceProvider extends ServiceProvider
         // Manga events
         MangaViewed::class => [
             MangaViewedListener::class
+        ],
+        BareBonesMangaAdded::class => [
+            BareBonesMangaAddedListener::class
         ],
 
         // Person events
