@@ -108,7 +108,7 @@
                     <x-picture
                         :border="true"
                         class="w-28 h-40 mr-2 rounded-lg overflow-hidden"
-                        style="min-width: 7rem; max-height: 10rem; background-color: {{ $anime->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] }};"
+                        style="min-width: 7rem; max-height: 10rem; background-color: {{ $anime->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? '#FFFFFF' }};"
                         wire:ignore
                     >
                         <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $anime->title }} Poster" title="{{ $anime->title }}">

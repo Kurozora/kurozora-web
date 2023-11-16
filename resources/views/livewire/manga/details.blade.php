@@ -95,7 +95,7 @@
                 <div class="flex flex-nowrap pt-5 pb-8 pl-4 pr-4 md:mx-auto md:mb-8 md:p-2 md:max-w-lg md:bg-white md:bg-opacity-50 md:backdrop-filter md:backdrop-blur md:rounded-lg">
                     <svg
                         class="relative shrink-0 w-28 h-40 mr-2 overflow-hidden"
-                        style="min-width: 7rem; max-height: 10rem; background-color: {{ $manga->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] }};"
+                        style="min-width: 7rem; max-height: 10rem; background-color: {{ $manga->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? '#FFFFFF' }};"
                         wire:ignore
                     >
                         <foreignObject width="112" height="160" mask="url(#svg-mask-book-cover)">
