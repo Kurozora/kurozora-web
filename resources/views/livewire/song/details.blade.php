@@ -41,7 +41,7 @@
                     this.musicManager = window.musicManager
                     window.song = this.song
                     this.bgColor = '#' + this.song.attributes.artwork.bgColor
-                    this.artworkURL = musicManager.getArtworkURL(song)
+                    this.artworkURL = musicManager.getArtworkURL(song, 320, 320)
                     this.songURL = this.song.attributes.url
                 }
             }
@@ -49,7 +49,7 @@
         x-on:musicmanagerloaded.window="await fetchSongData('{{ $song->am_id }}')"
     >
         <section class="flex flex-col items-center gap-4 pb-8">
-            <div style="max-width: 300px">
+            <div style="max-width: 320px">
                 <x-picture class="aspect-square rounded-lg shadow-md overflow-hidden">
                     <img class="w-full h-full object-cover"
                          alt="{{ $song->title }} Artwork" title="{{ $song->title }}"

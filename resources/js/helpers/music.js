@@ -114,11 +114,13 @@ export default class MusicManager {
      * Returns the url of the artwork for the given song.
      *
      * @param {MusicKit.Song} song - the song object
+     * @param {number} width - the width of the artwork
+     * @param {number} height - the height of the artwork
      *
      * @returns {string}
      */
-    getArtworkURL(song) {
-        return MusicKit.formatArtworkURL(song.attributes.artwork, 200, 200)
+    getArtworkURL(song, width = 320, height = 320) {
+        return MusicKit.formatArtworkURL(song.attributes.artwork, width, height)
     }
 
     /**

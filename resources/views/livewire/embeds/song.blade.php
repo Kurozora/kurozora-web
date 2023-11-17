@@ -60,7 +60,7 @@
                         <img class="object-cover"
                              alt="{{ $song->title }} Banner" title="{{ $song->title }}"
                              width="320" height="320"
-                             x-bind:src="musicManager.getArtworkURL(song)"
+                             x-bind:src="musicManager.getArtworkURL(song, 320, 320)"
                              x-bind:style="{'background-color': '#' + song.attributes.artwork.bgColor}"
                         >
 
