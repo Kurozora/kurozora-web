@@ -42,6 +42,7 @@ class LibraryController extends Controller
     public function index(GetLibraryRequest $request): JsonResponse
     {
         $data = $request->validated();
+        $library = (int) ($data['library'] ?? UserLibraryKind::Anime);
 
         // Get the authenticated user
         $user = auth()->user();
@@ -90,7 +91,7 @@ class LibraryController extends Controller
         $nextPageURL = str_replace($request->root(), '', $model->nextPageUrl());
 
         // Get data collection
-        $data = match ((int) ($data['library'] ?? UserLibraryKind::Anime)) {
+        $data = match ($library) {
             UserLibraryKind::Manga => ['literatures' => LiteratureResourceBasic::collection($model)],
             UserLibraryKind::Game => ['games' => GameResourceBasic::collection($model)],
             default => ['shows' => AnimeResourceBasic::collection($model)],

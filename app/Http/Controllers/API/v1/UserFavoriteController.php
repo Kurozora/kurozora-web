@@ -67,9 +67,9 @@ class UserFavoriteController extends Controller
 
         // Get data collection
         $data = match ($library) {
-            UserLibraryKind::Manga => LiteratureResourceBasic::collection($userFavorites),
-            UserLibraryKind::Game => GameResourceBasic::collection($userFavorites),
-            default => AnimeResourceBasic::collection($userFavorites),
+            UserLibraryKind::Manga => ['literatures' => LiteratureResourceBasic::collection($userFavorites)],
+            UserLibraryKind::Game => ['games' => GameResourceBasic::collection($userFavorites)],
+            default => ['shows' => AnimeResourceBasic::collection($userFavorites)],
         };
 
         return JSONResult::success([
