@@ -373,7 +373,7 @@ class AnimeSpider extends BasicSpider
                             // Get Apple Music ID
                             $regex = '/.+?i=/';
                             $amID = preg_replace($regex, '', $item->attr('value'));
-                            $malSong['am_id'] = empty($amID) ? null : trim($amID);
+                            $malSong['am_id'] = empty($amID) || !is_numeric($amID) ? null : trim($amID);
                         } else if ($id->startsWith('spotify_url_')) {
                             // Get song MAL ID
                             if (empty($malSong['mal_id'])) {
