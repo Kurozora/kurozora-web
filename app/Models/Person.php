@@ -137,6 +137,17 @@ class Person extends KModel implements HasMedia, Sitemapable
     }
 
     /**
+     * Modify the query used to retrieve models when making all of the models searchable.
+     *
+     * @param Builder $query
+     * @return Builder
+     */
+    protected function makeAllSearchableUsing(Builder $query): Builder
+    {
+        return $query->withoutGlobalScopes();
+    }
+
+    /**
      * Get the indexable data array for the model.
      *
      * @return array

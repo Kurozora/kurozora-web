@@ -15,6 +15,7 @@ use App\Traits\SearchFilterable;
 use Astrotomic\Translatable\Translatable;
 use Carbon\CarbonInterval;
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
@@ -249,6 +250,17 @@ class Episode extends KModel implements HasMedia, Sitemapable
         }
 
         return $filter;
+    }
+
+    /**
+     * Modify the query used to retrieve models when making all of the models searchable.
+     *
+     * @param Builder $query
+     * @return Builder
+     */
+    protected function makeAllSearchableUsing(Builder $query): Builder
+    {
+        return $query->withoutGlobalScopes();
     }
 
     /**

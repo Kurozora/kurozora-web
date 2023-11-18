@@ -8,6 +8,7 @@ use App\Traits\Model\Actionable;
 use App\Traits\Model\HasMediaStat;
 use App\Traits\Model\HasViews;
 use App\Traits\SearchFilterable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -86,6 +87,17 @@ class Song extends KModel implements HasMedia, Sitemapable
     public static function webSearchFilters(): array
     {
         return [];
+    }
+
+    /**
+     * Modify the query used to retrieve models when making all of the models searchable.
+     *
+     * @param Builder $query
+     * @return Builder
+     */
+    protected function makeAllSearchableUsing(Builder $query): Builder
+    {
+        return $query->withoutGlobalScopes();
     }
 
     /**
