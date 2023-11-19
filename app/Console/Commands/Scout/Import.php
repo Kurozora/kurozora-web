@@ -26,8 +26,8 @@ class Import extends ImportCommand
      * @var string
      */
     protected $signature = 'scout:import
-            {model : Class name of model to bulk import}
-            {--c|chunk= : The number of records to import at a time (Defaults to configuration value: `scout.chunk.searchable`)}';
+                            {model : Class name of model to bulk import}
+                            {--c|chunk= : The number of records to import at a time (Defaults to configuration value: `scout.chunk.searchable`)}';
 
     /**
      * The console command description.

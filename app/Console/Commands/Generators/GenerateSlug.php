@@ -13,8 +13,8 @@ class GenerateSlug extends Command
      * @var string
      */
     protected $signature = 'generate:slug
-            {model : Class name of model to bulk import}
-            {--R|regenerate : Regenerate all slugs}';
+                            {model : Class name of model to bulk import}
+                            {--R|regenerate : Regenerate all slugs}';
 
     /**
      * The console command description.
