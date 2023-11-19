@@ -41,12 +41,6 @@ class Studio extends KModel implements HasMedia, Sitemapable
     // Maximum relationships fetch limit
     const MAXIMUM_RELATIONSHIPS_LIMIT = 10;
 
-    // How long to cache certain responses
-    const CACHE_KEY_ANIME_SECONDS = 60 * 60 * 2;
-    const CACHE_KEY_MANGA_SECONDS = 60 * 60 * 2;
-    const CACHE_KEY_GAME_SECONDS = 60 * 60 * 2;
-    const CACHE_KEY_STATS_SECONDS = 60 * 60 * 2;
-
     // Table name
     const TABLE_NAME = 'studios';
     protected $table = self::TABLE_NAME;
