@@ -168,6 +168,11 @@ return [
                 'sortableAttributes'=> ['astrological_sign', 'birthdate', 'deceased_date', 'full_name', 'created_at', 'update_at'],
                 'filterableAttributes'=> ['id', 'astrological_sign', 'birthdate', 'deceased_date'],
             ],
+            \App\Models\Platform::TABLE_NAME => [
+                'searchableAttributes' => ['original_name', 'name', 'synonym_names', 'translations', 'about', 'tagline',],
+                'sortableAttributes'=> ['original_name', 'name', 'generation', 'type', 'rank_total', 'started_at', 'ended_at', 'created_at', 'update_at'],
+                'filterableAttributes'=> ['id', 'generation', 'type', 'started_at', 'ended_at'],
+            ],
             \App\Models\Song::TABLE_NAME => [
                 'searchableAttributes' => ['title', 'artist'],
                 'sortableAttributes'=> ['artist', 'title', 'rank_total', 'created_at', 'update_at'],

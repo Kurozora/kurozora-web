@@ -11,6 +11,7 @@ use App\Events\Event;
 use App\Events\GameViewed;
 use App\Events\MangaViewed;
 use App\Events\PersonViewed;
+use App\Events\PlatformViewed;
 use App\Events\SeasonViewed;
 use App\Events\SongViewed;
 use App\Events\StudioViewed;
@@ -25,6 +26,7 @@ use App\Listeners\GameViewedListener;
 use App\Listeners\MangaViewedListener;
 use App\Listeners\MediaHasBeenAddedListener;
 use App\Listeners\PersonViewedListener;
+use App\Listeners\PlatformViewedListener;
 use App\Listeners\SeasonViewedListener;
 use App\Listeners\SongViewedListener;
 use App\Listeners\StudioViewedListener;
@@ -87,6 +89,11 @@ class EventServiceProvider extends ServiceProvider
         // Person events
         PersonViewed::class => [
             PersonViewedListener::class
+        ],
+
+        // Person events
+        PlatformViewed::class => [
+            PlatformViewedListener::class
         ],
 
         // Season events
