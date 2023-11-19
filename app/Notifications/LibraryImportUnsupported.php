@@ -12,7 +12,7 @@ use Illuminate\Notifications\Notification;
 use NotificationChannels\Apn\ApnChannel;
 use NotificationChannels\Apn\ApnMessage;
 
-class LibraryImportFinished extends Notification implements ShouldQueue
+class LibraryImportUnsupported extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -96,12 +96,11 @@ class LibraryImportFinished extends Notification implements ShouldQueue
      */
     public function toApn(User $notifiable): ApnMessage
     {
-        $libraryName = $this->libraryKind->description;
         $serviceName = $this->service->description;
 
         return ApnMessage::create()
-            ->title('🤩 ' . $serviceName . ' import finished')
+            ->title('😥 ' . $serviceName . ' import unsupported')
             ->badge($notifiable->unreadNotifications()->count())
-            ->body('Your ' . $serviceName . ' ' . $libraryName . ' import was processed. Come check it out!');
+            ->body('The file structure you submitted is not supported. Please reach out so we can fix this for you.');
     }
 }

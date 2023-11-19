@@ -12,6 +12,7 @@ use App\Models\MediaRating;
 use App\Models\User;
 use App\Models\UserLibrary;
 use App\Notifications\LibraryImportFinished;
+use App\Notifications\LibraryImportUnsupported;
 use Artisan;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -106,23 +107,38 @@ class ProcessMALImport implements ShouldQueue
      */
     public function handle(): void
     {
+        $success = false;
+
+        // Create XML object
+        $xml = simplexml_load_string($this->xmlContent);
+
+        // Read XML object into JSON
+        $json = json_encode($xml);
+        $json = json_decode($json, true);
+
         switch ($this->libraryKind->value) {
             case UserLibraryKind::Anime:
-                $this->handleAnime();
+                $success = $this->handleAnime($json);
                 break;
             case UserLibraryKind::Manga:
-                $this->handleManga();
+                $success = $this->handleManga($json);
                 break;
         }
 
-        // Notify the user that the import has finished
-        $this->user->notify(new LibraryImportFinished($this->results, $this->libraryKind, $this->service, $this->behavior));
+        if ($success) {
+            $this->user->notify(new LibraryImportFinished($this->results, $this->libraryKind, $this->service, $this->behavior));
+        } else {
+            $this->user->notify(new LibraryImportUnsupported($this->results, $this->libraryKind, $this->service, $this->behavior));
+        }
     }
 
     /**
      * Execute the anime job.
+     *
+     * @param array $json
+     * @return bool
      */
-    public function handleAnime(): void
+    public function handleAnime(array $json): bool
     {
         // Wipe current library if behavior is set to overwrite
         if ($this->behavior->value === ImportBehavior::Overwrite) {
@@ -131,30 +147,44 @@ class ProcessMALImport implements ShouldQueue
             $this->user->animeRatings()->forceDelete();
         }
 
-        // Create XML object
-        $xml = simplexml_load_string($this->xmlContent);
+        if (isset($json['anime'])) { // Genuine MAL export
+            // Loop through the anime in the export file
+            foreach ($json['anime'] as $anime) {
+                $animeID = $anime['series_animedb_id'];
+                $status = $anime['my_status'];
+                $rating = $anime['my_score'] ?? 0;
+                $startDate = $anime['my_start_date'] ?? '0000-00-00';
+                $endDate = $anime['my_finish_date'] ?? '0000-00-00';
 
-        // Read XML object into JSON
-        $json = json_encode($xml);
-        $json = json_decode($json, true);
+                // Handle import
+                $this->importModel($animeID, $status, $rating, $startDate, $endDate);
+            }
+        } else if (isset($json['folder'])) { // 9anime export
+            foreach ($json['folder'] as $folder) {
+                $status = $folder['name'];
+                $animes = $folder['data']['item'];
 
-        // Loop through the anime in the export file
-        foreach($json['anime'] as $anime) {
-            $animeId = $anime['series_animedb_id'];
-            $status = $anime['my_status'];
-            $rating = $anime['my_score'] ?? 0;
-            $startDate = $anime['my_start_date'] ?? '0000-00-00';
-            $endDate = $anime['my_finish_date'] ?? '0000-00-00';
+                foreach ($animes as $anime) {
+                    $animeID = basename($anime['link']);
 
-            // Handle import
-            $this->importModel($animeId, $status, $rating, $startDate, $endDate);
+                    // Handle import
+                    $this->importModel($animeID, $status, 0, '0000-00-00', '0000-00-00');
+                }
+            }
+        } else {
+            return false;
         }
+
+        return true;
     }
 
     /**
      * Execute the manga job.
+     *
+     * @param array $json
+     * @return bool
      */
-    public function handleManga(): void
+    public function handleManga(array $json): bool
     {
         // Wipe current library if behavior is set to overwrite
         if ($this->behavior->value === ImportBehavior::Overwrite) {
@@ -163,24 +193,23 @@ class ProcessMALImport implements ShouldQueue
             $this->user->mangaRatings()->forceDelete();
         }
 
-        // Create XML object
-        $xml = simplexml_load_string($this->xmlContent);
-
-        // Read XML object into JSON
-        $json = json_encode($xml);
-        $json = json_decode($json, true);
-
         // Loop through the anime in the export file
-        foreach($json['manga'] as $manga) {
-            $mangaId = $manga['manga_mangadb_id'];
-            $status = $manga['my_status'];
-            $rating = $manga['my_score'] ?? 0;
-            $startDate = $manga['my_start_date'] ?? '0000-00-00';
-            $endDate = $manga['my_finish_date'] ?? '0000-00-00';
+        if (isset($json['manga'])) {
+            foreach ($json['manga'] as $manga) {
+                $mangaId = $manga['manga_mangadb_id'];
+                $status = $manga['my_status'];
+                $rating = $manga['my_score'] ?? 0;
+                $startDate = $manga['my_start_date'] ?? '0000-00-00';
+                $endDate = $manga['my_finish_date'] ?? '0000-00-00';
 
-            // Handle import
-            $this->importModel($mangaId, $status, $rating, $startDate, $endDate);
+                // Handle import
+                $this->importModel($mangaId, $status, $rating, $startDate, $endDate);
+            }
+        } else {
+            return false;
         }
+
+        return true;
     }
 
     /**
