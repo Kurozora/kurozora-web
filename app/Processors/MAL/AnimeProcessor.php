@@ -638,6 +638,16 @@ class AnimeProcessor extends CustomItemProcessor
                     return $date;
                 }
             } catch (Exception $exception) {
+                try {
+                    $date = Carbon::createFromFormat('Y', $str);
+                    if ($date) {
+                        $date->month(1)
+                            ->day(1);
+                        return $date;
+                    }
+                } catch (Exception $exception) {
+
+                }
             }
         }
 
@@ -752,6 +762,13 @@ class AnimeProcessor extends CustomItemProcessor
                 $malID = $relation['mal_id'];
                 $originalTitle = $relation['original_title'];
                 $relatedModel = null;
+
+                // Some relationships are empty URLs, likely due to
+                // the resource being deleted, but the relationship
+                // is not removed correctly.
+                if (empty($malID)) {
+                    continue;
+                }
 
                 switch ($relation['type']) {
                     case 'anime':

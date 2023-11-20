@@ -701,6 +701,13 @@ class MangaProcessor extends CustomItemProcessor
                 $originalTitle = $relation['original_title'];
                 $relatedModel = null;
 
+                // Some relationships are empty URLs, likely due to
+                // the resource being deleted, but the relationship
+                // is not removed correctly.
+                if (empty($malID)) {
+                    continue;
+                }
+
                 switch ($relation['type']) {
                     case 'anime':
                         if ($foundAnime = Anime::firstWhere([
@@ -796,6 +803,16 @@ class MangaProcessor extends CustomItemProcessor
                     return $date;
                 }
             } catch (Exception $exception) {
+                try {
+                    $date = Carbon::createFromFormat('Y', $str);
+                    if ($date) {
+                        $date->month(1)
+                            ->day(1);
+                        return $date;
+                    }
+                } catch (Exception $exception) {
+
+                }
             }
         }
 
