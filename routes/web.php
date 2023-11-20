@@ -56,6 +56,7 @@ require 'Web/Me.php';
 require 'Web/MyAnimeList.php';
 require 'Web/Notify.php';
 require 'Web/People.php';
+require 'Web/Platforms.php';
 require 'Web/Profile.php';
 require 'Web/Syoboi.php';
 require 'Web/Search.php';

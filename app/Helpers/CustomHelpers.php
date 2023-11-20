@@ -13,6 +13,13 @@ if (!function_exists('ios_app_url')) {
     }
 }
 
+if (!function_exists('ordinal_number')) {
+    function ordinal_number(int|float $number): bool|string
+    {
+        return (new NumberFormatter(app()->getLocale(), NumberFormatter::ORDINAL))->format($number);
+    }
+}
+
 if (!function_exists('number_shorten')) {
     /**
      * Shorten the number and append a unit.
