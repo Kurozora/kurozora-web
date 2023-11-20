@@ -3,8 +3,10 @@
 namespace App\Console\Commands\Fixers;
 
 use App\Models\Anime;
+use DB;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Collection;
+use Throwable;
 
 class AnimeAiringSeason extends Command
 {
@@ -31,17 +33,29 @@ class AnimeAiringSeason extends Command
     {
         $year = $this->argument('year') ?? now()->year;
 
-        Anime::where('started_at', '!=', null)
+        DB::disableQueryLog();
+
+        Anime::where([
+            ['started_at', '!=', null],
+        ])
             ->whereYear('started_at', '=', $year)
-            ->chunk(1000, function (Collection $animes) {
-                /** @var Anime $anime */
-                foreach ($animes as $anime) {
-                    print $anime->started_at->month . '|' . $anime->generateAiringSeason() . PHP_EOL;
-                    $anime->update([
-                        'air_season' => $anime->generateAiringSeason()
-                    ]);
+            ->chunkById(1000, function (Collection $animes) {
+                try {
+                    DB::beginTransaction();
+
+                    $animes->each(function (Anime $anime) {
+                        $anime->update([
+                            'air_day' => $anime->started_at->dayOfWeek
+                        ]);
+                    });
+
+                    DB::commit();
+                } catch (Throwable $e) {
+                    DB::rollBack();
                 }
             });
+
+        DB::enableQueryLog();
 
         return Command::SUCCESS;
     }
