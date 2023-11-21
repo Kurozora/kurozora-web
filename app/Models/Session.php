@@ -50,7 +50,7 @@ class Session extends KModel
      */
     public function session_attribute(): MorphOne
     {
-        return $this->morphOne(SessionAttribute::class, 'model', localKey: 'token');
+        return $this->morphOne(SessionAttribute::class, 'model', localKey: 'id');
     }
 
     /**
