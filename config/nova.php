@@ -113,6 +113,24 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Nova Routes
+    |--------------------------------------------------------------------------
+    |
+    | These routes will be used for authentication instead of the default
+    | routes provided by Nova. Comment or remove a route to use its default
+    | Nova equivalent.
+    |
+    */
+
+    'routes' => [
+        'login' => '/sign-in',
+        'logout' => '/sign-out',
+        'forgot_password' => '/forgot-password',
+        'reset_password' => '/reset-password'
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Nova Pagination Type
     |--------------------------------------------------------------------------
     |
