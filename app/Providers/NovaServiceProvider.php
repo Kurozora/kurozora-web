@@ -38,10 +38,10 @@ if (class_exists('Laravel\Nova\NovaApplicationServiceProvider')) {
             // Breadcrumbs
             Nova::withBreadcrumbs();
 
-//        // Right-to-Left
-//        Nova::enableRTL(function (Request $request) {
-//            return $request->user()->wantsRTL();
-//        });
+//            // Right-to-Left
+//            Nova::enableRTL(function (Request $request) {
+//                return $request->user()->wantsRTL();
+//            });
 
             // Set timezone to JST
             Nova::userTimezone(function (Request $request) {
