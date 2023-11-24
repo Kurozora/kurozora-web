@@ -30,7 +30,7 @@ class SearchRequest extends FormRequest
             'scope'     => ['bail', 'required', 'string', 'in:' . implode(',', SearchScope::getValues())],
             'types'     => ['bail', 'required', 'array'],
             'types.*'   => ['bail', 'required', 'string', 'distinct', 'in:' . implode(',', SearchType::getValues())],
-            'query'     => ['bail', 'required', 'string', 'min:1'],
+            'query'     => ['bail', 'nullable', 'string'],
             'limit'     => ['bail', 'integer', 'min:1', 'max:25'],
             'page'      => ['bail', 'integer', 'min:1'],
             'filter'    => ['bail', 'nullable', new ValidateBase64()],

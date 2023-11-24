@@ -150,10 +150,6 @@ class Index extends Component
         try {
             $this->validate();
 
-            if (empty($this->q)) {
-                return null;
-            }
-
             $searchableModel = match ($this->type) {
                 SearchType::Literatures => Manga::class,
                 SearchType::Games => Game::class,
@@ -184,6 +180,10 @@ class Index extends Component
                         default => $selected,
                     };
                 }
+            }
+
+            if (empty($wheres)) {
+                return null;
             }
 
             // Search
