@@ -79,7 +79,7 @@ class Season extends KModel implements HasMedia, Sitemapable
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection(MediaCollection::Poster)
-            ->useFallbackUrl($this->anime->getFirstMediaFullUrl(MediaCollection::Poster()) ?? '')
+            ->useFallbackUrl($this->anime?->getFirstMediaFullUrl(MediaCollection::Poster()) ?? '')
             ->singleFile();
     }
 

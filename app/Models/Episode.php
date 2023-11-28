@@ -128,8 +128,8 @@ class Episode extends KModel implements HasMedia, Sitemapable
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection(MediaCollection::Banner)
-            ->useFallbackUrl($this->anime->getFirstMediaFullUrl(MediaCollection::Banner()) ??
-                $this->anime->getFirstMediaFullUrl(MediaCollection::Poster()) ??
+            ->useFallbackUrl($this->anime?->getFirstMediaFullUrl(MediaCollection::Banner()) ??
+                $this->anime?->getFirstMediaFullUrl(MediaCollection::Poster()) ??
                 ''
             )
             ->singleFile();
