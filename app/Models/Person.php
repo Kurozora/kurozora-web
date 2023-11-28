@@ -40,12 +40,6 @@ class Person extends KModel implements HasMedia, Sitemapable
     // Maximum relationships fetch limit
     const MAXIMUM_RELATIONSHIPS_LIMIT = 10;
 
-    // How long to cache certain responses
-    const CACHE_KEY_ANIME_SECONDS = 60 * 60 * 2;
-    const CACHE_KEY_MANGA_SECONDS = 60 * 60 * 2;
-    const CACHE_KEY_GAMES_SECONDS = 60 * 60 * 2;
-    const CACHE_KEY_CHARACTERS_SECONDS = 60 * 60 * 2;
-
     // Table name
     const TABLE_NAME = 'people';
     protected $table = self::TABLE_NAME;
@@ -312,9 +306,29 @@ class Person extends KModel implements HasMedia, Sitemapable
      *
      * @return HasMany
      */
-    public function cast(): HasMany
+    public function animeCast(): HasMany
     {
         return $this->hasMany(AnimeCast::class, 'person_id');
+    }
+
+    /**
+     * Returns the cast relationship the character has.
+     *
+     * @return HasMany
+     */
+    public function gameCast(): HasMany
+    {
+        return $this->hasMany(GameCast::class, 'person_id');
+    }
+
+    /**
+     * Returns the cast relationship the character has.
+     *
+     * @return HasMany
+     */
+    public function mediaStaff(): HasMany
+    {
+        return $this->hasMany(MediaStaff::class, 'person_id');
     }
 
     /**

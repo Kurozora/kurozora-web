@@ -197,10 +197,11 @@ class Person extends Resource
                 ->help('The URLs to the official website of the person. Separated by ","')
                 ->nullable(),
 
-            HasMany::make('Cast', 'cast', AnimeCast::class),
+            HasMany::make('Anime Cast'),
 
-            BelongsToMany::make('Anime')
-                ->searchable(),
+            HasMany::make('Game Cast'),
+
+            HasMany::make('Media Staff'),
 
             BelongsToMany::make('Characters')
                 ->searchable(),
