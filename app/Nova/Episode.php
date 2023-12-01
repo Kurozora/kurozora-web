@@ -60,7 +60,7 @@ class Episode extends Resource
      */
     public static $with = [
         'anime',
-        'translation'
+        'translations'
     ];
 
     /**
