@@ -25,7 +25,7 @@ class ResetPassword extends ResetPasswordNotification
                 'count' => $expirationDuration
             ]))
             ->action(__('Reset Password'), $url)
-            ->line(__('If you did not request a password reset, it’s likely that another user has entered your email address by mistake and your account is still secure. If you believe an unauthorized person has accessed your account, you can reset your password at [kurozora.app](:url).', ['url' => config('app.url')]))
+            ->line(__('If you did not request a password reset, it’s likely that another user has entered your email address by mistake and your account is still secure. If you believe an unauthorized person has accessed your account, you can reset your password at [:domain](:url).', ['domain' => config('app.domain'), 'url' => config('app.url')]))
             ->salutation('Kurozora Support');
     }
 }
