@@ -275,10 +275,19 @@
                     </div>
 
                     @if($episode->previous_episode_id)
-                        <div id="episodeBadge" class="flex-grow px-12 border-l-2">
+                        <div id="previousEpisodeBadge" class="flex-grow px-12 border-l-2">
                             <a href="{{ route('episodes.details', $episode->previous_episode_id) }}">
                                 <p class="font-bold">{{ __('Episode :x', ['x' => $episode->previous_episode->number_total]) }}</p>
                                 <p class="text-sm text-gray-500">{{ __('Previous') }}</p>
+                            </a>
+                        </div>
+                    @endif
+
+                    @if($episode->next_episode_id)
+                        <div id="nextEpisodeBadge" class="flex-grow px-12 border-l-2">
+                            <a href="{{ route('episodes.details', $episode->next_episode_id) }}">
+                                <p class="font-bold">{{ __('Episode :x', ['x' => $episode->next_episode->number_total]) }}</p>
+                                <p class="text-sm text-gray-500">{{ __('Next') }}</p>
                             </a>
                         </div>
                     @endif
