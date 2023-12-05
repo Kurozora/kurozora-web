@@ -79,17 +79,6 @@ class Manga extends KModel implements HasMedia, Sitemapable
     // Maximum relationships fetch limit
     const MAXIMUM_RELATIONSHIPS_LIMIT = 10;
 
-    // How long to cache certain responses
-    const CACHE_KEY_MANGA_CAST_SECONDS = 60 * 60 * 2;
-    const CACHE_KEY_CHARACTERS_SECONDS = 60 * 60 * 2;
-    const CACHE_KEY_PAGES_SECONDS = 60 * 60 * 2;
-    const CACHE_KEY_LANGUAGES_SECONDS = 60 * 60 * 24;
-    const CACHE_KEY_RELATIONS_SECONDS = 60 * 60 * 2;
-    const CACHE_KEY_VOLUMES_SECONDS = 60 * 60 * 24;
-    const CACHE_KEY_STAFF_SECONDS = 60 * 60 * 2;
-    const CACHE_KEY_STAT_SECONDS = 60 * 60 * 2;
-    const CACHE_KEY_STUDIOS_SECONDS = 60 * 60 * 2;
-
     /**
      * Indicates if the IDs are auto-incrementing.
      *

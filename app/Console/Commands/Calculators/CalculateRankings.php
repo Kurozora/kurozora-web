@@ -66,6 +66,8 @@ class CalculateRankings extends Command
             return Command::SUCCESS;
         }
 
+        $this->info('Calculating rankings for: ' . $class);
+
         $mediaStat = MediaStat::withoutGlobalScopes()
             ->orderBy('in_progress_count', 'desc')
             ->orderBy('rating_average', 'desc')

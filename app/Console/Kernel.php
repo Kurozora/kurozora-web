@@ -99,9 +99,9 @@ class Kernel extends ConsoleKernel
 
         /**********************************************/
         // Calculate anime views every day
-        $schedule->command('calculate:anime_views')
+        $schedule->command('calculate:views', ['model' => 'all'])
             ->daily()
-            ->name('Calculate anime views')
+            ->name('Calculate views')
             ->onOneServer();
 
         /**********************************************/
@@ -112,13 +112,6 @@ class Kernel extends ConsoleKernel
             ->onOneServer();
 
         /**********************************************/
-        // Calculate game views every week
-        $schedule->command('calculate:game_views')
-            ->daily()
-            ->name('Calculate game views')
-            ->onOneServer();
-
-        /**********************************************/
         // Calculate manga library stats every day
         $schedule->command('calculate:manga_library_stats')
             ->daily()
@@ -126,66 +119,10 @@ class Kernel extends ConsoleKernel
             ->onOneServer();
 
         /**********************************************/
-        // Calculate manga views every week
-        $schedule->command('calculate:manga_views')
-            ->daily()
-            ->name('Calculate manga views')
-            ->onOneServer();
-
-        /**********************************************/
-        // Calculate character views every week
-        $schedule->command('calculate:character_views')
-            ->daily()
-            ->name('Calculate character views')
-            ->onOneServer();
-
-        /**********************************************/
         // Calculate episode stats every week
         $schedule->command('calculate:episode_stats')
             ->daily()
             ->name('Calculate episode stats')
-            ->onOneServer();
-
-        /**********************************************/
-        // Calculate episode views every week
-        $schedule->command('calculate:episode_views')
-            ->daily()
-            ->name('Calculate episode views')
-            ->onOneServer();
-
-        /**********************************************/
-        // Calculate person views every week
-        $schedule->command('calculate:person_views')
-            ->daily()
-            ->name('Calculate person views')
-            ->onOneServer();
-
-        /**********************************************/
-        // Calculate season views every week
-        $schedule->command('calculate:season_views')
-            ->daily()
-            ->name('Calculate season views')
-            ->onOneServer();
-
-        /**********************************************/
-        // Calculate song views every week
-        $schedule->command('calculate:song_views')
-            ->daily()
-            ->name('Calculate song views')
-            ->onOneServer();
-
-        /**********************************************/
-        // Calculate studio views every week
-        $schedule->command('calculate:studio_views')
-            ->daily()
-            ->name('Calculate studio views')
-            ->onOneServer();
-
-        /**********************************************/
-        // Calculate user views every week
-        $schedule->command('calculate:user_views')
-            ->daily()
-            ->name('Calculate user views')
             ->onOneServer();
 
         /**********************************************/

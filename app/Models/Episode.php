@@ -47,9 +47,6 @@ class Episode extends KModel implements HasMedia, Sitemapable
         Translatable,
         TvRated;
 
-    // How long to cache certain responses
-    const CACHE_KEY_STAT_SECONDS = 60 * 60 * 2;
-
     // Table name
     const TABLE_NAME = 'episodes';
     protected $table = self::TABLE_NAME;

@@ -38,11 +38,6 @@ class Song extends KModel implements HasMedia, Sitemapable
         SearchFilterable,
         SoftDeletes;
 
-    // How long to cache certain responses
-    const CACHE_KEY_ANIMES_SECONDS = 60 * 60 * 2;
-    const CACHE_KEY_GAMES_SECONDS = 60 * 60 * 2;
-    const CACHE_KEY_STATS_SECONDS = 60 * 60 * 2;
-
     // Table name
     const TABLE_NAME = 'songs';
     protected $table = self::TABLE_NAME;
