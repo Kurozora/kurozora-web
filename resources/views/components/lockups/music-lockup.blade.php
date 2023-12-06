@@ -33,8 +33,8 @@
             <img class="w-full h-full object-cover"
                  width="320" height="320"
                  src="{{ $song->getFirstMediaFullUrl(\App\Enums\MediaCollection::Artwork()) ?? asset('images/static/placeholders/music_album.webp') }}"
-                 x-bind:title="artworkURL !== '' ? '{{ $song->title }}' : null"
-                 x-bind:alt="artworkURL !== '' ? '{{ $song->title }} Artwork' : null"
+                 x-bind:title="songTitle"
+                 x-bind:alt="songTitle + ' Artwork'"
                  x-bind:src="artworkURL"
                  x-bind:style="{'background-color': bgColor}"
             >

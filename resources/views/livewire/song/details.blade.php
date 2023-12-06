@@ -32,6 +32,7 @@
         x-data="{
             song: null,
             bgColor: '#A660B2',
+            songTitle: '{{ str($song->title)->replace('\'', '’') }}',
             artworkURL: '{{ $song->getFirstMediaFullUrl(\App\Enums\MediaCollection::Artwork()) ?? asset('images/static/placeholders/music_album.webp') }}',
             songURL: null,
             musicManager: null,
@@ -41,6 +42,7 @@
                     this.musicManager = window.musicManager
                     window.song = this.song
                     this.bgColor = '#' + this.song.attributes.artwork.bgColor
+                    this.songTitle = this.song.attributes.name
                     this.artworkURL = musicManager.getArtworkURL(song, 320, 320)
                     this.songURL = this.song.attributes.url
                 }
@@ -54,6 +56,8 @@
                     <img class="w-full h-full object-cover"
                          alt="{{ $song->title }} Artwork" title="{{ $song->title }}"
                          width="320" height="320"
+                         x-bind:title="songTitle"
+                         x-bind:alt="songTitle + ' Artwork'"
                          x-bind:src="artworkURL"
                          x-bind:style="{'background-color': bgColor}"
                          style="width: 320px; height: 320px;"
