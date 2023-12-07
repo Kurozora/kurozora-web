@@ -81,7 +81,7 @@ class SignInWithAppleController extends Controller
         }
 
         // Sign in the user.
-        auth()->login($user);
+        auth()->login($user, true);
     }
 
     /**
