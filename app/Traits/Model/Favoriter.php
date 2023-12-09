@@ -107,6 +107,21 @@ trait Favoriter
     }
 
     /**
+     * Clears the favorites of the given type.
+     *
+     * @param string|null $type
+     * @return bool
+     */
+    public function clearFavorites(?string $type = null): bool
+    {
+        return $this->favorites()
+            ->when($type != null, function ($query) use ($type) {
+                $query->where('favorable_type', '=', $type);
+            })
+            ->forceDelete();
+    }
+
+    /**
      * Toggle favorite status of the given model.
      *
      * @param Model $model

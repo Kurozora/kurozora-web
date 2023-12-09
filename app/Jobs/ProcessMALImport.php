@@ -143,7 +143,7 @@ class ProcessMALImport implements ShouldQueue
         // Wipe current library if behavior is set to overwrite
         if ($this->behavior->value === ImportBehavior::Overwrite) {
             $this->user->clearLibrary(Anime::class);
-            $this->user->whereFavorited(Anime::class)->forceDelete();
+            $this->user->clearFavorites(Anime::class);
             $this->user->animeRatings()->forceDelete();
         }
 
@@ -189,7 +189,7 @@ class ProcessMALImport implements ShouldQueue
         // Wipe current library if behavior is set to overwrite
         if ($this->behavior->value === ImportBehavior::Overwrite) {
             $this->user->clearLibrary(Manga::class);
-            $this->user->whereFavorited(Manga::class)->forceDelete();
+            $this->user->clearFavorites(Manga::class);
             $this->user->mangaRatings()->forceDelete();
         }
 
