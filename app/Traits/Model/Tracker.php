@@ -119,7 +119,9 @@ trait Tracker
     public function clearLibrary(?string $type = null): bool
     {
         return $this->library()
-            ->where('trackable_type', '=', $type)
+            ->when($type != null, function ($query) use ($type) {
+                $query->where('trackable_type', '=', $type);
+            })
             ->forceDelete();
     }
 
