@@ -168,7 +168,7 @@ class Tab extends Component
         // Search
         $mangaIDs = collect(UserLibrary::search($this->search)
             ->where('user_id', $this->user->id)
-            ->where('trackable_type', Manga::class)
+            ->where('trackable_type', addslashes(Manga::class))
             ->where('status', $userLibraryStatus->value)
             ->simplePaginateRaw(perPage: 2000, page: 1)
             ->items()['hits'] ?? [])
