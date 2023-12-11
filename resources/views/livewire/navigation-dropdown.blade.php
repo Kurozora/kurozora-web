@@ -184,17 +184,17 @@
                                 {{ __('Studios') }}
                             </x-nav-link>
 
-                            <x-nav-link href="{{ route('platforms.index') }}" :active="request()->routeIs('platforms.index')"
-                                        x-show="! isSearchEnabled"
-                                        x-transition:enter="ease-out duration-150 delay-[400ms] transform"
-                                        x-transition:enter-start="opacity-0 scale-75"
-                                        x-transition:enter-end="opacity-100 scale-100"
-                                        x-transition:leave="ease-in duration-200 delay-[50ms] transform"
-                                        x-transition:leave-start="opacity-100 scale-100"
-                                        x-transition:leave-end="opacity-0 scale-75"
-                            >
-                                {{ __('Platforms') }}
-                            </x-nav-link>
+{{--                            <x-nav-link href="{{ route('platforms.index') }}" :active="request()->routeIs('platforms.index')"--}}
+{{--                                        x-show="! isSearchEnabled"--}}
+{{--                                        x-transition:enter="ease-out duration-150 delay-[400ms] transform"--}}
+{{--                                        x-transition:enter-start="opacity-0 scale-75"--}}
+{{--                                        x-transition:enter-end="opacity-100 scale-100"--}}
+{{--                                        x-transition:leave="ease-in duration-200 delay-[50ms] transform"--}}
+{{--                                        x-transition:leave-start="opacity-100 scale-100"--}}
+{{--                                        x-transition:leave-end="opacity-0 scale-75"--}}
+{{--                            >--}}
+{{--                                {{ __('Platforms') }}--}}
+{{--                            </x-nav-link>--}}
                         </div>
                     </span>
 
@@ -391,9 +391,9 @@
                     {{ __('Studios') }}
                 </x-responsive-nav-link>
 
-                <x-responsive-nav-link href="{{ route('platforms.index') }}" :active="request()->routeIs('platforms.index')">
-                    {{ __('Platforms') }}
-                </x-responsive-nav-link>
+{{--                <x-responsive-nav-link href="{{ route('platforms.index') }}" :active="request()->routeIs('platforms.index')">--}}
+{{--                    {{ __('Platforms') }}--}}
+{{--                </x-responsive-nav-link>--}}
             </div>
 
             {{-- Responsive Settings Options --}}

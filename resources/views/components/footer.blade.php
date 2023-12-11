@@ -103,9 +103,9 @@
                         <x-footer-link href="{{ route('studios.index') }}">{{ __('Studios') }}</x-footer-link>
                     </li>
 
-                    <li class="mt-2">
-                        <x-footer-link href="{{ route('platforms.index') }}">{{ __('Platforms') }}</x-footer-link>
-                    </li>
+{{--                    <li class="mt-2">--}}
+{{--                        <x-footer-link href="{{ route('platforms.index') }}">{{ __('Platforms') }}</x-footer-link>--}}
+{{--                    </li>--}}
                 </ul>
             </div>
 
