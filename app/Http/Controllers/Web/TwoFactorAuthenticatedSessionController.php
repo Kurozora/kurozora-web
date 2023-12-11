@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Actions\Web\Auth\PrepareAuthenticatedSession;
+use App\Actions\Web\Auth\RedirectIfHasLocalLibrary;
 use App\Events\RecoveryCodeReplaced;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Web\TwoFactorSignInRequest;
@@ -11,7 +12,6 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Pipeline\Pipeline;
 use PragmaRX\Google2FA\Exceptions\IncompatibleWithGoogleAuthenticatorException;
 use PragmaRX\Google2FA\Exceptions\InvalidCharactersException;
@@ -67,13 +67,14 @@ class TwoFactorAuthenticatedSessionController extends Controller
     /**
      * Get the authentication pipeline instance.
      *
-     * @param Request $request
+     * @param TwoFactorSignInRequest $request
      * @return Pipeline
      */
-    protected function signInPipeline(Request $request): Pipeline
+    protected function signInPipeline(TwoFactorSignInRequest $request): Pipeline
     {
         return (new Pipeline(app()))->send($request)->through(array_filter([
             PrepareAuthenticatedSession::class,
+            RedirectIfHasLocalLibrary::class,
         ]));
     }
 }

@@ -45,6 +45,44 @@
                 @csrf
                 <x-honey recaptcha="sign_in" />
 
+                <x-input
+                    x-data="{
+                        hasLocalLibrary: 0,
+                        setHasLocalLibrary() {
+                            // Ensure the database is initialized
+                            if (!window.libraryDB) {
+                                console.error('IndexedDB not initialized for library database.')
+                                return false
+                            }
+
+                            // Start a transaction and get the object store
+                            let transaction = window.libraryDB.transaction(['libraryData'], 'readonly')
+                            let objectStore = transaction.objectStore('libraryData')
+
+                            // Open a cursor to count the number of entries
+                            let countRequest = objectStore.count()
+
+                            countRequest.onsuccess = function(event) {
+                                let count = event.target.result
+
+                                // Set if there are any entries in the object store
+                                this.hasLocalLibrary = count > 0 ? 1 : 0
+                            }.bind(this)
+
+                            countRequest.onerror = function(event) {
+                                console.error('Error counting entries in library database:', event.target.error)
+                                return false
+                            }
+                        }
+                    }"
+                    x-on:librarydbloaded.window="setHasLocalLibrary()"
+                    id="has_local_library"
+                    type="hidden"
+                    name="hasLocalLibrary"
+                    value="0"
+                    x-model="hasLocalLibrary"
+                />
+
                 <section class="space-y-4">
                     <div>
                         <x-label for="email" value="{{ __('Kurozora ID') }}" />
@@ -74,20 +112,22 @@
                     <x-button>
                         {{ __('Open sesame 👐') }}
                     </x-button>
-
-                    <p class="tracking-wide font-black">{{ __('———— or ————') }}</p>
-
-                    <x-link class="text-sm" href="{{ route('sign-up') }}">
-                        {{ __('New to Kurozora? Join us 🔥') }}
-                    </x-link>
-
-                    <p class="tracking-wide font-black">{{ __('———— or ————') }}</p>
-
-                    <div>
-                        <x-auth.apple-button />
-                    </div>
                 </section>
             </form>
+
+            <div class="flex flex-col items-center justify-end gap-4 mt-4 text-center">
+                <p class="tracking-wide font-black">{{ __('———— or ————') }}</p>
+
+                <x-link class="text-sm" href="{{ route('sign-up') }}">
+                    {{ __('New to Kurozora? Join us 🔥') }}
+                </x-link>
+
+                <p class="tracking-wide font-black">{{ __('———— or ————') }}</p>
+
+                <div>
+                    <x-auth.apple-button />
+                </div>
+            </div>
         </section>
 
         {{-- Services --}}

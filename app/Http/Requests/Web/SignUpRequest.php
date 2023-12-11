@@ -28,11 +28,12 @@ class SignUpRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'username'      => ['bail', 'required_without:nickname', new ValidateUsername],
-            'nickname'      => ['bail', 'required_without:username', new ValidateUsername],
-            'password'      => ['bail', 'required', new ValidatePassword],
-            'email'         => ['bail', 'required', new ValidateEmail(['must-be-available' => true])],
-            'profileImage'  => ['bail', new ValidateProfileImage],
+            'username'          => ['bail', 'required_without:nickname', new ValidateUsername],
+            'nickname'          => ['bail', 'required_without:username', new ValidateUsername],
+            'password'          => ['bail', 'required', new ValidatePassword],
+            'email'             => ['bail', 'required', new ValidateEmail(['must-be-available' => true])],
+            'profileImage'      => ['bail', new ValidateProfileImage],
+            'hasLocalLibrary'   => ['bail', 'nullable', 'boolean'],
         ];
     }
 }

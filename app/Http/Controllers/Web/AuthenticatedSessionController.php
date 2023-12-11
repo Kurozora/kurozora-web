@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Actions\Web\Auth\AttemptToAuthenticate;
 use App\Actions\Web\Auth\PrepareAuthenticatedSession;
+use App\Actions\Web\Auth\RedirectIfHasLocalLibrary;
 use App\Actions\Web\Auth\RedirectIfTwoFactorAuthenticatable;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Web\SignInRequest;
@@ -52,6 +53,7 @@ class AuthenticatedSessionController extends Controller
             RedirectIfTwoFactorAuthenticatable::class,
             AttemptToAuthenticate::class,
             PrepareAuthenticatedSession::class,
+            RedirectIfHasLocalLibrary::class,
         ]));
     }
 

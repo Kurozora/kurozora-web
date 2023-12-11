@@ -21,6 +21,45 @@
             @csrf
             <x-honey recaptcha="sign_up" />
 
+            <x-input
+                x-data="{
+                        hasLocalLibrary: 0,
+                        setHasLocalLibrary() {
+                            // Ensure the database is initialized
+                            if (!window.libraryDB) {
+                                console.error('IndexedDB not initialized for library database.')
+                                return false
+                            }
+
+                            // Start a transaction and get the object store
+                            let transaction = window.libraryDB.transaction(['libraryData'], 'readonly')
+                            let objectStore = transaction.objectStore('libraryData')
+
+                            // Open a cursor to count the number of entries
+                            let countRequest = objectStore.count()
+
+                            countRequest.onsuccess = function(event) {
+                                let count = event.target.result
+
+                                // Set if there are any entries in the object store
+                                this.hasLocalLibrary = count > 0 ? 1 : 0
+                            }.bind(this)
+
+                            countRequest.onerror = function(event) {
+                                console.error('Error counting entries in library database:', event.target.error)
+                                return false
+                            }
+                        }
+                    }"
+                x-on:librarydbloaded.window="setHasLocalLibrary()"
+                id="has_local_library"
+                class="block mt-1 w-full"
+                type="hidden"
+                name="hasLocalLibrary"
+                value="0"
+                x-model="hasLocalLibrary"
+            />
+
             <section class="space-y-4" >
                 <div>
                     <x-label for="username" value="{{ __('Username') }}" />

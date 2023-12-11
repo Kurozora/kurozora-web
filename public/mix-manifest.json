@@ -1,6 +1,7 @@
 {
     "/js/app.js": "/js/app.js?id=873611a971c1de17dba08af74f1dfa39",
     "/js/debug.js": "/js/debug.js?id=36e1d89113d3e2b8718aabbe0174c5ad",
+    "/js/db.js": "/js/db.js?id=af685317d30faa81fdaa53e69d6a925a",
     "/js/chat.js": "/js/chat.js?id=a25154c2e7485a89cb113b7b0a044288",
     "/js/listen.js": "/js/listen.js?id=9cc0dfa479f1aff2cd7a7f918e894e33",
     "/js/watch.js": "/js/watch.js?id=0cbb29a66651c690811e83b585629179",
@@ -8,6 +9,6 @@
     "/js/manifest.js": "/js/manifest.js?id=9cc4ba42188c795a63dcbbed1e2c564d",
     "/css/watch.css": "/css/watch.css?id=5930d109880dda4a15d439b5acfa7411",
     "/css/chat.css": "/css/chat.css?id=c94ecda28f343fe6f9a3f7e36744979d",
-    "/css/app.css": "/css/app.css?id=695bdad88c91b1f7cdecfa0542a1e54e",
-    "/js/vendor.js": "/js/vendor.js?id=eaf850304de6097ef3c094241da5ad3b"
+    "/css/app.css": "/css/app.css?id=eb07ba4e2334a1f6737b297ab4d573b4",
+    "/js/vendor.js": "/js/vendor.js?id=f286ac5fb2f18f3dd287247ff297148a"
 }

@@ -29,6 +29,13 @@ class TwoFactorSignInRequest extends FormRequest
     protected bool $remember = false;
 
     /**
+     * Indicates if the user has a local library.
+     *
+     * @var bool
+     */
+    protected bool $hasLocalLibrary = false;
+
+    /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
@@ -148,5 +155,19 @@ class TwoFactorSignInRequest extends FormRequest
         }
 
         return $this->remember;
+    }
+
+    /**
+     * Determine if the user has a local library.
+     *
+     * @return bool
+     */
+    public function hasLocalLibrary(): bool
+    {
+        if (!$this->hasLocalLibrary) {
+            $this->hasLocalLibrary = $this->session()->pull('sign-in.has-local-library', false);
+        }
+
+        return $this->hasLocalLibrary;
     }
 }

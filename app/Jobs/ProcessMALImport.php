@@ -140,14 +140,14 @@ class ProcessMALImport implements ShouldQueue
      */
     public function handleAnime(array $json): bool
     {
-        // Wipe current library if behavior is set to overwrite
-        if ($this->behavior->value === ImportBehavior::Overwrite) {
-            $this->user->clearLibrary(Anime::class);
-            $this->user->clearFavorites(Anime::class);
-            $this->user->animeRatings()->forceDelete();
-        }
-
         if (isset($json['anime'])) { // Genuine MAL export
+            // Wipe current anime library if behavior is set to overwrite
+            if ($this->behavior->value === ImportBehavior::Overwrite) {
+                $this->user->clearLibrary(Anime::class);
+                $this->user->clearFavorites(Anime::class);
+                $this->user->animeRatings()->forceDelete();
+            }
+
             // Loop through the anime in the export file
             foreach ($json['anime'] as $anime) {
                 $animeID = $anime['series_animedb_id'];
@@ -160,6 +160,14 @@ class ProcessMALImport implements ShouldQueue
                 $this->importModel($animeID, $status, $rating, $startDate, $endDate);
             }
         } else if (isset($json['folder'])) { // 9anime export
+            // Wipe current anime library if behavior is set to overwrite
+            if ($this->behavior->value === ImportBehavior::Overwrite) {
+                $this->user->clearLibrary(Anime::class);
+                $this->user->clearFavorites(Anime::class);
+                $this->user->animeRatings()->forceDelete();
+            }
+
+            // Loop through the anime in the export file
             foreach ($json['folder'] as $folder) {
                 $status = $folder['name'];
                 $animes = $folder['data']['item'];
@@ -172,6 +180,7 @@ class ProcessMALImport implements ShouldQueue
                 }
             }
         } else {
+            $this->fail('Unsupported anime import file structure.');
             return false;
         }
 
@@ -186,15 +195,15 @@ class ProcessMALImport implements ShouldQueue
      */
     public function handleManga(array $json): bool
     {
-        // Wipe current library if behavior is set to overwrite
-        if ($this->behavior->value === ImportBehavior::Overwrite) {
-            $this->user->clearLibrary(Manga::class);
-            $this->user->clearFavorites(Manga::class);
-            $this->user->mangaRatings()->forceDelete();
-        }
-
-        // Loop through the anime in the export file
         if (isset($json['manga'])) {
+            // Wipe current manga library if behavior is set to overwrite
+            if ($this->behavior->value === ImportBehavior::Overwrite) {
+                $this->user->clearLibrary(Manga::class);
+                $this->user->clearFavorites(Manga::class);
+                $this->user->mangaRatings()->forceDelete();
+            }
+
+            // Loop through the manga in the export file
             foreach ($json['manga'] as $manga) {
                 $mangaId = $manga['manga_mangadb_id'];
                 $status = $manga['my_status'];
@@ -206,6 +215,7 @@ class ProcessMALImport implements ShouldQueue
                 $this->importModel($mangaId, $status, $rating, $startDate, $endDate);
             }
         } else {
+            $this->fail('Unsupported manga import file structure.');
             return false;
         }
 
@@ -226,9 +236,9 @@ class ProcessMALImport implements ShouldQueue
         // Try to find the model in our DB
         $model = match ($this->libraryKind->value) {
             UserLibraryKind::Manga => Manga::withoutGlobalScopes()
-                ->firstWhere('mal_id', $malID),
+                ->firstWhere('mal_id', '=', $malID),
             default => Anime::withoutGlobalScopes()
-                ->firstWhere('mal_id', $malID)
+                ->firstWhere('mal_id', '=', $malID)
         };
 
         // If a match was not found
@@ -252,7 +262,7 @@ class ProcessMALImport implements ShouldQueue
             };
 
             if (empty($model)) {
-                logger($this->libraryKind->description . ' mal_id: ' . $malID . ' not exist');
+                logger($this->libraryKind->description . ' mal_id: ' . $malID . ' does not exist');
                 $this->registerFailure($malID, 'MAL ID could not be found.');
                 return;
             }
@@ -370,11 +380,11 @@ class ProcessMALImport implements ShouldQueue
      * Registers a success in the import process.
      *
      * @param mixed $modelID
-     * @param int $malID
-     * @param string $status
-     * @param int $rating
+     * @param int   $malID
+     * @param mixed $status
+     * @param int   $rating
      */
-    protected function registerSuccess(mixed $modelID, int $malID, string $status, int $rating): void
+    protected function registerSuccess(mixed $modelID, int $malID, mixed $status, int $rating): void
     {
         $this->results['successful'][] = [
             'library'   => $this->libraryKind->description,
@@ -388,7 +398,7 @@ class ProcessMALImport implements ShouldQueue
     /**
      * Registers a failure in the import process.
      *
-     * @param int $malID
+     * @param int    $malID
      * @param string $reason
      */
     protected function registerFailure(int $malID, string $reason): void

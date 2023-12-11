@@ -14,7 +14,13 @@ use App\Http\Controllers\Web\TwoFactorAuthenticationController;
 use App\Http\Controllers\Web\TwoFactorQrCodeController;
 use App\Http\Controllers\Web\TwoFactorSecretKeyController;
 use App\Http\Controllers\Web\VerifyEmailController;
+use App\Http\Livewire\MergeLibrary;
 use Illuminate\Support\Facades\Route;
+
+// Merge library
+Route::get('/merge-library', MergeLibrary::class)
+    ->middleware(['auth'])
+    ->name('merge-library');
 
 // Sign In
 Route::get('/sign-in', [AuthenticatedSessionController::class, 'create'])
@@ -39,7 +45,7 @@ Route::post('/sign-up', [SignUpUserController::class, 'store'])
 Route::prefix('/siwa')
     ->name('siwa')
     ->group(function () {
-        Route::get('/sign-in', [SignInWithAppleController::class, 'signIn'])
+        Route::post('/sign-in', [SignInWithAppleController::class, 'signIn'])
             ->middleware(['guest'])
             ->name('.sign-in');
 

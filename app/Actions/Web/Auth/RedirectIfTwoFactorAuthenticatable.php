@@ -51,6 +51,7 @@ class RedirectIfTwoFactorAuthenticatable
             in_array(TwoFactorAuthenticatable::class, class_uses_recursive($user))) {
             return $this->twoFactorChallengeResponse($request, $user);
         }
+
         return $next($request);
     }
 
@@ -114,6 +115,7 @@ class RedirectIfTwoFactorAuthenticatable
         $request->session()->put([
             'sign-in.id' => $user->getKey(),
             'sign-in.remember' => $request->filled('remember'),
+            'sign-in.has-local-library' => $request->filled('hasLocalLibrary'),
         ]);
 
         TwoFactorAuthenticationChallenged::dispatch($user);

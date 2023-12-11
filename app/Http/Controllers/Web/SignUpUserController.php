@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Actions\Web\Auth\AttemptToAuthenticate;
 use App\Actions\Web\Auth\PrepareAuthenticatedSession;
+use App\Actions\Web\Auth\RedirectIfHasLocalLibrary;
 use App\Enums\MediaCollection;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Web\SignUpRequest;
@@ -81,6 +82,7 @@ class SignUpUserController extends Controller
         return (new Pipeline(app()))->send($request)->through(array_filter([
             AttemptToAuthenticate::class,
             PrepareAuthenticatedSession::class,
+            RedirectIfHasLocalLibrary::class,
         ]));
     }
 }

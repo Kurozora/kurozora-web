@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Web\Auth;
 
 use App\Actions\Web\Auth\PrepareAuthenticatedSession;
+use App\Actions\Web\Auth\RedirectIfHasLocalLibrary;
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Exception;
 use Hash;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -19,12 +19,16 @@ class SignInWithAppleController extends Controller
     /**
      * Show the sign in view.
      *
+     * @param Request $request
+     *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     * @throws Exception
      */
-    public function signIn(): \Symfony\Component\HttpFoundation\RedirectResponse
+    public function signIn(Request $request): \Symfony\Component\HttpFoundation\RedirectResponse
     {
-        return Socialite::driver('apple')->redirect();
+        session(['hasLocalLibrary' => $request->boolean('hasLocalLibrary')]);
+
+        return Socialite::driver('apple')
+            ->redirect();
     }
 
     /**
@@ -35,6 +39,9 @@ class SignInWithAppleController extends Controller
      */
     public function callback(Request $request): RedirectResponse
     {
+        $request->merge(['hasLocalLibrary' => session('hasLocalLibrary')]);
+        session()->forget(['hasLocalLibrary']);
+
         $socialiteUser = Socialite::driver('apple')->user();
 
         // Sign in user
@@ -55,6 +62,7 @@ class SignInWithAppleController extends Controller
         return (new Pipeline(app()))->send($request)->through(array_filter([
             $this->authenticateUser($socialiteUser),
             PrepareAuthenticatedSession::class,
+            RedirectIfHasLocalLibrary::class,
         ]));
     }
 

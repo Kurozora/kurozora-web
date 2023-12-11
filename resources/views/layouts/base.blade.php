@@ -54,6 +54,7 @@
         <script src="{{ url(mix('js/manifest.js')) }}" defer></script>
         <script src="{{ url(mix('js/vendor.js')) }}" defer></script>
         <script src="{{ url(mix('js/app.js')) }}" defer></script>
+        <script src="{{ url(mix('js/db.js')) }}"></script>
         @if (app()->isLocal())
             <script src="{{ url(mix('js/debug.js')) }}" defer></script>
         @endif
@@ -116,7 +117,7 @@
 
         <livewire:navigation-dropdown />
 
-        @if(Session::has('success'))
+        @if (Session::has('success'))
             <x-alert :message="Session::get('success')"></x-alert>
         @endif
 

@@ -20,6 +20,7 @@ mix.options({
 mix.extract()
     .js('resources/js/app.js', 'public/js/app.js')
     .js('resources/js/debug.js', 'public/js/debug.js')
+    .js('resources/js/db.js', 'public/js/db.js')
     .js('resources/js/chat.js', 'public/js/chat.js')
     .js('resources/js/listen.js', 'public/js/listen.js')
     .js('resources/js/watch.js', 'public/js/watch.js')

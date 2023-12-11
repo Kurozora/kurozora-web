@@ -39,10 +39,11 @@ class AttemptToAuthenticate
     {
         if (auth()->attempt(
             $request->only('email', 'password'),
-            $request->filled('remember'))
+            $request->boolean('remember'))
         ) {
             return $next($request);
         }
+
         $this->throwFailedAuthenticationException($request);
     }
 
