@@ -18,6 +18,7 @@ mix.options({
 })
 
 mix.extract()
+    .js('resources/js/service-worker.js', 'public/service-worker.js')
     .js('resources/js/app.js', 'public/js/app.js')
     .js('resources/js/debug.js', 'public/js/debug.js')
     .js('resources/js/db.js', 'public/js/db.js')

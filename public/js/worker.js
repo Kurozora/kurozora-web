@@ -1,2 +1,2 @@
-(self.webpackChunk=self.webpackChunk||[]).push([[998],{808:()=>{"serviceWorker"in navigator&&window.addEventListener("load",(function(){navigator.serviceWorker.register("/service-worker.js").catch((function(r){console.error("Error registering service worker:",r)}))}))}},r=>{var e;e=808,r(r.s=e)}]);
+(self.webpackChunk=self.webpackChunk||[]).push([[998],{808:()=>{"serviceWorker"in navigator&&window.addEventListener("load",(function(){navigator.serviceWorker.register("/service-worker.js").then((function(e){console.log("Service worker registered:",e)})).catch((function(e){console.error("Error registering service worker:",e)}))}))}},e=>{var r;r=808,e(e.s=r)}]);
 //# sourceMappingURL=worker.js.map

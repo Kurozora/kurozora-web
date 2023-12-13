@@ -3,27 +3,66 @@
     "short_name": "Kurozora",
     "description": "Your one-stop shop for everything anime!",
     "categories": ["entertainment", "productivity", "lifestyle"],
-    "dir": "rtl",
+    "dir": "auto",
     "lang": "en",
     "scope": "/",
+    "id": "?pwa=1",
     "start_url": "/",
+    "scope_extensions": [
+        {"origin": "*.kurozora.app"},
+        {"origin": "kurozora.com"},
+        {"origin": "*.kurozora.com"}
+    ],
     "display": "standalone",
     "display_override": ["window-controls-overlay"],
     "background_color": "#353A50",
     "theme_color": "#FF9300",
     "orientation": "any",
+    "launch_handler": {
+        "client_mode": ["navigate-existing", "auto"]
+    },
+    "handle_links": "auto",
+    "edge_side_panel": {},
+    "screenshots": [
+        {
+            "src": "images/static/screenshots/desktop/1.webp",
+            "sizes": "1280x800",
+            "type": "image/webp",
+            "form_factor": "wide",
+            "label": "The explore page on Kurozora showcasing curated lists of anime, manga, and games."
+        },
+        {
+            "src": "images/static/screenshots/mobile/1.webp",
+            "sizes": "480x800",
+            "type": "image/webp",
+            "form_factor": "narrow",
+            "label": "The explore page on Kurozora showcasing curated lists of anime, manga, and games."
+        }
+    ],
     "icons": [
         {
             "src": "images/static/icon/app_icon.png",
-            "sizes": "any",
+            "sizes": "512x512",
             "type": "image/png",
             "purpose": "any"
         },
         {
+            "src": "images/static/icon/app_icon.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        },
+        {
             "src": "images/static/icon/app_icon.webp",
-            "sizes": "any",
+            "sizes": "512x512",
             "type": "image/webp",
-            "purpose": "any maskable"
+            "purpose": "any"
+        },
+        {
+            "src": "images/static/icon/app_icon.webp",
+            "sizes": "512x512",
+            "type": "image/webp",
+            "purpose": "maskable"
         }
     ],
     "shortcuts": [
