@@ -86,6 +86,8 @@ class GenerateEpisodes extends Command
 
                         foreach (range(1, $anime->episode_count) as $count) {
                             $startedAt = $sameDayRelease ? $season->started_at->setTimezone('UTC') : $season->started_at->addWeeks($count - 1)->setTimezone('UTC');
+                            $endedAt = ($startedAt->copy())
+                                ->addSeconds($anime->duration);
 
                             $episode = $season->episodes()
                                 ->withoutGlobalScopes()
@@ -105,7 +107,7 @@ class GenerateEpisodes extends Command
                                     'is_premiere' => $count == 1,
                                     'is_finale' => $count == $anime->episode_count,
                                     'started_at' => $startedAt,
-                                    'ended_at' => $startedAt->addSeconds($anime->duration),
+                                    'ended_at' => $endedAt,
                                 ]);
                             $episodes[] = $episode;
 
