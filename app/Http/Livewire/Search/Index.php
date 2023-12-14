@@ -182,7 +182,7 @@ class Index extends Component
                 }
             }
 
-            if (empty($wheres)) {
+            if (empty($this->q) && empty($wheres)) {
                 return null;
             }
 
