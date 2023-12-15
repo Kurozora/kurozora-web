@@ -763,10 +763,10 @@ class AnimeProcessor extends CustomItemProcessor
                 $originalTitle = $relation['original_title'];
                 $relatedModel = null;
 
-                // Some relationships are empty URLs, likely due to
-                // the resource being deleted, but the relationship
-                // is not removed correctly.
-                if (empty($malID)) {
+                // Some relationships are empty URLs or a dash "-" as title,
+                // likely due to the resource being deleted, but the
+                // relationship is not removed correctly.
+                if (empty($malID) || empty($originalTitle)) {
                     continue;
                 }
 
