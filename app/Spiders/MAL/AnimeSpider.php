@@ -144,6 +144,7 @@ class AnimeSpider extends BasicSpider
         $openings = $this->cleanSongs($response, 'div[class*="theme-songs opnening"] table'); // typo on the website
         $endings = $this->cleanSongs($response, 'div[class*="theme-songs ending"] table');
 
+        dd('s');
         logger()->channel('stderr')->info('✅️ [MAL_ID:ANIME:' . $id . '] Done parsing');
 
         yield $this->item(new AnimeItem(
@@ -421,10 +422,10 @@ class AnimeSpider extends BasicSpider
                 $artist = empty($artist) ? '' : $artist[0];
 
                 // Get episodes
-                $regex = '/\(.+\)/';
+                $regex = '/\(([^)]+)\)$/';
                 preg_match($regex, $artist, $episodes);
                 $episodes = empty($episodes) ? '' : $episodes[0];
-                $episodes = str($episodes)->remove(['(', 'eps', ')']);
+                $episodes = str($episodes)->remove(['(', 'eps', 'ep', ')']);
 
                 // Done with episode, clean artist string
                 $artist = str($artist)
