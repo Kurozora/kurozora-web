@@ -2,10 +2,8 @@
 
 namespace App\Processors\MAL;
 
-use App\Models\Anime;
 use App\Models\Manga;
 use App\Models\MediaRating;
-use App\Models\MediaStat;
 use App\Spiders\MAL\Models\MangaStatItem;
 use RoachPHP\ItemPipeline\ItemInterface;
 use RoachPHP\ItemPipeline\Processors\CustomItemProcessor;
@@ -27,12 +25,13 @@ final class MangaStatsProcessor extends CustomItemProcessor
         $malID = $item->get('id');
         logger()->channel('stderr')->info('🔄 [MAL_ID:MANGA:' . $malID . '] Processing stats');
 
-        $manga = Manga::withoutGlobalScopes()
+        $manga = Manga::with('mediaStat')
+            ->withoutGlobalScopes()
             ->firstWhere('mal_id', '=', $malID);
         $mediaStat = $manga->mediaStat;
         $scores = $this->cleanScores($item->get('scores') ?? []);
         $scoreAverage = $this->convertScoreAverage($scores, $item->get('scoreAverage') ?? 0.0);
-        $scoreCount = $item->get('scoreCount') ?? 0;
+        $scoreCount = $item->get('scoreCount') ?? $this->ratingCount($scores);
 
 //        dd([
 //            'scores' => $scores,
@@ -40,30 +39,13 @@ final class MangaStatsProcessor extends CustomItemProcessor
 //            'scoreAverage' => $scoreAverage
 //        ]);
 
-        if (empty($mediaStat)) {
-            logger()->channel('stderr')->info('🖨 [MAL_ID:MANGA:' . $malID . '] Creating stats');
-            MediaStat::withoutGlobalScopes()
-                ->create([
-                    'model_type'        => $manga->getMorphClass(),
-                    'model_id'          => $manga->id,
-                    'rating_1'          => $scores['rating_1'] ?? 0,
-                    'rating_2'          => $scores['rating_2'] ?? 0,
-                    'rating_3'          => $scores['rating_3'] ?? 0,
-                    'rating_4'          => $scores['rating_4'] ?? 0,
-                    'rating_5'          => $scores['rating_5'] ?? 0,
-                    'rating_6'          => $scores['rating_6'] ?? 0,
-                    'rating_7'          => $scores['rating_7'] ?? 0,
-                    'rating_8'          => $scores['rating_8'] ?? 0,
-                    'rating_9'          => $scores['rating_9'] ?? 0,
-                    'rating_10'         => $scores['rating_10'] ?? 0,
-                    'rating_average'    => $scoreAverage,
-                    'rating_count'      => $scoreCount,
-                ]);
-            logger()->channel('stderr')->info('✅️ [MAL_ID:MANGA:' . $malID . '] Done creating stats');
-        } else if ($mediaStat->rating_average <= 0) {
+        if ($mediaStat->rating_average <= 0) {
             logger()->channel('stderr')->info('🛠 [MAL_ID:MANGA:' . $malID . '] Updating stats attributes');
 
-            $mediaStat->update([
+            $mediaStat->updateOrInsert([
+                'model_type'        => $manga->getMorphClass(),
+                'model_id'          => $manga->id,
+            ], [
                 'rating_1'          => $scores['rating_1'] ?? 0,
                 'rating_2'          => $scores['rating_2'] ?? 0,
                 'rating_3'          => $scores['rating_3'] ?? 0,
@@ -106,6 +88,23 @@ final class MangaStatsProcessor extends CustomItemProcessor
     }
 
     /**
+     * Sums the number of ratings.
+     *
+     * @param array $scores
+     * @return int
+     */
+    private function ratingCount(array $scores): int
+    {
+        $totalCount = ($scores['rating_1'] ?? 0) + ($scores['rating_2'] ?? 0) +
+            ($scores['rating_3'] ?? 0) + ($scores['rating_4'] ?? 0) +
+            ($scores['rating_5'] ?? 0) + ($scores['rating_6'] ?? 0) +
+            ($scores['rating_7'] ?? 0) + ($scores['rating_8'] ?? 0) +
+            ($scores['rating_9'] ?? 0) + ($scores['rating_10'] ?? 0);
+
+        return $totalCount;
+    }
+
+    /**
      * Converts scale-10 rating to scale-5.
      *
      * @param array $scores
@@ -118,16 +117,11 @@ final class MangaStatsProcessor extends CustomItemProcessor
             return 0.0;
         }
 
-        $totalRatingCount = $scores['rating_1'] ?? 0 + $scores['rating_2'] ?? 0 +
-        $scores['rating_3'] ?? 0 + $scores['rating_4'] ?? 0 +
-        $scores['rating_5'] ?? 0 + $scores['rating_6'] ?? 0 +
-        $scores['rating_7'] ?? 0 + $scores['rating_8'] ?? 0 +
-        $scores['rating_9'] ?? 0 + $scores['rating_10'] ?? 0;
-
+        $totalRatingCount = $this->ratingCount($scores);
         $basicAverageRating = $scoreAverage / 10 * 5;
-        $meanRating = MediaRating::where('model_type', Anime::class)
+        $meanRating = MediaRating::where('model_type', Manga::class)
             ->avg('rating');
-        $weightedRating = ($totalRatingCount / ($totalRatingCount + Anime::MINIMUM_RATINGS_REQUIRED)) * $basicAverageRating + (Anime::MINIMUM_RATINGS_REQUIRED / ($totalRatingCount + Anime::MINIMUM_RATINGS_REQUIRED)) * $meanRating;
+        $weightedRating = ($totalRatingCount / ($totalRatingCount + Manga::MINIMUM_RATINGS_REQUIRED)) * $basicAverageRating + (Manga::MINIMUM_RATINGS_REQUIRED / ($totalRatingCount + Manga::MINIMUM_RATINGS_REQUIRED)) * $meanRating;
 
         return $weightedRating;
     }
