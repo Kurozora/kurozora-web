@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\SongType;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -39,6 +40,22 @@ class MediaSong extends KModel implements Sitemapable
         'order_column_name' => 'position',
         'sort_when_creating' => true,
     ];
+
+    /**
+     * The query used for sorting.
+     *
+     * @return Builder
+     */
+    public function buildSortQuery(): Builder
+    {
+        return static::query()
+            ->withoutGlobalScopes()
+            ->where([
+                ['type', '=', $this->type],
+                ['model_type', '=', $this->model_type],
+                ['model_id', '=', $this->model_id],
+            ]);
+    }
 
     /**
      * The model relationship.
