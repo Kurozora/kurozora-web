@@ -301,8 +301,8 @@ class MangaProcessor extends CustomItemProcessor
         /** @var Stringable[] $attributes */
         foreach ($attributes as $attribute) {
             if ($attribute->startsWith($attributeKey . ':')) {
-                $value = $this->getCleanAttribute($attribute->replaceFirst($attributeKey . ': ', ''));
-
+                $uncleanAttribute = $attribute->replaceFirst($attributeKey . ': ', '');
+                $value = $this->getCleanAttribute($uncleanAttribute);
                 switch ($attributeKey) {
                     case 'Synonyms':
                         return explode(', ', $value);
@@ -337,6 +337,11 @@ class MangaProcessor extends CustomItemProcessor
                     case 'Duration':
                         return $this->getDuration($value);
                     case 'Authors':
+                        if (!empty($value)) {
+                            // Necessary since authors can have special characters, like "?", in their name
+                            $value = $uncleanAttribute;
+                        }
+
                         $authors = explode('),', $value);
                         foreach ($authors as $key => $author) {
                             $authors[$key] = [
