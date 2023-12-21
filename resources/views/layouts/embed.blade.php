@@ -11,13 +11,6 @@
         <meta name="theme-color" content="{{ $darkThemeColor ?? '#353A50'}}" media="(prefers-color-scheme: dark)">
         {{ $meta ?? '' }}
 
-        @desktop
-        @else
-            @if (!empty($appArgument))
-                <meta name="apple-itunes-app" content="app-id={{ config('app.ios.id') }}, app-argument={{ config('app.ios.protocol') }}{{ $appArgument }}" />
-            @endif
-        @enddesktop
-
         @if (empty($title))
             <title>{{ config('app.name') }}</title>
         @else

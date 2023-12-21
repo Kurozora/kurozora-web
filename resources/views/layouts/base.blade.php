@@ -4,6 +4,10 @@
         <meta charset="utf-8" />
         <meta content="Kurozora" name="Author">
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="apple-itunes-app" content="app-id={{ config('app.ios.id') }}, app-argument={{ config('app.ios.protocol') }}{{ $appArgument ?? request()->path() }}" />
+        <meta property="al:ios:url" content="{{ config('app.ios.protocol') }}{{ $appArgument ?? request()->path() }}" />
+        <meta property="al:ios:app_store_id" content="{{ config('app.ios.id') }}" />
+        <meta property="al:ios:app_name" content="{{ config('app.name') }}" />
         <meta property="og:url" content="{{ url()->current() }}" />
         <meta property="og:site_name" content="{{ config('app.name') }}" />
         <meta property="twitter:site" content="{{ '@' . config('social.twitter.username') }}" />
@@ -11,13 +15,6 @@
         <meta name="theme-color" content="{{ $lightThemeColor ?? '#F3F4F6'}}" media="(prefers-color-scheme: light)">
         <meta name="theme-color" content="{{ $darkThemeColor ?? '#353A50'}}" media="(prefers-color-scheme: dark)">
         {{ $meta ?? '' }}
-
-        @desktop
-        @else
-            @if (!empty($appArgument))
-                <meta name="apple-itunes-app" content="app-id={{ config('app.ios.id') }}, app-argument={{ config('app.ios.protocol') }}{{ $appArgument }}" />
-            @endif
-        @enddesktop
 
         @if (empty($title))
             <title>{{ config('app.name') }}</title>
