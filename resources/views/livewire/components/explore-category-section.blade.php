@@ -68,8 +68,8 @@
                             @case(\App\Enums\ExploreCategorySize::Video)
                                 <div class="flex overflow-x-scroll no-scrollbar">
                                     <div class="flex flex-nowrap gap-4">
-                                    @foreach($this->exploreCategoryItems as $aniem)
-                                        <x-lockups.video-lockup :anime="$aniem" />
+                                    @foreach($this->exploreCategoryItems as $anime)
+                                        <x-lockups.video-lockup :anime="$anime" />
                                     @endforeach
                                 </div>
                             @break
