@@ -84,7 +84,7 @@ class MangaSpider extends BasicSpider
      *
      * @var int $requestDelay
      */
-    public int $requestDelay = 1;
+    public int $requestDelay = 4;
 
     /**
      * @param Response $response

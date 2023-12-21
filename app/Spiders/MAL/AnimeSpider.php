@@ -84,7 +84,7 @@ class AnimeSpider extends BasicSpider
      *
      * @var int $requestDelay
      */
-    public int $requestDelay = 2;
+    public int $requestDelay = 4;
 
     /**
      * @param Response $response
@@ -144,7 +144,6 @@ class AnimeSpider extends BasicSpider
         $openings = $this->cleanSongs($response, 'div[class*="theme-songs opnening"] table'); // typo on the website
         $endings = $this->cleanSongs($response, 'div[class*="theme-songs ending"] table');
 
-        dd('s');
         logger()->channel('stderr')->info('✅️ [MAL_ID:ANIME:' . $id . '] Done parsing');
 
         yield $this->item(new AnimeItem(
