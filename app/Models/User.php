@@ -522,7 +522,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     }
 
     /**
-     * Returns the watched Episode items.
+     * Returns the user's watched Episode models.
      *
      * @return BelongsToMany
      */
@@ -532,7 +532,12 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
             ->withTimestamps();
     }
 
-    function user_watched_episode(): HasMany
+    /**
+     * Returns the user's UserWatchedEpisode models.
+     *
+     * @return HasMany
+     */
+    function user_watched_episodes(): HasMany
     {
         return $this->hasMany(UserWatchedEpisode::class);
     }
