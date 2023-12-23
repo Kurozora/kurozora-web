@@ -58,6 +58,7 @@ require 'Web/Notify.php';
 require 'Web/People.php';
 require 'Web/Platforms.php';
 require 'Web/Profile.php';
+require 'Web/Recap.php';
 require 'Web/Syoboi.php';
 require 'Web/Search.php';
 require 'Web/Seasons.php';

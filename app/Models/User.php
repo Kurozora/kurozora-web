@@ -625,6 +625,16 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     }
 
     /**
+     * Get the user's recaps.
+     *
+     * @return HasMany
+     */
+    public function recaps(): HasMany
+    {
+        return $this->hasMany(Recap::class);
+    }
+
+    /**
      * Returns the total amount of reputation the user has
      *
      * @return int

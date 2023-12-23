@@ -20,6 +20,34 @@ if (!function_exists('ordinal_number')) {
     }
 }
 
+if (!function_exists('round_to_nearest_quarter')) {
+    /**
+     * Rounds the given integer to the nearest quarter.
+     *
+     * @param int|float $number
+     *
+     * @return int
+     */
+    function round_to_nearest_quarter(int|float $number): int
+    {
+        if ($number == 0) {
+            return 0; // Special case: 0 is already a multiple of any power of 10
+        }
+
+        $magnitude = pow(10, floor(log10(abs($number)))); // Calculate the magnitude of the number
+
+        if ($number > 100) {
+            $quarter = $magnitude / 4; // Determine the quarter for the current magnitude
+        } else {
+            $quarter = $magnitude;
+        }
+
+        $roundedValue = floor($number / $quarter) * $quarter;
+
+        return (int) $roundedValue;
+    }
+}
+
 if (!function_exists('number_shorten')) {
     /**
      * Shorten the number and append a unit.
@@ -96,7 +124,7 @@ if (!function_exists('create_studio_banner_from')) {
         // Get dimensions, load images and copy to the canvas
         foreach ($images as $key => $image) {
             // Get dimensions of the image
-            list(${'width_' . $key}, ${'height_' . $key}) = getimagesize($image);
+            [${'width_' . $key}, ${'height_' . $key}] = getimagesize($image);
 
             // Load the image
             ${'image_' . $key} = imagecreatefromwebp($image);
