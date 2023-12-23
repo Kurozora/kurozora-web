@@ -78,12 +78,12 @@
                                     x-text="song.attributes.name"
                                 >{{ $song->title }}</p>
                                 <p
-                                    class="text-sm leading-tight text-black/60 line-clamp-2"
+                                    class="text-sm leading-tight opacity-75 line-clamp-2"
                                     x-bind:style="{color: '#' + song.attributes.artwork.textColor2}"
                                     x-text="song.attributes.artistName"
                                 >{{ $song->artist ?? 'Unknown' }}</p>
                                 <p
-                                    class="text-sm leading-tight text-black/60 line-clamp-2"
+                                    class="text-sm leading-tight opacity-75 line-clamp-2"
                                     x-bind:style="{color: '#' + song.attributes.artwork.textColor3}"
                                     x-text="song.attributes.albumName"
                                 ></p>

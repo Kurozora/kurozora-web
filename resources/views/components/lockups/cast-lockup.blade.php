@@ -27,12 +27,12 @@
                 @else
                     <p class="text-orange-500 leading-tight line-clamp-2">{{ __('Unknown') }}</p>
                 @endif
-                <p class="text-xs leading-tight text-black/60 line-clamp-2">{{ __('Voice actor') }}</p>
+                <p class="text-xs leading-tight opacity-75 line-clamp-2">{{ __('Voice actor') }}</p>
             </div>
 
             <div class="flex flex-col text-end gap-1">
                 <a class="leading-tight line-clamp-2" href="{{ route('characters.details', $cast->character) }}">{{ __('as :x', ['x' => $cast->character->name]) }}</a>
-                <p class="text-xs leading-tight text-black/60 line-clamp-2" >{{ $cast->castRole->name }}</p>
+                <p class="text-xs leading-tight opacity-75 line-clamp-2" >{{ $cast->castRole->name }}</p>
             </div>
         </section>
 

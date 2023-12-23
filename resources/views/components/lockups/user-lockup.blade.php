@@ -25,7 +25,7 @@
 
             <div class="pl-2 pr-2">
                 <p class="leading-tight line-clamp-2">{{ $user->username }}</p>
-                <p class="text-xs leading-tight text-black/60">
+                <p class="text-xs leading-tight opacity-75">
                     @auth
                         @if ($followersCount === 0)
                             @if ($user->id === auth()->user()->id)

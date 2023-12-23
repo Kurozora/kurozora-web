@@ -76,12 +76,12 @@
                 @endif
             </a>
 
-            <p class="text-black/60 line-clamp-2" x-text="artistName"></p>
+            <p class="opacity-75 line-clamp-2" x-text="artistName"></p>
             @if ($anime && $showModel)
                 <x-simple-link class="text-sm" href="{{ route('anime.details', $anime) }}">{{ $anime->title }}</x-simple-link>
             @endif
             @if (!empty($episodes) && $showEpisodes)
-                <p class="text-sm text-black/60 line-clamp-2">{{ __('Episodes: :x', ['x' => $episodes]) }}</p>
+                <p class="text-sm opacity-75 line-clamp-2">{{ __('Episodes: :x', ['x' => $episodes]) }}</p>
             @endif
             </div>
         </div>

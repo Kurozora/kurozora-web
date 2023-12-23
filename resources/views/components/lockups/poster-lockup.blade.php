@@ -16,25 +16,25 @@
 
         <div class="flex flex-col gap-1 justify-between">
             <div>
-                <p class="text-xs leading-tight text-black/60 line-clamp-2">{{ __('Season') . ' ' . $season->number }}</p>
+                <p class="text-xs leading-tight opacity-75 line-clamp-2">{{ __('Season') . ' ' . $season->number }}</p>
                 <p class="leading-tight line-clamp-2">{{ $season->title }}</p>
             </div>
 
             <div class="flex flex-wrap gap-1.5 justify-between">
                 <div class="flex flex-wrap w-full justify-between">
-                    <p class="text-sm text-black/60">{{ __('Premiere') }}</p>
+                    <p class="text-sm opacity-75">{{ __('Premiere') }}</p>
                     <p class="text-sm">{{ $season->started_at?->toFormattedDateString() }}</p>
                 </div>
                 <x-hr />
 
                 <div class="flex flex-wrap w-full justify-between">
-                    <p class="text-sm text-black/60">{{ __('Episodes') }}</p>
+                    <p class="text-sm opacity-75">{{ __('Episodes') }}</p>
                     <p class="text-sm">{{ $season->episodes_count }}</p>
                 </div>
                 <x-hr />
 
                 <div class="flex flex-wrap w-full justify-between">
-                    <p class="text-sm text-black/60">{{ __('Score') }}</p>
+                    <p class="text-sm opacity-75">{{ __('Score') }}</p>
                     <p class="text-sm">0.00</p>
                 </div>
             </div>
