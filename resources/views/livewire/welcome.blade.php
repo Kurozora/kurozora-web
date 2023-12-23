@@ -526,7 +526,7 @@
                             x-show="expanded"
                             x-collapse
                         >
-                            {{ __('Kurozora is an anime discovering service that offers unlimited access to a growing collection of over 20,000 anime — featuring new releases, award winners, and beloved favorites. Kurozora also includes manga, and anime related music and games — all without ads. You can track anime on iPhone, iPad, iPod touch, Mac, and through any web browser.') }}
+                            {{ __('Kurozora is an open-source anime, manga, game and music discovery service that offers unlimited access to a growing collection of over 90,000 Japanese media combined — featuring new releases, award winners, and beloved favorites. Kurozora also includes episodes, characters, voice actors, staff, studios, and much more — all without ads. You can track what you’re watching, reading, playing, and listening to on iPhone, iPad, iPod touch, Mac, and through any web browser.') }}
                         </p>
                     </div>
                 </li>
@@ -586,7 +586,7 @@
                             x-show="expanded"
                             x-collapse
                         >
-                            <p>{{ __('New anime and other content updates are added to Kurozora every week. To preview upcoming releases, look for the Upcoming Shows section in the Explore tab on Kurozora.') }}</p>
+                            <p>{{ __('New anime, manga, games, music and other content updates are added to Kurozora every day. To preview upcoming releases, look for the Upcoming section in the Explore tab on Kurozora.') }}</p>
                         </div>
                     </div>
                 </li>
@@ -602,10 +602,10 @@
                             x-show="expanded"
                             x-collapse
                         >
-                            <p>{{ __('You can download the app on') }} <x-link target="_blank" href="{{ config('app.ios.store_url') }}">App Store</x-link> {{ __('on your favorite Apple device. Kurozora works on iPhone, iPad, iPod Touch and Mac.') }}</p>
+                            <p>{{ __('You can download the app on the') }} <x-link target="_blank" href="{{ config('app.ios.store_url') }}">App Store</x-link> {{ __('on your favorite Apple device. Kurozora works on iPhone, iPad, iPod Touch and Mac.') }}</p>
                             <br />
                             <br />
-                            <p>{{ __('Kurozora can also be used on all other devices through the website at') }} <x-link href="{{ route('home') }}">kurozora.app</x-link>.</p>
+                            <p>{{ __('Kurozora can also be used on all other devices through the website, or as a Progressive Web App (PWA), at') }} <x-link href="{{ route('home') }}">kurozora.app</x-link>.</p>
                         </div>
                     </div>
                 </li>
