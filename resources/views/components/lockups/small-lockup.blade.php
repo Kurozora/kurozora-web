@@ -1,4 +1,4 @@
-@props(['anime', 'manga', 'game', 'relation', 'rank', 'isRanked' => false, 'isRow' => true])
+@props(['anime', 'manga', 'game', 'relation', 'rank', 'trackingEnabled' => true, 'isRanked' => false, 'isRow' => true])
 
 @php
     $class = $isRow ? 'pb-2 shrink-0 snap-normal snap-center' : '';
@@ -40,8 +40,8 @@
 {{--                        <p class="text-xs leading-tight opacity-75 line-clamp-2">{{ __($anime->started_at?->year) }}</p>--}}
                     </div>
 
-                    @if (!empty($anime->mediaStat?->rating_count))
-                        <div class="inline-flex my-auto">
+                    @if (!empty($anime->mediaStat?->rating_count) && $trackingEnabled)
+                        <div class="inline-flex items-center gap-1 my-auto">
                             <p class="text-sm font-bold text-orange-500">{{ number_format($anime->mediaStat?->rating_average ?? 0, 1) }}</p>
 
                             <livewire:anime.star-rating :rating="$anime->mediaStat?->rating_average" :star-size="'sm'" :disabled="true" wire:key="{{ uniqid(more_entropy: true) }}" />
@@ -49,7 +49,9 @@
                     @endif
                 </div>
 
-                <livewire:components.library-button :model="$anime" wire:key="{{ uniqid($anime->id, true) }}" />
+                @if ($trackingEnabled)
+                    <livewire:components.library-button :model="$anime" wire:key="{{ uniqid($anime->id, true) }}" />
+               @endif
             </div>
         </div>
     @elseif(!empty($game))
@@ -87,8 +89,8 @@
 {{--                        <p class="text-xs leading-tight opacity-75 line-clamp-2">{{ __($game->published_at?->year) }}</p>--}}
                     </div>
 
-                    @if (!empty($game->mediaStat?->rating_count))
-                        <div class="inline-flex my-auto">
+                    @if (!empty($game->mediaStat?->rating_count) && $trackingEnabled)
+                        <div class="inline-flex items-center gap-1 my-auto">
                             <p class="text-sm font-bold text-orange-500">{{ number_format($game->mediaStat?->rating_average ?? 0, 1) }}</p>
 
                             <livewire:game.star-rating :rating="$game->mediaStat?->rating_average" :star-size="'sm'" :disabled="true" wire:key="{{ uniqid(more_entropy: true) }}" />
@@ -96,7 +98,9 @@
                     @endif
                 </div>
 
-                <livewire:components.library-button :model="$game" wire:key="{{ uniqid($game->id, true) }}" />
+                 @if ($trackingEnabled)
+                    <livewire:components.library-button :model="$game" wire:key="{{ uniqid($game->id, true) }}" />
+                 @endif
             </div>
         </div>
     @elseif(!empty($manga))
@@ -140,8 +144,8 @@
 {{--                        <p class="text-xs leading-tight opacity-75 line-clamp-2">{{ __($manga->started_at?->year) }}</p>--}}
                     </div>
 
-                    @if (!empty($manga->mediaStat?->rating_count))
-                        <div class="inline-flex my-auto">
+                    @if (!empty($manga->mediaStat?->rating_count) && $trackingEnabled)
+                        <div class="inline-flex items-center gap-1 my-auto">
                             <p class="text-sm font-bold text-orange-500">{{ number_format($manga->mediaStat?->rating_average ?? 0, 1) }}</p>
 
                             <livewire:manga.star-rating :rating="$manga->mediaStat?->rating_average" :star-size="'sm'" :disabled="true" wire:key="{{ uniqid(more_entropy: true) }}" />
@@ -149,7 +153,9 @@
                     @endif
                 </div>
 
-                <livewire:components.library-button :model="$manga" wire:key="{{ uniqid($manga->id, true) }}" />
+                @if ($trackingEnabled)
+                    <livewire:components.library-button :model="$manga" wire:key="{{ uniqid($manga->id, true) }}" />
+                @endif
             </div>
         </div>
     @endif
