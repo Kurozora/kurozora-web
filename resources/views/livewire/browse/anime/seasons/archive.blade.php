@@ -71,24 +71,24 @@
     </div>
 
     <script>
-        // When the user scrolls the page, execute stickyHeader
-        window.onscroll = function() { stickyHeader() };
-
         // Get the header
-        const mediaTypeHeader = document.getElementById('mediaTypeHeader');
-        const tableHeader = document.getElementById('tableHeader');
+        const mediaTypeHeader = document.getElementById('mediaTypeHeader')
+        const tableHeader = document.getElementById('tableHeader')
 
         // Get the offset position of the navbar
-        const sticky = mediaTypeHeader.offsetTop;
+        const sticky = mediaTypeHeader.offsetTop
+
+        // When the user scrolls the page, execute stickyHeader
+        window.onscroll = function() { stickyHeader() }
 
         // Add the sticky class to the headers when you reach its scroll position. Remove "sticky" when you leave the scroll position
         function stickyHeader() {
             if (window.scrollY > sticky) {
-                mediaTypeHeader.classList.add('sticky', 'top-0', 'border-b-2');
+                mediaTypeHeader.classList.add('sticky', 'top-0', 'border-b-2')
                 tableHeader.classList.add('sticky')
                 tableHeader.setAttribute('style', 'top:' + mediaTypeHeader.offsetHeight + 'px;')
             } else {
-                mediaTypeHeader.classList.remove('sticky', 'top-0', 'border-b-2');
+                mediaTypeHeader.classList.remove('sticky', 'top-0', 'border-b-2')
                 tableHeader.classList.remove('sticky')
                 tableHeader.removeAttribute('style')
             }
