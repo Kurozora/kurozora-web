@@ -92,6 +92,8 @@
                 x-collapse.duration.400ms=""
                 x-on:click="isNavOpen = !isNavOpen"
             >
+                <div class="fixed top-0 left-0 bottom-0 right-0 blur backdrop-blur" style="z-index: -1;"></div>
+
                 <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6">
                     <ul class="m-0 mb-4">
                         <li class="pb-10">
@@ -124,6 +126,7 @@
         x-show="!loadingScreenEnabled"
     >
         <div class="fixed top-0 left-0 bottom-0 right-0 blur" style="background: url('{{ asset('images/static/star_bg_lg.jpg') }}') no-repeat center center; background-size: cover; margin: -1rem; z-index: -1;"></div>
+        <div class="fixed top-0 left-0 bottom-0 right-0 blur backdrop-blur" style="z-index: -1;"></div>
 
         @if ($this->recaps->count())
             {{-- rand() is necessary to make it re-render and run x-init --}}
@@ -333,6 +336,7 @@
         x-show="loadingScreenEnabled"
     >
         <div class="fixed top-0 left-0 bottom-0 right-0 blur" style="background: url('{{ asset('images/static/star_bg_lg.jpg') }}') no-repeat center center; background-size: cover; margin: -1rem; z-index: -1;"></div>
+        <div class="fixed top-0 left-0 bottom-0 right-0 blur backdrop-blur" style="z-index: -1;"></div>
 
         <div class="flex flex-col items-center justify-center w-full h-screen text-center">
             <p class="animate-pulse text-5xl font-black">{{ __('This is your Re:CAP.') }}</p>
