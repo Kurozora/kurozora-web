@@ -17,7 +17,7 @@
     <x-slot:meta>
         <meta property="og:title" content="{{ __('Re:CAP :x', ['x' => $this->year]) }} — {{ config('app.name') }}" />
         <meta property="og:description" content="{{ __('Look back at the top anime, manga, games and songs that defined your year. Discover your personalized :x Kurozora Re:CAP.', ['x' => $this->year]) }}" />
-        <meta property="og:image" content="{{ asset('images/static/promotional/social_preview_icon_only.webp') }}" />
+        <meta property="og:image" content="{{ asset('images/static/banners/kurozora_recap_23.webp') }}" />
         <meta property="og:type" content="website" />
     </x-slot:meta>
 
