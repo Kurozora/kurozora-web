@@ -20,8 +20,10 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->year('year');
             $table->string('type');
-            $table->unsignedSmallInteger('total_count')->default(0);
-            $table->unsignedBigInteger('total_duration')->default(0);
+            $table->unsignedSmallInteger('total_type_count')->default(0);
+            $table->unsignedBigInteger('total_parts_count')->default(0);
+            $table->unsignedBigInteger('total_parts_duration')->default(0);
+            $table->decimal('top_percentile', 5)->default(0.00);
             $table->timestamps();
             $table->softDeletes();
         });
