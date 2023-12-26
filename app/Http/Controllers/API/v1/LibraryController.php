@@ -139,12 +139,6 @@ class LibraryController extends Controller
             };
         }
 
-        // Decide if the tracking ended
-        $endedAt = match ($userLibraryStatus->value) {
-            UserLibraryStatus::Completed => now(),
-            default => null
-        };
-
         // Update or create the user library entry
         UserLibrary::updateOrCreate([
             'user_id' => $user->id,
@@ -152,7 +146,6 @@ class LibraryController extends Controller
             'trackable_id' => $model->id,
         ], [
             'status' => $userLibraryStatus->value,
-            'ended_at' => $endedAt
         ]);
 
         // Decide the value of isReminded

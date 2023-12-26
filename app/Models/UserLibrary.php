@@ -46,12 +46,16 @@ class UserLibrary extends KModel
             // Check if the anime needs an end date
             switch ($model->status) {
                 case UserLibraryStatus::InProgress:
+                    $originalStatus = $model->getOriginal('status');
+                    $model->started_at = ($originalStatus == UserLibraryStatus::Planning || $model->started_at == null) ? now() : $model->started_at;
+                    $model->ended_at = null;
+                    break;
+                case UserLibraryStatus::Dropped:
                 case UserLibraryStatus::OnHold:
                     $model->started_at = $model->started_at ?? now();
                     $model->ended_at = null;
                     break;
                 case UserLibraryStatus::Completed:
-                case UserLibraryStatus::Dropped:
                     $model->started_at = $model->started_at ?? now();
                     $model->ended_at = $model->ended_at ?? now();
                     break;

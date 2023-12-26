@@ -75,30 +75,14 @@ class LibraryButton extends Component
             // Reset dropdown to "ADD".
             $this->libraryStatus = -1;
         } else {
-            $startDate = match ($this->libraryStatus) {
-                UserLibraryStatus::InProgress => now(),
-                UserLibraryStatus::Planning => null,
-                default => -1
-            };
-            $endDate = match ($this->libraryStatus) {
-                UserLibraryStatus::Completed => now(),
-                default => null
-            };
-            $values = [
-                'status' => $this->libraryStatus,
-                'ended_at' => $endDate
-            ];
-
-            if ($startDate != -1) {
-                $values['started_at'] = $startDate;
-            }
-
             // Update or create the user library entry.
             UserLibrary::updateOrCreate([
                 'user_id' => $user->id,
                 'trackable_type' => $this->model->getMorphClass(),
                 'trackable_id' => $this->model->id
-            ], $values);
+            ], [
+                'status' => $this->libraryStatus,
+            ]);
         }
 
         // Notify other components of an update in the model's data.
