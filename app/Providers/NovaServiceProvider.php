@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use App\Http\Controllers\Web\Nova\SignInController;
 use App\Models\User;
 use App\Nova\Dashboards\Main;
 use App\Nova\Dashboards\UserInsights;
@@ -14,7 +13,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use KABBOUCHI\LogsTool\LogsTool;
 use Laravel\Nova\Actions\ActionEvent;
-use Laravel\Nova\Http\Controllers\LoginController;
 use Laravel\Nova\Nova;
 use Laravel\Nova\NovaApplicationServiceProvider;
 use Stepanenko3\NovaCommandRunner\CommandRunnerTool;
@@ -31,9 +29,6 @@ if (class_exists('Laravel\Nova\NovaApplicationServiceProvider')) {
         public function boot(): void
         {
             parent::boot();
-
-            // Register custom sign-in controller
-            $this->app->alias(SignInController::class, LoginController::class);
 
             // Breadcrumbs
             Nova::withBreadcrumbs();
