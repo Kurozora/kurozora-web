@@ -97,6 +97,10 @@
       "description": "All legal endpoints"
     },
     {
+      "name": "myanimelist",
+      "description": "Endpoints for finding anime or manga using the MyAnimeList ID"
+    },
+    {
       "name": "misc",
       "description": "All other endpoints"
     }
@@ -4943,6 +4947,98 @@
         "responses": {
           "200": {
             "$ref": "#/components/responses/GetTermsOfUseSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/myanimelist/anime/{malID}": {
+      "get": {
+        "security": [
+          {
+          },
+          {
+            "bearerAuth": [
+            ]
+          }
+        ],
+        "tags": [
+          "myanimelist"
+        ],
+        "operationId": "getMyAnimeListAnime",
+        "summary": "(optional authentication) Anime details.",
+        "description": "This endpoint will retrieve the details of an Anime item using the MyAnimeList ID.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "malID",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "MyAnimeList ID of the anime."
+          },
+          {
+            "in": "query",
+            "name": "include[]",
+            "schema": {
+              "$ref": "#/components/schemas/AnimeRelation"
+            },
+            "required": false,
+            "description": "The relations to include in the response."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetAnimeSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/myanimelist/manga/{malID}": {
+      "get": {
+        "security": [
+          {
+          },
+          {
+            "bearerAuth": [
+            ]
+          }
+        ],
+        "tags": [
+          "myanimelist"
+        ],
+        "operationId": "getMyAnimeListManga",
+        "summary": "(optional authentication) Manga details.",
+        "description": "This endpoint will retrieve the details of an Manga item using the MyAnimeList ID.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "malID",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "MyAnimeList ID of the manga."
+          },
+          {
+            "in": "query",
+            "name": "include[]",
+            "schema": {
+              "$ref": "#/components/schemas/MangaRelation"
+            },
+            "required": false,
+            "description": "The relations to include in the response."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetMangaSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
