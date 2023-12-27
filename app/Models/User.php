@@ -412,10 +412,10 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     function getCalendar(): string
     {
         /** @var Anime[] $animes */
-        $animes = $this->reminderAnime()->get();
+        $animes = $this->reminderAnime;
 
         // Find location of cached data
-        $cacheKey = self::TABLE_NAME . '-name-reminders-id-' . $this->id . '-reminder_count-' . count($animes);
+        $cacheKey = self::TABLE_NAME . '-name-reminders-id-' . $this->id . '-reminder_count-' . $animes->count();
 
         // Retrieve or save cached result
         return Cache::remember($cacheKey, self::CACHE_KEY_CALENDAR_SECONDS, function() use ($animes) {
@@ -432,12 +432,8 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
                 ->appendProperty(TextProperty::create('ORGANIZER', 'kurozoraapp@gmail.app')
                     ->addParameter(Parameter::create('CN', 'Kurozora')));
 
-            $startDate = now()->startOfWeek()->subWeeks(1);
-            $endDate = now()->endOfWeek()->addWeeks(2);
-            $whereBetween = [$startDate, $endDate];
-
             foreach ($animes as $anime) {
-                $episodes = $anime->getEpisodes($whereBetween);
+                $episodes = $anime->episodes;
 
                 foreach ($episodes as $episode) {
                     $uniqueIdentifier = Uuid::uuid4() . '@kurozora.app';
@@ -447,7 +443,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
 
                     // Create event
                     $calendarEvent = Event::create($eventName)
-                        ->description($episode->synopsis)
+                        ->description($episode->synopsis ?? $anime->synopsis ?? '')
                         ->organizer('reminder@kurozora.app', 'Kurozora')
                         ->startsAt($startsAt)
                         ->endsAt($endsAt)

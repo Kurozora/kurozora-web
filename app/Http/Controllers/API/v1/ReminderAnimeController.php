@@ -11,6 +11,7 @@ use App\Http\Resources\AnimeResourceBasic;
 use App\Http\Resources\GameResourceBasic;
 use App\Http\Resources\LiteratureResourceBasic;
 use App\Models\Anime;
+use App\Models\Episode;
 use App\Models\Game;
 use App\Models\Manga;
 use App\Traits\Model\Remindable;
@@ -45,7 +46,7 @@ class ReminderAnimeController extends Controller
         $userReminders = $user->reminderAnime()
             ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating', 'mediaRatings' => function ($query) use ($user) {
                 $query->where([
-                    ['user_id', '=', $user->id]
+                    ['user_id', '=', $user->id],
                 ]);
             }, 'library' => function ($query) use ($user) {
                 $query->where('user_id', '=', $user->id);
@@ -78,7 +79,7 @@ class ReminderAnimeController extends Controller
         // Show successful response
         return JSONResult::success([
             'data' => $data,
-            'next' => empty($nextPageURL) ? null : $nextPageURL
+            'next' => empty($nextPageURL) ? null : $nextPageURL,
         ]);
     }
 
@@ -126,8 +127,8 @@ class ReminderAnimeController extends Controller
 
         return JSONResult::success([
             'data' => [
-                'isReminded' => !$isAlreadyReminded
-            ]
+                'isReminded' => !$isAlreadyReminded,
+            ],
         ]);
     }
 
@@ -146,13 +147,28 @@ class ReminderAnimeController extends Controller
             throw new AuthorizationException(__('Reminders are only available to subscribed users.'));
         }
 
+        $startDate = now()->startOfWeek()->subWeeks(1);
+        $endDate = now()->endOfWeek()->addWeeks(2);
+        $whereBetween = [$startDate, $endDate];
+
+        $user = $user->load([
+            'reminderAnime' => function ($query) use ($whereBetween) {
+                $query->with([
+                    'translations',
+                    'episodes' => function ($query) use ($whereBetween) {
+                        $query->with(['translations'])
+                            ->whereBetween(Episode::TABLE_NAME . '.started_at', $whereBetween);
+                    },
+                ]);
+            },
+        ]);
         $calendarExportStream = $user->getCalendar();
 
         // Headers to return for the download
         $headers = [
             'Content-type'          => 'text/calendar',
             'Content-Disposition'   => sprintf('attachment; filename=%s', $user->username. '-reminder.ics'),
-            'Content-Length'        => strlen($calendarExportStream)
+            'Content-Length'        => strlen($calendarExportStream),
         ];
 
         // Return the file
