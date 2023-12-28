@@ -206,6 +206,15 @@ class User extends Resource
 
             BelongsTo::make('Language'),
 
+            Boolean::make('Is Developer')
+                ->help('Indicates whether the user is an active Kurozora developer.'),
+
+            Boolean::make('Is Staff')
+                ->help('Indicates whether the user is a Kurozora staff.'),
+
+            Boolean::make('Is Early Supporter')
+                ->help('Indicates whether the user was one of the early 100 Kurozora users.'),
+
             Boolean::make('Is Pro')
                 ->help('Indicates whether the user has bought Kurozora Pro.'),
 
@@ -213,17 +222,17 @@ class User extends Resource
                 ->help('Indicates whether the user is subscribed to Kurozora+ services.'),
 
             Boolean::make('Is Verified')
-                ->help('Indicates whether the user is verified, because it’s notable in animators, voice actors, entertainment studios, or another designated category.'),
+                ->help('Indicates whether the user is verified, because they’re notable in animators, voice actors, entertainment studios, or another designated category.'),
 
             Date::make('Subscribed At')
                 ->hideFromIndex()
                 ->help('The date time the user subscribed at.'),
 
-            Date::make('Anime Imported At', 'anime_import_at')
+            Date::make('Anime Imported At')
                 ->hideFromIndex()
                 ->help('The date at which the user last imported an anime export file. The cooldown is <strong>' . config('import.cooldown_in_days') . '</strong> day(s).'),
 
-            Date::make('Manga Imported At', 'manga_import_at')
+            Date::make('Manga Imported At')
                 ->hideFromIndex()
                 ->help('The date at which the user last imported a manga export file. The cooldown is <strong>' . config('import.cooldown_in_days') . '</strong> day(s).'),
 
