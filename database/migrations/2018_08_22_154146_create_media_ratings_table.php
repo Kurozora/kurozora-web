@@ -19,8 +19,9 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->uuidMorphs('model');
-            $table->float('rating');
+            $table->float('rating')->default(MediaRating::MAX_RATING_VALUE);
             $table->text('description')->nullable();
+            $table->text('note')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
