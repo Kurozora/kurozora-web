@@ -603,8 +603,8 @@ class Game extends KModel implements HasMedia, Sitemapable
             $query->where(self::TABLE_NAME . '.is_nsfw', false);
         }
 
-        return $query->where(self::TABLE_NAME . '.publication_season', '=', season_of_year(today()->addDays(2))->value)
-            ->whereYear(self::TABLE_NAME . '.published_at', '=', today()->addDays(2)->year)
+        return $query->where(self::TABLE_NAME . '.publication_season', '=', season_of_year(today()->addDays(3))->value)
+            ->whereYear(self::TABLE_NAME . '.published_at', '=', today()->addDays(3)->year)
             ->limit($limit);
     }
 

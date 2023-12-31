@@ -58,7 +58,7 @@ class ExploreCategoryResource extends JsonResource
     private function getTypeSpecificTitle(Request $request): string
     {
         return match ($this->resource->type) {
-            ExploreCategoryTypes::ShowsSeason => season_of_year()->key . ' ' . now()->year,
+            ExploreCategoryTypes::ShowsSeason => season_of_year(today()->addDays(3))->key . ' ' . today()->addDays(3)->year,
             default => $this->resource->title,
         };
     }
