@@ -528,6 +528,7 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
             $animeSeason = match ($class) {
                 Anime::class => $this->anime($genreOrTheme)
                     ->currentSeason($limit, (bool) $genreOrTheme?->is_nsfw)
+                    ->where('air_day', '=', today()->dayOfWeek)
                     ->when($withRelations, function ($query) {
                         $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating']);
 
