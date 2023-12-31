@@ -169,7 +169,7 @@
                             {{ number_format($anime->mediaStat->rating_average, 1) }}
                         </p>
 
-                        <livewire:anime.star-rating :rating="$anime->mediaStat->rating_average" :star-size="'sm'" :disabled="true" />
+                        <livewire:components.star-rating :rating="$anime->mediaStat->rating_average" :star-size="'sm'" :disabled="true" />
 
                         <p class="text-sm text-gray-500">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x reviews', (int) $anime->mediaStat->rating_count, ['x' => number_shorten((int) $anime->mediaStat->rating_count, 0, true)]) }}</p>
                     </a>
@@ -282,7 +282,7 @@
                     <div class="flex justify-between items-center">
                         <p class="">{{ __('Click to Rate:') }}</p>
 
-                        <livewire:anime.star-rating :anime="$anime" :rating="$userRating->first()?->rating" :star-size="'md'" />
+                        <livewire:components.star-rating :model="$anime" :rating="$userRating->first()?->rating" :star-size="'md'" />
                     </div>
 
                     <div class="flex justify-between">
@@ -296,7 +296,7 @@
                 </div>
 
                 <div class="mt-5">
-                    <livewire:components.anime.reviews-section :anime="$anime" />
+                    <livewire:sections.reviews :model="$anime" />
                 </div>
             </section>
 
@@ -506,7 +506,7 @@
                             <div class="flex items-center">
                                 <p class="">{{ __('Click to Rate:') }}</p>
 
-                                <livewire:anime.star-rating :anime="$anime" :rating="$userRating->first()?->rating" :star-size="'md'" />
+                                <livewire:components.star-rating :model="$anime" :rating="$userRating->first()?->rating" :star-size="'md'" />
                             </div>
 
                             <x-textarea class="block w-full h-48 mt-1 resize-none" placeholder="{{ __('What’s on your mind?') }}" wire:model.defer="reviewText"></x-textarea>

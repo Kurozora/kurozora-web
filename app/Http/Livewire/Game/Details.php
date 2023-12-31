@@ -196,7 +196,7 @@ class Details extends Component
     {
         // Require user to authenticate if necessary.
         if (!auth()->check()) {
-            return redirect(route('sign-in'));
+            return to_route('sign-in');
         }
 
         $this->reviewText = $this->game->mediaRatings->first()?->description;
@@ -263,19 +263,13 @@ class Details extends Component
     {
         $reviewText = strip_tags($this->reviewText);
 
-        if ($userRating = $this->userRating->first()) {
-            $userRating->update([
-                'description' => $reviewText
-            ]);
-        } else {
-            MediaRating::create([
-                'rating' => 5,
-                'description' => $reviewText,
-                'user_id' => auth()->user()->id,
+        auth()->user()->mediaRatings()
+            ->updateOrCreate([
                 'model_type' => $this->game->getMorphClass(),
-                'model_id' => $this->game->id
+                'model_id' => $this->game->id,
+            ], [
+                'description' => $reviewText,
             ]);
-        }
 
         $this->showReviewBox = false;
         $this->showPopup = false;

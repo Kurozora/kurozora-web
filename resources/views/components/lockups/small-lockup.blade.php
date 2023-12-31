@@ -44,7 +44,7 @@
                         <div class="inline-flex items-center gap-1 my-auto">
                             <p class="text-sm font-bold text-orange-500">{{ number_format($anime->mediaStat?->rating_average ?? 0, 1) }}</p>
 
-                            <livewire:anime.star-rating :rating="$anime->mediaStat?->rating_average" :star-size="'sm'" :disabled="true" wire:key="{{ uniqid(more_entropy: true) }}" />
+                            <livewire:components.star-rating :rating="$anime->mediaStat?->rating_average" :star-size="'sm'" :disabled="true" wire:key="{{ uniqid(more_entropy: true) }}" />
                         </div>
                     @endif
                 </div>
@@ -93,7 +93,7 @@
                         <div class="inline-flex items-center gap-1 my-auto">
                             <p class="text-sm font-bold text-orange-500">{{ number_format($game->mediaStat?->rating_average ?? 0, 1) }}</p>
 
-                            <livewire:game.star-rating :rating="$game->mediaStat?->rating_average" :star-size="'sm'" :disabled="true" wire:key="{{ uniqid(more_entropy: true) }}" />
+                            <livewire:components.star-rating :rating="$game->mediaStat?->rating_average" :star-size="'sm'" :disabled="true" wire:key="{{ uniqid(more_entropy: true) }}" />
                         </div>
                     @endif
                 </div>
@@ -148,7 +148,7 @@
                         <div class="inline-flex items-center gap-1 my-auto">
                             <p class="text-sm font-bold text-orange-500">{{ number_format($manga->mediaStat?->rating_average ?? 0, 1) }}</p>
 
-                            <livewire:manga.star-rating :rating="$manga->mediaStat?->rating_average" :star-size="'sm'" :disabled="true" wire:key="{{ uniqid(more_entropy: true) }}" />
+                            <livewire:components.star-rating :rating="$manga->mediaStat?->rating_average" :star-size="'sm'" :disabled="true" wire:key="{{ uniqid(more_entropy: true) }}" />
                         </div>
                     @endif
                 </div>

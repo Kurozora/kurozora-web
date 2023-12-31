@@ -170,7 +170,7 @@
                             {{ number_format($game->mediaStat->rating_average, 1) }}
                         </p>
 
-                        <livewire:game.star-rating :rating="$game->mediaStat->rating_average" :star-size="'sm'" :disabled="true" />
+                        <livewire:components.star-rating  :rating="$game->mediaStat->rating_average" :star-size="'sm'" :disabled="true" />
 
                         <p class="text-sm text-gray-500">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x reviews', (int) $game->mediaStat->rating_count, ['x' => number_shorten((int) $game->mediaStat->rating_count, 0, true)]) }}</p>
                     </a>
@@ -283,7 +283,7 @@
                     <div class="flex justify-between items-center">
                         <p class="">{{ __('Click to Rate:') }}</p>
 
-                        <livewire:game.star-rating :game="$game" :rating="$userRating->first()?->rating" :star-size="'md'" />
+                        <livewire:components.star-rating :model="$game" :rating="$userRating->first()?->rating" :star-size="'md'" />
                     </div>
 
                     <div class="flex justify-between">
@@ -483,7 +483,7 @@
                             <div class="flex items-center">
                                 <p class="">{{ __('Click to Rate:') }}</p>
 
-                                <livewire:game.star-rating :game="$game" :rating="$userRating->first()?->rating" :star-size="'md'" />
+                                <livewire:components.star-rating :model="$game" :rating="$userRating->first()?->rating" :star-size="'md'" />
                             </div>
 
                             <x-textarea class="block w-full h-48 mt-1 resize-none" placeholder="{{ __('What’s on your mind?') }}" wire:model.defer="reviewText"></x-textarea>

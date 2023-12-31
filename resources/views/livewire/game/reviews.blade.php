@@ -61,7 +61,7 @@
                 <div class="flex justify-between items-center">
                     <p class="">{{ __('Click to Rate:') }}</p>
 
-                    <livewire:game.star-rating :game="$game" :rating="$this->userRating?->rating" :star-size="'md'" />
+                    <livewire:components.star-rating :model="$game" :rating="$this->userRating?->rating" :star-size="'md'" />
                 </div>
 
                 <div class="flex justify-between">
@@ -110,7 +110,7 @@
                         <div class="flex items-center">
                             <p class="">{{ __('Click to Rate:') }}</p>
 
-                            <livewire:game.star-rating :game="$game" :rating="$this->userRating?->rating" :star-size="'md'" />
+                            <livewire:components.star-rating :model="$game" :rating="$this->userRating?->rating" :star-size="'md'" />
                         </div>
 
                         <x-textarea class="block w-full h-48 mt-1 resize-none" placeholder="{{ __('What’s on your mind?') }}" wire:model.defer="reviewText"></x-textarea>

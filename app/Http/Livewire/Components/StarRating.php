@@ -1,23 +1,23 @@
 <?php
 
-namespace App\Http\Livewire\Manga;
+namespace App\Http\Livewire\Components;
 
-use App\Models\Manga;
+use App\Models\KModel;
+use App\Models\MediaRating;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Routing\Redirector;
 use Illuminate\View\View;
 use Livewire\Component;
 
 class StarRating extends Component
 {
     /**
-     * The object containing the manga data.
+     * The object containing the model data.
      *
-     * @var Manga|null
+     * @var KModel|null
      */
-    public ?Manga $manga;
+    public ?KModel $model;
 
     /**
      * The rating used to fill the stars.
@@ -43,17 +43,17 @@ class StarRating extends Component
     /**
      * Prepare the component.
      *
-     * @param null $manga
+     * @param KModel|null $model
      * @param float|null $rating
-     * @param string $starSize
-     * @param bool $disabled
+     * @param string     $starSize
+     * @param bool       $disabled
      *
      * @return void
      */
-    function mount($manga = null, ?float $rating = null, string $starSize = 'md', bool $disabled = false): void
+    function mount(?KModel $model, ?float $rating = null, string $starSize = 'md', bool $disabled = false): void
     {
-        $this->manga = $manga;
-        $this->rating = $rating ?? 0.0;
+        $this->model = $model;
+        $this->rating = $rating ?? MediaRating::MIN_RATING_VALUE;
         $this->starSize = match ($starSize) {
             'sm' => 'h-4',
             'md' => 'h-6',
@@ -63,31 +63,32 @@ class StarRating extends Component
     }
 
     /**
-     * Updates the authenticated user's rating of the manga.
+     * Updates the authenticated user's rating of the model.
      *
-     * @return Application|RedirectResponse|Redirector|void
+     * @return RedirectResponse|void
      */
     public function rate()
     {
         $user = auth()->user();
+
         if (empty($user)) {
-            return redirect(route('sign-in'));
+            return to_route('sign-in');
         }
 
         if ($this->rating == -1) {
-            $user->mangaRatings()->where([
-                ['model_id', '=', $this->manga->id],
-                ['model_type', '=', Manga::class],
+            $user->mediaRatings()->where([
+                ['model_id', '=', $this->model->id],
+                ['model_type', '=', $this->model->getMorphClass()],
             ])->forceDelete();
         } else {
-            if ($this->rating < 0 || $this->rating > 5) {
+            if ($this->rating < MediaRating::MIN_RATING_VALUE || $this->rating > MediaRating::MAX_RATING_VALUE) {
                 return;
             }
 
             // Update authenticated user's rating
-            $user->mangaRatings()->updateOrCreate([
-                'model_id' => $this->manga->id,
-                'model_type' => Manga::class,
+            $user->mediaRatings()->updateOrCreate([
+                'model_id' => $this->model->id,
+                'model_type' => $this->model->getMorphClass(),
             ], [
                 'rating' => $this->rating
             ]);
@@ -101,6 +102,6 @@ class StarRating extends Component
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.manga.star-rating');
+        return view('livewire.components.star-rating');
     }
 }

@@ -8,7 +8,7 @@
                         @case(\App\Enums\ExploreCategoryTypes::ShowsSeason)
                         @case(\App\Enums\ExploreCategoryTypes::LiteraturesSeason)
                         @case(\App\Enums\ExploreCategoryTypes::GamesSeason)
-                            {{ season_of_year(today()->addDays(2))->key . ' ' . today()->addDays(2)->year }}
+                            {{ season_of_year(today()->addDays(3))->key . ' ' . today()->addDays(3)->year }}
                         @break
                         @default
                             {{ $exploreCategory->title }}

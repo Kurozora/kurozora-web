@@ -11,7 +11,6 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Routing\Redirector;
 use Illuminate\Support\Collection;
 use Livewire\Component;
 
@@ -174,13 +173,13 @@ class Details extends Component
     /**
      * Shows the review text box to the user.
      *
-     * @return Application|RedirectResponse|Redirector|void
+     * @return RedirectResponse|void
      */
     public function showReviewBox()
     {
         // Require user to authenticate if necessary.
         if (!auth()->check()) {
-            return redirect(route('sign-in'));
+            return to_route('sign-in');
         }
 
         $this->reviewText = $this->manga->mediaRatings->first()?->description;
@@ -247,19 +246,13 @@ class Details extends Component
     {
         $reviewText = strip_tags($this->reviewText);
 
-        if ($userRating = $this->userRating->first()) {
-            $userRating->update([
-                'description' => $reviewText
-            ]);
-        } else {
-            MediaRating::create([
-                'rating' => 5,
-                'description' => $reviewText,
-                'user_id' => auth()->user()->id,
+        auth()->user()->mediaRatings()
+            ->updateOrCreate([
                 'model_type' => $this->manga->getMorphClass(),
-                'model_id' => $this->manga->id
+                'model_id' => $this->manga->id,
+            ], [
+                'description' => $reviewText,
             ]);
-        }
 
         $this->showReviewBox = false;
         $this->showPopup = false;

@@ -24,7 +24,7 @@
             </div>
 
             <div>
-                <livewire:anime.star-rating :rating="$review->rating" :star-size="'sm'" :disabled="true" wire:key="{{ uniqid('rating-', true) }}" />
+                <livewire:components.star-rating :rating="$review->rating" :star-size="'sm'" :disabled="true" wire:key="{{ uniqid('rating-', true) }}" />
             </div>
 
             <div class="mt-2 w-full">
