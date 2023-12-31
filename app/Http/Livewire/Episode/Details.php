@@ -6,6 +6,7 @@ use App\Enums\VideoSource;
 use App\Events\EpisodeViewed;
 use App\Models\Anime;
 use App\Models\Episode;
+use App\Models\MediaRating;
 use App\Models\Season;
 use App\Models\Video;
 use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
@@ -13,6 +14,8 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 
 class Details extends Component
@@ -23,6 +26,13 @@ class Details extends Component
      * @var Episode $episode
      */
     public Episode $episode;
+
+    /**
+     * The object containing the user's rating data.
+     *
+     * @var Collection|MediaRating[] $userRating
+     */
+    public Collection|array $userRating;
 
     /**
      * Whether the user is tracking the anime.
@@ -60,6 +70,13 @@ class Details extends Component
     public bool $showVideo = false;
 
     /**
+     * Whether to show the review box to the user.
+     *
+     * @var bool $showReviewBox
+     */
+    public bool $showReviewBox = false;
+
+    /**
      * Whether to show the popup to the user.
      *
      * @var bool $showPopup
@@ -74,11 +91,11 @@ class Details extends Component
     public bool $showSharePopup = false;
 
     /**
-     * Whether the component is ready to load.
+     * The written review text.
      *
-     * @var bool $readyToLoad
+     * @var string|null $reviewText
      */
-    public bool $readyToLoad = false;
+    public ?string $reviewText;
 
     /**
      * The data used to populate the popup.
@@ -90,6 +107,13 @@ class Details extends Component
         'message' => '',
         'type' => 'default'
     ];
+
+    /**
+     * Whether the component is ready to load.
+     *
+     * @var bool $readyToLoad
+     */
+    public bool $readyToLoad = false;
 
     /**
      * The query strings of the component.
@@ -120,7 +144,7 @@ class Details extends Component
         // Call the EpisodeViewed event
         EpisodeViewed::dispatch($episode);
 
-        $this->episode = $episode->load([
+        $this->episode = $episode->loadMissing([
             'anime' => function (HasOneThrough $hasOneThrough) {
                 $hasOneThrough->with([
                     'studios',
@@ -135,7 +159,17 @@ class Details extends Component
             },
             'translations',
             'tv_rating',
-        ]);
+        ])->when(auth()->user(), function ($query, $user) use ($episode) {
+            return $episode->loadMissing(['mediaRatings' => function ($query) {
+                $query->where('user_id', '=', auth()->user()->id);
+            }]);
+        });
+
+        if (!auth()->check()) {
+            $this->episode->setRelation('mediaRatings', collect());
+        }
+
+        $this->userRating = $episode->mediaRatings;
         $this->setupActions();
     }
 
@@ -170,6 +204,23 @@ class Details extends Component
     public function showVideo(): void
     {
         $this->showVideo = true;
+    }
+
+    /**
+     * Shows the review text box to the user.
+     *
+     * @return RedirectResponse|void
+     */
+    public function showReviewBox()
+    {
+        // Require user to authenticate if necessary.
+        if (!auth()->check()) {
+            return to_route('sign-in');
+        }
+
+        $this->reviewText = $this->episode->mediaRatings->first()?->description;
+        $this->showReviewBox = true;
+        $this->showPopup = true;
     }
 
     /**
@@ -271,6 +322,27 @@ class Details extends Component
     public function getSeasonProperty(): ?Season
     {
         return $this->episode->season;
+    }
+
+    /**
+     * Submits the written review.
+     *
+     * @return void
+     */
+    public function submitReview(): void
+    {
+        $reviewText = strip_tags($this->reviewText);
+
+        auth()->user()->mediaRatings()
+            ->updateOrCreate([
+                'model_type' => $this->episode->getMorphClass(),
+                'model_id' => $this->episode->id,
+            ], [
+                'description' => $reviewText,
+            ]);
+
+        $this->showReviewBox = false;
+        $this->showPopup = false;
     }
 
     /**

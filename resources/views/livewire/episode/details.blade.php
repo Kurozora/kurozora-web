@@ -261,7 +261,7 @@
                         <a href="#ratingsAndReviews">
                             <p class="inline-flex font-bold text-orange-500">
                                 {{ number_format($episode->mediaStat->rating_average ?? 0, 1) }}
-                                <livewire:anime.star-rating :rating="$episode->mediaStat->rating_average" :star-size="'sm'" :disabled="true" />
+                                <livewire:components.star-rating :rating="$episode->mediaStat->rating_average" :star-size="'sm'" :disabled="true" />
                             </p>
                             <p class="text-sm text-gray-500">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x reviews', (int) $episode->mediaStat->rating_count, ['x' => number_shorten((int) $episode->mediaStat->rating_count, 0, true)]) }}</p>
                         </a>
@@ -321,20 +321,52 @@
                         <x-slot:title>
                             {{ __('Ratings & Reviews') }}
                         </x-slot:title>
+
+                        <x-slot:action>
+                            <x-section-nav-link class="whitespace-nowrap" href="{{ route('episodes.reviews', $episode) }}">{{ __('See All') }}</x-section-nav-link>
+                        </x-slot:action>
                     </x-section-nav>
 
-                    <div class="flex flex-row justify-between">
-                        <div class="text-center">
-                            <p class="font-bold text-6xl">{{ number_format($episode->mediaStat->rating_average ?? 0, 1) }}</p>
+                    <div class="flex flex-row flex-wrap justify-between gap-4">
+                        <div class="flex flex-col justify-end text-center">
+                            <p class="font-bold text-6xl">{{ number_format($episode->mediaStat->rating_average, 1) }}</p>
                             <p class="font-bold text-sm text-gray-500">{{ __('out of') }} 5</p>
                         </div>
 
-                        @auth
-                            <div class="text-right">
-                                <livewire:anime.star-rating :rating="$episode->mediaStat->rating_average" :star-size="'lg'" :disabled="true" />
-                                <p class="text-sm text-gray-500">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x reviews', (int) $episode->mediaStat->rating_count, ['x' => (int) $episode->mediaStat->rating_count]) }}</p>
-                            </div>
-                        @endif
+                        <div class="flex flex-col justify-end items-center text-center">
+                            @svg('star_fill', 'fill-current', ['width' => 32])
+                            <p class="font-bold text-2xl">{{ number_format($episode->mediaStat->highestRatingPercentage) }}%</p>
+                            <p class="text-sm text-gray-500">{{ $episode->mediaStat->sentiment }}</p>
+                        </div>
+
+                        <div class="flex flex-col w-full justify-end text-right sm:w-auto">
+                            <x-star-rating-bar :media-stat="$episode->mediaStat" />
+
+                            <p class="text-sm text-gray-500">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x Ratings', $episode->mediaStat->rating_count, ['x' => number_format($episode->mediaStat->rating_count)]) }}</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="writeAReview" class="pt-5 pb-8 pl-4 pr-4 border-t-2">
+                    <div class="flex flex-row flex-wrap gap-4">
+                        <div class="flex justify-between items-center">
+                            <p class="">{{ __('Click to Rate:') }}</p>
+
+                            <livewire:components.star-rating :model="$episode" :rating="$userRating->first()?->rating" :star-size="'md'" />
+                        </div>
+
+                        <div class="flex justify-between">
+                            <x-simple-button class="flex gap-1" wire:click="showReviewBox">
+                                @svg('pencil', 'fill-current', ['width' => 18])
+                                {{ __('Write a Review') }}
+                            </x-simple-button>
+                        </div>
+
+                        <div></div>
+                    </div>
+
+                    <div class="mt-5">
+                        <livewire:sections.reviews :model="$episode" />
                     </div>
                 </section>
 
@@ -399,17 +431,39 @@
     </div>
 
     <x-dialog-modal maxWidth="md" model="showPopup">
-        <x-slot:title>
-            {{ $popupData['title'] }}
-        </x-slot:title>
+        @if ($showReviewBox)
+            <x-slot:title>
+                {{ __('Write a Review') }}
+            </x-slot:title>
 
-        <x-slot:content>
-            <p>{{ $popupData['message'] }}</p>
-        </x-slot:content>
+            <x-slot:content>
+                <div class="flex flex-col gap-2">
+                    <div class="flex items-center">
+                        <p class="">{{ __('Click to Rate:') }}</p>
 
-        <x-slot:footer>
-            <x-button wire:click="$toggle('showPopup')">{{ __('Ok') }}</x-button>
-        </x-slot:footer>
+                        <livewire:components.star-rating :model="$episode" :rating="$userRating->first()?->rating" :star-size="'md'" />
+                    </div>
+
+                    <x-textarea class="block w-full h-48 mt-1 resize-none" placeholder="{{ __('What’s on your mind?') }}" wire:model.defer="reviewText"></x-textarea>
+                </div>
+            </x-slot:content>
+
+            <x-slot:footer>
+                <x-button wire:click="submitReview">{{ __('Submit') }}</x-button>
+            </x-slot:footer>
+        @else
+            <x-slot:title>
+                {{ $popupData['title'] }}
+            </x-slot:title>
+
+            <x-slot:content>
+                <p>{{ $popupData['message'] }}</p>
+            </x-slot:content>
+
+            <x-slot:footer>
+                <x-button wire:click="$toggle('showPopup')">{{ __('Ok') }}</x-button>
+            </x-slot:footer>
+        @endif
     </x-dialog-modal>
 
     <x-share-modal
