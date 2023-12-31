@@ -23,7 +23,7 @@
         @endforeach
 
         @foreach($relatedGames as $index => $game)
-            <x-lockups.small-lockup :game="$game->related" :relation="$game->relation" :rank="($page - 1) * $perPage + $index + 1"  trackingEnabled=$trackingEnabled:is-ranked="$isRanked" :is-row="$isRow" />
+            <x-lockups.small-lockup :game="$game->related" :relation="$game->relation" :rank="($page - 1) * $perPage + $index + 1"  :tracking-enabled="$trackingEnabled" :is-ranked="$isRanked" :is-row="$isRow" />
         @endforeach
         <div class="w-64 md:w-80 flex-grow"></div>
         <div class="w-64 md:w-80 flex-grow"></div>
