@@ -726,6 +726,64 @@ class Anime extends KModel implements HasMedia, Sitemapable
     }
 
     /**
+     * The orderable properties.
+     *
+     * @return array[]
+     */
+    public static function webSearchOrders(): array
+    {
+        $order = [
+            'rank_total' => [
+                'title' => __('Ranking'),
+                'options' => [
+                    'Default' => null,
+                    'Highest' => 'asc',
+                    'Lowest' => 'desc',
+                ],
+                'selected' => null,
+            ],
+            'title' => [
+                'title' => __('Title'),
+                'options' => [
+                    'Default' => null,
+                    'A-Z' => 'asc',
+                    'Z-A' => 'desc',
+                ],
+                'selected' => null,
+            ],
+            'started_at' => [
+                'title' => __('First Aired'),
+                'options' => [
+                    'Default' => null,
+                    'Newest' => 'desc',
+                    'Oldest' => 'asc',
+                ],
+                'selected' => null,
+            ],
+            'ended_at' => [
+                'title' => __('Last Aired'),
+                'options' => [
+                    'Default' => null,
+                    'Newest' => 'desc',
+                    'Oldest' => 'asc',
+                ],
+                'selected' => null,
+            ],
+            'duration' => [
+                'title' => __('Duration'),
+                'options' => [
+                    'Default' => null,
+                    'Shortest' => 'asc',
+                    'Longest' => 'desc',
+                ],
+                'selected' => null,
+            ],
+        ];
+
+        return $order;
+    }
+
+    /**
      * The filterable properties.
      *
      * @return array[]

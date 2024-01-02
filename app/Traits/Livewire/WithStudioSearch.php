@@ -33,35 +33,7 @@ trait WithStudioSearch
      */
     public function setOrderableAttributes(): void
     {
-        $this->order = [
-            'name' => [
-                'title' => __('Name'),
-                'options' => [
-                    'Default' => null,
-                    'A-Z' => 'asc',
-                    'Z-A' => 'desc',
-                ],
-                'selected' => null,
-            ],
-            'address' => [
-                'title' => __('Address'),
-                'options' => [
-                    'Default' => null,
-                    'A-Z' => 'asc',
-                    'Z-A' => 'desc',
-                ],
-                'selected' => null,
-            ],
-            'founded' => [
-                'title' => __('Founded'),
-                'options' => [
-                    'Default' => null,
-                    'Recent' => 'desc',
-                    'Oldest' => 'asc',
-                ],
-                'selected' => null,
-            ],
-        ];
+        $this->order = Studio::webSearchOrders();
     }
 
     /**

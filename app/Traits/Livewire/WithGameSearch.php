@@ -33,44 +33,7 @@ trait WithGameSearch
      */
     public function setOrderableAttributes(): void
     {
-        $this->order = [
-            'rank_total' => [
-                'title' => __('Ranking'),
-                'options' => [
-                    'Default' => null,
-                    'Highest' => 'asc',
-                    'Lowest' => 'desc',
-                ],
-                'selected' => null,
-            ],
-            'title' => [
-                'title' => __('Title'),
-                'options' => [
-                    'Default' => null,
-                    'A-Z' => 'asc',
-                    'Z-A' => 'desc',
-                ],
-                'selected' => null,
-            ],
-            'published_at' => [
-                'title' => __('First Published'),
-                'options' => [
-                    'Default' => null,
-                    'Newest' => 'desc',
-                    'Oldest' => 'asc',
-                ],
-                'selected' => null,
-            ],
-            'duration' => [
-                'title' => __('Duration'),
-                'options' => [
-                    'Default' => null,
-                    'Shortest' => 'asc',
-                    'Longest' => 'desc',
-                ],
-                'selected' => null,
-            ],
-        ];
+        $this->order = Game::webSearchOrders();
     }
 
     /**

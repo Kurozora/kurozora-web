@@ -207,6 +207,37 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     }
 
     /**
+     * The orderable properties.
+     *
+     * @return array[]
+     */
+    public static function webSearchOrders(): array
+    {
+        $order = [
+            'username' => [
+                'title' => __('Name'),
+                'options' => [
+                    'Default' => null,
+                    'A-Z' => 'asc',
+                    'Z-A' => 'desc',
+                ],
+                'selected' => null,
+            ],
+            'created_at' => [
+                'title' => __('Join Date'),
+                'options' => [
+                    'Default' => null,
+                    'Newest' => 'desc',
+                    'Oldest' => 'asc',
+                ],
+                'selected' => null,
+            ],
+        ];
+
+        return $order;
+    }
+
+    /**
      * The filterable properties.
      *
      * @return array[]

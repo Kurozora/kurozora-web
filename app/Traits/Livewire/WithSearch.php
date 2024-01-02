@@ -83,21 +83,21 @@ trait WithSearch
             }
         }
 
-        // If no search was performed, return all anime
+        // If no search, filter or order was performed, return the model's index
         if (empty($this->search) && empty($wheres) && empty($orders)) {
-            $model = static::$searchModel::query();
-            $model = $this->searchIndexQuery($model);
-            return $model->paginate($this->perPage);
+            $models = static::$searchModel::query();
+            $models = $this->searchIndexQuery($models);
+            return $models->paginate($this->perPage);
         }
 
         // Search
-        $model = static::$searchModel::search($this->search);
-        $model->wheres = $wheres;
-        $model->orders = $orders;
-        $model = $this->searchQuery($model);
+        $models = static::$searchModel::search($this->search);
+        $models->wheres = $wheres;
+        $models->orders = $orders;
+        $models = $this->searchQuery($models);
 
         // Paginate
-        return $model->paginate($this->perPage);
+        return $models->paginate($this->perPage);
     }
 
     /**

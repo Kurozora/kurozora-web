@@ -118,6 +118,46 @@ class Studio extends KModel implements HasMedia, Sitemapable
     }
 
     /**
+     * The orderable properties.
+     *
+     * @return array[]
+     */
+    public static function webSearchOrders(): array
+    {
+        $order = [
+            'name' => [
+                'title' => __('Name'),
+                'options' => [
+                    'Default' => null,
+                    'A-Z' => 'asc',
+                    'Z-A' => 'desc',
+                ],
+                'selected' => null,
+            ],
+            'address' => [
+                'title' => __('Address'),
+                'options' => [
+                    'Default' => null,
+                    'A-Z' => 'asc',
+                    'Z-A' => 'desc',
+                ],
+                'selected' => null,
+            ],
+            'founded' => [
+                'title' => __('Founded'),
+                'options' => [
+                    'Default' => null,
+                    'Recent' => 'desc',
+                    'Oldest' => 'asc',
+                ],
+                'selected' => null,
+            ],
+        ];
+
+        return $order;
+    }
+
+    /**
      * The filterable properties.
      *
      * @return array[]

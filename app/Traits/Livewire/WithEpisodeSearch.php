@@ -59,62 +59,7 @@ trait WithEpisodeSearch
      */
     public function setOrderableAttributes(): void
     {
-        $this->order = [
-            'rank_total' => [
-                'title' => __('Ranking'),
-                'options' => [
-                    'Default' => null,
-                    'Highest' => 'asc',
-                    'Lowest' => 'desc',
-                ],
-                'selected' => null,
-            ],
-            'title' => [
-                'title' => __('Title'),
-                'options' => [
-                    'Default' => null,
-                    'A-Z' => 'asc',
-                    'Z-A' => 'desc',
-                ],
-                'selected' => null,
-            ],
-            'number' => [
-                'title' => __('Number (Season)'),
-                'options' => [
-                    'Default' => null,
-                    '0-9' => 'asc',
-                    '9-0' => 'desc',
-                ],
-                'selected' => null,
-            ],
-            'number_total' => [
-                'title' => __('Number (Series)'),
-                'options' => [
-                    'Default' => null,
-                    '0-9' => 'asc',
-                    '9-0' => 'desc',
-                ],
-                'selected' => null,
-            ],
-            'started_at' => [
-                'title' => __('First Aired'),
-                'options' => [
-                    'Default' => null,
-                    'Newest' => 'desc',
-                    'Oldest' => 'asc',
-                ],
-                'selected' => null,
-            ],
-            'duration' => [
-                'title' => __('Duration'),
-                'options' => [
-                    'Default' => null,
-                    'Shortest' => 'asc',
-                    'Longest' => 'desc',
-                ],
-                'selected' => null,
-            ],
-        ];
+        $this->order = Episode::webSearchOrders();
     }
 
     /**

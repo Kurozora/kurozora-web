@@ -112,6 +112,55 @@ class Character extends KModel implements HasMedia, Sitemapable
     }
 
     /**
+     * The orderable properties.
+     *
+     * @return array[]
+     */
+    public static function webSearchOrders(): array
+    {
+        $order = [
+            'name' => [
+                'title' => __('Name'),
+                'options' => [
+                    'Default' => null,
+                    'A-Z' => 'asc',
+                    'Z-A' => 'desc',
+                ],
+                'selected' => null,
+            ],
+            'age' => [
+                'title' => __('Age'),
+                'options' => [
+                    'Default' => null,
+                    'Youngest' => 'asc',
+                    'Oldest' => 'desc',
+                ],
+                'selected' => null,
+            ],
+            'height' => [
+                'title' => __('Height'),
+                'options' => [
+                    'Default' => null,
+                    'Shortest' => 'asc',
+                    'Tallest' => 'desc',
+                ],
+                'selected' => null,
+            ],
+            'weight' => [
+                'title' => __('Weight'),
+                'options' => [
+                    'Default' => null,
+                    'Lightest' => 'asc',
+                    'Heaviest' => 'desc',
+                ],
+                'selected' => null,
+            ],
+        ];
+
+        return $order;
+    }
+
+    /**
      * The filterable properties.
      *
      * @return array[]

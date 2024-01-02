@@ -15,7 +15,7 @@ use App\Models\Song;
 use App\Models\Studio;
 use App\Models\User;
 use App\Models\UserLibrary;
-use App\Traits\Livewire\WithPagination;
+use App\Traits\Livewire\WithSearch;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
@@ -26,7 +26,7 @@ use Livewire\Component;
 
 class Index extends Component
 {
-    use WithPagination;
+    use WithSearch;
 
     /**
      * The type of the search.
@@ -43,25 +43,11 @@ class Index extends Component
     public string $scope = SearchScope::Kurozora;
 
     /**
-     * The search query.
-     *
-     * @var string $q
-     */
-    public string $q = '';
-
-    /**
      * The source of the search request.
      *
      * @var string $src
      */
     public string $src = SearchSource::Kurozora;
-
-    /**
-     * The filterable attributes.
-     *
-     * @var array $filter
-     */
-    public array $filter = [];
 
     /**
      * Whether the component is ready to load.
@@ -78,7 +64,7 @@ class Index extends Component
     protected $queryString = [
         'scope' => ['except' => SearchScope::Kurozora],
         'type' => ['except' => SearchType::Shows],
-        'q' => ['except' => ''],
+        'search' => ['except' => '', 'as' => 'q'],
         'perPage' => ['except' => 25],
         'src' => ['except' => SearchSource::Kurozora],
     ];
@@ -93,7 +79,7 @@ class Index extends Component
         return [
             'scope'     => ['nullable', 'string', 'in:' . implode(',', SearchScope::getValues())],
             'type'      => ['nullable', 'string', 'distinct', 'in:' . implode(',', SearchType::getWebValues($this->scope))],
-            'q'         => ['string', 'min:1'],
+            'search'    => ['string', 'min:1'],
             'perPage'   => ['nullable', 'integer', 'min:1', 'max:25'],
             'src'       => ['string', 'in:' . implode(',', SearchSource::getValues())],
         ];
@@ -104,10 +90,7 @@ class Index extends Component
      *
      * @return void
      */
-    public function mount(): void
-    {
-        $this->setFilterableAttributes();
-    }
+    public function mount(): void {}
 
     /**
      * Sets the property to load the page.
@@ -131,6 +114,7 @@ class Index extends Component
             $this->type = SearchType::Shows;
         }
         if ($propertyName == 'type') {
+            $this->setOrderableAttributes();
             $this->setFilterableAttributes();
         }
         $this->validateOnly($propertyName);
@@ -162,9 +146,22 @@ class Index extends Component
                 default => Anime::class,
             };
 
+            // Order
+            $orders = [];
+            foreach ($this->order as $attribute => $order) {
+                $attribute = str_replace(':', '.', $attribute);
+                $selected = $order['selected'];
+
+                if (!empty($selected)) {
+                    $orders[] = [
+                        'column' => $attribute,
+                        'direction' => $selected,
+                    ];
+                }
+            }
+
             // Filter
             $wheres = [];
-
             foreach ($this->filter as $attribute => $filter) {
                 $attribute = str_replace(':', '.', $attribute);
                 $selected = $filter['selected'];
@@ -182,12 +179,13 @@ class Index extends Component
                 }
             }
 
-            if (empty($this->q) && empty($wheres)) {
+            // If no search, filter or order was performed, return nothing
+            if (empty($this->search) && empty($wheres)) {
                 return null;
             }
 
             // Search
-            $models = $searchableModel::search($this->q)
+            $models = $searchableModel::search($this->search)
                 ->query(function ($query) use ($searchableModel) {
                     switch ($searchableModel) {
                         case Anime::class:
@@ -232,10 +230,11 @@ class Index extends Component
                     }
                 });
 
+            $models->orders = $orders;
             $models->wheres = $wheres;
 
             if ($this->scope == SearchScope::Library) {
-                $trackableIDs = collect(UserLibrary::search($this->q)
+                $trackableIDs = collect(UserLibrary::search($this->search)
                     ->where('user_id', auth()->user()->id)
                     ->where('trackable_type', addslashes($searchableModel))
                     ->simplePaginateRaw(perPage: 2000, page: 1)
@@ -322,6 +321,27 @@ class Index extends Component
                 'Fejrix',
             ],
             default => [],
+        };
+    }
+
+    /**
+     * Set the orderable attributes of the model.
+     *
+     * @return void
+     */
+    public function setOrderableAttributes(): void
+    {
+        $this->order = match ($this->type) {
+            SearchType::Shows => Anime::webSearchOrders(),
+            SearchType::Literatures => Manga::webSearchOrders(),
+            SearchType::Games => Game::webSearchOrders(),
+            SearchType::Episodes => Episode::webSearchOrders(),
+            SearchType::Characters => Character::webSearchOrders(),
+            SearchType::People => Person::webSearchOrders(),
+            SearchType::Songs => Song::webSearchOrders(),
+            SearchType::Studios => Studio::webSearchOrders(),
+            SearchType::Users => User::webSearchOrders(),
+            default => []
         };
     }
 

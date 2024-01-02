@@ -50,7 +50,7 @@
                     type: @entangle('type')
                 }"
             >
-                <x-search-bar searchModel="q">
+                <x-search-bar>
                     <x-slot:rightBarButtonItems>
                         <div>
                             <x-select wire:model="scope">
@@ -85,7 +85,7 @@
                 <ul class="flex flex-col gap-4 items-center mt-8">
                     @foreach ($this->searchSuggestions as $searchSuggestion)
                         <li>
-                            <button class="pl-4 pr-4 pb-2 text-orange-500" wire:click="$set('q', '{{ $searchSuggestion }}')">
+                            <button class="pl-4 pr-4 pb-2 text-orange-500" wire:click="$set('search', '{{ $searchSuggestion }}')">
                                 {{ $searchSuggestion }}
                             </button>
                         </li>
