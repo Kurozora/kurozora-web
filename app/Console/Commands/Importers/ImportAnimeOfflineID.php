@@ -9,6 +9,7 @@ use App\Models\Relation;
 use App\Models\Source;
 use App\Models\Tag;
 use App\Models\Theme;
+use Artisan;
 use DB;
 use Http;
 use Illuminate\Console\Command;
@@ -64,7 +65,7 @@ class ImportAnimeOfflineID extends Command
         $progressBar->start();
 
         foreach ($animes as $data) {
-//            if ($animes->getPosition() < 34572959) {
+//            if ($animes->getPosition() < 34782445) {
 //                continue;
 //            }
 
@@ -107,6 +108,20 @@ class ImportAnimeOfflineID extends Command
                 } else {
                     $this->output->info('Missing MAL ID: ' . $sources['mal_id'] ?? 'N/A');
                     $this->output->info('Missing anime: ' . print_r($sources, true));
+
+                    Artisan::call('scrape:mal_anime', ['malID' => $sources['mal_id']]);
+
+                    $anime = Anime::withoutGlobalScopes()
+                        ->where('mal_id', '=', $sources['mal_id'])
+                        ->first();
+
+                    // If it's still empty then it's a dead entry
+                    if (!empty($anime)) {
+                        $anime->update($sources);
+
+                        // Add tags
+                        $this->addTags($data->tags, $anime);
+                    }
                 }
             }
 

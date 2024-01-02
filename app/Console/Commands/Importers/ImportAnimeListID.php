@@ -3,6 +3,7 @@
 namespace App\Console\Commands\Importers;
 
 use App\Models\Anime;
+use Artisan;
 use Http;
 use Illuminate\Console\Command;
 use JsonMachine\Exception\InvalidArgumentException;
@@ -55,28 +56,44 @@ class ImportAnimeListID extends Command
         $progressBar->start();
 
         foreach ($animes as $data) {
-//            if ($animes->getPosition() >= 4745616) {
-                $sources = $this->filterSources($data);
+//            if ($animes->getPosition() < 5268782) {
+//                continue;
+//            }
 
-                if (array_key_exists('mal_id', $sources)) {
+            $sources = $this->filterSources($data);
+
+            if (array_key_exists('mal_id', $sources)) {
+                $anime = Anime::withoutGlobalScopes()
+                    ->where('mal_id', '=', $sources['mal_id'])
+//                        ->whereDate('updated_at', '<', today())
+                    ->first();
+
+                if (!empty($anime)) {
+                    if (!empty($anime->kitsu_id)) {
+                        unset($sources['kitsu_id']);
+                    }
+
+                    $anime->update($sources);
+//                        $anime->touch();
+                } else {
+                    $this->output->info('Missing MAL ID: ' . $sources['mal_id'] ?? 'N/A');
+                    $this->output->info('Missing anime: ' . print_r($sources, true));
+
+                    Artisan::call('scrape:mal_anime', ['malID' => $sources['mal_id']]);
+
                     $anime = Anime::withoutGlobalScopes()
                         ->where('mal_id', '=', $sources['mal_id'])
-//                        ->whereDate('updated_at', '<', today())
                         ->first();
 
+                    // If it's still empty then it's a dead entry
                     if (!empty($anime)) {
-                        if (!empty($anime->kitsu_id)) {
-                            unset($sources['kitsu_id']);
-                        }
-
                         $anime->update($sources);
-//                        $anime->touch();
                     }
                 }
+            }
 
-                $progress = $animes->getPosition();
-                $progressBar->setProgress($progress);
-//            }
+            $progress = $animes->getPosition();
+            $progressBar->setProgress($progress);
         }
 
         $progressBar->finish();
