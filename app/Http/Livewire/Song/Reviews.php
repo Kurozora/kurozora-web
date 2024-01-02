@@ -2,17 +2,19 @@
 
 namespace App\Http\Livewire\Song;
 
-use App\Events\SongViewed;
 use App\Models\MediaRating;
+use App\Models\MediaStat;
 use App\Models\Song;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Pagination\CursorPaginator;
 use Illuminate\Support\Collection;
 use Livewire\Component;
 
-class Details extends Component
+class Reviews extends Component
 {
     /**
      * The object containing the song data.
@@ -22,11 +24,11 @@ class Details extends Component
     public Song $song;
 
     /**
-     * The object containing the user's rating data.
+     * Whether the component is ready to load.
      *
-     * @var Collection|MediaRating[] $userRating
+     * @var bool $readyToLoad
      */
-    public Collection|array $userRating;
+    public bool $readyToLoad = false;
 
     /**
      * Whether to show the review box to the user.
@@ -34,13 +36,6 @@ class Details extends Component
      * @var bool $showReviewBox
      */
     public bool $showReviewBox = false;
-
-    /**
-     * Whether to show the share popup to the user.
-     *
-     * @var bool $showSharePopup
-     */
-    public bool $showSharePopup = false;
 
     /**
      * Whether to show the popup to the user.
@@ -64,32 +59,28 @@ class Details extends Component
     public array $popupData = [
         'title' => '',
         'message' => '',
-        'type' => 'default'
     ];
 
     /**
      * Prepare the component.
      *
      * @param Song $song
+     *
      * @return void
      */
     public function mount(Song $song): void
     {
-        // Call the SongViewed event
-        SongViewed::dispatch($song);
+        $this->song = $song->load(['media']);
+    }
 
-        $this->song = $song->load(['media'])
-            ->when(auth()->user(), function ($query, $user) use ($song) {
-                return $song->loadMissing(['mediaRatings' => function ($query) {
-                    $query->where('user_id', '=', auth()->user()->id);
-                }]);
-            });
-
-        if (!auth()->check()) {
-            $this->song->setRelation('mediaRatings', collect());
-        }
-
-        $this->userRating = $song->mediaRatings;
+    /**
+     * Sets the property to load the page.
+     *
+     * @return void
+     */
+    public function loadPage(): void
+    {
+        $this->readyToLoad = true;
     }
 
     /**
@@ -104,9 +95,48 @@ class Details extends Component
             return to_route('sign-in');
         }
 
-        $this->reviewText = $this->song->mediaRatings->first()?->description;
+        $this->reviewText = $this->userRating?->description;
         $this->showReviewBox = true;
         $this->showPopup = true;
+    }
+
+    /**
+     * Get the media stats.
+     *
+     * @return MediaStat
+     */
+    public function getMediaStatProperty(): MediaStat
+    {
+        return $this->song->mediaStat;
+    }
+
+    /**
+     * Get the media stats.
+     *
+     * @return Collection|CursorPaginator
+     */
+    public function getMediaRatingsProperty(): Collection|CursorPaginator
+    {
+        if (!$this->readyToLoad) {
+            return collect();
+        }
+
+        return $this->song->mediaRatings()
+            ->with(['user.media'])
+            ->where('description', '!=', null)
+            ->orderBy('created_at')
+            ->cursorPaginate();
+    }
+
+    /**
+     * Returns the user rating.
+     *
+     * @return MediaRating|Model|null
+     */
+    public function getUserRatingProperty(): MediaRating|Model|null
+    {
+        return $this->song->mediaRatings()
+            ->firstWhere('user_id', auth()->user()?->id);
     }
 
     /**
@@ -137,6 +167,6 @@ class Details extends Component
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.song.details');
+        return view('livewire.song.reviews');
     }
 }

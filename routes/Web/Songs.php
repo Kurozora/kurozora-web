@@ -2,6 +2,7 @@
 
 use App\Http\Livewire\Song\Details as SongDetails;
 use App\Http\Livewire\Song\Index as SongIndex;
+use App\Http\Livewire\Song\Reviews as SongReviews;
 
 Route::prefix('/songs')
     ->name('songs')
@@ -13,5 +14,8 @@ Route::prefix('/songs')
             ->group(function () {
                 Route::get('/', SongDetails::class)
                     ->name('.details');
+
+                Route::get('/reviews', SongReviews::class)
+                    ->name('.reviews');
             });
     });

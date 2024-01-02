@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\MediaCollection;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\Actionable;
+use App\Traits\Model\HasMediaRatings;
 use App\Traits\Model\HasMediaStat;
 use App\Traits\Model\HasViews;
 use App\Traits\SearchFilterable;
@@ -28,6 +29,7 @@ class Song extends KModel implements HasMedia, Sitemapable
 {
     use Actionable,
         HasFactory,
+        HasMediaRatings,
         HasMediaStat,
         HasSlug,
         HasViews,

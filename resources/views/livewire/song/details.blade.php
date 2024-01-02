@@ -165,6 +165,60 @@
             </div>
         </section>
 
+        <section id="ratingsAndReviews" class="pt-5 pb-8 pl-4 pr-4 border-t-2">
+            <x-section-nav>
+                <x-slot:title>
+                    {{ __('Ratings & Reviews') }}
+                </x-slot:title>
+
+                <x-slot:action>
+                    <x-section-nav-link class="whitespace-nowrap" href="{{ route('songs.reviews', $song) }}">{{ __('See All') }}</x-section-nav-link>
+                </x-slot:action>
+            </x-section-nav>
+
+            <div class="flex flex-row flex-wrap justify-between gap-4">
+                <div class="flex flex-col justify-end text-center">
+                    <p class="font-bold text-6xl">{{ number_format($song->mediaStat->rating_average, 1) }}</p>
+                    <p class="font-bold text-sm text-gray-500">{{ __('out of') }} 5</p>
+                </div>
+
+                <div class="flex flex-col justify-end items-center text-center">
+                    @svg('star_fill', 'fill-current', ['width' => 32])
+                    <p class="font-bold text-2xl">{{ number_format($song->mediaStat->highestRatingPercentage) }}%</p>
+                    <p class="text-sm text-gray-500">{{ $song->mediaStat->sentiment }}</p>
+                </div>
+
+                <div class="flex flex-col w-full justify-end text-right sm:w-auto">
+                    <x-star-rating-bar :media-stat="$song->mediaStat" />
+
+                    <p class="text-sm text-gray-500">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x Ratings', $song->mediaStat->rating_count, ['x' => number_format($song->mediaStat->rating_count)]) }}</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="writeAReview" class="pt-5 pb-8 pl-4 pr-4 border-t-2">
+            <div class="flex flex-row flex-wrap gap-4">
+                <div class="flex justify-between items-center">
+                    <p class="">{{ __('Click to Rate:') }}</p>
+
+                    <livewire:components.star-rating :model="$song" :rating="$userRating->first()?->rating" :star-size="'md'" />
+                </div>
+
+                <div class="flex justify-between">
+                    <x-simple-button class="flex gap-1" wire:click="showReviewBox">
+                        @svg('pencil', 'fill-current', ['width' => 18])
+                        {{ __('Write a Review') }}
+                    </x-simple-button>
+                </div>
+
+                <div></div>
+            </div>
+
+            <div class="mt-5">
+                <livewire:sections.reviews :model="$song" />
+            </div>
+        </section>
+
         <livewire:components.song.media-section :song="$song" :type="\App\Models\Anime::class" />
 
         <livewire:components.song.media-section :song="$song" :type="\App\Models\Game::class" />
@@ -177,4 +231,40 @@
         :title="$this->song->title"
         :type="'song'"
     />
+
+    <x-dialog-modal maxWidth="md" model="showPopup">
+        @if ($showReviewBox)
+            <x-slot:title>
+                {{ __('Write a Review') }}
+            </x-slot:title>
+
+            <x-slot:content>
+                <div class="flex flex-col gap-2">
+                    <div class="flex items-center">
+                        <p class="">{{ __('Click to Rate:') }}</p>
+
+                        <livewire:components.star-rating :model="$song" :rating="$userRating->first()?->rating" :star-size="'md'" />
+                    </div>
+
+                    <x-textarea class="block w-full h-48 mt-1 resize-none" placeholder="{{ __('What’s on your mind?') }}" wire:model.defer="reviewText"></x-textarea>
+                </div>
+            </x-slot:content>
+
+            <x-slot:footer>
+                <x-button wire:click="submitReview">{{ __('Submit') }}</x-button>
+            </x-slot:footer>
+        @else
+            <x-slot:title>
+                {{ $popupData['title'] }}
+            </x-slot:title>
+
+            <x-slot:content>
+                <p>{{ $popupData['message'] }}</p>
+            </x-slot:content>
+
+            <x-slot:footer>
+                <x-button wire:click="$toggle('showPopup')">{{ __('Ok') }}</x-button>
+            </x-slot:footer>
+        @endif
+    </x-dialog-modal>
 </main>
