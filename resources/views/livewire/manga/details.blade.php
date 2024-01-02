@@ -291,7 +291,7 @@
                 </div>
 
                 <div class="mt-5">
-                    <livewire:components.manga.reviews-section :manga="$manga" />
+                    <livewire:sections.reviews :model="$manga" />
                 </div>
             </section>
 

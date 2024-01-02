@@ -297,7 +297,7 @@
                 </div>
 
                 <div class="mt-5">
-                    <livewire:components.game.reviews-section :game="$game" />
+                    <livewire:sections.reviews :model="$game" />
                 </div>
             </section>
 
