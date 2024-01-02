@@ -6,6 +6,7 @@ use App\Http\Livewire\Character\Games as CharacterGames;
 use App\Http\Livewire\Character\Index as CharacterIndex;
 use App\Http\Livewire\Character\Manga as CharacterManga;
 use App\Http\Livewire\Character\People as CharacterPeople;
+use App\Http\Livewire\Character\Reviews as CharacterReviews;
 
 Route::prefix('/characters')
     ->name('characters')
@@ -29,5 +30,8 @@ Route::prefix('/characters')
 
                 Route::get('/people', CharacterPeople::class)
                     ->name('.people');
+
+                Route::get('/reviews', CharacterReviews::class)
+                    ->name('.reviews');
             });
     });

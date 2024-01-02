@@ -8,6 +8,7 @@ use App\Enums\CharacterStatus;
 use App\Enums\MediaCollection;
 use App\Scopes\BornTodayScope;
 use App\Traits\InteractsWithMediaExtension;
+use App\Traits\Model\HasMediaRatings;
 use App\Traits\Model\HasMediaStat;
 use App\Traits\Model\HasTranslatableSlug;
 use App\Traits\Model\HasViews;
@@ -29,6 +30,7 @@ use Spatie\Sluggable\SlugOptions;
 class Character extends KModel implements HasMedia, Sitemapable
 {
     use HasFactory,
+        HasMediaRatings,
         HasMediaStat,
         HasTranslatableSlug,
         HasViews,

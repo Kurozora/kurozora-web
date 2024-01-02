@@ -2,17 +2,19 @@
 
 namespace App\Http\Livewire\Character;
 
-use App\Events\CharacterViewed;
 use App\Models\Character;
 use App\Models\MediaRating;
+use App\Models\MediaStat;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Pagination\CursorPaginator;
 use Illuminate\Support\Collection;
 use Livewire\Component;
 
-class Details extends Component
+class Reviews extends Component
 {
     /**
      * The object containing the character data.
@@ -22,11 +24,11 @@ class Details extends Component
     public Character $character;
 
     /**
-     * The object containing the user's rating data.
+     * Whether the component is ready to load.
      *
-     * @var Collection|MediaRating[] $userRating
+     * @var bool $readyToLoad
      */
-    public Collection|array $userRating;
+    public bool $readyToLoad = false;
 
     /**
      * Whether to show the review box to the user.
@@ -57,15 +59,7 @@ class Details extends Component
     public array $popupData = [
         'title' => '',
         'message' => '',
-        'type' => 'default'
     ];
-
-    /**
-     * Whether the component is ready to load.
-     *
-     * @var bool $readyToLoad
-     */
-    public bool $readyToLoad = false;
 
     /**
      * Prepare the component.
@@ -76,21 +70,7 @@ class Details extends Component
      */
     public function mount(Character $character): void
     {
-        // Call the CharacterViewed event
-        CharacterViewed::dispatch($character);
-
-        $this->character = $character->load(['media'])
-            ->when(auth()->user(), function ($query, $user) use ($character) {
-                return $character->loadMissing(['mediaRatings' => function ($query) {
-                    $query->where('user_id', '=', auth()->user()->id);
-                }]);
-            });
-
-        if (!auth()->check()) {
-            $this->character->setRelation('mediaRatings', collect());
-        }
-
-        $this->userRating = $character->mediaRatings;
+        $this->character = $character->load(['media']);
     }
 
     /**
@@ -115,9 +95,48 @@ class Details extends Component
             return to_route('sign-in');
         }
 
-        $this->reviewText = $this->character->mediaRatings->first()?->description;
+        $this->reviewText = $this->userRating?->description;
         $this->showReviewBox = true;
         $this->showPopup = true;
+    }
+
+    /**
+     * Get the media stats.
+     *
+     * @return MediaStat
+     */
+    public function getMediaStatProperty(): MediaStat
+    {
+        return $this->character->mediaStat;
+    }
+
+    /**
+     * Get the media stats.
+     *
+     * @return Collection|CursorPaginator
+     */
+    public function getMediaRatingsProperty(): Collection|CursorPaginator
+    {
+        if (!$this->readyToLoad) {
+            return collect();
+        }
+
+        return $this->character->mediaRatings()
+            ->with(['user.media'])
+            ->where('description', '!=', null)
+            ->orderBy('created_at')
+            ->cursorPaginate();
+    }
+
+    /**
+     * Returns the user rating.
+     *
+     * @return MediaRating|Model|null
+     */
+    public function getUserRatingProperty(): MediaRating|Model|null
+    {
+        return $this->character->mediaRatings()
+            ->firstWhere('user_id', auth()->user()?->id);
     }
 
     /**
@@ -148,6 +167,6 @@ class Details extends Component
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.character.details');
+        return view('livewire.character.reviews');
     }
 }
