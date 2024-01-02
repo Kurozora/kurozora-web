@@ -29,8 +29,12 @@
                         <h1 class="text-2xl font-bold">{{ __(':x Episodes', ['x' => $season->title]) }}</h1>
                     </div>
 
-                    <div class="flex flex-wrap justify-end items-center w-full">
+                    <div class="flex flex-wrap justify-end items-center gap-2 w-full">
                         <livewire:season.watch-button :season="$season" />
+
+                        <x-nova-link :resource="\App\Nova\Season::class" :model="$season">
+                            @svg('pencil', 'fill-current', ['width' => '44'])
+                        </x-nova-link>
                     </div>
                 </div>
 

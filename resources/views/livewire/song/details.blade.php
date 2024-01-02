@@ -98,6 +98,10 @@
                     </div>
                 </template>
 
+                <x-nova-link :resource="\App\Nova\Song::class" :model="$song">
+                    @svg('pencil', 'fill-current', ['width' => '44'])
+                </x-nova-link>
+
                 <x-dropdown align="right" width="48">
                     <x-slot:trigger>
                         <x-circle-button
