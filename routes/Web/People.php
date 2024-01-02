@@ -6,6 +6,7 @@ use App\Http\Livewire\Person\Details as PersonDetails;
 use App\Http\Livewire\Person\Games as PersonGames;
 use App\Http\Livewire\Person\Index as PersonIndex;
 use App\Http\Livewire\Person\Manga as PersonManga;
+use App\Http\Livewire\Person\Reviews as PersonReviews;
 
 Route::prefix('/people')
     ->name('people')
@@ -29,5 +30,8 @@ Route::prefix('/people')
 
                 Route::get('/manga', PersonManga::class)
                     ->name('.manga');
+
+                Route::get('/reviews', PersonReviews::class)
+                    ->name('.reviews');
             });
     });

@@ -7,6 +7,7 @@ use App\Enums\AstrologicalSign;
 use App\Enums\MediaCollection;
 use App\Scopes\BornTodayScope;
 use App\Traits\InteractsWithMediaExtension;
+use App\Traits\Model\HasMediaRatings;
 use App\Traits\Model\HasMediaStat;
 use App\Traits\Model\HasViews;
 use App\Traits\SearchFilterable;
@@ -28,6 +29,7 @@ use Spatie\Sluggable\SlugOptions;
 class Person extends KModel implements HasMedia, Sitemapable
 {
     use HasFactory,
+        HasMediaRatings,
         HasMediaStat,
         HasSlug,
         HasViews,
