@@ -5,6 +5,7 @@ use App\Http\Livewire\Studio\Details as StudioDetails;
 use App\Http\Livewire\Studio\Games as StudioGames;
 use App\Http\Livewire\Studio\Index as StudioIndex;
 use App\Http\Livewire\Studio\Manga as StudioManga;
+use App\Http\Livewire\Studio\Reviews as StudioReviews;
 
 Route::prefix('/studios')
     ->name('studios')
@@ -25,5 +26,8 @@ Route::prefix('/studios')
 
                 Route::get('/games', StudioGames::class)
                     ->name('.games');
+
+                Route::get('/reviews', StudioReviews::class)
+                    ->name('.reviews');
             });
     });

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Livewire\Anime;
+namespace App\Http\Livewire\Studio;
 
-use App\Models\Anime;
 use App\Models\MediaRating;
 use App\Models\MediaStat;
+use App\Models\Studio;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -17,11 +17,11 @@ use Livewire\Component;
 class Reviews extends Component
 {
     /**
-     * The object containing the anime data.
+     * The object containing the studio data.
      *
-     * @var Anime $anime
+     * @var Studio $studio
      */
-    public Anime $anime;
+    public Studio $studio;
 
     /**
      * Whether the component is ready to load.
@@ -64,13 +64,13 @@ class Reviews extends Component
     /**
      * Prepare the component.
      *
-     * @param Anime $anime
+     * @param Studio $studio
      *
      * @return void
      */
-    public function mount(Anime $anime): void
+    public function mount(Studio $studio): void
     {
-        $this->anime = $anime->load(['media']);
+        $this->studio = $studio->load(['media']);
     }
 
     /**
@@ -95,7 +95,7 @@ class Reviews extends Component
             return to_route('sign-in');
         }
 
-        $this->reviewText = $this->userRating->description;
+        $this->reviewText = $this->userRating?->description;
         $this->showReviewBox = true;
         $this->showPopup = true;
     }
@@ -107,7 +107,7 @@ class Reviews extends Component
      */
     public function getMediaStatProperty(): MediaStat
     {
-        return $this->anime->mediaStat;
+        return $this->studio->mediaStat;
     }
 
     /**
@@ -121,7 +121,7 @@ class Reviews extends Component
             return collect();
         }
 
-        return $this->anime->mediaRatings()
+        return $this->studio->mediaRatings()
             ->with(['user.media'])
             ->where('description', '!=', null)
             ->orderBy('created_at')
@@ -135,7 +135,7 @@ class Reviews extends Component
      */
     public function getUserRatingProperty(): MediaRating|Model|null
     {
-        return $this->anime->mediaRatings()
+        return $this->studio->mediaRatings()
             ->firstWhere('user_id', auth()->user()?->id);
     }
 
@@ -146,9 +146,16 @@ class Reviews extends Component
      */
     public function submitReview(): void
     {
-        $this->userRating->update([
-            'description' => strip_tags($this->reviewText)
-        ]);
+        $reviewText = strip_tags($this->reviewText);
+
+        auth()->user()->mediaRatings()
+            ->updateOrCreate([
+                'model_type' => $this->studio->getMorphClass(),
+                'model_id' => $this->studio->id,
+            ], [
+                'description' => $reviewText,
+            ]);
+
         $this->showReviewBox = false;
         $this->showPopup = false;
     }
@@ -160,6 +167,6 @@ class Reviews extends Component
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.anime.reviews');
+        return view('livewire.studio.reviews');
     }
 }

@@ -6,6 +6,7 @@ use App\Casts\AsArrayObject;
 use App\Enums\MediaCollection;
 use App\Enums\StudioType;
 use App\Traits\InteractsWithMediaExtension;
+use App\Traits\Model\HasMediaRatings;
 use App\Traits\Model\HasMediaStat;
 use App\Traits\Model\HasViews;
 use App\Traits\Model\TvRated;
@@ -28,9 +29,10 @@ use Spatie\Sluggable\SlugOptions;
 class Studio extends KModel implements HasMedia, Sitemapable
 {
     use HasFactory,
+        HasMediaRatings,
+        HasMediaStat,
         HasSlug,
         HasViews,
-        HasMediaStat,
         InteractsWithMedia,
         InteractsWithMediaExtension,
         Searchable,
