@@ -9,17 +9,19 @@ use App\Models\Episode;
 use App\Models\MediaRating;
 use App\Models\Season;
 use App\Models\Video;
+use App\Traits\Livewire\WithReviewBox;
 use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Collection;
 use Livewire\Component;
 
 class Details extends Component
 {
+    use WithReviewBox;
+
     /**
      * The object containing the episode data.
      *
@@ -70,13 +72,6 @@ class Details extends Component
     public bool $showVideo = false;
 
     /**
-     * Whether to show the review box to the user.
-     *
-     * @var bool $showReviewBox
-     */
-    public bool $showReviewBox = false;
-
-    /**
      * Whether to show the popup to the user.
      *
      * @var bool $showPopup
@@ -89,13 +84,6 @@ class Details extends Component
      * @var bool $showSharePopup
      */
     public bool $showSharePopup = false;
-
-    /**
-     * The written review text.
-     *
-     * @var string|null $reviewText
-     */
-    public ?string $reviewText;
 
     /**
      * The data used to populate the popup.
@@ -207,23 +195,6 @@ class Details extends Component
     }
 
     /**
-     * Shows the review text box to the user.
-     *
-     * @return RedirectResponse|void
-     */
-    public function showReviewBox()
-    {
-        // Require user to authenticate if necessary.
-        if (!auth()->check()) {
-            return to_route('sign-in');
-        }
-
-        $this->reviewText = $this->episode->mediaRatings->first()?->description;
-        $this->showReviewBox = true;
-        $this->showPopup = true;
-    }
-
-    /**
      * Select the preferred video source.
      *
      * @param string $source
@@ -322,27 +293,6 @@ class Details extends Component
     public function getSeasonProperty(): ?Season
     {
         return $this->episode->season;
-    }
-
-    /**
-     * Submits the written review.
-     *
-     * @return void
-     */
-    public function submitReview(): void
-    {
-        $reviewText = strip_tags($this->reviewText);
-
-        auth()->user()->mediaRatings()
-            ->updateOrCreate([
-                'model_type' => $this->episode->getMorphClass(),
-                'model_id' => $this->episode->id,
-            ], [
-                'description' => $reviewText,
-            ]);
-
-        $this->showReviewBox = false;
-        $this->showPopup = false;
     }
 
     /**

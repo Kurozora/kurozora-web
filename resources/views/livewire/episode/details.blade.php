@@ -352,11 +352,11 @@
                         <div class="flex justify-between items-center">
                             <p class="">{{ __('Click to Rate:') }}</p>
 
-                            <livewire:components.star-rating :model="$episode" :rating="$userRating->first()?->rating" :star-size="'md'" />
+                            <livewire:components.star-rating :model-id="$episode->id" :model-type="$episode->getMorphClass()" :rating="$userRating->first()?->rating" :star-size="'md'" />
                         </div>
 
                         <div class="flex justify-between">
-                            <x-simple-button class="flex gap-1" wire:click="showReviewBox">
+                            <x-simple-button class="flex gap-1" wire:click="$emit('show-review-box', '{{  $this->reviewBoxID }}')">
                                 @svg('pencil', 'fill-current', ['width' => 18])
                                 {{ __('Write a Review') }}
                             </x-simple-button>
@@ -430,40 +430,20 @@
         </div>
     </div>
 
+    <livewire:components.review-box :review-box-id="$reviewBoxID" :model="$episode" :user-rating="$userRating" />
+
     <x-dialog-modal maxWidth="md" model="showPopup">
-        @if ($showReviewBox)
-            <x-slot:title>
-                {{ __('Write a Review') }}
-            </x-slot:title>
+        <x-slot:title>
+            {{ $popupData['title'] }}
+        </x-slot:title>
 
-            <x-slot:content>
-                <div class="flex flex-col gap-2">
-                    <div class="flex items-center">
-                        <p class="">{{ __('Click to Rate:') }}</p>
+        <x-slot:content>
+            <p>{{ $popupData['message'] }}</p>
+        </x-slot:content>
 
-                        <livewire:components.star-rating :model="$episode" :rating="$userRating->first()?->rating" :star-size="'md'" />
-                    </div>
-
-                    <x-textarea class="block w-full h-48 mt-1 resize-none" placeholder="{{ __('What’s on your mind?') }}" wire:model.defer="reviewText"></x-textarea>
-                </div>
-            </x-slot:content>
-
-            <x-slot:footer>
-                <x-button wire:click="submitReview">{{ __('Submit') }}</x-button>
-            </x-slot:footer>
-        @else
-            <x-slot:title>
-                {{ $popupData['title'] }}
-            </x-slot:title>
-
-            <x-slot:content>
-                <p>{{ $popupData['message'] }}</p>
-            </x-slot:content>
-
-            <x-slot:footer>
-                <x-button wire:click="$toggle('showPopup')">{{ __('Ok') }}</x-button>
-            </x-slot:footer>
-        @endif
+        <x-slot:footer>
+            <x-button wire:click="$toggle('showPopup')">{{ __('Ok') }}</x-button>
+        </x-slot:footer>
     </x-dialog-modal>
 
     <x-share-modal
