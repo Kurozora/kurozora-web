@@ -2,7 +2,6 @@
 
 namespace App\Http\Livewire\Components;
 
-use App\Models\KModel;
 use App\Models\MediaRating;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -13,11 +12,18 @@ use Livewire\Component;
 class StarRating extends Component
 {
     /**
-     * The object containing the model data.
+     * The id the model.
      *
-     * @var KModel|null
+     * @var string|null
      */
-    public ?KModel $model;
+    public ?string $modelID;
+
+    /**
+     * The type of the model.
+     *
+     * @var string|null
+     */
+    public ?string $modelType;
 
     /**
      * The rating used to fill the stars.
@@ -41,18 +47,42 @@ class StarRating extends Component
     public bool $disabled;
 
     /**
+     * The component's listeners.
+     *
+     * @return array
+     */
+    protected function getListeners(): array
+    {
+        return $this->disabled ? [] : [
+            $this->listenerKey() => 'handleRatingUpdate',
+        ];
+    }
+
+    /**
+     * The listener key of the component.
+     *
+     * @return string
+     */
+    protected function listenerKey(): string
+    {
+        return 'star-rating-updated-' . $this->modelID . '-' . $this->modelType;
+    }
+
+    /**
      * Prepare the component.
      *
-     * @param KModel|null $model
-     * @param float|null $rating
-     * @param string     $starSize
-     * @param bool       $disabled
+     * @param null|string $modelId
+     * @param null|string $modelType
+     * @param null|float  $rating
+     * @param string      $starSize
+     * @param bool        $disabled
      *
      * @return void
      */
-    function mount(?KModel $model, ?float $rating = null, string $starSize = 'md', bool $disabled = false): void
+    function mount(?string $modelId = null, ?string $modelType = null, ?float $rating = null, string $starSize = 'md', bool $disabled = false): void
     {
-        $this->model = $model;
+        $this->modelID = $modelId;
+        $this->modelType = $modelType;
         $this->rating = $rating ?? MediaRating::MIN_RATING_VALUE;
         $this->starSize = match ($starSize) {
             'sm' => 'h-4',
@@ -77,8 +107,8 @@ class StarRating extends Component
 
         if ($this->rating == -1) {
             $user->mediaRatings()->where([
-                ['model_id', '=', $this->model->id],
-                ['model_type', '=', $this->model->getMorphClass()],
+                ['model_id', '=', $this->modelID],
+                ['model_type', '=', $this->modelType],
             ])->forceDelete();
         } else {
             if ($this->rating < MediaRating::MIN_RATING_VALUE || $this->rating > MediaRating::MAX_RATING_VALUE) {
@@ -87,11 +117,34 @@ class StarRating extends Component
 
             // Update authenticated user's rating
             $user->mediaRatings()->updateOrCreate([
-                'model_id' => $this->model->id,
-                'model_type' => $this->model->getMorphClass(),
+                'model_id' => $this->modelID,
+                'model_type' => $this->modelType,
             ], [
-                'rating' => $this->rating
+                'rating' => $this->rating,
             ]);
+        }
+
+        $this->emit($this->listenerKey(), $this->id, $this->modelID, $this->modelType, $this->rating);
+    }
+
+    /**
+     * Handles the event emitted when updating the rating.
+     *
+     * @param $id
+     * @param $modelID
+     * @param $modelType
+     * @param $rating
+     *
+     * @return void
+     */
+    public function handleRatingUpdate($id, $modelID, $modelType, $rating): void
+    {
+        if (
+            $this->id != $id &&
+            $modelID == $this->modelID &&
+            $modelType == $this->modelType
+        ) {
+            $this->rating = $rating;
         }
     }
 
