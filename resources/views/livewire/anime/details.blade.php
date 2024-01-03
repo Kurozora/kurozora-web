@@ -282,11 +282,11 @@
                     <div class="flex justify-between items-center">
                         <p class="">{{ __('Click to Rate:') }}</p>
 
-                        <livewire:components.star-rating :model="$anime" :rating="$userRating->first()?->rating" :star-size="'md'" />
+                        <livewire:components.star-rating :model-id="$anime->id" :model-type="$anime->getMorphClass()" :rating="$userRating->first()?->rating" :star-size="'md'" />
                     </div>
 
                     <div class="flex justify-between">
-                        <x-simple-button class="flex gap-1" wire:click="showReviewBox">
+                        <x-simple-button class="flex gap-1" wire:click="$emit('show-review-box', '{{  $this->reviewBoxID }}')">
                             @svg('pencil', 'fill-current', ['width' => 18])
                             {{ __('Write a Review') }}
                         </x-simple-button>
@@ -471,6 +471,8 @@
                 </div>
             @endif
 
+            <livewire:components.review-box :review-box-id="$reviewBoxID" :model="$anime" :user-rating="$userRating" />
+
             <x-dialog-modal maxWidth="md" model="showPopup">
                 @if ($showVideo)
                     <x-slot:title>
@@ -495,26 +497,6 @@
 
                     <x-slot:footer>
                         <x-button wire:click="$toggle('showPopup')">{{ __('Close') }}</x-button>
-                    </x-slot:footer>
-                @elseif ($showReviewBox)
-                    <x-slot:title>
-                        {{ __('Write a Review') }}
-                    </x-slot:title>
-
-                    <x-slot:content>
-                        <div class="flex flex-col gap-2">
-                            <div class="flex items-center">
-                                <p class="">{{ __('Click to Rate:') }}</p>
-
-                                <livewire:components.star-rating :model="$anime" :rating="$userRating->first()?->rating" :star-size="'md'" />
-                            </div>
-
-                            <x-textarea class="block w-full h-48 mt-1 resize-none" placeholder="{{ __('What’s on your mind?') }}" wire:model.defer="reviewText"></x-textarea>
-                        </div>
-                    </x-slot:content>
-
-                    <x-slot:footer>
-                        <x-button wire:click="submitReview">{{ __('Submit') }}</x-button>
                     </x-slot:footer>
                 @else
                     <x-slot:title>

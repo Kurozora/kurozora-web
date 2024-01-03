@@ -7,15 +7,17 @@ use App\Models\Anime;
 use App\Models\MediaRating;
 use App\Models\Studio;
 use App\Models\UserLibrary;
+use App\Traits\Livewire\WithReviewBox;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Collection;
 use Livewire\Component;
 
 class Details extends Component
 {
+    use WithReviewBox;
+
     /**
      * The object containing the anime data.
      *
@@ -66,25 +68,11 @@ class Details extends Component
     public bool $showVideo = false;
 
     /**
-     * Whether to show the review box to the user.
-     *
-     * @var bool $showReviewBox
-     */
-    public bool $showReviewBox = false;
-
-    /**
      * Whether to show the popup to the user.
      *
      * @var bool $showPopup
      */
     public bool $showPopup = false;
-
-    /**
-     * The written review text.
-     *
-     * @var string|null $reviewText
-     */
-    public ?string $reviewText;
 
     /**
      * The data used to populate the popup.
@@ -187,23 +175,6 @@ class Details extends Component
     }
 
     /**
-     * Shows the review text box to the user.
-     *
-     * @return RedirectResponse|void
-     */
-    public function showReviewBox()
-    {
-        // Require user to authenticate if necessary.
-        if (!auth()->check()) {
-            return to_route('sign-in');
-        }
-
-        $this->reviewText = $this->anime->mediaRatings->first()?->description;
-        $this->showReviewBox = true;
-        $this->showPopup = true;
-    }
-
-    /**
      * Adds the anime to the user's favorite list.
      */
     public function favoriteAnime(): void
@@ -251,27 +222,6 @@ class Details extends Component
             ];
             $this->showPopup = true;
         }
-    }
-
-    /**
-     * Submits the written review.
-     *
-     * @return void
-     */
-    public function submitReview(): void
-    {
-        $reviewText = strip_tags($this->reviewText);
-
-        auth()->user()->mediaRatings()
-            ->updateOrCreate([
-                'model_type' => $this->anime->getMorphClass(),
-                'model_id' => $this->anime->id,
-            ], [
-                'description' => $reviewText,
-            ]);
-
-        $this->showReviewBox = false;
-        $this->showPopup = false;
     }
 
     /**
