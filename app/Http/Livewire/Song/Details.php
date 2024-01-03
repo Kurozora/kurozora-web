@@ -5,15 +5,17 @@ namespace App\Http\Livewire\Song;
 use App\Events\SongViewed;
 use App\Models\MediaRating;
 use App\Models\Song;
+use App\Traits\Livewire\WithReviewBox;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Collection;
 use Livewire\Component;
 
 class Details extends Component
 {
+    use WithReviewBox;
+
     /**
      * The object containing the song data.
      *
@@ -29,43 +31,11 @@ class Details extends Component
     public Collection|array $userRating;
 
     /**
-     * Whether to show the review box to the user.
-     *
-     * @var bool $showReviewBox
-     */
-    public bool $showReviewBox = false;
-
-    /**
      * Whether to show the share popup to the user.
      *
      * @var bool $showSharePopup
      */
     public bool $showSharePopup = false;
-
-    /**
-     * Whether to show the popup to the user.
-     *
-     * @var bool $showPopup
-     */
-    public bool $showPopup = false;
-
-    /**
-     * The written review text.
-     *
-     * @var string|null $reviewText
-     */
-    public ?string $reviewText;
-
-    /**
-     * The data used to populate the popup.
-     *
-     * @var array|string[]
-     */
-    public array $popupData = [
-        'title' => '',
-        'message' => '',
-        'type' => 'default'
-    ];
 
     /**
      * Prepare the component.
@@ -90,44 +60,6 @@ class Details extends Component
         }
 
         $this->userRating = $song->mediaRatings;
-    }
-
-    /**
-     * Shows the review text box to the user.
-     *
-     * @return RedirectResponse|void
-     */
-    public function showReviewBox()
-    {
-        // Require user to authenticate if necessary.
-        if (!auth()->check()) {
-            return to_route('sign-in');
-        }
-
-        $this->reviewText = $this->song->mediaRatings->first()?->description;
-        $this->showReviewBox = true;
-        $this->showPopup = true;
-    }
-
-    /**
-     * Submits the written review.
-     *
-     * @return void
-     */
-    public function submitReview(): void
-    {
-        $reviewText = strip_tags($this->reviewText);
-
-        auth()->user()->mediaRatings()
-            ->updateOrCreate([
-                'model_type' => $this->song->getMorphClass(),
-                'model_id' => $this->song->id,
-            ], [
-                'description' => $reviewText,
-            ]);
-
-        $this->showReviewBox = false;
-        $this->showPopup = false;
     }
 
     /**
