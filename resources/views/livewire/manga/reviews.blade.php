@@ -21,7 +21,7 @@
         manga/{{ $manga->id }}/reviews
     </x-slot:appArgument>
 
-    <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6">
+    <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6" wire:init="loadPage">
         <section class="mb-4">
             <div>
                 <div class="flex gap-1">
@@ -61,11 +61,11 @@
                 <div class="flex justify-between items-center">
                     <p class="">{{ __('Click to Rate:') }}</p>
 
-                    <livewire:components.star-rating :model="$manga" :rating="$this->userRating?->rating" :star-size="'md'" />
+                    <livewire:components.star-rating :model-id="$manga->id" :model-type="$manga->getMorphClass()" :rating="$this->userRating?->rating" :star-size="'md'" />
                 </div>
 
                 <div class="flex justify-between">
-                    <x-simple-button class="flex gap-1" wire:click="showReviewBox">
+                    <x-simple-button class="flex gap-1" wire:click="$emit('show-review-box', '{{  $this->reviewBoxID }}')">
                         @svg('pencil', 'fill-current', ['width' => 18])
                         {{ __('Write a Review') }}
                     </x-simple-button>
@@ -98,41 +98,7 @@
                 </div>
             </section>
         @endif
-
-        <x-dialog-modal maxWidth="md" model="showPopup">
-            @if ($showReviewBox)
-                <x-slot:title>
-                    {{ __('Write a Review') }}
-                </x-slot:title>
-
-                <x-slot:content>
-                    <div class="flex flex-col gap-2">
-                        <div class="flex items-center">
-                            <p class="">{{ __('Click to Rate:') }}</p>
-
-                            <livewire:components.star-rating :model="$manga" :rating="$this->userRating?->rating" :star-size="'md'" />
-                        </div>
-
-                        <x-textarea class="block w-full h-48 mt-1 resize-none" placeholder="{{ __('What’s on your mind?') }}" wire:model.defer="reviewText"></x-textarea>
-                    </div>
-                </x-slot:content>
-
-                <x-slot:footer>
-                    <x-button wire:click="submitReview">{{ __('Submit') }}</x-button>
-                </x-slot:footer>
-            @else
-                <x-slot:title>
-                    {{ $popupData['title'] }}
-                </x-slot:title>
-
-                <x-slot:content>
-                    <p>{{ $popupData['message'] }}</p>
-                </x-slot:content>
-
-                <x-slot:footer>
-                    <x-button wire:click="$toggle('showPopup')">{{ __('Ok') }}</x-button>
-                </x-slot:footer>
-            @endif
-        </x-dialog-modal>
     </div>
+
+    <livewire:components.review-box :review-box-id="$reviewBoxID" :model="$manga" :user-rating="collect([$this->userRating])" />
 </main>
