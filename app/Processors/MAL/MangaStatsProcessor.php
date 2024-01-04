@@ -39,7 +39,7 @@ final class MangaStatsProcessor extends CustomItemProcessor
 //            'scoreAverage' => $scoreAverage
 //        ]);
 
-        if ($mediaStat->rating_average <= 0) {
+//        if ($mediaStat->rating_average <= 0) {
             logger()->channel('stderr')->info('🛠 [MAL_ID:MANGA:' . $malID . '] Updating stats attributes');
 
             $mediaStat->updateOrInsert([
@@ -61,7 +61,7 @@ final class MangaStatsProcessor extends CustomItemProcessor
             ]);
 
             logger()->channel('stderr')->info('✅️ [MAL_ID:MANGA:' . $malID . '] Done updating stats attributes');
-        }
+//        }
 
         logger()->channel('stderr')->info('✅️ [MAL_ID:MANGA:' . $malID . '] Done processing stats');
         return $item;
