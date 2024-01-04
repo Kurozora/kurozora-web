@@ -72,6 +72,8 @@ class Details extends Component
                 return $person->loadMissing(['mediaRatings' => function ($query) {
                     $query->where('user_id', '=', auth()->user()->id);
                 }]);
+            }, function() use ($person) {
+                return $person;
             });
 
         if (!auth()->check()) {

@@ -54,6 +54,8 @@ class Details extends Component
                 return $studio->loadMissing(['mediaRatings' => function ($query) {
                     $query->where('user_id', '=', auth()->user()->id);
                 }]);
+            }, function() use ($studio) {
+                return $studio;
             });
 
         if (!auth()->check()) {

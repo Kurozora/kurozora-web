@@ -53,6 +53,8 @@ class Details extends Component
                 return $song->loadMissing(['mediaRatings' => function ($query) {
                     $query->where('user_id', '=', auth()->user()->id);
                 }]);
+            }, function() use ($song) {
+                return $song;
             });
 
         if (!auth()->check()) {

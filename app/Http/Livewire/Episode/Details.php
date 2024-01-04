@@ -151,6 +151,8 @@ class Details extends Component
             return $episode->loadMissing(['mediaRatings' => function ($query) {
                 $query->where('user_id', '=', auth()->user()->id);
             }]);
+        }, function() use ($episode) {
+            return $episode;
         });
 
         if (!auth()->check()) {
