@@ -49,10 +49,11 @@ class ExploreCategoryResource extends JsonResource
     }
 
     /**
-     * Returns specific title that should be added depending on the type of
-     * category.
+     * Returns specific title that should be added
+     * depending on the type of the category.
      *
      * @param Request $request
+     *
      * @return string
      */
     private function getTypeSpecificTitle(Request $request): string
@@ -64,10 +65,11 @@ class ExploreCategoryResource extends JsonResource
     }
 
     /**
-     * Returns specific data that should be added depending on the type of
-     * category.
+     * Returns specific data that should be added
+     * depending on the type of the category.
      *
      * @param Request $request
+     *
      * @return array
      */
     private function getTypeSpecificData(Request $request): array

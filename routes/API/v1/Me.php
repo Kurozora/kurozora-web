@@ -25,6 +25,7 @@ Route::prefix('/me')
         require 'Me/Feed-Messages.php';
         require 'Me/Library.php';
         require 'Me/Notifications.php';
+        require 'Me/Recap.php';
         require 'Me/Reminder-Anime.php';
         require 'Me/Sessions.php';
     });

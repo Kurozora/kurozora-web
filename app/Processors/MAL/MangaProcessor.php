@@ -855,7 +855,7 @@ class MangaProcessor extends CustomItemProcessor
             } else if (str($synopsis)->contains(['[Written by MAL Rewrite]'])) {
                 $synopsis = str($synopsis)->replaceLast('[Written by MAL Rewrite]', 'Source: MAL');
             } else {
-                $synopsis = preg_replace_array('/\([^ ]*|\)/i', ['Source:', ''], $synopsis);
+                $synopsis = preg_replace_array('/\(Source:[^ ]*|\)$/i', ['Source:', ''], $synopsis);
             }
 
             $synopsis = str_replace('<br>', '', $synopsis);

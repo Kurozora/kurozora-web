@@ -3886,6 +3886,64 @@
         }
       }
     },
+    "/me/recap": {
+      "get": {
+        "security": [
+          {
+            "bearerAuth": [
+            ]
+          }
+        ],
+        "tags": [
+          "me"
+        ],
+        "summary": "Get a list of available Re:CAP years.",
+        "description": "This endpoint will retrieve the list of Re:CAP years available for the authenticated user.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/me/recap/{year}": {
+      "get": {
+        "security": [
+          {
+            "bearerAuth": [
+            ]
+          }
+        ],
+        "tags": [
+          "me"
+        ],
+        "summary": "Get Re:CAP for year.",
+        "description": "This endpoint will retrieve the authenticated user's Re:CAP details for the specified year.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "year",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Year of the Re:CAP to be retrieved."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
     "/me/reminder-anime": {
       "get": {
         "security": [
