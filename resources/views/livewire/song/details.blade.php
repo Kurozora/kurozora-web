@@ -236,5 +236,5 @@
         :type="'song'"
     />
 
-    <livewire:components.review-box :review-box-id="$reviewBoxID" :model="$song" :user-rating="$userRating" />
+    <livewire:components.review-box :review-box-id="$reviewBoxID" :model-id="$song->id" :model-type="$song->getMorphClass()" :user-rating="$userRating?->first()" />
 </main>

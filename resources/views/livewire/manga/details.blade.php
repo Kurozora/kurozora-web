@@ -464,7 +464,7 @@
         </div>
     </div>
 
-    <livewire:components.review-box :review-box-id="$reviewBoxID" :model="$manga" :user-rating="$userRating" />
+    <livewire:components.review-box :review-box-id="$reviewBoxID" :model-id="$manga->id" :model-type="$manga->getMorphClass()" :user-rating="$userRating?->first()" />
 
     <x-dialog-modal maxWidth="md" model="showPopup">
         <x-slot:title>

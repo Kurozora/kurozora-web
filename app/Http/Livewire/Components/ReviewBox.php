@@ -2,13 +2,11 @@
 
 namespace App\Http\Livewire\Components;
 
-use App\Models\KModel;
 use App\Models\MediaRating;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Collection;
 use Livewire\Component;
 
 class ReviewBox extends Component
@@ -21,30 +19,37 @@ class ReviewBox extends Component
     public string $reviewBoxID;
 
     /**
-     * The object containing the model data.
+     * The object containing the model id.
      *
-     * @var KModel $model
+     * @var string $modelID
      */
-    public KModel $model;
+    public string $modelID;
+
+    /**
+     * The object containing the model type.
+     *
+     * @var string $modelType
+     */
+    public string $modelType;
 
     /**
      * The object containing the user's rating data.
      *
-     * @var Collection|MediaRating[] $userRating
+     * @var null|MediaRating $userRating
      */
-    public Collection|array $userRating;
+    public ?MediaRating $userRating = null;
 
     /**
      * The written review text.
      *
-     * @var string|null $reviewText
+     * @var null|string $reviewText
      */
     public ?string $reviewText;
 
     /**
      * The written note text.
      *
-     * @var string|null $noteText
+     * @var null|string $noteText
      */
     public ?string $noteText;
 
@@ -64,15 +69,17 @@ class ReviewBox extends Component
 
     /**
      * @param string           $reviewBoxId
-     * @param KModel           $model
-     * @param Collection|array $userRating
+     * @param string           $modelId
+     * @param string           $modelType
+     * @param null|MediaRating $userRating
      *
      * @return void
      */
-    public function mount(string $reviewBoxId, KModel $model, Collection|array $userRating): void
+    public function mount(string $reviewBoxId, string $modelId, string $modelType, $userRating): void
     {
         $this->reviewBoxID = $reviewBoxId;
-        $this->model = $model;
+        $this->modelID = $modelId;
+        $this->modelType = $modelType;
         $this->userRating = $userRating;
     }
 
@@ -102,8 +109,8 @@ class ReviewBox extends Component
             return to_route('sign-in');
         }
 
-        $this->reviewText = $this->model->mediaRatings->first()?->description;
-        $this->noteText = $this->model->mediaRatings->first()?->note;
+        $this->reviewText = $this->userRating?->description ?? '';
+        $this->noteText = $this->userRating?->note ?? '';
         $this->showPopup = true;
     }
 
@@ -117,10 +124,13 @@ class ReviewBox extends Component
         $reviewText = strip_tags($this->reviewText);
         $noteText = strip_tags($this->noteText);
 
+        $reviewText = empty($reviewText) ? null : $reviewText;
+        $noteText = empty($noteText) ? null : $noteText;
+
         auth()->user()->mediaRatings()
             ->updateOrCreate([
-                'model_type' => $this->model->getMorphClass(),
-                'model_id' => $this->model->id,
+                'model_type' => $this->modelType,
+                'model_id' => $this->modelID,
             ], [
                 'description' => $reviewText,
                 'note' => $noteText,

@@ -99,5 +99,5 @@
         @endif
     </div>
 
-    <livewire:components.review-box :review-box-id="$reviewBoxID" :model="$song" :user-rating="collect([$this->userRating])" />
+    <livewire:components.review-box :review-box-id="$reviewBoxID" :model-id="$song->id" :model-type="$song->getMorphClass()" :user-rating="$this->userRating" />
 </main>

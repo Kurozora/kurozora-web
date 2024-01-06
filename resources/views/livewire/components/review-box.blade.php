@@ -9,7 +9,7 @@
                 <div class="flex items-center">
                     <p class="">{{ __('Click to Rate:') }}</p>
 
-                    <livewire:components.star-rating :model-id="$model->id" :model-type="$model->getMorphClass()"  :rating="$userRating->first()?->rating" :star-size="'md'" />
+                    <livewire:components.star-rating :model-id="$modelID" :model-type="$modelType" :rating="$userRating?->rating" :star-size="'md'" />
                 </div>
 
                 <x-textarea class="block w-full h-48 mt-1 resize-none" placeholder="{{ __('What’s on your mind?') }}" wire:model.defer="reviewText"></x-textarea>

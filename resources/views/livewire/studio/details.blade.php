@@ -176,5 +176,5 @@
         @endif
     </div>
 
-    <livewire:components.review-box :review-box-id="$reviewBoxID" :model="$studio" :user-rating="$userRating" />
+    <livewire:components.review-box :review-box-id="$reviewBoxID" :model-id="$studio->id" :model-type="$studio->getMorphClass()" :user-rating="$userRating?->first()" />
 </main>

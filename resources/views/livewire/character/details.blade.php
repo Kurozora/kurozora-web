@@ -200,7 +200,7 @@
         @endif
     </div>
 
-    <livewire:components.review-box :review-box-id="$reviewBoxID" :model="$character" :user-rating="$userRating" />
+    <livewire:components.review-box :review-box-id="$reviewBoxID" :model-id="$character->id" :model-type="$character->getMorphClass()" :user-rating="$userRating?->first()" />
 
     <x-dialog-modal maxWidth="md" model="showPopup">
         <x-slot:title>

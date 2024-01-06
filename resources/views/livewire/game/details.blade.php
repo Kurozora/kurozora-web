@@ -450,7 +450,7 @@
         </div>
     </div>
 
-    <livewire:components.review-box :review-box-id="$reviewBoxID" :model="$game" :user-rating="$userRating" />
+    <livewire:components.review-box :review-box-id="$reviewBoxID" :model-id="$game->id" :model-type="$game->getMorphClass()" :user-rating="$userRating?->first()" />
 
     <x-dialog-modal maxWidth="md" model="showPopup">
         @if ($showVideo)
