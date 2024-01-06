@@ -7,7 +7,7 @@
     <nav class="relative bg-white border-b border-gray-100 z-[300]">
         {{-- Primary Navigation Menu --}}
         <div class="max-w-7xl mx-auto pl-4 pr-4 sm:px-6">
-            <div class="flex justify-between h-16">
+            <div class="flex justify-between gap-2 h-12">
                 {{-- Hamburger --}}
                 <div
                     class="-mr-2 flex items-center md:hidden"
@@ -57,11 +57,25 @@
                     </button>
                 </div>
 
-                <div class="flex w-full justify-between">
-                    {{-- Left Side --}}
-                    <span class="flex w-full">
+                <div class="flex gap-2 w-full">
+                    {{-- Logo --}}
+                    <a class="inline-flex items-center h-full m-auto text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none focus:text-gray-700 md:hidden"
+                       href="/"
+                       x-show="! isSearchEnabled"
+                       x-transition:enter="ease-out duration-150 delay-100 transform sm:delay-[0ms]"
+                       x-transition:enter-start="opacity-0 scale-75"
+                       x-transition:enter-end="opacity-100 scale-100"
+                       x-transition:leave="ease-in duration-200 delay-[50ms] transform sm:delay-[400ms]"
+                       x-transition:leave-start="opacity-100 scale-100"
+                       x-transition:leave-end="opacity-0 scale-75"
+                    >
+                        <x-logo class="block h-6 w-auto" />
+                    </a>
+
+                    {{-- Navigation Links --}}
+                    <div class="items-center justify-between md:flex md:-my-px md:w-full">
                         {{-- Logo --}}
-                        <a class="inline-flex items-center m-auto text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none focus:text-gray-700 md:my-0 md:ml-0 md:mr-8 md:pt-1"
+                        <a class="hidden md:inline-flex items-center h-full text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none focus:text-gray-700 md:pt-1"
                            href="/"
                            x-show="! isSearchEnabled"
                            x-transition:enter="ease-out duration-150 delay-100 transform sm:delay-[0ms]"
@@ -71,145 +85,163 @@
                            x-transition:leave-start="opacity-100 scale-100"
                            x-transition:leave-end="opacity-0 scale-75"
                         >
-                            <x-logo class="block h-9 w-auto" />
+                            <x-logo class="block h-6 w-auto" />
                         </a>
 
-                        {{-- Navigation Links --}}
-                        <div class="hidden md:flex md:justify-between md:-my-px md:w-full lg:w-auto lg:space-x-8">
-                            <x-nav-link href="{{ route('home') }}" :active="request()->routeIs('home')"
-                                        x-show="! isSearchEnabled"
-                                        x-transition:enter="ease-out duration-150 delay-[50ms] transform"
-                                        x-transition:enter-start="opacity-0 scale-75"
-                                        x-transition:enter-end="opacity-100 scale-100"
-                                        x-transition:leave="ease-in duration-200 delay-[350ms] transform"
-                                        x-transition:leave-start="opacity-100 scale-100"
-                                        x-transition:leave-end="opacity-0 scale-75"
-                            >
-                                {{ __('Explore') }}
-                            </x-nav-link>
+                        <x-nav-link class="hidden md:inline-flex" href="{{ route('home') }}" :active="request()->routeIs('home')"
+                                    x-show="! isSearchEnabled"
+                                    x-transition:enter="ease-out duration-150 delay-[50ms] transform"
+                                    x-transition:enter-start="opacity-0 scale-75"
+                                    x-transition:enter-end="opacity-100 scale-100"
+                                    x-transition:leave="ease-in duration-200 delay-[350ms] transform"
+                                    x-transition:leave-start="opacity-100 scale-100"
+                                    x-transition:leave-end="opacity-0 scale-75"
+                        >
+                            {{ __('Explore') }}
+                        </x-nav-link>
 
-                            <x-nav-link href="{{ route('anime.index') }}" :active="request()->routeIs('anime.index')"
-                                        x-show="! isSearchEnabled"
-                                        x-transition:enter="ease-out duration-150 delay-100 transform"
-                                        x-transition:enter-start="opacity-0 scale-75"
-                                        x-transition:enter-end="opacity-100 scale-100"
-                                        x-transition:leave="ease-in duration-200 delay-300 transform"
-                                        x-transition:leave-start="opacity-100 scale-100"
-                                        x-transition:leave-end="opacity-0 scale-75"
-                            >
-                                {{ __('Anime') }}
-                            </x-nav-link>
+                        <x-nav-link class="hidden md:inline-flex" href="{{ route('anime.index') }}" :active="request()->routeIs('anime.index')"
+                                    x-show="! isSearchEnabled"
+                                    x-transition:enter="ease-out duration-150 delay-100 transform"
+                                    x-transition:enter-start="opacity-0 scale-75"
+                                    x-transition:enter-end="opacity-100 scale-100"
+                                    x-transition:leave="ease-in duration-200 delay-300 transform"
+                                    x-transition:leave-start="opacity-100 scale-100"
+                                    x-transition:leave-end="opacity-0 scale-75"
+                        >
+                            {{ __('Anime') }}
+                        </x-nav-link>
 
-                            <x-nav-link href="{{ route('manga.index') }}" :active="request()->routeIs('manga.index')"
-                                        x-show="! isSearchEnabled"
-                                        x-transition:enter="ease-out duration-150 delay-150 transform"
-                                        x-transition:enter-start="opacity-0 scale-75"
-                                        x-transition:enter-end="opacity-100 scale-100"
-                                        x-transition:leave="ease-in duration-200 delay-[250ms] transform"
-                                        x-transition:leave-start="opacity-100 scale-100"
-                                        x-transition:leave-end="opacity-0 scale-75"
-                            >
-                                {{ __('Manga') }}
-                            </x-nav-link>
+                        <x-nav-link class="hidden md:inline-flex" href="{{ route('manga.index') }}" :active="request()->routeIs('manga.index')"
+                                    x-show="! isSearchEnabled"
+                                    x-transition:enter="ease-out duration-150 delay-150 transform"
+                                    x-transition:enter-start="opacity-0 scale-75"
+                                    x-transition:enter-end="opacity-100 scale-100"
+                                    x-transition:leave="ease-in duration-200 delay-[250ms] transform"
+                                    x-transition:leave-start="opacity-100 scale-100"
+                                    x-transition:leave-end="opacity-0 scale-75"
+                        >
+                            {{ __('Manga') }}
+                        </x-nav-link>
 
-                            <x-nav-link href="{{ route('games.index') }}" :active="request()->routeIs('games.index')"
-                                        x-show="! isSearchEnabled"
-                                        x-transition:enter="ease-out duration-150 delay-100 transform"
-                                        x-transition:enter-start="opacity-0 scale-75"
-                                        x-transition:enter-end="opacity-100 scale-100"
-                                        x-transition:leave="ease-in duration-200 delay-300 transform"
-                                        x-transition:leave-start="opacity-100 scale-100"
-                                        x-transition:leave-end="opacity-0 scale-75"
-                            >
-                                {{ __('Game') }}
-                            </x-nav-link>
+                        <x-nav-link class="hidden md:inline-flex" href="{{ route('games.index') }}" :active="request()->routeIs('games.index')"
+                                    x-show="! isSearchEnabled"
+                                    x-transition:enter="ease-out duration-150 delay-100 transform"
+                                    x-transition:enter-start="opacity-0 scale-75"
+                                    x-transition:enter-end="opacity-100 scale-100"
+                                    x-transition:leave="ease-in duration-200 delay-300 transform"
+                                    x-transition:leave-start="opacity-100 scale-100"
+                                    x-transition:leave-end="opacity-0 scale-75"
+                        >
+                            {{ __('Game') }}
+                        </x-nav-link>
 
-                            <x-nav-link href="{{ route('songs.index') }}" :active="request()->routeIs('songs.index')"
-                                        x-show="! isSearchEnabled"
-                                        x-transition:enter="ease-out duration-150 delay-200 transform"
-                                        x-transition:enter-start="opacity-0 scale-75"
-                                        x-transition:enter-end="opacity-100 scale-100"
-                                        x-transition:leave="ease-in duration-200 delay-200 transform"
-                                        x-transition:leave-start="opacity-100 scale-100"
-                                        x-transition:leave-end="opacity-0 scale-75"
-                            >
-                                {{ __('Songs') }}
-                            </x-nav-link>
+{{--                        <x-nav-link class="hidden md:inline-flex" href="#"--}}
+{{--                                    x-show="! isSearchEnabled"--}}
+{{--                                    x-transition:enter="ease-out duration-150 delay-100 transform"--}}
+{{--                                    x-transition:enter-start="opacity-0 scale-75"--}}
+{{--                                    x-transition:enter-end="opacity-100 scale-100"--}}
+{{--                                    x-transition:leave="ease-in duration-200 delay-300 transform"--}}
+{{--                                    x-transition:leave-start="opacity-100 scale-100"--}}
+{{--                                    x-transition:leave-end="opacity-0 scale-75"--}}
+{{--                        >--}}
+{{--                            {{ __('Live Action') }}--}}
+{{--                        </x-nav-link>--}}
 
-                            <x-nav-link href="{{ route('charts.index') }}" :active="request()->routeIs('charts.index')"
-                                        x-show="! isSearchEnabled"
-                                        x-transition:enter="ease-out duration-150 delay-[250ms] transform"
-                                        x-transition:enter-start="opacity-0 scale-75"
-                                        x-transition:enter-end="opacity-100 scale-100"
-                                        x-transition:leave="ease-in duration-200 delay-150 transform"
-                                        x-transition:leave-start="opacity-100 scale-100"
-                                        x-transition:leave-end="opacity-0 scale-75"
-                            >
-                                {{ __('Charts') }}
-                            </x-nav-link>
+                        <x-nav-link class="hidden md:inline-flex" href="{{ route('songs.index') }}" :active="request()->routeIs('songs.index')"
+                                    x-show="! isSearchEnabled"
+                                    x-transition:enter="ease-out duration-150 delay-200 transform"
+                                    x-transition:enter-start="opacity-0 scale-75"
+                                    x-transition:enter-end="opacity-100 scale-100"
+                                    x-transition:leave="ease-in duration-200 delay-200 transform"
+                                    x-transition:leave-start="opacity-100 scale-100"
+                                    x-transition:leave-end="opacity-0 scale-75"
+                        >
+                            {{ __('Songs') }}
+                        </x-nav-link>
 
-                            <x-nav-link href="{{ route('characters.index') }}" :active="request()->routeIs('characters.index')"
-                                        x-show="! isSearchEnabled"
-                                        x-transition:enter="ease-out duration-150 delay-300 transform"
-                                        x-transition:enter-start="opacity-0 scale-75"
-                                        x-transition:enter-end="opacity-100 scale-100"
-                                        x-transition:leave="ease-in duration-200 delay-100 transform"
-                                        x-transition:leave-start="opacity-100 scale-100"
-                                        x-transition:leave-end="opacity-0 scale-75"
-                            >
-                                {{ __('Characters') }}
-                            </x-nav-link>
+{{--                        <x-nav-link class="hidden md:inline-flex" href="#"--}}
+{{--                                    x-show="! isSearchEnabled"--}}
+{{--                                    x-transition:enter="ease-out duration-150 delay-200 transform"--}}
+{{--                                    x-transition:enter-start="opacity-0 scale-75"--}}
+{{--                                    x-transition:enter-end="opacity-100 scale-100"--}}
+{{--                                    x-transition:leave="ease-in duration-200 delay-200 transform"--}}
+{{--                                    x-transition:leave-start="opacity-100 scale-100"--}}
+{{--                                    x-transition:leave-end="opacity-0 scale-75"--}}
+{{--                        >--}}
+{{--                            {{ __('Schedule') }}--}}
+{{--                        </x-nav-link>--}}
 
-                            <x-nav-link href="{{ route('people.index') }}" :active="request()->routeIs('people.index')"
-                                        x-show="! isSearchEnabled"
-                                        x-transition:enter="ease-out duration-150 delay-[350ms] transform"
-                                        x-transition:enter-start="opacity-0 scale-75"
-                                        x-transition:enter-end="opacity-100 scale-100"
-                                        x-transition:leave="ease-in duration-200 delay-75 transform"
-                                        x-transition:leave-start="opacity-100 scale-100"
-                                        x-transition:leave-end="opacity-0 scale-75"
-                            >
-                                {{ __('People') }}
-                            </x-nav-link>
+                        <x-nav-link class="hidden md:inline-flex" href="{{ route('charts.index') }}" :active="request()->routeIs('charts.index')"
+                                    x-show="! isSearchEnabled"
+                                    x-transition:enter="ease-out duration-150 delay-[250ms] transform"
+                                    x-transition:enter-start="opacity-0 scale-75"
+                                    x-transition:enter-end="opacity-100 scale-100"
+                                    x-transition:leave="ease-in duration-200 delay-150 transform"
+                                    x-transition:leave-start="opacity-100 scale-100"
+                                    x-transition:leave-end="opacity-0 scale-75"
+                        >
+                            {{ __('Charts') }}
+                        </x-nav-link>
 
-                            <x-nav-link href="{{ route('studios.index') }}" :active="request()->routeIs('studios.index')"
-                                        x-show="! isSearchEnabled"
-                                        x-transition:enter="ease-out duration-150 delay-[400ms] transform"
-                                        x-transition:enter-start="opacity-0 scale-75"
-                                        x-transition:enter-end="opacity-100 scale-100"
-                                        x-transition:leave="ease-in duration-200 delay-[50ms] transform"
-                                        x-transition:leave-start="opacity-100 scale-100"
-                                        x-transition:leave-end="opacity-0 scale-75"
-                            >
-                                {{ __('Studios') }}
-                            </x-nav-link>
+                        <x-nav-link class="hidden md:inline-flex" href="{{ route('characters.index') }}" :active="request()->routeIs('characters.index')"
+                                    x-show="! isSearchEnabled"
+                                    x-transition:enter="ease-out duration-150 delay-300 transform"
+                                    x-transition:enter-start="opacity-0 scale-75"
+                                    x-transition:enter-end="opacity-100 scale-100"
+                                    x-transition:leave="ease-in duration-200 delay-100 transform"
+                                    x-transition:leave-start="opacity-100 scale-100"
+                                    x-transition:leave-end="opacity-0 scale-75"
+                        >
+                            {{ __('Characters') }}
+                        </x-nav-link>
 
-{{--                            <x-nav-link href="{{ route('platforms.index') }}" :active="request()->routeIs('platforms.index')"--}}
-{{--                                        x-show="! isSearchEnabled"--}}
-{{--                                        x-transition:enter="ease-out duration-150 delay-[400ms] transform"--}}
-{{--                                        x-transition:enter-start="opacity-0 scale-75"--}}
-{{--                                        x-transition:enter-end="opacity-100 scale-100"--}}
-{{--                                        x-transition:leave="ease-in duration-200 delay-[50ms] transform"--}}
-{{--                                        x-transition:leave-start="opacity-100 scale-100"--}}
-{{--                                        x-transition:leave-end="opacity-0 scale-75"--}}
-{{--                            >--}}
-{{--                                {{ __('Platforms') }}--}}
-{{--                            </x-nav-link>--}}
-                        </div>
-                    </span>
+                        <x-nav-link class="hidden md:inline-flex" href="{{ route('people.index') }}" :active="request()->routeIs('people.index')"
+                                    x-show="! isSearchEnabled"
+                                    x-transition:enter="ease-out duration-150 delay-[350ms] transform"
+                                    x-transition:enter-start="opacity-0 scale-75"
+                                    x-transition:enter-end="opacity-100 scale-100"
+                                    x-transition:leave="ease-in duration-200 delay-75 transform"
+                                    x-transition:leave-start="opacity-100 scale-100"
+                                    x-transition:leave-end="opacity-0 scale-75"
+                        >
+                            {{ __('People') }}
+                        </x-nav-link>
 
-                    {{-- Right Side --}}
-                    <div class="flex items-center md:justify-between md:ml-8 md:-my-px md:space-x-8">
+                        <x-nav-link class="hidden md:inline-flex" href="{{ route('studios.index') }}" :active="request()->routeIs('studios.index')"
+                                    x-show="! isSearchEnabled"
+                                    x-transition:enter="ease-out duration-150 delay-[400ms] transform"
+                                    x-transition:enter-start="opacity-0 scale-75"
+                                    x-transition:enter-end="opacity-100 scale-100"
+                                    x-transition:leave="ease-in duration-200 delay-[50ms] transform"
+                                    x-transition:leave-start="opacity-100 scale-100"
+                                    x-transition:leave-end="opacity-0 scale-75"
+                        >
+                            {{ __('Studios') }}
+                        </x-nav-link>
+
+{{--                            <x-nav-link class="hidden md:inline-flex" href="{{ route('platforms.index') }}" :active="request()->routeIs('platforms.index')"--}}
+                        {{--                                        x-show="! isSearchEnabled"--}}
+                        {{--                                        x-transition:enter="ease-out duration-150 delay-[400ms] transform"--}}
+                        {{--                                        x-transition:enter-start="opacity-0 scale-75"--}}
+                        {{--                                        x-transition:enter-end="opacity-100 scale-100"--}}
+                        {{--                                        x-transition:leave="ease-in duration-200 delay-[50ms] transform"--}}
+                        {{--                                        x-transition:leave-start="opacity-100 scale-100"--}}
+                        {{--                                        x-transition:leave-end="opacity-0 scale-75"--}}
+                        {{--                            >--}}
+                        {{--                                {{ __('Platforms') }}--}}
+                        {{--                            </x-nav-link>--}}
                         {{-- Search --}}
-                        <button class="inline-flex h-8 w-8 items-center justify-center text-gray-500 cursor-pointer transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none focus:text-gray-700"
-                           x-show="! isSearchEnabled"
-                           x-on:click="isNavOpen = false; isSearchEnabled = ! isSearchEnabled;"
-                           x-transition:enter="ease-out duration-150 delay-150 transform sm:delay-300"
-                           x-transition:enter-start="opacity-0 scale-75"
-                           x-transition:enter-end="opacity-100 scale-100"
-                           x-transition:leave="ease-in duration-200 transform sm:delay-[50ms]"
-                           x-transition:leave-start="opacity-100 scale-100"
-                           x-transition:leave-end="opacity-0 scale-75"
+
+                        <button class="inline-flex h-full w-8 items-center justify-center text-gray-500 cursor-pointer transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none focus:text-gray-700"
+                                x-show="! isSearchEnabled"
+                                x-on:click="isNavOpen = false; isSearchEnabled = ! isSearchEnabled;"
+                                x-transition:enter="ease-out duration-150 delay-150 transform sm:delay-300"
+                                x-transition:enter-start="opacity-0 scale-75"
+                                x-transition:enter-end="opacity-100 scale-100"
+                                x-transition:leave="ease-in duration-200 transform sm:delay-[50ms]"
+                                x-transition:leave-start="opacity-100 scale-100"
+                                x-transition:leave-end="opacity-0 scale-75"
                         >
                             @svg('magnifyingglass', 'fill-current', ['width' => '18'])
                         </button>
@@ -228,7 +260,7 @@
                                     x-transition:leave-end="opacity-0 scale-75"
                                 >
                                     <div
-                                        class="h-8 w-8 bg-cover rounded-full"
+                                        class="h-6 w-6 bg-cover rounded-full"
                                         style="background-image: url({{ $user?->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/user_profile.webp') }});"
                                         alt="{{ $user?->username ?? __('Guest') }} {{ __('Profile') }}"
                                         title="{{ $user?->username ?? __('Guest') }}"

@@ -156,7 +156,7 @@
             </div>
         </div>
 
-        <div class="pt-4 2xl:col-span-2 xl:max-h-[calc(100vh-64px)] overflow-x-hidden overflow-y-scroll no-scrollbar">
+        <div class="pt-4 2xl:col-span-2 xl:max-h-[calc(100vh-48px)] overflow-x-hidden overflow-y-scroll no-scrollbar">
             <section id="badges" class="flex flex-row flex-nowrap whitespace-nowrap justify-between items-center text-center pb-5 pl-4 pr-4 overflow-x-scroll no-scrollbar">
                 <div id="ratingBadge" class="flex-grow pr-12">
                     <a href="#ratingsAndReviews">

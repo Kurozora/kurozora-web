@@ -45,7 +45,7 @@
          x-transition:leave-start="opacity-100"
          x-transition:leave-end="opacity-0"
     >
-        <div style="height: 64px;">
+        <div class="h-12">
             <form
                 id="search"
                 class="absolute h-full w-full"
