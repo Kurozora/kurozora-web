@@ -399,9 +399,13 @@ class MangaProcessor extends CustomItemProcessor
      */
     private function getMediaType(string $value): int
     {
-        $value = empty($value) ? 'Unknown' : $value;
-        $mediaType = MediaType::where('name', '=', trim($value))
-            ->firstOrFail();
+        $value = empty($value) ? 'Unknown' : trim($value);
+        $mediaType = MediaType::firstOrCreate([
+            'type' => 'manga',
+            'name' => $value,
+        ], [
+            'description' => ''
+        ]);
         return $mediaType->id;
     }
 
@@ -434,9 +438,9 @@ class MangaProcessor extends CustomItemProcessor
      */
     private function getSource(string $value): int
     {
-        $value = empty($value) ? 'Unknown' : $value;
+        $value = empty($value) ? 'Unknown' : trim($value);
         $source = Source::firstOrCreate([
-            'name' => trim($value)
+            'name' => $value
         ], [
             'description' => ''
         ]);
