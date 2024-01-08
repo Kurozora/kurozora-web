@@ -160,17 +160,17 @@
                             {{ __('Songs') }}
                         </x-nav-link>
 
-{{--                        <x-nav-link class="hidden md:inline-flex" href="#"--}}
-{{--                                    x-show="! isSearchEnabled"--}}
-{{--                                    x-transition:enter="ease-out duration-150 delay-200 transform"--}}
-{{--                                    x-transition:enter-start="opacity-0 scale-75"--}}
-{{--                                    x-transition:enter-end="opacity-100 scale-100"--}}
-{{--                                    x-transition:leave="ease-in duration-200 delay-200 transform"--}}
-{{--                                    x-transition:leave-start="opacity-100 scale-100"--}}
-{{--                                    x-transition:leave-end="opacity-0 scale-75"--}}
-{{--                        >--}}
-{{--                            {{ __('Schedule') }}--}}
-{{--                        </x-nav-link>--}}
+                        <x-nav-link class="hidden md:inline-flex" href="{{ route('schedule') }}" :active="request()->routeIs('schedule')"
+                                    x-show="! isSearchEnabled"
+                                    x-transition:enter="ease-out duration-150 delay-200 transform"
+                                    x-transition:enter-start="opacity-0 scale-75"
+                                    x-transition:enter-end="opacity-100 scale-100"
+                                    x-transition:leave="ease-in duration-200 delay-200 transform"
+                                    x-transition:leave-start="opacity-100 scale-100"
+                                    x-transition:leave-end="opacity-0 scale-75"
+                        >
+                            {{ __('Schedule') }}
+                        </x-nav-link>
 
                         <x-nav-link class="hidden md:inline-flex" href="{{ route('charts.index') }}" :active="request()->routeIs('charts.index')"
                                     x-show="! isSearchEnabled"
@@ -405,6 +405,10 @@
 
                 <x-responsive-nav-link href="{{ route('songs.index') }}" :active="request()->routeIs('songs.index')">
                     {{ __('Songs') }}
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link href="{{ route('schedule') }}" :active="request()->routeIs('schedule')">
+                    {{ __('Schedule') }}
                 </x-responsive-nav-link>
 
                 <x-responsive-nav-link href="{{ route('charts.index') }}" :active="request()->routeIs('charts.index')">
