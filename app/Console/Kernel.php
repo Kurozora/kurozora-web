@@ -55,16 +55,23 @@ class Kernel extends ConsoleKernel
             ->onOneServer();
 
         /**********************************************/
+        // Scrape upcoming anime twice a day
+        $schedule->command('scrape:mal_upcoming_manga')
+            ->twiceDaily(3, 15)
+            ->name('Scrape upcoming anime')
+            ->onOneServer();
+
+        /**********************************************/
         // Scrape upcoming anime every six hours
         $schedule->command('fix:anime_details')
-            ->everySixHours()
+            ->everySixHours(rand(1, 15))
             ->name('Fix anime details')
             ->onOneServer();
 
         /**********************************************/
         // Scrape upcoming manga every six hours
         $schedule->command('fix:manga_details')
-            ->everySixHours()
+            ->everySixHours(rand(25, 40))
             ->name('Fix manga details')
             ->onOneServer();
 
