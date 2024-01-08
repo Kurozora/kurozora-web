@@ -11,6 +11,11 @@
         App\Models\Manga::class => 'manga.seasons.year.season',
         default => 'anime.seasons.year.season'
     };
+    $seasonScheduleRouteName = match ($type) {
+        App\Models\Game::class => 'schedule',
+        App\Models\Manga::class => 'schedule',
+        default => 'schedule'
+    };
     $seasonArchiveRouteName = match ($type) {
         App\Models\Game::class => 'games.seasons.archive',
         App\Models\Manga::class => 'manga.seasons.archive',
@@ -75,7 +80,15 @@
             </a>
         @endforeach
 
-        {{-- archive --}}
+        {{-- Schedule --}}
+        @php
+            $active = request()->routeIs($seasonScheduleRouteName, [$year, $seasonOfYear->key]);
+        @endphp
+        <a class="pl-4 pr-4 pb-2 border-b-2 {{ $active ? 'border-orange-500' : 'hover:border-orange-500' }}" href="{{ route($seasonScheduleRouteName) }}">
+            {{ __('Schedule') }}
+        </a>
+
+        {{-- Archive --}}
         @php
             $active = request()->routeIs($seasonArchiveRouteName, [$year, $seasonOfYear->key]);
         @endphp

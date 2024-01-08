@@ -20,7 +20,7 @@
 
         <section>
             <div id="mediaTypeHeader" class="pt-4 pb-5 bg-white z-10">
-                <x-season-pagination :type="App\Models\Anime::class" />
+                <x-season-pagination :type="\App\Models\Anime::class" />
             </div>
 
             <table class="table-fixed w-full text-xs text-center border-2 sm:text-base">

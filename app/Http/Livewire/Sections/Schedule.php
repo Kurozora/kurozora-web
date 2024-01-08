@@ -1,17 +1,18 @@
 <?php
 
-namespace App\Http\Livewire\Components\Browse;
+namespace App\Http\Livewire\Sections;
 
+use App\Models\Episode;
 use App\Models\Game;
 use App\Models\Manga;
-use App\Models\MediaType;
+use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use Livewire\Component;
 
-class SeasonsSection extends Component
+class Schedule extends Component
 {
     /**
      * The morphable class of a model.
@@ -21,25 +22,11 @@ class SeasonsSection extends Component
     public string $class;
 
     /**
-     * The object containing the media type data.
+     * The selected date.
      *
-     * @var MediaType $mediaType
+     * @var Carbon $date
      */
-    public MediaType $mediaType;
-
-    /**
-     * The selected season of year.
-     *
-     * @var int $seasonOfYear
-     */
-    public int $seasonOfYear;
-
-    /**
-     * The selected year.
-     *
-     * @var int $year
-     */
-    public int $year;
+    public Carbon $date;
 
     /**
      * Whether the component is ready to load.
@@ -52,18 +39,14 @@ class SeasonsSection extends Component
      * Prepare the component.
      *
      * @param string $class
-     * @param MediaType $mediaType
-     * @param int $seasonOfYear
-     * @param int $year
+     * @param Carbon $date
      *
      * @return void
      */
-    public function mount(string $class, MediaType $mediaType, int $seasonOfYear, int $year): void
+    public function mount(string $class, Carbon $date): void
     {
         $this->class = $class;
-        $this->mediaType = $mediaType;
-        $this->seasonOfYear = $seasonOfYear;
-        $this->year = $year;
+        $this->date = $date;
     }
 
     /**
@@ -77,7 +60,7 @@ class SeasonsSection extends Component
     }
 
     /**
-     * Get the anime with the given Media Type ID.
+     * Get the anime with episodes on the given date.
      *
      * @return Collection
      */
@@ -87,27 +70,27 @@ class SeasonsSection extends Component
             return collect();
         }
 
-        $seasonOfYearKey = match ($this->class) {
-           Game::class, Manga::class => 'publication_season',
-            default => 'air_season'
-        };
-        $startedAtKey = match ($this->class) {
-           Game::class => 'published_at',
-            default => 'started_at'
+        $dateKey = match ($this->class) {
+            Game::class, Manga::class => 'publication_day',
+            default => 'air_day'
         };
 
         return $this->class::where([
-            [$seasonOfYearKey, '=', $this->seasonOfYear],
-            ['media_type_id', '=', $this->mediaType->id],
-            [$startedAtKey, '>=', $this->year . '-01-01'],
-            [$startedAtKey, '<=', $this->year . '-12-31'],
+            [$dateKey, '=', $this->date->dayOfWeek],
         ])
+            ->whereHas('episodes', function($query) {
+                $query->where([
+                    [Episode::TABLE_NAME . '.started_at', '>=', $this->date->startOfDay()->toDateTimeString()],
+                    [Episode::TABLE_NAME . '.started_at', '<=', $this->date->endOfDay()->toDateTimeString()],
+                ]);
+            })
             ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
             ->when(auth()->user(), function ($query, $user) {
                 $query->with(['library' => function ($query) use ($user) {
                     $query->where('user_id', '=', $user->id);
                 }]);
             })
+            ->orderBy('air_time', 'desc')
             ->get();
     }
 
@@ -118,6 +101,6 @@ class SeasonsSection extends Component
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.components.browse.seasons-section');
+        return view('livewire.sections.schedule');
     }
 }

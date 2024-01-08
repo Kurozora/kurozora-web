@@ -4,6 +4,7 @@ use App\Http\Controllers\API\v1\MiscController;
 use App\Http\Controllers\Web\Auth\ImpersonateController;
 use App\Http\Controllers\Web\Misc\HealthCheckController;
 use App\Http\Livewire\Home;
+use App\Http\Livewire\Schedule\Index as ScheduleIndex;
 use App\Http\Livewire\Welcome;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Route;
@@ -30,6 +31,9 @@ Route::prefix('.well-known')
         Route::get('apple-app-site-association', [MiscController::class, 'appleAppSiteAssociation'])
             ->name('.apple-app-site-association');
     });
+
+Route::get('schedule', ScheduleIndex::class)
+    ->name('schedule');
 
 // Authentication routes
 require 'Web/Authentication.php';
