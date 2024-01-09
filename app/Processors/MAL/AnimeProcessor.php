@@ -221,7 +221,6 @@ class AnimeProcessor extends CustomItemProcessor
             $newEpisodeCount = empty($episodeCount) ? $anime->episode_count : $episodeCount;
             $newDuration = empty($anime->duration) ? $duration : $anime->duration;
             $newEndedAt = $anime->ended_at ?? $endedAt;
-            $newAirDay = empty($anime->air_day) ? $airDay : $anime->air_day->value;
 
             $anime->update(array_merge([
                 'mal_id' => $malID,
@@ -237,7 +236,7 @@ class AnimeProcessor extends CustomItemProcessor
                 'duration' => $newDuration,
                 'started_at' => $startedAt,
                 'ended_at' => $newEndedAt,
-                'air_day' => $newAirDay,
+                'air_day' => $airDay,
                 'air_time' => $airTime,
                 'air_season' => $airSeason,
                 'tv_rating_id' => $tvRating->id,

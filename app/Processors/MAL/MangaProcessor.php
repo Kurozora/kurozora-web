@@ -231,7 +231,6 @@ class MangaProcessor extends CustomItemProcessor
             $newPageCount = empty($manga->page_count) ? $newChapterCount * 18 : $manga->page_count;
             $newDuration = empty($manga->duration) ? 240 : $manga->duration;
             $newEndedAt = $manga->ended_at ?? $endedAt;
-            $newPublicationDay = empty($manga->publication_day) ? $publicationDay : $manga->publication_day->value;
 
             $manga->update(array_merge([
                 'mal_id' => $malID,
@@ -248,7 +247,7 @@ class MangaProcessor extends CustomItemProcessor
                 'duration' => $newDuration,
                 'started_at' => $startedAt,
                 'ended_at' => $newEndedAt,
-                'publication_day' => $newPublicationDay,
+                'publication_day' => $publicationDay,
                 'publication_time' => $publicationTime,
                 'publication_season' => $publicationSeason,
                 'tv_rating_id' => $tvRating->id,
