@@ -143,6 +143,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -180,6 +183,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -226,6 +232,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -387,6 +396,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -446,6 +458,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -505,6 +520,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -566,6 +584,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -769,6 +790,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -815,6 +839,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -976,6 +1003,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -1035,6 +1065,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -1094,6 +1127,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -1155,6 +1191,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -1307,6 +1346,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -1353,6 +1395,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -1514,6 +1559,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -1573,6 +1621,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -1632,6 +1683,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -1693,6 +1747,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -1845,6 +1902,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -2080,6 +2140,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -2115,6 +2178,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -2161,6 +2227,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -2196,6 +2265,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -2257,6 +2329,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -2303,6 +2378,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -2413,6 +2491,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -2535,6 +2616,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -2594,6 +2678,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -2698,10 +2785,9 @@
     },
     "/feed": {
       "post": {
-        "security":[
+        "security": [
           {
-            "bearerAuth":[
-
+            "bearerAuth": [
             ]
           }
         ],
@@ -2754,6 +2840,9 @@
           },
           "400": {
             "$ref":"#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref":"#/components/responses/AuthenticationError"
           }
         }
       }
@@ -2762,7 +2851,6 @@
       "get": {
         "security": [
           {
-
           },
           {
             "bearerAuth": [
@@ -2805,6 +2893,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -2853,6 +2944,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -2890,6 +2984,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -2951,6 +3048,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -3010,6 +3110,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -3045,6 +3148,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -3080,6 +3186,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -3106,6 +3215,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       },
@@ -3157,6 +3269,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -3205,6 +3320,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -3240,6 +3358,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -3293,6 +3414,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -3328,6 +3452,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -3385,6 +3512,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       },
@@ -3425,6 +3555,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -3473,6 +3606,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -3521,6 +3657,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -3569,6 +3708,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -3644,6 +3786,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       },
@@ -3692,6 +3837,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -3747,6 +3895,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -3793,6 +3944,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -3817,6 +3971,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -3852,6 +4009,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -3887,6 +4047,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -3938,6 +4101,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -3962,6 +4128,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -3996,6 +4165,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -4043,6 +4215,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       },
@@ -4082,6 +4257,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -4105,6 +4283,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -4153,6 +4334,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -4188,6 +4372,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -4223,6 +4410,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -4269,6 +4459,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -4328,6 +4521,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -4354,6 +4550,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -4391,6 +4590,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -4670,6 +4872,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -4729,6 +4934,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -4766,6 +4974,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -4801,6 +5012,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -4858,6 +5072,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -4915,6 +5132,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -4957,6 +5177,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -5028,6 +5251,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -5110,6 +5336,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -5156,6 +5385,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -5469,6 +5701,32 @@
                     "status": 401,
                     "title": "Unauthorized",
                     "detail": "The request wasn’t accepted due to an issue with the kuro-auth token or because it’s using incorrect authentication."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "AuthenticationError": {
+        "description": "Authentication error JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "meta": {
+                  "version": "1.0.8",
+                  "queryCount": 0,
+                  "isUserAuthenticated": false,
+                  "authenticatedUserID": null
+                },
+                "errors": [
+                  {
+                    "id": 40003,
+                    "status": 403,
+                    "title": "Forbidden",
+                    "detail": "The request wasn’t accepted due to an issue with the bearer token or because it’s using incorrect authentication."
                   }
                 ]
               }
