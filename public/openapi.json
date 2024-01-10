@@ -37,6 +37,10 @@
       "description": "Everything manga related"
     },
     {
+      "name": "schedule",
+      "description": "Everything schedule related"
+    },
+    {
       "name": "cast",
       "description": "Everything cast related"
     },
@@ -1845,6 +1849,55 @@
         }
       }
     },
+    "/schedule": {
+      "get": {
+        "security": [
+          {
+          },
+          {
+            "bearerAuth": [
+            ]
+          }
+        ],
+        "tags": [
+          "schedule"
+        ],
+        "operationId": "getSchedule",
+        "summary": "Get schedule results.",
+        "description": "This endpoint will return schedule results for the specified query.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "type",
+            "schema": {
+              "$ref": "#/components/schemas/ScheduleType"
+            },
+            "required": true,
+            "description": "The schedule type."
+          },
+          {
+            "in": "query",
+            "name": "date",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "Format: Y-m-d\nThe start date of the schedule. Keep empty for current date."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetScheduleSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
+          }
+        }
+      }
+    },
     "/search": {
       "get": {
         "security": [
@@ -1920,6 +1973,9 @@
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
           }
         }
       }
@@ -5297,6 +5353,16 @@
         ],
         "default": "kurozora",
         "description": "The types used to perform the search."
+      },
+      "ScheduleType": {
+        "type": "integer",
+        "enum": [
+          0,
+          1,
+          2
+        ],
+        "default": 0,
+        "description": "The set of available schedule types.\n- 0 = anime\n- 1 = manga\n- 2 = game"
       },
       "SearchType": {
         "type": "array",
@@ -9158,6 +9224,173 @@
                     }
                   }
                 ]
+              }
+            }
+          }
+        }
+      },
+      "GetScheduleSuccess": {
+        "description": "Successful GET Schedule JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": {
+                  "shows": {
+                    "data": [
+                      {
+                        "date": 1704758400,
+                        "shows": [
+                          {
+                            "id": 24540,
+                            "uuid": "24540",
+                            "type": "show",
+                            "href": "/api/v1/anime/24540"
+                          },
+                          {
+                            "id": 25226,
+                            "uuid": "25226",
+                            "type": "show",
+                            "href": "/api/v1/anime/25226"
+                          },
+                          {
+                            "id": 25922,
+                            "uuid": "25922",
+                            "type": "show",
+                            "href": "/api/v1/anime/25922"
+                          }
+                        ]
+                      },
+                      {
+                        "date": 1704844800,
+                        "shows": [
+                          {
+                            "id": 22434,
+                            "uuid": "22434",
+                            "type": "show",
+                            "href": "/api/v1/anime/22434"
+                          },
+                          {
+                            "id": 25075,
+                            "uuid": "25075",
+                            "type": "show",
+                            "href": "/api/v1/anime/25075"
+                          },
+                          {
+                            "id": 25679,
+                            "uuid": "25679",
+                            "type": "show",
+                            "href": "/api/v1/anime/25679"
+                          }
+                        ]
+                      },
+                      {
+                        "date": 1704931200,
+                        "shows": [
+                          {
+                            "id": 24513,
+                            "uuid": "24513",
+                            "type": "show",
+                            "href": "/api/v1/anime/24513"
+                          },
+                          {
+                            "id": 25567,
+                            "uuid": "25567",
+                            "type": "show",
+                            "href": "/api/v1/anime/25567"
+                          },
+                          {
+                            "id": 26209,
+                            "uuid": "26209",
+                            "type": "show",
+                            "href": "/api/v1/anime/26209"
+                          }
+                        ]
+                      },
+                      {
+                        "date": 1705017600,
+                        "shows": [
+                          {
+                            "id": 20399,
+                            "uuid": "20399",
+                            "type": "show",
+                            "href": "/api/v1/anime/20399"
+                          },
+                          {
+                            "id": 28176,
+                            "uuid": "28176",
+                            "type": "show",
+                            "href": "/api/v1/anime/28176"
+                          },
+                          {
+                            "id": 27913,
+                            "uuid": "27913",
+                            "type": "show",
+                            "href": "/api/v1/anime/27913"
+                          }
+                        ]
+                      },
+                      {
+                        "date": 1705104000,
+                        "shows": [
+                          {
+                            "id": 22840,
+                            "uuid": "22840",
+                            "type": "show",
+                            "href": "/api/v1/anime/22840"
+                          },
+                          {
+                            "id": 25323,
+                            "uuid": "25323",
+                            "type": "show",
+                            "href": "/api/v1/anime/25323"
+                          },
+                          {
+                            "id": 25611,
+                            "uuid": "25611",
+                            "type": "show",
+                            "href": "/api/v1/anime/25611"
+                          }
+                        ]
+                      },
+                      {
+                        "date": 1705190400,
+                        "shows": [
+                          {
+                            "id": 17013,
+                            "uuid": "17013",
+                            "type": "show",
+                            "href": "/api/v1/anime/17013"
+                          },
+                          {
+                            "id": 18116,
+                            "uuid": "18116",
+                            "type": "show",
+                            "href": "/api/v1/anime/18116"
+                          },
+                          {
+                            "id": 19262,
+                            "uuid": "19262",
+                            "type": "show",
+                            "href": "/api/v1/anime/19262"
+                          }
+                        ]
+                      },
+                      {
+                        "date": 1705276800,
+                        "shows": [
+                          {
+                            "id": 25724,
+                            "uuid": "25724",
+                            "type": "show",
+                            "href": "/api/v1/anime/25724"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
               }
             }
           }

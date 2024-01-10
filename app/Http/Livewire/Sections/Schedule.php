@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Sections;
 
+use App\Models\Anime;
 use App\Models\Episode;
 use App\Models\Game;
 use App\Models\Manga;
@@ -70,27 +71,40 @@ class Schedule extends Component
             return collect();
         }
 
-        $dateKey = match ($this->class) {
+        $dayKey = match ($this->class) {
             Game::class, Manga::class => 'publication_day',
             default => 'air_day'
         };
 
         return $this->class::where([
-            [$dateKey, '=', $this->date->dayOfWeek],
+            [$dayKey, '=', $this->date->dayOfWeek],
         ])
-            ->whereHas('episodes', function($query) {
+            ->when($this->class == Anime::class, function ($query) {
+                $query->whereHas('episodes', function($query) {
+                    $query->where([
+                        [Episode::TABLE_NAME . '.started_at', '>=', $this->date->startOfDay()->toDateTimeString()],
+                        [Episode::TABLE_NAME . '.started_at', '<=', $this->date->endOfDay()->toDateTimeString()],
+                    ]);
+                })
+                    ->orderBy('air_time');
+            })
+            ->when($this->class == Manga::class, function ($query) {
                 $query->where([
-                    [Episode::TABLE_NAME . '.started_at', '>=', $this->date->startOfDay()->toDateTimeString()],
-                    [Episode::TABLE_NAME . '.started_at', '<=', $this->date->endOfDay()->toDateTimeString()],
-                ]);
+                    ['status_id', '=', 8],
+                ])
+                    ->orderBy('publication_time');
             })
             ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
+            ->when($this->class == Game::class, function ($query) {
+                $query->where([
+                    ['published_at', '=', $this->date->startOfDay()->toDateString()]
+                ]);
+            })
             ->when(auth()->user(), function ($query, $user) {
                 $query->with(['library' => function ($query) use ($user) {
                     $query->where('user_id', '=', $user->id);
                 }]);
             })
-            ->orderBy('air_time', 'desc')
             ->get();
     }
 
