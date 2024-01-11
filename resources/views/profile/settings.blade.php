@@ -39,6 +39,12 @@
         <x-hr class="hidden sm:block" />
 
         <div class="sm:mt-0">
+            <livewire:profile.subscribe-to-reminders />
+        </div>
+
+        <x-hr class="hidden sm:block" />
+
+        <div class="sm:mt-0">
             <livewire:profile.update-password-form />
         </div>
 
