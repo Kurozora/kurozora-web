@@ -6,11 +6,11 @@ use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateNotificationsRequest;
 use App\Http\Resources\NotificationResource;
+use App\Models\Notification;
 use App\Models\User;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Notifications\DatabaseNotification;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
 class NotificationController extends Controller
@@ -32,27 +32,27 @@ class NotificationController extends Controller
     /**
      * Retrieves details for a specific notification.
      *
-     * @param DatabaseNotification $databaseNotification
+     * @param Notification $notification
      * @return JsonResponse
      */
-    public function details(DatabaseNotification $databaseNotification): JsonResponse
+    public function details(Notification $notification): JsonResponse
     {
         return JSONResult::success([
-            'data' => NotificationResource::make($databaseNotification)
+            'data' => NotificationResource::make($notification)
         ]);
     }
 
     /**
      * Deletes the authenticated user's notification.
      *
-     * @param DatabaseNotification $databaseNotification
+     * @param Notification $notification
      * @return JsonResponse
      * @throws Exception
      */
-    public function delete(DatabaseNotification $databaseNotification): JsonResponse
+    public function delete(Notification $notification): JsonResponse
     {
         // Delete the notification
-        $databaseNotification->delete();
+        $notification->delete();
 
         return JSONResult::success();
     }

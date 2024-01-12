@@ -9,14 +9,14 @@ Route::prefix('/notifications')
         Route::get('/', [NotificationController::class, 'index'])
             ->name('.index');
 
-        Route::prefix('{databaseNotification}')
+        Route::prefix('{notification}')
             ->group(function () {
                 Route::get('/', [NotificationController::class, 'details'])
-                    ->can('view', 'databaseNotification')
+                    ->can('view', 'notification')
                     ->name('.details');
 
                 Route::post('/delete', [NotificationController::class, 'delete'])
-                    ->can('delete', 'databaseNotification')
+                    ->can('delete', 'notification')
                     ->name('.delete');
             });
 

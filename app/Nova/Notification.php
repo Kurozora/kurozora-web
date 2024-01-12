@@ -2,9 +2,7 @@
 
 namespace App\Nova;
 
-use App\Http\Resources\NotificationResource;
 use Illuminate\Http\Request;
-use Illuminate\Notifications\DatabaseNotification;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Fields\DateTime;
@@ -19,12 +17,12 @@ class Notification extends Resource
      *
      * @var string
      */
-    public static $model = DatabaseNotification::class;
+    public static $model = \App\Models\Notification::class;
 
     /**
      * The underlying model resource instance.
      *
-     * @var DatabaseNotification|null
+     * @var \App\Models\Notification|null
      */
     public $resource;
 
@@ -36,7 +34,7 @@ class Notification extends Resource
      */
     public static function authorizedToViewAny(Request $request): bool
     {
-        return $request->user()?->can('viewDatabaseNotification') ?? false;
+        return $request->user()?->can('viewNotification') ?? false;
     }
 
     /**
@@ -85,7 +83,7 @@ class Notification extends Resource
                 ->required()
                 ->sortable(),
 
-            Text::make('Body', function() use ($notification) { return NotificationResource::getNotificationDescription($notification); })
+            Text::make('Body', function() use ($notification) { return $notification->description; })
                 ->readonly(),
 
             MorphTo::make('Receiver', 'notifiable')->types([

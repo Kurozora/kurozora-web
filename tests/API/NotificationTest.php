@@ -3,10 +3,10 @@
 namespace Tests\API;
 
 use App\Http\Resources\NotificationResource;
+use App\Models\Notification;
 use App\Models\User;
 use App\Notifications\NewFollower;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Notifications\DatabaseNotification;
 use Tests\TestCase;
 use Tests\Traits\ProvidesTestUser;
 
@@ -34,8 +34,9 @@ class NotificationTest extends TestCase
         // Check whether the response shows the 10 notifications
         $notificationArray = [];
 
-        foreach($this->user->notifications as $notification)
+        foreach ($this->user->notifications as $notification) {
             $notificationArray = NotificationResource::make($notification)->resolve();
+        }
 
         $response->assertJsonFragment($notificationArray);
     }
@@ -153,8 +154,8 @@ class NotificationTest extends TestCase
 
         // Send request to notification update endpoint
         $response = $this->auth()->json('POST', 'v1/me/notifications/update', [
-            'notification'  => $notification->id,
-            'read'          => 1
+            'notification' => $notification->id,
+            'read' => 1
         ]);
 
         // Check whether the response is successful
@@ -177,7 +178,7 @@ class NotificationTest extends TestCase
         $this->addNotificationsToUser($this->user, 1);
 
         // Get the user's first notification
-        /** @var DatabaseNotification $notification */
+        /** @var Notification $notification */
         $notification = $this->user->notifications()->first();
 
         // Mark the notification as read
@@ -185,8 +186,8 @@ class NotificationTest extends TestCase
 
         // Send request to notification update endpoint
         $response = $this->auth()->json('POST', 'v1/me/notifications/update', [
-            'notification'  => $notification->id,
-            'read'          => 0
+            'notification' => $notification->id,
+            'read' => 0
         ]);
 
         // Check whether the response is successful
@@ -210,8 +211,8 @@ class NotificationTest extends TestCase
 
         // Send request to notification update endpoint
         $response = $this->auth()->json('POST', 'v1/me/notifications/update', [
-            'notification'  => 'all',
-            'read'          => 1
+            'notification' => 'all',
+            'read' => 1
         ]);
 
         // Check whether the response is successful
@@ -220,8 +221,9 @@ class NotificationTest extends TestCase
         // Check whether all the notifications are now read
         $notifications = $this->user->notifications()->get();
 
-        foreach($notifications as $notification)
+        foreach ($notifications as $notification) {
             $this->assertNotNull($notification->read_at);
+        }
     }
 
     /**
@@ -244,15 +246,17 @@ class NotificationTest extends TestCase
         // Create the string of IDs separated by comma
         $notificationIDs = '';
 
-        foreach($notifications as $notification) {
-            if (strlen($notificationIDs)) $notificationIDs .= ',';
+        foreach ($notifications as $notification) {
+            if (strlen($notificationIDs)) {
+                $notificationIDs .= ',';
+            }
             $notificationIDs .= $notification->id;
         }
 
         // Send request to notification update endpoint
         $response = $authUser->json('POST', 'v1/me/notifications/update', [
-            'notification'  => $notificationIDs,
-            'read'          => 1
+            'notification' => $notificationIDs,
+            'read' => 1
         ]);
 
         // Check whether the response is successful
@@ -261,8 +265,9 @@ class NotificationTest extends TestCase
         // Check whether all the notifications are now read
         $notifications = $this->user->notifications()->get();
 
-        foreach($notifications as $notification)
+        foreach ($notifications as $notification) {
             $this->assertNotNull($notification->read_at);
+        }
     }
 
     /**
@@ -288,15 +293,15 @@ class NotificationTest extends TestCase
         // Create the string of IDs separated by comma
         $notificationIDs = '';
 
-        foreach($notifications as $notification) {
+        foreach ($notifications as $notification) {
             if (strlen($notificationIDs)) $notificationIDs .= ',';
             $notificationIDs .= $notification->id;
         }
 
         // Send request to notification update endpoint
         $response = $authUser->json('POST', 'v1/me/notifications/update', [
-            'notification'  => $notificationIDs,
-            'read'          => 0
+            'notification' => $notificationIDs,
+            'read' => 0
         ]);
 
         // Check whether the response is successful
@@ -305,8 +310,9 @@ class NotificationTest extends TestCase
         // Check whether all the notifications are now unread
         $notifications = $this->user->notifications()->get();
 
-        foreach($notifications as $notification)
+        foreach ($notifications as $notification) {
             $this->assertNull($notification->read_at);
+        }
     }
 
     /**
@@ -329,15 +335,15 @@ class NotificationTest extends TestCase
         // Create the string of IDs separated by comma
         $notificationIDs = '';
 
-        foreach($notifications as $notification) {
+        foreach ($notifications as $notification) {
             if (strlen($notificationIDs)) $notificationIDs .= ',';
             $notificationIDs .= $notification->id;
         }
 
         // Send request to notification update endpoint
         $response = $authUser->json('POST', 'v1/me/notifications/update', [
-            'notification'  => $notificationIDs,
-            'read'          => 1
+            'notification' => $notificationIDs,
+            'read' => 1
         ]);
 
         // Check whether the response is successful
@@ -346,14 +352,16 @@ class NotificationTest extends TestCase
         // Check whether the first 10 notifications are now read
         $notifications = $this->user->notifications()->limit(10)->get();
 
-        foreach($notifications as $notification)
+        foreach ($notifications as $notification) {
             $this->assertNotNull($notification->read_at);
+        }
 
         // Check whether the remaining 10 notifications are still unread
         $notifications = $this->user->notifications()->skip(10)->limit(10)->get();
 
-        foreach($notifications as $notification)
+        foreach ($notifications as $notification) {
             $this->assertNull($notification->read_at);
+        }
     }
 
     /**
@@ -379,15 +387,15 @@ class NotificationTest extends TestCase
         // Create the string of IDs separated by comma
         $notificationIDs = '';
 
-        foreach($notifications as $notification) {
+        foreach ($notifications as $notification) {
             if (strlen($notificationIDs)) $notificationIDs .= ',';
             $notificationIDs .= $notification->id;
         }
 
         // Send request to notification update endpoint
         $response = $authUser->json('POST', 'v1/me/notifications/update', [
-            'notification'  => $notificationIDs,
-            'read'          => 0
+            'notification' => $notificationIDs,
+            'read' => 0
         ]);
 
         // Check whether the response is successful
@@ -396,14 +404,16 @@ class NotificationTest extends TestCase
         // Check whether the first 10 notifications are now unread
         $notifications = $this->user->notifications()->limit(10)->get();
 
-        foreach($notifications as $notification)
+        foreach ($notifications as $notification) {
             $this->assertNull($notification->read_at);
+        }
 
         // Check whether the remaining 10 notifications are still read
         $notifications = $this->user->notifications()->skip(10)->limit(10)->get();
 
-        foreach($notifications as $notification)
+        foreach ($notifications as $notification) {
             $this->assertNotNull($notification->read_at);
+        }
     }
 
     /**
@@ -425,8 +435,8 @@ class NotificationTest extends TestCase
 
         // Send request to notification update endpoint
         $response = $this->auth()->json('POST', 'v1/me/notifications/update', [
-            'notification'  => $notification->id,
-            'read'          => 1
+            'notification' => $notification->id,
+            'read' => 1
         ]);
 
         // Check whether the response is unsuccessful
@@ -437,12 +447,14 @@ class NotificationTest extends TestCase
      * Adds notifications to a user for testing.
      *
      * @param User $user
-     * @param int $amount
+     * @param int  $amount
      */
-    private function addNotificationsToUser($user, $amount) {
+    private function addNotificationsToUser(User $user, int $amount): void
+    {
         $otherUser = User::factory()->create();
 
-        for($i = 0; $i < $amount; $i++)
+        for ($i = 0; $i < $amount; $i++) {
             $user->notify(new NewFollower($otherUser));
+        }
     }
 }
