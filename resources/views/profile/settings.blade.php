@@ -27,6 +27,12 @@
         <x-hr class="hidden sm:block" />
 
         <div class="sm:mt-0">
+            <livewire:profile.select-preferred-timezone-form  />
+        </div>
+
+        <x-hr class="hidden sm:block" />
+
+        <div class="sm:mt-0">
             <livewire:profile.select-preferred-tv-rating-form />
         </div>
 
