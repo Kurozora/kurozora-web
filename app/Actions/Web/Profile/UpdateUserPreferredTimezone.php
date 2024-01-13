@@ -21,7 +21,7 @@ class UpdateUserPreferredTimezone implements UpdatesUserPreferredTimezone
     public function update(User $user, array $input): void
     {
         Validator::make($input, [
-            'timezone' => ['required', 'string', 'max:40'],
+            'timezone' => ['required', 'timezone:all'],
         ])->validateWithBag('updatePreferredTimezone');
 
         auth()->user()->update([
