@@ -20,8 +20,8 @@ class MediaSong extends Resource
 {
     use SearchesRelations,
         HasSortableRows {
-            indexQuery as indexSortableQuery;
-        }
+        indexQuery as indexSortableQuery;
+    }
 
     /**
      * The model the resource corresponds to.
@@ -48,7 +48,8 @@ class MediaSong extends Resource
      * Determine if the given resource is sortable.
      *
      * @param NovaRequest $request
-     * @param $resource
+     * @param             $resource
+     *
      * @return bool
      */
     public static function canSort(NovaRequest $request, $resource): bool
@@ -103,6 +104,7 @@ class MediaSong extends Resource
      * Get the fields displayed by the resource.
      *
      * @param Request $request
+     *
      * @return array
      */
     public function fields(Request $request): array
@@ -154,13 +156,14 @@ class MediaSong extends Resource
     {
         $mediaSong = $this->resource;
 
-        return $mediaSong->song->title . ' | ' . $mediaSong->model->original_title . ' (ID: ' . $mediaSong->id . ')';
+        return $mediaSong->song->title . ' | ' . $mediaSong->model?->original_title . ' (ID: ' . $mediaSong->id . ')';
     }
 
     /**
      * Determine if this resource is available for navigation.
      *
      * @param Request $request
+     *
      * @return bool
      */
     public static function availableForNavigation(Request $request): bool
@@ -172,6 +175,7 @@ class MediaSong extends Resource
      * Get the cards available for the request.
      *
      * @param Request $request
+     *
      * @return array
      */
     public function cards(Request $request): array
@@ -183,6 +187,7 @@ class MediaSong extends Resource
      * Get the filters available for the resource.
      *
      * @param Request $request
+     *
      * @return array
      */
     public function filters(Request $request): array
@@ -194,6 +199,7 @@ class MediaSong extends Resource
      * Get the lenses available for the resource.
      *
      * @param Request $request
+     *
      * @return array
      */
     public function lenses(Request $request): array
@@ -205,6 +211,7 @@ class MediaSong extends Resource
      * Get the actions available for the resource.
      *
      * @param Request $request
+     *
      * @return array
      */
     public function actions(Request $request): array
@@ -216,7 +223,8 @@ class MediaSong extends Resource
      * Build an "index" query for the given resource.
      *
      * @param NovaRequest $request
-     * @param  Builder  $query
+     * @param Builder     $query
+     *
      * @return Builder
      */
     public static function indexQuery(NovaRequest $request, $query): Builder
