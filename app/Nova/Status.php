@@ -63,6 +63,7 @@ class Status extends Resource
      * Get the fields displayed by the resource.
      *
      * @param Request $request
+     *
      * @return array
      */
     public function fields(Request $request): array
@@ -117,6 +118,7 @@ class Status extends Resource
      * Determine if this resource is available for navigation.
      *
      * @param Request $request
+     *
      * @return bool
      */
     public static function availableForNavigation(Request $request): bool
@@ -128,6 +130,7 @@ class Status extends Resource
      * Get the cards available for the request.
      *
      * @param Request $request
+     *
      * @return array
      */
     public function cards(Request $request): array
@@ -139,6 +142,7 @@ class Status extends Resource
      * Get the filters available for the resource.
      *
      * @param Request $request
+     *
      * @return array
      */
     public function filters(Request $request): array
@@ -150,6 +154,7 @@ class Status extends Resource
      * Get the lenses available for the resource.
      *
      * @param Request $request
+     *
      * @return array
      */
     public function lenses(Request $request): array
@@ -161,6 +166,7 @@ class Status extends Resource
      * Get the actions available for the resource.
      *
      * @param Request $request
+     *
      * @return array
      */
     public function actions(Request $request): array

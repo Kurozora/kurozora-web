@@ -19,9 +19,11 @@ use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\MorphMany;
+use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
+use Outl1ne\NovaColorField\Color;
 use Ramsey\Uuid\Uuid;
 use Vyuldashev\NovaPermission\RoleBooleanGroup;
 
@@ -38,6 +40,7 @@ class User extends Resource
      * Determine if the resource should be available for the given request.
      *
      * @param Request $request
+     *
      * @return bool
      */
     public static function authorizedToViewAny(Request $request): bool
@@ -79,6 +82,7 @@ class User extends Resource
      * Get the fields displayed by the resource.
      *
      * @param Request $request
+     *
      * @return array
      * @throws Exception
      */
@@ -93,7 +97,7 @@ class User extends Resource
 
             Avatar::make('Profile')
                 ->thumbnail(function () {
-                    return  $this->resource->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/user_profile.webp');
+                    return $this->resource->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/user_profile.webp');
                 })->preview(function () {
                     return $this->resource->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/user_profile.webp');
                 })
@@ -105,84 +109,84 @@ class User extends Resource
 
             Images::make('Profile')
                 ->showStatistics()
-                ->setFileName(function($originalFilename, $extension, $model) {
+                ->setFileName(function ($originalFilename, $extension, $model) {
                     return Uuid::uuid4() . '.' . $extension;
                 })
-                ->setName(function($originalFilename, $model) {
+                ->setName(function ($originalFilename, $model) {
                     return $this->resource->username;
-                }),
-//                ->customPropertiesFields([
-//                    Heading::make('Colors (automatically generated if empty)'),
-//
-//                    Color::make('Background Color')
-//                        ->slider()
-//                        ->help('The average background color of the image.'),
-//
-//                    Color::make('Text Color 1')
-//                        ->slider()
-//                        ->help('The primary text color that may be used if the background color is displayed.'),
-//
-//                    Color::make('Text Color 2')
-//                        ->slider()
-//                        ->help('The secondary text color that may be used if the background color is displayed.'),
-//
-//                    Color::make('Text Color 3')
-//                        ->slider()
-//                        ->help('The tertiary text color that may be used if the background color is displayed.'),
-//
-//                    Color::make('Text Color 4')
-//                        ->slider()
-//                        ->help('The final post-tertiary text color that may be used if the background color is displayed.'),
-//
-//                    Heading::make('Dimensions (automatically generated if empty)'),
-//
-//                    Number::make('Width')
-//                        ->help('The maximum width available for the image.'),
-//
-//                    Number::make('Height')
-//                        ->help('The maximum height available for the image.'),
-//                ]),
+                })
+                ->customPropertiesFields([
+                    Heading::make('Colors (automatically generated if empty)'),
+
+                    Color::make('Background Color')
+                        ->slider()
+                        ->help('The average background color of the image.'),
+
+                    Color::make('Text Color 1')
+                        ->slider()
+                        ->help('The primary text color that may be used if the background color is displayed.'),
+
+                    Color::make('Text Color 2')
+                        ->slider()
+                        ->help('The secondary text color that may be used if the background color is displayed.'),
+
+                    Color::make('Text Color 3')
+                        ->slider()
+                        ->help('The tertiary text color that may be used if the background color is displayed.'),
+
+                    Color::make('Text Color 4')
+                        ->slider()
+                        ->help('The final post-tertiary text color that may be used if the background color is displayed.'),
+
+                    Heading::make('Dimensions (automatically generated if empty)'),
+
+                    Number::make('Width')
+                        ->help('The maximum width available for the image.'),
+
+                    Number::make('Height')
+                        ->help('The maximum height available for the image.'),
+                ]),
 
             Images::make('Banner')
                 ->hideFromIndex()
                 ->showStatistics()
-                ->setFileName(function($originalFilename, $extension, $model) {
+                ->setFileName(function ($originalFilename, $extension, $model) {
                     return Uuid::uuid4() . '.' . $extension;
                 })
-                ->setName(function($originalFilename, $model) {
+                ->setName(function ($originalFilename, $model) {
                     return $this->resource->username;
-                }),
-//                ->customPropertiesFields([
-//                    Heading::make('Colors (automatically generated if empty)'),
-//
-//                    Color::make('Background Color')
-//                        ->slider()
-//                        ->help('The average background color of the image.'),
-//
-//                    Color::make('Text Color 1')
-//                        ->slider()
-//                        ->help('The primary text color that may be used if the background color is displayed.'),
-//
-//                    Color::make('Text Color 2')
-//                        ->slider()
-//                        ->help('The secondary text color that may be used if the background color is displayed.'),
-//
-//                    Color::make('Text Color 3')
-//                        ->slider()
-//                        ->help('The tertiary text color that may be used if the background color is displayed.'),
-//
-//                    Color::make('Text Color 4')
-//                        ->slider()
-//                        ->help('The final post-tertiary text color that may be used if the background color is displayed.'),
-//
-//                    Heading::make('Dimensions (automatically generated if empty)'),
-//
-//                    Number::make('Width')
-//                        ->help('The maximum width available for the image.'),
-//
-//                    Number::make('Height')
-//                        ->help('The maximum height available for the image.'),
-//                ]),
+                })
+                ->customPropertiesFields([
+                    Heading::make('Colors (automatically generated if empty)'),
+
+                    Color::make('Background Color')
+                        ->slider()
+                        ->help('The average background color of the image.'),
+
+                    Color::make('Text Color 1')
+                        ->slider()
+                        ->help('The primary text color that may be used if the background color is displayed.'),
+
+                    Color::make('Text Color 2')
+                        ->slider()
+                        ->help('The secondary text color that may be used if the background color is displayed.'),
+
+                    Color::make('Text Color 3')
+                        ->slider()
+                        ->help('The tertiary text color that may be used if the background color is displayed.'),
+
+                    Color::make('Text Color 4')
+                        ->slider()
+                        ->help('The final post-tertiary text color that may be used if the background color is displayed.'),
+
+                    Heading::make('Dimensions (automatically generated if empty)'),
+
+                    Number::make('Width')
+                        ->help('The maximum width available for the image.'),
+
+                    Number::make('Height')
+                        ->help('The maximum height available for the image.'),
+                ]),
 
             Heading::make('Meta information'),
 
@@ -241,7 +245,9 @@ class User extends Resource
                 ->hideFromIndex(),
 
             // Display roles on index
-            Text::make('Roles', function() { return $this->displayRolesForIndex(); })
+            Text::make('Roles', function () {
+                return $this->displayRolesForIndex();
+            })
                 ->asHtml()
                 ->readonly()
                 ->onlyOnIndex(),
@@ -273,6 +279,7 @@ class User extends Resource
      * Get the cards available for the request.
      *
      * @param Request $request
+     *
      * @return array
      */
     public function cards(Request $request): array
@@ -284,6 +291,7 @@ class User extends Resource
      * Get the filters available for the resource.
      *
      * @param Request $request
+     *
      * @return array
      */
     public function filters(Request $request): array
@@ -298,6 +306,7 @@ class User extends Resource
      * Get the lenses available for the resource.
      *
      * @param Request $request
+     *
      * @return array
      */
     public function lenses(Request $request): array
@@ -311,6 +320,7 @@ class User extends Resource
      * Get the actions available for the resource.
      *
      * @param Request $request
+     *
      * @return array
      */
     public function actions(Request $request): array
@@ -348,7 +358,7 @@ class User extends Resource
         // Join all roles together and create the string
         $roleString = '';
 
-        foreach($roles as $role) {
+        foreach ($roles as $role) {
             $roleString .= '<span class="inline-block align-middle mr-1 pt-1 pr-2 pb-1 pl-2 rounded" style="background-color: #465161; color: #fff;">' . $role . '</span>';
         }
 

@@ -33,6 +33,7 @@ class Badge extends Resource
      * Determine if the resource should be available for the given request.
      *
      * @param Request $request
+     *
      * @return bool
      */
     public static function authorizedToViewAny(Request $request): bool
@@ -67,6 +68,7 @@ class Badge extends Resource
      * Get the fields displayed by the resource.
      *
      * @param Request $request
+     *
      * @return array
      */
     public function fields(Request $request): array
@@ -81,43 +83,43 @@ class Badge extends Resource
 
             Images::make('Symbol')
                 ->showStatistics()
-                ->setFileName(function($originalFilename, $extension, $model) {
+                ->setFileName(function ($originalFilename, $extension, $model) {
                     return Uuid::uuid4() . '.' . $extension;
                 })
-                ->setName(function($originalFilename, $model) {
+                ->setName(function ($originalFilename, $model) {
                     return $this->resource->name;
-                }),
-//                ->customPropertiesFields([
-//                    Heading::make('Colors (automatically generated if empty)'),
-//
-//                    Color::make('Background Color')
-//                        ->slider()
-//                        ->help('The average background color of the image.'),
-//
-//                    Color::make('Text Color 1')
-//                        ->slider()
-//                        ->help('The primary text color that may be used if the background color is displayed.'),
-//
-//                    Color::make('Text Color 2')
-//                        ->slider()
-//                        ->help('The secondary text color that may be used if the background color is displayed.'),
-//
-//                    Color::make('Text Color 3')
-//                        ->slider()
-//                        ->help('The tertiary text color that may be used if the background color is displayed.'),
-//
-//                    Color::make('Text Color 4')
-//                        ->slider()
-//                        ->help('The final post-tertiary text color that may be used if the background color is displayed.'),
-//
-//                    Heading::make('Dimensions (automatically generated if empty)'),
-//
-//                    Number::make('Width')
-//                        ->help('The maximum width available for the image.'),
-//
-//                    Number::make('Height')
-//                        ->help('The maximum height available for the image.'),
-//                ]),
+                })
+                ->customPropertiesFields([
+                    Heading::make('Colors (automatically generated if empty)'),
+
+                    Color::make('Background Color')
+                        ->slider()
+                        ->help('The average background color of the image.'),
+
+                    Color::make('Text Color 1')
+                        ->slider()
+                        ->help('The primary text color that may be used if the background color is displayed.'),
+
+                    Color::make('Text Color 2')
+                        ->slider()
+                        ->help('The secondary text color that may be used if the background color is displayed.'),
+
+                    Color::make('Text Color 3')
+                        ->slider()
+                        ->help('The tertiary text color that may be used if the background color is displayed.'),
+
+                    Color::make('Text Color 4')
+                        ->slider()
+                        ->help('The final post-tertiary text color that may be used if the background color is displayed.'),
+
+                    Heading::make('Dimensions (automatically generated if empty)'),
+
+                    Number::make('Width')
+                        ->help('The maximum width available for the image.'),
+
+                    Number::make('Height')
+                        ->help('The maximum height available for the image.'),
+                ]),
 
             Heading::make('Meta Information'),
 
@@ -154,6 +156,7 @@ class Badge extends Resource
      * Get the cards available for the request.
      *
      * @param Request $request
+     *
      * @return array
      */
     public function cards(Request $request): array
@@ -165,6 +168,7 @@ class Badge extends Resource
      * Get the filters available for the resource.
      *
      * @param Request $request
+     *
      * @return array
      */
     public function filters(Request $request): array
@@ -176,6 +180,7 @@ class Badge extends Resource
      * Get the lenses available for the resource.
      *
      * @param Request $request
+     *
      * @return array
      */
     public function lenses(Request $request): array
@@ -187,6 +192,7 @@ class Badge extends Resource
      * Get the actions available for the resource.
      *
      * @param Request $request
+     *
      * @return array
      */
     public function actions(Request $request): array

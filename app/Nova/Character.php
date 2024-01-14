@@ -16,6 +16,7 @@ use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
+use Outl1ne\NovaColorField\Color;
 use Ramsey\Uuid\Uuid;
 
 class Character extends Resource
@@ -61,6 +62,7 @@ class Character extends Resource
      * Get the fields displayed by the resource.
      *
      * @param Request $request
+     *
      * @return array
      */
     public function fields(Request $request): array
@@ -78,7 +80,7 @@ class Character extends Resource
 
             Avatar::make('Profile')
                 ->thumbnail(function () {
-                    return  $this->resource->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/person_poster.webp');
+                    return $this->resource->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/person_poster.webp');
                 })->preview(function () {
                     return $this->resource->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/person_poster.webp');
                 })
@@ -90,43 +92,43 @@ class Character extends Resource
 
             Images::make('Profile')
                 ->showStatistics()
-                ->setFileName(function($originalFilename, $extension, $model) {
+                ->setFileName(function ($originalFilename, $extension, $model) {
                     return Uuid::uuid4() . '.' . $extension;
                 })
-                ->setName(function($originalFilename, $model) {
+                ->setName(function ($originalFilename, $model) {
                     return $this->resource->name;
-                }),
-//                ->customPropertiesFields([
-//                    Heading::make('Colors (automatically generated if empty)'),
-//
-//                    Color::make('Background Color')
-//                        ->slider()
-//                        ->help('The average background color of the image.'),
-//
-//                    Color::make('Text Color 1')
-//                        ->slider()
-//                        ->help('The primary text color that may be used if the background color is displayed.'),
-//
-//                    Color::make('Text Color 2')
-//                        ->slider()
-//                        ->help('The secondary text color that may be used if the background color is displayed.'),
-//
-//                    Color::make('Text Color 3')
-//                        ->slider()
-//                        ->help('The tertiary text color that may be used if the background color is displayed.'),
-//
-//                    Color::make('Text Color 4')
-//                        ->slider()
-//                        ->help('The final post-tertiary text color that may be used if the background color is displayed.'),
-//
-//                    Heading::make('Dimensions (automatically generated if empty)'),
-//
-//                    Number::make('Width')
-//                        ->help('The maximum width available for the image.'),
-//
-//                    Number::make('Height')
-//                        ->help('The maximum height available for the image.'),
-//                ]),
+                })
+                ->customPropertiesFields([
+                    Heading::make('Colors (automatically generated if empty)'),
+
+                    Color::make('Background Color')
+                        ->slider()
+                        ->help('The average background color of the image.'),
+
+                    Color::make('Text Color 1')
+                        ->slider()
+                        ->help('The primary text color that may be used if the background color is displayed.'),
+
+                    Color::make('Text Color 2')
+                        ->slider()
+                        ->help('The secondary text color that may be used if the background color is displayed.'),
+
+                    Color::make('Text Color 3')
+                        ->slider()
+                        ->help('The tertiary text color that may be used if the background color is displayed.'),
+
+                    Color::make('Text Color 4')
+                        ->slider()
+                        ->help('The final post-tertiary text color that may be used if the background color is displayed.'),
+
+                    Heading::make('Dimensions (automatically generated if empty)'),
+
+                    Number::make('Width')
+                        ->help('The maximum width available for the image.'),
+
+                    Number::make('Height')
+                        ->help('The maximum height available for the image.'),
+                ]),
 
             Heading::make('Personal Information'),
 
@@ -156,7 +158,7 @@ class Character extends Resource
                 ->help('A short description of the character.'),
 
             Text::make('Debut')
-                ->rules( 'max:255')
+                ->rules('max:255')
                 ->help('When did the character first appear? E.g. Episode 1')
                 ->sortable(),
 
@@ -205,7 +207,7 @@ class Character extends Resource
             Number::make('Hip')
                 ->help('The current hip size of the character if it applies. E.g. 50 or 60.4')
                 ->step(0.01)
-            ->hideFromIndex(),
+                ->hideFromIndex(),
 
             Heading::make('Birth Information')
                 ->onlyOnForms(),
@@ -265,6 +267,7 @@ class Character extends Resource
      * Get the cards available for the request.
      *
      * @param Request $request
+     *
      * @return array
      */
     public function cards(Request $request): array
@@ -276,6 +279,7 @@ class Character extends Resource
      * Get the filters available for the resource.
      *
      * @param Request $request
+     *
      * @return array
      */
     public function filters(Request $request): array
@@ -287,6 +291,7 @@ class Character extends Resource
      * Get the lenses available for the resource.
      *
      * @param Request $request
+     *
      * @return array
      */
     public function lenses(Request $request): array
@@ -298,6 +303,7 @@ class Character extends Resource
      * Get the actions available for the resource.
      *
      * @param Request $request
+     *
      * @return array
      */
     public function actions(Request $request): array

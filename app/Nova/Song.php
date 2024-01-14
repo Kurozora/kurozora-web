@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Laravel\Nova\Fields\Avatar;
-use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
@@ -17,6 +16,7 @@ use Laravel\Nova\Fields\MorphOne;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Outl1ne\NovaColorField\Color;
 use Ramsey\Uuid\Uuid;
 use Validator;
 
@@ -63,6 +63,7 @@ class Song extends Resource
      * Get the fields displayed by the resource.
      *
      * @param Request $request
+     *
      * @return array
      */
     public function fields(Request $request): array
@@ -100,7 +101,7 @@ class Song extends Resource
 
             Avatar::make('Artwork')
                 ->thumbnail(function () {
-                    return  $this->resource->getFirstMediaFullUrl(\App\Enums\MediaCollection::Artwork()) ?? asset('images/static/placeholders/music_album.webp');
+                    return $this->resource->getFirstMediaFullUrl(\App\Enums\MediaCollection::Artwork()) ?? asset('images/static/placeholders/music_album.webp');
                 })->preview(function () {
                     return $this->resource->getFirstMediaFullUrl(\App\Enums\MediaCollection::Artwork()) ?? asset('images/static/placeholders/music_album.webp');
                 })
@@ -112,43 +113,43 @@ class Song extends Resource
 
             Images::make('Artwork', MediaCollection::Artwork)
                 ->showStatistics()
-                ->setFileName(function($originalFilename, $extension, $model) {
+                ->setFileName(function ($originalFilename, $extension, $model) {
                     return Uuid::uuid4() . '.' . $extension;
                 })
-                ->setName(function($originalFilename, $model) {
+                ->setName(function ($originalFilename, $model) {
                     return $this->resource->title;
-                }),
-//                ->customPropertiesFields([
-//                    Heading::make('Colors (automatically generated if empty)'),
-//
-//                    Color::make('Background Color')
-//                        ->slider()
-//                        ->help('The average background color of the image.'),
-//
-//                    Color::make('Text Color 1')
-//                        ->slider()
-//                        ->help('The primary text color that may be used if the background color is displayed.'),
-//
-//                    Color::make('Text Color 2')
-//                        ->slider()
-//                        ->help('The secondary text color that may be used if the background color is displayed.'),
-//
-//                    Color::make('Text Color 3')
-//                        ->slider()
-//                        ->help('The tertiary text color that may be used if the background color is displayed.'),
-//
-//                    Color::make('Text Color 4')
-//                        ->slider()
-//                        ->help('The final post-tertiary text color that may be used if the background color is displayed.'),
-//
-//                    Heading::make('Dimensions (automatically generated if empty)'),
-//
-//                    Number::make('Width')
-//                        ->help('The maximum width available for the image.'),
-//
-//                    Number::make('Height')
-//                        ->help('The maximum height available for the image.'),
-//                ]),
+                })
+                ->customPropertiesFields([
+                    Heading::make('Colors (automatically generated if empty)'),
+
+                    Color::make('Background Color')
+                        ->slider()
+                        ->help('The average background color of the image.'),
+
+                    Color::make('Text Color 1')
+                        ->slider()
+                        ->help('The primary text color that may be used if the background color is displayed.'),
+
+                    Color::make('Text Color 2')
+                        ->slider()
+                        ->help('The secondary text color that may be used if the background color is displayed.'),
+
+                    Color::make('Text Color 3')
+                        ->slider()
+                        ->help('The tertiary text color that may be used if the background color is displayed.'),
+
+                    Color::make('Text Color 4')
+                        ->slider()
+                        ->help('The final post-tertiary text color that may be used if the background color is displayed.'),
+
+                    Heading::make('Dimensions (automatically generated if empty)'),
+
+                    Number::make('Width')
+                        ->help('The maximum width available for the image.'),
+
+                    Number::make('Height')
+                        ->help('The maximum height available for the image.'),
+                ]),
 
             Heading::make('Meta information'),
 
@@ -161,11 +162,11 @@ class Song extends Resource
 
             HasMany::make('Media Songs'),
 
-            BelongsToMany::make('Anime')
-                ->searchable(),
+//            BelongsToMany::make('Anime')
+//                ->searchable(),
 
-            BelongsToMany::make('Games')
-            ->searchable(),
+//            BelongsToMany::make('Games')
+//                ->searchable(),
 
             MorphOne::make('Stats', 'mediaStat', MediaStat::class),
         ];
@@ -186,8 +187,9 @@ class Song extends Resource
     /**
      * Handle any post-validation processing.
      *
-     * @param NovaRequest $request
+     * @param NovaRequest                      $request
      * @param \Illuminate\Validation\Validator $validator
+     *
      * @return void
      * @throws ValidationException
      */
@@ -197,7 +199,7 @@ class Song extends Resource
         $title = $request->post('title');
         $artist = $request->post('artist');
 
-        $unique = Rule::unique(\App\Models\Song::TABLE_NAME)->where(function ($query) use($resourceID, $title, $artist) {
+        $unique = Rule::unique(\App\Models\Song::TABLE_NAME)->where(function ($query) use ($resourceID, $title, $artist) {
             if ($resourceID) {
                 $query->whereNotIn('id', [$resourceID]);
             }
@@ -218,6 +220,7 @@ class Song extends Resource
      * Get the cards available for the request.
      *
      * @param Request $request
+     *
      * @return array
      */
     public function cards(Request $request): array
@@ -229,6 +232,7 @@ class Song extends Resource
      * Get the filters available for the resource.
      *
      * @param Request $request
+     *
      * @return array
      */
     public function filters(Request $request): array
@@ -242,6 +246,7 @@ class Song extends Resource
      * Get the lenses available for the resource.
      *
      * @param Request $request
+     *
      * @return array
      */
     public function lenses(Request $request): array
@@ -253,6 +258,7 @@ class Song extends Resource
      * Get the actions available for the resource.
      *
      * @param Request $request
+     *
      * @return array
      */
     public function actions(Request $request): array

@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Laravel\Nova\Fields\File;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Outl1ne\NovaColorField\Color;
@@ -91,32 +92,32 @@ class AppTheme extends Resource
                 ->setName(function($originalFilename, $model) {
                     return $this->resource->name;
                 })
-//                ->customPropertiesFields([
-//                    Heading::make('Colors (automatically generated if empty)'),
-//
-//                    Color::make('Background Color')
-//                        ->help('The average background color of the image.'),
-//
-//                    Color::make('Text Color 1')
-//                        ->help('The primary text color that may be used if the background color is displayed.'),
-//
-//                    Color::make('Text Color 2')
-//                        ->help('The secondary text color that may be used if the background color is displayed.'),
-//
-//                    Color::make('Text Color 3')
-//                        ->help('The tertiary text color that may be used if the background color is displayed.'),
-//
-//                    Color::make('Text Color 4')
-//                        ->help('The final post-tertiary text color that may be used if the background color is displayed.'),
-//
-//                    Heading::make('Dimensions (automatically generated if empty)'),
-//
-//                    Number::make('Width')
-//                        ->help('The maximum width available for the image.'),
-//
-//                    Number::make('Height')
-//                        ->help('The maximum height available for the image.'),
-//                ])
+                ->customPropertiesFields([
+                    Heading::make('Colors (automatically generated if empty)'),
+
+                    Color::make('Background Color')
+                        ->help('The average background color of the image.'),
+
+                    Color::make('Text Color 1')
+                        ->help('The primary text color that may be used if the background color is displayed.'),
+
+                    Color::make('Text Color 2')
+                        ->help('The secondary text color that may be used if the background color is displayed.'),
+
+                    Color::make('Text Color 3')
+                        ->help('The tertiary text color that may be used if the background color is displayed.'),
+
+                    Color::make('Text Color 4')
+                        ->help('The final post-tertiary text color that may be used if the background color is displayed.'),
+
+                    Heading::make('Dimensions (automatically generated if empty)'),
+
+                    Number::make('Width')
+                        ->help('The maximum width available for the image.'),
+
+                    Number::make('Height')
+                        ->help('The maximum height available for the image.'),
+                ])
                 ->singleMediaRules('dimensions:min-width=375,min-height=667,max_width=1170,max-height=2532')
                 ->help('Screenshot should have a minimum dimension of 375x667 and a maximum dimension of 768x1024. i.e a screenshot on iPhone 6...iPhone 12 Pro Max.')
                 ->required(),
