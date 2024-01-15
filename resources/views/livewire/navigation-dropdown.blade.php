@@ -73,7 +73,7 @@
                     </a>
 
                     {{-- Navigation Links --}}
-                    <div class="items-center justify-between md:flex md:-my-px md:w-full">
+                    <div class="flex items-center justify-between md:-my-px md:w-full">
                         {{-- Logo --}}
                         <a class="hidden md:inline-flex items-center h-full text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none focus:text-gray-700 md:pt-1"
                            href="/"
