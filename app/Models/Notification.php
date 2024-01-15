@@ -10,6 +10,7 @@ use App\Notifications\NewSession;
 use App\Notifications\SubscriptionStatus;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\MassPrunable;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Notifications\DatabaseNotification;
 
 class Notification extends DatabaseNotification
@@ -85,12 +86,20 @@ class Notification extends DatabaseNotification
     }
 
     /**
+     * @return HasOne
+     */
+    public function newFollower(): HasOne
+    {
+        return $this->hasOne(User::class, 'id', 'data->userID');
+    }
+
+    /**
      * Checks whether the notification has data under the key value.
      *
      * @param string $key
      * @return bool
      */
-    private function hasData(string $key): bool
+    function hasData(string $key): bool
     {
         return isset($this->data[$key]);
     }
@@ -102,7 +111,7 @@ class Notification extends DatabaseNotification
      * @param string $key
      * @return mixed
      */
-    private function getData(string $key): mixed
+    function getData(string $key): mixed
     {
         return self::hasData($key) ? $this->data[$key] : null;
     }
