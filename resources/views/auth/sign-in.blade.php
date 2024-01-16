@@ -86,12 +86,12 @@
                 <section class="space-y-4">
                     <div>
                         <x-label for="email" value="{{ __('Kurozora ID') }}" />
-                        <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" placeholder="{{ __('The cool Kurozora ID you claimed') }} 🙌" required autofocus />
+                        <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" placeholder="{{ __('The cool Kurozora ID you claimed 🙌') }}" required autofocus />
                     </div>
 
                     <div>
                         <x-label for="password" value="{{ __('Password') }}" />
-                        <x-input id="password" class="block mt-1 w-full" type="password" name="password" placeholder="{{ __('Your super secret password') }} 👀" required autocomplete="current-password" />
+                        <x-input id="password" class="block mt-1 w-full" type="password" name="password" placeholder="{{ __('Your super secret password 👀') }}" required autocomplete="current-password" />
                     </div>
                 </section>
 
