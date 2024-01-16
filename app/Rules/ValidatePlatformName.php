@@ -2,24 +2,30 @@
 
 namespace App\Rules;
 
-use Illuminate\Contracts\Validation\Rule;
+use Closure;
+use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Translation\PotentiallyTranslatedString;
 
-class ValidatePlatformName implements Rule
+class ValidatePlatformName implements ValidationRule
 {
     const VALID_PLATFORMS = [
-        'iOS', 'Android', 'Web', 'Console', 'macOS', 'iPadOS', 'tvOS', 'watchOS'
+        'iOS', 'Android', 'Web', 'Console', 'macOS', 'iPadOS', 'tvOS', 'watchOS', 'visionOS', 'Windows', 'Linux'
     ];
 
     /**
-     * Determine if the validation rule passes.
+     * Run the validation rule.
      *
-     * @param  string  $attribute
-     * @param  mixed  $value
-     * @return bool
+     * @param string                                       $attribute
+     * @param mixed                                        $value
+     * @param Closure(string): PotentiallyTranslatedString $fail
+     *
+     * @return void
      */
-    public function passes($attribute, $value): bool
+    public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        return in_array($value, self::VALID_PLATFORMS, true);
+        if (!in_array($value, self::VALID_PLATFORMS, true)) {
+            $fail($this->message());
+        }
     }
 
     /**
@@ -29,6 +35,6 @@ class ValidatePlatformName implements Rule
      */
     public function message(): string
     {
-        return 'Valid platform names are ' . implode(', ', self::VALID_PLATFORMS) . '.';
+        return __('Valid platform names are :x.', ['x' => implode(', ', self::VALID_PLATFORMS)]);
     }
 }

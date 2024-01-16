@@ -10,12 +10,12 @@ class ValidatePlatformNameTest extends TestCase
     /** @var ValidatePlatformName $rule */
     private ValidatePlatformName $rule;
 
-    private array $validPlatformNames = [
-        'iOS', 'Android', 'Web', 'Console', 'macOS', 'iPadOS', 'tvOS', 'watchOS'
-    ];
+    /** @var array|string[] $validPlatformNames */
+    private array $validPlatformNames = ValidatePlatformName::VALID_PLATFORMS;
 
+    /** @var array|string[] $invalidPlatformNames */
     private array $invalidPlatformNames = [
-        'Windows', 'Linux', 'Water Bottle', 'Tin can telephone', 'Walkie Talkie OS'
+        'Water Bottle', 'Tin can telephone', 'Walkie Talkie OS'
     ];
 
     public function setUp(): void
@@ -28,14 +28,28 @@ class ValidatePlatformNameTest extends TestCase
     /** @test */
     function valid_platform_names_pass(): void
     {
-        foreach($this->validPlatformNames as $validPlatformName)
-            $this->assertTrue($this->rule->passes('platform', $validPlatformName), "$validPlatformName did not pass, while it should have!");
+        foreach($this->validPlatformNames as $validPlatformName) {
+            $message = '';
+
+            $this->rule->validate('platform', $validPlatformName, function ($error) use (&$message) {
+                $message = $error;
+            });
+
+            $this->assertEmpty($message, "$validPlatformName did not pass, while it should have!");
+        }
     }
 
     /** @test */
     function invalid_platform_names_dont_pass(): void
     {
-        foreach($this->invalidPlatformNames as $invalidPlatformName)
-            $this->assertFalse($this->rule->passes('platform', $invalidPlatformName), "$invalidPlatformName passed, while it should not have!");
+        foreach($this->invalidPlatformNames as $invalidPlatformName) {
+            $message = '';
+
+            $this->rule->validate('platform', $invalidPlatformName, function ($error) use (&$message) {
+                $message = $error;
+            });
+
+            $this->assertNotEmpty($message, "$invalidPlatformName passed, while it should not have!");
+        }
     }
 }

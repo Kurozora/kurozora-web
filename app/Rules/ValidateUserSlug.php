@@ -12,9 +12,10 @@ class ValidateUserSlug implements ValidationRule
     /**
      * Run the validation rule.
      *
-     * @param string $attribute
-     * @param mixed $value
+     * @param string                                       $attribute
+     * @param mixed                                        $value
      * @param Closure(string): PotentiallyTranslatedString $fail
+     *
      * @return void
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
@@ -64,6 +65,7 @@ class ValidateUserSlug implements ValidationRule
      * Get the validation error message.
      *
      * @param string $type
+     *
      * @return string
      */
     private function message(string $type): string
