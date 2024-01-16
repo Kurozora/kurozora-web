@@ -5,7 +5,6 @@ namespace App\Nova;
 use App\Rules\ValidateAPNDeviceToken;
 use App\Rules\ValidatePlatformName;
 use App\Rules\ValidatePlatformVersion;
-use App\Rules\ValidateVendorName;
 use Exception;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Boolean;
@@ -117,7 +116,7 @@ class SessionAttribute extends Resource
                 ->hideFromIndex(),
 
             Text::make('Device vendor')
-                ->rules('required', new ValidateVendorName)
+                ->rules('required', 'min:1')
                 ->hideFromIndex(),
 
             Text::make('Device model')

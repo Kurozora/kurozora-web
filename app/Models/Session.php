@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Rules\ValidatePlatformName;
 use App\Rules\ValidatePlatformVersion;
-use App\Rules\ValidateVendorName;
 use App\Traits\Model\HasSessionAttribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -63,7 +62,7 @@ class Session extends KModel
         return [
             'platform'          => ['bail', 'required', new ValidatePlatformName],
             'platform_version'  => ['bail', 'required', new ValidatePlatformVersion],
-            'device_vendor'     => ['bail', 'required', new ValidateVendorName],
+            'device_vendor'     => ['bail', 'required', 'string', 'min:1'],
             'device_model'      => ['bail', 'required', 'string', 'max:50']
         ];
     }
