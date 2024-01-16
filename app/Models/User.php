@@ -53,6 +53,7 @@ use Spatie\Permission\Traits\HasRoles;
 use Spatie\Sitemap\Contracts\Sitemapable;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
+use Staudenmeir\EloquentJsonRelations\HasJsonRelationships;
 use URL;
 use Xetaio\Mentions\Models\Traits\HasMentionsTrait;
 
@@ -62,6 +63,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         Favoriter,
         HasApiTokens,
         HasFactory,
+        HasJsonRelationships,
         HasMentionsTrait,
         HasPermissions,
         HasRoles,

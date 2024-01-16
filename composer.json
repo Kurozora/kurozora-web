@@ -70,6 +70,8 @@
         "spatie/laravel-permission": "^5.0",
         "spatie/laravel-sitemap": "^6.0",
         "spatie/laravel-sluggable": "^3.0",
+        "staudenmeir/eloquent-json-relations": "^1.10",
+        "stepanenko3/nova-command-runner": "^4.2",
         "titasgailius/search-relations": "^2.0",
         "xetaio/xetaravel-mentions": "^10.0"
     },

@@ -12,10 +12,12 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\MassPrunable;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Notifications\DatabaseNotification;
+use Staudenmeir\EloquentJsonRelations\HasJsonRelationships;
 
 class Notification extends DatabaseNotification
 {
-    use MassPrunable;
+    use HasJsonRelationships,
+        MassPrunable;
 
     // Table name
     const TABLE_NAME = 'notifications';
@@ -86,9 +88,11 @@ class Notification extends DatabaseNotification
     }
 
     /**
+     * The user that caused the notification to be sent.
+     *
      * @return HasOne
      */
-    public function newFollower(): HasOne
+    public function notifier(): HasOne
     {
         return $this->hasOne(User::class, 'id', 'data->userID');
     }

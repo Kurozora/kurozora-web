@@ -5,7 +5,7 @@
     @if ($isNotificationOpen)
         <ul class="flex flex-col gap-2 m-0">
             @foreach ($this->notifications as $key => $notification)
-                <li>
+                <li class="relative">
                     @switch($notification->type)
                         @case(\App\Notifications\NewSession::class)
 {{--                            {{ $notification->data['ipAddress'] }}--}}
@@ -18,12 +18,11 @@
 {{--                        @break--}}
                         @case(\App\Notifications\LibraryImportFinished::class)
 {{--                            {{ $notification->data['library'] }}--}}
+                                <p class="pr-2 pl-2 text-sm">{{ $notification->description }}</p>
+                            @break
                         @case(\App\Notifications\NewFeedMessageReply::class)
-{{--                            {{ $notification->data['username'] }}--}}
-                            <p class="pr-2 pl-2 text-sm">{{ $notification->description }}</p>
-                        @break
                         @case(\App\Notifications\NewFollower::class)
-                            <div class="flex flex-nowrap justify-between">
+                            <div class="flex flex-nowrap justify-between pr-2 pl-2">
                                 <div class="flex items-center">
                                     <picture class="relative shrink-0 w-10 aspect-square rounded-full overflow-hidden">
                                         <img
@@ -45,7 +44,7 @@
                                     </div>
                                 </div>
 
-                                <a class="absolute w-full h-full" href="{{ route('profile.details', $notification->newFollower) }}"></a>
+                                <a class="absolute w-full h-full" href="{{ route('profile.details', $notification->notifier) }}"></a>
                             </div>
                         @break
                         @default

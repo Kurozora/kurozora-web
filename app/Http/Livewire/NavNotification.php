@@ -59,8 +59,7 @@ class NavNotification extends Component
 
         return auth()->user()
             ->notifications()
-            ->whereJsonContainsKey('data->userID')
-            ->with(['newFollower'])
+            ->with(['notifier'])
             ->get();
     }
 
