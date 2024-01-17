@@ -443,10 +443,10 @@ class Manga extends KModel implements HasMedia, Sitemapable
         $dayTime = now('Asia/Tokyo')
             ->next((int) $publicationDay)
             ->setTimeFromTimeString($publicationTime ?? '00:00')
-            ->setTimezone('UTC');
+            ->setTimezone(config('app.timezone'));
 
         if (!is_null($publicationDay) && !empty($publicationTime)) {
-            $publication = $dayTime->englishDayOfWeek . ' at ' . $dayTime->format('H:i e');
+            $publication = __(':day at :time', ['day' => $dayTime->translatedFormat('l'), 'time' => $dayTime->format('H:i T')]);
         }
 
         return $publication;
@@ -463,7 +463,15 @@ class Manga extends KModel implements HasMedia, Sitemapable
             return '';
         }
 
-        return now('UTC')->until($this->publication, CarbonInterface::DIFF_RELATIVE_TO_NOW, true, 3);
+        $publicationDay = $this->publication_day?->value;
+        $publicationTime = $this->publication_time;
+        $dayTime = now('Asia/Tokyo')
+            ->next((int) $publicationDay)
+            ->setTimeFromTimeString($publicationTime ?? '00:00')
+            ->setTimezone('UTC');
+        $publication = $dayTime->englishDayOfWeek . ' at ' . $dayTime->format('H:i e');
+
+        return now(config('app.timezone'))->until($publication, CarbonInterface::DIFF_RELATIVE_TO_NOW, true, 3);
     }
 
     /**

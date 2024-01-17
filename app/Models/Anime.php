@@ -278,10 +278,10 @@ class Anime extends KModel implements HasMedia, Sitemapable
         $dayTime = now('Asia/Tokyo')
             ->next((int) $airDay)
             ->setTimeFromTimeString($airTime ?? '00:00')
-            ->setTimezone('UTC');
+            ->setTimezone(config('app.timezone'));
 
         if (!is_null($airDay) && !empty($airTime)) {
-            $broadcast = $dayTime->englishDayOfWeek . ' at ' . $dayTime->format('H:i e');
+            $broadcast = __(':day at :time', ['day' => $dayTime->translatedFormat('l'), 'time' => $dayTime->format('H:i T')]);
         }
 
         return $broadcast;
@@ -298,7 +298,15 @@ class Anime extends KModel implements HasMedia, Sitemapable
             return '';
         }
 
-        return now('UTC')->until($this->broadcast, CarbonInterface::DIFF_RELATIVE_TO_NOW, true, 3);
+        $airDay = $this->air_day?->value;
+        $airTime = $this->air_time;
+        $dayTime = now('Asia/Tokyo')
+            ->next((int) $airDay)
+            ->setTimeFromTimeString($airTime ?? '00:00')
+            ->setTimezone(config('app.timezone'));
+        $broadcast = $dayTime->englishDayOfWeek . ' at ' . $dayTime->format('H:i e');
+
+        return now(config('app.timezone'))->until($broadcast, CarbonInterface::DIFF_RELATIVE_TO_NOW, true, 3);
     }
 
     /**
