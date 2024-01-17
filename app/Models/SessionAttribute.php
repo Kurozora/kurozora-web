@@ -41,20 +41,19 @@ class SessionAttribute extends KModel
      */
     public function personal_access_token(): BelongsTo
     {
-        return $this->belongsTo(PersonalAccessToken::class, 'model_id', 'id');
+        return $this->belongsTo(PersonalAccessToken::class, 'model_id', 'token');
     }
 
     /**
-     * Returns the platform information in a human-readable format.
+     * Returns the full platform information as a single string.
      *
      * @return string
      */
-    function humanReadablePlatform(): string
+    function getFullPlatformAttribute(): string
     {
-        if ($this->device_model == null ||
-            $this->platform == null ||
-            $this->platform_version == null)
+        if ($this->device_model == null || $this->platform == null || $this->platform_version == null) {
             return 'Unknown platform';
+        }
 
         return $this->device_model . ' on ' . $this->platform . ' ' . $this->platform_version;
     }

@@ -26,7 +26,7 @@ class PlatformResource extends JsonResource
         return [
             'type'          => 'platforms',
             'attributes'    => [
-                'description'       => $this->resource?->humanReadablePlatform() ?? 'Unknown',
+                'description'       => $this->resource?->full_platform ?? 'Unknown',
                 'systemName'        => $this->resource?->platform ?? 'Unknown',
                 'systemVersion'     => $this->resource?->platform_version ?? 'Unknown',
                 'deviceVendor'      => $this->resource?->device_vendor ?? 'Unknown',

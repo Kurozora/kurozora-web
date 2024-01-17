@@ -94,7 +94,7 @@ class SessionAttribute extends Resource
                 ->sortable(),
 
             Text::make('Platform', function () {
-                return $this->resource->humanReadablePlatform();
+                return $this->resource->full_platform;
             })
                 ->readonly()
                 ->onlyOnIndex(),
