@@ -246,10 +246,10 @@
                             @svg('magnifyingglass', 'fill-current', ['width' => '18'])
                         </button>
 
-                        <x-dropdown align="right" width="48">
+                        <x-dropdown align="right" width="64">
                             <x-slot:trigger>
                                 <button
-                                    class="inline-flex h-full w-8 items-center justify-center text-gray-500 cursor-pointer transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none focus:text-gray-700"
+                                    class="inline-flex h-8 w-8 items-center justify-center text-gray-500 cursor-pointer transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none focus:text-gray-700"
                                     x-show="! isSearchEnabled"
                                     wire:click="$emit('is-notifications-open', true)"
                                     x-transition:enter="ease-out duration-150 delay-[350ms] transform"
@@ -259,7 +259,7 @@
                                     x-transition:leave-start="opacity-100 scale-100"
                                     x-transition:leave-end="opacity-0 scale-75"
                                 >
-                                    @svg('bell', 'fill-current', ['width' => '18'])
+                                    @svg('app_badge', 'fill-current', ['width' => '18'])
                                 </button>
 
                                 <x-slot:content>

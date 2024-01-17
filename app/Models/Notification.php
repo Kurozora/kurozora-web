@@ -88,6 +88,23 @@ class Notification extends DatabaseNotification
     }
 
     /**
+     * Return a localized string representation of the notification type.
+     *
+     * @return string
+     */
+    public function getLocalizedTypeAttribute(): string
+    {
+        return match ($this->type) {
+            NewSession::class => __('New Session'),
+            NewFollower::class => __('Follower'),
+            NewFeedMessageReply::class, NewFeedMessageReShare::class => __('Message'),
+            LibraryImportFinished::class => __('Library Import'),
+            SubscriptionStatus::class => __('Subscription Update'),
+            default => __('Other')
+        };
+    }
+
+    /**
      * The user that caused the notification to be sent.
      *
      * @return HasOne
