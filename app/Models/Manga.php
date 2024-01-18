@@ -468,10 +468,31 @@ class Manga extends KModel implements HasMedia, Sitemapable
         $dayTime = now('Asia/Tokyo')
             ->next((int) $publicationDay)
             ->setTimeFromTimeString($publicationTime ?? '00:00')
-            ->setTimezone('UTC');
+            ->setTimezone(config('app.timezone'));
         $publication = $dayTime->englishDayOfWeek . ' at ' . $dayTime->format('H:i e');
 
         return now(config('app.timezone'))->until($publication, CarbonInterface::DIFF_RELATIVE_TO_NOW, true, 3);
+    }
+
+    /**
+     * The time from now until the publication as timestamp.
+     *
+     * @return string
+     */
+    public function getTimeUntilPublicationTimestampAttribute(): string
+    {
+        if (empty($this->publication)) {
+            return '';
+        }
+
+        $publicationDay = $this->publication_day?->value;
+        $publicationTime = $this->publication_time;
+        $publication = now('Asia/Tokyo')
+            ->next((int) $publicationDay)
+            ->setTimeFromTimeString($publicationTime ?? '00:00')
+            ->setTimezone(config('app.timezone'));
+
+        return $publication->timestamp;
     }
 
     /**
