@@ -310,6 +310,27 @@ class Anime extends KModel implements HasMedia, Sitemapable
     }
 
     /**
+     * The time from now until the broadcast as timestamp.
+     *
+     * @return string
+     */
+    public function getTimeUntilBroadcastTimestampAttribute(): string
+    {
+        if (empty($this->broadcast)) {
+            return '';
+        }
+
+        $airDay = $this->air_day?->value;
+        $airTime = $this->air_time;
+        $broadcast = now('Asia/Tokyo')
+            ->next((int) $airDay)
+            ->setTimeFromTimeString($airTime ?? '00:00')
+            ->setTimezone(config('app.timezone'));
+
+        return $broadcast->timestamp;
+    }
+
+    /**
      * A summary of the anime's information.
      *
      * Example: 'TV · TV-MA · 25eps · 25min · 2016'
