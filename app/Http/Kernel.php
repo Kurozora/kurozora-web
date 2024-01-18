@@ -14,6 +14,7 @@ use App\Http\Middleware\Localization;
 use App\Http\Middleware\NoSessionForBotsMiddleware;
 use App\Http\Middleware\PreventRequestsDuringMaintenance;
 use App\Http\Middleware\RedirectIfAuthenticated;
+use App\Http\Middleware\Timezone;
 use App\Http\Middleware\TrimStrings;
 use App\Http\Middleware\TrustProxies;
 use App\Http\Middleware\TVRating;
@@ -66,8 +67,9 @@ class Kernel extends HttpKernel
             NoSessionForBotsMiddleware::class,
             StartSession::class,
             'auth.session',
-            'localization',
-            'tv-rating',
+            Localization::class,
+            Timezone::class,
+            TVRating::class,
             ShareErrorsFromSession::class,
             VerifyCsrfToken::class,
             SubstituteBindings::class,
@@ -76,8 +78,9 @@ class Kernel extends HttpKernel
         'api' => [
             EnsureAPIRequestsAreStateful::class,
             ThrottleRequests::class.':api',
-            'localization',
-            'tv-rating',
+            Localization::class,
+            Timezone::class,
+            TVRating::class,
             SubstituteBindings::class,
         ],
     ];
@@ -99,11 +102,9 @@ class Kernel extends HttpKernel
         'guest' => RedirectIfAuthenticated::class,
         'headers.http-accept' => HttpAccept::class,
         'headers.http-csp' => HttpContentSecurityPolicy::class,
-        'localization' => Localization::class,
         'password.confirm' => RequirePassword::class,
         'signed' => ValidateSignature::class,
         'throttle' => ThrottleRequests::class,
-        'tv-rating' => TVRating::class,
         'user.is-pro-or-subscribed' => UserIsProOrSubscribed::class,
         'verified' => EnsureEmailIsVerified::class,
         'explore.always-enabled' => ExploreCategoryAlwaysEnabled::class
