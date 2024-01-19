@@ -31,7 +31,7 @@ class RolePolicy
      */
     public function view(User $user, Role $role): Response|bool
     {
-        return true;
+        return $user->can('viewRole');
     }
 
     /**
