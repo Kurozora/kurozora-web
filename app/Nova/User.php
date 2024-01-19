@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use App\Enums\MediaCollection;
 use App\Nova\Filters\PremiumStatus;
 use App\Nova\Filters\UserRole;
 use App\Nova\Lenses\UnconfirmedUsers;
@@ -23,6 +24,7 @@ use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
+use Laravel\Nova\Http\Requests\NovaRequest;
 use Outl1ne\NovaColorField\Color;
 use Ramsey\Uuid\Uuid;
 use Vyuldashev\NovaPermission\RoleBooleanGroup;
@@ -45,7 +47,64 @@ class User extends Resource
      */
     public static function authorizedToViewAny(Request $request): bool
     {
-        return $request->user()?->can('viewUser') || $request->user()?->hasRole('admin');
+        return $request->user()?->hasRole('admin') ?? false;
+    }
+
+    /**
+     * Determine if the current user can view the given resource.
+     *
+     * @param Request $request
+     *
+     * @return bool
+     */
+    public function authorizedToView(Request $request): bool
+    {
+        return $request->user()?->hasRole('admin') ?? false;
+    }
+
+    /**
+     * Determine if the current user can update the given resource.
+     *
+     * @param Request $request
+     *
+     * @return bool
+     */
+    public function authorizedToUpdate(Request $request): bool
+    {
+        return $request->user()?->hasRole('admin') ?? false;
+    }
+
+    /**
+     * Determine if the current user can delete the given resource.
+     *
+     * @param Request $request
+     * @return bool
+     */
+    public function authorizedToDelete(Request $request): bool
+    {
+        return $request->user()?->hasRole('admin') ?? false;
+    }
+
+    /**
+     * Determine if the current user can impersonate the given resource.
+     *
+     * @param  NovaRequest  $request
+     * @return bool
+     */
+    public function authorizedToImpersonate(Request $request): bool
+    {
+        return $request->user()?->hasRole('admin') ?? false;
+    }
+
+    /**
+     * Determine if the current user can replicate the given resource.
+     *
+     * @param Request $request
+     * @return bool
+     */
+    public function authorizedToReplicate(Request $request): bool
+    {
+        return $request->user()?->hasRole('admin') ?? false;
     }
 
     /**
@@ -97,9 +156,9 @@ class User extends Resource
 
             Avatar::make('Profile')
                 ->thumbnail(function () {
-                    return $this->resource->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/user_profile.webp');
+                    return $this->resource->getFirstMediaFullUrl(MediaCollection::Profile()) ?? asset('images/static/placeholders/user_profile.webp');
                 })->preview(function () {
-                    return $this->resource->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/user_profile.webp');
+                    return $this->resource->getFirstMediaFullUrl(MediaCollection::Profile()) ?? asset('images/static/placeholders/user_profile.webp');
                 })
                 ->rounded()
                 ->deletable(false)
