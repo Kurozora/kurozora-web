@@ -93,7 +93,7 @@ class User extends Resource
      */
     public function authorizedToImpersonate(Request $request): bool
     {
-        return $request->user()?->hasRole('admin') ?? false;
+        return $request->user()?->hasRole('superAdmin') ?? false;
     }
 
     /**

@@ -102,7 +102,7 @@ if (class_exists('Laravel\Nova\NovaApplicationServiceProvider')) {
             return [
                 (new CommandRunnerTool)
                     ->canSee(function ($request) {
-                        return $request->user()->hasRole('superAdmin');
+                        return $request->user()?->hasRole('superAdmin') ?? false;
                     }),
                 (new NovaPermissionTool)
                     ->rolePolicy(RolePolicy::class)
@@ -111,13 +111,13 @@ if (class_exists('Laravel\Nova\NovaApplicationServiceProvider')) {
                     ->permissionResource(Permission::class),
                 (new LogsTool)
                     ->canSee(function ($request) {
-                        return $request->user()->hasRole('superAdmin');
+                        return $request->user()?->hasRole('superAdmin') ?? false;
                     })
                     ->canDownload(function ($request) {
-                        return $request->user()->hasRole('superAdmin');
+                        return $request->user()?->hasRole('superAdmin') ?? false;
                     })
                     ->canDelete(function ($request) {
-                        return $request->user()->hasRole('superAdmin');
+                        return $request->user()?->hasRole('superAdmin') ?? false;
                     }),
             ];
         }
