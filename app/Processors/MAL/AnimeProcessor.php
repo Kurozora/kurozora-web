@@ -2,6 +2,7 @@
 
 namespace App\Processors\MAL;
 
+use App\Enums\DayOfWeek;
 use App\Enums\MediaCollection;
 use App\Enums\SongType;
 use App\Enums\StudioType;
@@ -125,8 +126,8 @@ class AnimeProcessor extends CustomItemProcessor
         $aired = $this->getAttribute('Aired');
         $startedAt = $this->getStartedAt($aired);
         $endedAt = $this->getEndedAt($aired);
-        $airDay = $this->getAirDay($startedAt);
         $broadcast = $this->getAttribute('Broadcast');
+        $airDay = $this->getAirDay($broadcast, $startedAt);
         $airTime = $this->getAirTime($broadcast);
         $airSeason = $this->getAirSeason($startedAt);
         $relations = $item->get('relations');
@@ -700,16 +701,31 @@ class AnimeProcessor extends CustomItemProcessor
     /**
      * Get the air day.
      *
+     * @param null|string $broadcast
      * @param Carbon|null $startedAt
+     *
      * @return int|null
      */
-    private function getAirDay(?Carbon $startedAt): ?int
+    private function getAirDay(?string $broadcast, ?Carbon $startedAt): ?int
     {
-        if (empty($startedAt)) {
-            return null;
+        if (!empty($broadcast)) {
+            $dayOfWeek = str($broadcast)
+                ->match('/\b(([m|M]on|[t|T]ues|[w|W]ed(nes)?|[t|T]hur(s)?|[f|F]ri|[s|S]at(ur)?|[s|S]un)(days)?)\b/')
+                ->replaceLast('s', '')
+                ->value();
+
+            try {
+                return DayOfWeek::fromKey($dayOfWeek)->value;
+            } catch (Exception $e) {
+                // Continue guessing
+            }
         }
 
-        return $startedAt->dayOfWeek;
+        if (!empty($startedAt)) {
+            return $startedAt->dayOfWeek;
+        }
+
+        return null;
     }
 
     /**
