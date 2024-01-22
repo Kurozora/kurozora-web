@@ -1930,7 +1930,7 @@
             "in": "query",
             "name": "type",
             "schema": {
-              "$ref": "#/components/schemas/ScheduleType"
+              "$ref": "#/components/schemas/ScheduleKind"
             },
             "required": true,
             "description": "The schedule type."
@@ -5592,7 +5592,7 @@
         "default": "kurozora",
         "description": "The types used to perform the search."
       },
-      "ScheduleType": {
+      "ScheduleKind": {
         "type": "integer",
         "enum": [
           0,
