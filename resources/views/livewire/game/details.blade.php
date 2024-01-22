@@ -365,16 +365,16 @@
 
                     <x-information-list id="publication" title="{{ __('Publication') }}" icon="{{ asset('images/symbols/calendar_badge_clock.svg') }}">
                         <x-slot:information>
-                            {{ $game->publication }}
+                            {{ $game->publication_string }}
                         </x-slot:information>
 
-                        @if ($game->status_id === 4)
+                        @if ($game->status_id === 15)
                             <x-slot:footer>
                                 {{ __('The publication of this series has ended.') }}
                             </x-slot:footer>
-                        @elseif (empty($game->publication))
+                        @elseif (empty($game->publication_date))
                             {{ __('No publication data available at the moment.') }}
-                        @elseif ($game->status_id === 3)
+                        @elseif ($game->status_id === 14)
                             <div class="flex flex-col align-center mt-1">
                                 <p class="font-black text-2xl">
                                     {{ $game->time_until_publication }}

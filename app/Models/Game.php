@@ -25,6 +25,8 @@ use App\Traits\Model\Trackable;
 use App\Traits\Model\TvRated;
 use App\Traits\SearchFilterable;
 use Astrotomic\Translatable\Translatable;
+use Carbon\Carbon;
+use Carbon\CarbonInterface;
 use Carbon\CarbonInterval;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
@@ -365,6 +367,56 @@ class Game extends KModel implements HasMedia, Sitemapable
     public function getPublicationDayAttribute(?int $value): ?DayOfWeek
     {
         return isset($value) ? DayOfWeek::fromValue($value) : null;
+    }
+
+    /**
+     * The publication date object of the manga.
+     *
+     * @return null|Carbon
+     */
+    public function getPublicationDateAttribute(): ?Carbon
+    {
+        $publicationDay = $this->publication_day?->value;
+        $publicationTime = $this->publication_time;
+
+        if (is_null($publicationDay) && empty($publicationTime)) {
+            return null;
+        }
+
+        return now('Asia/Tokyo')
+            ->next((int) $publicationDay)
+            ->setTimeFromTimeString($publicationTime ?? '00:00')
+            ->setTimezone(config('app.timezone'));
+    }
+
+    /**
+     * The publication date and time of the manga as a string.
+     *
+     * @return null|string
+     */
+    public function getPublicationStringAttribute(): ?string
+    {
+        if ($publicationDate = $this->publication_date) {
+            return __(':day at :time', ['day' => $publicationDate->translatedFormat('l'), 'time' => $publicationDate->format('H:i T')]);
+        }
+
+        return null;
+    }
+
+    /**
+     * The time from now until the publication.
+     *
+     * @return string
+     */
+    public function getTimeUntilPublicationAttribute(): string
+    {
+        if ($publicationDate = $this->publication_date) {
+            $publication = $publicationDate->englishDayOfWeek . ' at ' . $publicationDate->format('H:i e');
+            return now(config('app.timezone'))
+                ->until($publication, CarbonInterface::DIFF_RELATIVE_TO_NOW, true, 3);
+        }
+
+        return '';
     }
 
     /**

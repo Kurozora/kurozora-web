@@ -359,14 +359,14 @@
 
                     <x-information-list id="publication" title="{{ __('Publication') }}" icon="{{ asset('images/symbols/calendar_badge_clock.svg') }}">
                         <x-slot:information>
-                            {{ $manga->publication }}
+                            {{ $manga->publication_string }}
                         </x-slot:information>
 
                         @if ($manga->status_id === 4)
                             <x-slot:footer>
                                 {{ __('The publishing of this series has ended.') }}
                             </x-slot:footer>
-                        @elseif (empty($manga->publication))
+                        @elseif (empty($manga->publication_date))
                             {{ __('No publication data available at the moment.') }}
                         @elseif ($manga->status_id === 3)
                             <div class="flex flex-col align-center mt-1">

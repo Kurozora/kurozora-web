@@ -431,25 +431,37 @@ class Manga extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * The publication date and time of the manga.
+     * The publication date object of the manga.
      *
-     * @return null|string
+     * @return null|Carbon
      */
-    public function getPublicationAttribute(): ?string
+    public function getPublicationDateAttribute(): ?Carbon
     {
-        $publication = null;
         $publicationDay = $this->publication_day?->value;
         $publicationTime = $this->publication_time;
-        $dayTime = now('Asia/Tokyo')
+
+        if (is_null($publicationDay) && empty($publicationTime)) {
+            return null;
+        }
+
+        return now('Asia/Tokyo')
             ->next((int) $publicationDay)
             ->setTimeFromTimeString($publicationTime ?? '00:00')
             ->setTimezone(config('app.timezone'));
+    }
 
-        if (!is_null($publicationDay) && !empty($publicationTime)) {
-            $publication = __(':day at :time', ['day' => $dayTime->translatedFormat('l'), 'time' => $dayTime->format('H:i T')]);
+    /**
+     * The publication date and time of the manga as a string.
+     *
+     * @return null|string
+     */
+    public function getPublicationStringAttribute(): ?string
+    {
+        if ($publicationDate = $this->publication_date) {
+            return __(':day at :time', ['day' => $publicationDate->translatedFormat('l'), 'time' => $publicationDate->format('H:i T')]);
         }
 
-        return $publication;
+        return null;
     }
 
     /**
@@ -459,40 +471,13 @@ class Manga extends KModel implements HasMedia, Sitemapable
      */
     public function getTimeUntilPublicationAttribute(): string
     {
-        if (empty($this->publication)) {
-            return '';
+        if ($publicationDate = $this->publication_date) {
+            $publication = $publicationDate->englishDayOfWeek . ' at ' . $publicationDate->format('H:i e');
+            return now(config('app.timezone'))
+                ->until($publication, CarbonInterface::DIFF_RELATIVE_TO_NOW, true, 3);
         }
 
-        $publicationDay = $this->publication_day?->value;
-        $publicationTime = $this->publication_time;
-        $dayTime = now('Asia/Tokyo')
-            ->next((int) $publicationDay)
-            ->setTimeFromTimeString($publicationTime ?? '00:00')
-            ->setTimezone(config('app.timezone'));
-        $publication = $dayTime->englishDayOfWeek . ' at ' . $dayTime->format('H:i e');
-
-        return now(config('app.timezone'))->until($publication, CarbonInterface::DIFF_RELATIVE_TO_NOW, true, 3);
-    }
-
-    /**
-     * The time from now until the publication as timestamp.
-     *
-     * @return string
-     */
-    public function getTimeUntilPublicationTimestampAttribute(): string
-    {
-        if (empty($this->publication)) {
-            return '';
-        }
-
-        $publicationDay = $this->publication_day?->value;
-        $publicationTime = $this->publication_time;
-        $publication = now('Asia/Tokyo')
-            ->next((int) $publicationDay)
-            ->setTimeFromTimeString($publicationTime ?? '00:00')
-            ->setTimezone(config('app.timezone'));
-
-        return $publication->timestamp;
+        return '';
     }
 
     /**
