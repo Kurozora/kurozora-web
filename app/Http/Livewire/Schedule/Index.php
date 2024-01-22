@@ -2,6 +2,10 @@
 
 namespace App\Http\Livewire\Schedule;
 
+use App\Enums\ScheduleKind;
+use App\Models\Anime;
+use App\Models\Game;
+use App\Models\Manga;
 use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -11,11 +15,25 @@ use Livewire\Component;
 class Index extends Component
 {
     /**
+     * The selected schedule type.
+     *
+     * @var string $type
+     */
+    public string $type = '';
+
+    /**
      * The selected date.
      *
      * @var string $date
      */
     public string $date = '';
+
+    /**
+     * The selected schedule type's class.
+     *
+     * @var string $class
+     */
+    public string $class = Anime::class;
 
     /**
      * The query strings of the component.
@@ -25,6 +43,7 @@ class Index extends Component
     public function getQueryString(): array
     {
         return [
+            'type' => ['except' => ScheduleKind::Anime()->key],
             'date' => ['except' => today()->toDateString()],
         ];
     }
@@ -32,13 +51,23 @@ class Index extends Component
     /**
      * Prepare the component.
      *
-     * @param null|string $date
-     *
      * @return void
      */
-    public function mount(?string $date = null): void
+    public function mount(): void
     {
-        $this->date = $date ?? today()->toDateString();
+        if (empty($this->type)) {
+            $this->type = ScheduleKind::Anime()->key;
+        }
+
+        $this->class = match ($this->type) {
+            strtolower(ScheduleKind::Game()->key) => Game::class,
+            strtolower(ScheduleKind::Manga()->key) => Manga::class,
+            default => Anime::class
+        };
+
+        if (empty($this->date)) {
+            $this->date = today()->toDateString();
+        }
     }
 
     /**

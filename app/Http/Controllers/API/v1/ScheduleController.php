@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\API\v1;
 
-use App\Enums\UserLibraryKind;
+use App\Enums\ScheduleKind;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GetScheduleRequest;
@@ -27,30 +27,27 @@ class ScheduleController extends Controller
     {
         $data = $request->validated();
         $dates = $this->getDates($data['date'] ?? today()->toDateString());
-        $libraryKind = UserLibraryKind::fromValue((int) $data['type']);
-
-        // Get whether user is in import cooldown period
+        $libraryKind = ScheduleKind::fromValue((int) $data['type']);
         $model = match ($libraryKind->value) {
-            UserLibraryKind::Game => Game::class,
-            UserLibraryKind::Manga => Manga::class,
+            ScheduleKind::Game => Game::class,
+            ScheduleKind::Manga => Manga::class,
             default => Anime::class
-        };
-
-        // Get whether user is in import cooldown period
-        $dayKey = match ($model) {
-            Game::class, Manga::class => 'publication_day',
-            default => 'air_day'
         };
         $schedules = [];
 
         /** @var Carbon $date */
         foreach ($dates as $date) {
+            $where = match ($model) {
+                Game::class, Manga::class => [
+                    ['publication_day', '=', $date->dayOfWeek],
+                ],
+                default => []
+            };
+
             $schedules[] = [
                 'date' => $date->startOfDay()->timestamp,
                 'type' => $model,
-                'models' => $model::where([
-                    [$dayKey, '=', $date->dayOfWeek],
-                ])
+                'models' => $model::where($where)
                     ->when($model == Anime::class, function ($query) use ($date) {
                         $query->whereHas('episodes', function ($query) use ($date) {
                             $query->where([

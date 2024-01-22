@@ -71,14 +71,14 @@ class Schedule extends Component
             return collect();
         }
 
-        $dayKey = match ($this->class) {
-            Game::class, Manga::class => 'publication_day',
-            default => 'air_day'
+        $where = match ($this->class) {
+            Game::class, Manga::class => [
+                ['publication_day', '=', $this->date->dayOfWeek],
+            ],
+            default => []
         };
 
-        return $this->class::where([
-            [$dayKey, '=', $this->date->dayOfWeek],
-        ])
+        return $this->class::where($where)
             ->when($this->class == Anime::class, function ($query) {
                 $query->whereHas('episodes', function($query) {
                     $query->where([

@@ -1,15 +1,15 @@
 <main>
     <x-slot:title>
-        {{ __('Anime Schedule') }}
+        {{ __(':x Schedule', ['x' => class_basename($class)]) }}
     </x-slot:title>
 
     <x-slot:description>
-        {{ __('Explore the latest anime schedule on Kurozora. Stay updated with upcoming episode broadcasts and countdowns.') }}
+        {{ __('Explore the latest :x schedule on Kurozora. Stay updated with upcoming episode broadcasts and countdowns.', ['x' => strtolower(class_basename($class))]) }}
     </x-slot:description>
 
     <x-slot:meta>
-        <meta property="og:title" content="{{ __('Anime Schedule') }} — {{ config('app.name') }}" />
-        <meta property="og:description" content="{{ __('Explore the latest anime schedule on Kurozora. Stay updated with upcoming episode broadcasts and countdowns.') }}" />
+        <meta property="og:title" content="{{ __(':x Schedule', ['x' => class_basename($class)]) }} — {{ config('app.name') }}" />
+        <meta property="og:description" content="{{ __('Explore the latest :x schedule on Kurozora. Stay updated with upcoming episode broadcasts and countdowns.', ['x' => strtolower(class_basename($class))]) }}" />
         <meta property="og:image" content="{{ asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="og:type" content="website" />
         <link rel="canonical" href="{{ route('schedule') }}">
@@ -23,7 +23,7 @@
     >
         <section class="flex gap-1">
             <div class="flex flex-wrap items-center w-full">
-                <h1 class="text-2xl font-bold">{{ __('Anime Schedule') }}</h1>
+                <h1 class="text-2xl font-bold">{{ __(':x Schedule', ['x' => class_basename($class)]) }}</h1>
             </div>
 
             <div class="flex flex-wrap justify-end items-center w-full">
@@ -31,7 +31,7 @@
         </section>
 
         <section id="dateHeader" class="bg-white pt-4 pb-4 z-10">
-            <x-season-pagination :type="\App\Models\Anime::class" />
+            <x-season-pagination :type="$class" />
 
             <x-hr class="mt-4 mb-4" />
 
@@ -63,7 +63,7 @@
                     class="pb-10"
                     x-bind:class="{'bg-orange-50': '{{ $date->toDateString() }}' === '{{ today()->toDateString() }}' }"
                 >
-                    <livewire:sections.schedule :class="\App\Models\Anime::class" :date="$date" />
+                    <livewire:sections.schedule :class="$class" :date="$date" />
                 </div>
             @endforeach
         </section>
