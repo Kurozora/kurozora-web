@@ -266,25 +266,37 @@ class Anime extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * The broadcast date and time of the anime.
+     * The broadcast date object of the anime.
      *
-     * @return null|string
+     * @return null|Carbon
      */
-    public function getBroadcastAttribute(): ?string
+    public function getBroadcastDateAttribute(): ?Carbon
     {
-        $broadcast = null;
         $airDay = $this->air_day?->value;
         $airTime = $this->air_time;
-        $dayTime = now('Asia/Tokyo')
+
+        if (is_null($airDay) && empty($airTime)) {
+            return null;
+        }
+
+        return now('Asia/Tokyo')
             ->next((int) $airDay)
             ->setTimeFromTimeString($airTime ?? '00:00')
             ->setTimezone(config('app.timezone'));
+    }
 
-        if (!is_null($airDay) && !empty($airTime)) {
-            $broadcast = __(':day at :time', ['day' => $dayTime->translatedFormat('l'), 'time' => $dayTime->format('H:i T')]);
+    /**
+     * The broadcast date and time of the anime as a string.
+     *
+     * @return null|string
+     */
+    public function getBroadcastStringAttribute(): ?string
+    {
+        if ($broadcastDate = $this->broadcast_date) {
+            return __(':day at :time', ['day' => $broadcastDate->translatedFormat('l'), 'time' => $broadcastDate->format('H:i T')]);
         }
 
-        return $broadcast;
+        return null;
     }
 
     /**
@@ -294,40 +306,13 @@ class Anime extends KModel implements HasMedia, Sitemapable
      */
     public function getTimeUntilBroadcastAttribute(): string
     {
-        if (empty($this->broadcast)) {
-            return '';
+        if ($broadcastDate = $this->broadcast_date) {
+            $broadcast = $broadcastDate->englishDayOfWeek . ' at ' . $broadcastDate->format('H:i e');
+            return now(config('app.timezone'))
+                ->until($broadcast, CarbonInterface::DIFF_RELATIVE_TO_NOW, true, 3);
         }
 
-        $airDay = $this->air_day?->value;
-        $airTime = $this->air_time;
-        $dayTime = now('Asia/Tokyo')
-            ->next((int) $airDay)
-            ->setTimeFromTimeString($airTime ?? '00:00')
-            ->setTimezone(config('app.timezone'));
-        $broadcast = $dayTime->englishDayOfWeek . ' at ' . $dayTime->format('H:i e');
-
-        return now(config('app.timezone'))->until($broadcast, CarbonInterface::DIFF_RELATIVE_TO_NOW, true, 3);
-    }
-
-    /**
-     * The time from now until the broadcast as timestamp.
-     *
-     * @return string
-     */
-    public function getTimeUntilBroadcastTimestampAttribute(): string
-    {
-        if (empty($this->broadcast)) {
-            return '';
-        }
-
-        $airDay = $this->air_day?->value;
-        $airTime = $this->air_time;
-        $broadcast = now('Asia/Tokyo')
-            ->next((int) $airDay)
-            ->setTimeFromTimeString($airTime ?? '00:00')
-            ->setTimezone(config('app.timezone'));
-
-        return $broadcast->timestamp;
+        return '';
     }
 
     /**

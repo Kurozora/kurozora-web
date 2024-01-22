@@ -364,14 +364,14 @@
 
                     <x-information-list id="broadcast" title="{{ __('Broadcast') }}" icon="{{ asset('images/symbols/calendar_badge_clock.svg') }}">
                         <x-slot:information>
-                            {{ $anime->broadcast }}
+                            {{ $anime->broadcast_string }}
                         </x-slot:information>
 
                         @if ($anime->status_id === 4)
                             <x-slot:footer>
                                 {{ __('The broadcasting of this series has ended.') }}
                             </x-slot:footer>
-                        @elseif (empty($anime->broadcast))
+                        @elseif (empty($anime->broadcast_string))
                             {{ __('No broadcast data available at the moment.') }}
                         @elseif ($anime->status_id === 3)
                             <div class="flex flex-col align-center mt-1">
