@@ -17,13 +17,13 @@
 
             @switch($class)
                 @case(\App\Models\Anime::class)
-                    <x-rows.small-lockup :animes="$this->models" :is-row="false" />
+                    <x-rows.small-lockup :animes="$this->models" :shows-schedule="true" :is-row="false" />
                     @break
                 @case(\App\Models\Game::class)
-                    <x-rows.small-lockup :games="$this->models" :is-row="false" />
+                    <x-rows.small-lockup :games="$this->models" :shows-schedule="true" :is-row="false" />
                     @break
                 @case(\App\Models\Manga::class)
-                    <x-rows.small-lockup :mangas="$this->models" :is-row="false" />
+                    <x-rows.small-lockup :mangas="$this->models" :shows-schedule="true" :is-row="false" />
                     @break
             @endswitch
         @elseif (!$readyToLoad)

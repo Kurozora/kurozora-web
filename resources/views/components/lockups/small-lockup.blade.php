@@ -1,4 +1,4 @@
-@props(['anime', 'manga', 'game', 'relation', 'rank', 'trackingEnabled' => true, 'isRanked' => false, 'isRow' => true])
+@props(['anime', 'manga', 'game', 'relation', 'rank', 'trackingEnabled' => true, 'showsSchedule' => false, 'isRanked' => false, 'isRow' => true])
 
 @php
     $class = $isRow ? 'pb-2 shrink-0 snap-normal snap-center' : '';
@@ -25,19 +25,18 @@
                         <p class="text-xs leading-tight font-semibold opacity-75 line-clamp-2">{{ $relation->name }}</p>
                     @endif
 
-                    <div class="flex justify-between">
-                        <p class="leading-tight line-clamp-2">{{ $anime->title }}</p>
+                    @if ($showsSchedule)
+                        <p class="text-xs leading-tight font-semibold opacity-75 line-clamp-2">
+                            {{ $anime->broadcast_date?->format('H:i T') }}
+                            <span class="font-normal">({{ $anime->time_until_broadcast }})</span>
+                        </p>
+                    @endif
 
-{{--                        <p class="text-xs leading-tight opacity-75 whitespace-nowrap">{{ $anime->mediaStatus->name }}</p>--}}
-                    </div>
+                    <p class="leading-tight line-clamp-2">{{ $anime->title }}</p>
 
-                    <div class="space-y-1">
+                    <div class="flex flex-col gap-1">
                         <p class="text-xs leading-tight opacity-75 line-clamp-2">{{ empty($anime->tagline) ? ($anime->genres?->pluck('name')->join(', ', ' and ') ?? $anime->themes?->pluck('name')->join(', ', ' and ')) : $anime->tagline }}</p>
                         <p class="text-xs leading-tight opacity-75 line-clamp-2">{{ $anime->tv_rating->name }}</p>
-
-{{--                        <p class="text-xs leading-tight opacity-75 line-clamp-2">{{ trans_choice('[0,1] :x Episode|[2,*] :x Episodes', $anime->episode_count, ['x' => $anime->episode_count]) }}</p>--}}
-{{--    --}}
-{{--                        <p class="text-xs leading-tight opacity-75 line-clamp-2">{{ __($anime->started_at?->year) }}</p>--}}
                     </div>
 
                     @if (!empty($anime->mediaStat?->rating_count) && $trackingEnabled)
@@ -74,19 +73,18 @@
                         <p class="text-xs leading-tight font-semibold opacity-75 line-clamp-2">{{ $relation->name }}</p>
                     @endif
 
-                    <div class="flex justify-between">
-                        <p class="leading-tight line-clamp-1">{{ $game->title }}</p>
+                    @if ($showsSchedule)
+                        <p class="text-xs leading-tight font-semibold opacity-75 line-clamp-2">
+                            {{ $game->publication_date?->format('H:i T') }}
+                            <span class="font-normal">({{ $game->time_until_publication }})</span>
+                        </p>
+                    @endif
 
-{{--                        <p class="text-xs leading-tight opacity-75 whitespace-nowrap">{{ $game->mediaStatus->name }}</p>--}}
-                    </div>
+                    <p class="leading-tight line-clamp-1">{{ $game->title }}</p>
 
-                    <div class="space-y-1">
+                    <div class="flex flex-col gap-1">
                         <p class="text-xs leading-tight opacity-75 line-clamp-1">{{ empty($game->tagline) ? ($game->genres?->pluck('name')->join(', ', ' and ') ?? $game->themes?->pluck('name')->join(', ', ' and ')) : $game->tagline }}</p>
                         <p class="text-xs leading-tight opacity-75 line-clamp-1">{{ $game->tv_rating->name }}</p>
-
-{{--                        <p class="text-xs leading-tight opacity-75 line-clamp-2">{{ trans_choice('[0,1] :x Episode|[2,*] :x Episodes', $game->episode_count, ['x' => $game->episode_count]) }}</p>--}}
-{{--    --}}
-{{--                        <p class="text-xs leading-tight opacity-75 line-clamp-2">{{ __($game->published_at?->year) }}</p>--}}
                     </div>
 
                     @if (!empty($game->mediaStat?->rating_count) && $trackingEnabled)
@@ -129,19 +127,18 @@
                         <p class="text-xs leading-tight font-semibold opacity-75 line-clamp-2">{{ $relation->name }}</p>
                     @endif
 
-                    <div class="flex justify-between">
-                        <p class="leading-tight line-clamp-2">{{ $manga->title }}</p>
+                    @if ($showsSchedule)
+                        <p class="text-xs leading-tight font-semibold opacity-75 line-clamp-2">
+                            {{ $manga->publication_date?->format('H:i T') }}
+                            <span class="font-normal">({{ $manga->time_until_publication }})</span>
+                        </p>
+                    @endif
 
-{{--                        <p class="text-xs leading-tight opacity-75 whitespace-nowrap">{{ $manga->mediaStatus->name }}</p>--}}
-                    </div>
+                    <p class="leading-tight line-clamp-2">{{ $manga->title }}</p>
 
-                    <div class="space-y-1">
+                    <div class="flex flex-col gap-1">
                         <p class="text-xs leading-tight opacity-75 line-clamp-2">{{ empty($manga->tagline) ? ($manga->genres?->pluck('name')->join(', ', ' and ') ?? $manga->themes?->pluck('name')->join(', ', ' and ')) : $manga->tagline }}</p>
                         <p class="text-xs leading-tight opacity-75 line-clamp-2">{{ $manga->tv_rating->name }}</p>
-
-{{--                        <p class="text-xs leading-tight opacity-75 line-clamp-2">{{ trans_choice('[0,1] :x Episode|[2,*] :x Episodes', $manga->episode_count, ['x' => $manga->episode_count]) }}</p>--}}
-{{--    --}}
-{{--                        <p class="text-xs leading-tight opacity-75 line-clamp-2">{{ __($manga->started_at?->year) }}</p>--}}
                     </div>
 
                     @if (!empty($manga->mediaStat?->rating_count) && $trackingEnabled)
