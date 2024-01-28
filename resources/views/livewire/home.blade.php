@@ -160,6 +160,66 @@
            <x-skeletons.small-lockup />
            <x-skeletons.small-lockup />
            <x-skeletons.small-lockup />
+        @else
+            @guest
+                <section>
+                    <a href="{{ route('recap.index') }}">
+                        <x-picture>
+                            <img class="w-full object-cover h-32 rounded-lg shadow sm:h-40 md:h-80" src="{{ asset('images/static/banners/kurozora_recap.webp') }}" alt="Kurozora Recap 2023">
+                        </x-picture>
+                    </a>
+                </section>
+            @endguest
+
+            <section class="pt-5 pb-8 border-t-2">
+                <x-section-nav class="flex flex-nowrap justify-between mb-5">
+                    <x-slot:title>
+                        {{ __('More to Explore') }}
+                    </x-slot:title>
+                </x-section-nav>
+
+                <div class="grid gap-4 md:grid-cols-3">
+                    <x-simple-link href="{{ route('anime.seasons.index') }}" class="justify-between w-full pt-4 pr-4 pb-4 pl-4 text-sm bg-gray-100 rounded-lg" :hover-underline-enabled="false">
+                        <span>
+                            {{ __('Browse by Season') }}
+                        </span>
+
+                        @svg('chevron_forward', 'fill-current', ['width' => 12])
+                    </x-simple-link>
+
+                    <x-simple-link href="{{ route('genres.index') }}" class="justify-between w-full pt-4 pr-4 pb-4 pl-4 text-sm bg-gray-100 rounded-lg" :hover-underline-enabled="false">
+                        <span>
+                            {{ __('Browse by Genre') }}
+                        </span>
+
+                        @svg('chevron_forward', 'fill-current', ['width' => 12])
+                    </x-simple-link>
+
+                    <x-simple-link href="{{ route('themes.index') }}" class="justify-between w-full pt-4 pr-4 pb-4 pl-4 text-sm bg-gray-100 rounded-lg" :hover-underline-enabled="false">
+                        <span>
+                            {{ __('Browse by Theme') }}
+                        </span>
+
+                        @svg('chevron_forward', 'fill-current', ['width' => 12])
+                    </x-simple-link>
+
+                    <x-simple-link href="{{ route('schedule') }}" class="justify-between w-full pt-4 pr-4 pb-4 pl-4 text-sm bg-gray-100 rounded-lg" :hover-underline-enabled="false">
+                        <span>
+                            {{ __('Broadcast Schedule') }}
+                        </span>
+
+                        @svg('chevron_forward', 'fill-current', ['width' => 12])
+                    </x-simple-link>
+
+                    <x-simple-link href="{{ route('charts.index') }}" class="justify-between w-full pt-4 pr-4 pb-4 pl-4 text-sm bg-gray-100 rounded-lg" :hover-underline-enabled="false">
+                        <span>
+                            {{ __('Charts') }}
+                        </span>
+
+                        @svg('chevron_forward', 'fill-current', ['width' => 12])
+                    </x-simple-link>
+                </div>
+            </section>
         @endif
     </div>
 </main>
