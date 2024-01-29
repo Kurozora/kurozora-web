@@ -186,6 +186,15 @@ class ExploreCategoryResource extends JsonResource
                         )
                     ]
                 ];
+            case ExploreCategoryTypes::ReCAP:
+                return [
+                    'recaps' => [
+                        'data' => RecapResourceIdentity::collection($this->resource
+                            ->exploreCategoryItems
+                            ->pluck('model')
+                        )
+                    ]
+                ];
             default: // Return empty shows by default
                 return [
                     'shows' => null

@@ -92,6 +92,7 @@ class Details extends Component
             ExploreCategoryTypes::GamesSeason => $this->exploreCategory->currentSeason(Game::class, null, 25),
             ExploreCategoryTypes::Characters => $this->exploreCategory->charactersBornToday(25),
             ExploreCategoryTypes::People => $this->exploreCategory->peopleBornToday(25),
+            ExploreCategoryTypes::ReCAP => $this->exploreCategory->reCAP(25),
             default => $this->exploreCategory->load([
                 'exploreCategoryItems.model' => function (MorphTo $morphTo) {
                     $morphTo->constrain([

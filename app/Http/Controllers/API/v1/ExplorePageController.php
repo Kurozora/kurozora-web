@@ -97,6 +97,7 @@ class ExplorePageController extends Controller
                 ExploreCategoryTypes::GamesSeason => $exploreCategory->currentSeason(Game::class, $genreOrTheme, 10, false),
                 ExploreCategoryTypes::Characters => $exploreCategory->charactersBornToday(10, false),
                 ExploreCategoryTypes::People => $exploreCategory->peopleBornToday(10, false),
+                ExploreCategoryTypes::ReCAP => $exploreCategory->reCAP(10),
                 default => $exploreCategory->loadMissing([
                     'exploreCategoryItems.model' => function (MorphTo $morphTo) {
                         $morphTo->limit(10)->constrain([
@@ -175,6 +176,7 @@ class ExplorePageController extends Controller
             ExploreCategoryTypes::GamesSeason => $exploreCategory->currentSeason(Game::class, $genreOrTheme, 25),
             ExploreCategoryTypes::Characters => $exploreCategory->charactersBornToday(25),
             ExploreCategoryTypes::People => $exploreCategory->peopleBornToday(25),
+            ExploreCategoryTypes::ReCAP => $exploreCategory->reCAP(25),
             default => $exploreCategory->load([
                 'exploreCategoryItems.model' => function (MorphTo $morphTo) {
                     $morphTo->constrain([

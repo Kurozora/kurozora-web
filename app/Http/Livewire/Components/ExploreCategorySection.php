@@ -121,6 +121,7 @@ class ExploreCategorySection extends Component
             ExploreCategoryTypes::GamesSeason => $this->exploreCategory->currentSeason(Game::class, $this->genre ?? $this->theme),
             ExploreCategoryTypes::Characters => $this->exploreCategory->charactersBornToday(),
             ExploreCategoryTypes::People => $this->exploreCategory->peopleBornToday(),
+            ExploreCategoryTypes::ReCAP => $this->exploreCategory->reCAP(),
             default => $this->exploreCategory->load([
                 'exploreCategoryItems.model' => function (MorphTo $morphTo) {
                     $morphTo->constrain([

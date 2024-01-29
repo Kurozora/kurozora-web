@@ -32,6 +32,7 @@ use BenSampo\Enum\Enum;
  * @method static ExploreCategoryTypes Genres()
  * @method static ExploreCategoryTypes Themes()
  * @method static ExploreCategoryTypes Songs()
+ * @method static ExploreCategoryTypes ReCAP()
  */
 final class ExploreCategoryTypes extends Enum
 {
@@ -62,4 +63,5 @@ final class ExploreCategoryTypes extends Enum
     const Genres = 'genres';
     const Themes = 'themes';
     const Songs = 'songs';
+    const ReCAP = 're-cap';
 }

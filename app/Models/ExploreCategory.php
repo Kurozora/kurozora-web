@@ -620,6 +620,30 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
     }
 
     /**
+     * Append the user's Re:CAP entries to the category's items
+     *
+     * @param int $limit
+     * @return ExploreCategory
+     */
+    public function reCAP(int $limit = 10): ExploreCategory
+    {
+        $models = auth()->user()->recaps()
+                ->distinct()
+                ->limit($limit)
+                ->orderBy('year', 'desc')
+                ->select('year')
+                ->get();
+
+        $this->exploreCategoryItems = $models->map(function ($model) {
+            return new ExploreCategoryItem([
+                'model' => $model,
+            ]);
+        });
+
+        return $this;
+    }
+
+    /**
      * Convert the model to its sitemap representation.
      *
      * @return Url|string|array
