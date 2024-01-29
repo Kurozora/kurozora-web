@@ -130,6 +130,9 @@
                     @case(\App\Enums\ExploreCategoryTypes::Songs)
                         <x-rows.music-lockup :media-songs="$this->exploreCategoryItems" :show-episodes="false" :show-model="true" />
                     @break
+                    @case(\App\Enums\ExploreCategoryTypes::ReCAP)
+                        <x-rows.recap-lockup :recaps="$this->exploreCategoryItems" />
+                    @break
                     @default
                         @if (app()->isLocal())
                             {{ 'Unhandled type: ' . $exploreCategory->type }}
