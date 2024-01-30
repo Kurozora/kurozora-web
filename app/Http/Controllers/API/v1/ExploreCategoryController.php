@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Http\JsonResponse;
 
-class ExplorePageController extends Controller
+class ExploreCategoryController extends Controller
 {
     /**
      * Returns the necessary data for the Anime explore page.
