@@ -627,18 +627,18 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
      */
     public function reCAP(int $limit = 10): ExploreCategory
     {
-        $models = auth()->user()->recaps()
+        $models = auth()->user()?->recaps()
                 ->distinct()
                 ->limit($limit)
                 ->orderBy('year', 'desc')
                 ->select('year')
                 ->get();
 
-        $this->exploreCategoryItems = $models->map(function ($model) {
+        $this->exploreCategoryItems = $models?->map(function ($model) {
             return new ExploreCategoryItem([
                 'model' => $model,
             ]);
-        });
+        }) ?? collect();
 
         return $this;
     }

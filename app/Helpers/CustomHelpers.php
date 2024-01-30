@@ -213,3 +213,29 @@ if (! function_exists('yesterday')) {
         return Date::yesterday($tz);
     }
 }
+
+if (! function_exists('generateRandomColor')) {
+    /**
+     * Generate a random color based on a seed.
+     *
+     * @param $number
+     *
+     * @return string
+     */
+    function generateRandomColor($number): string
+    {
+        // Ensure the number is positive
+        $number = abs($number);
+
+        // Use the number to seed the random color generation
+        srand($number);
+
+        // Generate random RGB values
+        $red = rand(0, 175);
+        $green = rand(0, 175);
+        $blue = rand(0, 175);
+
+        // Format the RGB values into a hexadecimal color code
+        return sprintf('#%02x%02x%02x', $red, $green, $blue);
+    }
+}
