@@ -20,16 +20,15 @@
                     </x-slot:description>
 
                     <x-slot:action>
+                        <x-spinner />
+
                         @hasrole('superAdmin')
                             <x-button wire:click="$refresh">{{ __('Refresh') }}</x-button>
                         @endhasrole
+
                         <x-section-nav-link class="whitespace-nowrap" href="{{ $exploreCategory->secondary_slug ? url($exploreCategory->secondary_slug) : route('explore.details', $exploreCategory) }}">{{ __('See All') }}</x-section-nav-link>
                     </x-slot:action>
                 </x-section-nav>
-
-                <div class="flex justify-center">
-                    <x-spinner />
-                </div>
 
                 @switch($exploreCategory->type)
                     @case(\App\Enums\ExploreCategoryTypes::MostPopularShows)

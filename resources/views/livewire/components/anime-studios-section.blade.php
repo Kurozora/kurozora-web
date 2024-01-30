@@ -7,16 +7,15 @@
                 </x-slot:title>
 
                 <x-slot:action>
+                    <x-spinner />
+
                     @hasrole('superAdmin')
                         <x-button wire:click="$refresh">{{ __('Refresh') }}</x-button>
                     @endhasrole
+
                     <x-section-nav-link href="{{ route('anime.studios', $anime) }}">{{ __('See All') }}</x-section-nav-link>
                 </x-slot:action>
             </x-section-nav>
-
-            <div class="flex justify-center">
-                <x-spinner />
-            </div>
 
             <x-rows.studio-lockup :studios="$this->studios" />
         </section>
