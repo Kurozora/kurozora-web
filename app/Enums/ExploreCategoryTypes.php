@@ -63,5 +63,5 @@ final class ExploreCategoryTypes extends Enum
     const Genres = 'genres';
     const Themes = 'themes';
     const Songs = 'songs';
-    const ReCAP = 're-cap';
+    const ReCAP = 'recap';
 }
