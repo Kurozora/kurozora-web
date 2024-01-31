@@ -17,6 +17,35 @@ class Recap extends KModel
     protected $table = self::TABLE_NAME;
 
     /**
+     * Casts rules.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'year' => 'int'
+    ];
+
+    /**
+     * The first background color of the recap.
+     *
+     * @return string
+     */
+    public function getBackgroundColor1Attribute(): string
+    {
+        return generate_random_color($this->year);
+    }
+
+    /**
+     * The second background color of the recap.
+     *
+     * @return string
+     */
+    public function getBackgroundColor2Attribute(): string
+    {
+        return generate_random_color($this->year - 3);
+    }
+
+    /**
      * Returns the model related to the media rating.
      *
      * @return BelongsTo
