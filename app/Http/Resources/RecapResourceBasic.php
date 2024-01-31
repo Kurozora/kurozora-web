@@ -2,11 +2,7 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Game;
-use App\Models\Genre;
-use App\Models\Manga;
 use App\Models\Recap;
-use App\Models\Theme;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -30,18 +26,11 @@ class RecapResourceBasic extends JsonResource
         $resource = RecapResourceIdentity::make($this->resource)->toArray($request);
         $resource = array_merge($resource, [
             'attributes' => [
-                'year'                  => $this->resource->year,
-                'type'                  => match ($this->resource->type) {
-                    Game::class => 'games',
-                    Manga::class => 'literatures',
-                    Genre::class => 'genres',
-                    Theme::class => 'themes',
-                    default => 'shows'
-                },
-                'totalSeriesCount'      => $this->resource->total_series_count,
-                'totalPartsCount'       => $this->resource->total_parts_count,
-                'totalPartsDuration'    => $this->resource->total_parts_duration,
-                'topPercentile'         => $this->resource->top_percentile,
+                'year'              => $this->resource->year,
+                'description'       => null,
+                'backgroundColor1'  => $this->resource->background_color1,
+                'backgroundColor2'  => $this->resource->background_color2,
+                'artwork'           => null,
             ]
         ]);
         return $resource;

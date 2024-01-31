@@ -25,8 +25,8 @@ class RecapResourceIdentity extends JsonResource
     {
         return [
             'id'    => (string) ($this->resource?->id ?? $this->resource),
-            'type'  => 'recap',
-            'href'  => route('api.me.recap.view', $this->resource, false),
+            'type'  => 'recaps',
+            'href'  => route('api.me.recap.view', ($this->resource?->year ?? $this->resource), false),
         ];
     }
 }

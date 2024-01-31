@@ -19,10 +19,11 @@ class RecapController extends Controller
         $recaps = auth()->user()->recaps()
             ->distinct()
             ->orderBy('year', 'desc')
-            ->pluck('year');
+            ->select(['id', 'year'])
+            ->get();
 
         return JSONResult::success([
-            'data' => $recaps
+            'data' => RecapResource::collection($recaps)
         ]);
     }
 

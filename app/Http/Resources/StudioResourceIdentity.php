@@ -26,10 +26,10 @@ class StudioResourceIdentity extends JsonResource
     public function toArray(Request $request): array|JsonSerializable|Arrayable
     {
         return [
-            'id'            => $this->resource->id,
-            'uuid'          => (string) $this->resource->id,
-            'type'          => 'studios',
-            'href'          => route('api.studios.details', $this->resource, false),
+            'id' => $this->resource->id,
+            'uuid' => (string) $this->resource->id,
+            'type' => 'studios',
+            'href' => route('api.studios.details', $this->resource, false),
         ];
     }
 }
