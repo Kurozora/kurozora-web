@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\RecapItemResource;
 use App\Http\Resources\RecapResource;
 use Illuminate\Http\JsonResponse;
 
@@ -42,7 +43,7 @@ class RecapController extends Controller
             ->get();
 
         return JSONResult::success([
-            'data' => RecapResource::collection($recaps)
+            'data' => RecapItemResource::collection($recaps)
         ]);
     }
 }
