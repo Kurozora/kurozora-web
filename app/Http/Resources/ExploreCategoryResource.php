@@ -189,7 +189,7 @@ class ExploreCategoryResource extends JsonResource
             case ExploreCategoryTypes::ReCAP:
                 return [
                     'recaps' => [
-                        'data' => RecapResourceIdentity::collection($this->resource
+                        'data' => RecapResource::collection($this->resource
                             ->exploreCategoryItems
                             ->pluck('model')
                         )
