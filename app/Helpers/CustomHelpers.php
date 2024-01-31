@@ -214,7 +214,7 @@ if (! function_exists('yesterday')) {
     }
 }
 
-if (! function_exists('generateRandomColor')) {
+if (! function_exists('generate_random_color')) {
     /**
      * Generate a random color based on a seed.
      *
@@ -222,7 +222,7 @@ if (! function_exists('generateRandomColor')) {
      *
      * @return string
      */
-    function generateRandomColor($number): string
+    function generate_random_color($number): string
     {
         // Ensure the number is positive
         $number = abs($number);

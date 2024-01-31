@@ -11,7 +11,7 @@
 
             <div
                 class="absolute top-0 left-0 h-full w-full"
-                style="background: linear-gradient({{ generateRandomColor($recap->year) }}, {{ generateRandomColor($recap->year - 3) }}); opacity: 50%"
+                style="background: linear-gradient({{ $recap->background_color1 }}, {{ $recap->background_color2 }}); opacity: 50%"
             ></div>
 
             <div class="absolute top-0 left-0 h-full w-full">
