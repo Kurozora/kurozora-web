@@ -26,7 +26,7 @@
 {{--        <section>--}}
 {{--            <a href="{{ route('recap.index') }}">--}}
 {{--                <x-picture>--}}
-{{--                    <img class="w-full object-cover h-32 rounded-lg shadow sm:h-40 md:h-80" src="{{ asset('images/static/banners/kurozora_recap_2023.webp') }}" alt="Kurozora Recap 2023">--}}
+{{--                    <img class="w-full object-cover h-40 rounded-lg shadow md:h-80" src="{{ asset('images/static/banners/kurozora_recap_2023.webp') }}" alt="Kurozora Recap 2023">--}}
 {{--                </x-picture>--}}
 {{--            </a>--}}
 {{--        </section>--}}
@@ -165,7 +165,7 @@
                 <section>
                     <a href="{{ route('recap.index') }}">
                         <x-picture>
-                            <img class="w-full object-cover h-32 rounded-lg shadow sm:h-40 md:h-80" src="{{ asset('images/static/banners/kurozora_recap.webp') }}" alt="Kurozora Recap 2023">
+                            <img class="w-full object-cover h-40 rounded-lg shadow md:h-80" src="{{ asset('images/static/banners/kurozora_recap.webp') }}" alt="Kurozora Recap 2023">
                         </x-picture>
                     </a>
                 </section>
