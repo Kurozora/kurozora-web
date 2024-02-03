@@ -2,10 +2,11 @@
 
 namespace App\Policies;
 
+use App\Models\Notification;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Auth\Access\Response;
-use Illuminate\Notifications\Notification;
+use Illuminate\Notifications\Notification as IlluminateNotification;
 
 class NotificationPolicy
 {
@@ -14,10 +15,10 @@ class NotificationPolicy
     /**
      * Verifies that a notification was sent to a user, and not some other model.
      *
-     * @param Notification $notification
+     * @param Notification|IlluminateNotification $notification
      * @return Response|bool
      */
-    private function isNotifyingUser(Notification $notification): Response|bool
+    private function isNotifyingUser(Notification|IlluminateNotification $notification): Response|bool
     {
         return $notification->notifiable instanceof User;
     }
@@ -26,10 +27,10 @@ class NotificationPolicy
      * Determine whether the user can view the model.
      *
      * @param User $user
-     * @param Notification $notification
+     * @param Notification|IlluminateNotification $notification
      * @return Response|bool
      */
-    public function view(User $user, Notification $notification): Response|bool
+    public function view(User $user, Notification|IlluminateNotification $notification): Response|bool
     {
         if (!$this->isNotifyingUser($notification)) {
             return false;
@@ -53,10 +54,10 @@ class NotificationPolicy
      * Determine whether the user can update the model.
      *
      * @param User $user
-     * @param Notification $notification
+     * @param Notification|IlluminateNotification $notification
      * @return Response|bool
      */
-    public function update(User $user, Notification $notification): Response|bool
+    public function update(User $user, Notification|IlluminateNotification $notification): Response|bool
     {
         if (!$this->isNotifyingUser($notification)) {
             return false;
@@ -69,10 +70,10 @@ class NotificationPolicy
      * Determine whether the user can delete the model.
      *
      * @param User $user
-     * @param Notification $notification
+     * @param Notification|IlluminateNotification $notification
      * @return Response|bool
      */
-    public function delete(User $user, Notification $notification): Response|bool
+    public function delete(User $user, Notification|IlluminateNotification $notification): Response|bool
     {
         if (!$this->isNotifyingUser($notification)) {
             return false;
@@ -85,10 +86,10 @@ class NotificationPolicy
      * Determine whether the user can restore the model.
      *
      * @param User $user
-     * @param Notification $notification
+     * @param Notification|IlluminateNotification $notification
      * @return Response|bool
      */
-    public function restore(User $user, Notification $notification): Response|bool
+    public function restore(User $user, Notification|IlluminateNotification $notification): Response|bool
     {
         return $user->can('restoreNotification');
     }
@@ -97,10 +98,10 @@ class NotificationPolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param User $user
-     * @param Notification $notification
+     * @param Notification|IlluminateNotification $notification
      * @return Response|bool
      */
-    public function forceDelete(User $user, Notification $notification): Response|bool
+    public function forceDelete(User $user, Notification|IlluminateNotification $notification): Response|bool
     {
         return $user->can('forceDeleteNotification');
     }
