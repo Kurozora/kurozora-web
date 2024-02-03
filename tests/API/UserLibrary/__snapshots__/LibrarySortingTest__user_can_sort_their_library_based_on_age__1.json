@@ -70,7 +70,9 @@
                     "ratingAverage": 2.5,
                     "ratingCount": 0,
                     "rankGlobal": 0,
-                    "rankTotal": 0
+                    "rankTotal": 0,
+                    "sentiment": "Not enough ratings",
+                    "highestRatingPercentage": 0
                 },
                 "startedAt": 67046400,
                 "firstAired": 67046400,
@@ -84,6 +86,7 @@
                 "isNSFW": false,
                 "copyright": "\u00ae 2012 Steuber Group",
                 "givenRating": 3,
+                "givenReview": null,
                 "libraryStatus": 0,
                 "isFavorited": false,
                 "isReminded": false
@@ -159,7 +162,9 @@
                     "ratingAverage": 4,
                     "ratingCount": 0,
                     "rankGlobal": 0,
-                    "rankTotal": 0
+                    "rankTotal": 0,
+                    "sentiment": "Not enough ratings",
+                    "highestRatingPercentage": 0
                 },
                 "startedAt": 67046400,
                 "firstAired": 67046400,
@@ -173,6 +178,7 @@
                 "isNSFW": true,
                 "copyright": "\u2117 2018 Abernathy-Daniel",
                 "givenRating": 1.2,
+                "givenReview": null,
                 "libraryStatus": 0,
                 "isFavorited": false,
                 "isReminded": false
