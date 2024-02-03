@@ -36,7 +36,7 @@ use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use SocialiteProviders\Apple\AppleExtendSocialite;
 use SocialiteProviders\Manager\SocialiteWasCalled;
-use Spatie\MediaLibrary\MediaCollections\Events\MediaHasBeenAdded;
+use Spatie\MediaLibrary\MediaCollections\Events\MediaHasBeenAddedEvent;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -117,7 +117,7 @@ class EventServiceProvider extends ServiceProvider
         ],
 
         // Media events
-        MediaHasBeenAdded::class => [
+        MediaHasBeenAddedEvent::class => [
             MediaHasBeenAddedListener::class,
         ],
 

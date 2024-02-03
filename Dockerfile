@@ -1,4 +1,4 @@
-FROM php:8.2-fpm-alpine as app
+FROM php:8.3-fpm-alpine as app
 
 # Set labels
 LABEL app.kurozora.authors="Kiritokatklian"
@@ -26,7 +26,7 @@ ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/do
 RUN chmod +x /usr/local/bin/install-php-extensions && \
     install-php-extensions exif \
     bcmath \
-    gd imagick \
+    gd imagick/imagick@master \
     intl \
     opcache \
     pdo_mysql \

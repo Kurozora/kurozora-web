@@ -5,7 +5,7 @@ namespace App\Listeners;
 use App\Jobs\ConvertImageToWebPJob;
 use App\Jobs\GenerateImageAttributesJob;
 use Bus;
-use Spatie\MediaLibrary\MediaCollections\Events\MediaHasBeenAdded;
+use Spatie\MediaLibrary\MediaCollections\Events\MediaHasBeenAddedEvent;
 
 class MediaHasBeenAddedListener
 {
@@ -34,10 +34,10 @@ class MediaHasBeenAddedListener
     /**
      * Handle the event.
      *
-     * @param  MediaHasBeenAdded  $event
+     * @param  MediaHasBeenAddedEvent  $event
      * @return void
      */
-    public function handle(MediaHasBeenAdded $event): void
+    public function handle(MediaHasBeenAddedEvent $event): void
     {
         $media = $event->media;
 
