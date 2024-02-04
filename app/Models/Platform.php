@@ -6,6 +6,7 @@ use App\Casts\AsArrayObject;
 use App\Enums\MediaCollection;
 use App\Enums\PlatformType;
 use App\Traits\InteractsWithMediaExtension;
+use App\Traits\Model\HasSlug;
 use App\Traits\Model\HasViews;
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Builder;
@@ -19,7 +20,6 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Sitemap\Contracts\Sitemapable;
 use Spatie\Sitemap\Tags\Url;
-use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
 class Platform extends KModel  implements HasMedia, Sitemapable
@@ -67,19 +67,6 @@ class Platform extends KModel  implements HasMedia, Sitemapable
         'started_at' => 'date',
         'ended_at' => 'date',
     ];
-
-    /**
-     * Get the route key for the model.
-     *
-     * @return string
-     */
-    public function getRouteKeyName(): string
-    {
-        if (request()->wantsJson()) {
-            return parent::getRouteKeyName();
-        }
-        return 'slug';
-    }
 
     /**
      * Get the options for generating the slug.

@@ -18,6 +18,7 @@ use App\Traits\Model\HasMediaStat;
 use App\Traits\Model\HasMediaStudios;
 use App\Traits\Model\HasMediaTags;
 use App\Traits\Model\HasMediaThemes;
+use App\Traits\Model\HasSlug;
 use App\Traits\Model\HasVideos;
 use App\Traits\Model\HasViews;
 use App\Traits\Model\MediaRelated;
@@ -47,7 +48,6 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Sitemap\Contracts\Sitemapable;
 use Spatie\Sitemap\Tags\Url;
-use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
 class Anime extends KModel implements HasMedia, Sitemapable
@@ -155,19 +155,6 @@ class Anime extends KModel implements HasMedia, Sitemapable
         }
 
         return season_of_year($startedAt)->value;
-    }
-
-    /**
-     * Get the route key for the model.
-     *
-     * @return string
-     */
-    public function getRouteKeyName(): string
-    {
-        if (request()->wantsJson()) {
-            return parent::getRouteKeyName();
-        }
-        return 'slug';
     }
 
     /**

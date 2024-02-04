@@ -5,7 +5,6 @@ namespace App\Traits\Model;
 use App\Exceptions\AttributeIsNotTranslatable;
 use App\Exceptions\TranslationNotFound as TranslationNotFoundAlias;
 use Spatie\Sluggable\Exceptions\InvalidOption;
-use Spatie\Sluggable\HasSlug;
 
 trait HasTranslatableSlug
 {

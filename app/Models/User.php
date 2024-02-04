@@ -13,6 +13,7 @@ use App\Parsers\MentionParser;
 use App\Traits\HeartActionTrait;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\Favoriter;
+use App\Traits\Model\HasSlug;
 use App\Traits\Model\HasViews;
 use App\Traits\Model\Impersonatable;
 use App\Traits\Model\Tracker;
@@ -38,7 +39,6 @@ use Laravel\Sanctum\HasApiTokens;
 use Laravel\Scout\Searchable;
 use Markdown;
 use Ramsey\Uuid\Uuid;
-use Request;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\IcalendarGenerator\Components\Alert;
@@ -51,7 +51,6 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Permission\Traits\HasPermissions;
 use Spatie\Permission\Traits\HasRoles;
 use Spatie\Sitemap\Contracts\Sitemapable;
-use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 use Staudenmeir\EloquentJsonRelations\HasJsonRelationships;
 use URL;
@@ -168,19 +167,6 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
             ->useFallbackUrl('https://ui-avatars.com/api/?name=' . $this->username . '&color=FFFFFF&background=AAAAAA&length=1&bold=true&size=256');
         $this->addMediaCollection(MediaCollection::Banner)
             ->singleFile();
-    }
-
-    /**
-     * Get the route key for the model.
-     *
-     * @return string
-     */
-    public function getRouteKeyName(): string
-    {
-        if (Request::wantsJson()) {
-            return parent::getRouteKeyName();
-        }
-        return 'slug';
     }
 
     /**

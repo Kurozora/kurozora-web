@@ -20,7 +20,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Scout\Searchable;
-use Request;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Sitemap\Contracts\Sitemapable;
@@ -78,19 +77,6 @@ class Character extends KModel implements HasMedia, Sitemapable
 //        'height_string',
 //        'weight_string',
     ];
-
-    /**
-     * Get the route key for the model.
-     *
-     * @return string
-     */
-    public function getRouteKeyName(): string
-    {
-        if (Request::wantsJson()) {
-            return parent::getRouteKeyName();
-        }
-        return 'slug';
-    }
 
     /**
      * Get the options for generating the slug.

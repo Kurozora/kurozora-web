@@ -9,6 +9,7 @@ use App\Scopes\BornTodayScope;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\HasMediaRatings;
 use App\Traits\Model\HasMediaStat;
+use App\Traits\Model\HasSlug;
 use App\Traits\Model\HasViews;
 use App\Traits\SearchFilterable;
 use Illuminate\Database\Eloquent\Builder;
@@ -18,12 +19,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Scout\Searchable;
-use Request;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Sitemap\Contracts\Sitemapable;
 use Spatie\Sitemap\Tags\Url;
-use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
 class Person extends KModel implements HasMedia, Sitemapable
@@ -77,19 +76,6 @@ class Person extends KModel implements HasMedia, Sitemapable
 //        'full_name',
 //        'full_given_name',
     ];
-
-    /**
-     * Get the route key for the model.
-     *
-     * @return string
-     */
-    public function getRouteKeyName(): string
-    {
-        if (Request::wantsJson()) {
-            return parent::getRouteKeyName();
-        }
-        return 'slug';
-    }
 
     /**
      * Get the options for generating the slug.

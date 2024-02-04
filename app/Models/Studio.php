@@ -8,6 +8,7 @@ use App\Enums\StudioType;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\HasMediaRatings;
 use App\Traits\Model\HasMediaStat;
+use App\Traits\Model\HasSlug;
 use App\Traits\Model\HasViews;
 use App\Traits\Model\TvRated;
 use App\Traits\SearchFilterable;
@@ -18,12 +19,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Scout\Searchable;
-use Request;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Sitemap\Contracts\Sitemapable;
 use Spatie\Sitemap\Tags\Url;
-use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
 class Studio extends KModel implements HasMedia, Sitemapable
@@ -56,19 +55,6 @@ class Studio extends KModel implements HasMedia, Sitemapable
         'founded' => 'date',
         'website_urls' => AsArrayObject::class,
     ];
-
-    /**
-     * Get the route key for the model.
-     *
-     * @return string
-     */
-    public function getRouteKeyName(): string
-    {
-        if (Request::wantsJson()) {
-            return parent::getRouteKeyName();
-        }
-        return 'slug';
-    }
 
     /**
      * Get the options for generating the slug.

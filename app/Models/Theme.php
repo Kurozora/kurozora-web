@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\MediaCollection;
 use App\Traits\InteractsWithMediaExtension;
+use App\Traits\Model\HasSlug;
 use App\Traits\Model\TvRated;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -11,12 +12,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Scout\Searchable;
-use Request;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Sitemap\Contracts\Sitemapable;
 use Spatie\Sitemap\Tags\Url;
-use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
 class Theme extends KModel implements HasMedia, Sitemapable
@@ -31,19 +30,6 @@ class Theme extends KModel implements HasMedia, Sitemapable
     // Table name
     const TABLE_NAME = 'themes';
     protected $table = self::TABLE_NAME;
-
-    /**
-     * Get the route key for the model.
-     *
-     * @return string
-     */
-    public function getRouteKeyName(): string
-    {
-        if (Request::wantsJson()) {
-            return parent::getRouteKeyName();
-        }
-        return 'slug';
-    }
 
     /**
      * Get the options for generating the slug.

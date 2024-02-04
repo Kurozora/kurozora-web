@@ -3,15 +3,14 @@
 namespace App\Models;
 
 use App\Scopes\ExploreCategoryIsEnabledScope;
+use App\Traits\Model\HasSlug;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Request;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 use Spatie\Sitemap\Contracts\Sitemapable;
 use Spatie\Sitemap\Tags\Url;
-use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
 class ExploreCategory extends KModel implements Sitemapable, Sortable
@@ -46,19 +45,6 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
         if (app('explore.only_enabled')) {
             static::addGlobalScope(new ExploreCategoryIsEnabledScope);
         }
-    }
-
-    /**
-     * Get the route key for the model.
-     *
-     * @return string
-     */
-    public function getRouteKeyName(): string
-    {
-        if (Request::wantsJson()) {
-            return parent::getRouteKeyName();
-        }
-        return 'slug';
     }
 
     /**
