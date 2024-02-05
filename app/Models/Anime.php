@@ -689,6 +689,13 @@ class Anime extends KModel implements HasMedia, Sitemapable
                 return $item->toSearchableArray();
             });
         $anime['media_stat'] = $this->mediaStat?->toSearchableArray();
+        $anime['translations'] = $this->translations()
+            ->select(['locale', 'title', 'synopsis', 'tagline'])
+            ->get();
+        $anime['tv_rating'] = $this->tv_rating->toSearchableArray();
+        $anime['media_type'] = $this->media_type->toSearchableArray();
+        $anime['source'] = $this->source->toSearchableArray();
+        $anime['status'] = $this->status->toSearchableArray();
         $anime['genres'] = $this->genres
             ->map(function ($item) {
                 return $item->toSearchableArray();
@@ -697,13 +704,6 @@ class Anime extends KModel implements HasMedia, Sitemapable
             ->map(function ($item) {
                 return $item->toSearchableArray();
             });
-        $anime['translations'] = $this->translations()
-            ->select(['locale', 'title', 'synopsis', 'tagline'])
-            ->get();
-        $anime['tv_rating'] = $this->tv_rating->toSearchableArray();
-        $anime['media_type'] = $this->media_type->toSearchableArray();
-        $anime['source'] = $this->source->toSearchableArray();
-        $anime['status'] = $this->status->toSearchableArray();
         $anime['tags'] = $this->tags
             ->map(function ($item) {
                 return $item->toSearchableArray();

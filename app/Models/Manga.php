@@ -646,11 +646,35 @@ class Manga extends KModel implements HasMedia, Sitemapable
     public function toSearchableArray(): array
     {
         $manga = $this->toArray();
+        unset($manga['media']);
+        $manga['languages'] = $this->languages
+            ->map(function ($item) {
+                return $item->toSearchableArray();
+            });
+        $manga['media_stat'] = $this->mediaStat?->toSearchableArray();
+        $manga['translations'] = $this->translations()
+            ->select(['locale', 'title', 'synopsis', 'tagline'])
+            ->get();
+        $manga['tv_rating'] = $this->tv_rating->toSearchableArray();
+        $manga['media_type'] = $this->media_type->toSearchableArray();
+        $manga['source'] = $this->source->toSearchableArray();
+        $manga['status'] = $this->status->toSearchableArray();
+        $manga['genres'] = $this->genres
+            ->map(function ($item) {
+                return $item->toSearchableArray();
+            });
+        $manga['themes'] = $this->themes
+            ->map(function ($item) {
+                return $item->toSearchableArray();
+            });
+        $manga['tags'] = $this->tags
+            ->map(function ($item) {
+                return $item->toSearchableArray();
+            });
         $manga['started_at'] = $this->started_at?->timestamp;
         $manga['ended_at'] = $this->ended_at?->timestamp;
         $manga['created_at'] = $this->created_at?->timestamp;
         $manga['updated_at'] = $this->updated_at?->timestamp;
-        $manga['tags'] = $this->tags()->pluck('name')->toArray();
         return $manga;
     }
 
