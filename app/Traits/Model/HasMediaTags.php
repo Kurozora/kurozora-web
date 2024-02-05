@@ -2,11 +2,11 @@
 
 namespace App\Traits\Model;
 
-use App\Models\Anime;
 use App\Models\MediaTag;
 use App\Models\Tag;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -50,11 +50,33 @@ trait HasMediaTags
     /**
      * Get the model's tags.
      *
-     * @return HasManyThrough
+     * @return BelongsToMany
      */
-    public function tags(): HasManyThrough
+    public function tags(): BelongsToMany
     {
-        return $this->hasManyThrough(Tag::class, MediaTag::class, 'taggable_id', 'id', 'id', 'tag_id')
-            ->where('taggable_type', '=', Anime::class);
+        return $this->belongsToMany(Tag::class, MediaTag::class, 'taggable_id')
+            ->where('taggable_type', '=', $this->getMorphClass())
+            ->withTimestamps();
+    }
+
+    /**
+     * Eloquent builder scope that limits the query to the given tag.
+     *
+     * @param Builder $query
+     * @param string|int|Tag $tag
+     * @return Builder
+     */
+    public function scopeWhereTag(Builder $query, string|int|Tag $tag): Builder
+    {
+        if (is_numeric($tag)) {
+            $tagID = $tag;
+        } else {
+            $tagID = $tag->id;
+        }
+
+        return $query->leftJoin(MediaTag::TABLE_NAME, MediaTag::TABLE_NAME . '.taggable_id', '=', self::TABLE_NAME . '.' . $this->getKeyName())
+            ->where(MediaTag::TABLE_NAME . '.taggable_type', '=', $this->getMorphClass())
+            ->where(MediaTag::TABLE_NAME . '.tag_id', '=', $tagID)
+            ->select(self::TABLE_NAME . '.*');
     }
 }
