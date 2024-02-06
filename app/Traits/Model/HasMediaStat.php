@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 trait HasMediaStat
 {
     // Minimum ratings required to calculate average
-    const MINIMUM_RATINGS_REQUIRED = 1;
+    const int MINIMUM_RATINGS_REQUIRED = 1;
 
     /**
      * Bootstrap the model with Stat.

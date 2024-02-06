@@ -8,7 +8,7 @@ use Illuminate\Translation\PotentiallyTranslatedString;
 
 class ValidatePlatformName implements ValidationRule
 {
-    const VALID_PLATFORMS = [
+    const array VALID_PLATFORMS = [
         'iOS', 'Android', 'Web', 'Console', 'macOS', 'iPadOS', 'tvOS', 'watchOS', 'visionOS', 'Windows', 'Linux'
     ];
 

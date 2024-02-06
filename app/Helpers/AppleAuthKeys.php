@@ -8,9 +8,9 @@ use Illuminate\Support\Facades\Cache;
 
 class AppleAuthKeys
 {
-    private const KEYS_ENDPOINT_URL = 'https://appleid.apple.com/auth/keys';
-    private const KEYS_CACHE_KEY = 'apple_auth_keys';
-    private const CACHE_FOR_SECONDS = 86400;
+    private const string KEYS_ENDPOINT_URL = 'https://appleid.apple.com/auth/keys';
+    private const string KEYS_CACHE_KEY = 'apple_auth_keys';
+    private const int|float CACHE_FOR_SECONDS = 24 * 60 * 60;
 
     private function __construct() { }
 

@@ -6,7 +6,7 @@ use Illuminate\Contracts\Validation\Rule;
 
 class ValidatePlatformVersion implements Rule
 {
-    const MAX_VERSION_LENGTH = 15;
+    const int MAX_VERSION_LENGTH = 15;
 
     /**
      * Determine if the validation rule passes.

@@ -6,7 +6,7 @@ use Illuminate\Contracts\Validation\Rule;
 
 class ValidateAPNDeviceToken implements Rule
 {
-    const TOKEN_LENGTH = 64;
+    const int TOKEN_LENGTH = 64;
 
     /**
      * Determine if the validation rule passes.

@@ -10,8 +10,8 @@ use Validator;
 
 class ValidateEmail implements Rule
 {
-    const MINIMUM_EMAIL_LENGTH = 5;
-    const MAXIMUM_EMAIL_LENGTH = 255;
+    const int MINIMUM_EMAIL_LENGTH = 5;
+    const int MAXIMUM_EMAIL_LENGTH = 255;
 
     /** @var OptionsBag $options */
     protected OptionsBag $options;
