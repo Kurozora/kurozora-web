@@ -13,9 +13,9 @@ use BenSampo\Enum\Enum;
  */
 final class ExploreCategorySize extends Enum
 {
-    const Small     = 'small';
-    const Medium    = 'medium';
-    const Large     = 'large';
-    const Video     = 'video';
-    const Upcoming  = 'upcoming';
+    const string Small     = 'small';
+    const string Medium    = 'medium';
+    const string Large     = 'large';
+    const string Video     = 'video';
+    const string Upcoming  = 'upcoming';
 }

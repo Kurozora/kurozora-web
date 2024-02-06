@@ -13,9 +13,9 @@ use BenSampo\Enum\Enum;
  */
 final class StudioType extends Enum
 {
-    const Anime =   0;
-    const Manga =   1;
-    const Game =    2;
-    const Act =     3;
-    const Record =  4;
+    const int Anime =   0;
+    const int Manga =   1;
+    const int Game =    2;
+    const int Act =     3;
+    const int Record =  4;
 }

@@ -10,8 +10,8 @@ use BenSampo\Enum\Enum;
  */
 final class StatusBarStyle extends Enum
 {
-    const Default = 0;
-    const LightContent = 1;
+    const int Default = 0;
+    const int LightContent = 1;
 
     /**
      * The string value of the status bar style type.

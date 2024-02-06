@@ -10,8 +10,8 @@ use BenSampo\Enum\Enum;
  */
 final class ImportService extends Enum
 {
-    const MAL   =   0;
-    const Kitsu =   1;
+    const int MAL   =   0;
+    const int Kitsu =   1;
 
     /**
      * Get the description for an enum value

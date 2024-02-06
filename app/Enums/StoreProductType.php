@@ -12,8 +12,8 @@ use BenSampo\Enum\Enum;
  */
 final class StoreProductType extends Enum
 {
-    const Consumable                = 0;
-    const NonConsumable             = 1;
-    const NonRenewingSubscription   = 2;
-    const AutoRenewingSubscription  = 3;
+    const int Consumable                = 0;
+    const int NonConsumable             = 1;
+    const int NonRenewingSubscription   = 2;
+    const int AutoRenewingSubscription  = 3;
 }

@@ -10,8 +10,8 @@ use BenSampo\Enum\Enum;
  */
 final class AppThemeDownloadKind extends Enum
 {
-    const Plist = 0;
-    const CSS   = 1;
+    const int Plist = 0;
+    const int CSS   = 1;
 
     /**
      * Get the content type for an enum value

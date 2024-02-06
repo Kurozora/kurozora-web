@@ -27,15 +27,15 @@ use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
  */
 final class SearchType extends Enum
 {
-    const Characters = 'characters';
-    const Episodes = 'episodes';
-    const Games = 'games';
-    const Literatures = 'literatures';
-    const People = 'people';
-    const Shows = 'shows';
-    const Songs = 'songs';
-    const Studios = 'studios';
-    const Users = 'users';
+    const string Characters = 'characters';
+    const string Episodes = 'episodes';
+    const string Games = 'games';
+    const string Literatures = 'literatures';
+    const string People = 'people';
+    const string Shows = 'shows';
+    const string Songs = 'songs';
+    const string Studios = 'studios';
+    const string Users = 'users';
 
     /**
      * Make an enum instance from a given model.

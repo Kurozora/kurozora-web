@@ -11,7 +11,7 @@ use BenSampo\Enum\Enum;
  */
 final class ScheduleKind extends Enum
 {
-    const Anime = 0;
-    const Manga = 1;
-    const Game = 2;
+    const int Anime = 0;
+    const int Manga = 1;
+    const int Game = 2;
 }

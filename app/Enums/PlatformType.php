@@ -14,10 +14,10 @@ use BenSampo\Enum\Enum;
  */
 final class PlatformType extends Enum
 {
-    const Console = 1;
-    const Arcade = 2;
-    const Platform = 3;
-    const OperatingSystem = 4;
-    const PortableConsole = 5;
-    const Computer = 6;
+    const int Console = 1;
+    const int Arcade = 2;
+    const int Platform = 3;
+    const int OperatingSystem = 4;
+    const int PortableConsole = 5;
+    const int Computer = 6;
 }

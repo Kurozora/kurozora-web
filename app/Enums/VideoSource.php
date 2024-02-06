@@ -26,15 +26,15 @@ use BenSampo\Enum\Enum;
  */
 final class VideoSource extends Enum
 {
-    const Default       = DefaultEmbed::class;
-    const DoodStream    = DoodStreamEmbed::class;
-    const Fembed        = FembedEmbed::class;
-    const FileMoon      = FileMoonEmbed::class;
-    const Hydrax        = HydraxEmbed::class;
-    const MixDrop       = MixDropEmbed::class;
-    const Mp4Upload     = Mp4UploadEmbed::class;
-    const StreamTape    = StreamTapeEmbed::class;
-    const YouTube       = YouTubeEmbed::class;
+    const string Default       = DefaultEmbed::class;
+    const string DoodStream    = DoodStreamEmbed::class;
+    const string Fembed        = FembedEmbed::class;
+    const string FileMoon      = FileMoonEmbed::class;
+    const string Hydrax        = HydraxEmbed::class;
+    const string MixDrop       = MixDropEmbed::class;
+    const string Mp4Upload     = Mp4UploadEmbed::class;
+    const string StreamTape    = StreamTapeEmbed::class;
+    const string YouTube       = YouTubeEmbed::class;
 
     /**
      * Get the description for an enum value

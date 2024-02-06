@@ -15,13 +15,13 @@ use BenSampo\Enum\Exceptions\InvalidEnumMemberException;
 final class WatchStatus extends Enum
 {
     // The episode is not watched.
-    const NotWatched = -1;
+    const int NotWatched = -1;
 
     // The episode can't be watched or unwatched.
-    const Disabled  = 0;
+    const int Disabled  = 0;
 
     // The episode is watched.
-    const Watched = 1;
+    const int Watched = 1;
 
     /**
      * The bool value of one of the enum members.
@@ -37,7 +37,7 @@ final class WatchStatus extends Enum
      * @return void
      * @throws InvalidEnumMemberException
      */
-    public function __construct($enumValue)
+    public function __construct(mixed $enumValue)
     {
         parent::__construct($enumValue);
 

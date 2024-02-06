@@ -16,12 +16,12 @@ use BenSampo\Enum\Enum;
  */
 final class ChartKind extends Enum
 {
-    const Anime = 'anime';
-    const Characters = 'characters';
-    const Episodes = 'episodes';
-    const Games = 'games';
-    const Manga = 'manga';
-    const People = 'people';
-    const Songs = 'songs';
-    const Studios = 'studios';
+    const string Anime = 'anime';
+    const string Characters = 'characters';
+    const string Episodes = 'episodes';
+    const string Games = 'games';
+    const string Manga = 'manga';
+    const string People = 'people';
+    const string Songs = 'songs';
+    const string Studios = 'studios';
 }

@@ -11,7 +11,7 @@ use BenSampo\Enum\Enum;
  */
 final class SearchSource extends Enum
 {
-    const Kurozora = 'gs_kurozora';
-    const Google = 'mc_google';
-    const OpenSearch = 'opensearch';
+    const string Kurozora = 'gs_kurozora';
+    const string Google = 'mc_google';
+    const string OpenSearch = 'opensearch';
 }

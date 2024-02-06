@@ -10,8 +10,8 @@ use BenSampo\Enum\Enum;
  */
 final class FeedVoteType extends Enum
 {
-    const UnHeart   =   0;
-    const Heart     =   1;
+    const int UnHeart   = 0;
+    const int Heart     = 1;
 
     /**
      * Returns the next FeedVoteType type.

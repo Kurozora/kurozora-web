@@ -20,18 +20,18 @@ use BenSampo\Enum\Enum;
  */
 final class AstrologicalSign extends Enum
 {
-    const Aries         = 0;
-    const Taurus        = 1;
-    const Gemini        = 2;
-    const Cancer        = 3;
-    const Leo           = 4;
-    const Virgo         = 5;
-    const Libra         = 6;
-    const Scorpio       = 7;
-    const Sagittarius   = 8;
-    const Capricorn     = 9;
-    const Aquarius      = 10;
-    const Pisces        = 11;
+    const int Aries         = 0;
+    const int Taurus        = 1;
+    const int Gemini        = 2;
+    const int Cancer        = 3;
+    const int Leo           = 4;
+    const int Virgo         = 5;
+    const int Libra         = 6;
+    const int Scorpio       = 7;
+    const int Sagittarius   = 8;
+    const int Capricorn     = 9;
+    const int Aquarius      = 10;
+    const int Pisces        = 11;
 
     /**
      * The emojis representing the astrological signs.

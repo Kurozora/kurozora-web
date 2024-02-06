@@ -11,9 +11,9 @@ use BenSampo\Enum\Enum;
  */
 final class UserActivityStatus extends Enum
 {
-    const Online = 0;
-    const SeenRecently = 1;
-    const Offline = 2;
+    const int Online = 0;
+    const int SeenRecently = 1;
+    const int Offline = 2;
 
     /**
      * Get the description for an enum value

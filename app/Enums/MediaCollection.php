@@ -16,12 +16,12 @@ use BenSampo\Enum\Enum;
  */
 final class MediaCollection extends Enum
 {
-    const Default = 'default';
-    const Artwork = 'artwork';
-    const Banner = 'banner';
-    const Logo = 'logo';
-    const Poster = 'poster';
-    const Profile = 'profile';
-    const Screenshot = 'screenshot';
-    const Symbol = 'symbol';
+    const string Default = 'default';
+    const string Artwork = 'artwork';
+    const string Banner = 'banner';
+    const string Logo = 'logo';
+    const string Poster = 'poster';
+    const string Profile = 'profile';
+    const string Screenshot = 'screenshot';
+    const string Symbol = 'symbol';
 }

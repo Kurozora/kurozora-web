@@ -15,13 +15,13 @@ use BenSampo\Enum\Enum;
  */
 final class RatingSentiment extends Enum
 {
-    const NotEnough = 0;
-    const OverwhelminglyPositive = 1;
-    const Positive = 2;
-    const Average = 3;
-    const MixedFeelings = 4;
-    const OverwhelminglyNegative = 5;
-    const Negative = 6;
+    const int NotEnough = 0;
+    const int OverwhelminglyPositive = 1;
+    const int Positive = 2;
+    const int Average = 3;
+    const int MixedFeelings = 4;
+    const int OverwhelminglyNegative = 5;
+    const int Negative = 6;
 
     protected static function getLocalizedDescription(mixed $value): ?string
     {

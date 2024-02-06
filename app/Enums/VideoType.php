@@ -13,9 +13,9 @@ use BenSampo\Enum\Enum;
  */
 final class VideoType extends Enum
 {
-    const Default           = 0;
-    const CommercialMessage = 1;
-    const PromotionalVideo  = 2;
-    const Teaser            = 3;
-    const Trailer           = 4;
+    const int Default           = 0;
+    const int CommercialMessage = 1;
+    const int PromotionalVideo  = 2;
+    const int Teaser            = 3;
+    const int Trailer           = 4;
 }

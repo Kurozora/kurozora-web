@@ -16,12 +16,12 @@ use BenSampo\Enum\Exceptions\InvalidEnumMemberException;
  */
 final class UserLibraryStatus extends Enum
 {
-    const InProgress    = 0;
-    const Planning      = 2;
-    const Completed     = 3;
-    const OnHold        = 4;
-    const Dropped       = 1;
-    const Ignored       = 5;
+    const int InProgress    = 0;
+    const int Planning      = 2;
+    const int Completed     = 3;
+    const int OnHold        = 4;
+    const int Dropped       = 1;
+    const int Ignored       = 5;
 
     /**
      * Make an enum instance from a given key.

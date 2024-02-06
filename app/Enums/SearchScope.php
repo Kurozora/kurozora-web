@@ -10,6 +10,6 @@ use BenSampo\Enum\Enum;
  */
 final class SearchScope extends Enum
 {
-    const Kurozora = 'kurozora';
-    const Library = 'library';
+    const string Kurozora = 'kurozora';
+    const string Library = 'library';
 }

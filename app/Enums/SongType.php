@@ -11,9 +11,9 @@ use BenSampo\Enum\Enum;
  */
 final class SongType extends Enum
 {
-    const Opening       = 0;
-    const Ending        = 1;
-    const Background    = 2;
+    const int Opening       = 0;
+    const int Ending        = 1;
+    const int Background    = 2;
 
     /**
      * Return the abbreviated string for the SongType type.

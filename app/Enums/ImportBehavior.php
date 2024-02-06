@@ -10,6 +10,6 @@ use BenSampo\Enum\Enum;
  */
 final class ImportBehavior extends Enum
 {
-    const Overwrite =   0;
-    const Merge     =   1;
+    const int Overwrite = 0;
+    const int Merge     = 1;
 }

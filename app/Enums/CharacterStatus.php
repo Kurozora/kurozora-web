@@ -12,8 +12,8 @@ use BenSampo\Enum\Enum;
  */
 final class CharacterStatus extends Enum
 {
-    const Unknown   = 0;
-    const Alive     = 1;
-    const Deceased  = 2;
-    const Missing   = 3;
+    const int Unknown   = 0;
+    const int Alive     = 1;
+    const int Deceased  = 2;
+    const int Missing   = 3;
 }

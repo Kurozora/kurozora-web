@@ -10,8 +10,8 @@ use BenSampo\Enum\Enum;
  */
 final class VisualEffectViewStyle extends Enum
 {
-    const Light = 0;
-    const Dark = 1;
+    const int Light = 0;
+    const int Dark = 1;
 
     /**
      * The string value of the visual effect view style type.
