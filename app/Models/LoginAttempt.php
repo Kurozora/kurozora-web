@@ -5,13 +5,13 @@ namespace App\Models;
 class LoginAttempt extends KModel
 {
     // How far back should we check for sign in attempts (minutes)
-    const CHECK_TIMESPAN = 5;
+    const int CHECK_TIMESPAN = 5;
 
     // How many failed attempts do we tolerate in the timespan
-    const MAX_FAILED_ATTEMPTS = 3;
+    const int MAX_FAILED_ATTEMPTS = 3;
 
     // Table name
-    const TABLE_NAME = 'login_attempts';
+    const string TABLE_NAME = 'login_attempts';
     protected $table = self::TABLE_NAME;
 
     /**

@@ -11,7 +11,7 @@ class SessionAttribute extends KModel
     use HasFactory;
 
     // Table name
-    const TABLE_NAME = 'session_attributes';
+    const string TABLE_NAME = 'session_attributes';
     protected $table = self::TABLE_NAME;
 
     /**

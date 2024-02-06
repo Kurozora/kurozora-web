@@ -19,7 +19,7 @@ class TvRating extends KModel
      *
      * @var string
      */
-    const TABLE_NAME = 'tv_ratings';
+    const string TABLE_NAME = 'tv_ratings';
 
     /**
      * The model's table name.

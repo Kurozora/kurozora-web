@@ -24,7 +24,7 @@ class AppTheme extends KModel implements HasMedia
         SoftDeletes;
 
     // Table name
-    const TABLE_NAME = 'app_themes';
+    const string TABLE_NAME = 'app_themes';
     protected $table = self::TABLE_NAME;
 
     /**

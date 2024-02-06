@@ -20,7 +20,7 @@ class Notification extends DatabaseNotification
         MassPrunable;
 
     // Table name
-    const TABLE_NAME = 'notifications';
+    const string TABLE_NAME = 'notifications';
     protected $table = self::TABLE_NAME;
 
     /**

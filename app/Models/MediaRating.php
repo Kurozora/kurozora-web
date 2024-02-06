@@ -13,11 +13,11 @@ class MediaRating extends KModel
         SoftDeletes;
 
     // Rating boundaries
-    const MIN_RATING_VALUE = 0.00;
-    const MAX_RATING_VALUE = 5.00;
+    const float MIN_RATING_VALUE = 0.00;
+    const float MAX_RATING_VALUE = 5.00;
 
     // Table name
-    const TABLE_NAME = 'media_ratings';
+    const string TABLE_NAME = 'media_ratings';
     protected $table = self::TABLE_NAME;
 
     /**

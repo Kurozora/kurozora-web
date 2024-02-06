@@ -15,7 +15,7 @@ class MediaType extends KModel
         SoftDeletes;
 
     // Table name
-    const TABLE_NAME = 'media_types';
+    const string TABLE_NAME = 'media_types';
     protected $table = self::TABLE_NAME;
 
     /**

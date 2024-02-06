@@ -13,7 +13,7 @@ class MediaTag extends KModel
         SoftDeletes;
 
     // Table name
-    const TABLE_NAME = 'media_tags';
+    const string TABLE_NAME = 'media_tags';
     protected $table = self::TABLE_NAME;
 
     /**

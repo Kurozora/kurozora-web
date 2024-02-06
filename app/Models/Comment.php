@@ -16,7 +16,7 @@ class Comment extends KModel
         SoftDeletes;
 
     // Table name
-    const TABLE_NAME = 'comments';
+    const string TABLE_NAME = 'comments';
     protected $table = self::TABLE_NAME;
 
     /**

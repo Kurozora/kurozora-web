@@ -9,6 +9,6 @@ class PasswordReset extends KModel
     use HasFactory;
 
     // Table name
-    const TABLE_NAME = 'password_reset_tokens';
+    const string TABLE_NAME = 'password_reset_tokens';
     protected $table = self::TABLE_NAME;
 }

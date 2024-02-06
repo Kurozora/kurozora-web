@@ -14,7 +14,7 @@ class MediaStat extends KModel
         SoftDeletes;
 
     // Table name
-    const TABLE_NAME = 'media_stats';
+    const string TABLE_NAME = 'media_stats';
     protected $table = self::TABLE_NAME;
 
     /**

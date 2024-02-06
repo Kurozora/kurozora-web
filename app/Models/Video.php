@@ -15,7 +15,7 @@ class Video extends KModel
         SoftDeletes;
 
     // Table name
-    const TABLE_NAME = 'videos';
+    const string TABLE_NAME = 'videos';
     protected $table = self::TABLE_NAME;
 
     /**

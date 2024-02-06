@@ -16,7 +16,7 @@ class AnimeCast extends KModel implements Sitemapable
         SoftDeletes;
 
     // Table name
-    const TABLE_NAME = 'anime_casts';
+    const string TABLE_NAME = 'anime_casts';
     protected $table = self::TABLE_NAME;
 
     /**

@@ -77,7 +77,7 @@ class Manga extends KModel implements HasMedia, Sitemapable
         TvRated;
 
     // Maximum relationships fetch limit
-    const MAXIMUM_RELATIONSHIPS_LIMIT = 10;
+    const int MAXIMUM_RELATIONSHIPS_LIMIT = 10;
 
     /**
      * Indicates if the IDs are auto-incrementing.
@@ -87,7 +87,7 @@ class Manga extends KModel implements HasMedia, Sitemapable
     public $incrementing = false;
 
     // Table name
-    const TABLE_NAME = 'mangas';
+    const string TABLE_NAME = 'mangas';
     protected $table = self::TABLE_NAME;
 
     /**

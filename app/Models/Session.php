@@ -15,7 +15,7 @@ class Session extends KModel
         HasSessionAttribute;
 
     // Table name
-    const TABLE_NAME = 'sessions';
+    const string TABLE_NAME = 'sessions';
     protected $table = self::TABLE_NAME;
 
     /**

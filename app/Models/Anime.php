@@ -80,13 +80,13 @@ class Anime extends KModel implements HasMedia, Sitemapable
         TvRated;
 
     // Maximum relationships fetch limit
-    const MAXIMUM_RELATIONSHIPS_LIMIT = 10;
+    const int MAXIMUM_RELATIONSHIPS_LIMIT = 10;
 
     // How long to cache certain responses
-    const CACHE_KEY_EPISODES_SECONDS = 60 * 60 * 2;
+    const int|float CACHE_KEY_EPISODES_SECONDS = 60 * 60 * 2;
 
     // Table name
-    const TABLE_NAME = 'animes';
+    const string TABLE_NAME = 'animes';
     protected $table = self::TABLE_NAME;
 
     /**

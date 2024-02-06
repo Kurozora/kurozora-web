@@ -27,10 +27,10 @@ class Season extends KModel implements HasMedia, Sitemapable
         TvRated;
 
     // Maximum relationships fetch limit
-    const MAXIMUM_RELATIONSHIPS_LIMIT = 10;
+    const int MAXIMUM_RELATIONSHIPS_LIMIT = 10;
 
     // Table name
-    const TABLE_NAME = 'seasons';
+    const string TABLE_NAME = 'seasons';
     protected $table = self::TABLE_NAME;
 
     /**

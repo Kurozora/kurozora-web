@@ -21,7 +21,7 @@ class MediaSong extends KModel implements Sitemapable
         SortableTrait;
 
     // Table name
-    const TABLE_NAME = 'media_songs';
+    const string TABLE_NAME = 'media_songs';
     protected $table = self::TABLE_NAME;
 
     /**

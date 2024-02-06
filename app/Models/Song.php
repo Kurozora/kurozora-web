@@ -41,7 +41,7 @@ class Song extends KModel implements HasMedia, Sitemapable
         SoftDeletes;
 
     // Table name
-    const TABLE_NAME = 'songs';
+    const string TABLE_NAME = 'songs';
     protected $table = self::TABLE_NAME;
 
     /**

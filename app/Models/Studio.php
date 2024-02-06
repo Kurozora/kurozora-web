@@ -40,10 +40,10 @@ class Studio extends KModel implements HasMedia, Sitemapable
         TvRated;
 
     // Maximum relationships fetch limit
-    const MAXIMUM_RELATIONSHIPS_LIMIT = 10;
+    const int MAXIMUM_RELATIONSHIPS_LIMIT = 10;
 
     // Table name
-    const TABLE_NAME = 'studios';
+    const string TABLE_NAME = 'studios';
     protected $table = self::TABLE_NAME;
 
     /**

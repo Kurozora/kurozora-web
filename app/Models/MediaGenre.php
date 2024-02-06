@@ -12,7 +12,7 @@ class MediaGenre extends MorphPivot
     use SoftDeletes;
 
     // Table name
-    const TABLE_NAME = 'media_genres';
+    const string TABLE_NAME = 'media_genres';
     protected $table = self::TABLE_NAME;
 
     /**

@@ -90,14 +90,14 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     const CACHE_KEY_REPUTATION_COUNT_SECONDS = 10 * 60;
 
     // Length limits
-    const MAX_BIOGRAPHY_LENGTH = 500;
-    const MINIMUM_SLUG_LENGTH = 3;
-    const MAXIMUM_SLUG_LENGTH = 30;
-    const MINIMUM_USERNAME_LENGTH = 1;
-    const MAXIMUM_USERNAME_LENGTH = 30;
+    const int MAX_BIOGRAPHY_LENGTH = 500;
+    const int MINIMUM_SLUG_LENGTH = 3;
+    const int MAXIMUM_SLUG_LENGTH = 30;
+    const int MINIMUM_USERNAME_LENGTH = 1;
+    const int MAXIMUM_USERNAME_LENGTH = 30;
 
     // Table name
-    const TABLE_NAME = 'users';
+    const string TABLE_NAME = 'users';
     protected $table = self::TABLE_NAME;
 
     // Remove column guards

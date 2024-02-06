@@ -13,7 +13,7 @@ class UserFavorite extends MorphPivot
     use HasUlids;
 
     // Table name
-    const TABLE_NAME = 'user_favorites';
+    const string TABLE_NAME = 'user_favorites';
     protected $table = self::TABLE_NAME;
 
     /**

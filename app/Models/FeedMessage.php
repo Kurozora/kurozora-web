@@ -20,11 +20,11 @@ class FeedMessage extends KModel implements ReactableContract
         Reactable;
 
     // Table name
-    const TABLE_NAME = 'feed_messages';
+    const string TABLE_NAME = 'feed_messages';
     protected $table = self::TABLE_NAME;
 
     // Text limit on body
-    const MAX_CONTENT_LENGTH = 240;
+    const int MAX_CONTENT_LENGTH = 240;
 
     /**
      * The attributes that should be cast to native types.

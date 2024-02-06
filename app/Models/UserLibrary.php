@@ -13,7 +13,7 @@ class UserLibrary extends KModel
     use Searchable;
 
     // Table name
-    const TABLE_NAME = 'user_libraries';
+    const string TABLE_NAME = 'user_libraries';
     protected $table = self::TABLE_NAME;
 
     /**

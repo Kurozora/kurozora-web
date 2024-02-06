@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class UserWatchedEpisode extends KModel
 {
     // Table name
-    const TABLE_NAME = 'user_watched_episodes';
+    const string TABLE_NAME = 'user_watched_episodes';
     protected $table = self::TABLE_NAME;
 
     /**

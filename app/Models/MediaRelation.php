@@ -13,7 +13,7 @@ class MediaRelation extends KModel
         SoftDeletes;
 
     // Table name
-    const TABLE_NAME = 'media_relations';
+    const string TABLE_NAME = 'media_relations';
     protected $table = self::TABLE_NAME;
 
     /**

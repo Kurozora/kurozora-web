@@ -12,7 +12,7 @@ class PlatformTranslation extends KModel
         SoftDeletes;
 
     // Table name
-    const TABLE_NAME = 'platform_translations';
+    const string TABLE_NAME = 'platform_translations';
     protected $table = self::TABLE_NAME;
 
     /**

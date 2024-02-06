@@ -12,7 +12,7 @@ class View extends KModel
         SoftDeletes;
 
     // Table name
-    const TABLE_NAME = 'views';
+    const string TABLE_NAME = 'views';
     protected $table = self::TABLE_NAME;
 
     /**

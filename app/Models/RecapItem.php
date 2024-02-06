@@ -17,7 +17,7 @@ class RecapItem extends KModel implements Sortable
         SortableTrait;
 
     // Table name
-    const TABLE_NAME = 'recap_items';
+    const string TABLE_NAME = 'recap_items';
     protected $table = self::TABLE_NAME;
 
     /**

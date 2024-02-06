@@ -12,7 +12,7 @@ class CastRole extends KModel
         SoftDeletes;
 
     // Table name
-    const TABLE_NAME = 'cast_roles';
+    const string TABLE_NAME = 'cast_roles';
     protected $table = self::TABLE_NAME;
 
     /**

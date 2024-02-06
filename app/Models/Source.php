@@ -15,7 +15,7 @@ class Source extends KModel
         SoftDeletes;
 
     // Table name
-    const TABLE_NAME = 'sources';
+    const string TABLE_NAME = 'sources';
     protected $table = self::TABLE_NAME;
 
     /**

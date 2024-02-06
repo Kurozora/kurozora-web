@@ -12,7 +12,7 @@ class Relation extends KModel
         SoftDeletes;
 
     // Table name
-    const TABLE_NAME = 'relations';
+    const string TABLE_NAME = 'relations';
     protected $table = self::TABLE_NAME;
 
     /**

@@ -28,7 +28,7 @@ class Genre extends KModel implements HasMedia, Sitemapable
         TvRated;
 
     // Table name
-    const TABLE_NAME = 'genres';
+    const string TABLE_NAME = 'genres';
     protected $table = self::TABLE_NAME;
 
     /**

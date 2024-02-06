@@ -8,7 +8,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media as MediaLibrary;
 class Media extends MediaLibrary
 {
     // Table name
-    const TABLE_NAME = 'media';
+    const string TABLE_NAME = 'media';
     protected $table = self::TABLE_NAME;
 
     /**

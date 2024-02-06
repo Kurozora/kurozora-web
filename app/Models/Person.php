@@ -39,10 +39,10 @@ class Person extends KModel implements HasMedia, Sitemapable
         SoftDeletes;
 
     // Maximum relationships fetch limit
-    const MAXIMUM_RELATIONSHIPS_LIMIT = 10;
+    const int MAXIMUM_RELATIONSHIPS_LIMIT = 10;
 
     // Table name
-    const TABLE_NAME = 'people';
+    const string TABLE_NAME = 'people';
     protected $table = self::TABLE_NAME;
 
     /**

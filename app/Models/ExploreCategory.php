@@ -20,7 +20,7 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
         SortableTrait;
 
     // Table name
-    const TABLE_NAME = 'explore_categories';
+    const string TABLE_NAME = 'explore_categories';
     protected $table = self::TABLE_NAME;
 
     /**

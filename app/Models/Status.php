@@ -15,7 +15,7 @@ class Status extends KModel
         SoftDeletes;
 
     // Table name
-    const TABLE_NAME = 'status';
+    const string TABLE_NAME = 'status';
     protected $table = self::TABLE_NAME;
 
     /**

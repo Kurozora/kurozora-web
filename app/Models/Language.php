@@ -14,7 +14,7 @@ class Language extends KModel
         SoftDeletes;
 
     // Table name
-    const TABLE_NAME = 'languages';
+    const string TABLE_NAME = 'languages';
     protected $table = self::TABLE_NAME;
 
     /**

@@ -23,7 +23,7 @@ class Tag extends KModel
     public $incrementing = false;
 
     // Table name
-    const TABLE_NAME = 'tags';
+    const string TABLE_NAME = 'tags';
     protected $table = self::TABLE_NAME;
 
     /**

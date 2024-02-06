@@ -11,6 +11,6 @@ class StaffRole extends KModel
         SoftDeletes;
 
     // Table name
-    const TABLE_NAME = 'staff_roles';
+    const string TABLE_NAME = 'staff_roles';
     protected $table = self::TABLE_NAME;
 }

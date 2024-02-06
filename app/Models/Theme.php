@@ -28,7 +28,7 @@ class Theme extends KModel implements HasMedia, Sitemapable
         TvRated;
 
     // Table name
-    const TABLE_NAME = 'themes';
+    const string TABLE_NAME = 'themes';
     protected $table = self::TABLE_NAME;
 
     /**

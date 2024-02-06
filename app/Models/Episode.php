@@ -48,7 +48,7 @@ class Episode extends KModel implements HasMedia, Sitemapable
         TvRated;
 
     // Table name
-    const TABLE_NAME = 'episodes';
+    const string TABLE_NAME = 'episodes';
     protected $table = self::TABLE_NAME;
 
     /**

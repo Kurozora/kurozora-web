@@ -12,7 +12,7 @@ class SeasonTranslation extends KModel
         SoftDeletes;
 
     // Table name
-    const TABLE_NAME = 'season_translations';
+    const string TABLE_NAME = 'season_translations';
     protected $table = self::TABLE_NAME;
 
     /**

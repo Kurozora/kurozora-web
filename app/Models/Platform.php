@@ -36,7 +36,7 @@ class Platform extends KModel  implements HasMedia, Sitemapable
         Translatable;
 
     // Table name
-    const TABLE_NAME = 'platforms';
+    const string TABLE_NAME = 'platforms';
     protected $table = self::TABLE_NAME;
 
     /**

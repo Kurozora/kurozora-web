@@ -15,7 +15,7 @@ class MediaStaff extends KModel implements Sitemapable
         SoftDeletes;
 
     // Table name
-    const TABLE_NAME = 'media_staff';
+    const string TABLE_NAME = 'media_staff';
     protected $table = self::TABLE_NAME;
 
     /**

@@ -41,10 +41,10 @@ class Character extends KModel implements HasMedia, Sitemapable
         Translatable;
 
     // Maximum relationships fetch limit
-    const MAXIMUM_RELATIONSHIPS_LIMIT = 10;
+    const int MAXIMUM_RELATIONSHIPS_LIMIT = 10;
 
     // Table name
-    const TABLE_NAME = 'characters';
+    const string TABLE_NAME = 'characters';
     protected $table = self::TABLE_NAME;
 
     /**

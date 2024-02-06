@@ -16,7 +16,7 @@ class GameCast extends KModel implements Sitemapable
         SoftDeletes;
 
     // Table name
-    const TABLE_NAME = 'game_casts';
+    const string TABLE_NAME = 'game_casts';
     protected $table = self::TABLE_NAME;
 
     /**

@@ -13,7 +13,7 @@ class Recap extends KModel
         SoftDeletes;
 
     // Table name
-    const TABLE_NAME = 'recaps';
+    const string TABLE_NAME = 'recaps';
     protected $table = self::TABLE_NAME;
 
     /**

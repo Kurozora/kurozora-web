@@ -14,7 +14,7 @@ class PersonalAccessToken extends SanctumPersonalAccessToken
         HasSessionAttribute;
 
     // Table name
-    const TABLE_NAME = 'personal_access_tokens';
+    const string TABLE_NAME = 'personal_access_tokens';
     protected $table = self::TABLE_NAME;
 
     /**

@@ -14,7 +14,7 @@ class Badge extends KModel implements HasMedia
         InteractsWithMediaExtension;
 
     // Table name
-    const TABLE_NAME = 'badges';
+    const string TABLE_NAME = 'badges';
     protected $table = self::TABLE_NAME;
 
     /**

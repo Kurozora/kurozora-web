@@ -16,7 +16,7 @@ class MediaStudio extends MorphPivot implements Sitemapable
         SoftDeletes;
 
     // Table name
-    const TABLE_NAME = 'media_studios';
+    const string TABLE_NAME = 'media_studios';
     protected $table = self::TABLE_NAME;
 
     /**

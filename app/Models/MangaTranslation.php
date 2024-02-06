@@ -12,7 +12,7 @@ class MangaTranslation extends KModel
         SoftDeletes;
 
     // Table name
-    const TABLE_NAME = 'manga_translations';
+    const string TABLE_NAME = 'manga_translations';
     protected $table = self::TABLE_NAME;
 
     /**
