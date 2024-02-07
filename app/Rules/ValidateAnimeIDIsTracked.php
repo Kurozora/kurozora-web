@@ -3,43 +3,41 @@
 namespace App\Rules;
 
 use App\Models\Anime;
-use App\Models\User;
-use Illuminate\Contracts\Validation\Rule;
+use Closure;
+use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Translation\PotentiallyTranslatedString;
 
-class ValidateAnimeIDIsTracked implements Rule
+class ValidateAnimeIDIsTracked implements ValidationRule
 {
     /**
-     * The object containing the anime data.
+     * Run the validation rule.
      *
-     * @var Anime $anime
-     */
-    protected Anime $anime;
-
-    /**
-     * Determine if the validation rule passes.
+     * @param string                                       $attribute
+     * @param mixed                                        $value
+     * @param Closure(string): PotentiallyTranslatedString $fail
      *
-     * @param  string  $attribute
-     * @param  mixed  $value
-     * @return bool
+     * @return void
      */
-    public function passes($attribute, $value): bool
+    public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         // Find the anime instance
-        $this->anime = Anime::firstWhere('id', $value);
+        $anime = Anime::with('translations')
+            ->firstWhere('id', $value);
 
-        /** @var User $user */
-        $user = auth()->user();
-
-        return $user->hasTracked($this->anime);
+        if (!auth()->user()->hasTracked($anime)) {
+            $fail($this->message($anime->title));
+        }
     }
 
     /**
      * Get the validation error message.
      *
+     * @param string $title
+     *
      * @return string
      */
-    public function message(): string
+    public function message(string $title): string
     {
-        return 'Please add ' . $this->anime->title . ' to your library first.';
+        return __('Please add :x to your library first.', ['x' => $title]);
     }
 }

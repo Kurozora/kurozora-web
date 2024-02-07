@@ -2,26 +2,26 @@
 
 namespace App\Rules;
 
-use Illuminate\Contracts\Validation\Rule;
+use Closure;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Translation\PotentiallyTranslatedString;
 
-class ValidateBannerImage implements Rule
+class ValidateBannerImage implements ValidationRule
 {
-    /** @var string $error */
-    protected string $error;
-
     /**
-     * Determine if the validation rule passes.
+     * Run the validation rule.
      *
-     * @param string $attribute
-     * @param mixed $value
-     * @return bool
+     * @param string                                       $attribute
+     * @param mixed                                        $value
+     * @param Closure(string): PotentiallyTranslatedString $fail
+     *
+     * @return void
      */
-    public function passes($attribute, $value): bool
+    public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         $user = auth()->user();
         $isProOrSubscribed = $user?->is_pro || $user?->is_subscribed;
-
         $allowedMimes = $isProOrSubscribed ? 'mimes:webp,jpg,png,gif' : 'mimes:webp,jpg,png';
         $rules = ['nullable', 'image', 'max:2048', $allowedMimes];
 
@@ -31,19 +31,7 @@ class ValidateBannerImage implements Rule
         ]);
 
         if ($imgValidator->fails()) {
-            $this->error = $imgValidator->errors()->first();
-            return false;
+            $fail($imgValidator->errors()->first());
         }
-        return true;
-    }
-
-    /**
-     * Get the validation error message.
-     *
-     * @return string
-     */
-    public function message(): string
-    {
-        return $this->error;
     }
 }

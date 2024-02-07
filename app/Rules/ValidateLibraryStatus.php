@@ -3,26 +3,38 @@
 namespace App\Rules;
 
 use App\Enums\UserLibraryStatus;
-use Illuminate\Contracts\Validation\Rule;
+use Closure;
+use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Translation\PotentiallyTranslatedString;
 
-class ValidateLibraryStatus implements Rule
+class ValidateLibraryStatus implements ValidationRule
 {
     /**
-     * Determine if the validation rule passes.
+     * Run the validation rule.
      *
-     * @param  string  $attribute
-     * @param  mixed  $value
-     * @return bool
+     * @param string                                       $attribute
+     * @param mixed                                        $value
+     * @param Closure(string): PotentiallyTranslatedString $fail
+     *
+     * @return void
      */
-    public function passes($attribute, $value): bool
+    public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         if (is_numeric($value)) {
-            return UserLibraryStatus::hasValue((int) $value);
+            if (!UserLibraryStatus::hasValue((int) $value)) {
+                $fail($this->message());
+            }
+
+            return;
         } else if (is_string($value)) {
-            return UserLibraryStatus::hasKey($value);
+            if (!UserLibraryStatus::hasKey($value)) {
+                $fail($this->message());
+            }
+
+            return;
         }
 
-        return false;
+        $fail($this->message());
     }
 
     /**

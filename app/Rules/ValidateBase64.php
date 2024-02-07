@@ -2,30 +2,38 @@
 
 namespace App\Rules;
 
-use Illuminate\Contracts\Validation\Rule;
+use Closure;
+use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Translation\PotentiallyTranslatedString;
 
-class ValidateBase64 implements Rule
+class ValidateBase64 implements ValidationRule
 {
     /**
-     * Determine if the validation rule passes.
+     * Run the validation rule.
      *
-     * @param  string  $attribute
-     * @param  mixed  $value
-     * @return bool
+     * @param string                                       $attribute
+     * @param mixed                                        $value
+     * @param Closure(string): PotentiallyTranslatedString $fail
+     *
+     * @return void
      */
-    public function passes($attribute, $value): bool
+    public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         // Empty string does not pass
-        return base64_decode($value);
+        if (!base64_decode($value)) {
+            $fail($this->message($attribute));
+        }
     }
 
     /**
      * Get the validation error message.
      *
+     * @param $attribute
+     *
      * @return string
      */
-    public function message(): string
+    public function message($attribute): string
     {
-        return 'The :attribute must be a base64 string.';
+        return __('The :attribute must be a base64 string.', ['attribute' => $attribute]);
     }
 }

@@ -2,33 +2,40 @@
 
 namespace App\Rules;
 
-use Illuminate\Contracts\Validation\Rule;
+use Closure;
+use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Translation\PotentiallyTranslatedString;
 
-class ValidatePlatformVersion implements Rule
+class ValidatePlatformVersion implements ValidationRule
 {
     const int MAX_VERSION_LENGTH = 15;
 
     /**
-     * Determine if the validation rule passes.
+     * Run the validation rule.
      *
-     * @param  string  $attribute
-     * @param  mixed  $value
-     * @return bool
+     * @param string                                       $attribute
+     * @param mixed                                        $value
+     * @param Closure(string): PotentiallyTranslatedString $fail
+     *
+     * @return void
      */
-    public function passes($attribute, $value): bool
+    public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        return
-            preg_match("#^(([0-9])+(\.{0,1}([0-9]))*)+$#", $value) &&
-            strlen($value) <= self::MAX_VERSION_LENGTH;
+        if (!(preg_match('#^(([0-9])+(\.?([0-9]))*)+$#', $value) &&
+            strlen($value) <= self::MAX_VERSION_LENGTH)) {
+            $fail($this->message($attribute));
+        }
     }
 
     /**
      * Get the validation error message.
      *
+     * @param string $attribute
+     *
      * @return string
      */
-    public function message(): string
+    public function message(string $attribute): string
     {
-        return 'The :attribute is not in a valid format.';
+        return __('The :attribute is not in a valid format.', ['attribute' => $attribute]);
     }
 }

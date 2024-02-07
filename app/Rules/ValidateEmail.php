@@ -4,20 +4,19 @@ namespace App\Rules;
 
 use App\Helpers\OptionsBag;
 use App\Models\User;
-use Illuminate\Contracts\Validation\Rule;
+use Closure;
+use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Translation\PotentiallyTranslatedString;
 use InvalidArgumentException;
 use Validator;
 
-class ValidateEmail implements Rule
+class ValidateEmail implements ValidationRule
 {
     const int MINIMUM_EMAIL_LENGTH = 5;
     const int MAXIMUM_EMAIL_LENGTH = 255;
 
     /** @var OptionsBag $options */
     protected OptionsBag $options;
-
-    /** @var string $error */
-    protected string $error = 'The :attribute is invalid';
 
     /**
      * Available options:
@@ -38,13 +37,15 @@ class ValidateEmail implements Rule
     }
 
     /**
-     * Determine if the validation rule passes.
+     * Run the validation rule.
      *
-     * @param string $attribute
-     * @param mixed $value
-     * @return bool
+     * @param string                                       $attribute
+     * @param mixed                                        $value
+     * @param Closure(string): PotentiallyTranslatedString $fail
+     *
+     * @return void
      */
-    public function passes($attribute, $value): bool
+    public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         $availabilityRule = '';
         $validationRules = ['required', 'min:'.self::MINIMUM_EMAIL_LENGTH, 'max:'.self::MAXIMUM_EMAIL_LENGTH, 'email:filter'];
@@ -65,17 +66,8 @@ class ValidateEmail implements Rule
             $attribute => $validationRules
         ]);
 
-        $this->error = $validator->errors()->first();
-        return $validator->passes();
-    }
-
-    /**
-     * Get the validation error message.
-     *
-     * @return string
-     */
-    public function message(): string
-    {
-        return $this->error;
+        if ($validator->fails()) {
+            $fail($validator->errors()->first());
+        }
     }
 }

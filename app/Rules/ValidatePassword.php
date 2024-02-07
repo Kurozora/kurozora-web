@@ -2,9 +2,11 @@
 
 namespace App\Rules;
 
-use Illuminate\Contracts\Validation\Rule;
+use Closure;
+use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Translation\PotentiallyTranslatedString;
 
-class ValidatePassword implements Rule
+class ValidatePassword implements ValidationRule
 {
     /**
      * The minimum length of the password.
@@ -42,36 +44,27 @@ class ValidatePassword implements Rule
     protected bool $requireSpecialCharacter = true;
 
     /**
-     * The message that should be used when validation fails.
+     * Run the validation rule.
      *
-     * @var string $message
-     */
-    protected string $message = '';
-
-    /**
-     * Determine if the validation rule passes.
+     * @param string                                       $attribute
+     * @param mixed                                        $value
+     * @param Closure(string): PotentiallyTranslatedString $fail
      *
-     * @param  string  $attribute
-     * @param  mixed  $value
-     * @return bool
+     * @return void
      */
-    public function passes($attribute, $value): bool
+    public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         $stringLength = str($value)->length();
 
-        if ($this->requireUppercase && str($value)->lower() === $value) {
-            return false;
+        if ($this->requireUppercase && $value === str($value)->lower()) {
+            $fail($this->message());
+        } else if ($this->requireNumeric && !preg_match('/[0-9]/', $value)) {
+            $fail($this->message());
+         }else if ($this->requireSpecialCharacter && !preg_match('/[\W_]/', $value)) {
+            $fail($this->message());
+        } else if (!($stringLength >= $this->minLength && $stringLength <= $this->maxLength)) {
+            $fail($this->message());
         }
-
-        if ($this->requireNumeric && !preg_match('/[0-9]/', $value)) {
-            return false;
-        }
-
-        if ($this->requireSpecialCharacter && !preg_match('/[\W_]/', $value)) {
-            return false;
-        }
-
-        return $stringLength >= $this->minLength && $stringLength <= $this->maxLength;
     }
 
     /**
@@ -81,10 +74,6 @@ class ValidatePassword implements Rule
      */
     public function message(): string
     {
-        if ($this->message) {
-            return $this->message;
-        }
-
         return match (true) {
             $this->requireUppercase
             && !$this->requireNumeric
@@ -186,18 +175,6 @@ class ValidatePassword implements Rule
     public function requireSpecialCharacter(bool $requireSpecialCharacter): ValidatePassword
     {
         $this->requireSpecialCharacter = $requireSpecialCharacter;
-        return $this;
-    }
-
-    /**
-     * Set the message that should be used when the rule fails.
-     *
-     * @param  string  $message
-     * @return $this
-     */
-    public function withMessage(string $message): ValidatePassword
-    {
-        $this->message = $message;
         return $this;
     }
 }
