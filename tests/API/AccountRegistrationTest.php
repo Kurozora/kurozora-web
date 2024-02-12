@@ -64,7 +64,7 @@ class AccountRegistrationTest extends TestCase
         // Create fake 100kb image
         $uploadFile = UploadedFile::fake()->image('ProfileImage.jpg', 250, 250)->size(100);
 
-        // Attempt to signup the user
+        // Attempt to sign up the user
         $response = $this->json('POST', 'v1/users', [
             'username'      => 'KurozoraTester',
             'password'      => 'StrongPassword909@!',
