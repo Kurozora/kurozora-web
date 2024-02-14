@@ -99,6 +99,7 @@ class UserResourceBasic extends JsonResource
         return [
             'preferredLanguage' => $this->resource->language_id,
             'preferredTVRating' => $this->resource->tv_rating,
+            'preferredTimezone' => $this->resource->timezone,
             'canChangeUsername' => $this->resource->can_change_username,
         ];
     }
