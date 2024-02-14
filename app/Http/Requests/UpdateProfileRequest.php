@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Language;
 use App\Rules\ValidateBannerImage;
 use App\Rules\ValidateProfileImage;
+use App\Rules\ValidateTVRating;
 use App\Rules\ValidateUserBiography;
 use App\Rules\ValidateUsername;
 use App\Rules\ValidateUserSlug;
@@ -33,7 +35,10 @@ class UpdateProfileRequest extends FormRequest
             'nickname'      => ['bail', new ValidateUsername],
             'profileImage'  => ['bail', new ValidateProfileImage],
             'bannerImage'   => ['bail', new ValidateBannerImage],
-            'biography'     => ['bail', new ValidateUserBiography]
+            'biography'     => ['bail', new ValidateUserBiography],
+            'language'      => ['bail', 'string', 'exists:' . Language::TABLE_NAME . ',code'],
+            'tvRating'      => ['bail', new ValidateTVRating],
+            'timezone'      => ['bail', 'timezone:all'],
         ];
     }
 }
