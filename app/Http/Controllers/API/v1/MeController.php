@@ -127,6 +127,24 @@ class MeController extends Controller
             $changedFields[] = 'banner image';
         }
 
+        // Update language
+        if ($request->has('language')) {
+            $user->language_id = $data['language'];
+            $changedFields[] = 'language';
+        }
+
+        // Update tv rating
+        if ($request->has('tvRating')) {
+            $user->tv_rating = $data['tvRating'];
+            $changedFields[] = 'tvRating';
+        }
+
+        // Update timezone
+        if ($request->has('timezone')) {
+            $user->timezone = $data['timezone'];
+            $changedFields[] = 'timezone';
+        }
+
         // Successful response
         $displayMessage = 'Your settings were saved. ';
 
@@ -143,7 +161,10 @@ class MeController extends Controller
                 'nickname'          => $user->username,
                 'biography'         => $user->biography,
                 'profileImageURL'   => $user->getFirstMediaFullUrl(MediaCollection::Profile()),
-                'bannerImageURL'    => $user->getFirstMediaFullUrl(MediaCollection::Banner())
+                'bannerImageURL'    => $user->getFirstMediaFullUrl(MediaCollection::Banner()),
+                'preferredLanguage' => $user->language_id,
+                'preferredTVRating' => $user->tv_rating,
+                'preferredTimezone' => $user->timezone,
             ],
             'message'   => $displayMessage,
         ]);
