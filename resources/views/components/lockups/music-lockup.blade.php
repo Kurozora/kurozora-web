@@ -71,7 +71,7 @@
 
             <a class="flex gap-2 justify-between" href="{{ route('songs.details', $song) }}">
                 <p class="line-clamp-2" x-text="songTitle"></p>
-                @if ($type && !$showModel)
+                @if ($type && !$showModel || $type && $anime)
                     <span class="ml-1 pl-2 pr-2 pt-1 pb-1 h-full {{ $type->color() }} text-white text-xs font-semibold whitespace-nowrap rounded-full">{{ $type->abbreviated() . ' #' . $position }}</span>
                 @endif
             </a>
