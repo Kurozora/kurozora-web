@@ -4,6 +4,17 @@
  */
 @tailwind base;
 
+html, body {
+  @apply h-full
+  w-full
+  scroll-smooth;
+}
+
+::selection {
+  @apply text-white
+  bg-orange-500;
+}
+
 /**
  * Remove the default box-shadow for invalid elements to prevent
  * inputs in Livewire components showing with a
@@ -30,12 +41,6 @@ input:invalid, textarea:invalid, select:invalid {
  */
 
 /* Global styles */
-html, body {
-  @apply h-full
-  w-full
-  scroll-smooth;
-}
-
 ul, ol {
   margin: 1em 0 1em 1.1em;
 }
