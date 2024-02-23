@@ -17,7 +17,7 @@
 
             <div class="mt-5">
                 <x-select id="tv_rating" wire:model.defer="state.tv_rating">
-                    <option value="-1">{{ __('Allow All Shows') }}</option>
+                    <option value="-1">{{ __('Allow All Titles') }}</option>
                     @foreach ($this->tvRatings as $tvRating)
                         <option value="{{ $tvRating->weight }}">{{ $tvRating->full_name }}</option>
                     @endforeach
