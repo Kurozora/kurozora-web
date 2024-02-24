@@ -128,20 +128,20 @@ class MeController extends Controller
         }
 
         // Update language
-        if ($request->has('language')) {
-            $user->language_id = $data['language'];
+        if ($request->has('preferredLanguage')) {
+            $user->language_id = $data['preferredLanguage'];
             $changedFields[] = 'language';
         }
 
         // Update tv rating
-        if ($request->has('tvRating')) {
-            $user->tv_rating = $data['tvRating'];
-            $changedFields[] = 'tvRating';
+        if ($request->has('preferredTVRating')) {
+            $user->tv_rating = $data['preferredTVRating'];
+            $changedFields[] = 'TV rating';
         }
 
         // Update timezone
-        if ($request->has('timezone')) {
-            $user->timezone = $data['timezone'];
+        if ($request->has('preferredTimezone')) {
+            $user->timezone = $data['preferredTimezone'];
             $changedFields[] = 'timezone';
         }
 
@@ -163,7 +163,7 @@ class MeController extends Controller
                 'profileImageURL'   => $user->getFirstMediaFullUrl(MediaCollection::Profile()),
                 'bannerImageURL'    => $user->getFirstMediaFullUrl(MediaCollection::Banner()),
                 'preferredLanguage' => $user->language_id,
-                'preferredTVRating' => $user->tv_rating,
+                'preferredTVRating' => (int) $user->tv_rating,
                 'preferredTimezone' => $user->timezone,
             ],
             'message'   => $displayMessage,

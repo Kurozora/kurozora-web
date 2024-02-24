@@ -31,14 +31,14 @@ class UpdateProfileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'username'      => ['bail', new ValidateUserSlug],
-            'nickname'      => ['bail', new ValidateUsername],
-            'profileImage'  => ['bail', new ValidateProfileImage],
-            'bannerImage'   => ['bail', new ValidateBannerImage],
-            'biography'     => ['bail', new ValidateUserBiography],
-            'language'      => ['bail', 'string', 'exists:' . Language::TABLE_NAME . ',code'],
-            'tvRating'      => ['bail', new ValidateTVRating],
-            'timezone'      => ['bail', 'timezone:all'],
+            'username' => ['bail', new ValidateUserSlug],
+            'nickname' => ['bail', new ValidateUsername],
+            'profileImage' => ['bail', new ValidateProfileImage],
+            'bannerImage' => ['bail', new ValidateBannerImage],
+            'biography' => ['bail', new ValidateUserBiography],
+            'preferredLanguage' => ['bail', 'string', 'exists:' . Language::TABLE_NAME . ',code'],
+            'preferredTVRating' => ['bail', new ValidateTVRating],
+            'preferredTimezone' => ['bail', 'timezone:all'],
         ];
     }
 }
