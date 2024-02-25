@@ -58,8 +58,8 @@ class MangaTest extends TestCase
         // Check whether the response was successful
         $response->assertSuccessfulAPIResponse();
 
-        // Check whether the current_user array is not empty
-        $this->assertArrayHasKey('libraryStatus', $response->json()['data'][0]['literature']['attributes']);
+        // Check whether the library array is not empty
+        $this->assertArrayHasKey('status', $response->json()['data'][0]['literature']['attributes']['library']);
     }
 
     /**

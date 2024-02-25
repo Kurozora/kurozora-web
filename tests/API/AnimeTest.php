@@ -59,7 +59,7 @@ class AnimeTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Check whether the current_user array is not empty
-        $this->assertArrayHasKey('libraryStatus', $response->json()['data'][0]['show']['attributes']);
+        $this->assertArrayHasKey('status', $response->json()['data'][0]['show']['attributes']['library']);
     }
 
     /**
