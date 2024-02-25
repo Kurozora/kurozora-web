@@ -148,15 +148,15 @@ class LibraryController extends Controller
             'status' => $userLibraryStatus->value,
         ]);
 
-        // Decide the value of isReminded
-        $isReminded = $model->getMorphClass() == Anime::class ? $user->user_reminder_anime()->where('anime_id', $modelID)->exists() : false;
-
         // Successful response
         return JSONResult::success([
             'data' => [
-                'libraryStatus' => $userLibraryStatus->value,
-                'isFavorited'   => $user->hasFavorited($model),
-                'isReminded'    => $isReminded
+                'libraryStatus' => $userLibraryStatus->value, // TODO: - Remove when updating to 1.6.0
+                'status' => $userLibraryStatus->value,
+                'isFavorited' => false,
+                'isReminded' => false,
+                'isHidden' => false,
+                'rewatchCount' => 0,
             ]
         ]);
     }
@@ -210,8 +210,11 @@ class LibraryController extends Controller
         return JSONResult::success([
             'data' => [
                 'libraryStatus' => null,
-                'isFavorited'   => null,
-                'isReminded'    => null
+                'status' => null,
+                'isFavorited' => null,
+                'isReminded' => null,
+                'isHidden' => null,
+                'watchCount' => null,
             ]
         ]);
     }

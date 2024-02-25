@@ -76,15 +76,25 @@ class GameResourceBasic extends JsonResource
     protected function getUserSpecificDetails(): array
     {
         $givenRating = $this->resource->mediaRatings->first();
-        $libraryStatus = $this->resource->pivot?->status ?? $this->resource->library->first()?->status;
+        $library = $this->resource->pivot ?? $this->resource->library->first();
 
         // Return the array
+        // TODO: - Deprecate the attributes not in `library` array after releasing 1.6.0
         return [
             'givenRating'       => (double) $givenRating?->rating,
             'givenReview'       => $givenRating?->description,
-            'libraryStatus'     => $libraryStatus,
+            'libraryStatus'     => $library?->status,
             'isFavorited'       => (bool) $this->resource->isFavorited,
             'isReminded'        => $this->resource->isReminded,
+            'library' => [
+                'rating' => (double) $givenRating?->rating,
+                'review' => $givenRating?->description,
+                'status' => $library?->status,
+                'rewatchCount' => $library?->rewatch_count,
+                'isHidden' => (bool) $library?->isHidden,
+                'isFavorited' => (bool) $this->resource->isFavorited,
+                'isReminded' => $this->resource->isReminded,
+            ]
         ];
     }
 }
