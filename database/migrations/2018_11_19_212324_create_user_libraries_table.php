@@ -20,6 +20,8 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->uuidMorphs('trackable');
             $table->tinyInteger('status');
+            $table->unsignedTinyInteger('rewatch_count')->default(0);
+            $table->boolean('is_hidden')->default(false);
             $table->timestamp('started_at')->nullable();
             $table->timestamp('ended_at')->nullable();
             $table->timestamps();
@@ -28,6 +30,7 @@ return new class extends Migration
         Schema::table(UserLibrary::TABLE_NAME, function (Blueprint $table) {
             // Set index key constraints
             $table->index('user_id');
+            $table->index('is_hidden');
 
             // Set unique key constraints
             $table->unique(['trackable_type', 'trackable_id', 'user_id']);
