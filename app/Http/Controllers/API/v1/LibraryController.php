@@ -12,6 +12,7 @@ use App\Http\Requests\AddToLibraryRequest;
 use App\Http\Requests\DeleteFromLibraryRequest;
 use App\Http\Requests\GetLibraryRequest;
 use App\Http\Requests\LibraryImportRequest;
+use App\Http\Requests\UpdateLibraryRequest;
 use App\Http\Resources\AnimeResourceBasic;
 use App\Http\Resources\GameResourceBasic;
 use App\Http\Resources\LiteratureResourceBasic;
@@ -104,7 +105,7 @@ class LibraryController extends Controller
     }
 
     /**
-     * Adds an Anime to the authenticated user's library
+     * Adds a model to the authenticated user's library
      *
      * @param AddToLibraryRequest $request
      * @return JsonResponse
@@ -162,7 +163,74 @@ class LibraryController extends Controller
     }
 
     /**
-     * Removes an Anime from the authenticated user's library
+     * Update a model in the authenticated user's library
+     *
+     * @param UpdateLibraryRequest $request
+     * @return JsonResponse
+     * @throws AuthorizationException
+     */
+    public function update(UpdateLibraryRequest $request): JsonResponse
+    {
+        $data = $request->validated();
+
+        // Get the model
+        $modelID = $data['model_id'];
+        $libraryKind = UserLibraryKind::fromValue((int) $data['library']);
+        $modelType = match ($libraryKind->value) {
+            UserLibraryKind::Manga  => Manga::class,
+            UserLibraryKind::Game   => Game::class,
+            default                 => Anime::class,
+        };
+
+        // Get the authenticated user
+        $user = auth()->user();
+        $library = $user->library()
+            ->firstWhere([
+                ['trackable_type', '=', $modelType],
+                ['trackable_id', '=', $modelID],
+            ]);
+
+        if (!$library) {
+            // The item could not be found
+            throw new AuthorizationException(__('":x" is not in your library.', ['x' => $data['model_id']]));
+        }
+
+        // Track if anything changed
+        $changedFields = [];
+
+        // Update hidden status
+        if ($request->has('is_hidden')) {
+            $library->is_hidden = $data['is_hidden'];
+            $changedFields[] = 'hidden status';
+        }
+
+        // Update rewatch count
+        if ($request->has('rewatch_count')) {
+            $library->rewatch_count = $data['rewatch_count'];
+            $changedFields[] = 'rewatch count';
+        }
+
+        // Successful response
+        $displayMessage = 'Your settings were saved. ';
+
+        if (count($changedFields)) {
+            $displayMessage .= 'You have updated your ' . join(', ', $changedFields) . '.';
+            $library->save();
+        } else {
+            $displayMessage .= 'No information was updated.';
+        }
+
+        return JSONResult::success([
+            'data' => [
+                'isHidden' => $library->is_hidden,
+                'rewatchCount' => $library->rewatch_count,
+            ],
+            'message' => $displayMessage,
+        ]);
+    }
+
+    /**
+     * Removes a model from the authenticated user's library
      *
      * @param DeleteFromLibraryRequest $request
      * @return JsonResponse

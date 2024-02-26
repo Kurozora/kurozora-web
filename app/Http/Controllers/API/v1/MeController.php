@@ -156,17 +156,17 @@ class MeController extends Controller
         }
 
         return JSONResult::success([
-            'data'      => [
-                'username'          => $user->slug,
-                'nickname'          => $user->username,
-                'biography'         => $user->biography,
-                'profileImageURL'   => $user->getFirstMediaFullUrl(MediaCollection::Profile()),
-                'bannerImageURL'    => $user->getFirstMediaFullUrl(MediaCollection::Banner()),
+            'data' => [
+                'username' => $user->slug,
+                'nickname' => $user->username,
+                'biography' => $user->biography,
+                'profileImageURL' => $user->getFirstMediaFullUrl(MediaCollection::Profile()),
+                'bannerImageURL' => $user->getFirstMediaFullUrl(MediaCollection::Banner()),
                 'preferredLanguage' => $user->language_id,
                 'preferredTVRating' => (int) $user->tv_rating,
                 'preferredTimezone' => $user->timezone,
             ],
-            'message'   => $displayMessage,
+            'message' => $displayMessage,
         ]);
     }
 
