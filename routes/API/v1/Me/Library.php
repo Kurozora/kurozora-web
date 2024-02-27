@@ -12,7 +12,7 @@ Route::prefix('/library')
             ->middleware('auth.kurozora')
             ->name('.create');
 
-        Route::post('/', [LibraryController::class, 'update'])
+        Route::post('/update', [LibraryController::class, 'update'])
             ->middleware('auth.kurozora')
             ->name('.update');
 
