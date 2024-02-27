@@ -195,37 +195,22 @@ class LibraryController extends Controller
             throw new AuthorizationException(__('":x" is not in your library.', ['x' => $data['model_id']]));
         }
 
-        // Track if anything changed
-        $changedFields = [];
-
         // Update hidden status
         if ($request->has('is_hidden')) {
             $library->is_hidden = $data['is_hidden'];
-            $changedFields[] = 'hidden status';
         }
 
         // Update rewatch count
         if ($request->has('rewatch_count')) {
             $library->rewatch_count = $data['rewatch_count'];
-            $changedFields[] = 'rewatch count';
         }
 
         // Successful response
-        $displayMessage = 'Your settings were saved. ';
-
-        if (count($changedFields)) {
-            $displayMessage .= 'You have updated your ' . join(', ', $changedFields) . '.';
-            $library->save();
-        } else {
-            $displayMessage .= 'No information was updated.';
-        }
-
         return JSONResult::success([
             'data' => [
                 'isHidden' => $library->is_hidden,
                 'rewatchCount' => $library->rewatch_count,
             ],
-            'message' => $displayMessage,
         ]);
     }
 
