@@ -29,6 +29,7 @@ class UserLibrary extends KModel
      * @var array
      */
     protected $casts = [
+        'is_hidden' => 'boolean',
         'started_at' => 'datetime',
         'ended_at' => 'datetime',
     ];
