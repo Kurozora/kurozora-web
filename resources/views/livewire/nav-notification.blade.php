@@ -60,7 +60,9 @@
                                         </div>
                                     </div>
 
-                                    <a class="absolute w-full h-full" href="{{ route('profile.details', $notification->notifier) }}"></a>
+                                    @if ($notification->notifier)
+                                        <a class="absolute w-full h-full" href="{{ route('profile.details', $notification->notifier) }}"></a>
+                                    @endif
                                 </div>
                                 @break
                             @default
