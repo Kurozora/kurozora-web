@@ -23,7 +23,9 @@ class PreventRequestsDuringMaintenance extends Middleware
     public function getExcludedPaths(): array
     {
         return array_merge(parent::getExcludedPaths(), [
-            route('api.info')
+            route('.well-known.apple-app-site-association'),
+            route('api.info'),
+            route('misc.health-check'),
         ]);
     }
 }
