@@ -5,7 +5,7 @@
 @endphp
 
 <div
-    {{ $attributes->merge(['class' => 'absolute']) }}
+    {{ $attributes->merge(['class' => 'absolute z-50']) }}
     id="{{ $id }}"
     x-cloak=""
     x-transition:enter="ease-out duration-300"
