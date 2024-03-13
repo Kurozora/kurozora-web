@@ -28,7 +28,7 @@
                         <h1 class="text-2xl font-bold">{{ __(':x Voice Acted As', ['x' => $person->full_name]) }}</h1>
                     </div>
 
-                    <div class="flex flex-wrap justify-end items-center w-full">
+                    <div class="flex flex-wrap flex-1 justify-end items-center w-full">
                     </div>
                 </div>
             </div>
