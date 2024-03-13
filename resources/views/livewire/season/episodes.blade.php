@@ -1,6 +1,6 @@
 <main>
     <x-slot:title>
-        {{ __('Episodes') }} | {!! $season->title !!}
+        {{ __(':x Episodes', ['x' => $season->title]) }} | {!! $season->anime->title !!}
     </x-slot:title>
 
     <x-slot:description>
@@ -8,7 +8,7 @@
     </x-slot:description>
 
     <x-slot:meta>
-        <meta property="og:title" content="{{ __('Episodes') }} | {{ $season->title }} — {{ config('app.name') }}" />
+        <meta property="og:title" content="{{ __(':x Episodes', ['x' => $season->title]) }} | {{ $season->anime->title }} — {{ config('app.name') }}" />
         <meta property="og:description" content="{{ $season->synopsis ?? __('Discover the extensive list of :x episodes on Kurozora, the largest, free online anime, manga, game & music database in the world.', ['x' => $season->anime->title]) }}" />
         <meta property="og:image" content="{{ $season->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp') }}" />
         <meta property="og:type" content="video.tv_show" />
