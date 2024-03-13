@@ -12,10 +12,10 @@
     >
         <x-profile-image-view class="w-16 h-16" :user="$review->user" />
 
-        <div class="flex flex-col items-baseline w-full overflow-hidden">
-            <div class="flex gap-2 justify-between w-full">
-                <div class="flex gap-1 overflow-hidden">
-                    <a class="inline-flex items-center text-sm font-semibold whitespace-nowrap overflow-hidden" href="{{ route('profile.details', $review->user) }}">{{ $review->user->username }}</a>
+        <div class="flex flex-col items-baseline w-full">
+            <div class="flex flex-wrap justify-between w-full">
+                <div class="flex flex-wrap gap-1">
+                    <a class="inline-flex items-center text-sm font-semibold break-all overflow-hidden" href="{{ route('profile.details', $review->user) }}">{{ $review->user->username }}</a>
 
                     <livewire:components.user.badge-shelf :user="$review->user" wire:key="{{ uniqid('badges-', true) }}" />
                 </div>
@@ -28,7 +28,11 @@
             </div>
 
             <div class="mt-2 w-full">
-                <p class="line-clamp-5" style="word-break: break-word;">{!! nl2br(e($review->description)) !!}</p>
+                <x-truncated-text>
+                    <x-slot:text>
+                        {!! nl2br(e($review->description)) !!}
+                    </x-slot:text>
+                </x-truncated-text>
             </div>
 
 {{--            <div class="flex gap-2 justify-between w-full">--}}
@@ -40,9 +44,36 @@
 {{--                </div>--}}
 
 {{--                <div>--}}
-{{--                    <x-square-button>--}}
-{{--                        @svg('ellipsis', 'fill-current', ['width' => '18'])--}}
-{{--                    </x-square-button>--}}
+{{--                    <x-dropdown align="right" width="48">--}}
+{{--                        <x-slot:trigger>--}}
+{{--                            <x-square-button--}}
+{{--                                title="{{ __('More') }}"--}}
+{{--                            >--}}
+{{--                                @svg('ellipsis', 'fill-current', ['width' => '18'])--}}
+{{--                            </x-square-button>--}}
+{{--                        </x-slot:trigger>--}}
+
+{{--                        <x-slot:content>--}}
+{{--                            <button--}}
+{{--                                x-data="{--}}
+{{--                                    copyTextToClipboard() {--}}
+{{--                                        let url = window.location.href + '?id={{ $review->id }}'--}}
+
+{{--                                        navigator.clipboard.writeText(url).then(function() {--}}
+{{--                                        }, function(err) {--}}
+{{--                                            console.error('Async: Could not copy text: ', err)--}}
+{{--                                        })--}}
+
+{{--                                        open = !open--}}
+{{--                                    }--}}
+{{--                                }"--}}
+{{--                                class="block w-full pl-4 pr-4 pt-2 pb-2 bg-white text-gray-400 text-xs text-center font-semibold hover:bg-gray-50 focus:bg-gray-200"--}}
+{{--                                x-on:click="copyTextToClipboard()"--}}
+{{--                            >--}}
+{{--                                {{ __('Copy Link') }}--}}
+{{--                            </button>--}}
+{{--                        </x-slot:content>--}}
+{{--                    </x-dropdown>--}}
 {{--                </div>--}}
 {{--            </div>--}}
         </div>
