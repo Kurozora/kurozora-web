@@ -30,6 +30,13 @@
                         {{ __('Mark as Watched') }}
                     @endif
                 </x-tinted-pill-button>
+
+{{--                <x-circle-button--}}
+{{--                    :color="'orange'"--}}
+{{--                    wire:click="updateWatchStatus"--}}
+{{--                >--}}
+{{--                    @svg('arrow_clockwise', 'fill-current', ['width' => 44])--}}
+{{--                </x-circle-button>--}}
             </div>
         </div>
 @endswitch
