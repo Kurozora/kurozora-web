@@ -8,7 +8,7 @@
     </x-slot:description>
 
     <x-slot:meta>
-        <meta property="og:title" content="{{ $user->username . __(' on Kurozora') }}" />
+        <meta property="og:title" content="{{ __(':x on Kurozora', ['x' => $user->username]) }}" />
         <meta property="og:description" content="{{ $user->biography ?? __('app.description') }}" />
         <meta property="og:image" content="{{ $user->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) }}" />
         <meta property="og:type" content="profile" />
@@ -55,11 +55,6 @@
             <div class="mt-2 pt-2 pb-2 px-3">{!! $user->biography_html !!}</div>
 
             <div class="flex justify-between">
-                <x-profile-information-badge>
-                    <x-slot:title>{{ __('Reputation') }}</x-slot:title>
-                    <x-slot:description>{{ $user->getReputationCount() }}</x-slot:description>
-                </x-profile-information-badge>
-
                 <x-profile-information-badge wire:click="togglePopupFor('badges')">
                     <x-slot:title>{{ __('Badges') }}</x-slot:title>
                     <x-slot:description>{{ $counts['badges_count'] }}</x-slot:description>
@@ -74,6 +69,12 @@
                     <x-slot:title>{{ __('Followers') }}</x-slot:title>
                     <x-slot:description>{{ $counts['followers_count'] }}</x-slot:description>
                 </x-profile-information-badge>
+
+                <x-profile-information-badge wire:click="togglePopupFor('ratingsAndReviews')">
+                    <x-slot:title>{{ __('Ratings & Reviews') }}</x-slot:title>
+                    <x-slot:description>{{ $counts['media_ratings_count'] }}</x-slot:description>
+                </x-profile-information-badge>
+
             </div>
 
             <x-hr class="mt-2" />
@@ -131,6 +132,15 @@
             </x-slot:title>
 
             <livewire:profile.following.index :user="$user" />
+        </x-page-modal>
+        @break
+    @case ('ratingsAndReviews')
+        <x-page-modal maxWidth="sm" model="showPopup">
+            <x-slot:title>
+                {{ __('Ratings & Reviews') }}
+            </x-slot:title>
+
+            <livewire:profile.reviews.index :user="$user" />
         </x-page-modal>
         @break
     @endswitch

@@ -51,6 +51,7 @@ class Details extends Component
         'badges_count' => 0,
         'followers_count' => 0,
         'following_count' => 0,
+        'media_ratings_count' => 0,
     ];
 
     /**
@@ -63,6 +64,7 @@ class Details extends Component
         'badges',
         'following',
         'followers',
+        'reviews',
     ];
 
     /**
@@ -87,12 +89,18 @@ class Details extends Component
         UserViewed::dispatch($user);
 
         $this->user = $user->load(['media'])
-            ->loadCount(['followers', 'following', 'badges']);
+            ->loadCount([
+                'badges',
+                'followers',
+                'following',
+                'mediaRatings'
+            ]);
 
         $this->counts = [
             'badges_count' => $user->badges_count,
             'followers_count' => $user->followers_count,
             'following_count' => $user->following_count,
+            'media_ratings_count' => $user->media_ratings_count,
         ];
     }
 
