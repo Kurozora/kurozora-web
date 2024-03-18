@@ -518,7 +518,7 @@ class MangaController extends Controller
                                 ->limit(1);
                         },
                     ])
-                        ->withCount(['followers', 'following']);
+                        ->withCount(['followers', 'following', 'mediaRatings']);
                 }
             ])
             ->where('description', '!=', null)

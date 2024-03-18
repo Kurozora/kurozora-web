@@ -93,7 +93,7 @@ class AccessTokenController
                         ->limit(1);
                 },
             ])
-            ->withCount(['followers', 'following'])
+            ->withCount(['followers', 'following', 'mediaRatings'])
             ->first();
 
         // Compare the passwords

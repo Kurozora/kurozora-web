@@ -45,6 +45,7 @@ class UserResourceBasic extends JsonResource
                 'activityStatus'    => $this->resource->activityStatus->description,
                 'followerCount'     => $this->resource->followers_count,
                 'followingCount'    => $this->resource->following_count,
+                'ratingsCount'      => $this->resource->media_ratings_count,
                 'reputationCount'   => 0, // - TODO: add $this->resource->getReputationCount(),
                 'isDeveloper'       => $this->resource->is_developer,
                 'isEarlySupporter'  => $this->resource->is_early_supporter,

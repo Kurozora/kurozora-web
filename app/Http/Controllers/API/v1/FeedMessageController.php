@@ -190,7 +190,7 @@ class FeedMessageController extends Controller
                     ->limit(1);
             },
         ])
-            ->withCount(['followers', 'following'])
+            ->withCount(['followers', 'following', 'mediaRatings'])
             ->when(auth()->check(), function ($query) {
                 $query->withExists(['followers as isFollowed' => function ($query) {
                     $query->where('user_id', '=', auth()->user()->id);
