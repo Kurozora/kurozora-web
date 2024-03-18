@@ -48,7 +48,7 @@ class Details extends Component
      * @var array|int[]
      */
     public array $counts = [
-        'badges_count' => 0,
+        'achievements_count' => 0,
         'followers_count' => 0,
         'following_count' => 0,
         'media_ratings_count' => 0,
@@ -61,7 +61,7 @@ class Details extends Component
      */
     private array $popupTypes = [
         'edit',
-        'badges',
+        'achievements',
         'following',
         'followers',
         'reviews',
@@ -97,7 +97,7 @@ class Details extends Component
             ]);
 
         $this->counts = [
-            'badges_count' => $user->badges_count,
+            'achievements_count' => $user->badges_count,
             'followers_count' => $user->followers_count,
             'following_count' => $user->following_count,
             'media_ratings_count' => $user->media_ratings_count,

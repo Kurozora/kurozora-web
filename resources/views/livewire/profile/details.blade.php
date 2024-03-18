@@ -55,26 +55,25 @@
             <div class="mt-2 pt-2 pb-2 px-3">{!! $user->biography_html !!}</div>
 
             <div class="flex justify-between">
-                <x-profile-information-badge wire:click="togglePopupFor('badges')">
-                    <x-slot:title>{{ __('Badges') }}</x-slot:title>
-                    <x-slot:description>{{ $counts['badges_count'] }}</x-slot:description>
+                <x-profile-information-badge wire:click="togglePopupFor('achievements')">
+                    <x-slot:title>{{ __('Achievements') }}</x-slot:title>
+                    <x-slot:description>{{ number_shorten($counts['achievements_count'], 0, true) }}</x-slot:description>
                 </x-profile-information-badge>
 
                 <x-profile-information-badge wire:click="togglePopupFor('following')">
                     <x-slot:title>{{ __('Following') }}</x-slot:title>
-                    <x-slot:description>{{ $counts['following_count'] }}</x-slot:description>
+                    <x-slot:description>{{ number_shorten($counts['following_count'], 0, true) }}</x-slot:description>
                 </x-profile-information-badge>
 
                 <x-profile-information-badge wire:click="togglePopupFor('followers')">
                     <x-slot:title>{{ __('Followers') }}</x-slot:title>
-                    <x-slot:description>{{ $counts['followers_count'] }}</x-slot:description>
+                    <x-slot:description>{{ number_shorten($counts['followers_count'], 0, true) }}</x-slot:description>
                 </x-profile-information-badge>
 
                 <x-profile-information-badge wire:click="togglePopupFor('ratingsAndReviews')">
-                    <x-slot:title>{{ __('Ratings & Reviews') }}</x-slot:title>
-                    <x-slot:description>{{ $counts['media_ratings_count'] }}</x-slot:description>
+                    <x-slot:title>{{ __('Reviews') }}</x-slot:title>
+                    <x-slot:description>{{ number_shorten($counts['media_ratings_count'], 0, true) }}</x-slot:description>
                 </x-profile-information-badge>
-
             </div>
 
             <x-hr class="mt-2" />
@@ -107,10 +106,10 @@
             </x-modal-form-section>
         @endauth
         @break
-    @case ('badges')
+    @case ('achievements')
         <x-page-modal maxWidth="sm" model="showPopup">
             <x-slot:title>
-                {{ __('Badges') }}
+                {{ __('Achievements') }}
             </x-slot:title>
 
             <livewire:profile.badges :user="$user" />
@@ -140,7 +139,7 @@
                 {{ __('Ratings & Reviews') }}
             </x-slot:title>
 
-            <livewire:profile.reviews.index :user="$user" />
+            <livewire:profile.ratings.index :user="$user" />
         </x-page-modal>
         @break
     @endswitch
