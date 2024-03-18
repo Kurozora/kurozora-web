@@ -11,7 +11,7 @@
         <picture class="relative aspect-square rounded-full shadow-md overflow-hidden">
             <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $character->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/person_poster.webp') }}" alt="{{ $character->name }} Profile Image" title="{{ $character->name }}">
 
-            <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-lg"></div>
+            <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-full"></div>
         </picture>
 
         <a class="absolute w-full h-full" href="{{ route('characters.details', $character) }}"></a>
