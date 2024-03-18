@@ -70,16 +70,19 @@
             @endif
 
             <a class="flex gap-2 justify-between" href="{{ route('songs.details', $song) }}">
-                <p class="line-clamp-2" x-text="songTitle"></p>
+                <p class="line-clamp-2" x-text="songTitle">{{ $song->title }}</p>
+
                 @if ($type && !$showModel || $type && $anime)
                     <span class="ml-1 pl-2 pr-2 pt-1 pb-1 h-full {{ $type->color() }} text-white text-xs font-semibold whitespace-nowrap rounded-full">{{ $type->abbreviated() . ' #' . $position }}</span>
                 @endif
             </a>
 
-            <p class="opacity-75 line-clamp-2" x-text="artistName"></p>
+            <p class="opacity-75 line-clamp-2" x-text="artistName">{{ $song->artist }}</p>
+
             @if ($anime && $showModel)
                 <x-simple-link class="text-sm" href="{{ route('anime.details', $anime) }}">{{ $anime->title }}</x-simple-link>
             @endif
+
             @if (!empty($episodes) && $showEpisodes)
                 <p class="text-sm opacity-75 line-clamp-2">{{ __('Episodes: :x', ['x' => $episodes]) }}</p>
             @endif
