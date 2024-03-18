@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Profile\Reviews;
+namespace App\Http\Livewire\Profile\Ratings;
 
 use App\Models\Anime;
 use App\Models\Character;
@@ -32,9 +32,9 @@ class Index extends Component
     /**
      * The current page query parameter's alias.
      *
-     * @var string $rwc
+     * @var string $rgc
      */
-    public string $rwc = '';
+    public string $rgc = '';
 
     /**
      * The current page query parameter.
@@ -49,7 +49,7 @@ class Index extends Component
      * @var string[] $queryString
      */
     protected $queryString = [
-        'cursor' => ['except' => '', 'as' => 'rwc']
+        'cursor' => ['except' => '', 'as' => 'rgc']
     ];
 
     /**
@@ -71,12 +71,12 @@ class Index extends Component
      */
     public function getMediaRatingsProperty(): CursorPaginator
     {
-        // We're aliasing `cursorName` as `rwc`, and setting
+        // We're aliasing `cursorName` as `rgc`, and setting
         // query rule to never show `cursor` param when it's
-        // empty. Since `cursor` is also aliased as `rwc` in
+        // empty. Since `cursor` is also aliased as `rgc` in
         // query rules, and we always keep it empty, as far
-        // as Livewire is concerned, `rwc` is also empty. So,
-        // `rwc` doesn't show up in the query params in the
+        // as Livewire is concerned, `rgc` is also empty. So,
+        // `rgc` doesn't show up in the query params in the
         // browser.
         return $this->user->mediaRatings()
             ->with([
@@ -108,7 +108,7 @@ class Index extends Component
                 }
             ])
             ->orderBy('created_at', 'desc')
-            ->cursorPaginate(25, ['*'], 'rwc');
+            ->cursorPaginate(25, ['*'], 'rgc');
     }
 
     /**
@@ -118,6 +118,6 @@ class Index extends Component
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.profile.reviews.index');
+        return view('livewire.profile.ratings.index');
     }
 }
