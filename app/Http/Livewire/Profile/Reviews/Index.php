@@ -2,10 +2,18 @@
 
 namespace App\Http\Livewire\Profile\Reviews;
 
+use App\Models\Anime;
+use App\Models\Character;
+use App\Models\Game;
+use App\Models\Manga;
+use App\Models\MediaSong;
+use App\Models\Person;
 use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Pagination\CursorPaginator;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -72,8 +80,31 @@ class Index extends Component
         // browser.
         return $this->user->mediaRatings()
             ->with([
-                'model' => function ($query) {
-                    $query->with(['media', 'translations']);
+                'model' => function (MorphTo $morphTo) {
+                    $morphTo->constrain([
+                        Anime::class => function (Builder $query) {
+                            $query->with(['media', 'translations']);
+                        },
+                        Character::class => function (Builder $query) {
+                            $query->with(['media']);
+                        },
+                        Game::class => function (Builder $query) {
+                            $query->with(['media', 'translations']);
+                        },
+                        Manga::class => function (Builder $query) {
+                            $query->with(['media', 'translations']);
+                        },
+                        Person::class => function (Builder $query) {
+                            $query->with(['media']);
+                        },
+                        MediaSong::class => function (Builder $query) {
+                            $query->with([
+                                'song' => function ($query) {
+                                    $query->with(['media']);
+                                },
+                            ]);
+                        },
+                    ]);
                 }
             ])
             ->orderBy('created_at', 'desc')
