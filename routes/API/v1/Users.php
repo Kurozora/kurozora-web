@@ -52,6 +52,10 @@ Route::prefix('/users')
                     ->middleware('auth.kurozora:optional')
                     ->name('.following');
 
+                Route::get('/reviews', [UserController::class, 'getRatings'])
+                    ->middleware('auth.kurozora:optional')
+                    ->name('.reviews');
+
                 Route::get('/profile', [UserController::class, 'profile'])
                     ->middleware('auth.kurozora:optional')
                     ->name('.profile');

@@ -220,4 +220,16 @@ class MeController extends Controller
         return (new FollowingController())
             ->getFollowing($request, auth()->user());
     }
+
+    /**
+     * Returns a list of the user's ratings.
+     *
+     * @param GetRatingsRequest $request
+     * @return JsonResponse
+     */
+    function getRatings(GetRatingsRequest $request): JsonResponse
+    {
+        return (new UserController())
+            ->getRatings($request, auth()->user());
+    }
 }

@@ -8,14 +8,26 @@ use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DeleteUserRequest;
 use App\Http\Requests\GetFeedMessagesRequest;
+use App\Http\Requests\GetRatingsRequest;
 use App\Http\Requests\ResetPassword;
 use App\Http\Resources\FeedMessageResource;
+use App\Http\Resources\MediaRatingResource;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\UserResourceIdentity;
+use App\Models\Anime;
+use App\Models\Character;
+use App\Models\Episode;
+use App\Models\Game;
+use App\Models\Manga;
+use App\Models\Person;
+use App\Models\Song;
+use App\Models\Studio;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
@@ -128,6 +140,62 @@ class UserController extends Controller
 
         return JSONResult::success([
             'data' => FeedMessageResource::collection($feedMessages),
+            'next' => empty($nextPageURL) ? null : $nextPageURL
+        ]);
+    }
+
+    /**
+     * Returns a list of the user's ratings.
+     *
+     * @param GetRatingsRequest $request
+     * @param User $user
+     * @return JsonResponse
+     */
+    public function getRatings(GetRatingsRequest $request, User $user): JsonResponse
+    {
+        $data = $request->validated();
+
+        // Get the feed messages
+        $mediaRatings = $user->mediaRatings()
+            ->with([
+                'user',
+                'model' => function (MorphTo $morphTo) {
+                    $morphTo->constrain([
+                        Anime::class => function (Builder $query) {
+                            $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating']);
+                        },
+                        Character::class => function (Builder $query) {
+                            $query->with(['media', 'mediaStat']);
+                        },
+                        Episode::class => function (Builder $query) {
+                            $query->with(['media', 'mediaStat']);
+                        },
+                        Game::class => function (Builder $query) {
+                            $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating']);
+                        },
+                        Manga::class => function (Builder $query) {
+                            $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating']);
+                        },
+                        Person::class => function (Builder $query) {
+                            $query->with(['media', 'mediaStat']);
+                        },
+                        Song::class => function (Builder $query) {
+                            $query->with(['media', 'mediaStat']);
+                        },
+                        Studio::class => function (Builder $query) {
+                            $query->with(['media', 'mediaStat']);
+                        },
+                    ]);
+                }
+            ])
+            ->orderBy('created_at', 'desc')
+            ->cursorPaginate($data['limit'] ?? 25);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $mediaRatings->nextPageUrl());
+
+        return JSONResult::success([
+            'data' => MediaRatingResource::collection($mediaRatings),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }

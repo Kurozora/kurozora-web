@@ -20,6 +20,10 @@ Route::prefix('/me')
             ->middleware('auth.kurozora:optional')
             ->name('.following');
 
+        Route::get('/reviews', [MeController::class, 'getRatings'])
+            ->middleware('auth.kurozora:optional')
+            ->name('.reviews');
+
         require 'Me/Access-Tokens.php';
         require 'Me/Favorites.php';
         require 'Me/Feed-Messages.php';
