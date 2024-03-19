@@ -254,7 +254,7 @@
                     </div>
                 </x-picture>
 
-                <div class="flex flex-col items-baseline w-full">
+                <div class="relative flex flex-col items-baseline w-full">
                     <a class="absolute w-full h-full" href="{{ route('songs.details', $mediaRating->model) }}"></a>
 
                     <div class="flex justify-between gap-2 w-full">
@@ -285,7 +285,7 @@
                     <div class="absolute top-0 left-0 h-full w-full border-2 border-solid border-black/20 rounded-full"></div>
                 </picture>
 
-                <a class="absolute w-full h-full" href="{{ route('episodes.details', $mediaRating->model) }}"></a>
+                <a class="absolute w-full h-full" href="{{ route('studios.details', $mediaRating->model) }}"></a>
 
                 <div class="flex flex-col items-baseline w-full">
                     <div class="flex justify-between gap-2 w-full">
