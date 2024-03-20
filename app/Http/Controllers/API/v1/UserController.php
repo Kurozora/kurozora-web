@@ -158,11 +158,43 @@ class UserController extends Controller
         // Get the feed messages
         $mediaRatings = $user->mediaRatings()
             ->with([
-                'user',
+                'user'=> function ($query) {
+                    $query->with([
+                        'badges' => function ($query) {
+                            $query->with(['media']);
+                        },
+                        'media',
+                        'tokens' => function ($query) {
+                            $query
+                                ->orderBy('last_used_at', 'desc')
+                                ->limit(1);
+                        },
+                        'sessions' => function ($query) {
+                            $query
+                                ->orderBy('last_activity', 'desc')
+                                ->limit(1);
+                        },
+                    ])
+                        ->withCount(['followers', 'following', 'mediaRatings']);
+                },
                 'model' => function (MorphTo $morphTo) {
                     $morphTo->constrain([
                         Anime::class => function (Builder $query) {
-                            $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating']);
+                            $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating'])
+                                ->when(auth()->user(), function ($query, $user) {
+                                    $query->with(['mediaRatings' => function ($query) use ($user) {
+                                        $query->where([
+                                            ['user_id', '=', $user->id]
+                                        ]);
+                                    }, 'library' => function ($query) use ($user) {
+                                        $query->where('user_id', '=', $user->id);
+                                    }])
+                                        ->withExists([
+                                            'favoriters as isFavorited' => function ($query) use ($user) {
+                                                $query->where('user_id', '=', $user->id);
+                                            }
+                                        ]);
+                                });
                         },
                         Character::class => function (Builder $query) {
                             $query->with(['media', 'mediaStat']);
@@ -171,10 +203,38 @@ class UserController extends Controller
                             $query->with(['media', 'mediaStat']);
                         },
                         Game::class => function (Builder $query) {
-                            $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating']);
+                            $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating'])
+                                ->when(auth()->user(), function ($query, $user) {
+                                    $query->with(['mediaRatings' => function ($query) use ($user) {
+                                        $query->where([
+                                            ['user_id', '=', $user->id]
+                                        ]);
+                                    }, 'library' => function ($query) use ($user) {
+                                        $query->where('user_id', '=', $user->id);
+                                    }])
+                                        ->withExists([
+                                            'favoriters as isFavorited' => function ($query) use ($user) {
+                                                $query->where('user_id', '=', $user->id);
+                                            }
+                                        ]);
+                                });
                         },
                         Manga::class => function (Builder $query) {
-                            $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating']);
+                            $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating'])
+                                ->when(auth()->user(), function ($query, $user) {
+                                    $query->with(['mediaRatings' => function ($query) use ($user) {
+                                        $query->where([
+                                            ['user_id', '=', $user->id]
+                                        ]);
+                                    }, 'library' => function ($query) use ($user) {
+                                        $query->where('user_id', '=', $user->id);
+                                    }])
+                                        ->withExists([
+                                            'favoriters as isFavorited' => function ($query) use ($user) {
+                                                $query->where('user_id', '=', $user->id);
+                                            }
+                                        ]);
+                                });
                         },
                         Person::class => function (Builder $query) {
                             $query->with(['media', 'mediaStat']);
