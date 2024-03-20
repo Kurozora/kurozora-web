@@ -47,6 +47,23 @@ class SongController extends Controller
         // Get the anime
         $animes = $song->anime()
             ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating'])
+            ->when(auth()->user(), function ($query, $user) {
+                $query->with(['mediaRatings' => function ($query) use ($user) {
+                    $query->where([
+                        ['user_id', '=', $user->id]
+                    ]);
+                }, 'library' => function ($query) use ($user) {
+                    $query->where('user_id', '=', $user->id);
+                }])
+                    ->withExists([
+                        'favoriters as isFavorited' => function ($query) use ($user) {
+                            $query->where('user_id', '=', $user->id);
+                        },
+                        'reminderers as isReminded' => function ($query) use ($user) {
+                            $query->where('user_id', '=', $user->id);
+                        },
+                    ]);
+            })
             ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
 
         // Get next page url minus domain
@@ -72,6 +89,23 @@ class SongController extends Controller
         // Get the games
         $games = $song->games()
             ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating'])
+            ->when(auth()->user(), function ($query, $user) {
+                $query->with(['mediaRatings' => function ($query) use ($user) {
+                    $query->where([
+                        ['user_id', '=', $user->id]
+                    ]);
+                }, 'library' => function ($query) use ($user) {
+                    $query->where('user_id', '=', $user->id);
+                }])
+                    ->withExists([
+                        'favoriters as isFavorited' => function ($query) use ($user) {
+                            $query->where('user_id', '=', $user->id);
+                        },
+                        'reminderers as isReminded' => function ($query) use ($user) {
+                            $query->where('user_id', '=', $user->id);
+                        },
+                    ]);
+            })
             ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
 
         // Get next page url minus domain
