@@ -77,7 +77,7 @@ class MediaRatingResource extends JsonResource
                 ];
             case Game::class:
                 return [
-                    'ames' => [
+                    'games' => [
                         'data' => GameResourceBasic::collection([$this->resource->model])
                     ]
                 ];
