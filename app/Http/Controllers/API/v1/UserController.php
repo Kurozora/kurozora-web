@@ -200,7 +200,19 @@ class UserController extends Controller
                             $query->with(['media', 'mediaStat']);
                         },
                         Episode::class => function (Builder $query) {
-                            $query->with(['media', 'mediaStat']);
+                            $query->with([
+                                'anime' => function ($query) {
+                                    $query->with(['media', 'translations']);
+                                },
+                                'media',
+                                'mediaRatings',
+                                'mediaStat',
+                                'season' => function ($query) {
+                                    $query->with(['media', 'translations']);
+                                },
+                                'translations',
+                                'videos',
+                            ]);
                         },
                         Game::class => function (Builder $query) {
                             $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating'])
