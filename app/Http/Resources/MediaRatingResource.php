@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use App\Models\Anime;
 use App\Models\Character;
+use App\Models\Episode;
 use App\Models\Game;
 use App\Models\Manga;
 use App\Models\MediaRating;
@@ -73,6 +74,12 @@ class MediaRatingResource extends JsonResource
                 return [
                     'characters' => [
                         'data' => CharacterResourceBasic::collection([$this->resource->model])
+                    ]
+                ];
+            case Episode::class:
+                return [
+                    'episodes' => [
+                        'data' => EpisodeResourceBasic::collection([$this->resource->model])
                     ]
                 ];
             case Game::class:
