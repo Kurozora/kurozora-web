@@ -31,6 +31,7 @@ Route::prefix('/v1')
         require 'API/v1/Me.php';
         require 'API/v1/MyAnimeList.php';
         require 'API/v1/People.php';
+        require 'API/v1/Reviews.php';
         require 'API/v1/Schedule.php';
         require 'API/v1/Search.php';
         require 'API/v1/Seasons.php';
