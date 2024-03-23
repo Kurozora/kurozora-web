@@ -11,23 +11,13 @@ use App\Http\Requests\GetFeedMessagesRequest;
 use App\Http\Requests\GetRatingsRequest;
 use App\Http\Requests\ResetPassword;
 use App\Http\Resources\FeedMessageResource;
-use App\Http\Resources\MediaRatingResource;
+use App\Http\Resources\MediaRatingResourceBasic;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\UserResourceIdentity;
-use App\Models\Anime;
-use App\Models\Character;
-use App\Models\Episode;
-use App\Models\Game;
-use App\Models\Manga;
-use App\Models\Person;
-use App\Models\Song;
-use App\Models\Studio;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
@@ -157,109 +147,6 @@ class UserController extends Controller
 
         // Get the feed messages
         $mediaRatings = $user->mediaRatings()
-            ->with([
-                'user'=> function ($query) {
-                    $query->with([
-                        'badges' => function ($query) {
-                            $query->with(['media']);
-                        },
-                        'media',
-                        'tokens' => function ($query) {
-                            $query
-                                ->orderBy('last_used_at', 'desc')
-                                ->limit(1);
-                        },
-                        'sessions' => function ($query) {
-                            $query
-                                ->orderBy('last_activity', 'desc')
-                                ->limit(1);
-                        },
-                    ])
-                        ->withCount(['followers', 'following', 'mediaRatings']);
-                },
-                'model' => function (MorphTo $morphTo) {
-                    $morphTo->constrain([
-                        Anime::class => function (Builder $query) {
-                            $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating'])
-                                ->when(auth()->user(), function ($query, $user) {
-                                    $query->with(['mediaRatings' => function ($query) use ($user) {
-                                        $query->where([
-                                            ['user_id', '=', $user->id]
-                                        ]);
-                                    }, 'library' => function ($query) use ($user) {
-                                        $query->where('user_id', '=', $user->id);
-                                    }])
-                                        ->withExists([
-                                            'favoriters as isFavorited' => function ($query) use ($user) {
-                                                $query->where('user_id', '=', $user->id);
-                                            }
-                                        ]);
-                                });
-                        },
-                        Character::class => function (Builder $query) {
-                            $query->with(['media', 'mediaStat']);
-                        },
-                        Episode::class => function (Builder $query) {
-                            $query->with([
-                                'anime' => function ($query) {
-                                    $query->with(['media', 'translations']);
-                                },
-                                'media',
-                                'mediaRatings',
-                                'mediaStat',
-                                'season' => function ($query) {
-                                    $query->with(['media', 'translations']);
-                                },
-                                'translations',
-                                'videos',
-                            ]);
-                        },
-                        Game::class => function (Builder $query) {
-                            $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating'])
-                                ->when(auth()->user(), function ($query, $user) {
-                                    $query->with(['mediaRatings' => function ($query) use ($user) {
-                                        $query->where([
-                                            ['user_id', '=', $user->id]
-                                        ]);
-                                    }, 'library' => function ($query) use ($user) {
-                                        $query->where('user_id', '=', $user->id);
-                                    }])
-                                        ->withExists([
-                                            'favoriters as isFavorited' => function ($query) use ($user) {
-                                                $query->where('user_id', '=', $user->id);
-                                            }
-                                        ]);
-                                });
-                        },
-                        Manga::class => function (Builder $query) {
-                            $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating'])
-                                ->when(auth()->user(), function ($query, $user) {
-                                    $query->with(['mediaRatings' => function ($query) use ($user) {
-                                        $query->where([
-                                            ['user_id', '=', $user->id]
-                                        ]);
-                                    }, 'library' => function ($query) use ($user) {
-                                        $query->where('user_id', '=', $user->id);
-                                    }])
-                                        ->withExists([
-                                            'favoriters as isFavorited' => function ($query) use ($user) {
-                                                $query->where('user_id', '=', $user->id);
-                                            }
-                                        ]);
-                                });
-                        },
-                        Person::class => function (Builder $query) {
-                            $query->with(['media', 'mediaStat']);
-                        },
-                        Song::class => function (Builder $query) {
-                            $query->with(['media', 'mediaStat']);
-                        },
-                        Studio::class => function (Builder $query) {
-                            $query->with(['media', 'mediaStat']);
-                        },
-                    ]);
-                }
-            ])
             ->orderBy('created_at', 'desc')
             ->cursorPaginate($data['limit'] ?? 25);
 
@@ -267,7 +154,7 @@ class UserController extends Controller
         $nextPageURL = str_replace($request->root(), '', $mediaRatings->nextPageUrl());
 
         return JSONResult::success([
-            'data' => MediaRatingResource::collection($mediaRatings),
+            'data' => MediaRatingResourceBasic::collection($mediaRatings),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
