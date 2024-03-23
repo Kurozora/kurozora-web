@@ -31,14 +31,7 @@ class MediaRatingResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $resource = MediaRatingResourceIdentity::make($this->resource)->toArray($request);
-        $resource = array_merge($resource, [
-            'attributes' => [
-                'score' => $this->resource->rating,
-                'description' => $this->resource->description,
-                'createdAt' => $this->resource->created_at->timestamp
-            ]
-        ]);
+        $resource = MediaRatingResourceBasic::make($this->resource)->toArray($request);
 
         // Add relationships
         $relationships = [];
