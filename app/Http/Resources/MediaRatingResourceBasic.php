@@ -25,7 +25,6 @@ class MediaRatingResourceBasic extends JsonResource
         $resource = MediaRatingResourceIdentity::make($this->resource)->toArray($request);
         return array_merge($resource, [
             'attributes' => [
-                'type' => mb_strtolower(class_basename($this->resource->model_type)),
                 'score' => $this->resource->rating,
                 'description' => $this->resource->description,
                 'createdAt' => $this->resource->created_at->timestamp

@@ -13,7 +13,7 @@ class StudioResourceIdentity extends JsonResource
     /**
      * The resource instance.
      *
-     * @var Studio $resource
+     * @var Studio|int $resource
      */
     public $resource;
 
@@ -26,10 +26,10 @@ class StudioResourceIdentity extends JsonResource
     public function toArray(Request $request): array|JsonSerializable|Arrayable
     {
         return [
-            'id' => $this->resource->id,
-            'uuid' => (string) $this->resource->id,
-            'type' => 'studios',
-            'href' => route('api.studios.details', $this->resource, false),
+            'id'    => (int) ($this->resource?->id ?? $this->resource),
+            'uuid'  => (string) ($this->resource?->id ?? $this->resource),
+            'type'  => 'studios',
+            'href'  => route('api.studios.details', $this->resource, false),
         ];
     }
 }

@@ -11,7 +11,7 @@ class EpisodeResourceIdentity extends JsonResource
     /**
      * The resource instance.
      *
-     * @var Episode $resource
+     * @var Episode|int $resource
      */
     public $resource;
 
@@ -24,10 +24,10 @@ class EpisodeResourceIdentity extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'            => $this->resource->id,
-            'uuid'          => (string) $this->resource->id,
-            'type'          => 'episodes',
-            'href'          => route('api.episodes.details', $this->resource, false),
+            'id'    => (int) ($this->resource?->id ?? $this->resource),
+            'uuid'  => (string) ($this->resource?->id ?? $this->resource),
+            'type'  => 'episodes',
+            'href'  => route('api.episodes.details', $this->resource, false),
         ];
     }
 }

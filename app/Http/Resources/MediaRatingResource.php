@@ -36,10 +36,8 @@ class MediaRatingResource extends JsonResource
         // Add relationships
         $relationships = [];
 
-        if ($this->resource->relationLoaded('model')) {
-            // Add specific data per type
-            $relationships = array_merge($relationships, $this->getTypeSpecificData($request));
-        }
+        // Add specific data per type
+        $relationships = array_merge($relationships, $this->getTypeSpecificData($request));
 
         $relationships = array_merge($relationships, $this->getUserDetails());
 
@@ -60,49 +58,49 @@ class MediaRatingResource extends JsonResource
             case Anime::class:
                 return [
                     'shows' => [
-                        'data' => AnimeResourceBasic::collection([$this->resource->model])
+                        'data' => AnimeResourceIdentity::collection([$this->resource->model_id])
                     ]
                 ];
             case Character::class:
                 return [
                     'characters' => [
-                        'data' => CharacterResourceBasic::collection([$this->resource->model])
+                        'data' => CharacterResourceIdentity::collection([$this->resource->model_id])
                     ]
                 ];
             case Episode::class:
                 return [
                     'episodes' => [
-                        'data' => EpisodeResourceBasic::collection([$this->resource->model])
+                        'data' => EpisodeResourceIdentity::collection([$this->resource->model_id])
                     ]
                 ];
             case Game::class:
                 return [
                     'games' => [
-                        'data' => GameResourceBasic::collection([$this->resource->model])
+                        'data' => GameResourceIdentity::collection([$this->resource->model_id])
                     ]
                 ];
             case Manga::class:
                 return [
                     'literatures' => [
-                        'data' => LiteratureResourceBasic::collection([$this->resource->model])
+                        'data' => LiteratureResourceIdentity::collection([$this->resource->model_id])
                     ]
                 ];
             case Person::class:
                 return [
                     'people' => [
-                        'data' => PersonResourceBasic::collection([$this->resource->model])
+                        'data' => PersonResourceIdentity::collection([$this->resource->model_id])
                     ]
                 ];
             case Song::class:
                 return [
                     'songs' => [
-                        'data' => SongResourceBasic::collection([$this->resource->model])
+                        'data' => SongResourceIdentity::collection([$this->resource->model_id])
                     ]
                 ];
             case Studio::class:
                 return [
                     'studios' => [
-                        'data' => StudioResourceBasic::collection([$this->resource->model])
+                        'data' => StudioResourceIdentity::collection([$this->resource->model_id])
                     ]
                 ];
             default:

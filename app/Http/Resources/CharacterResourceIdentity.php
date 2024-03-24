@@ -24,10 +24,10 @@ class CharacterResourceIdentity extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'            => (int) ($this->resource?->id ?? $this->resource),
-            'uuid'          => (string) ($this->resource?->id ?? $this->resource),
-            'type'          => 'characters',
-            'href'          => route('api.characters.details', $this->resource, false),
+            'id'    => (int) ($this->resource?->id ?? $this->resource),
+            'uuid'  => (string) ($this->resource?->id ?? $this->resource),
+            'type'  => 'characters',
+            'href'  => route('api.characters.details', $this->resource, false),
         ];
     }
 }

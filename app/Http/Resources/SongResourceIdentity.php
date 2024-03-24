@@ -11,7 +11,7 @@ class SongResourceIdentity extends JsonResource
     /**
      * The resource instance.
      *
-     * @var Song $resource
+     * @var Song|int $resource
      */
     public $resource;
 
@@ -24,8 +24,8 @@ class SongResourceIdentity extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'    => $this->resource->id,
-            'uuid'  => (string) $this->resource->id,
+            'id'    => (int) ($this->resource?->id ?? $this->resource),
+            'uuid'  => (string) ($this->resource?->id ?? $this->resource),
             'type'  => 'songs',
             'href'  => route('api.songs.details', $this->resource, false),
         ];
