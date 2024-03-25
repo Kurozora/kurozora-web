@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\Model\MorphTvRated;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -10,6 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class MediaRating extends KModel
 {
     use HasUlids,
+        MorphTvRated,
         SoftDeletes;
 
     // Rating boundaries
