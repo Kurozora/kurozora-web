@@ -148,25 +148,7 @@ class UserController extends Controller
         // Get the feed messages
         $mediaRatings = $user->mediaRatings()
             ->with([
-                'user' => function ($query) {
-                    $query->with([
-                        'badges' => function ($query) {
-                            $query->with(['media']);
-                        },
-                        'media',
-                        'tokens' => function ($query) {
-                            $query
-                                ->orderBy('last_used_at', 'desc')
-                                ->limit(1);
-                        },
-                        'sessions' => function ($query) {
-                            $query
-                                ->orderBy('last_activity', 'desc')
-                                ->limit(1);
-                        },
-                    ])
-                        ->withCount(['followers', 'following', 'mediaRatings']);
-                },
+                'user' => fn($query) => $this->eagerLoadUser($query)
             ])
             ->orderBy('created_at', 'desc')
             ->cursorPaginate($data['limit'] ?? 25);
