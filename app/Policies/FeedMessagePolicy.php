@@ -7,7 +7,7 @@ use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Auth\Access\Response;
 
-class FeedMessageItemPolicy
+class FeedMessagePolicy
 {
     use HandlesAuthorization;
 
@@ -54,7 +54,9 @@ class FeedMessageItemPolicy
      */
     public function update(User $user, FeedMessage $feedMessage): Response|bool
     {
-        return $user->can('updateFeedMessage') || $user->id === $feedMessage->user_id;
+        return $user->hasRole('superAdmin')
+            || $user->can('updateFeedMessage')
+            || $user->id === $feedMessage->user_id;
     }
 
     /**
@@ -66,7 +68,9 @@ class FeedMessageItemPolicy
      */
     public function delete(User $user, FeedMessage $feedMessage): Response|bool
     {
-        return $user->can('deleteFeedMessage') || $user->id === $feedMessage->user_id;
+        return $user->hasRole('superAdmin')
+            || $user->can('deleteFeedMessage')
+            || $user->id === $feedMessage->user_id;
     }
 
     /**
@@ -78,7 +82,8 @@ class FeedMessageItemPolicy
      */
     public function restore(User $user, FeedMessage $feedMessage): Response|bool
     {
-        return $user->can('restoreFeedMessage');
+        return $user->hasRole('superAdmin')
+            || $user->can('restoreFeedMessage');
     }
 
     /**
@@ -90,6 +95,7 @@ class FeedMessageItemPolicy
      */
     public function forceDelete(User $user, FeedMessage $feedMessage): Response|bool
     {
-        return $user->can('forceDeleteFeedMessage');
+        return $user->hasRole('superAdmin')
+            || $user->can('forceDeleteFeedMessage');
     }
 }

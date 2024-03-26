@@ -12,11 +12,9 @@ Route::prefix('/notifications')
         Route::prefix('{notification}')
             ->group(function () {
                 Route::get('/', [NotificationController::class, 'details'])
-                    ->can('view', 'notification')
                     ->name('.details');
 
                 Route::post('/delete', [NotificationController::class, 'delete'])
-                    ->can('delete', 'notification')
                     ->name('.delete');
             });
 
