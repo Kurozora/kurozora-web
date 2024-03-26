@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\SongType;
+use App\Traits\Model\MorphTvRated;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -17,6 +18,7 @@ class MediaSong extends KModel implements Sitemapable
 {
     use HasFactory,
         HasUlids,
+        MorphTvRated,
         SoftDeletes,
         SortableTrait;
 
