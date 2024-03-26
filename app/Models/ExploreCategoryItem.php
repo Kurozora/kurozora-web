@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Scopes\ExploreCategoryIsEnabledScope;
+use App\Traits\Model\MorphTvRated;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -11,7 +12,8 @@ use Spatie\EloquentSortable\SortableTrait;
 
 class ExploreCategoryItem extends KModel implements Sortable
 {
-    use SoftDeletes,
+    use MorphTvRated,
+        SoftDeletes,
         SortableTrait;
 
     // Table name
