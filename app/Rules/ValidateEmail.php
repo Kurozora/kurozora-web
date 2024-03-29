@@ -48,7 +48,7 @@ class ValidateEmail implements ValidationRule
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         $availabilityRule = '';
-        $validationRules = ['required', 'min:'.self::MINIMUM_EMAIL_LENGTH, 'max:'.self::MAXIMUM_EMAIL_LENGTH, 'email:filter'];
+        $validationRules = ['required', 'min:'.self::MINIMUM_EMAIL_LENGTH, 'max:'.self::MAXIMUM_EMAIL_LENGTH, 'email:filter,dns'];
 
         if ($this->options->get('must-be-taken', false) === true) {
             $availabilityRule = 'exists:' . User::TABLE_NAME . ',email';
