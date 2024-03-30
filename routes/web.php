@@ -7,7 +7,6 @@ use App\Http\Livewire\Home;
 use App\Http\Livewire\Schedule\Index as ScheduleIndex;
 use App\Http\Livewire\Welcome;
 use App\Providers\RouteServiceProvider;
-use Illuminate\Support\Facades\Route;
 
 Route::get('chat', function () {
     return view('chat');
@@ -81,3 +80,8 @@ require 'Web/Misc.php';
 
 // Legal pages
 require 'Web/Legal.php';
+
+// WordPress Spam
+Route::get('/{wordpress_url}', [MiscController::class, 'markSpammer'])
+    ->where(['wordpress_url' => '(?:[a-zA-Z0-9_-]+\/)?wp-includes\/(?:[^\/]+)'])
+    ->name('wordpress');

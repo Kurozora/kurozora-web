@@ -8,6 +8,8 @@ use Carbon\Carbon;
 use File;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Lukeraymonddowning\Honey\Models\Spammer;
 use Markdown;
 
 class MiscController extends Controller
@@ -32,9 +34,9 @@ class MiscController extends Controller
                 'type'          => 'legal',
                 'href'          => route('api.legal.privacy-policy', [], false),
                 'attributes'    => [
-                    'text' => $privacyPolicyText->toHtml()
-                ]
-            ]
+                    'text' => $privacyPolicyText->toHtml(),
+                ],
+            ],
         ]);
     }
 
@@ -58,9 +60,9 @@ class MiscController extends Controller
                 'type'          => 'legal',
                 'href'          => route('api.legal.terms-of-use', [], false),
                 'attributes'    => [
-                    'text' => $termsOfUseText->toHtml()
-                ]
-            ]
+                    'text' => $termsOfUseText->toHtml(),
+                ],
+            ],
         ]);
     }
 
@@ -101,5 +103,15 @@ class MiscController extends Controller
 
         // Attach date and return file content
         return str_replace('#UPDATE_DATE#', $lastUpdateStr, File::get($filePath));
+    }
+
+    /**
+     * Mark a request as spammer.
+     *
+     * @param Request $request
+     */
+    protected function markSpammer(Request $request)
+    {
+        Spammer::markAttempt($request->ip());
     }
 }

@@ -8,7 +8,9 @@ use App\Http\Resources\SettingsResource;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
+use Lukeraymonddowning\Honey\Models\Spammer;
 use Nette\NotImplementedException;
 
 class APIController extends Controller
@@ -43,6 +45,20 @@ class APIController extends Controller
         return JSONResult::success([
             'data' => SettingsResource::make([])
         ]);
+    }
+
+    /**
+     * Mark a request as spammer.
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    function markSpammer(Request $request): JsonResponse
+    {
+        Spammer::markAttempt($request->ip());
+
+        return JSONResult::success();
     }
 
     /**
