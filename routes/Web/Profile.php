@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Web\MeController;
 use App\Http\Controllers\Web\Profile\AnimeLibraryController;
 use App\Http\Controllers\Web\Profile\GameLibraryController;
 use App\Http\Controllers\Web\Profile\MangaLibraryController;
@@ -15,6 +16,10 @@ use App\Http\Livewire\Profile\Library\Manga\Index as MangaLibrary;
 Route::prefix('/profile')
     ->name('profile')
     ->group(function () {
+        Route::get('/', [MeController::class, 'index'])
+            ->middleware(['auth'])
+            ->name('.index');
+
         Route::get('/{user}', Details::class)
             ->name('.details');
 
