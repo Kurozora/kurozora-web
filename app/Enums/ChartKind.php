@@ -6,7 +6,7 @@ use BenSampo\Enum\Enum;
 
 /**
  * @method static ChartKind Anime()
- * @method static ChartKind Charcters()
+ * @method static ChartKind Characters()
  * @method static ChartKind Episodes()
  * @method static ChartKind Games()
  * @method static ChartKind Manga()
