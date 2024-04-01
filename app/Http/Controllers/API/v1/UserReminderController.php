@@ -20,10 +20,10 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
-class ReminderAnimeController extends Controller
+class UserReminderController extends Controller
 {
     /**
-     * Returns a calendar file of the user's reminder anime.
+     * Returns the lit of user's reminders.
      *
      * @param GetAnimeReminderRequest $request
      * @return JsonResponse
@@ -42,7 +42,7 @@ class ReminderAnimeController extends Controller
             default => Anime::class,
         };
 
-        // Paginate the reminder anime
+        // Paginate the reminders
         $userReminders = $user->reminderAnime()
             ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating', 'mediaRatings' => function ($query) use ($user) {
                 $query->where([
