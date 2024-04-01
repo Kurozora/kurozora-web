@@ -17,13 +17,6 @@ class UserLibrary extends KModel
     protected $table = self::TABLE_NAME;
 
     /**
-     * Indicates if the IDs are auto-incrementing.
-     *
-     * @var bool
-     */
-    public $incrementing = true;
-
-    /**
      * The attributes that should be cast.
      *
      * @var array

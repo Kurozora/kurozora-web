@@ -590,10 +590,10 @@ class Game extends KModel implements HasMedia, Sitemapable
         $game['translations'] = $this->translations()
             ->select(['locale', 'title', 'synopsis', 'tagline'])
             ->get();
-        $game['tv_rating'] = $this->tv_rating->toSearchableArray();
-        $game['media_type'] = $this->media_type->toSearchableArray();
-        $game['source'] = $this->source->toSearchableArray();
-        $game['status'] = $this->status->toSearchableArray();
+        $game['tv_rating'] = $this->tv_rating?->toSearchableArray();
+        $game['media_type'] = $this->media_type?->toSearchableArray();
+        $game['source'] = $this->source?->toSearchableArray();
+        $game['status'] = $this->status?->toSearchableArray();
         $game['genres'] = $this->genres
             ->map(function ($item) {
                 return $item->toSearchableArray();

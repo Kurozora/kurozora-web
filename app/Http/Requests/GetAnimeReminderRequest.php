@@ -25,9 +25,9 @@ class GetAnimeReminderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'library'   => ['bail', 'integer', 'in:' . implode(',', UserLibraryKind::getValues())],
+            'library' => ['bail', 'integer', 'in:' . implode(',', UserLibraryKind::getValues())],
             'limit' => ['bail', 'integer', 'min:1', 'max:100'],
-            'page'  => ['bail', 'integer', 'min:1']
+            'page' => ['bail', 'integer', 'min:1']
         ];
     }
 }

@@ -655,10 +655,10 @@ class Manga extends KModel implements HasMedia, Sitemapable
         $manga['translations'] = $this->translations()
             ->select(['locale', 'title', 'synopsis', 'tagline'])
             ->get();
-        $manga['tv_rating'] = $this->tv_rating->toSearchableArray();
-        $manga['media_type'] = $this->media_type->toSearchableArray();
-        $manga['source'] = $this->source->toSearchableArray();
-        $manga['status'] = $this->status->toSearchableArray();
+        $manga['tv_rating'] = $this->tv_rating?->toSearchableArray();
+        $manga['media_type'] = $this->media_type?->toSearchableArray();
+        $manga['source'] = $this->source?->toSearchableArray();
+        $manga['status'] = $this->status?->toSearchableArray();
         $manga['genres'] = $this->genres
             ->map(function ($item) {
                 return $item->toSearchableArray();
