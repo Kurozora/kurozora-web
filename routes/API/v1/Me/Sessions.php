@@ -13,7 +13,7 @@ Route::prefix('/sessions')
             ->group(function () {
                 Route::get('/', [SessionController::class, 'details'])
                     ->middleware(['auth.kurozora'])
-                    ->can('get_session', 'session')
+                    ->can('view', 'session')
                     ->name('.details');
 
                 Route::post('/delete', [SessionController::class, 'delete'])

@@ -17,7 +17,7 @@ class SessionPolicy
      * @param Session $session
      * @return bool
      */
-    public function get_session(User $user, Session $session): bool
+    public function view(User $user, Session $session): bool
     {
         return $user->id === (int) $session->user_id;
     }
