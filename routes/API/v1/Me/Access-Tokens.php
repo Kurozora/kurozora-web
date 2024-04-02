@@ -13,7 +13,7 @@ Route::prefix('/access-tokens')
             ->group(function () {
                 Route::get('/', [AccessTokenController::class, 'details'])
                     ->middleware(['auth.kurozora'])
-                    ->can('get_access_token', 'personalAccessToken')
+                    ->can('view', 'personalAccessToken')
                     ->name('.details');
 
                 Route::post('/update', [AccessTokenController::class, 'update'])

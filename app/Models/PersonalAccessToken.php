@@ -6,6 +6,7 @@ use App\Traits\Model\HasSessionAttribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Laravel\Sanctum\PersonalAccessToken as SanctumPersonalAccessToken;
 
 class PersonalAccessToken extends SanctumPersonalAccessToken
@@ -16,6 +17,16 @@ class PersonalAccessToken extends SanctumPersonalAccessToken
     // Table name
     const string TABLE_NAME = 'personal_access_tokens';
     protected $table = self::TABLE_NAME;
+
+    /**
+     * The tokenable relationship of the access token.
+     *
+     * @return MorphTo
+     */
+    public function tokenable(): MorphTo
+    {
+        return $this->morphTo();
+    }
 
     /**
      * The user relationship of the access token.

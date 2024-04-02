@@ -17,9 +17,10 @@ class PersonalAccessTokenPolicy
      * @param PersonalAccessToken $accessToken
      * @return bool
      */
-    public function get_access_token(User $user, PersonalAccessToken $accessToken): bool
+    public function view(User $user, PersonalAccessToken $accessToken): bool
     {
-        return $user->id === $accessToken->user->id;
+        return $user->id === (int) $accessToken->tokenable_id
+            && $accessToken->tokenable_type == User::class;
     }
 
     /**
@@ -31,7 +32,8 @@ class PersonalAccessTokenPolicy
      */
     public function update(User $user, PersonalAccessToken $accessToken): bool
     {
-        return $user->id === $accessToken->user->id;
+        return $user->id === (int) $accessToken->tokenable_id
+            && $accessToken->tokenable_type == User::class;
     }
 
     /**
@@ -43,7 +45,8 @@ class PersonalAccessTokenPolicy
      */
     public function validate_accessToken(User $user, PersonalAccessToken $accessToken): bool
     {
-        return $user->id === $accessToken->user->id;
+        return $user->id === (int) $accessToken->tokenable_id
+            && $accessToken->tokenable_type == User::class;
     }
 
     /**
@@ -55,6 +58,7 @@ class PersonalAccessTokenPolicy
      */
     public function delete(User $user, PersonalAccessToken $accessToken): bool
     {
-        return $user->id === $accessToken->user->id;
+        return $user->id === (int) $accessToken->tokenable_id
+            && $accessToken->tokenable_type == User::class;
     }
 }

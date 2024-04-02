@@ -7,6 +7,7 @@ use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\MorphOne;
+use Laravel\Nova\Fields\MorphTo;
 use Laravel\Nova\Fields\Text;
 
 class PersonalAccessToken extends Resource
@@ -86,6 +87,12 @@ class PersonalAccessToken extends Resource
 
             DateTime::make('Last used at')
                 ->readonly(),
+
+            MorphTo::make('Tokenable')
+                ->types([
+                    User::class
+                ])
+                ->searchable(),
 
             MorphOne::make('Session Attribute', 'session_attribute'),
         ];
