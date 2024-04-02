@@ -23,23 +23,39 @@ Route::prefix('/profile')
         Route::get('/{user}', Details::class)
             ->name('.details');
 
-        Route::get('/{user}/anime', AnimeLibrary::class)
-            ->name('.anime-library');
+        Route::prefix('/{user}/anime')
+            ->name('.anime')
+            ->group(function () {
+                Route::get('/', AnimeLibrary::class)
+                    ->name('.library');
 
-        Route::get('/{user}/manga', MangaLibrary::class)
-            ->name('.manga-library');
+                Route::get('/favorites', FavoriteAnime::class)
+                    ->name('.favorites');
+            });
 
-        Route::get('/{user}/games', GameLibrary::class)
-            ->name('.games-library');
+        Route::prefix('/{user}/games')
+            ->name('.games')
+            ->group(function () {
+                Route::get('/', GameLibrary::class)
+                    ->name('.library');
 
-        Route::get('/{user}/anime/favorites', FavoriteAnime::class)
-            ->name('.favorite-anime');
+                Route::get('/favorites', FavoriteGame::class)
+                    ->name('.favorites');
+            });
 
-        Route::get('/{user}/manga/favorites', FavoriteManga::class)
-            ->name('.favorite-manga');
+        Route::prefix('/{user}/manga')
+            ->name('.manga')
+            ->group(function () {
+                Route::get('/', MangaLibrary::class)
+                    ->name('.library');
 
-        Route::get('/{user}/games/favorites', FavoriteGame::class)
-            ->name('.favorite-games');
+                Route::get('/favorites', FavoriteManga::class)
+                    ->name('.favorites');
+            });
+
+        Route::get('/settings', [UserProfileController::class, 'settings'])
+            ->middleware(['auth', 'verified'])
+            ->name('.settings');
     });
 
  Route::get('/animelist/{user?}', [AnimeLibraryController::class, 'index'])
@@ -50,7 +66,3 @@ Route::prefix('/profile')
 
  Route::get('/gamelist/{user?}', [GameLibraryController::class, 'index'])
     ->name('gamelist');
-
-Route::get('/settings', [UserProfileController::class, 'settings'])
-    ->middleware(['auth', 'verified'])
-    ->name('profile.settings');

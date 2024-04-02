@@ -7,7 +7,7 @@ Route::prefix('/library')
         Route::get('/', function (\Illuminate\Http\Request $request) {
             $parameters = $request->all();
             $parameters['user'] = auth()->user();
-            return to_route('profile.anime-library', $parameters);
+            return to_route('profile.anime.library', $parameters);
         })
             ->name('.index');
     });

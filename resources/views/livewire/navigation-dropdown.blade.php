@@ -304,15 +304,15 @@
                                         {{ __('Library') }}
                                     </div>
 
-                                    <x-dropdown-link href="{{ route('profile.anime-library', $user) }}">
+                                    <x-dropdown-link href="{{ route('profile.anime.library', $user) }}">
                                         {{ __('Anime Library') }}
                                     </x-dropdown-link>
 
-                                    <x-dropdown-link href="{{ route('profile.manga-library', $user) }}">
+                                    <x-dropdown-link href="{{ route('profile.manga.library', $user) }}">
                                         {{ __('Manga Library') }}
                                     </x-dropdown-link>
 
-                                    <x-dropdown-link href="{{ route('profile.games-library', $user) }}">
+                                    <x-dropdown-link href="{{ route('profile.games.library', $user) }}">
                                         {{ __('Games Library') }}
                                     </x-dropdown-link>
                                 @else
@@ -324,24 +324,31 @@
 
                                 <div class="border-t border-gray-100"></div>
 
+                                @auth
+                                    {{-- Favorite Pages --}}
+                                    <div class="block pl-4 pr-4 pt-2 pb-2 text-xs text-gray-400">
+                                        {{ __('Favorite') }}
+                                    </div>
+
+                                    <x-dropdown-link href="{{ route('profile.anime.favorites', $user) }}">
+                                        {{ __('Favorite Anime') }}
+                                    </x-dropdown-link>
+
+                                    <x-dropdown-link href="{{ route('profile.manga.favorites', $user) }}">
+                                        {{ __('Favorite Manga') }}
+                                    </x-dropdown-link>
+
+                                    <x-dropdown-link href="{{ route('profile.games.favorites', $user) }}">
+                                        {{ __('Favorite Game') }}
+                                    </x-dropdown-link>
+
+                                    <div class="border-t border-gray-100"></div>
+                                @endauth
+
                                 {{-- More Pages --}}
                                 <div class="block pl-4 pr-4 pt-2 pb-2 text-xs text-gray-400">
                                     {{ __('More') }}
                                 </div>
-
-                                @auth
-                                    <x-dropdown-link href="{{ route('profile.favorite-anime', $user) }}">
-                                        {{ __('Favorite Anime') }}
-                                    </x-dropdown-link>
-
-                                    <x-dropdown-link href="{{ route('profile.favorite-manga', $user) }}">
-                                        {{ __('Favorite Manga') }}
-                                    </x-dropdown-link>
-
-                                    <x-dropdown-link href="{{ route('profile.favorite-games', $user) }}">
-                                        {{ __('Favorite Game') }}
-                                    </x-dropdown-link>
-                                @endauth
 
                                 <x-dropdown-link href="{{ route('theme-store.index') }}">
                                     {{ __('Theme Store') }}
@@ -478,26 +485,26 @@
                     </div>
 
                     {{-- Library --}}
-                    <div class="space-y-1">
-                        <x-responsive-nav-link href="{{ route('profile.anime-library', $user) }}"
-                                               :active="request()->routeIs('profile.anime-library')">
+                    <div class="space-y-1 pt-1">
+                        <x-responsive-nav-link href="{{ route('profile.anime.library', $user) }}"
+                                               :active="request()->routeIs('profile.anime.library')">
                             {{ __('Anime Library') }}
                         </x-responsive-nav-link>
 
-                        <x-responsive-nav-link href="{{ route('profile.manga-library', $user) }}"
-                                               :active="request()->routeIs('profile.manga-library')">
+                        <x-responsive-nav-link href="{{ route('profile.manga.library', $user) }}"
+                                               :active="request()->routeIs('profile.manga.library')">
                             {{ __('Manga Library') }}
                         </x-responsive-nav-link>
 
-                        <x-responsive-nav-link href="{{ route('profile.games-library', $user) }}"
-                                               :active="request()->routeIs('profile.games-library')">
+                        <x-responsive-nav-link href="{{ route('profile.games.library', $user) }}"
+                                               :active="request()->routeIs('profile.games.library')">
                             {{ __('Games Library') }}
                         </x-responsive-nav-link>
 
                         <div class="border-t border-gray-100"></div>
                     </div>
                 @else
-                    <div class="space-y-1">
+                    <div class="space-y-1 pt-1">
                         <x-responsive-nav-link href="{{ route('me') }}">
                             {{ __('Profile') }}
                         </x-responsive-nav-link>
@@ -512,25 +519,30 @@
                     </div>
                 @endauth
 
-                {{-- More Pages --}}
-                <div class="space-y-1">
-                    @auth
-                        <x-responsive-nav-link href="{{ route('profile.favorite-anime', $user) }}"
-                                               :active="request()->routeIs('profile.favorite-anime', $user)">
+                @auth
+                    {{-- Favorite Pages --}}
+                    <div class="space-y-1 pt-1">
+                        <x-responsive-nav-link href="{{ route('profile.anime.favorites', $user) }}"
+                                               :active="request()->routeIs('profile.anime.favorites', $user)">
                             {{ __('Favorite Anime') }}
                         </x-responsive-nav-link>
 
-                        <x-responsive-nav-link href="{{ route('profile.favorite-manga', $user) }}"
-                                               :active="request()->routeIs('profile.favorite-manga', $user)">
+                        <x-responsive-nav-link href="{{ route('profile.manga.favorites', $user) }}"
+                                               :active="request()->routeIs('profile.manga.favorites', $user)">
                             {{ __('Favorite Manga') }}
                         </x-responsive-nav-link>
 
-                        <x-responsive-nav-link href="{{ route('profile.favorite-games', $user) }}"
-                                               :active="request()->routeIs('profile.favorite-games', $user)">
+                        <x-responsive-nav-link href="{{ route('profile.games.favorites', $user) }}"
+                                               :active="request()->routeIs('profile.games.favorites', $user)">
                             {{ __('Favorite Game') }}
                         </x-responsive-nav-link>
-                    @endauth
 
+                        <div class="border-t border-gray-100"></div>
+                    </div>
+                @endauth
+
+                {{-- More Pages --}}
+                <div class="space-y-1 pt-1">
                     <x-responsive-nav-link href="{{ route('theme-store.index') }}"
                                            :active="request()->routeIs('theme-store.index')">
                         {{ __('Theme Store') }}
@@ -541,7 +553,7 @@
 
                 {{-- Account Management --}}
                 @auth
-                    <div class="space-y-1">
+                    <div class="space-y-1 pt-1">
                         <x-responsive-nav-link href="{{ route('profile.settings') }}"
                                                :active="request()->routeIs('profile.settings')">
                             {{ __('Settings') }}
@@ -552,7 +564,7 @@
                 @endauth
 
                 {{-- Authentication --}}
-                <div class="space-y-1">
+                <div class="space-y-1 pt-1">
                     @auth
                         @if (session()->has('nova_impersonated_by'))
                             <form method="POST" action="{{ route('impersonation.stop') }}">
