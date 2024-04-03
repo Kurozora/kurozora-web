@@ -27,6 +27,6 @@ class MangaLibraryController extends Controller
             return to_route('sign-in');
         }
 
-        return to_route('profile.manga-library', $data);
+        return to_route('profile.manga.library', $data);
     }
 }

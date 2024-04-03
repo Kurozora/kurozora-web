@@ -27,6 +27,6 @@ class GameLibraryController extends Controller
             return to_route('sign-in');
         }
 
-        return to_route('profile.games-library', $data);
+        return to_route('profile.games.library', $data);
     }
 }

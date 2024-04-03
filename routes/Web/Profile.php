@@ -8,6 +8,7 @@ use App\Http\Controllers\Web\UserProfileController;
 use App\Http\Livewire\Profile\Details;
 use App\Http\Livewire\Profile\Library\Anime\Favorites as FavoriteAnime;
 use App\Http\Livewire\Profile\Library\Anime\Index as AnimeLibrary;
+use App\Http\Livewire\Profile\Library\Anime\Reminders as AnimeReminders;
 use App\Http\Livewire\Profile\Library\Game\Favorites as FavoriteGame;
 use App\Http\Livewire\Profile\Library\Game\Index as GameLibrary;
 use App\Http\Livewire\Profile\Library\Manga\Favorites as FavoriteManga;
@@ -31,6 +32,9 @@ Route::prefix('/profile')
 
                 Route::get('/favorites', FavoriteAnime::class)
                     ->name('.favorites');
+
+                Route::get('/reminders', AnimeReminders::class)
+                    ->name('.reminders');
             });
 
         Route::prefix('/{user}/games')
@@ -41,6 +45,9 @@ Route::prefix('/profile')
 
                 Route::get('/favorites', FavoriteGame::class)
                     ->name('.favorites');
+
+//                Route::get('/reminders', GameReminders::class)
+//                    ->name('.reminders');
             });
 
         Route::prefix('/{user}/manga')
@@ -51,6 +58,9 @@ Route::prefix('/profile')
 
                 Route::get('/favorites', FavoriteManga::class)
                     ->name('.favorites');
+
+//                Route::get('/reminders', MangaReminders::class)
+//                    ->name('.reminders');
             });
 
         Route::get('/settings', [UserProfileController::class, 'settings'])

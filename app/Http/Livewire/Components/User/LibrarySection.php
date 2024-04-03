@@ -66,9 +66,9 @@ class LibrarySection extends Component
             Manga::class => __('Manga Library'),
         };
         $this->seeAllURL = match ($type) {
-            Anime::class => route('profile.anime-library', $user),
-            Game::class => route('profile.games-library', $user),
-            Manga::class => route('profile.manga-library', $user),
+            Anime::class => route('profile.anime.library', $user),
+            Game::class => route('profile.games.library', $user),
+            Manga::class => route('profile.manga.library', $user),
         };
     }
 

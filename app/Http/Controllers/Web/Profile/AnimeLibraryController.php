@@ -27,6 +27,6 @@ class AnimeLibraryController extends Controller
             return to_route('sign-in');
         }
 
-        return to_route('profile.anime-library', $data);
+        return to_route('profile.anime.library', $data);
     }
 }

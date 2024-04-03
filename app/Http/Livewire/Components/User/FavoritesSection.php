@@ -66,9 +66,9 @@ class FavoritesSection extends Component
             Manga::class => __('Favorite Manga'),
         };
         $this->seeAllURL = match ($type) {
-            Anime::class => route('profile.favorite-anime', $user),
-            Game::class => route('profile.favorite-games', $user),
-            Manga::class => route('profile.favorite-manga', $user),
+            Anime::class => route('profile.anime.favorites', $user),
+            Game::class => route('profile.games.favorites', $user),
+            Manga::class => route('profile.manga.favorites', $user),
         };
     }
 

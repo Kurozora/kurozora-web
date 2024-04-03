@@ -345,6 +345,27 @@
                                     <div class="border-t border-gray-100"></div>
                                 @endauth
 
+                                @auth
+                                    {{-- Reminder Pages --}}
+                                    <div class="block pl-4 pr-4 pt-2 pb-2 text-xs text-gray-400">
+                                        {{ __('Reminder') }}
+                                    </div>
+
+                                    <x-dropdown-link href="{{ route('profile.anime.reminders', $user) }}">
+                                        {{ __('Anime Reminders') }}
+                                    </x-dropdown-link>
+
+{{--                                    <x-dropdown-link href="{{ route('profile.manga.reminders', $user) }}">--}}
+{{--                                        {{ __('Reminder Manga') }}--}}
+{{--                                    </x-dropdown-link>--}}
+
+{{--                                    <x-dropdown-link href="{{ route('profile.games.reminders', $user) }}">--}}
+{{--                                        {{ __('Reminder Game') }}--}}
+{{--                                    </x-dropdown-link>--}}
+
+                                    <div class="border-t border-gray-100"></div>
+                                @endauth
+
                                 {{-- More Pages --}}
                                 <div class="block pl-4 pr-4 pt-2 pb-2 text-xs text-gray-400">
                                     {{ __('More') }}
@@ -536,6 +557,28 @@
                                                :active="request()->routeIs('profile.games.favorites', $user)">
                             {{ __('Favorite Game') }}
                         </x-responsive-nav-link>
+
+                        <div class="border-t border-gray-100"></div>
+                    </div>
+                @endauth
+
+                @auth
+                    {{-- Reminder Pages --}}
+                    <div class="space-y-1 pt-1">
+                        <x-responsive-nav-link href="{{ route('profile.anime.reminders', $user) }}"
+                                               :active="request()->routeIs('profile.anime.reminders', $user)">
+                            {{ __('Anime Reminders') }}
+                        </x-responsive-nav-link>
+
+{{--                        <x-responsive-nav-link href="{{ route('profile.manga.reminders', $user) }}"--}}
+{{--                                               :active="request()->routeIs('profile.manga.reminders', $user)">--}}
+{{--                            {{ __('Manga Reminders') }}--}}
+{{--                        </x-responsive-nav-link>--}}
+
+{{--                        <x-responsive-nav-link href="{{ route('profile.games.reminders', $user) }}"--}}
+{{--                                               :active="request()->routeIs('profile.games.reminders', $user)">--}}
+{{--                            {{ __('Game Reminders') }}--}}
+{{--                        </x-responsive-nav-link>--}}
 
                         <div class="border-t border-gray-100"></div>
                     </div>
