@@ -20,7 +20,7 @@ return new class extends Migration
             $table->unsignedBigInteger('love_reactant_id')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('parent_feed_message_id')->nullable();
-            $table->string('content', FeedMessage::MAX_CONTENT_LENGTH);
+            $table->text('content');
             $table->text('content_html');
             $table->text('content_markdown');
             $table->boolean('is_reply')->default(false);
