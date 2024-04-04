@@ -24,7 +24,9 @@ class FeedMessage extends KModel implements ReactableContract
     protected $table = self::TABLE_NAME;
 
     // Text limit on body
-    const int MAX_CONTENT_LENGTH = 240;
+    const int MAX_CONTENT_LENGTH = 280;
+    const int MAX_CONTENT_LENGTH_PRO = 500;
+    const int MAX_CONTENT_LENGTH_PLUS = 1000;
 
     /**
      * The attributes that should be cast to native types.
@@ -69,6 +71,18 @@ class FeedMessage extends KModel implements ReactableContract
             // Parse user mentions
             $feedMessage->content_html = trim(Markdown::parse(nl2br($feedMessage->content_markdown)));
         });
+    }
+
+    /**
+     * Returns the allowed max content length of a feed message.
+     *
+     * @return int
+     */
+    static function maxContentLength(): int
+    {
+        return auth()->user()?->is_subscribed
+            ? FeedMessage::MAX_CONTENT_LENGTH_PLUS
+            : (auth()->user()?->is_pro ? FeedMessage::MAX_CONTENT_LENGTH_PRO : FeedMessage::MAX_CONTENT_LENGTH);
     }
 
     /**
