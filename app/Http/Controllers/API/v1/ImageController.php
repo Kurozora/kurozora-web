@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers\API\v1;
 
+use App\Enums\MediaType;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GetRandomImageRequest;
 use App\Http\Resources\ImageResource;
-use App\Models\Anime;
-use App\Models\Game;
-use App\Models\Manga;
 use App\Models\Media;
 use Illuminate\Http\JsonResponse;
 
@@ -24,13 +22,10 @@ class ImageController extends Controller
     public function random(GetRandomImageRequest $request): JsonResponse
     {
         $data = $request->validated();
-        $modelType = match($data['type']) {
-            'manga' => Manga::class,
-            'games' => Game::class,
-            default => Anime::class
-        };
+        $mediaType = MediaType::fromValue($data['type']);
+        $modelType = $mediaType->toModel();
 
-        // Get all genres
+        // Get random images
         $images = Media::where('collection_name', '=', $data['collection'])
             ->where('model_type', '=', $modelType)
             ->whereMorphRelation('model', [$modelType], 'tv_rating_id', '<=', 4)

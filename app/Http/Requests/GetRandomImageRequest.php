@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Enums\MediaCollection;
+use App\Enums\MediaType;
 use Illuminate\Foundation\Http\FormRequest;
 
 class GetRandomImageRequest extends FormRequest
@@ -25,8 +26,8 @@ class GetRandomImageRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'type' => ['required', 'string', 'in:' . implode(',', MediaType::getValues())],
             'collection' => ['required', 'string', 'in:' . implode(',', MediaCollection::getValues())],
-            'type' => ['required', 'string', 'in:anime,manga,games'],
             'limit' => ['nullable', 'numeric', 'min:1', 'max:25'],
         ];
     }
