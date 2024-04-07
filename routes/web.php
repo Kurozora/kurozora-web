@@ -83,5 +83,5 @@ require 'Web/Legal.php';
 
 // WordPress Spam
 Route::get('/{wordpress_url}', [MiscController::class, 'markSpammer'])
-    ->where(['wordpress_url' => '(?:[a-zA-Z0-9_-]+\/)?wp-includes\/(?:[^\/]+)'])
+    ->where(['wordpress_url' => '(?:[a-zA-Z0-9_-]+\/)?(wp-includes|wp-admin|wp-content)\/(?:[^\/]+)'])
     ->name('wordpress');
