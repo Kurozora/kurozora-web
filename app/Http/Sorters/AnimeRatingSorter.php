@@ -2,7 +2,10 @@
 
 namespace App\Http\Sorters;
 
+use App\Enums\UserLibraryKind;
 use App\Models\Anime;
+use App\Models\Game;
+use App\Models\Manga;
 use App\Models\MediaStat;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -21,9 +24,21 @@ class AnimeRatingSorter extends Sorter
      */
     public function apply(Request $request, Builder $builder, string $direction): Builder
     {
+        // Get morph class
+        $morphClass = match ((int) ($request->get('library') ?? UserLibraryKind::Anime)) {
+            UserLibraryKind::Manga => Manga::class,
+            UserLibraryKind::Game => Game::class,
+            default => Anime::class,
+        };
+        $morphTable = match ((int) ($request->get('library') ?? UserLibraryKind::Anime)) {
+            UserLibraryKind::Manga => Manga::TABLE_NAME,
+            UserLibraryKind::Game => Game::TABLE_NAME,
+            default => Anime::TABLE_NAME,
+        };
+
         // Join the media stats table
-        $builder->join(MediaStat::TABLE_NAME, MediaStat::TABLE_NAME . '.model_id', '=', Anime::TABLE_NAME . '.id')
-            ->where(MediaStat::TABLE_NAME . '.model_type', Anime::class);
+        $builder->join(MediaStat::TABLE_NAME, MediaStat::TABLE_NAME . '.model_id', '=', $morphTable . '.id')
+            ->where(MediaStat::TABLE_NAME . '.model_type', $morphClass);
 
         // Order by the rating average
         if ($direction == 'worst') {
@@ -32,7 +47,7 @@ class AnimeRatingSorter extends Sorter
             $builder->orderBy(MediaStat::TABLE_NAME . '.rating_average', 'desc');
         }
 
-        return $builder->select(Anime::TABLE_NAME . '.*');
+        return $builder->select($morphTable . '.*');
     }
 
     /**

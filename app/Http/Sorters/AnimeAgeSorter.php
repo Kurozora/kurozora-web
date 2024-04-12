@@ -2,6 +2,7 @@
 
 namespace App\Http\Sorters;
 
+use App\Models\UserLibrary;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use kiritokatklian\SortRequest\Support\Foundation\Contracts\Sorter;
@@ -21,9 +22,9 @@ class AnimeAgeSorter extends Sorter
     {
         // Order by when the user added the anime to their library
         if ($direction == 'newest') {
-            $builder->orderBy('created_at', 'desc');
+            $builder->orderBy(UserLibrary::TABLE_NAME . '.created_at', 'desc');
         } else {
-            $builder->orderBy('created_at');
+            $builder->orderBy(UserLibrary::TABLE_NAME . '.created_at');
         }
 
         return $builder;
