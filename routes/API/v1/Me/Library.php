@@ -6,7 +6,8 @@ Route::prefix('/library')
     ->name('.library')
     ->group(function () {
         Route::get('/', [LibraryController::class, 'index'])
-            ->middleware('auth.kurozora');
+            ->middleware('auth.kurozora')
+            ->name('.index');
 
         Route::post('/', [LibraryController::class, 'create'])
             ->middleware('auth.kurozora')

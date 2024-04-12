@@ -40,13 +40,10 @@ class LibraryController extends Controller
      * @throws InvalidEnumKeyException
      * @throws InvalidEnumMemberException
      */
-    public function index(GetLibraryRequest $request): JsonResponse
+    public function index(GetLibraryRequest $request, User $user): JsonResponse
     {
         $data = $request->validated();
         $library = (int) ($data['library'] ?? UserLibraryKind::Anime);
-
-        // Get the authenticated user
-        $user = auth()->user();
 
         // Get the library status
         if (is_numeric($data['status'])) {
@@ -64,6 +61,9 @@ class LibraryController extends Controller
 
         // Retrieve the model from the user's library with the correct status
         $model = $user->whereTracked($morphClass)
+            ->when(auth()->user() !== $user, function (Builder $query) use ($user) {
+                $query->where(UserLibrary::TABLE_NAME . '.is_hidden', '=', false);
+            })
             ->sortViaRequest($request)
             ->with([
                 'genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating', 'mediaRatings' => function ($query) use ($user) {
