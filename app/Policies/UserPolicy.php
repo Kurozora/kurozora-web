@@ -11,18 +11,6 @@ class UserPolicy
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can get to another user's favorites.
-     *
-     * @param User $user
-     * @param User $model
-     * @return bool
-     */
-    public function view_user_favorites(User $user, User $model): bool
-    {
-        return true;
-    }
-
-    /**
      * Determine whether the user can follow another user.
      *
      * @param User $user
