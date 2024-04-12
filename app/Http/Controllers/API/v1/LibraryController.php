@@ -205,6 +205,9 @@ class LibraryController extends Controller
             $library->rewatch_count = $data['rewatch_count'];
         }
 
+        // Save changes
+        $library->save();
+
         // Successful response
         return JSONResult::success([
             'data' => [
