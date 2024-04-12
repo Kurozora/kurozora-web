@@ -14,7 +14,10 @@ use App\Models\Anime;
 use App\Models\Game;
 use App\Models\Manga;
 use App\Models\User;
+use App\Models\UserFavorite;
+use App\Models\UserLibrary;
 use App\Traits\Model\Remindable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 
 class UserFavoriteController extends Controller
@@ -40,6 +43,12 @@ class UserFavoriteController extends Controller
 
         // Paginate the favorited model
         $userFavorites = $user->whereFavorited($morphClass)
+            ->when(auth()->user() !== $user, function (Builder $query) use ($user) {
+                $query->join(UserLibrary::TABLE_NAME, UserFavorite::TABLE_NAME . '.favorable_id', '=', UserLibrary::TABLE_NAME . '.trackable_id')
+                    ->whereColumn(UserLibrary::TABLE_NAME . '.trackable_type', '=', UserFavorite::TABLE_NAME . '.favorable_type')
+                    ->where(UserLibrary::TABLE_NAME . '.user_id', '=', $user->id)
+                    ->where(UserLibrary::TABLE_NAME . '.is_hidden', '=', false);
+            })
             ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating', 'mediaRatings' => function ($query) use ($user) {
                 $query->where([
                     ['user_id', '=', $user->id]
