@@ -8,10 +8,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\GetFeedMessagesRequest;
 use App\Http\Requests\GetFollowersRequest;
 use App\Http\Requests\GetFollowingRequest;
+use App\Http\Requests\GetLibraryRequest;
 use App\Http\Requests\GetRatingsRequest;
 use App\Http\Requests\GetUserFavoritesRequest;
 use App\Http\Requests\UpdateProfileRequest;
 use App\Http\Resources\UserResource;
+use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
+use BenSampo\Enum\Exceptions\InvalidEnumMemberException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -172,7 +175,25 @@ class MeController extends Controller
     }
 
     /**
-     * Returns a list of the authenticated user's favorite anime.
+     * Returns a list of the authenticated user's library.
+     *
+     * @param GetLibraryRequest $request
+     *
+     * @return JsonResponse
+     * @throws InvalidEnumKeyException
+     * @throws InvalidEnumMemberException
+     */
+    function getLibrary(GetLibraryRequest $request): JsonResponse
+    {
+        // Get the authenticated user
+        $user = auth()->user();
+        
+        return (new LibraryController())
+            ->index($request, $user);
+    }
+
+    /**
+     * Returns a list of the authenticated user's favorites.
      *
      * @param GetUserFavoritesRequest $request
      * @return JsonResponse

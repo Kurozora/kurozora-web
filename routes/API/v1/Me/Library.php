@@ -1,11 +1,12 @@
 <?php
 
 use App\Http\Controllers\API\v1\LibraryController;
+use App\Http\Controllers\API\v1\MeController;
 
 Route::prefix('/library')
     ->name('.library')
     ->group(function () {
-        Route::get('/', [LibraryController::class, 'index'])
+        Route::get('/', [MeController::class, 'getLibrary'])
             ->middleware('auth.kurozora')
             ->name('.index');
 

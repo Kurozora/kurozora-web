@@ -38,6 +38,8 @@ class LibraryController extends Controller
      * Returns the authenticated user's library with the given status.
      *
      * @param GetLibraryRequest $request
+     * @param User              $user
+     *
      * @return JsonResponse
      * @throws InvalidEnumKeyException
      * @throws InvalidEnumMemberException
@@ -110,6 +112,7 @@ class LibraryController extends Controller
      * Adds a model to the authenticated user's library
      *
      * @param AddToLibraryRequest $request
+     *
      * @return JsonResponse
      * @throws InvalidEnumKeyException
      * @throws InvalidEnumMemberException
@@ -136,9 +139,9 @@ class LibraryController extends Controller
             $modelID = $data['model_id'];
             $libraryKind = UserLibraryKind::fromValue((int) $data['library']);
             $model = match ($libraryKind->value) {
-                UserLibraryKind::Manga  => Manga::findOrFail($modelID),
-                UserLibraryKind::Game   => Game::findOrFail($modelID),
-                default                 => Anime::findOrFail($modelID),
+                UserLibraryKind::Manga => Manga::findOrFail($modelID),
+                UserLibraryKind::Game => Game::findOrFail($modelID),
+                default => Anime::findOrFail($modelID),
             };
         }
 
@@ -168,6 +171,7 @@ class LibraryController extends Controller
      * Update a model in the authenticated user's library
      *
      * @param UpdateLibraryRequest $request
+     *
      * @return JsonResponse
      * @throws AuthorizationException
      */
@@ -179,9 +183,9 @@ class LibraryController extends Controller
         $modelID = $data['model_id'];
         $libraryKind = UserLibraryKind::fromValue((int) $data['library']);
         $modelType = match ($libraryKind->value) {
-            UserLibraryKind::Manga  => Manga::class,
-            UserLibraryKind::Game   => Game::class,
-            default                 => Anime::class,
+            UserLibraryKind::Manga => Manga::class,
+            UserLibraryKind::Game => Game::class,
+            default => Anime::class,
         };
 
         // Get the authenticated user
@@ -223,6 +227,7 @@ class LibraryController extends Controller
      * Removes a model from the authenticated user's library
      *
      * @param DeleteFromLibraryRequest $request
+     *
      * @return JsonResponse
      * @throws AuthorizationException
      */
@@ -238,9 +243,9 @@ class LibraryController extends Controller
             $modelID = $data['model_id'];
             $libraryKind = UserLibraryKind::fromValue((int) $data['library']);
             $model = match ($libraryKind->value) {
-                UserLibraryKind::Manga  => Manga::findOrFail($modelID),
-                UserLibraryKind::Game   => Game::findOrFail($modelID),
-                default                 => Anime::findOrFail($modelID),
+                UserLibraryKind::Manga => Manga::findOrFail($modelID),
+                UserLibraryKind::Game => Game::findOrFail($modelID),
+                default => Anime::findOrFail($modelID),
             };
         }
 
@@ -261,7 +266,7 @@ class LibraryController extends Controller
 
         // Remove from reminders as you can't be reminded and not have the anime in library
         match ($libraryKind?->value ?? UserLibraryKind::Anime) {
-            UserLibraryKind::Anime  => $user->reminderAnime()->detach($modelID),
+            UserLibraryKind::Anime => $user->reminderAnime()->detach($modelID),
             default => null
         };
 
@@ -281,6 +286,7 @@ class LibraryController extends Controller
      * Allows the authenticated user to upload a library export file to be imported.
      *
      * @param LibraryImportRequest $request
+     *
      * @return JsonResponse
      * @throws FileNotFoundException
      * @throws TooManyRequestsHttpException
