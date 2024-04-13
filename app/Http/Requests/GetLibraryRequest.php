@@ -3,10 +3,11 @@
 namespace App\Http\Requests;
 
 use App\Enums\UserLibraryKind;
-use App\Http\Sorters\AnimeAgeSorter;
-use App\Http\Sorters\AnimeMyRatingSorter;
-use App\Http\Sorters\AnimeRatingSorter;
-use App\Http\Sorters\AnimeTitleSorter;
+use App\Http\Sorters\LibraryDateSorter;
+use App\Http\Sorters\LibraryMyRatingSorter;
+use App\Http\Sorters\LibraryPopularitySorter;
+use App\Http\Sorters\LibraryRatingSorter;
+use App\Http\Sorters\LibraryTitleSorter;
 use App\Rules\ValidateLibraryStatus;
 use Illuminate\Foundation\Http\FormRequest;
 use kiritokatklian\SortRequest\Traits\SortsViaRequest;
@@ -48,10 +49,12 @@ class GetLibraryRequest extends FormRequest
     function getSortableColumns(): array
     {
         return [
-            'title'     => AnimeTitleSorter::class,
-            'age'       => AnimeAgeSorter::class,
-            'rating'    => AnimeRatingSorter::class,
-            'my-rating' => AnimeMyRatingSorter::class
+            'title' => LibraryTitleSorter::class,
+            'age' => LibraryDateSorter::class,
+            'date' => LibraryDateSorter::class,
+            'popularity' => LibraryPopularitySorter::class,
+            'rating' => LibraryRatingSorter::class,
+            'my-rating' => LibraryMyRatingSorter::class
         ];
     }
 }

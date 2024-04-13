@@ -6,12 +6,12 @@ use App\Enums\UserLibraryKind;
 use App\Models\Anime;
 use App\Models\Game;
 use App\Models\Manga;
-use App\Models\MediaRating;
+use App\Models\MediaStat;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use kiritokatklian\SortRequest\Support\Foundation\Contracts\Sorter;
 
-class AnimeMyRatingSorter extends Sorter
+class LibraryRatingSorter extends Sorter
 {
     /**
      * Applies the sorter to the Eloquent builder.
@@ -36,16 +36,15 @@ class AnimeMyRatingSorter extends Sorter
             default => Anime::TABLE_NAME,
         };
 
-        // Join the user ratings table
-        $builder->leftJoin(MediaRating::TABLE_NAME, MediaRating::TABLE_NAME . '.model_id', '=', $morphTable . '.id')
-            ->where(MediaRating::TABLE_NAME . '.model_type', $morphClass)
-            ->where(MediaRating::TABLE_NAME . '.user_id', '=', auth()->user()->id);
+        // Join the media stats table
+        $builder->join(MediaStat::TABLE_NAME, MediaStat::TABLE_NAME . '.model_id', '=', $morphTable . '.id')
+            ->where(MediaStat::TABLE_NAME . '.model_type', $morphClass);
 
-        // Order by the user rating
+        // Order by the rating average
         if ($direction == 'worst') {
-            $builder->orderBy(MediaRating::TABLE_NAME . '.rating');
+            $builder->orderBy(MediaStat::TABLE_NAME . '.rating_average');
         } else {
-            $builder->orderBy(MediaRating::TABLE_NAME . '.rating', 'desc');
+            $builder->orderBy(MediaStat::TABLE_NAME . '.rating_average', 'desc');
         }
 
         return $builder->select($morphTable . '.*');
