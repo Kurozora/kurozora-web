@@ -21,6 +21,10 @@ Route::prefix('/profile')
             ->middleware(['auth'])
             ->name('.index');
 
+        Route::get('/settings', [UserProfileController::class, 'settings'])
+            ->middleware(['auth', 'verified'])
+            ->name('.settings');
+
         Route::get('/{user}', Details::class)
             ->name('.details');
 
@@ -62,10 +66,6 @@ Route::prefix('/profile')
 //                Route::get('/reminders', MangaReminders::class)
 //                    ->name('.reminders');
             });
-
-        Route::get('/settings', [UserProfileController::class, 'settings'])
-            ->middleware(['auth', 'verified'])
-            ->name('.settings');
     });
 
  Route::get('/animelist/{user?}', [AnimeLibraryController::class, 'index'])

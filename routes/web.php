@@ -34,6 +34,11 @@ Route::prefix('.well-known')
 Route::get('schedule', ScheduleIndex::class)
     ->name('schedule');
 
+Route::get('/settings', function() {
+    return to_route('profile.settings');
+})
+    ->name('settings');
+
 // Authentication routes
 require 'Web/Authentication.php';
 
