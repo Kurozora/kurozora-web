@@ -26,8 +26,8 @@ return new class extends Migration
             $table->unsignedInteger('anisearch_id')->nullable();
             $table->unsignedInteger('kitsu_id')->unique()->nullable();
             $table->unsignedInteger('mal_id')->unique()->nullable();
-            $table->string('slug');
-            $table->string('original_title');
+            $table->string('slug', 280);
+            $table->string('original_title', 280);
             $table->json('synonym_titles')->nullable();
             $table->string('copyright')->nullable();
             $table->unsignedMediumInteger('duration')->default(0);

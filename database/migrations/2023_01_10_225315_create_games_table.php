@@ -23,8 +23,8 @@ return new class extends Migration
             $table->ulid('series_id')->nullable();
             $table->unsignedInteger('igdb_id')->unique()->nullable();
             $table->string('igdb_slug')->unique()->nullable();
-            $table->string('slug');
-            $table->string('original_title');
+            $table->string('slug', 280);
+            $table->string('original_title', 280);
             $table->json('synonym_titles')->nullable();
             $table->unsignedBigInteger('tv_rating_id')->nullable();
             $table->ulid('parent_id')->nullable();

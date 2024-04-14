@@ -22,8 +22,8 @@ return new class extends Migration
             $table->unsignedInteger('mal_id')->unique()->nullable();
             $table->string('spotify_id')->unique()->nullable();
             $table->string('youtube_id')->unique()->nullable();
-            $table->string('slug');
-            $table->string('title');
+            $table->string('slug', 280);
+            $table->string('title', 280);
             $table->string('artist', 500)->nullable();
             $table->unsignedBigInteger('rank_total')->default(0);
             $table->integer('view_count')->default(0);

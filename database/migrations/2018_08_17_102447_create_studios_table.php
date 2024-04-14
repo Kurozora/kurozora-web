@@ -19,8 +19,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('tv_rating_id')->nullable();
             $table->unsignedInteger('mal_id')->nullable();
-            $table->string('slug');
             $table->unsignedTinyInteger('type');
+            $table->string('slug');
             $table->string('name');
             $table->mediumText('about')->nullable();
             $table->mediumText('address')->nullable();

@@ -33,8 +33,8 @@ return new class extends Migration
             $table->unsignedInteger('syoboi_id')->nullable();
             $table->unsignedInteger('trakt_id')->nullable();
             $table->unsignedInteger('tvdb_id')->nullable();
-            $table->string('slug');
-            $table->string('original_title');
+            $table->string('slug', 280);
+            $table->string('original_title', 280);
             $table->json('synonym_titles')->nullable();
             $table->unsignedBigInteger('tv_rating_id')->nullable();
             $table->unsignedBigInteger('media_type_id')->nullable();

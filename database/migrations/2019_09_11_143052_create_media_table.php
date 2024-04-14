@@ -20,7 +20,7 @@ return new class extends Migration
             $table->uuidMorphs('model');
             $table->uuid()->nullable()->unique();
             $table->string('collection_name');
-            $table->string('name');
+            $table->string('name', 280);
             $table->string('file_name');
             $table->string('mime_type')->nullable();
             $table->string('disk');

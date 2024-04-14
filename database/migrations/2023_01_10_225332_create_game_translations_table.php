@@ -20,7 +20,7 @@ return new class extends Migration
             $table->ulid('id')->primary();
             $table->ulid('game_id');
             $table->string('locale', 2)->index();
-            $table->string('title');
+            $table->string('title', 280);
             $table->text('synopsis')->nullable();
             $table->string('tagline')->nullable();
             $table->timestamps();

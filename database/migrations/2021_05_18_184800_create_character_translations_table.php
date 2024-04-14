@@ -20,7 +20,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('character_id');
             $table->string('locale', 2);
-            $table->string('name');
+            $table->string('name', 280);
             $table->text('about')->nullable();
             $table->string('short_description')->nullable();
             $table->timestamps();
