@@ -41,6 +41,10 @@
       "description": "Everything schedule related"
     },
     {
+      "name": "images",
+      "description": "Everything image related"
+    },
+    {
       "name": "cast",
       "description": "Everything cast related"
     },
@@ -2538,6 +2542,56 @@
         "responses": {
           "200": {
             "$ref": "#/components/responses/GetGenresDetailsSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/images/random": {
+      "get": {
+        "tags": [
+          "images"
+        ],
+        "operationId": "getRandomImages",
+        "summary": "Random images.",
+        "description": "This endpoint will retrieve random images.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "type",
+            "schema": {
+              "$ref": "#/components/schemas/MediaType"
+            },
+            "required": true,
+            "description": "The type of images to retrieve."
+          },
+          {
+            "in": "query",
+            "name": "collection",
+            "schema": {
+              "$ref": "#/components/schemas/MediaCollection"
+            },
+            "required": true,
+            "description": "The collection of images to retrieve."
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "string",
+              "example": 12,
+              "minimum": 1,
+              "maximum": 25
+            },
+            "required": false,
+            "description": "The limit on the number of objects, or number of objects in the specified relationship, that are returned. The default value is 25 and the maximum value is 100."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetCastSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -5477,6 +5531,32 @@
           ]
         },
         "description": "The relations to include in the response."
+      },
+      "MediaType": {
+        "type": "string",
+        "enum": [
+          "episodes",
+          "games",
+          "literatures",
+          "shows"
+        ],
+        "default": "shows",
+        "description": "The set of available media types."
+      },
+      "MediaCollection": {
+        "type": "string",
+        "enum": [
+          "default",
+          "artwork",
+          "banner",
+          "logo",
+          "poster",
+          "profile",
+          "screenshot",
+          "symbol"
+        ],
+        "default": "banner",
+        "description": "The set of available media collections."
       },
       "ImportService": {
         "type": "integer",
