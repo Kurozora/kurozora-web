@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Response;
 class UserReminderController extends Controller
 {
     /**
-     * Returns the lit of user's reminders.
+     * Returns the list of user's reminders.
      *
      * @param GetAnimeReminderRequest $request
      * @return JsonResponse
