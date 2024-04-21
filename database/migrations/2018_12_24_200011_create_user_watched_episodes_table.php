@@ -20,6 +20,7 @@ return new class extends Migration
             $table->increments('id');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('episode_id');
+            $table->unsignedTinyInteger('rewatch_count')->default(0);
             $table->timestamps();
         });
 
