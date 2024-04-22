@@ -269,7 +269,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
         return now('Asia/Tokyo')
             ->next((int) $airDay)
             ->setTimeFromTimeString($airTime ?? '00:00')
-            ->setTimezone(config('app.timezone'));
+            ->setTimezone(config('app.format_timezone'));
     }
 
     /**
@@ -295,7 +295,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
     {
         if ($broadcastDate = $this->broadcast_date) {
             $broadcast = $broadcastDate->englishDayOfWeek . ' at ' . $broadcastDate->format('H:i e');
-            return now(config('app.timezone'))
+            return now(config('app.format_timezone'))
                 ->until($broadcast, CarbonInterface::DIFF_RELATIVE_TO_NOW, true, 3);
         }
 

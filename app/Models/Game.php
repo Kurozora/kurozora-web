@@ -373,7 +373,7 @@ class Game extends KModel implements HasMedia, Sitemapable
         return now('Asia/Tokyo')
             ->next((int) $publicationDay)
             ->setTimeFromTimeString($publicationTime ?? '00:00')
-            ->setTimezone(config('app.timezone'));
+            ->setTimezone(config('app.format_timezone'));
     }
 
     /**
@@ -399,7 +399,7 @@ class Game extends KModel implements HasMedia, Sitemapable
     {
         if ($publicationDate = $this->publication_date) {
             $publication = $publicationDate->englishDayOfWeek . ' at ' . $publicationDate->format('H:i e');
-            return now(config('app.timezone'))
+            return now(config('app.format_timezone'))
                 ->until($publication, CarbonInterface::DIFF_RELATIVE_TO_NOW, true, 3);
         }
 

@@ -30,7 +30,7 @@ class Timezone
         }
 
         // Set TVRating in config
-        config()->set('app.timezone', $tvRating);
+        config()->set('app.format_timezone', $tvRating);
 
         // Continue request
         return $next($request);
