@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('slug', 280);
             $table->string('title', 280);
             $table->string('artist', 500)->nullable();
+            $table->text('original_lyrics')->nullable();
             $table->unsignedBigInteger('rank_total')->default(0);
             $table->integer('view_count')->default(0);
             $table->timestamps();
