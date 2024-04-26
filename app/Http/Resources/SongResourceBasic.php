@@ -27,17 +27,18 @@ class SongResourceBasic extends JsonResource
         $resource = SongResourceIdentity::make($this->resource)->toArray($request);
 
         return array_merge($resource, [
-            'attributes'    => [
-                'amazonID'  => $this->resource->amazon_id,
-                'amID'      => $this->resource->am_id,
-                'deezerID'  => $this->resource->deezer_id,
-                'malID'     => $this->resource->mal_id,
+            'attributes' => [
+                'amazonID' => $this->resource->amazon_id,
+                'amID' => $this->resource->am_id,
+                'deezerID' => $this->resource->deezer_id,
+                'malID' => $this->resource->mal_id,
                 'spotifyID' => $this->resource->spotify_id,
                 'youtubeID' => $this->resource->youtube_id,
-                'artwork'   => ImageResource::make($this->resource->getFirstMedia(MediaCollection::Artwork)),
-                'title'     => $this->resource->title,
-                'artist'    => $this->resource->artist ?? 'Unknown',
-                'stats'     => MediaStatsResource::make($this->resource->mediaStat),
+                'artwork' => ImageResource::make($this->resource->getFirstMedia(MediaCollection::Artwork)),
+                'title' => $this->resource->title,
+                'artist' => $this->resource->artist ?? 'Unknown',
+                'originalLyrics' => $this->resource->original_lyrics,
+                'stats' => MediaStatsResource::make($this->resource->mediaStat),
             ]
         ]);
     }
