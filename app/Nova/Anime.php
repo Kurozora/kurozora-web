@@ -59,7 +59,7 @@ class Anime extends Resource
      *
      * @var string
      */
-    public static $title = 'title';
+    public static $title = 'original_title';
 
     /**
      * The columns that should be searched.
