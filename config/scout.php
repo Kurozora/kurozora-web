@@ -174,9 +174,9 @@ return [
                 'filterableAttributes'=> ['id', 'generation', 'type', 'started_at', 'ended_at'],
             ],
             \App\Models\Song::TABLE_NAME => [
-                'searchableAttributes' => ['title', 'artist'],
+                'searchableAttributes' => ['original_title', 'title', 'artist', 'original_lyrics', 'lyrics', 'translations'],
                 'sortableAttributes'=> ['artist', 'title', 'rank_total', 'created_at', 'update_at'],
-                'filterableAttributes'=> ['id', 'artist', 'title'],
+                'filterableAttributes'=> ['id', 'artist'],
             ],
             \App\Models\Studio::TABLE_NAME => [
                 'searchableAttributes' => ['name', 'address'],
