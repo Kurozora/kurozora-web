@@ -15,6 +15,7 @@ use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\MorphOne;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Outl1ne\NovaColorField\Color;
 use Ramsey\Uuid\Uuid;
@@ -41,7 +42,7 @@ class Song extends Resource
      *
      * @var string
      */
-    public static $title = 'title';
+    public static $title = 'original_title';
 
     /**
      * The columns that should be searched.
@@ -49,7 +50,7 @@ class Song extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'title', 'artist'
+        'id', 'original_title', 'artist', 'original_lyrics'
     ];
 
     /**
@@ -57,7 +58,7 @@ class Song extends Resource
      *
      * @var string
      */
-    public static $group = 'Music';
+    public static $group = 'Song';
 
     /**
      * Get the fields displayed by the resource.
@@ -117,7 +118,7 @@ class Song extends Resource
                     return Uuid::uuid4() . '.' . $extension;
                 })
                 ->setName(function ($originalFilename, $model) {
-                    return $this->resource->title;
+                    return $this->resource->original_title;
                 })
                 ->customPropertiesFields([
                     Heading::make('Colors (automatically generated if empty)'),
@@ -153,12 +154,27 @@ class Song extends Resource
 
             Heading::make('Meta information'),
 
-            Text::make('Title')
+            Text::make('Title', 'original_title')
                 ->sortable()
+                ->rules('max:280')
                 ->required(),
+
+            Text::make('Title Translations', 'title')
+                ->hideFromIndex()
+                ->nullable()
+                ->translatable(),
 
             Text::make('Artist')
                 ->sortable(),
+
+            Textarea::make('Lyrics', 'original_lyrics')
+                ->hideFromIndex()
+                ->nullable(),
+
+            Textarea::make('Lyrics Translations', 'lyrics')
+                ->hideFromIndex()
+                ->nullable()
+                ->translatable(),
 
             HasMany::make('Media Songs'),
 

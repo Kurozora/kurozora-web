@@ -9,6 +9,7 @@ use App\Traits\Model\HasMediaRatings;
 use App\Traits\Model\HasMediaStat;
 use App\Traits\Model\HasViews;
 use App\Traits\SearchFilterable;
+use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -38,11 +39,22 @@ class Song extends KModel implements HasMedia, Sitemapable
         LogsActivity,
         Searchable,
         SearchFilterable,
-        SoftDeletes;
+        SoftDeletes,
+        Translatable;
 
     // Table name
     const string TABLE_NAME = 'songs';
     protected $table = self::TABLE_NAME;
+
+    /**
+     * Translatable attributes.
+     *
+     * @var array
+     */
+    public array $translatedAttributes = [
+        'title',
+        'lyrics',
+    ];
 
     /**
      * Get the options for generating the slug.
@@ -52,7 +64,7 @@ class Song extends KModel implements HasMedia, Sitemapable
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
-            ->generateSlugsFrom('title')
+            ->generateSlugsFrom('original_title')
             ->saveSlugsTo('slug');
     }
 
@@ -145,7 +157,10 @@ class Song extends KModel implements HasMedia, Sitemapable
     public function toSearchableArray(): array
     {
         $song = $this->toArray();
-        $song['rating_average'] = $this->mediaStat?->rating_average ?? 0;
+        $song['translations'] = $this->translations()
+            ->select(['locale', 'title', 'lyrics'])
+            ->get();
+        $song['media_stat'] = $this->mediaStat?->toSearchableArray();
         $song['created_at'] = $this->created_at?->timestamp;
         $song['updated_at'] = $this->updated_at?->timestamp;
         return $song;
@@ -194,6 +209,16 @@ class Song extends KModel implements HasMedia, Sitemapable
     {
         return $this->morphMany(MediaRating::class, 'model')
             ->where('model_type', Song::class);
+    }
+
+    /**
+     * The song's translation relationship.
+     *
+     * @return HasMany
+     */
+    public function song_translations(): HasMany
+    {
+        return $this->hasMany(SongTranslation::class);
     }
 
     /**

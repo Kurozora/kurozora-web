@@ -35,9 +35,12 @@ class SongResourceBasic extends JsonResource
                 'spotifyID' => $this->resource->spotify_id,
                 'youtubeID' => $this->resource->youtube_id,
                 'artwork' => ImageResource::make($this->resource->getFirstMedia(MediaCollection::Artwork)),
-                'title' => $this->resource->title,
+                'title' => $this->resource->original_title,
+                'originalTitle' => $this->resource->original_title,
+                'localizedTitle' => $this->resource->title,
                 'artist' => $this->resource->artist ?? 'Unknown',
                 'originalLyrics' => $this->resource->original_lyrics,
+                'lyrics' => $this->resource->lyrics,
                 'stats' => MediaStatsResource::make($this->resource->mediaStat),
             ]
         ]);

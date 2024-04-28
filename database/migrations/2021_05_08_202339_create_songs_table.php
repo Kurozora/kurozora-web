@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('spotify_id')->unique()->nullable();
             $table->string('youtube_id')->unique()->nullable();
             $table->string('slug', 280);
-            $table->string('title', 280);
+            $table->string('original_title', 280);
             $table->string('artist', 500)->nullable();
             $table->text('original_lyrics')->nullable();
             $table->unsignedBigInteger('rank_total')->default(0);
@@ -39,7 +39,7 @@ return new class extends Migration
 
             // Set unique key constraints
             $table->unique(['slug']);
-            $table->unique(['title', 'artist']);
+            $table->unique(['original_title', 'artist']);
         });
     }
 
