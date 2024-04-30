@@ -157,7 +157,6 @@ class LibraryController extends Controller
         // Successful response
         return JSONResult::success([
             'data' => [
-                'libraryStatus' => $userLibraryStatus->value, // TODO: - Remove when updating to 1.6.0
                 'status' => $userLibraryStatus->value,
                 'isFavorited' => false,
                 'isReminded' => false,

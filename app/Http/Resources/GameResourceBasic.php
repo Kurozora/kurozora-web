@@ -79,13 +79,7 @@ class GameResourceBasic extends JsonResource
         $library = $this->resource->pivot ?? $this->resource->library->first();
 
         // Return the array
-        // TODO: - Deprecate the attributes not in `library` array after releasing 1.6.0
         return [
-            'givenRating'       => (double) $givenRating?->rating,
-            'givenReview'       => $givenRating?->description,
-            'libraryStatus'     => $library?->status,
-            'isFavorited'       => (bool) $this->resource->isFavorited,
-            'isReminded'        => $this->resource->isReminded,
             'library' => [
                 'rating' => (double) $givenRating?->rating,
                 'review' => $givenRating?->description,
