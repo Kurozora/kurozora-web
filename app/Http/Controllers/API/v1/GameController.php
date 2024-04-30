@@ -537,6 +537,7 @@ class GameController extends Controller
     public function reviews(GetGameReviewsRequest $request, Game $game): JsonResponse
     {
         $reviews = $game->mediaRatings()
+            ->withoutTvRatings()
             ->with([
                 'user' => function ($query) {
                     $query->with([

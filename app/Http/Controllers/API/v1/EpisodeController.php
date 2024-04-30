@@ -178,6 +178,7 @@ class EpisodeController extends Controller
     public function reviews(GetEpisodeReviewsRequest $request, Episode $episode): JsonResponse
     {
         $reviews = $episode->mediaRatings()
+            ->withoutTvRatings()
             ->with([
                 'user' => function ($query) {
                     $query->with(['media'])

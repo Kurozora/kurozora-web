@@ -572,6 +572,7 @@ class AnimeController extends Controller
     public function reviews(GetAnimeReviewsRequest $request, Anime $anime): JsonResponse
     {
         $reviews = $anime->mediaRatings()
+            ->withoutTvRatings()
             ->with([
                 'user' => function ($query) {
                     $query->with([

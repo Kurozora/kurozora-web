@@ -196,6 +196,7 @@ class SongController extends Controller
     public function reviews(GetSongReviewsRequest $request, Song $song): JsonResponse
     {
         $reviews = $song->mediaRatings()
+            ->withoutTvRatings()
             ->with([
                 'user' => function ($query) {
                     $query->with([

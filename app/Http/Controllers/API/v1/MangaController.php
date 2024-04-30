@@ -501,6 +501,7 @@ class MangaController extends Controller
     public function reviews(GetMangaReviewsRequest $request, Manga $manga): JsonResponse
     {
         $reviews = $manga->mediaRatings()
+            ->withoutTvRatings()
             ->with([
                 'user' => function ($query) {
                     $query->with([
