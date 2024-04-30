@@ -433,9 +433,10 @@ class MangaController extends Controller
         $givenRating = $data['rating'];
         $description = $data['description'] ?? null;
 
-        // Try to modify the rating if it already exists
+        // Modify the rating if it already exists
         /** @var MediaRating $foundRating */
         $foundRating = $user->mangaRatings()
+            ->withoutTvRatings()
             ->where('model_id', '=', $manga->id)
             ->first();
 

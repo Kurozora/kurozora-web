@@ -132,9 +132,10 @@ class EpisodeController extends Controller
         $givenRating = $data['rating'];
         $description = $data['description'] ?? null;
 
-        // Try to modify the rating if it already exists
+        // Modify the rating if it already exists
         /** @var MediaRating $foundRating */
         $foundRating = $user->episodeRatings()
+            ->withoutTvRatings()
             ->where('model_id', '=', $episode->id)
             ->first();
 
