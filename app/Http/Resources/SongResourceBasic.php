@@ -26,7 +26,7 @@ class SongResourceBasic extends JsonResource
     {
         $resource = SongResourceIdentity::make($this->resource)->toArray($request);
 
-        return array_merge($resource, [
+        $resource = array_merge($resource, [
             'attributes' => [
                 'amazonID' => $this->resource->amazon_id,
                 'amID' => $this->resource->am_id,
@@ -35,14 +35,38 @@ class SongResourceBasic extends JsonResource
                 'spotifyID' => $this->resource->spotify_id,
                 'youtubeID' => $this->resource->youtube_id,
                 'artwork' => ImageResource::make($this->resource->getFirstMedia(MediaCollection::Artwork)),
-                'title' => $this->resource->original_title,
-                'originalTitle' => $this->resource->original_title,
-                'localizedTitle' => $this->resource->title,
+                'originalTitle' => $this->resource->title ?? $this->resource->original_title,
+                'title' => $this->resource->title ?? $this->resource->original_title,
                 'artist' => $this->resource->artist ?? 'Unknown',
                 'originalLyrics' => $this->resource->original_lyrics,
                 'lyrics' => $this->resource->lyrics,
                 'stats' => MediaStatsResource::make($this->resource->mediaStat),
+                'copyright' => $this->resource->copyright,
             ]
         ]);
+
+        if (auth()->check()) {
+            $resource['attributes'] = array_merge($resource['attributes'], $this->getUserSpecificDetails());
+        }
+
+        return $resource;
+    }
+
+    /**
+     * Returns the user specific details for the resource.
+     *
+     * @return array
+     */
+    protected function getUserSpecificDetails(): array
+    {
+        $givenRating = $this->resource->mediaRatings->first();
+
+        // Return the array
+        return [
+            'library' => [
+                'rating' => (double) $givenRating?->rating,
+                'review' => $givenRating?->description,
+            ]
+        ];
     }
 }
