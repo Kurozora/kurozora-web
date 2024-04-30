@@ -28,6 +28,7 @@ return new class extends Migration
             $table->text('original_lyrics')->nullable();
             $table->unsignedBigInteger('rank_total')->default(0);
             $table->integer('view_count')->default(0);
+            $table->string('copyright')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
