@@ -35,7 +35,14 @@ class ExploreCategoryController extends Controller
                     MediaSong::class => function (Builder $query) {
                         $query->with([
                             'song' => function ($query) {
-                                $query->with(['media', 'mediaStat']);
+                                $query->with(['media', 'mediaStat', 'translations'])
+                                    ->when(auth()->user(), function ($query, $user) {
+                                        $query->with(['mediaRatings' => function ($query) use ($user) {
+                                            $query->where([
+                                                ['user_id', '=', $user->id]
+                                            ]);
+                                        }]);
+                                    });
                             },
                             'model' => function ($query) {
                                 $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating'])
