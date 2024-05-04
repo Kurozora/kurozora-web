@@ -878,7 +878,7 @@ class AnimeProcessor extends CustomItemProcessor
                     'am_id' => $malSong['am_id'],
                     'spotify_id' => $malSong['spotify_id'],
                     'youtube_id' => $malSong['youtube_id'],
-                    'title' => $malSong['title'],
+                    'original_title' => $malSong['title'],
                     'artist' => $malSong['artist'],
                 ]);
             }
