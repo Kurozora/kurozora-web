@@ -1,6 +1,6 @@
 <div wire:init="loadSection">
     @if ($this->models->count())
-        <section class="pt-5 pb-8 pl-4 pr-4 border-t-2">
+        <section class="pt-5 pb-8 border-t-2">
             <x-section-nav>
                 <x-slot:title>
                     {{ $this->title }}

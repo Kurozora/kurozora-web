@@ -442,7 +442,7 @@
 
                     @if (!empty($game->copyright))
                         <section class="pt-4 pr-4 pb-4 pl-4 border-t">
-                            <p class="text-sm text-gray-400">{{ $game->copyright }}</p>
+                            <p class="text-sm text-gray-400">{!! nl2br(e($game->copyright)) !!}</p>
                         </section>
                     @endif
                 </div>
