@@ -325,8 +325,8 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      */
     public function animeRatings(): HasMany
     {
-        return $this->hasMany(MediaRating::class)
-            ->where('model_type', Anime::class);
+        return $this->mediaRatings()
+            ->where('model_type', '=', Anime::class);
     }
 
     /**
@@ -336,8 +336,8 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      */
     public function gameRatings(): HasMany
     {
-        return $this->hasMany(MediaRating::class)
-            ->where('model_type', Game::class);
+        return $this->mediaRatings()
+            ->where('model_type', '=', Game::class);
     }
 
     /**
@@ -347,19 +347,30 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      */
     public function mangaRatings(): HasMany
     {
-        return $this->hasMany(MediaRating::class)
-            ->where('model_type', Manga::class);
+        return $this->mediaRatings()
+            ->where('model_type', '=', Manga::class);
     }
 
     /**
-     * Returns the anime ratings the user has.
+     * Returns the episode ratings the user has.
      *
      * @return HasMany
      */
     public function episodeRatings(): HasMany
     {
-        return $this->hasMany(MediaRating::class)
-            ->where('model_type', Episode::class);
+        return $this->mediaRatings()
+            ->where('model_type', '=', Episode::class);
+    }
+
+    /**
+     * Returns the song ratings the user has.
+     *
+     * @return HasMany
+     */
+    public function songRatings(): HasMany
+    {
+        return $this->mediaRatings()
+            ->where('model_type', '=', Song::class);
     }
 
     /**
