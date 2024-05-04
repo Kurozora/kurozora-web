@@ -37,6 +37,7 @@ Route::prefix('/anime')
                     ->name('.seasons');
 
                 Route::get('/songs', [AnimeController::class, 'songs'])
+                    ->middleware('auth.kurozora:optional')
                     ->name('.songs');
 
                 Route::get('/staff', [AnimeController::class, 'staff'])

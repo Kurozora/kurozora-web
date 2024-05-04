@@ -8,12 +8,15 @@ Route::prefix('/songs')
         Route::prefix('{song}')
             ->group(function () {
                 Route::get('/', [SongController::class, 'view'])
+                    ->middleware('auth.kurozora:optional')
                     ->name('.view');
 
                 Route::get('/anime', [SongController::class, 'anime'])
+                    ->middleware('auth.kurozora:optional')
                     ->name('.anime');
 
                 Route::get('/games', [SongController::class, 'games'])
+                    ->middleware('auth.kurozora:optional')
                     ->name('.games');
 
                 Route::post('/rate', [SongController::class, 'rateSong'])

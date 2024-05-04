@@ -34,6 +34,7 @@ Route::prefix('/games')
                     ->name('.related-games');
 
                 Route::get('/songs', [GameController::class, 'songs'])
+                    ->middleware('auth.kurozora:optional')
                     ->name('.songs');
 
                 Route::get('/staff', [GameController::class, 'staff'])
