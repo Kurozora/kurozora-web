@@ -6,6 +6,7 @@ use App\Enums\AstrologicalSign;
 use App\Enums\CharacterStatus;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Illuminate\Http\Request;
+use Kiritokatklian\NovaAstrotranslatable\HandlesTranslatable;
 use Laravel\Nova\Fields\Avatar;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Code;
@@ -21,6 +22,8 @@ use Ramsey\Uuid\Uuid;
 
 class Character extends Resource
 {
+    use HandlesTranslatable;
+
     /**
      * The model the resource corresponds to.
      *

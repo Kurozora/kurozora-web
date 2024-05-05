@@ -8,6 +8,7 @@ use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
+use Kiritokatklian\NovaAstrotranslatable\HandlesTranslatable;
 use Laravel\Nova\Fields\Avatar;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Heading;
@@ -23,6 +24,8 @@ use Validator;
 
 class Song extends Resource
 {
+    use HandlesTranslatable;
+
     /**
      * The model the resource corresponds to.
      *

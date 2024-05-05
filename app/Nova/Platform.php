@@ -6,6 +6,7 @@ use App\Enums\MediaCollection;
 use App\Enums\PlatformType;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Illuminate\Http\Request;
+use Kiritokatklian\NovaAstrotranslatable\HandlesTranslatable;
 use Laravel\Nova\Fields\Avatar;
 use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Fields\Date;
@@ -20,6 +21,8 @@ use Ramsey\Uuid\Uuid;
 
 class Platform extends Resource
 {
+    use HandlesTranslatable;
+
     /**
      * The model the resource corresponds to.
      *

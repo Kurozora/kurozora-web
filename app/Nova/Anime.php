@@ -20,6 +20,7 @@ use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
+use Kiritokatklian\NovaAstrotranslatable\HandlesTranslatable;
 use Laravel\Nova\Fields\Avatar;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Boolean;
@@ -40,6 +41,8 @@ use Ramsey\Uuid\Uuid;
 
 class Anime extends Resource
 {
+    use HandlesTranslatable;
+
     /**
      * The model the resource corresponds to.
      *
