@@ -206,7 +206,7 @@ class Song extends Resource
     {
         $song = $this->resource;
 
-        return $song->title . ' by ' . $song->artist ?? 'Unknown' . ' (ID: ' . $song->id . ')';
+        return $song->original_title . ' by ' . $song->artist ?? 'Unknown' . ' (ID: ' . $song->id . ')';
     }
 
     /**
@@ -218,24 +218,24 @@ class Song extends Resource
      * @return void
      * @throws ValidationException
      */
-    protected static function afterValidation(NovaRequest $request, $validator)
+    protected static function afterValidation(NovaRequest $request, $validator): void
     {
         $resourceID = $request->resourceId;
-        $title = $request->post('title');
+        $originalTitle = $request->post('original_title');
         $artist = $request->post('artist');
 
-        $unique = Rule::unique(\App\Models\Song::TABLE_NAME)->where(function ($query) use ($resourceID, $title, $artist) {
+        $unique = Rule::unique(\App\Models\Song::TABLE_NAME)->where(function ($query) use ($resourceID, $originalTitle, $artist) {
             if ($resourceID) {
                 $query->whereNotIn('id', [$resourceID]);
             }
 
-            return $query->where('title', $title)->where('artist', $artist);
+            return $query->where('original_title', $originalTitle)->where('artist', $artist);
         });
 
-        $uniqueValidator = Validator::make($request->only('title'), [
-            'title' => [$unique],
+        $uniqueValidator = Validator::make($request->only('original_title'), [
+            'original_title' => [$unique],
         ], [
-            'title' => __('validation.unique')
+            'original_title' => __('validation.unique')
         ]);
 
         $uniqueValidator->validate();
