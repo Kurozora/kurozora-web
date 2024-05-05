@@ -179,6 +179,12 @@ class Song extends Resource
                 ->nullable()
                 ->translatable(),
 
+            Textarea::make('Copyright')
+                ->hideFromIndex()
+                ->help('For example: © ' . date('Y') . ' Kurozora'),
+
+            HasMany::make('Translations', 'song_translations', SongTranslation::class),
+
             HasMany::make('Media Songs'),
 
 //            BelongsToMany::make('Anime')

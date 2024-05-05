@@ -292,7 +292,7 @@ class Game extends Resource
 
             Heading::make('Legal'),
 
-            Text::make('Copyright')
+            Textarea::make('Copyright')
                 ->hideFromIndex()
                 ->help('For example: © ' . date('Y') . ' Kurozora'),
 
