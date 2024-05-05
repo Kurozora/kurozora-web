@@ -105,7 +105,7 @@ class Song extends KModel implements HasMedia, Sitemapable
                 ],
                 'selected' => null,
             ],
-            'title' => [
+            'original_title' => [
                 'title' => __('Title'),
                 'options' => [
                     'Default' => null,

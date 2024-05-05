@@ -199,6 +199,7 @@ class Index extends Component
                                 });
                             break;
                         case Character::class:
+                        case Song::class:
                             $query->with(['media', 'translations']);
                             break;
                         case Episode::class:
@@ -215,7 +216,6 @@ class Index extends Component
                             break;
                         case Person::class:
                         case Studio::class:
-                        case Song::class:
                             $query->with(['media']);
                             break;
                         case User::class:
