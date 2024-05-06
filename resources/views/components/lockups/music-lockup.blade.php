@@ -11,7 +11,7 @@
         song: null,
         musicManager: null,
         bgColor: '#A660B2',
-        songTitle: '{{ str($song->title)->replace('\'', '’') }}',
+        songTitle: '{{ str($song->original_title)->replace('\'', '’') }}',
         artistName: '{{ str($song->artist ?? 'Unknown')->replace('\'', '’') }}',
         artworkURL: '{{ $song->getFirstMediaFullUrl(\App\Enums\MediaCollection::Artwork()) ?? asset('images/static/placeholders/music_album.webp') }}',
         async fetchSongData(songID) {
@@ -70,7 +70,7 @@
             @endif
 
             <a class="flex gap-2 justify-between" href="{{ route('songs.details', $song) }}">
-                <p class="line-clamp-2" x-text="songTitle">{{ $song->title }}</p>
+                <p class="line-clamp-2" x-text="songTitle">{{ $song->original_title }}</p>
 
                 @if ($type && !$showModel || $type && $anime)
                     <span class="ml-1 pl-2 pr-2 pt-1 pb-1 h-full {{ $type->color() }} text-white text-xs font-semibold whitespace-nowrap rounded-full">{{ $type->abbreviated() . ' #' . $position }}</span>
