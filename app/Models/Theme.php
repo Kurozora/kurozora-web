@@ -7,11 +7,9 @@ use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\HasSlug;
 use App\Traits\Model\TvRated;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Laravel\Scout\Searchable;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Sitemap\Contracts\Sitemapable;
@@ -23,7 +21,6 @@ class Theme extends KModel implements HasMedia, Sitemapable
     use InteractsWithMedia,
         InteractsWithMediaExtension,
         HasSlug,
-        Searchable,
         SoftDeletes,
         TvRated;
 
@@ -96,19 +93,6 @@ class Theme extends KModel implements HasMedia, Sitemapable
     public function tv_rating(): BelongsTo
     {
         return $this->belongsTo(TvRating::class);
-    }
-
-    /**
-     * Dispatch the job to make the given models searchable.
-     *
-     * @param  Collection  $models
-     * @return void
-     */
-    public function queueMakeSearchable($models)
-    {
-        // We just want the `toSearchableArray` method to be available,
-        // hence we're using the `Searchable` trait. By keeping this
-        // method empty, we avoid queueing created/updated models.
     }
 
     /**

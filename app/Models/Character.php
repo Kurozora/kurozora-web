@@ -213,7 +213,6 @@ class Character extends KModel implements HasMedia, Sitemapable
         return $filter;
     }
 
-
     /**
      * Modify the query used to retrieve models when making all of the models searchable.
      *
@@ -222,7 +221,8 @@ class Character extends KModel implements HasMedia, Sitemapable
      */
     protected function makeAllSearchableUsing(Builder $query): Builder
     {
-        return $query->withoutGlobalScopes();
+        return $query->withoutGlobalScopes()
+            ->with(['mediaStat', 'translations']);
     }
 
     /**
@@ -233,6 +233,10 @@ class Character extends KModel implements HasMedia, Sitemapable
     public function toSearchableArray(): array
     {
         $character = $this->toArray();
+        unset($character['media']);
+        $character['media_stat'] = $this->mediaStat?->toSearchableArray();
+        $character['translations'] = $this->translations
+            ->select(['locale', 'title', 'synopsis', 'tagline']);
         $character['created_at'] = $this->created_at?->timestamp;
         $character['updated_at'] = $this->updated_at?->timestamp;
         return $character;

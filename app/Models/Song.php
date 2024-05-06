@@ -146,7 +146,8 @@ class Song extends KModel implements HasMedia, Sitemapable
      */
     protected function makeAllSearchableUsing(Builder $query): Builder
     {
-        return $query->withoutGlobalScopes();
+        return $query->withoutGlobalScopes()
+            ->with(['translations', 'mediaStat']);
     }
 
     /**
@@ -157,9 +158,8 @@ class Song extends KModel implements HasMedia, Sitemapable
     public function toSearchableArray(): array
     {
         $song = $this->toArray();
-        $song['translations'] = $this->translations()
-            ->select(['locale', 'title', 'lyrics'])
-            ->get();
+        $song['translations'] = $this->translations
+            ->select(['locale', 'title', 'lyrics']);
         $song['media_stat'] = $this->mediaStat?->toSearchableArray();
         $song['created_at'] = $this->created_at?->timestamp;
         $song['updated_at'] = $this->updated_at?->timestamp;

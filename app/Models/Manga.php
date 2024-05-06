@@ -181,30 +181,6 @@ class Manga extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * Make all instances of the model searchable.
-     *
-     * @param  int  $chunk
-     * @return void
-     */
-    public static function makeAllSearchable($chunk = null): void
-    {
-        $self = new static;
-
-        $softDelete = static::usesSoftDelete() && config('scout.soft_delete', false);
-
-        $self->newQuery()
-            ->withoutGlobalScopes()
-            ->when(true, function ($query) use ($self) {
-                $self->makeAllSearchableUsing($query);
-            })
-            ->when($softDelete, function ($query) {
-                $query->withTrashed();
-            })
-            ->orderBy($self->getKeyName())
-            ->searchable($chunk);
-    }
-
-    /**
      * The orderable properties.
      *
      * @return array[]
@@ -635,7 +611,8 @@ class Manga extends KModel implements HasMedia, Sitemapable
      */
     protected function makeAllSearchableUsing(Builder $query): Builder
     {
-        return $query->withoutGlobalScopes();
+        return $query->withoutGlobalScopes()
+            ->with(['genres', 'languages', 'mediaStat', 'media_type', 'source', 'status', 'themes', 'translations', 'tv_rating']);
     }
 
     /**
@@ -652,9 +629,8 @@ class Manga extends KModel implements HasMedia, Sitemapable
                 return $item->toSearchableArray();
             });
         $manga['media_stat'] = $this->mediaStat?->toSearchableArray();
-        $manga['translations'] = $this->translations()
-            ->select(['locale', 'title', 'synopsis', 'tagline'])
-            ->get();
+        $manga['translations'] = $this->translations
+            ->select(['locale', 'title', 'synopsis', 'tagline']);
         $manga['tv_rating'] = $this->tv_rating?->toSearchableArray();
         $manga['media_type'] = $this->media_type?->toSearchableArray();
         $manga['source'] = $this->source?->toSearchableArray();
@@ -667,10 +643,10 @@ class Manga extends KModel implements HasMedia, Sitemapable
             ->map(function ($item) {
                 return $item->toSearchableArray();
             });
-        $manga['tags'] = $this->tags
-            ->map(function ($item) {
-                return $item->toSearchableArray();
-            });
+//        $manga['tags'] = $this->tags
+//            ->map(function ($item) {
+//                return $item->toSearchableArray();
+//            });
         $manga['started_at'] = $this->started_at?->timestamp;
         $manga['ended_at'] = $this->ended_at?->timestamp;
         $manga['created_at'] = $this->created_at?->timestamp;

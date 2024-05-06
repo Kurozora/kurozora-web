@@ -672,7 +672,8 @@ class Anime extends KModel implements HasMedia, Sitemapable
      */
     protected function makeAllSearchableUsing(Builder $query): Builder
     {
-        return $query->withoutGlobalScopes();
+        return $query->withoutGlobalScopes()
+            ->with(['genres', 'languages', 'mediaStat', 'media_type', 'source', 'status', 'themes', 'translations', 'tv_rating']);
     }
 
     /**
@@ -689,9 +690,8 @@ class Anime extends KModel implements HasMedia, Sitemapable
                 return $item->toSearchableArray();
             });
         $anime['media_stat'] = $this->mediaStat?->toSearchableArray();
-        $anime['translations'] = $this->translations()
-            ->select(['locale', 'title', 'synopsis', 'tagline'])
-            ->get();
+        $anime['translations'] = $this->translations
+            ->select(['locale', 'title', 'synopsis', 'tagline']);
         $anime['tv_rating'] = $this->tv_rating?->toSearchableArray();
         $anime['media_type'] = $this->media_type?->toSearchableArray();
         $anime['source'] = $this->source?->toSearchableArray();
@@ -704,10 +704,10 @@ class Anime extends KModel implements HasMedia, Sitemapable
             ->map(function ($item) {
                 return $item->toSearchableArray();
             });
-        $anime['tags'] = $this->tags
-            ->map(function ($item) {
-                return $item->toSearchableArray();
-            });
+//        $anime['tags'] = $this->tags
+//            ->map(function ($item) {
+//                return $item->toSearchableArray();
+//            });
         $anime['started_at'] = $this->started_at?->timestamp;
         $anime['ended_at'] = $this->ended_at?->timestamp;
         $anime['created_at'] = $this->created_at?->timestamp;

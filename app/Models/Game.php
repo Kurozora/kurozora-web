@@ -173,30 +173,6 @@ class Game extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * Make all instances of the model searchable.
-     *
-     * @param  int  $chunk
-     * @return void
-     */
-    public static function makeAllSearchable($chunk = null): void
-    {
-        $self = new static;
-
-        $softDelete = static::usesSoftDelete() && config('scout.soft_delete', false);
-
-        $self->newQuery()
-            ->withoutGlobalScopes()
-            ->when(true, function ($query) use ($self) {
-                $self->makeAllSearchableUsing($query);
-            })
-            ->when($softDelete, function ($query) {
-                $query->withTrashed();
-            })
-            ->orderBy($self->getKeyName())
-            ->searchable($chunk);
-    }
-
-    /**
      * The orderable properties.
      *
      * @return array[]
@@ -570,7 +546,8 @@ class Game extends KModel implements HasMedia, Sitemapable
      */
     protected function makeAllSearchableUsing(Builder $query): Builder
     {
-        return $query->withoutGlobalScopes();
+        return $query->withoutGlobalScopes()
+            ->with(['genres', 'languages', 'mediaStat', 'media_type', 'source', 'status', 'themes', 'translations', 'tv_rating']);
     }
 
     /**
@@ -587,9 +564,8 @@ class Game extends KModel implements HasMedia, Sitemapable
                 return $item->toSearchableArray();
             });
         $game['media_stat'] = $this->mediaStat?->toSearchableArray();
-        $game['translations'] = $this->translations()
-            ->select(['locale', 'title', 'synopsis', 'tagline'])
-            ->get();
+        $game['translations'] = $this->translations
+            ->select(['locale', 'title', 'synopsis', 'tagline']);
         $game['tv_rating'] = $this->tv_rating?->toSearchableArray();
         $game['media_type'] = $this->media_type?->toSearchableArray();
         $game['source'] = $this->source?->toSearchableArray();
@@ -602,10 +578,10 @@ class Game extends KModel implements HasMedia, Sitemapable
             ->map(function ($item) {
                 return $item->toSearchableArray();
             });
-        $game['tags'] = $this->tags
-            ->map(function ($item) {
-                return $item->toSearchableArray();
-            });
+//        $game['tags'] = $this->tags
+//            ->map(function ($item) {
+//                return $item->toSearchableArray();
+//            });
         $game['published_at'] = $this->published_at?->timestamp;
         $game['created_at'] = $this->created_at?->timestamp;
         $game['updated_at'] = $this->updated_at?->timestamp;

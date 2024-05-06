@@ -3,15 +3,12 @@
 namespace App\Models;
 
 use App\Enums\RatingSentiment;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Laravel\Scout\Searchable;
 
 class MediaStat extends KModel
 {
-    use Searchable,
-        SoftDeletes;
+    use SoftDeletes;
 
     // Table name
     const string TABLE_NAME = 'media_stats';
@@ -25,19 +22,6 @@ class MediaStat extends KModel
     public function model(): MorphTo
     {
         return $this->morphTo();
-    }
-
-    /**
-     * Dispatch the job to make the given models searchable.
-     *
-     * @param  Collection  $models
-     * @return void
-     */
-    public function queueMakeSearchable($models)
-    {
-        // We just want the `toSearchableArray` method to be available,
-        // hence we're using the `Searchable` trait. By keeping this
-        // method empty, we avoid queueing created/updated models.
     }
 
     /**
