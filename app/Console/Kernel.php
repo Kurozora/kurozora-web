@@ -41,7 +41,7 @@ class Kernel extends ConsoleKernel
             ->runInBackground();
 
         /**********************************************/
-        // Run queue worker every hour
+        // Delete stale cache every two hours
         $schedule->command('delete:stale_cache')
             ->everyTwoHours()
             ->name('Delete stale cache')
@@ -55,7 +55,7 @@ class Kernel extends ConsoleKernel
             ->onOneServer();
 
         /**********************************************/
-        // Scrape upcoming anime twice a day
+        // Scrape upcoming manga twice a day
         $schedule->command('scrape:mal_upcoming_manga')
             ->twiceDaily(3, 15)
             ->name('Scrape upcoming anime')
@@ -98,31 +98,10 @@ class Kernel extends ConsoleKernel
             ->onOneServer();
 
         /**********************************************/
-        // Calculate anime library stats every day
-        $schedule->command('calculate:anime_library_stats')
-            ->daily()
-            ->name('Calculate anime library stats')
-            ->onOneServer();
-
-        /**********************************************/
         // Calculate anime views every day
         $schedule->command('calculate:views', ['model' => 'all'])
             ->daily()
             ->name('Calculate views')
-            ->onOneServer();
-
-        /**********************************************/
-        // Calculate game library stats every day
-        $schedule->command('calculate:game_library_stats')
-            ->daily()
-            ->name('Calculate game library stats')
-            ->onOneServer();
-
-        /**********************************************/
-        // Calculate manga library stats every day
-        $schedule->command('calculate:manga_library_stats')
-            ->daily()
-            ->name('Calculate manga library stats')
             ->onOneServer();
 
         /**********************************************/
