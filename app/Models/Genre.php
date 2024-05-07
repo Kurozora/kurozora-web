@@ -6,7 +6,6 @@ use App\Enums\MediaCollection;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\HasSlug;
 use App\Traits\Model\TvRated;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -93,17 +92,6 @@ class Genre extends KModel implements HasMedia, Sitemapable
     public function tv_rating(): BelongsTo
     {
         return $this->belongsTo(TvRating::class);
-    }
-
-    /**
-     * Modify the query used to retrieve models when making all of the models searchable.
-     *
-     * @param Builder $query
-     * @return Builder
-     */
-    protected function makeAllSearchableUsing(Builder $query): Builder
-    {
-        return $query->withoutGlobalScopes();
     }
 
     /**

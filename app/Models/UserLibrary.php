@@ -69,8 +69,11 @@ class UserLibrary extends KModel
      */
     protected function makeAllSearchableUsing(Builder $query): Builder
     {
-        return $query->withoutEagerLoads()
-            ->withoutGlobalScopes();
+        return $query->withoutGlobalScopes()
+            ->with(['trackable' => function($query) {
+                $query->withoutGlobalScopes()
+                    ->with('translations');
+            }]);
     }
 
     /**
@@ -80,12 +83,7 @@ class UserLibrary extends KModel
      */
     public function toSearchableArray(): array
     {
-        $trackable = $this->trackable()
-            ->withoutGlobalScopes()
-            ->withoutEagerLoads()
-            ->with('translations')
-            ->first();
-
+        $trackable = $this->trackable;
         $library = $this->toArray();
         $library['trackable'] = [
             'slug' => $trackable->slug,
