@@ -2,11 +2,19 @@
 
 namespace App\Console\Commands\Calculators;
 
+use App\Models\Anime;
+use App\Models\Character;
+use App\Models\Episode;
+use App\Models\Game;
+use App\Models\Manga;
+use App\Models\Song;
 use App\Models\View;
 use Artisan;
 use DB;
 use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class CalculateViews extends Command
 {
@@ -34,7 +42,7 @@ class CalculateViews extends Command
     {
         DB::disableQueryLog();
 
-        $chunkSize = 1000;
+        $chunkSize = 50;
         $class = $this->argument('model');
 
         if ($class === 'all') {
@@ -60,7 +68,28 @@ class CalculateViews extends Command
         View::select(['viewable_type', 'viewable_id', DB::raw('COUNT(*) as views_count')])
             ->where('viewable_type', '=', $class)
             ->groupBy('viewable_type', 'viewable_id')
-            ->with('viewable')
+            ->with(['viewable' => function (MorphTo $morphTo) {
+                $morphTo->constrain([
+                    Anime::class => function (Builder $query) {
+                        $query->with(['genres', 'languages', 'mediaStat', 'media_type', 'source', 'status', 'themes', 'translations', 'tv_rating']);
+                    },
+                    Character::class => function (Builder $query) {
+                        $query->with(['mediaStat', 'translations']);
+                    },
+                    Episode::class => function (Builder $query) {
+                        $query->with(['mediaStat', 'translations']);
+                    },
+                    Game::class => function (Builder $query) {
+                        $query->with(['genres', 'languages', 'mediaStat', 'media_type', 'source', 'status', 'themes', 'translations', 'tv_rating']);
+                    },
+                    Manga::class => function (Builder $query) {
+                        $query->with(['genres', 'languages', 'mediaStat', 'media_type', 'source', 'status', 'themes', 'translations', 'tv_rating']);
+                    },
+                    Song::class => function (Builder $query) {
+                        $query->with(['mediaStat', 'translations']);
+                    },
+                ]);
+            }])
             ->chunkById($chunkSize, function (Collection $views) use ($class, $bar) {
                 DB::transaction(function () use ($class, $bar, $views) {
                     $views->each(function (View $view) use ($bar) {
