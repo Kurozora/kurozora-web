@@ -66,25 +66,30 @@ trait WithSearch
 
         // Filter
         $wheres = [];
+        $whereIns = [];
         foreach ($this->filter as $attribute => $filter) {
             $attribute = str_replace(':', '.', $attribute);
             $selected = $filter['selected'];
             $type = $filter['type'];
 
             if ((is_numeric($selected) && $selected >= 0) || !empty($selected)) {
-                $wheres[$attribute] = match ($type) {
-                    'date' => Carbon::createFromFormat('Y-m-d', $selected)
-                        ->setTime(0, 0)
-                        ->timestamp,
-                    'time' => $selected . ':00',
-                    'double' => number_format($selected, 2, '.', ''),
-                    default => $selected,
-                };
+                if ($type == 'select') {
+                    $whereIns[$attribute] = $selected;
+                } else {
+                    $wheres[$attribute] = match ($type) {
+                        'date' => Carbon::createFromFormat('Y-m-d', $selected)
+                            ->setTime(0, 0)
+                            ->timestamp,
+                        'time' => $selected . ':00',
+                        'double' => number_format($selected, 2, '.', ''),
+                        default => $selected,
+                    };
+                }
             }
         }
 
         // If no search, filter or order was performed, return the model's index
-        if (empty($this->search) && empty($wheres) && empty($orders)) {
+        if (empty($this->search) && (empty($wheres) && empty($whereIns)) && empty($orders)) {
             $models = static::$searchModel::query();
             $models = $this->searchIndexQuery($models);
             return $models->paginate($this->perPage);
@@ -93,6 +98,7 @@ trait WithSearch
         // Search
         $models = static::$searchModel::search($this->search);
         $models->wheres = $wheres;
+        $models->whereIns = $whereIns;
         $models->orders = $orders;
         $models = $this->searchQuery($models);
 

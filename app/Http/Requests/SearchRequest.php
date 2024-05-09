@@ -31,10 +31,10 @@ class SearchRequest extends FormRequest
             'types'     => ['bail', 'required', 'array'],
             'types.*'   => ['bail', 'required', 'string', 'distinct', 'in:' . implode(',', SearchType::getValues())],
             'query'     => ['bail', 'nullable', 'string'],
-            'limit'     => ['bail', 'integer', 'min:1', 'max:25'],
-            'page'      => ['bail', 'integer', 'min:1'],
             'filter'    => ['bail', 'nullable', new ValidateBase64()],
             'sort'      => ['bail', 'nullable', new ValidateBase64()],
+            'limit'     => ['bail', 'integer', 'min:1', 'max:25'],
+            'page'      => ['bail', 'integer', 'min:1'],
         ];
     }
 }

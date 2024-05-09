@@ -114,7 +114,7 @@
                                     </x-select>
                                     @break
                                 @case('select')
-                                    <x-select id="{{ $key }}" wire:model="filter.{{ $key }}.selected">
+                                    <x-select id="{{ $key }}" wire:model="filter.{{ $key }}.selected" multiple>
                                         <option value="">{{ __('Default') }}</option>
                                         @foreach($filter['options'] as $optionKey => $option)
                                             <option value="{{ $optionKey }}">{{ __($option) }}</option>

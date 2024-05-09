@@ -162,25 +162,30 @@ class Index extends Component
 
             // Filter
             $wheres = [];
+            $whereIns = [];
             foreach ($this->filter as $attribute => $filter) {
                 $attribute = str_replace(':', '.', $attribute);
                 $selected = $filter['selected'];
                 $type = $filter['type'];
 
                 if ((is_numeric($selected) && $selected >= 0) || !empty($selected)) {
-                    $wheres[$attribute] = match ($type) {
-                        'date' => Carbon::createFromFormat('Y-m-d', $selected)
-                            ->setTime(0, 0)
-                            ->timestamp,
-                        'time' => $selected . ':00',
-                        'double' => number_format($selected, 2, '.', ''),
-                        default => $selected,
-                    };
+                    if ($type == 'select') {
+                        $whereIns[$attribute] = $selected;
+                    } else {
+                        $wheres[$attribute] = match ($type) {
+                            'date' => Carbon::createFromFormat('Y-m-d', $selected)
+                                ->setTime(0, 0)
+                                ->timestamp,
+                            'time' => $selected . ':00',
+                            'double' => number_format($selected, 2, '.', ''),
+                            default => $selected,
+                        };
+                    }
                 }
             }
 
             // If no search, filter or order was performed, return nothing
-            if (empty($this->search) && empty($wheres)) {
+            if (empty($this->search) && (empty($wheres) || empty($whereIns))) {
                 return null;
             }
 
@@ -232,6 +237,7 @@ class Index extends Component
 
             $models->orders = $orders;
             $models->wheres = $wheres;
+            $models->whereIns = $whereIns;
 
             if ($this->scope == SearchScope::Library) {
                 $trackableIDs = collect(UserLibrary::search($this->search)
