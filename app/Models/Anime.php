@@ -791,6 +791,11 @@ class Anime extends KModel implements HasMedia, Sitemapable
      */
     public static function webSearchFilters(): array
     {
+        $preferredTvRating = config('app.tv_rating');
+        if ($preferredTvRating <= 0) {
+            $preferredTvRating = 4;
+        }
+
         $filter = [
             'started_at' => [
                 'title' => __('First Aired'),
@@ -809,25 +814,25 @@ class Anime extends KModel implements HasMedia, Sitemapable
             ],
             'tv_rating_id' => [
                 'title' => __('TV Rating'),
-                'type' => 'select',
-                'options' => TvRating::all()->pluck('name', 'id'),
+                'type' => 'multiselect',
+                'options' => TvRating::where('id', '<=', $preferredTvRating)->pluck('name', 'id'),
                 'selected' => null,
             ],
             'media_type_id' => [
                 'title' => __('Media Type'),
-                'type' => 'select',
+                'type' => 'multiselect',
                 'options' => MediaType::where('type', 'anime')->pluck('name', 'id'),
                 'selected' => null,
             ],
             'source_id' => [
                 'title' => __('Source'),
-                'type' => 'select',
+                'type' => 'multiselect',
                 'options' => Source::all()->pluck('name', 'id'),
                 'selected' => null,
             ],
             'status_id' => [
                 'title' => __('Airing Status'),
-                'type' => 'select',
+                'type' => 'multiselect',
                 'options' => Status::where('type', 'anime')->pluck('name', 'id'),
                 'selected' => null,
             ],
@@ -838,13 +843,13 @@ class Anime extends KModel implements HasMedia, Sitemapable
             ],
             'air_day' => [
                 'title' => __('Air Day'),
-                'type' => 'select',
+                'type' => 'multiselect',
                 'options' => DayOfWeek::asSelectArray(),
                 'selected' => null,
             ],
             'air_season' => [
                 'title' => __('Air Season'),
-                'type' => 'select',
+                'type' => 'multiselect',
                 'options' => SeasonOfYear::asSelectArray(),
                 'selected' => null,
             ],

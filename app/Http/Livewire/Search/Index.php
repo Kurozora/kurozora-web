@@ -169,7 +169,7 @@ class Index extends Component
                 $type = $filter['type'];
 
                 if ((is_numeric($selected) && $selected >= 0) || !empty($selected)) {
-                    if ($type == 'select') {
+                    if ($type === 'multiselect') {
                         $whereIns[$attribute] = $selected;
                     } else {
                         $wheres[$attribute] = match ($type) {
@@ -185,7 +185,7 @@ class Index extends Component
             }
 
             // If no search, filter or order was performed, return nothing
-            if (empty($this->search) && (empty($wheres) || empty($whereIns))) {
+            if (empty($this->search) && empty($wheres) && empty($whereIns)) {
                 return null;
             }
 

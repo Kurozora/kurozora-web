@@ -228,6 +228,11 @@ class Game extends KModel implements HasMedia, Sitemapable
      */
     public static function webSearchFilters(): array
     {
+        $preferredTvRating = config('app.tv_rating');
+        if ($preferredTvRating <= 0) {
+            $preferredTvRating = 4;
+        }
+
         $filter = [
             'published_at' => [
                 'title' => __('First Published'),
@@ -241,37 +246,37 @@ class Game extends KModel implements HasMedia, Sitemapable
             ],
             'tv_rating_id' => [
                 'title' => __('TV Rating'),
-                'type' => 'select',
-                'options' => TvRating::all()->pluck('name', 'id'),
+                'type' => 'multiselect',
+                'options' => TvRating::where('id', '<=', $preferredTvRating)->pluck('name', 'id'),
                 'selected' => null,
             ],
             'media_type_id' => [
                 'title' => __('Media Type'),
-                'type' => 'select',
+                'type' => 'multiselect',
                 'options' => MediaType::where('type', 'game')->pluck('name', 'id'),
                 'selected' => null,
             ],
             'source_id' => [
                 'title' => __('Source'),
-                'type' => 'select',
+                'type' => 'multiselect',
                 'options' => Source::all()->pluck('name', 'id'),
                 'selected' => null,
             ],
             'status_id' => [
                 'title' => __('Publication Status'),
-                'type' => 'select',
+                'type' => 'multiselect',
                 'options' => Status::where('type', 'game')->pluck('name', 'id'),
                 'selected' => null,
             ],
             'publication_day' => [
                 'title' => __('Publication Day'),
-                'type' => 'select',
+                'type' => 'multiselect',
                 'options' => DayOfWeek::asSelectArray(),
                 'selected' => null,
             ],
             'publication_season' => [
                 'title' => __('Publication Season'),
-                'type' => 'select',
+                'type' => 'multiselect',
                 'options' => SeasonOfYear::asSelectArray(),
                 'selected' => null,
             ],

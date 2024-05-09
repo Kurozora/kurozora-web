@@ -113,9 +113,19 @@
                                         @endforeach
                                     </x-select>
                                     @break
-                                @case('select')
+                                @case('multiselect')
                                     <x-select id="{{ $key }}" wire:model="filter.{{ $key }}.selected" multiple>
-                                        <option value="">{{ __('Default') }}</option>
+                                        @foreach($filter['options'] as $optionKey => $option)
+                                            <option value="{{ $optionKey }}">{{ __($option) }}</option>
+                                        @endforeach
+                                    </x-select>
+                                    @break
+                                    @foreach($filter['options'] as $optionKey => $option)
+                                        <option value="{{ (int) ($optionKey == 0) }}">{{ __($option) }}</option>
+                                    @endforeach
+                                @case('select')
+                                    <option value="">{{ __('Default') }}</option>
+                                    <x-select id="{{ $key }}" wire:model="filter.{{ $key }}.selected">
                                         @foreach($filter['options'] as $optionKey => $option)
                                             <option value="{{ $optionKey }}">{{ __($option) }}</option>
                                         @endforeach

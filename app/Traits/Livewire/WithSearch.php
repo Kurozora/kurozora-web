@@ -73,7 +73,7 @@ trait WithSearch
             $type = $filter['type'];
 
             if ((is_numeric($selected) && $selected >= 0) || !empty($selected)) {
-                if ($type == 'select') {
+                if ($type === 'multiselect') {
                     $whereIns[$attribute] = $selected;
                 } else {
                     $wheres[$attribute] = match ($type) {
