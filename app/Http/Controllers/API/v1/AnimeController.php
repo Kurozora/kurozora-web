@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\API\v1;
 
+use App\Enums\SearchScope;
+use App\Enums\SearchType;
 use App\Events\AnimeViewed;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
@@ -18,6 +20,7 @@ use App\Http\Requests\GetMediaSongsRequest;
 use App\Http\Requests\GetMediaStaffRequest;
 use App\Http\Requests\GetUpcomingAnimeRequest;
 use App\Http\Requests\RateAnimeRequest;
+use App\Http\Requests\SearchRequest;
 use App\Http\Resources\AnimeResource;
 use App\Http\Resources\AnimeResourceIdentity;
 use App\Http\Resources\CharacterResourceIdentity;
@@ -32,12 +35,45 @@ use App\Models\Anime;
 use App\Models\MediaRating;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Routing\Redirector;
 
 class AnimeController extends Controller
 {
+    /**
+     * Returns the anime index.
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     * @throws AuthenticationException
+     * @throws BindingResolutionException
+     */
+    public function index(Request $request): JsonResponse
+    {
+        // Override parameters
+        $request->merge([
+            'scope' => SearchScope::Kurozora,
+            'types' => [
+                SearchType::Shows
+            ]
+        ]);
+
+        // Convert request type
+        $app = app();
+        $searchRequest = SearchRequest::createFrom($request)
+            ->setContainer($app) // Necessary or validation fails (validate on null)
+            ->setRedirector($app->make(Redirector::class)); // Necessary or validation failure fails (422)
+        $searchRequest->validateResolved(); // Necessary for preparing for validation
+
+        return (new SearchController())
+            ->index($searchRequest);
+    }
+
     /**
      * Returns detailed information of an Anime.
      *

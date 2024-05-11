@@ -5,6 +5,10 @@ use App\Http\Controllers\API\v1\AnimeController;
 Route::prefix('/anime')
     ->name('.anime')
     ->group(function () {
+        Route::get('/', [AnimeController::class, 'index'])
+            ->middleware('auth.kurozora:optional')
+            ->name('.index');
+
         Route::get('/upcoming', [AnimeController::class, 'upcoming'])
             ->middleware('auth.kurozora:optional')
             ->name('.upcoming');

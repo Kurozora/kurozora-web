@@ -5,6 +5,10 @@ use App\Http\Controllers\API\v1\SongController;
 Route::prefix('/songs')
     ->name('.songs')
     ->group(function () {
+        Route::get('/', [SongController::class, 'index'])
+            ->middleware('auth.kurozora:optional')
+            ->name('.index');
+
         Route::prefix('{song}')
             ->group(function () {
                 Route::get('/', [SongController::class, 'view'])

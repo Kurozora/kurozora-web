@@ -5,6 +5,10 @@ use App\Http\Controllers\API\v1\PersonController;
 Route::prefix('/people')
     ->name('.people')
     ->group(function () {
+        Route::get('/', [PersonController::class, 'index'])
+            ->middleware('auth.kurozora:optional')
+            ->name('.index');
+
         Route::prefix('{person}')
             ->group(function () {
                 Route::get('/', [PersonController::class, 'details'])

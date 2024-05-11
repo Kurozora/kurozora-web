@@ -5,6 +5,10 @@ use App\Http\Controllers\API\v1\GameController;
 Route::prefix('/games')
     ->name('.games')
     ->group(function () {
+        Route::get('/', [GameController::class, 'index'])
+            ->middleware('auth.kurozora:optional')
+            ->name('.index');
+
         Route::get('/upcoming', [GameController::class, 'upcoming'])
             ->middleware('auth.kurozora:optional')
             ->name('.upcoming');

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\API\v1;
 
+use App\Enums\SearchScope;
+use App\Enums\SearchType;
 use App\Events\SongViewed;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
@@ -9,6 +11,7 @@ use App\Http\Requests\GetSongAnimesRequest;
 use App\Http\Requests\GetSongGamesRequest;
 use App\Http\Requests\GetSongReviewsRequest;
 use App\Http\Requests\RateSongRequest;
+use App\Http\Requests\SearchRequest;
 use App\Http\Resources\AnimeResource;
 use App\Http\Resources\GameResource;
 use App\Http\Resources\MediaRatingResource;
@@ -17,10 +20,44 @@ use App\Models\MediaRating;
 use App\Models\Song;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Redirector;
 
 class SongController extends Controller
 {
+    /**
+     * Returns the songs index.
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     * @throws AuthenticationException
+     * @throws BindingResolutionException
+     */
+    public function index(Request $request): JsonResponse
+    {
+        // Override parameters
+        $request->merge([
+            'scope' => SearchScope::Kurozora,
+            'types' => [
+                SearchType::Songs
+            ]
+        ]);
+
+        // Convert request type
+        $app = app();
+        $searchRequest = SearchRequest::createFrom($request)
+            ->setContainer($app) // Necessary or validation fails (validate on null)
+            ->setRedirector($app->make(Redirector::class)); // Necessary or validation failure fails (422)
+        $searchRequest->validateResolved(); // Necessary for preparing for validation
+
+        return (new SearchController())
+            ->index($searchRequest);
+    }
+
     /**
      * Shows song details.
      *

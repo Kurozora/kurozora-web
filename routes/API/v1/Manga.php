@@ -5,6 +5,10 @@ use App\Http\Controllers\API\v1\MangaController;
 Route::prefix('/manga')
     ->name('.manga')
     ->group(function () {
+        Route::get('/', [MangaController::class, 'index'])
+            ->middleware('auth.kurozora:optional')
+            ->name('.index');
+
         Route::get('/upcoming', [MangaController::class, 'upcoming'])
             ->middleware('auth.kurozora:optional')
             ->name('.upcoming');

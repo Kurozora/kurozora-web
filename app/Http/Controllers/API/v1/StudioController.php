@@ -2,22 +2,58 @@
 
 namespace App\Http\Controllers\API\v1;
 
+use App\Enums\SearchScope;
+use App\Enums\SearchType;
 use App\Events\StudioViewed;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GetStudioAnimeRequest;
 use App\Http\Requests\GetStudioGamesRequest;
 use App\Http\Requests\GetStudioLiteraturesRequest;
+use App\Http\Requests\SearchRequest;
 use App\Http\Resources\AnimeResourceIdentity;
 use App\Http\Resources\GameResourceIdentity;
 use App\Http\Resources\LiteratureResourceIdentity;
 use App\Http\Resources\StudioResource;
 use App\Models\Studio;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Redirector;
 
 class StudioController extends Controller
 {
+    /**
+     * Returns the studios index.
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     * @throws AuthenticationException
+     * @throws BindingResolutionException
+     */
+    public function index(Request $request): JsonResponse
+    {
+        // Override parameters
+        $request->merge([
+            'scope' => SearchScope::Kurozora,
+            'types' => [
+                SearchType::Studios
+            ]
+        ]);
+
+        // Convert request type
+        $app = app();
+        $searchRequest = SearchRequest::createFrom($request)
+            ->setContainer($app) // Necessary or validation fails (validate on null)
+            ->setRedirector($app->make(Redirector::class)); // Necessary or validation failure fails (422)
+        $searchRequest->validateResolved(); // Necessary for preparing for validation
+
+        return (new SearchController())
+            ->index($searchRequest);
+    }
+
     /**
      * Shows studio details
      *

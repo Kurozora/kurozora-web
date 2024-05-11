@@ -5,6 +5,10 @@ use App\Http\Controllers\API\v1\StudioController;
 Route::prefix('/studios')
     ->name('.studios')
     ->group(function () {
+        Route::get('/', [StudioController::class, 'index'])
+            ->middleware('auth.kurozora:optional')
+            ->name('.index');
+
         Route::prefix('{studio}')
             ->group(function () {
                 Route::get('/', [StudioController::class, 'details'])
