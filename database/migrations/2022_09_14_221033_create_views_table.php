@@ -15,17 +15,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create(View::TABLE_NAME, function (Blueprint $table) {
-            $table->ulid('id')->primary();
+            $table->id();
             $table->uuidMorphs('viewable');
-            $table->timestamp('viewed_at')->useCurrent();
             $table->timestamps();
-            $table->softDeletes();
-        });
-
-        Schema::table(View::TABLE_NAME, function (Blueprint $table) {
-            // Set index key constraints
-            $table->index('viewed_at');
-            $table->index('deleted_at');
         });
     }
 
