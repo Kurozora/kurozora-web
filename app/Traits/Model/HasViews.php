@@ -20,18 +20,9 @@ trait HasViews
             if (in_array(SoftDeletes::class, class_uses_recursive($model))) {
                 if ($model->forceDeleting) {
                     $model->views()->forceDelete();
-                    return;
                 }
             }
-
-            $model->views()->delete();
         });
-
-        if (in_array(SoftDeletes::class, class_uses_recursive(static::class))) {
-            static::restoring(function (Model $model) {
-                $model->views()->restore();
-            });
-        }
     }
 
     /**
