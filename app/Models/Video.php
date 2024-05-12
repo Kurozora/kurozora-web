@@ -4,26 +4,17 @@ namespace App\Models;
 
 use App\Enums\VideoSource;
 use App\Enums\VideoType;
-use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Video extends KModel
 {
-    use HasUlids,
-        SoftDeletes;
+    use SoftDeletes;
 
     // Table name
     const string TABLE_NAME = 'videos';
     protected $table = self::TABLE_NAME;
-
-    /**
-     * Indicates if the IDs are auto-incrementing.
-     *
-     * @var bool $incrementing
-     */
-    public $incrementing = false;
 
     /**
      * Bootstrap the model and its traits.

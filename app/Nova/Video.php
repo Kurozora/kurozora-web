@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Heading;
+use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\MorphTo;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Select;
@@ -54,12 +55,9 @@ class Video extends Resource
     public function fields(Request $request): array
     {
         return [
-            Heading::make('Identification')
-                ->onlyOnDetail(),
+            Heading::make('Identification'),
 
-            Text::make('ULID', 'id')
-                ->onlyOnDetail()
-                ->sortable(),
+            ID::make()->sortable(),
 
             Heading::make('Meta information'),
 
