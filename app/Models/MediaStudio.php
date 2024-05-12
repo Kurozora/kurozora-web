@@ -47,7 +47,6 @@ class MediaStudio extends MorphPivot implements Sitemapable
     public function model(): MorphTo
     {
         return $this->morphTo();
-//            ->withoutTvRatings();
     }
 
     /**

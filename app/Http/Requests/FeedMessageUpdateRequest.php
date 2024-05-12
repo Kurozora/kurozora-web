@@ -25,7 +25,7 @@ class FeedMessageUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'content'       => ['bail', 'required_without:body', 'string', 'min:2', 'max:' . FeedMessage::maxContentLength()],
+            'content'       => ['bail', 'required_without:body', 'string', 'min:1', 'max:' . FeedMessage::maxContentLength()],
             'is_nsfw'       => ['bail', 'required', 'integer', 'in:0,1', 'nullable'],
             'is_spoiler'    => ['bail', 'required', 'integer', 'in:0,1', 'nullable']
         ];
