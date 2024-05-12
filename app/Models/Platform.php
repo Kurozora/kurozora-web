@@ -10,7 +10,6 @@ use App\Traits\Model\HasSlug;
 use App\Traits\Model\HasViews;
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Scout\Searchable;
@@ -22,11 +21,10 @@ use Spatie\Sitemap\Contracts\Sitemapable;
 use Spatie\Sitemap\Tags\Url;
 use Spatie\Sluggable\SlugOptions;
 
-class Platform extends KModel  implements HasMedia, Sitemapable
+class Platform extends KModel implements HasMedia, Sitemapable
 {
     use HasFactory,
         HasSlug,
-        HasUlids,
         HasViews,
         InteractsWithMedia,
         InteractsWithMediaExtension,
@@ -38,13 +36,6 @@ class Platform extends KModel  implements HasMedia, Sitemapable
     // Table name
     const string TABLE_NAME = 'platforms';
     protected $table = self::TABLE_NAME;
-
-    /**
-     * Indicates if the IDs are auto-incrementing.
-     *
-     * @var bool $incrementing
-     */
-    public $incrementing = false;
 
     /**
      * Translatable attributes.
@@ -107,7 +98,8 @@ class Platform extends KModel  implements HasMedia, Sitemapable
     /**
      * Make all instances of the model searchable.
      *
-     * @param  int  $chunk
+     * @param int $chunk
+     *
      * @return void
      */
     public static function makeAllSearchable($chunk = null): void
@@ -132,6 +124,7 @@ class Platform extends KModel  implements HasMedia, Sitemapable
      * Modify the query used to retrieve models when making all of the models searchable.
      *
      * @param Builder $query
+     *
      * @return Builder
      */
     protected function makeAllSearchableUsing(Builder $query): Builder
@@ -177,6 +170,7 @@ class Platform extends KModel  implements HasMedia, Sitemapable
      * The type of the studio.
      *
      * @param int|null $value
+     *
      * @return PlatformType|null
      */
     public function getTypeAttribute(?int $value): ?PlatformType

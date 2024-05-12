@@ -15,7 +15,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create(Platform::TABLE_NAME, function (Blueprint $table) {
-            $table->ulid('id')->primary();
+            $table->id();
             $table->string('slug');
             $table->string('original_name');
             $table->json('synonym_names')->nullable();

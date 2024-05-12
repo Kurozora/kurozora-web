@@ -2,25 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PlatformTranslation extends KModel
 {
-    use HasUlids,
-        SoftDeletes;
+    use SoftDeletes;
 
     // Table name
     const string TABLE_NAME = 'platform_translations';
     protected $table = self::TABLE_NAME;
-
-    /**
-     * Indicates if the IDs are auto-incrementing.
-     *
-     * @var bool $incrementing
-     */
-    public $incrementing = false;
 
     /**
      * The platform the translations belongs to.

@@ -17,8 +17,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create(PlatformTranslation::TABLE_NAME, function (Blueprint $table) {
-            $table->ulid('id')->primary();
-            $table->foreignUlid('platform_id');
+            $table->id();
+            $table->foreignId('platform_id');
             $table->string('locale', 2);
             $table->string('name');
             $table->text('about')->nullable();
