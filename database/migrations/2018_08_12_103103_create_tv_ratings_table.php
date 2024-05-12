@@ -20,13 +20,11 @@ return new class extends Migration
             $table->string('description');
             $table->unsignedTinyInteger('weight');
             $table->timestamps();
-            $table->softDeletes();
         });
 
         Schema::table(TvRating::TABLE_NAME, function (Blueprint $table) {
             // Set index key constraints
             $table->index('weight');
-            $table->index('deleted_at');
         });
     }
 

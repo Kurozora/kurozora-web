@@ -4,12 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class TvRating extends KModel
 {
-    use HasFactory,
-        SoftDeletes;
+    use HasFactory;
 
     /**
      * The model's table name.
