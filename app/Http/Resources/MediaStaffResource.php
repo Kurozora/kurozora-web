@@ -20,6 +20,7 @@ class MediaStaffResource extends JsonResource
      * Transform the resource into an array.
      *
      * @param Request $request
+     *
      * @return array
      */
     public function toArray(Request $request): array
@@ -29,12 +30,12 @@ class MediaStaffResource extends JsonResource
             default => 'api.anime.staff',
         };
         $resource = [
-            'id'            => $this->resource->id,
-            'uuid'          => (string) $this->resource->id,
-            'type'          => 'staff',
-            'href'          => route($routeName, $this->resource->model, false),
-            'attributes'    => [
-                'role'      => $this->resource->staff_role->only(['name', 'description']),
+            'id' => (string) $this->resource->id,
+            'uuid' => (string) $this->resource->id, // TODO: - Remove after 1.9.0
+            'type' => 'staff',
+            'href' => route($routeName, $this->resource->model, false),
+            'attributes' => [
+                'role' => $this->resource->staff_role->only(['name', 'description']),
             ]
         ];
 

@@ -20,16 +20,17 @@ class GameCastResourceIdentity extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  Request  $request
+     * @param Request $request
+     *
      * @return array|Arrayable|JsonSerializable
      */
-    public function toArray($request): array|JsonSerializable|Arrayable
+    public function toArray(Request $request): array|JsonSerializable|Arrayable
     {
         return [
-            'id'            => $this->resource->id,
-            'uuid'          => (string) $this->resource->id,
-            'type'          => 'cast',
-            'href'          => route('api.game-cast.details', $this->resource, false),
+            'id' => (string) $this->resource->id,
+            'uuid' => (string) $this->resource->id, // TODO: - Remove after 1.9.0
+            'type' => 'cast',
+            'href' => route('api.game-cast.details', $this->resource, false),
         ];
     }
 }

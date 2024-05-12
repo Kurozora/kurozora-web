@@ -20,23 +20,24 @@ class ExploreCategoryResource extends JsonResource
      * Transform the resource into an array.
      *
      * @param Request $request
+     *
      * @return array
      */
     public function toArray(Request $request): array
     {
         $resource = [
-            'id'            => $this->resource->id,
-            'uuid'          => (string) $this->resource->id,
-            'type'          => 'explore',
-            'href'          => route('api.explore.details', $this->resource, absolute: false),
-            'attributes'    => [
-                'title'         => $this->getTypeSpecificTitle($request),
-                'description'   => $this->resource->description,
-                'slug'          => $this->resource->slug,
+            'id' => (string) $this->resource->id,
+            'uuid' => (string) $this->resource->id, // TODO: - Remove after 1.9.0
+            'type' => 'explore',
+            'href' => route('api.explore.details', $this->resource, absolute: false),
+            'attributes' => [
+                'title' => $this->getTypeSpecificTitle($request),
+                'description' => $this->resource->description,
+                'slug' => $this->resource->slug,
                 'secondarySlug' => $this->resource->secondary_slug,
-                'type'          => $this->resource->type,
-                'size'          => $this->resource->size,
-                'position'      => $this->resource->position,
+                'type' => $this->resource->type,
+                'size' => $this->resource->size,
+                'position' => $this->resource->position,
             ]
         ];
 

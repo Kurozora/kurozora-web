@@ -19,18 +19,19 @@ class SessionResource extends JsonResource
      * Transform the resource into an array.
      *
      * @param Request $request
+     *
      * @return array
      */
     public function toArray(Request $request): array
     {
         $resource = [
-            'id'            => $this->resource->id,
-            'uuid'          => (string) $this->resource->id,
-            'type'          => 'sessions',
-            'href'          => route('api.me.sessions.details', $this->resource, false),
-            'attributes'    => [
-                'ipAddress'         => $this->resource->ip_address,
-                'lastValidatedAt'   => $this->resource->last_activity,
+            'id' => (string) $this->resource->id,
+            'uuid' => (string) $this->resource->id, // TODO: - Remove after 1.9.0
+            'type' => 'sessions',
+            'href' => route('api.me.sessions.details', $this->resource, false),
+            'attributes' => [
+                'ipAddress' => $this->resource->ip_address,
+                'lastValidatedAt' => $this->resource->last_activity,
             ]
         ];
 

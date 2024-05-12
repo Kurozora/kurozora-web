@@ -20,6 +20,7 @@ class MediaSongResourceIdentity extends JsonResource
      * Transform the resource into an array.
      *
      * @param Request $request
+     *
      * @return array
      */
     public function toArray(Request $request): array
@@ -28,11 +29,12 @@ class MediaSongResourceIdentity extends JsonResource
             Game::class => 'api.games.songs',
             default => 'api.anime.songs',
         };
+
         return [
-            'id'            => $this->resource->id,
-            'uuid'          => (string) $this->resource->id,
-            'type'          => 'anime-songs',
-            'href'          => route($routeName, $this->resource->model, false),
+            'id' => (string) $this->resource->id,
+            'uuid' => (string) $this->resource->id, // TODO: - Remove after 1.9.0
+            'type' => 'anime-songs',
+            'href' => route($routeName, $this->resource->model, false),
         ];
     }
 }

@@ -19,18 +19,19 @@ class AccessTokenResource extends JsonResource
      * Transform the resource into an array.
      *
      * @param Request $request
+     *
      * @return array
      */
     public function toArray(Request $request): array
     {
         $resource = [
-            'id'            => $this->resource->id,
-            'uuid'          => (string) $this->resource->id,
-            'type'          => 'access-token',
-            'href'          => route('api.me.access-tokens.details', $this->resource, false),
-            'attributes'    => [
-                'ipAddress'         => $this->resource->session_attribute->ip_address,
-                'lastValidatedAt'   => $this->resource->last_used_at?->timestamp,
+            'id' => (string) $this->resource->id,
+            'uuid' => (string) $this->resource->id, // TODO: - Remove after 1.9.0
+            'type' => 'access-token',
+            'href' => route('api.me.access-tokens.details', $this->resource, false),
+            'attributes' => [
+                'ipAddress' => $this->resource->session_attribute->ip_address,
+                'lastValidatedAt' => $this->resource->last_used_at?->timestamp,
             ]
         ];
 

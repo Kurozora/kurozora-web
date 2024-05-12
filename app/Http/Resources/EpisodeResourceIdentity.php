@@ -19,15 +19,16 @@ class EpisodeResourceIdentity extends JsonResource
      * Transform the resource into an array.
      *
      * @param Request $request
+     *
      * @return array
      */
     public function toArray(Request $request): array
     {
         return [
-            'id'    => (int) ($this->resource?->id ?? $this->resource),
-            'uuid'  => (string) ($this->resource?->id ?? $this->resource),
-            'type'  => 'episodes',
-            'href'  => route('api.episodes.details', $this->resource, false),
+            'id' => (string) ($this->resource?->id ?? $this->resource),
+            'uuid' => (string) ($this->resource?->id ?? $this->resource), // TODO: - Remove after 1.9.0
+            'type' => 'episodes',
+            'href' => route('api.episodes.details', $this->resource, false),
         ];
     }
 }

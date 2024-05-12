@@ -27,35 +27,36 @@ class UserResourceBasic extends JsonResource
      * Transform the resource into an array.
      *
      * @param Request $request
+     *
      * @return array
      */
     public function toArray(Request $request): array
     {
         $resource = UserResourceIdentity::make($this->resource)->toArray($request);
         $resource = array_merge($resource, [
-            'uuid'              => $this->resource->uuid,
-            'attributes'        => [
-                'slug'              => $this->resource->slug,
-                'profile'           => ImageResource::make($this->resource->media->firstWhere('collection_name', '=', MediaCollection::Profile)),
-                'banner'            => ImageResource::make($this->resource->media->firstWhere('collection_name', '=', MediaCollection::Banner)),
-                'username'          => $this->resource->username,
-                'biography'         => $this->resource->biography,
-                'biographyHTML'     => $this->resource->biography_html,
+            'uuid' => $this->resource->uuid,
+            'attributes' => [
+                'slug' => $this->resource->slug,
+                'profile' => ImageResource::make($this->resource->media->firstWhere('collection_name', '=', MediaCollection::Profile)),
+                'banner' => ImageResource::make($this->resource->media->firstWhere('collection_name', '=', MediaCollection::Banner)),
+                'username' => $this->resource->username,
+                'biography' => $this->resource->biography,
+                'biographyHTML' => $this->resource->biography_html,
                 'biographyMarkdown' => $this->resource->biography_markdown,
-                'activityStatus'    => $this->resource->activityStatus->description,
-                'followerCount'     => $this->resource->followers_count,
-                'followingCount'    => $this->resource->following_count,
-                'ratingsCount'      => $this->resource->media_ratings_count,
-                'reputationCount'   => 0, // - TODO: add $this->resource->getReputationCount(),
-                'isDeveloper'       => $this->resource->is_developer,
-                'isEarlySupporter'  => $this->resource->is_early_supporter,
-                'isStaff'           => $this->resource->is_staff,
-                'isPro'             => $this->resource->is_pro,
-                'isSubscribed'      => $this->resource->is_subscribed,
-                'isVerified'        => $this->resource->is_verified,
-                'joinDate'          => $this->resource->created_at->timestamp,
-                'joinedAt'          => $this->resource->created_at->timestamp,
-                'subscribedAt'      => $this->resource->subscribed_at?->timestamp,
+                'activityStatus' => $this->resource->activityStatus->description,
+                'followerCount' => $this->resource->followers_count,
+                'followingCount' => $this->resource->following_count,
+                'ratingsCount' => $this->resource->media_ratings_count,
+                'reputationCount' => 0, // - TODO: add $this->resource->getReputationCount(),
+                'isDeveloper' => $this->resource->is_developer,
+                'isEarlySupporter' => $this->resource->is_early_supporter,
+                'isStaff' => $this->resource->is_staff,
+                'isPro' => $this->resource->is_pro,
+                'isSubscribed' => $this->resource->is_subscribed,
+                'isVerified' => $this->resource->is_verified,
+                'joinDate' => $this->resource->created_at->timestamp,
+                'joinedAt' => $this->resource->created_at->timestamp,
+                'subscribedAt' => $this->resource->subscribed_at?->timestamp,
             ]
         ]);
 
@@ -110,6 +111,7 @@ class UserResourceBasic extends JsonResource
      * Enables including user's settings in the resource.
      *
      * @param bool $include
+     *
      * @return UserResourceBasic
      */
     function includingSettings(bool $include = true): self

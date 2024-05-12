@@ -20,21 +20,22 @@ class AppThemeResource extends JsonResource
      * Transform the resource into an array.
      *
      * @param Request $request
+     *
      * @return array
      */
     public function toArray(Request $request): array
     {
         return [
-            'id'            => $this->resource->id,
-            'uuid'          => (string) $this->resource->id,
-            'type'          => 'themes',
-            'href'          => route('api.theme-store.details', $this->resource, false),
-            'attributes'        => [
-                'screenshots'   => ImageResource::collection($this->resource->media->where('collection_name', '=', MediaCollection::Screenshot)),
-                'name'          => $this->resource->name,
-                'downloadLink'  => route('api.theme-store.download', ['appTheme' => $this->resource->id]),
+            'id' => (string) $this->resource->id,
+            'uuid' => (string) $this->resource->id, // TODO: - Remove after 1.9.0
+            'type' => 'themes',
+            'href' => route('api.theme-store.details', $this->resource, false),
+            'attributes' => [
+                'screenshots' => ImageResource::collection($this->resource->media->where('collection_name', '=', MediaCollection::Screenshot)),
+                'name' => $this->resource->name,
+                'downloadLink' => route('api.theme-store.download', ['appTheme' => $this->resource->id]),
                 'downloadCount' => $this->resource->download_count,
-                'version'       => $this->resource->version,
+                'version' => $this->resource->version,
             ]
         ];
     }

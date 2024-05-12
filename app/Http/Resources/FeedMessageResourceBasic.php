@@ -20,6 +20,7 @@ class FeedMessageResourceBasic extends JsonResource
      * Transform the resource into an array.
      *
      * @param Request $request
+     *
      * @return array
      */
     public function toArray(Request $request): array
@@ -27,26 +28,26 @@ class FeedMessageResourceBasic extends JsonResource
         $totalHearts = $this->resource->viaLoveReactant()->getReactionCounterOfType(FeedVoteType::Heart()->description);
 
         $resource = [
-            'id'            => (int) $this->resource->id,
-            'uuid'          => (string) $this->resource->id,
-            'type'          => 'feed-messages',
-            'href'          => route('api.feed.messages.details', $this->resource, false),
-            'attributes'    => [
-                'body'              => $this->resource->content,
-                'content'           => $this->resource->content,
-                'contentHTML'       => $this->resource->content_html ?? '',
-                'contentMarkdown'   => $this->resource->content_markdown ?? '',
-                'metrics'           => [
-                    'heartCount'        => $totalHearts->getCount(),
-                    'replyCount'        => (int) $this->resource->replies_count,
-                    'reShareCount'      => (int) $this->resource->re_shares_count
+            'id' => (string) $this->resource->id,
+            'uuid' => (string) $this->resource->id, // TODO: - Remove after 1.9.0
+            'type' => 'feed-messages',
+            'href' => route('api.feed.messages.details', $this->resource, false),
+            'attributes' => [
+                'body' => $this->resource->content,
+                'content' => $this->resource->content,
+                'contentHTML' => $this->resource->content_html ?? '',
+                'contentMarkdown' => $this->resource->content_markdown ?? '',
+                'metrics' => [
+                    'heartCount' => $totalHearts->getCount(),
+                    'replyCount' => (int) $this->resource->replies_count,
+                    'reShareCount' => (int) $this->resource->re_shares_count
                 ],
-                'isReply'           => $this->resource->is_reply,
-                'isReShare'         => $this->resource->is_reshare,
-                'isReShared'        => (bool) $this->resource->isReShared,
-                'isNSFW'            => $this->resource->is_nsfw,
-                'isSpoiler'         => $this->resource->is_spoiler,
-                'createdAt'         => $this->resource->created_at->timestamp,
+                'isReply' => $this->resource->is_reply,
+                'isReShare' => $this->resource->is_reshare,
+                'isReShared' => (bool) $this->resource->isReShared,
+                'isNSFW' => $this->resource->is_nsfw,
+                'isSpoiler' => $this->resource->is_spoiler,
+                'createdAt' => $this->resource->created_at->timestamp,
             ]
         ];
 
