@@ -16,7 +16,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create(UserFavorite::TABLE_NAME, function (Blueprint $table) {
-            $table->ulid('id')->primary();
+            $table->id();
             $table->unsignedBigInteger('user_id');
             $table->uuidMorphs('favorable');
             $table->timestamps();
