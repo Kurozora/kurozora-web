@@ -19,15 +19,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create(Game::TABLE_NAME, function (Blueprint $table) {
-            $table->ulid('id')->primary();
-            $table->ulid('series_id')->nullable();
+            $table->id();
+            $table->unsignedBigInteger('series_id')->nullable();
             $table->unsignedInteger('igdb_id')->unique()->nullable();
             $table->string('igdb_slug')->unique()->nullable();
             $table->string('slug', 280);
             $table->string('original_title', 280);
             $table->json('synonym_titles')->nullable();
             $table->unsignedBigInteger('tv_rating_id')->nullable();
-            $table->ulid('parent_id')->nullable();
+            $table->unsignedBigInteger('parent_id')->nullable();
             $table->unsignedBigInteger('media_type_id')->nullable();
             $table->unsignedBigInteger('source_id')->nullable();
             $table->unsignedBigInteger('status_id')->nullable();

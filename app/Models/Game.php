@@ -31,7 +31,6 @@ use Carbon\CarbonInterface;
 use Carbon\CarbonInterval;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -62,7 +61,6 @@ class Game extends KModel implements HasMedia, Sitemapable
         HasMediaTags,
         HasMediaThemes,
         HasSlug,
-        HasUlids,
         HasVideos,
         HasViews,
         InteractsWithMedia,
