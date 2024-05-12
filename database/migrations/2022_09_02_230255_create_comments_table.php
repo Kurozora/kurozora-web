@@ -16,10 +16,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create(Comment::TABLE_NAME, function (Blueprint $table) {
-            $table->ulid('id')->primary();
-            $table->ulid('comment_id')->nullable();
+            $table->id();
+            $table->unsignedBigInteger('comment_id')->nullable();
             $table->unsignedBigInteger('user_id');
-            $table->uuidMorphs('commentable');
+            $table->morphs('commentable');
             $table->text('content');
             $table->boolean('is_spoiler')->default(false);
             $table->boolean('is_nsfw')->default(false);

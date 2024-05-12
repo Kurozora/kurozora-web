@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Traits\Model\HasComments;
-use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -12,19 +11,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Comment extends KModel
 {
     use HasComments,
-        HasUlids,
         SoftDeletes;
 
     // Table name
     const string TABLE_NAME = 'comments';
     protected $table = self::TABLE_NAME;
-
-    /**
-     * Indicates if the IDs are auto-incrementing.
-     *
-     * @var bool $incrementing
-     */
-    public $incrementing = false;
 
     /**
      * Get the commentable entity that the comment belongs to.
