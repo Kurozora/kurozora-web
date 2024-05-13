@@ -31,7 +31,6 @@ use Carbon\CarbonInterval;
 use Carbon\Exceptions\InvalidFormatException;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -62,7 +61,6 @@ class Manga extends KModel implements HasMedia, Sitemapable
         HasMediaTags,
         HasMediaThemes,
         HasSlug,
-        HasUlids,
         HasVideos,
         HasViews,
         InteractsWithMedia,
@@ -78,13 +76,6 @@ class Manga extends KModel implements HasMedia, Sitemapable
 
     // Maximum relationships fetch limit
     const int MAXIMUM_RELATIONSHIPS_LIMIT = 10;
-
-    /**
-     * Indicates if the IDs are auto-incrementing.
-     *
-     * @var bool $incrementing
-     */
-    public $incrementing = false;
 
     // Table name
     const string TABLE_NAME = 'mangas';

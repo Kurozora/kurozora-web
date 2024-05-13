@@ -19,7 +19,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create(Manga::TABLE_NAME, function (Blueprint $table) {
-            $table->ulid('id')->primary();
+            $table->id();
             $table->unsignedInteger('anidb_id')->unique()->nullable();
             $table->unsignedInteger('anilist_id')->unique()->nullable();
             $table->string('animeplanet_id')->nullable();
