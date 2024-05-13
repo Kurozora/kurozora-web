@@ -17,7 +17,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create(UserWatchedEpisode::TABLE_NAME, function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('episode_id');
             $table->unsignedTinyInteger('rewatch_count')->default(0);
