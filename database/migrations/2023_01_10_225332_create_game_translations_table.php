@@ -18,7 +18,7 @@ return new class extends Migration
     {
         Schema::create(GameTranslation::TABLE_NAME, function (Blueprint $table) {
             $table->ulid('id')->primary();
-            $table->ulid('game_id');
+            $table->unsignedBigInteger('game_id');
             $table->string('locale', 2)->index();
             $table->string('title', 280);
             $table->text('synopsis')->nullable();

@@ -18,7 +18,7 @@ return new class extends Migration
     {
         Schema::create(Video::TABLE_NAME, function (Blueprint $table) {
             $table->id();
-            $table->uuidMorphs('videoable');
+            $table->morphs('videoable');
             $table->unsignedBigInteger('language_id');
             $table->string('source');
             $table->string('code');

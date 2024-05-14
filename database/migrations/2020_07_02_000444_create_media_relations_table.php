@@ -17,9 +17,9 @@ return new class extends Migration
     {
         Schema::create(MediaRelation::TABLE_NAME, function (Blueprint $table) {
             $table->id();
-            $table->uuidMorphs('model');
+            $table->morphs('model');
             $table->unsignedBigInteger('relation_id');
-            $table->uuidMorphs('related');
+            $table->morphs('related');
             $table->timestamps();
             $table->softDeletes();
         });

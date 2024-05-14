@@ -18,7 +18,7 @@ return new class extends Migration
         Schema::create(ExploreCategoryItem::TABLE_NAME, function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('explore_category_id');
-            $table->uuidMorphs('model');
+            $table->morphs('model');
             $table->integer('position');
             $table->timestamps();
             $table->softDeletes();

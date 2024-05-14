@@ -21,7 +21,7 @@ return new class extends Migration
     {
         Schema::create(GameCast::TABLE_NAME, function (Blueprint $table) {
             $table->ulid('id')->primary();
-            $table->uuid('game_id');
+            $table->unsignedBigInteger('game_id');
             $table->unsignedBigInteger('character_id')->nullable();
             $table->unsignedBigInteger('person_id')->nullable();
             $table->unsignedBigInteger('cast_role_id');

@@ -17,7 +17,7 @@ return new class extends Migration
     {
         Schema::create(MediaTheme::TABLE_NAME, function (Blueprint $table) {
             $table->id();
-            $table->uuidMorphs('model');
+            $table->morphs('model');
             $table->unsignedBigInteger('theme_id');
             $table->timestamps();
             $table->softDeletes();

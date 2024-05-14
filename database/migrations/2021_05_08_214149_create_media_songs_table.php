@@ -17,7 +17,7 @@ return new class extends Migration
     {
         Schema::create(MediaSong::TABLE_NAME, function (Blueprint $table) {
             $table->ulid('id')->primary();
-            $table->uuidMorphs('model');
+            $table->morphs('model');
             $table->unsignedBigInteger('song_id');
             $table->tinyInteger('type');
             $table->integer('position');

@@ -18,7 +18,7 @@ return new class extends Migration
         Schema::create(UserLibrary::TABLE_NAME, function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->uuidMorphs('trackable');
+            $table->morphs('trackable');
             $table->tinyInteger('status');
             $table->unsignedTinyInteger('rewatch_count')->default(0);
             $table->boolean('is_hidden')->default(false);

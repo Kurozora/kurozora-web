@@ -19,7 +19,7 @@ return new class extends Migration
     {
         Schema::create(MangaCast::TABLE_NAME, function (Blueprint $table) {
             $table->ulid('id')->primary();
-            $table->uuid('manga_id');
+            $table->unsignedBigInteger('manga_id');
             $table->unsignedBigInteger('character_id');
             $table->unsignedBigInteger('cast_role_id');
             $table->timestamps();

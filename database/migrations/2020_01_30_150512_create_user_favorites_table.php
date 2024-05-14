@@ -18,7 +18,7 @@ return new class extends Migration
         Schema::create(UserFavorite::TABLE_NAME, function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->uuidMorphs('favorable');
+            $table->morphs('favorable');
             $table->timestamps();
         });
 

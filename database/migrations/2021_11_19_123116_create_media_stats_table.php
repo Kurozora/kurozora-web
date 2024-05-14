@@ -16,7 +16,7 @@ return new class extends Migration
     {
         Schema::create(MediaStat::TABLE_NAME, function (Blueprint $table) {
             $table->id();
-            $table->uuidMorphs('model');
+            $table->morphs('model');
             $table->unsignedBigInteger('model_count')->default(0);
             $table->unsignedBigInteger('planning_count')->default(0);
             $table->unsignedBigInteger('in_progress_count')->default(0);

@@ -16,7 +16,7 @@ return new class extends Migration
     {
         Schema::create(View::TABLE_NAME, function (Blueprint $table) {
             $table->id();
-            $table->uuidMorphs('viewable');
+            $table->morphs('viewable');
             $table->timestamps();
         });
     }

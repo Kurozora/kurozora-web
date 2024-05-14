@@ -16,7 +16,7 @@ return new class extends Migration
     {
         Schema::create(MediaStudio::TABLE_NAME, function (Blueprint $table) {
             $table->id();
-            $table->uuidMorphs('model');
+            $table->morphs('model');
             $table->unsignedBigInteger('studio_id');
             $table->boolean('is_licensor');
             $table->boolean('is_producer');

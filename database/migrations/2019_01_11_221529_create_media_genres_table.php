@@ -17,7 +17,7 @@ return new class extends Migration
     {
         Schema::create(MediaGenre::TABLE_NAME, function (Blueprint $table) {
             $table->id();
-            $table->uuidMorphs('model');
+            $table->morphs('model');
             $table->unsignedBigInteger('genre_id');
             $table->timestamps();
             $table->softDeletes();

@@ -18,7 +18,7 @@ return new class extends Migration
         Schema::create(MediaTag::TABLE_NAME, function (Blueprint $table) {
             $table->ulid('id')->primary();
             $table->ulid('tag_id');
-            $table->uuidMorphs('taggable');
+            $table->morphs('taggable');
             $table->timestamps();
             $table->softDeletes();
         });

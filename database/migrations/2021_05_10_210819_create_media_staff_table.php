@@ -18,7 +18,7 @@ return new class extends Migration
     {
         Schema::create(MediaStaff::TABLE_NAME, function (Blueprint $table) {
             $table->id();
-            $table->uuidMorphs('model');
+            $table->morphs('model');
             $table->unsignedBigInteger('person_id');
             $table->unsignedBigInteger('staff_role_id')->nullable();
             $table->timestamps();

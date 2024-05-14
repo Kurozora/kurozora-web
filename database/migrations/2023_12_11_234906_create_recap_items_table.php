@@ -18,7 +18,7 @@ return new class extends Migration
         Schema::create(RecapItem::TABLE_NAME, function (Blueprint $table) {
             $table->ulid('id')->primary();
             $table->ulid('recap_id');
-            $table->uuidMorphs('model');
+            $table->morphs('model');
             $table->integer('position');
             $table->timestamps();
             $table->softDeletes();
