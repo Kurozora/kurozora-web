@@ -20,7 +20,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create(AnimeCast::TABLE_NAME, function (Blueprint $table) {
-            $table->ulid('id')->primary();
+            $table->id();
             $table->unsignedBigInteger('anime_id');
             $table->unsignedBigInteger('character_id');
             $table->unsignedBigInteger('person_id')->nullable();

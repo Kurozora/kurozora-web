@@ -18,7 +18,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create(MangaCast::TABLE_NAME, function (Blueprint $table) {
-            $table->ulid('id')->primary();
+            $table->id();
             $table->unsignedBigInteger('manga_id');
             $table->unsignedBigInteger('character_id');
             $table->unsignedBigInteger('cast_role_id');

@@ -17,7 +17,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create(MangaTranslation::TABLE_NAME, function (Blueprint $table) {
-            $table->ulid('id')->primary();
+            $table->id();
             $table->unsignedBigInteger('manga_id');
             $table->string('locale', 2);
             $table->string('title', 280);

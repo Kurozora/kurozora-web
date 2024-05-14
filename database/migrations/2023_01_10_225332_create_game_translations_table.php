@@ -17,7 +17,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create(GameTranslation::TABLE_NAME, function (Blueprint $table) {
-            $table->ulid('id')->primary();
+            $table->id();
             $table->unsignedBigInteger('game_id');
             $table->string('locale', 2)->index();
             $table->string('title', 280);

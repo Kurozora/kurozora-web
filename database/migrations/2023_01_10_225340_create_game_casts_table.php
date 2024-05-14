@@ -20,7 +20,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create(GameCast::TABLE_NAME, function (Blueprint $table) {
-            $table->ulid('id')->primary();
+            $table->id();
             $table->unsignedBigInteger('game_id');
             $table->unsignedBigInteger('character_id')->nullable();
             $table->unsignedBigInteger('person_id')->nullable();

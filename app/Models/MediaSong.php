@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Enums\SongType;
 use App\Traits\Model\MorphTvRated;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -17,7 +16,6 @@ use Spatie\Sitemap\Tags\Url;
 class MediaSong extends KModel implements Sitemapable
 {
     use HasFactory,
-        HasUlids,
         MorphTvRated,
         SoftDeletes,
         SortableTrait;
@@ -25,13 +23,6 @@ class MediaSong extends KModel implements Sitemapable
     // Table name
     const string TABLE_NAME = 'media_songs';
     protected $table = self::TABLE_NAME;
-
-    /**
-     * Indicates if the IDs are auto-incrementing.
-     *
-     * @var bool $incrementing
-     */
-    public $incrementing = false;
 
     /**
      * The sortable configurations.

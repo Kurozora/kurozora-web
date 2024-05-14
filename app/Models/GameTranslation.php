@@ -2,14 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class GameTranslation extends KModel
 {
-    use HasUlids,
-        SoftDeletes;
+    use SoftDeletes;
 
     // Table name
     const string TABLE_NAME = 'game_translations';
