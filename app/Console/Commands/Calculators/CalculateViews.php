@@ -97,7 +97,7 @@ class CalculateViews extends Command
 
                         if (!empty($model)) {
                             // Update the view_count property
-                            $model->update([
+                            $model->updateQuietly([
                                 'view_count' => $model->view_count + $view->views_count,
                             ]);
                         }
