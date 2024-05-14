@@ -4,12 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Relation extends KModel
 {
-    use HasFactory,
-        SoftDeletes;
+    use HasFactory;
 
     // Table name
     const string TABLE_NAME = 'relations';
@@ -22,6 +20,7 @@ class Relation extends KModel
      */
     public function anime(): HasMany
     {
-        return $this->hasMany(MediaRelation::class, 'relation_id')->where('model_type', Anime::class);
+        return $this->hasMany(MediaRelation::class, 'relation_id')
+            ->where('model_type', Anime::class);
     }
 }

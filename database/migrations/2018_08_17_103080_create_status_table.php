@@ -21,13 +21,9 @@ return new class extends Migration
             $table->string('description');
             $table->string('color');
             $table->timestamps();
-            $table->softDeletes();
         });
 
         Schema::table(Status::TABLE_NAME, function (Blueprint $table) {
-            // Set index key constraints
-            $table->index('deleted_at');
-
             // Set unique key constraints
             $table->unique(['type', 'name']);
         });

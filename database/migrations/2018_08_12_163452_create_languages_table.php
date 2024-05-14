@@ -20,13 +20,9 @@ return new class extends Migration
             $table->string('code', 2);
             $table->string('iso_639_3', 3);
             $table->timestamps();
-            $table->softDeletes();
         });
 
         Schema::table(Language::TABLE_NAME, function (Blueprint $table) {
-            // Set index key constraints
-            $table->index('deleted_at');
-
             // Set unique key constraints
             $table->unique(['code']);
         });

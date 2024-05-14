@@ -4,12 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Status extends KModel
 {
-    use HasFactory,
-        SoftDeletes;
+    use HasFactory;
 
     // Table name
     const string TABLE_NAME = 'status';
