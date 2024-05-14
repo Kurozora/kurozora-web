@@ -16,7 +16,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create(MediaRating::TABLE_NAME, function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->id();
             $table->unsignedBigInteger('user_id');
             $table->morphs('model');
             $table->float('rating')->default(MediaRating::MAX_RATING_VALUE);

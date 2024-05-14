@@ -16,7 +16,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create(MediaTag::TABLE_NAME, function (Blueprint $table) {
-            $table->ulid('id')->primary();
+            $table->id();
             $table->ulid('tag_id');
             $table->morphs('taggable');
             $table->timestamps();
