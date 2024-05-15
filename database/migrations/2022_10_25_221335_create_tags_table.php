@@ -15,7 +15,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create(Tag::TABLE_NAME, function (Blueprint $table) {
-            $table->ulid('id')->primary();
+            $table->id();
             $table->string('name');
             $table->string('description')->nullable();
             $table->timestamps();
