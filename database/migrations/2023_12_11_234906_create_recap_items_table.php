@@ -16,8 +16,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create(RecapItem::TABLE_NAME, function (Blueprint $table) {
-            $table->ulid('id')->primary();
-            $table->ulid('recap_id');
+            $table->id();
+            $table->unsignedBigInteger('recap_id');
             $table->morphs('model');
             $table->integer('position');
             $table->timestamps();
