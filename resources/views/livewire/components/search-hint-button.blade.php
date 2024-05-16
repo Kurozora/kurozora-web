@@ -29,7 +29,6 @@
                 <li class="flex flex-col">
                     <span class="flex gap-2">
                         <p class="font-bold uppercase">{{ __('Exact Match') }}</p>
-                        <p class="pr-1 pl-1 bg-green-500 text-white font-semibold rounded">{{ __('New') }}</p>
                     </span>
                     <p class="text-sm">{{ __('Enclose one or more words in double quotes.') }}</p>
                     <div class="flex gap-2 pt-1 pb-1">
@@ -40,7 +39,7 @@
                 <li class="flex flex-col">
                     <span class="flex gap-2">
                         <p class="font-bold uppercase">{{ __('Exclude Words') }}</p>
-                        <p class="pr-1 pl-1 bg-orange-500 text-white font-semibold rounded">{{ __('TBA') }}</p>
+                        <p class="pr-1 pl-1 bg-green-500 text-white font-semibold rounded">{{ __('New') }}</p>
                     </span>
                     <p class="text-sm">{{ __('Append a minus in front of a word you want to leave out.') }}</p>
                     <div class="flex gap-2 pt-1 pb-1">
