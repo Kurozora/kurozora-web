@@ -1,6 +1,6 @@
 <div
     x-data="{
-        preferredVideoSource: $persist(@entangle('preferredVideoSource'))
+        preferredVideoSource: $persist(@entangle('preferredVideoSource').live)
     }"
     wire:init="loadSection"
 >

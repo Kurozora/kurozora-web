@@ -17,7 +17,7 @@
             </div>
 
             <div class="mt-5">
-                <x-select id="language" wire:model.defer="state.language">
+                <x-select id="language" wire:model="state.language">
                     @foreach ($this->languages as $language)
                         <option value="{{ $language->code }}">{{ $language->name }}</option>
                     @endforeach

@@ -1,6 +1,6 @@
 <div
     x-data="{
-        isSearchEnabled: @entangle('isSearchEnabled'),
+        isSearchEnabled: @entangle('isSearchEnabled').live,
         isNavOpen: false
     }"
 >
@@ -220,19 +220,19 @@
                             {{ __('Studios') }}
                         </x-nav-link>
 
-{{--                            <x-nav-link class="hidden md:inline-flex" href="{{ route('platforms.index') }}" :active="request()->routeIs('platforms.index')"--}}
-                        {{--                                        x-show="! isSearchEnabled"--}}
-                        {{--                                        x-transition:enter="ease-out duration-150 delay-[400ms] transform"--}}
-                        {{--                                        x-transition:enter-start="opacity-0 scale-75"--}}
-                        {{--                                        x-transition:enter-end="opacity-100 scale-100"--}}
-                        {{--                                        x-transition:leave="ease-in duration-200 delay-[50ms] transform"--}}
-                        {{--                                        x-transition:leave-start="opacity-100 scale-100"--}}
-                        {{--                                        x-transition:leave-end="opacity-0 scale-75"--}}
-                        {{--                            >--}}
-                        {{--                                {{ __('Platforms') }}--}}
-                        {{--                            </x-nav-link>--}}
-                        {{-- Search --}}
+{{--                        <x-nav-link class="hidden md:inline-flex" href="{{ route('platforms.index') }}" :active="request()->routeIs('platforms.index')"--}}
+{{--                                    x-show="! isSearchEnabled"--}}
+{{--                                    x-transition:enter="ease-out duration-150 delay-[400ms] transform"--}}
+{{--                                    x-transition:enter-start="opacity-0 scale-75"--}}
+{{--                                    x-transition:enter-end="opacity-100 scale-100"--}}
+{{--                                    x-transition:leave="ease-in duration-200 delay-[50ms] transform"--}}
+{{--                                    x-transition:leave-start="opacity-100 scale-100"--}}
+{{--                                    x-transition:leave-end="opacity-0 scale-75"--}}
+{{--                        >--}}
+{{--                            {{ __('Platforms') }}--}}
+{{--                        </x-nav-link>--}}
 
+                        {{-- Search --}}
                         <button class="inline-flex h-full w-8 items-center justify-center text-gray-500 cursor-pointer transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none focus:text-gray-700"
                                 x-show="! isSearchEnabled"
                                 x-on:click="isNavOpen = false; isSearchEnabled = ! isSearchEnabled;"
@@ -251,7 +251,7 @@
                                 <button
                                     class="inline-flex h-8 w-8 items-center justify-center text-gray-500 cursor-pointer transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none focus:text-gray-700"
                                     x-show="! isSearchEnabled"
-                                    wire:click="$emit('is-notifications-open', true)"
+                                    wire:click="$dispatch('is-notifications-open', { 'isOpen': true })"
                                     x-transition:enter="ease-out duration-150 delay-[350ms] transform"
                                     x-transition:enter-start="opacity-0 scale-75"
                                     x-transition:enter-end="opacity-100 scale-100"

@@ -1,7 +1,7 @@
 <main
     x-data="{
-        year: @entangle('year'),
-        loadingScreenEnabled: @entangle('loadingScreenEnabled'),
+        year: @entangle('year').live,
+        loadingScreenEnabled: @entangle('loadingScreenEnabled').live,
         isNavOpen: false
     }"
     wire:init="loadPage"

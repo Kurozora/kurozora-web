@@ -103,7 +103,7 @@
                         }
 
                         if (Object.keys(this.groupedItems).length === 0) {
-                            $wire.emit('local-library-empty')
+                            $wire.dispatch('local-library-empty')
                         }
                     }
                 }.bind(this)
@@ -138,7 +138,7 @@
                         return function(event) {
                             console.log('Local Library cleared successfully.', merging)
 
-                            $wire.emit('local-library-cleared', merging)
+                            $wire.dispatch('local-library-cleared', { merging: merging })
                         }
                     }(merging)
 

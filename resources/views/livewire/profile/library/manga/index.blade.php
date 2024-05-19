@@ -17,7 +17,7 @@
     <div
         class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6"
         x-data="{
-            selectedStatus: @entangle('status')
+            selectedStatus: @entangle('status').live
         }"
     >
         <div class="flex flex-nowrap gap-4 justify-between text-center whitespace-nowrap overflow-x-scroll no-scrollbar">

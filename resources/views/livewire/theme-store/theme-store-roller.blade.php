@@ -1,8 +1,8 @@
 <div
     x-data="{
-        show: @entangle('showColorPicker'),
-        state: @entangle('state'),
-        selectedElement: @entangle('selectedElement'),
+        show: @entangle('showColorPicker').live,
+        state: @entangle('state').live,
+        selectedElement: @entangle('selectedElement').live,
         colorPicker: null,
         colorPickerColor: '#FF9300',
         initializeColorPicker() {
@@ -211,7 +211,7 @@
                                         <path d="M6.0148,12.0972 C6.0148,10.7142 6.4848,9.4392 7.2668,8.4162 C8.2608,7.1152 9.7628,6.2212 11.4768,6.0462 C11.6808,6.0252 11.8878,6.0152 12.0978,6.0152 C13.0488,6.0152 13.9468,6.2402 14.7498,6.6312 C16.7778,7.6182 18.1828,9.6942 18.1828,12.0982 C18.1828,15.4532 15.4528,18.1832 12.0988,18.1832 C10.4278,18.1832 8.9118,17.5062 7.8118,16.4102 C7.8078,16.4062 7.8028,16.4042 7.7988,16.3982 C7.7918,16.3922 7.7868,16.3862 7.7808,16.3792 C6.6908,15.2792 6.0148,13.7652 6.0148,12.0972 L6.0148,12.0972 Z M22.9718,21.5392 L17.7788,16.3442 C17.8868,16.1992 17.9918,16.0502 18.0888,15.8972 C18.7878,14.7982 19.1988,13.4972 19.1988,12.0982 C19.1988,8.1782 16.0198,5.0002 12.0988,5.0002 C9.6848,5.0002 7.5568,6.2072 6.2738,8.0482 C5.4728,9.1972 4.9998,10.5922 4.9998,12.0972 C4.9998,16.0202 8.1798,19.1972 12.0978,19.1972 C13.6928,19.1972 15.1598,18.6662 16.3438,17.7782 L21.5388,22.9722 L22.9718,21.5392 Z" id="search"></path>
                                     </g>
                                 </g>
-                                <text id="Title" font-size="17" font-weight="500" line-spacing="22" letter-spacing="-0.409999996" x-bind:fill="state.global_bar_title_text_color" wire:model="state.global_bar_title_text_color">
+                                <text id="Title" font-size="17" font-weight="500" line-spacing="22" letter-spacing="-0.409999996" x-bind:fill="state.global_bar_title_text_color" wire:model.live="state.global_bar_title_text_color">
                                     <tspan x="157.919453" y="71">Forums</tspan>
                                 </text>
 
@@ -337,7 +337,7 @@
             <template x-if="selectedElement !== null">
                 <div class="mt-4">
                     <x-label x-bind:for="selectedElement" :for="$selectedElement" value="Hex" />
-                    <x-input id="{{ $selectedElement }}" type="text" class="mt-1 block w-full" wire:model="{{ 'state.' . $selectedElement }}" />
+                    <x-input id="{{ $selectedElement }}" type="text" class="mt-1 block w-full" wire:model.live="{{ 'state.' . $selectedElement }}" />
                     <x-input-error x-bind:for="selectedElement" :for="$selectedElement" class="mt-2" />
                 </div>
             </template>

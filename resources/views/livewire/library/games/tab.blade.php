@@ -1,6 +1,6 @@
 <div
     x-data="{
-        loadResourceIsEnabled: @entangle('loadResourceIsEnabled'),
+        loadResourceIsEnabled: @entangle('loadResourceIsEnabled').live,
         loadResource() {
             if (selectedStatus.toLowerCase() === '{{ strtolower($status) }}' && !this.loadResourceIsEnabled) {
                 @this.call('loadResource')

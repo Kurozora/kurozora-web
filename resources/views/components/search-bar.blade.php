@@ -2,7 +2,7 @@
 
 <div class="gap-2 items-center mt-4 mb-4 space-y-2 sm:flex sm:space-y-0">
     <div class="flex flex-1 gap-2 items-center">
-        <x-input id="search" type="text" placeholder="{{ __('I’m searching for…') }}" wire:model.debounce.500ms="{{ $searchModel }}" />
+        <x-input id="search" type="text" placeholder="{{ __('I’m searching for…') }}" wire:model.live.debounce.500ms="{{ $searchModel }}" />
 
         <livewire:components.search-hint-button />
     </div>
@@ -36,7 +36,7 @@
                         </div>
 
                         <div class="block pl-4 pr-4 pt-2 pb-2">
-                            <x-select id="{{ $key }}" wire:model="order.{{ $key }}.selected">
+                            <x-select id="{{ $key }}" wire:model.live="order.{{ $key }}.selected">
                                 @foreach($order['options'] as $optionKey => $option)
                                     <option value="{{ $option }}">{{ __($optionKey) }}</option>
                                 @endforeach
@@ -76,25 +76,25 @@
                         <div class="block pl-4 pr-4 pt-2 pb-2">
                             @switch($filter['type'])
                                 @case('string')
-                                    <x-input id="{{ $key }}" type="text" wire:model="filter.{{ $key }}.selected" />
+                                    <x-input id="{{ $key }}" type="text" wire:model.live="filter.{{ $key }}.selected" />
                                     @break
                                 @case('number')
-                                    <x-input id="{{ $key }}" type="number" wire:model="filter.{{ $key }}.selected" />
+                                    <x-input id="{{ $key }}" type="number" wire:model.live="filter.{{ $key }}.selected" />
                                     @break
                                 @case('double')
-                                    <x-input id="{{ $key }}" type="number" step="0.01" wire:model="filter.{{ $key }}.selected" />
+                                    <x-input id="{{ $key }}" type="number" step="0.01" wire:model.live="filter.{{ $key }}.selected" />
                                     @break
                                 @case('date')
-                                    <x-input id="{{ $key }}" type="date" wire:model="filter.{{ $key }}.selected" />
+                                    <x-input id="{{ $key }}" type="date" wire:model.live="filter.{{ $key }}.selected" />
                                     @break
                                 @case('duration')
-                                    <x-input id="{{ $key }}" type="number" step="1" wire:model="filter.{{ $key }}.selected" />
+                                    <x-input id="{{ $key }}" type="number" step="1" wire:model.live="filter.{{ $key }}.selected" />
                                     @break
                                 @case('time')
-                                    <x-input id="{{ $key }}" type="time" wire:model="filter.{{ $key }}.selected" />
+                                    <x-input id="{{ $key }}" type="time" wire:model.live="filter.{{ $key }}.selected" />
                                     @break
                                 @case('day')
-                                    <x-select id="{{ $key }}" wire:model="filter.{{ $key }}.selected">
+                                    <x-select id="{{ $key }}" wire:model.live="filter.{{ $key }}.selected">
                                         <option value="">{{ __('Default') }}</option>
                                         @foreach(range(1, 31) as $day)
                                             <option value="{{ strlen($day) == 1 ? '0' . $day : $day }}">
@@ -104,7 +104,7 @@
                                     </x-select>
                                     @break
                                 @case('month')
-                                    <x-select id="{{ $key }}" wire:model="filter.{{ $key }}.selected">
+                                    <x-select id="{{ $key }}" wire:model.live="filter.{{ $key }}.selected">
                                         <option value="">{{ __('Default') }}</option>
                                         @foreach(range(1, 12) as $month)
                                             <option value="{{ $month }}">
@@ -114,7 +114,7 @@
                                     </x-select>
                                     @break
                                 @case('multiselect')
-                                    <x-select id="{{ $key }}" wire:model="filter.{{ $key }}.selected" multiple>
+                                    <x-select id="{{ $key }}" wire:model.live="filter.{{ $key }}.selected" multiple>
                                         @foreach($filter['options'] as $optionKey => $option)
                                             <option value="{{ $optionKey }}">{{ __($option) }}</option>
                                         @endforeach
@@ -125,7 +125,7 @@
                                     @endforeach
                                 @case('select')
                                     <option value="">{{ __('Default') }}</option>
-                                    <x-select id="{{ $key }}" wire:model="filter.{{ $key }}.selected">
+                                    <x-select id="{{ $key }}" wire:model.live="filter.{{ $key }}.selected">
                                         @foreach($filter['options'] as $optionKey => $option)
                                             <option value="{{ $optionKey }}">{{ __($option) }}</option>
                                         @endforeach
@@ -135,7 +135,7 @@
                                         <option value="{{ (int) ($optionKey == 0) }}">{{ __($option) }}</option>
                                     @endforeach
                                 @case('bool')
-                                    <x-select id="{{ $key }}" wire:model="filter.{{ $key }}.selected">
+                                    <x-select id="{{ $key }}" wire:model.live="filter.{{ $key }}.selected">
                                         <option value="">{{ __('Default') }}</option>
                                         @foreach($filter['options'] as $optionKey => $option)
                                             <option value="{{ (int) ($optionKey == 0) }}">{{ __($option) }}</option>
@@ -152,7 +152,7 @@
                     </div>
 
                     <div class="block pl-4 pr-4 pt-2 pb-2">
-                        <x-select id="perPage" wire:model="perPage">
+                        <x-select id="perPage" wire:model.live="perPage">
                             <option value="25">25</option>
                             <option value="50">50</option>
                             <option value="100">100</option>

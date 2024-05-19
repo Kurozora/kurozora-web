@@ -9,11 +9,11 @@
 
     <x-slot:form>
         {{-- Banner Image --}}
-        <div x-data="{bannerImageName: null, bannerImagePreview: @entangle('bannerImage')}" class="col-span-6 sm:col-span-6">
+        <div x-data="{bannerImageName: null, bannerImagePreview: @entangle('bannerImage').live}" class="col-span-6 sm:col-span-6">
             {{-- Banner Image File Input --}}
             <input
                 type="file" class="hidden"
-                wire:model="bannerImage"
+                wire:model.live="bannerImage"
                 x-ref="bannerImage"
                 x-on:change="
                     bannerImageName = $refs.bannerImage.files[0].name;
@@ -98,11 +98,11 @@
         </div>
 
         {{-- Profile Image --}}
-        <div x-data="{profileImageName: null, profileImagePreview: @entangle('profileImage')}" class="-mt-14 pl-4 pr-4 col-span-6 z-10 sm:-mt-20 sm:px-6 sm:col-span-6">
+        <div x-data="{profileImageName: null, profileImagePreview: @entangle('profileImage').live}" class="-mt-14 pl-4 pr-4 col-span-6 z-10 sm:-mt-20 sm:px-6 sm:col-span-6">
             {{-- Profile Image File Input --}}
             <input
                 type="file" class="hidden"
-                wire:model="profileImage"
+                wire:model.live="profileImage"
                 x-ref="profileImage"
                 x-on:change="
                     profileImageName = $refs.profileImage.files[0].name;
@@ -181,14 +181,14 @@
         {{-- Nickname --}}
         <div class="col-span-6">
             <x-label for="nickname" value="{{ __('Nickname') }}" />
-            <x-input id="nickname" type="text" class="mt-1 block w-full" wire:model.defer="state.nickname" autocomplete="nickname" />
+            <x-input id="nickname" type="text" class="mt-1 block w-full" wire:model="state.nickname" autocomplete="nickname" />
             <x-input-error for="nickname" class="mt-2" />
         </div>
 
         {{-- Biography --}}
         <div class="col-span-6">
             <x-label for="biography" value="{{ __('Biography') }}" />
-            <x-textarea id="biography" class="mt-1 block w-full" placeholder="{{ __('Describe yourself') }}" :autoresize="true" wire:model.defer="state.biography" />
+            <x-textarea id="biography" class="mt-1 block w-full" placeholder="{{ __('Describe yourself') }}" :autoresize="true" wire:model="state.biography" />
             <x-input-error for="biography" class="mt-2" />
         </div>
     </x-slot:form>

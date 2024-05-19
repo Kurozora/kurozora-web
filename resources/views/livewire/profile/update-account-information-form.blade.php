@@ -11,14 +11,14 @@
         {{-- Slug --}}
         <div class="col-span-3 sm:col-span-2">
             <x-label for="username" value="{{ __('Username') }}" />
-            <x-input id="username" type="text" class="mt-1 block w-full {{ ($this->user->is_subscribed || $this->user->can_change_username) ?: 'select-none opacity-25' }}" wire:model.defer="state.username" autocomplete="username" disabled="{{ !($this->user->is_subscribed || $this->user->can_change_username) }}" />
+            <x-input id="username" type="text" class="mt-1 block w-full {{ ($this->user->is_subscribed || $this->user->can_change_username) ?: 'select-none opacity-25' }}" wire:model="state.username" autocomplete="username" disabled="{{ !($this->user->is_subscribed || $this->user->can_change_username) }}" />
             <x-input-error for="username" class="mt-2" />
         </div>
 
         {{-- Email --}}
         <div class="col-span-6 sm:col-span-4">
             <x-label for="email" value="{{ __('Email') }}" />
-            <x-input id="email" type="email" class="mt-1 block w-full" wire:model.defer="state.email" />
+            <x-input id="email" type="email" class="mt-1 block w-full" wire:model="state.email" />
             <x-input-error for="email" class="mt-2" />
         </div>
     </x-slot:form>

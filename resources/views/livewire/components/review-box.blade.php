@@ -12,13 +12,13 @@
                     <livewire:components.star-rating :model-id="$modelID" :model-type="$modelType" :rating="$userRating?->rating" :star-size="'md'" />
                 </div>
 
-                <x-textarea class="block w-full h-48 mt-1 resize-none" placeholder="{{ __('What’s on your mind?') }}" wire:model.defer="reviewText"></x-textarea>
+                <x-textarea class="block w-full h-48 mt-1 resize-none" placeholder="{{ __('What’s on your mind?') }}" wire:model="reviewText"></x-textarea>
             </div>
 
             <div class="flex flex-col gap-2">
                 <p class="text-gray-500 text-sm font-semibold">{{ __('Private Notes') }}</p>
 
-                <x-textarea class="block w-full h-48 mt-1 resize-none" placeholder="{{ __('What’s on your mind?') }}" wire:model.defer="noteText"></x-textarea>
+                <x-textarea class="block w-full h-48 mt-1 resize-none" placeholder="{{ __('What’s on your mind?') }}" wire:model="noteText"></x-textarea>
             </div>
         </div>
     </x-slot:content>

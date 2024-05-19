@@ -286,7 +286,7 @@
                     </div>
 
                     <div class="flex justify-between">
-                        <x-simple-button class="flex gap-1" wire:click="$emit('show-review-box', '{{  $this->reviewBoxID }}')">
+                        <x-simple-button class="flex gap-1" wire:click="$dispatch('show-review-box', { 'id': '{{  $this->reviewBoxID }}' })">
                             @svg('pencil', 'fill-current', ['width' => 18])
                             {{ __('Write a Review') }}
                         </x-simple-button>

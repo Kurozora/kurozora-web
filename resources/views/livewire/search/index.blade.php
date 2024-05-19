@@ -47,13 +47,13 @@
             <div
                 class="mt-4 justify-between"
                 x-data="{
-                    type: @entangle('type')
+                    type: @entangle('type').live
                 }"
             >
                 <x-search-bar>
                     <x-slot:rightBarButtonItems>
                         <div>
-                            <x-select wire:model="scope">
+                            <x-select wire:model.live="scope">
                                 @foreach(\App\Enums\SearchScope::asSelectArray() as $key => $value)
                                     <option value="{{ $key }}">{{ __($value) }}</option>
                                 @endforeach

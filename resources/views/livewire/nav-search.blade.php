@@ -1,6 +1,6 @@
 <div
     x-data="{
-        searchQuery: @entangle('searchQuery'),
+        searchQuery: @entangle('searchQuery').live,
         resetAndClose() {
             isSearchEnabled = false;
             this.searchQuery = '';
@@ -71,7 +71,7 @@
                     name="q"
                     placeholder="{{ [__('I’m searching for…'), __('Search faster with ⌘+K, ctrl+K or /')][array_rand([0,1])] }}"
                     x-ref="search"
-                    wire:model.debounce.500ms="searchQuery"
+                    wire:model.live.debounce.500ms="searchQuery"
                 />
             </form>
 

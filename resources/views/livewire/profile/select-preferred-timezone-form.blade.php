@@ -14,7 +14,7 @@
             </div>
 
             <div class="mt-5">
-                <x-select id="timezone" wire:model.defer="state.timezone">
+                <x-select id="timezone" wire:model="state.timezone">
                     @foreach ($this->timezones as $key => $timezone)
                         <option value="{{ $key }}">{{ $timezone }}</option>
                     @endforeach

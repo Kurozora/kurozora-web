@@ -1,7 +1,7 @@
 <div
     class="relative flex flex-col h-full w-full"
     x-data="{
-        selectedChatOption: $persist(@entangle('selectedChatOption'))
+        selectedChatOption: $persist(@entangle('selectedChatOption').live)
     }"
 >
     {{-- Header --}}
@@ -42,7 +42,7 @@
 
                         <div class="flex flex-col pl-4 pr-4 pt-2 pb-2">
                             @foreach([__('Cozy'), __('Compact')] as $optionKey => $option)
-                                <x-radio value="{{ $optionKey }}" name="selectedCommentDisplayOption" wire:model="selectedCommentDisplayOption">
+                                <x-radio value="{{ $optionKey }}" name="selectedCommentDisplayOption" wire:model.live="selectedCommentDisplayOption">
                                     {{ $option }}
                                 </x-radio>
                             @endforeach
@@ -53,7 +53,7 @@
                         </div>
 
                         <div class="block pl-4 pr-4 pt-2 pb-2">
-                            <x-checkbox wire:model="showTime">{{ __('Show') }}</x-checkbox>
+                            <x-checkbox wire:model.live="showTime">{{ __('Show') }}</x-checkbox>
                         </div>
                     </x-slot:content>
                 </x-dropdown>
@@ -87,16 +87,16 @@
 
         <form
             class="flex flex-row pt-2 pr-2 pb-2 pl-2"
-            wire:submit.prevent="postComment"
+            wire:submit="postComment"
             x-data="{
-                comment: $persist(@entangle('comment').defer).as('_x_comment' + window.location.pathname.replaceAll('/', '_'))
+                comment: $persist(@entangle('comment')).as('_x_comment' + window.location.pathname.replaceAll('/', '_'))
             }"
         >
             @csrf
 
             <x-comment-textarea
-                id="comment-box-{{ $this->id }}"
-                wire:submit.prevent="postComment"
+                id="comment-box-{{ $this->getID() }}"
+                wire:submit="postComment"
                 x-on:keydown.enter.prevent="
                     if ($event.shiftKey) {
                         $event.target.value = $event.target.value + '\n'
@@ -110,7 +110,7 @@
             />
 
             <div class="flex items-end">
-                <x-emoji id="{{ $this->id }}" />
+                <x-emoji id="{{ $this->getID() }}" />
 
                 <button
                     class="flex justify-center text-orange-500"
