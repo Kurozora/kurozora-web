@@ -1,8 +1,8 @@
 <?php
 
 use App\Enums\ChartKind;
-use App\Http\Livewire\Chart\Details as ChartDetails;
-use App\Http\Livewire\Chart\Index as ChartIndex;
+use App\Livewire\Chart\Details as ChartDetails;
+use App\Livewire\Chart\Index as ChartIndex;
 
 Route::prefix('/charts')
     ->name('charts')

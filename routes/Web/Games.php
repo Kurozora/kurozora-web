@@ -1,18 +1,18 @@
 <?php
 
-use App\Http\Livewire\Browse\Game\Seasons\Archive as BrowseGameSeasonsArchive;
-use App\Http\Livewire\Browse\Game\Seasons\Index as BrowseGameSeasons;
-use App\Http\Livewire\Browse\Game\Upcoming\Index as BrowseGameUpcomingIndex;
-use App\Http\Livewire\Game\Cast as GameCast;
-use App\Http\Livewire\Game\Details as GameDetails;
-use App\Http\Livewire\Game\Index as GameIndex;
-use App\Http\Livewire\Game\RelatedGames;
-use App\Http\Livewire\Game\RelatedMangas;
-use App\Http\Livewire\Game\RelatedShows;
-use App\Http\Livewire\Game\Reviews as GameReviews;
-use App\Http\Livewire\Game\Songs as GameSongs;
-use App\Http\Livewire\Game\Staff as GameStaff;
-use App\Http\Livewire\Game\Studios as GameStudios;
+use App\Livewire\Browse\Game\Seasons\Archive as BrowseGameSeasonsArchive;
+use App\Livewire\Browse\Game\Seasons\Index as BrowseGameSeasons;
+use App\Livewire\Browse\Game\Upcoming\Index as BrowseGameUpcomingIndex;
+use App\Livewire\Game\Cast as GameCast;
+use App\Livewire\Game\Details as GameDetails;
+use App\Livewire\Game\Index as GameIndex;
+use App\Livewire\Game\RelatedGames;
+use App\Livewire\Game\RelatedMangas;
+use App\Livewire\Game\RelatedShows;
+use App\Livewire\Game\Reviews as GameReviews;
+use App\Livewire\Game\Songs as GameSongs;
+use App\Livewire\Game\Staff as GameStaff;
+use App\Livewire\Game\Studios as GameStudios;
 
 Route::prefix('/games')
     ->name('games')

@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Livewire\Theme\Details as ThemeDetails;
-use App\Http\Livewire\Theme\Index as ThemeIndex;
+use App\Livewire\Theme\Details as ThemeDetails;
+use App\Livewire\Theme\Index as ThemeIndex;
 
 Route::prefix('/themes')
     ->name('themes')

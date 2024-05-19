@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Livewire\Recap\Index as RecapIndex;
+use App\Livewire\Recap\Index as RecapIndex;
 
 Route::prefix('/recap')
     ->name('recap')

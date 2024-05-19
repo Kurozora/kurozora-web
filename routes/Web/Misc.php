@@ -1,9 +1,9 @@
 <?php
 
-use App\Http\Livewire\Misc\Contact;
-use App\Http\Livewire\Misc\PressKit;
-use App\Http\Livewire\Misc\Projects;
-use App\Http\Livewire\Misc\Team;
+use App\Livewire\Misc\Contact;
+use App\Livewire\Misc\PressKit;
+use App\Livewire\Misc\Projects;
+use App\Livewire\Misc\Team;
 
 Route::name('misc')
     ->group(function() {

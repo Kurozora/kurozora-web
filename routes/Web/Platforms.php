@@ -1,11 +1,7 @@
 <?php
 
-use App\Http\Livewire\Platform\Details as PlatformDetails;
-use App\Http\Livewire\Platform\Index as PlatformIndex;
-
-//use App\Http\Livewire\Platform\Anime as PlatformAnime;
-//use App\Http\Livewire\Platform\Games as PlatformGames;
-//use App\Http\Livewire\Platform\Manga as PlatformManga;
+use App\Livewire\Platform\Details as PlatformDetails;
+use App\Livewire\Platform\Index as PlatformIndex;
 
 Route::prefix('/platforms')
     ->name('platforms')

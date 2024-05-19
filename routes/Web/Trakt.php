@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Livewire\Anime\Details as AnimeDetails;
+use App\Livewire\Anime\Details as AnimeDetails;
 
 Route::prefix('/{trakt_url}')
     ->where(['trakt_url' => '^(www\.)?trakt(.tv)?'])

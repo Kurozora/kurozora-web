@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\v1\APIController;
-use App\Http\Livewire\Misc\ApiIndex;
+use App\Livewire\Misc\ApiIndex;
 
 Route::get('/', [APIController::class, 'index'])
     ->name('api.index');

@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Livewire\Legal\PrivacyPolicy;
-use App\Http\Livewire\Legal\TermsOfUse;
+use App\Livewire\Legal\PrivacyPolicy;
+use App\Livewire\Legal\TermsOfUse;
 
 Route::prefix('/legal')
     ->name('legal')

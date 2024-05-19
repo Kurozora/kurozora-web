@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Livewire\KnowledgeBase\InAppPurchases;
-use App\Http\Livewire\KnowledgeBase\Personalisation;
+use App\Livewire\KnowledgeBase\InAppPurchases;
+use App\Livewire\KnowledgeBase\Personalisation;
 
 Route::prefix('/kb')
     ->name('kb')

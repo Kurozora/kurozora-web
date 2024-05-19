@@ -14,7 +14,7 @@ use App\Http\Controllers\Web\TwoFactorAuthenticationController;
 use App\Http\Controllers\Web\TwoFactorQrCodeController;
 use App\Http\Controllers\Web\TwoFactorSecretKeyController;
 use App\Http\Controllers\Web\VerifyEmailController;
-use App\Http\Livewire\MergeLibrary;
+use App\Livewire\MergeLibrary;
 use Illuminate\Support\Facades\Route;
 
 // Merge library

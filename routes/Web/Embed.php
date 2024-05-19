@@ -1,8 +1,8 @@
 <?php
 
 use App\Http\Controllers\Web\OEmbedController;
-use App\Http\Livewire\Embeds\Episode as EmbedsEpisode;
-use App\Http\Livewire\Embeds\Song as EmbedsSong;
+use App\Livewire\Embeds\Episode as EmbedsEpisode;
+use App\Livewire\Embeds\Song as EmbedsSong;
 
 Route::prefix('/oembed')
     ->name('oembed')

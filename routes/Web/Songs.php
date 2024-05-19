@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Livewire\Song\Details as SongDetails;
-use App\Http\Livewire\Song\Index as SongIndex;
-use App\Http\Livewire\Song\Reviews as SongReviews;
+use App\Livewire\Song\Details as SongDetails;
+use App\Livewire\Song\Index as SongIndex;
+use App\Livewire\Song\Reviews as SongReviews;
 
 Route::prefix('/songs')
     ->name('songs')

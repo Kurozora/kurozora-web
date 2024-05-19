@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Livewire\Anime\Details as AnimeDetails;
+use App\Livewire\Anime\Details as AnimeDetails;
 
 Route::prefix('/{livechart_url}')
     ->where(['livechart_url' => '^(www\.)?livechart(.me)?'])

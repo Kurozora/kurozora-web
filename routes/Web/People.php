@@ -1,12 +1,12 @@
 <?php
 
-use App\Http\Livewire\Person\Anime as PersonAnime;
-use App\Http\Livewire\Person\Characters as PersonCharacters;
-use App\Http\Livewire\Person\Details as PersonDetails;
-use App\Http\Livewire\Person\Games as PersonGames;
-use App\Http\Livewire\Person\Index as PersonIndex;
-use App\Http\Livewire\Person\Manga as PersonManga;
-use App\Http\Livewire\Person\Reviews as PersonReviews;
+use App\Livewire\Person\Anime as PersonAnime;
+use App\Livewire\Person\Characters as PersonCharacters;
+use App\Livewire\Person\Details as PersonDetails;
+use App\Livewire\Person\Games as PersonGames;
+use App\Livewire\Person\Index as PersonIndex;
+use App\Livewire\Person\Manga as PersonManga;
+use App\Livewire\Person\Reviews as PersonReviews;
 
 Route::prefix('/people')
     ->name('people')

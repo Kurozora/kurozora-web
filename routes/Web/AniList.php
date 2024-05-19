@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Livewire\Anime\Details as AnimeDetails;
-use App\Http\Livewire\Manga\Details as MangaDetails;
+use App\Livewire\Anime\Details as AnimeDetails;
+use App\Livewire\Manga\Details as MangaDetails;
 
 Route::prefix('/{anilist_url}')
     ->where(['anilist_url' => '^(www\.)?anilist(.co)?'])

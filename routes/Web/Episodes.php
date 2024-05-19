@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Livewire\Episode\Details as EpisodeDetails;
-use App\Http\Livewire\Episode\Reviews as EpisodeReviews;
+use App\Livewire\Episode\Details as EpisodeDetails;
+use App\Livewire\Episode\Reviews as EpisodeReviews;
 
 Route::prefix('/episodes')
     ->name('episodes')

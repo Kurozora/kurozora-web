@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Livewire\Search\Index as SearchIndex;
+use App\Livewire\Search\Index as SearchIndex;
 
 Route::prefix('/search')
     ->name('search')

@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Livewire\Anime\Details as AnimeDetails;
+use App\Livewire\Anime\Details as AnimeDetails;
 
 Route::prefix('/{imdb_url}')
     ->where(['imdb_url' => '^(www\.)?imdb(.com)?'])

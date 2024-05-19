@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Livewire\Explore\Details as ExploreDetails;
+use App\Livewire\Explore\Details as ExploreDetails;
 use App\Providers\RouteServiceProvider;
 
 Route::prefix('/explore')

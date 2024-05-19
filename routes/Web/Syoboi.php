@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Livewire\Anime\Details as AnimeDetails;
+use App\Livewire\Anime\Details as AnimeDetails;
 
 Route::prefix('/{syoboi_url}')
     ->where(['syoboi_url' => '^(cal\.)?syoboi(.jp)?'])

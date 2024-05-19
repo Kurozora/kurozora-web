@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Livewire\Season\Episodes;
+use App\Livewire\Season\Episodes;
 
 Route::prefix('/seasons')
     ->name('seasons')

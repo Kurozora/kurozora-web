@@ -1,11 +1,11 @@
 <?php
 
-use App\Http\Livewire\Studio\Anime as StudioAnime;
-use App\Http\Livewire\Studio\Details as StudioDetails;
-use App\Http\Livewire\Studio\Games as StudioGames;
-use App\Http\Livewire\Studio\Index as StudioIndex;
-use App\Http\Livewire\Studio\Manga as StudioManga;
-use App\Http\Livewire\Studio\Reviews as StudioReviews;
+use App\Livewire\Studio\Anime as StudioAnime;
+use App\Livewire\Studio\Details as StudioDetails;
+use App\Livewire\Studio\Games as StudioGames;
+use App\Livewire\Studio\Index as StudioIndex;
+use App\Livewire\Studio\Manga as StudioManga;
+use App\Livewire\Studio\Reviews as StudioReviews;
 
 Route::prefix('/studios')
     ->name('studios')

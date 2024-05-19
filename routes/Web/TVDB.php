@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Livewire\Anime\Details as AnimeDetails;
+use App\Livewire\Anime\Details as AnimeDetails;
 
 Route::prefix('/{tvdb_url}')
     ->where(['tvdb_url' => '^(www\.)?(thetvdb|tvdb)(.com)?'])

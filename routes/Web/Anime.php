@@ -1,20 +1,20 @@
 <?php
 
-use App\Http\Livewire\Anime\Cast as AnimeCast;
-use App\Http\Livewire\Anime\Details as AnimeDetails;
-use App\Http\Livewire\Anime\Index as AnimeIndex;
-use App\Http\Livewire\Anime\RelatedGames;
-use App\Http\Livewire\Anime\RelatedMangas;
-use App\Http\Livewire\Anime\RelatedShows;
-use App\Http\Livewire\Anime\Reviews as AnimeReviews;
-use App\Http\Livewire\Anime\Songs as AnimeSongs;
-use App\Http\Livewire\Anime\Staff as AnimeStaff;
-use App\Http\Livewire\Anime\Studios as AnimeStudios;
-use App\Http\Livewire\Browse\Anime\Continuing\Index as BrowseAnimeContinuingIndex;
-use App\Http\Livewire\Browse\Anime\Seasons\Archive as BrowseAnimeSeasonsArchive;
-use App\Http\Livewire\Browse\Anime\Seasons\Index as BrowseAnimeSeasons;
-use App\Http\Livewire\Browse\Anime\Upcoming\Index as BrowseAnimeUpcomingIndex;
-use App\Http\Livewire\Season\Details as SeasonDetails;
+use App\Livewire\Anime\Cast as AnimeCast;
+use App\Livewire\Anime\Details as AnimeDetails;
+use App\Livewire\Anime\Index as AnimeIndex;
+use App\Livewire\Anime\RelatedGames;
+use App\Livewire\Anime\RelatedMangas;
+use App\Livewire\Anime\RelatedShows;
+use App\Livewire\Anime\Reviews as AnimeReviews;
+use App\Livewire\Anime\Songs as AnimeSongs;
+use App\Livewire\Anime\Staff as AnimeStaff;
+use App\Livewire\Anime\Studios as AnimeStudios;
+use App\Livewire\Browse\Anime\Continuing\Index as BrowseAnimeContinuingIndex;
+use App\Livewire\Browse\Anime\Seasons\Archive as BrowseAnimeSeasonsArchive;
+use App\Livewire\Browse\Anime\Seasons\Index as BrowseAnimeSeasons;
+use App\Livewire\Browse\Anime\Upcoming\Index as BrowseAnimeUpcomingIndex;
+use App\Livewire\Season\Details as SeasonDetails;
 
 Route::prefix('/anime')
     ->name('anime')

@@ -3,9 +3,9 @@
 use App\Http\Controllers\API\v1\MiscController;
 use App\Http\Controllers\Web\Auth\ImpersonateController;
 use App\Http\Controllers\Web\Misc\HealthCheckController;
-use App\Http\Livewire\Home;
-use App\Http\Livewire\Schedule\Index as ScheduleIndex;
-use App\Http\Livewire\Welcome;
+use App\Livewire\Home;
+use App\Livewire\Schedule\Index as ScheduleIndex;
+use App\Livewire\Welcome;
 use App\Providers\RouteServiceProvider;
 
 Route::get('chat', function () {

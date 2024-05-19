@@ -5,14 +5,14 @@ use App\Http\Controllers\Web\Profile\AnimeLibraryController;
 use App\Http\Controllers\Web\Profile\GameLibraryController;
 use App\Http\Controllers\Web\Profile\MangaLibraryController;
 use App\Http\Controllers\Web\UserProfileController;
-use App\Http\Livewire\Profile\Details;
-use App\Http\Livewire\Profile\Library\Anime\Favorites as FavoriteAnime;
-use App\Http\Livewire\Profile\Library\Anime\Index as AnimeLibrary;
-use App\Http\Livewire\Profile\Library\Anime\Reminders as AnimeReminders;
-use App\Http\Livewire\Profile\Library\Game\Favorites as FavoriteGame;
-use App\Http\Livewire\Profile\Library\Game\Index as GameLibrary;
-use App\Http\Livewire\Profile\Library\Manga\Favorites as FavoriteManga;
-use App\Http\Livewire\Profile\Library\Manga\Index as MangaLibrary;
+use App\Livewire\Profile\Details;
+use App\Livewire\Profile\Library\Anime\Favorites as FavoriteAnime;
+use App\Livewire\Profile\Library\Anime\Index as AnimeLibrary;
+use App\Livewire\Profile\Library\Anime\Reminders as AnimeReminders;
+use App\Livewire\Profile\Library\Game\Favorites as FavoriteGame;
+use App\Livewire\Profile\Library\Game\Index as GameLibrary;
+use App\Livewire\Profile\Library\Manga\Favorites as FavoriteManga;
+use App\Livewire\Profile\Library\Manga\Index as MangaLibrary;
 
 Route::prefix('/profile')
     ->name('profile')

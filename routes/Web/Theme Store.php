@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Livewire\ThemeStore\CreateThemeStoreForm;
-use App\Http\Livewire\ThemeStore\Index as ThemeStoreIndex;
+use App\Livewire\ThemeStore\CreateThemeStoreForm;
+use App\Livewire\ThemeStore\Index as ThemeStoreIndex;
 
 Route::prefix('/theme-store')
     ->name('theme-store')

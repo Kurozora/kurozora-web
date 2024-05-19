@@ -1,18 +1,18 @@
 <?php
 
-use App\Http\Livewire\Browse\Manga\Continuing\Index as BrowseMangaContinuingIndex;
-use App\Http\Livewire\Browse\Manga\Seasons\Archive as BrowseMangaSeasonsArchive;
-use App\Http\Livewire\Browse\Manga\Seasons\Index as BrowseMangaSeasons;
-use App\Http\Livewire\Browse\Manga\Upcoming\Index as BrowseMangaUpcomingIndex;
-use App\Http\Livewire\Manga\Cast as MangaCast;
-use App\Http\Livewire\Manga\Details as MangaDetails;
-use App\Http\Livewire\Manga\Index as MangaIndex;
-use App\Http\Livewire\Manga\RelatedGames;
-use App\Http\Livewire\Manga\RelatedMangas;
-use App\Http\Livewire\Manga\RelatedShows;
-use App\Http\Livewire\Manga\Reviews as MangaReviews;
-use App\Http\Livewire\Manga\Staff as MangaStaff;
-use App\Http\Livewire\Manga\Studios as MangaStudios;
+use App\Livewire\Browse\Manga\Continuing\Index as BrowseMangaContinuingIndex;
+use App\Livewire\Browse\Manga\Seasons\Archive as BrowseMangaSeasonsArchive;
+use App\Livewire\Browse\Manga\Seasons\Index as BrowseMangaSeasons;
+use App\Livewire\Browse\Manga\Upcoming\Index as BrowseMangaUpcomingIndex;
+use App\Livewire\Manga\Cast as MangaCast;
+use App\Livewire\Manga\Details as MangaDetails;
+use App\Livewire\Manga\Index as MangaIndex;
+use App\Livewire\Manga\RelatedGames;
+use App\Livewire\Manga\RelatedMangas;
+use App\Livewire\Manga\RelatedShows;
+use App\Livewire\Manga\Reviews as MangaReviews;
+use App\Livewire\Manga\Staff as MangaStaff;
+use App\Livewire\Manga\Studios as MangaStudios;
 
 Route::prefix('/manga')
     ->name('manga')
