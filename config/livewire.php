@@ -38,7 +38,7 @@ return [
     |
     */
 
-    'layout' => 'components.layouts.app',
+    'layout' => 'components.layouts.base',
 
     /*
     |---------------------------------------------------------------------------
@@ -103,7 +103,7 @@ return [
     |
     */
 
-    'legacy_model_binding' => false,
+    'legacy_model_binding' => true,
 
     /*
     |---------------------------------------------------------------------------
