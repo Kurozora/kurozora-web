@@ -15,7 +15,6 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Collection;
 use Livewire\Component;
-use Livewire\Redirector;
 use Session;
 
 class MergeLibrary extends Component
@@ -102,6 +101,8 @@ class MergeLibrary extends Component
      * Merge Local Library with Kurozora Library.
      *
      * @param string $jsonString
+     *
+     * @return RedirectResponse|void
      */
     public function mergeLibrary(string $jsonString)
     {
@@ -118,6 +119,8 @@ class MergeLibrary extends Component
      * Overwrite Kurozora Library with Local Library.
      *
      * @param string $jsonString
+     *
+     * @return RedirectResponse|void
      */
     public function overwriteLibrary(string $jsonString)
     {
@@ -135,9 +138,9 @@ class MergeLibrary extends Component
      *
      * @param bool $merging
      *
-     * @return Application|RedirectResponse|Redirector
+     * @return RedirectResponse
      */
-    public function finishMerge(bool $merging): Application|RedirectResponse|Redirector
+    public function finishMerge(bool $merging): RedirectResponse
     {
         if ($merging) {
             Session::flash('success', __('Local Library import is in progress.'));
@@ -149,9 +152,9 @@ class MergeLibrary extends Component
     /**
      * Go to home page.
      *
-     * @return Application|RedirectResponse|Redirector
+     * @return RedirectResponse
      */
-    public function goToHome(): Application|RedirectResponse|Redirector
+    public function goToHome(): RedirectResponse
     {
         return redirect()->intended();
     }

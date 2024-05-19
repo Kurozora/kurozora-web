@@ -124,7 +124,7 @@ class StarRating extends Component
             ]);
         }
 
-        $this->dispatch($this->listenerKey(), id: $this->id, modelID: $this->modelID, modelType: $this->modelType, rating: $this->rating);
+        $this->dispatch($this->listenerKey(), id: $this->getID(), modelID: $this->modelID, modelType: $this->modelType, rating: $this->rating);
     }
 
     /**
@@ -140,7 +140,7 @@ class StarRating extends Component
     public function handleRatingUpdate($id, $modelID, $modelType, $rating): void
     {
         if (
-            $this->id != $id &&
+            $this->getID() != $id &&
             $modelID == $this->modelID &&
             $modelType == $this->modelType
         ) {
