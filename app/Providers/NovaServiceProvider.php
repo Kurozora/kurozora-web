@@ -11,10 +11,10 @@ use App\Policies\PermissionPolicy;
 use App\Policies\RolePolicy;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
-use KABBOUCHI\LogsTool\LogsTool;
 use Laravel\Nova\Actions\ActionEvent;
 use Laravel\Nova\Nova;
 use Laravel\Nova\NovaApplicationServiceProvider;
+use Stepanenko3\LogsTool\LogsTool;
 use Stepanenko3\NovaCommandRunner\CommandRunnerTool;
 use Vyuldashev\NovaPermission\NovaPermissionTool;
 
