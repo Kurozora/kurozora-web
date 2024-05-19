@@ -130,7 +130,7 @@
                     x-on:click="updateTooltip($el)"
                 >
                     <x-picture>
-                        @php ($subscribedMonths = $user->created_at?->diffInMonths(now()))
+                        @php ($subscribedMonths = (int) $user->created_at?->diffInMonths(now()))
 
                         @if ($subscribedMonths >= 24)
                             <img src="{{ asset('images/static/badges/24_months.webp') }}" alt="{{ __('Kurozora+ 24 months') }}">

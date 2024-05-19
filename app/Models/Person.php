@@ -253,7 +253,7 @@ class Person extends KModel implements HasMedia, Sitemapable
         if (empty($this->deceased_date)) {
             $age = $birthdate->age;
         } else {
-            $age = $birthdate->diffInYears($this->deceased_date);
+            $age = (int) $birthdate->diffInYears($this->deceased_date);
         }
 
         return trans_choice('{1} :x year old|[2,*] :x years old', $age, ['x' => $age]);
