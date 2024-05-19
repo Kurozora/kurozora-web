@@ -1,11 +1,4 @@
 /**
- * A rugged, minimal framework for composing JavaScript behavior in your markup.
- */
-import Alpine from 'alpinejs'
-import collapse from '@alpinejs/collapse'
-import intersect from '@alpinejs/intersect'
-import persist from '@alpinejs/persist'
-/**
  * iro is a modular, design-conscious color picker widget.
  * It works with colors in hex, RGB, HSV and HSL formats.
  */
@@ -17,12 +10,6 @@ import iro from "@jaames/iro"
  * perceived performance even faster.
  */
 import 'lazysizes'
-
-window.Alpine = Alpine
-Alpine.plugin(collapse)
-Alpine.plugin(intersect)
-Alpine.plugin(persist)
-Alpine.start()
 
 window.iro = iro
 
