@@ -33,8 +33,8 @@ return new class extends Migration
             $table->string('city')->nullable();
             $table->string('region')->nullable();
             $table->string('country')->nullable();
-            $table->float('latitude')->nullable();
-            $table->float('longitude')->nullable();
+            $table->double('latitude')->nullable();
+            $table->double('longitude')->nullable();
 
             // Timestamps
             $table->timestamps();

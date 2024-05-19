@@ -24,12 +24,12 @@ return new class extends Migration
             $table->unsignedTinyInteger('status')->default(CharacterStatus::Unknown);
             $table->string('blood_type')->nullable();
             $table->string('favorite_food')->nullable();
-            $table->unsignedDecimal('height', 32)->nullable();
-            $table->unsignedDecimal('weight', 32)->nullable();
-            $table->unsignedDecimal('bust')->nullable();
-            $table->unsignedDecimal('waist')->nullable();
-            $table->unsignedDecimal('hip')->nullable();
-            $table->unsignedDecimal('age', 32)->nullable();
+            $table->decimal('height', 32)->nullable();
+            $table->decimal('weight', 32)->nullable();
+            $table->decimal('bust')->nullable();
+            $table->decimal('waist')->nullable();
+            $table->decimal('hip')->nullable();
+            $table->decimal('age', 32)->nullable();
             $table->unsignedTinyInteger('birth_day')->nullable();
             $table->unsignedTinyInteger('birth_month')->nullable();
             $table->unsignedTinyInteger('astrological_sign')->nullable();
