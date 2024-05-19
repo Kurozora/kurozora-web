@@ -17,6 +17,6 @@ class ApiIndex extends Component
     public function render(): Application|Factory|View
     {
         return view('livewire.misc.api-index')
-            ->layout('layouts.empty');
+            ->layout('components.layouts.empty');
     }
 }

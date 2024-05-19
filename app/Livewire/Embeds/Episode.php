@@ -99,6 +99,6 @@ class Episode extends Component
     public function render(): Application|Factory|View
     {
         return view('livewire.embeds.episode')
-            ->layout('layouts.embed');
+            ->layout('components.layouts.embed');
     }
 }

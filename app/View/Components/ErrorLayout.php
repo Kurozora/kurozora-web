@@ -16,6 +16,6 @@ class ErrorLayout extends Component
      */
     public function render(): Application|Factory|View
     {
-        return view('layouts.error');
+        return view('components.layouts.error');
     }
 }
