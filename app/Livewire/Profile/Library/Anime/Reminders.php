@@ -103,7 +103,7 @@ class Reminders extends Component
             if ((is_numeric($selected) && $selected >= 0) || !empty($selected)) {
                 $wheres[$attribute] = match ($type) {
                     'date' => Carbon::createFromFormat('Y-m-d', $selected)
-                        ->setTime(0, 0)
+                        ?->setTime(0, 0)
                         ->timestamp,
                     'time' => $selected . ':00',
                     default => $selected,

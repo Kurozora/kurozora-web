@@ -77,7 +77,7 @@ class Index extends Component
      */
     public function getDatesProperty(): array
     {
-        $date = Carbon::createFromFormat('Y-m-d', $this->date);
+        $date = Carbon::createFromFormat('Y-m-d', $this->date) ?? now();
 
         // Get the previous day's date
         $previousDay = $date->copy()->subDay();

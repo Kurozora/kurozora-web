@@ -86,7 +86,7 @@ class ScheduleController extends Controller
      */
     private function getDates($date): array
     {
-        $date = Carbon::createFromFormat('Y-m-d', $date);
+        $date = Carbon::createFromFormat('Y-m-d', $date) ?? now();
 
         // Get the previous day's date
         $previousDay = $date->copy()->subDay();

@@ -274,7 +274,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
             ['email_verified_at', '=', null],
             ['is_pro', '=', false],
             ['is_subscribed', '=', false],
-            ['created_at', '<', Carbon::now()->subDays(30)]
+            ['created_at', '<', now()->subDays(30)]
         ]);
     }
 
@@ -400,7 +400,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         // the following constraints: orderBy('last_activity', 'desc'),
         // limit(1), and select('last_activity').
         $session = $this->sessions->first();
-        $sessionLastActivity = Carbon::createFromTimestamp($session?->last_activity);
+        $sessionLastActivity = Carbon::createFromTimestamp($session?->last_activity ?? now()->timestamp);
 
         $activity = max($sessionLastActivity, $personalAccessTokenLastUsedAt);
 

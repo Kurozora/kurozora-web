@@ -174,7 +174,7 @@ class Index extends Component
                     } else {
                         $wheres[$attribute] = match ($type) {
                             'date' => Carbon::createFromFormat('Y-m-d', $selected)
-                                ->setTime(0, 0)
+                                ?->setTime(0, 0)
                                 ->timestamp,
                             'time' => $selected . ':00',
                             'double' => number_format($selected, 2, '.', ''),

@@ -3,8 +3,8 @@
 namespace App\Traits\Livewire;
 
 use Carbon\Carbon;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Laravel\Scout\Builder as ScoutBuilder;
 
 trait WithSearch
@@ -78,7 +78,7 @@ trait WithSearch
                 } else {
                     $wheres[$attribute] = match ($type) {
                         'date' => Carbon::createFromFormat('Y-m-d', $selected)
-                            ->setTime(0, 0)
+                            ?->setTime(0, 0)
                             ->timestamp,
                         'time' => $selected . ':00',
                         'double' => number_format($selected, 2, '.', ''),
