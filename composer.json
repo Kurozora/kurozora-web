@@ -45,6 +45,7 @@
         "jaybizzle/crawler-detect": "^1.2",
         "kiritokatklian/laravel-color-palette": "^4.0",
         "kiritokatklian/laravel-sort-request": "^2.0",
+        "laravel-notification-channels/apn": "^v5.0",
         "laravel/framework": "^11.0",
         "laravel/nova": "*",
         "laravel/sanctum": "^4.0",
