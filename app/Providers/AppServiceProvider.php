@@ -3,13 +3,23 @@
 namespace App\Providers;
 
 use App\Models\PersonalAccessToken;
+use App\Models\User;
+use App\Policies\NotificationPolicy;
+use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Events\QueryExecuted;
+use Illuminate\Http\Request;
+use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Sanctum\Sanctum;
 use RoachPHP\Roach;
+use SocialiteProviders\Apple\AppleExtendSocialite;
+use SocialiteProviders\Manager\SocialiteWasCalled;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,6 +33,27 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Rate limits
+        RateLimiter::for('api', function (Request $request) {
+            $method = $request->method();
+
+            return match ($method) {
+                'GET' => Limit::perMinutes(1, 4000)->by($method . ':' . $request->user()?->id ?: $request->ip()),
+                default => Limit::perMinute(60)->by($method . ':' . ($request->user()?->id ?: $request->ip())),
+            };
+        });
+
+        // register events
+        Event::listen(SocialiteWasCalled::class, AppleExtendSocialite::class.'@handle');
+
+        /// Register gates
+        Gate::before(function (User $user, $ability) {
+            return $user->hasRole('superAdmin') ? true : null;
+        });
+
+        /// Register policy mapping
+        Gate::policy(DatabaseNotification::class, NotificationPolicy::class);
+
         /// Prevent model relationships from lazy loading...
         Model::preventLazyLoading();
 
