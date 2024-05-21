@@ -36,6 +36,9 @@ yarn-error.log
 # Rocketeer PHP task runner and deployment package. https://github.com/rocketeers/rocketeer
 .rocketeer/
 
+# Phpactor
+.phpactor.json
+
 # PHP-CS-Fixer
 .php-cs-fixer.cache
 

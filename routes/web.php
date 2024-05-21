@@ -6,13 +6,12 @@ use App\Http\Controllers\Web\Misc\HealthCheckController;
 use App\Livewire\Home;
 use App\Livewire\Schedule\Index as ScheduleIndex;
 use App\Livewire\Welcome;
-use App\Providers\RouteServiceProvider;
 
 Route::get('chat', function () {
     return view('chat');
 });
 
-Route::get(RouteServiceProvider::HOME, Home::class)
+Route::get('/', Home::class)
     ->name('home');
 
 Route::get('welcome', Welcome::class)

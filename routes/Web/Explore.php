@@ -1,12 +1,11 @@
 <?php
 
 use App\Livewire\Explore\Details as ExploreDetails;
-use App\Providers\RouteServiceProvider;
 
 Route::prefix('/explore')
     ->name('explore')
     ->group(function () {
-        Route::redirect('/', RouteServiceProvider::HOME)
+        Route::redirect('/', '/')
             ->name('.index');
 
         Route::prefix('{exploreCategory}')
