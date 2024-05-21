@@ -1,19 +1,145 @@
 <?php
 
-use Illuminate\Foundation\Inspiring;
-use Illuminate\Support\Facades\Artisan;
+use App\Models\Anime;
+use App\Models\Episode;
+use App\Models\Game;
+use App\Models\LoginAttempt;
+use App\Models\Manga;
+use Illuminate\Support\Facades\Schedule;
 
-/*
-|--------------------------------------------------------------------------
-| Console Routes
-|--------------------------------------------------------------------------
-|
-| This file is where you may define all of your Closure based console
-| commands. Each Closure is bound to a command instance allowing a
-| simple approach to interacting with each command's IO methods.
-|
-*/
+/**********************************************/
+// Run queue worker every minute
+Schedule::command('queue:work --timeout=0')
+    ->everyMinute()
+    ->name('Queue worker')
+    ->withoutOverlapping()
+    ->runInBackground();
 
-Artisan::command('inspire', function () {
-    $this->comment(Inspiring::quote());
-})->purpose('Display an inspiring quote');
+/**********************************************/
+// Delete stale cache every two hours
+Schedule::command('delete:stale_cache')
+    ->everyTwoHours()
+    ->name('Delete stale cache')
+    ->onOneServer();
+
+/**********************************************/
+// Scrape upcoming anime twice a day
+Schedule::command('scrape:mal_upcoming_anime')
+    ->twiceDaily()
+    ->name('Scrape upcoming anime')
+    ->onOneServer();
+
+/**********************************************/
+// Scrape upcoming manga twice a day
+Schedule::command('scrape:mal_upcoming_manga')
+    ->twiceDaily(3, 15)
+    ->name('Scrape upcoming anime')
+    ->onOneServer();
+
+/**********************************************/
+// Scrape upcoming anime every six hours
+Schedule::command('fix:anime_details')
+    ->everySixHours()
+    ->name('Fix anime details')
+    ->onOneServer();
+
+/**********************************************/
+// Scrape upcoming manga every six hours
+Schedule::command('fix:manga_details')
+    ->everySixHours()
+    ->name('Fix manga details')
+    ->onOneServer();
+
+/**********************************************/
+// Generate sitemap every day
+//Schedule::command('sitemap:generate')
+//    ->daily()
+//    ->name('Generate sitemap')
+//    ->onOneServer()
+//    ->runInBackground();
+
+/**********************************************/
+// Prune Telescope table
+Schedule::command('telescope:prune --hours=48')
+    ->daily()
+    ->name('Pruning Telescope table')
+    ->onOneServer();
+
+/**********************************************/
+// Calculate total rankings every day
+Schedule::command('calculate:rankings', ['models' => 'all'])
+    ->daily()
+    ->name('Calculate total rankings')
+    ->onOneServer();
+
+/**********************************************/
+// Calculate anime views every day
+Schedule::command('calculate:views', ['model' => 'all'])
+    ->daily()
+    ->name('Calculate views')
+    ->onOneServer();
+
+/**********************************************/
+// Calculate episode stats every week
+Schedule::command('calculate:episode_stats')
+    ->daily()
+    ->name('Calculate episode stats')
+    ->onOneServer();
+
+/**********************************************/
+// Prune all models that match their respective criteria every day
+Schedule::command('model:prune')
+    ->daily()
+    ->name('Prune models')
+    ->onOneServer();
+
+/**********************************************/
+// Truncates login attempts every day
+Schedule::call(function() {
+    LoginAttempt::truncate();
+})
+    ->daily()
+    ->name('Clear login attempts')
+    ->onOneServer();
+
+/**********************************************/
+// Delete all activity logs every week
+Schedule::command('activitylog:clean')
+    ->weekly()
+    ->name('Clean activity log')
+    ->onOneServer();
+
+/**********************************************/
+// Calculate anime ratings every week
+Schedule::command('calculate:ratings', ['model' => Anime::class])
+    ->weekly()
+    ->name('Calculate anime rating')
+    ->onOneServer();
+
+/**********************************************/
+// Calculate manga ratings every week
+Schedule::command('calculate:ratings', ['model' => Manga::class])
+    ->weekly()
+    ->name('Calculate manga rating')
+    ->onOneServer();
+
+/**********************************************/
+// Calculate game ratings every week
+Schedule::command('calculate:ratings', ['model' => Game::class])
+    ->weekly()
+    ->name('Calculate game rating')
+    ->onOneServer();
+
+/**********************************************/
+// Calculate episode ratings every week
+Schedule::command('calculate:ratings', ['model' => Episode::class])
+    ->weekly()
+    ->name('Calculate episode rating')
+    ->onOneServer();
+
+/**********************************************/
+// Calculate global ranking every week
+Schedule::command('calculate:rankings -g')
+    ->weekly()
+    ->name('Calculate global rankings')
+    ->onOneServer();
