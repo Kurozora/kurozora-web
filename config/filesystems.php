@@ -9,11 +9,11 @@ return [
     |
     | Here you may specify the default filesystem disk that should be used
     | by the framework. The "local" disk, as well as a variety of cloud
-    | based disks are available to your application. Just store away!
+    | based disks are available to your application for file storage.
     |
     */
 
-    'default' => env('FILESYSTEM_DISK', 'project'),
+    'default' => env('FILESYSTEM_DISK', 'local'),
 
     'cloud' => env('FILESYSTEM_CLOUD', 's3'),
 
@@ -22,9 +22,9 @@ return [
     | Filesystem Disks
     |--------------------------------------------------------------------------
     |
-    | Here you may configure as many filesystem "disks" as you wish, and you
-    | may even configure multiple disks of the same driver. Defaults have
-    | been set up for each driver as an example of the required values.
+    | Below you may configure as many filesystem disks as necessary, and you
+    | may even configure multiple disks for the same driver. Examples for
+    | most supported storage drivers are configured here for reference.
     |
     | Supported Drivers: "local", "ftp", "sftp", "s3"
     |
@@ -37,16 +37,19 @@ return [
             'driver' => 'local',
             'root' => base_path(),
             'url' => env('APP_URL'),
+            'throw' => false,
         ],
 
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app'),
+            'throw' => false,
         ],
 
         'media' => [
             'driver' => 'local',
             'root'   => storage_path('media'),
+            'throw' => false,
         ],
 
         'public' => [
@@ -54,6 +57,7 @@ return [
             'root' => storage_path('app/public'),
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
+            'throw' => false,
         ],
 
         's3' => [
@@ -65,6 +69,7 @@ return [
             'url' => env('AWS_URL'),
             'endpoint' => env('AWS_ENDPOINT'),
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
+            'throw' => false,
             'cache' => [
                 'store' => 'file',
                 'expire' => 604800,
