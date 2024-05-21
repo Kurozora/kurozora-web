@@ -13,7 +13,7 @@ use Spatie\Snapshots\MatchesSnapshots;
 
 abstract class TestCase extends BaseTestCase
 {
-    use CreatesApplication, MatchesSnapshots;
+    use MatchesSnapshots;
 
     /**
      * Set up the test.
