@@ -28,14 +28,28 @@ class ValidatePlatformVersionTest extends TestCase
     /** @test */
     function valid_platform_versions_pass(): void
     {
-        foreach($this->validPlatformVersions as $validPlatformVersion)
-            $this->assertTrue($this->rule->passes('platform_version', $validPlatformVersion), "$validPlatformVersion did not pass, while it should have!");
+        foreach($this->validPlatformVersions as $platformVersion) {
+            $message = '';
+
+            $this->rule->validate('platform_version', $platformVersion, function ($error) use (&$message) {
+                $message = $error;
+            });
+
+            $this->assertEmpty($message, $platformVersion . ' did not pass.' . $message);
+        }
     }
 
     /** @test */
     function invalid_platform_versions_dont_pass(): void
     {
-        foreach($this->invalidPlatformVersions as $invalidPlatformVersion)
-            $this->assertFalse($this->rule->passes('platform_version', $invalidPlatformVersion), "$invalidPlatformVersion passed, while it should not have!");
+        foreach($this->invalidPlatformVersions as $platformVersion) {
+            $message = '';
+
+            $this->rule->validate('platform_version', $platformVersion, function ($error) use (&$message) {
+                $message = $error;
+            });
+
+            $this->assertNotEmpty($message, $platformVersion . ' did not pass.' . $message);
+        }
     }
 }

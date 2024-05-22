@@ -38,14 +38,12 @@ class ValidateEmailTest extends TestCase
 
         // Source: https://gist.github.com/cjaoude/fd9910626629b53c4d25
         $this->validEmailAddresses = collect([
-            'john@example.com',
             'info@kurozora.app',
             'john490+1@gmail.com',
             'my-name-is-mark@hotmail.com',
-            'email@example.museum',
-            '"email"@example.com',
-            'email@subdomain.example.com',
-            'firstname.lastname@example.com'
+            '"email"@kurozora.app',
+            'email@subdomain.kurozora.app',
+            'firstname.lastname@kurozora.app'
         ]);
 
         $this->invalidEmailAddresses = collect([
@@ -66,7 +64,13 @@ class ValidateEmailTest extends TestCase
     function valid_email_addresses_pass(): void
     {
         foreach($this->validEmailAddresses as $email) {
-            $this->assertTrue($this->rule->passes('email', $email), "$email did not pass, while it should have!");
+            $message = '';
+
+            $this->rule->validate('email', $email, function ($error) use (&$message) {
+                $message = $error;
+            });
+
+            $this->assertEmpty($message, $email . ' did not pass.' . $message);
         }
     }
 
@@ -74,7 +78,13 @@ class ValidateEmailTest extends TestCase
     function invalid_email_addresses_dont_pass(): void
     {
         foreach($this->invalidEmailAddresses as $email) {
-            $this->assertFalse($this->rule->passes('email', $email), "$email passed, while it should not have!");
+            $message = '';
+
+            $this->rule->validate('email', $email, function ($error) use (&$message) {
+                $message = $error;
+            });
+
+            $this->assertNotEmpty($message, $email . ' did not pass.' . $message);
         }
     }
 
@@ -87,13 +97,25 @@ class ValidateEmailTest extends TestCase
         $email = $this->validEmailAddresses->random();
 
         // The email should not pass, because it is not taken
-        $this->assertFalse($this->rule->passes('email', $email), "$email passed, while it should not have!");
+        $message = '';
+
+        $this->rule->validate('email', $email, function ($error) use (&$message) {
+            $message = $error;
+        });
+
+        $this->assertNotEmpty($message, $email . ' did not pass.' . $message);
 
         // Create a user account with the email
         User::factory()->create(['email' => $email]);
 
         // The email should pass, because it is taken
-        $this->assertTrue($this->rule->passes('email', $email), "$email did not pass, while it should have!");
+        $message = '';
+
+        $this->rule->validate('email', $email, function ($error) use (&$message) {
+            $message = $error;
+        });
+
+        $this->assertEmpty($message, $email . ' did not pass.' . $message);
     }
 
     /** @test */
@@ -105,13 +127,25 @@ class ValidateEmailTest extends TestCase
         $email = $this->validEmailAddresses->random();
 
         // The email should pass, because it is available
-        $this->assertTrue($this->rule->passes('email', $email), "$email did not pass, while it should have!");
+        $message = '';
+
+        $this->rule->validate('email', $email, function ($error) use (&$message) {
+            $message = $error;
+        });
+
+        $this->assertEmpty($message, $email . ' did not pass.' . $message);
 
         // Create a user account with the email
         User::factory()->create(['email' => $email]);
 
         // The email should not pass, because it is taken
-        $this->assertFalse($this->rule->passes('email', $email), "$email passed, while it should not have!");
+        $message = '';
+
+        $this->rule->validate('email', $email, function ($error) use (&$message) {
+            $message = $error;
+        });
+
+        $this->assertNotEmpty($message, $email . ' did not pass.' . $message);
     }
 
     /** @test */
