@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Rules\ValidateUsername;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Collection;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class ValidateUsernameTest extends TestCase
@@ -26,7 +27,11 @@ class ValidateUsernameTest extends TestCase
      */
     private Collection $invalidUsername;
 
-    /** @var ValidateUsername $rule */
+    /**
+     * The username validation rule.
+     *
+     * @var ValidateUsername $rule
+     */
     private ValidateUsername $rule;
 
     public function setUp(): void
@@ -53,8 +58,13 @@ class ValidateUsernameTest extends TestCase
         ]);
     }
 
-    /** @test */
-    function valid_username_pass()
+    /**
+     * Valid username pass.
+     *
+     * @return void
+     */
+    #[Test]
+    public function valid_username_pass()
     {
         foreach ($this->validUsername as $username) {
             $message = '';
@@ -67,8 +77,13 @@ class ValidateUsernameTest extends TestCase
         }
     }
 
-    /** @test */
-    function invalid_username_dont_pass()
+    /**
+     * Invalid username dont pass.
+     *
+     * @return void
+     */
+    #[Test]
+    public function invalid_username_dont_pass()
     {
         foreach ($this->invalidUsername as $username) {
             $message = '';
@@ -81,8 +96,13 @@ class ValidateUsernameTest extends TestCase
         }
     }
 
-    /** @test */
-    function username_is_taken()
+    /**
+     * Username is taken.
+     *
+     * @return void
+     */
+    #[Test]
+    public function username_is_taken()
     {
         $this->rule = new ValidateUsername();
 

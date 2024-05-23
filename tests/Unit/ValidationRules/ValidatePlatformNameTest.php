@@ -3,17 +3,30 @@
 namespace Tests\Unit\ValidationRules;
 
 use App\Rules\ValidatePlatformName;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class ValidatePlatformNameTest extends TestCase
 {
-    /** @var ValidatePlatformName $rule */
+    /**
+     * The platform name validation rule.
+     *
+     * @var ValidatePlatformName $rule
+     */
     private ValidatePlatformName $rule;
 
-    /** @var array|string[] $validPlatformNames */
+    /**
+     * The array of valid platform names.
+     *
+     * @var array|string[] $validPlatformNames
+     */
     private array $validPlatformNames = ValidatePlatformName::VALID_PLATFORMS;
 
-    /** @var array|string[] $invalidPlatformNames */
+    /**
+     * The array of invalid platform names.
+     *
+     * @var array|string[] $invalidPlatformNames
+     */
     private array $invalidPlatformNames = [
         'Water Bottle', 'Tin can telephone', 'Walkie Talkie OS'
     ];
@@ -25,8 +38,13 @@ class ValidatePlatformNameTest extends TestCase
         $this->rule = new ValidatePlatformName();
     }
 
-    /** @test */
-    function valid_platform_names_pass(): void
+    /**
+     * Valid platform names pass.
+     *
+     * @return void
+     */
+    #[Test]
+    public function valid_platform_names_pass(): void
     {
         foreach($this->validPlatformNames as $validPlatformName) {
             $message = '';
@@ -39,8 +57,13 @@ class ValidatePlatformNameTest extends TestCase
         }
     }
 
-    /** @test */
-    function invalid_platform_names_dont_pass(): void
+    /**
+     * Invalid platform names dont pass.
+     *
+     * @return void
+     */
+    #[Test]
+    public function invalid_platform_names_dont_pass(): void
     {
         foreach($this->invalidPlatformNames as $invalidPlatformName) {
             $message = '';

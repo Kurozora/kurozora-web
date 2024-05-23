@@ -3,17 +3,32 @@
 namespace Tests\Unit\ValidationRules;
 
 use App\Rules\ValidatePlatformVersion;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class ValidatePlatformVersionTest extends TestCase
 {
-    /** @var ValidatePlatformVersion $rule */
+    /**
+     * The platform version validation rule.
+     *
+     * @var ValidatePlatformVersion $rule
+     */
     private ValidatePlatformVersion $rule;
 
+    /**
+     * The array of valid platform versions.
+     *
+     * @var array|string[]
+     */
     private array $validPlatformVersions = [
         '1', '1.2', '1.2.0', '5.0', '902.3', '21.23', '3.455'
     ];
 
+    /**
+     * The array of invalid platform versions.
+     *
+     * @var array|string[]
+     */
     private array $invalidPlatformVersions = [
         'v1.0', '2.0-rc', 'best version', 'cool', 'xp', '-12.1', '-1'
     ];
@@ -25,8 +40,13 @@ class ValidatePlatformVersionTest extends TestCase
         $this->rule = new ValidatePlatformVersion();
     }
 
-    /** @test */
-    function valid_platform_versions_pass(): void
+    /**
+     * Valid platform versions pass.
+     *
+     * @return void
+     */
+    #[Test]
+    public function valid_platform_versions_pass(): void
     {
         foreach($this->validPlatformVersions as $platformVersion) {
             $message = '';
@@ -39,8 +59,13 @@ class ValidatePlatformVersionTest extends TestCase
         }
     }
 
-    /** @test */
-    function invalid_platform_versions_dont_pass(): void
+    /**
+     * Invalid platform versions dont pass.
+     *
+     * @return void
+     */
+    #[Test]
+    public function invalid_platform_versions_dont_pass(): void
     {
         foreach($this->invalidPlatformVersions as $platformVersion) {
             $message = '';

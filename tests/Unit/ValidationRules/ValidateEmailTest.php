@@ -7,6 +7,7 @@ use App\Rules\ValidateEmail;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Collection;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class ValidateEmailTest extends TestCase
@@ -27,7 +28,11 @@ class ValidateEmailTest extends TestCase
      */
     private Collection $invalidEmailAddresses;
 
-    /** @var ValidateEmail $rule */
+    /**
+     * The email validation rule.
+     *
+     * @var ValidateEmail $rule
+     */
     private ValidateEmail $rule;
 
     public function setUp(): void
@@ -60,8 +65,13 @@ class ValidateEmailTest extends TestCase
         ]);
     }
 
-    /** @test */
-    function valid_email_addresses_pass(): void
+    /**
+     * Valid email addresses pass.
+     *
+     * @return void
+     */
+    #[Test]
+    public function valid_email_addresses_pass(): void
     {
         foreach($this->validEmailAddresses as $email) {
             $message = '';
@@ -74,8 +84,13 @@ class ValidateEmailTest extends TestCase
         }
     }
 
-    /** @test */
-    function invalid_email_addresses_dont_pass(): void
+    /**
+     * Invalid email addresses dont pass.
+     *
+     * @return void
+     */
+    #[Test]
+    public function invalid_email_addresses_dont_pass(): void
     {
         foreach($this->invalidEmailAddresses as $email) {
             $message = '';
@@ -88,8 +103,13 @@ class ValidateEmailTest extends TestCase
         }
     }
 
-    /** @test */
-    function must_be_taken_option_works(): void
+    /**
+     * Must be taken option works.
+     *
+     * @return void
+     */
+    #[Test]
+    public function must_be_taken_option_works(): void
     {
         $this->rule = new ValidateEmail(['must-be-taken' => true]);
 
@@ -118,8 +138,13 @@ class ValidateEmailTest extends TestCase
         $this->assertEmpty($message, $email . ' did not pass.' . $message);
     }
 
-    /** @test */
-    function must_be_available_option_works(): void
+    /**
+     * Must be available option works.
+     *
+     * @return void
+     */
+    #[Test]
+    public function must_be_available_option_works(): void
     {
         $this->rule = new ValidateEmail(['must-be-available' => true]);
 
@@ -148,8 +173,13 @@ class ValidateEmailTest extends TestCase
         $this->assertNotEmpty($message, $email . ' did not pass.' . $message);
     }
 
-    /** @test */
-    function must_be_available_and_must_be_taken_options_cannot_be_used_at_the_same_time(): void
+    /**
+     * Must be available and must be taken options cannot be used at the same time.
+     *
+     * @return void
+     */
+    #[Test]
+    public function must_be_available_and_must_be_taken_options_cannot_be_used_at_the_same_time(): void
     {
         $this->expectException(InvalidArgumentException::class);
 

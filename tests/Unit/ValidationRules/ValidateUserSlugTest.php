@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Rules\ValidateUserSlug;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Collection;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class ValidateUserSlugTest extends TestCase
@@ -26,7 +27,11 @@ class ValidateUserSlugTest extends TestCase
      */
     private Collection $invalidUserSlug;
 
-    /** @var ValidateUserSlug $rule */
+    /**
+     * The user slug validation rule.
+     *
+     * @var ValidateUserSlug $rule
+     */
     private ValidateUserSlug $rule;
 
     public function setUp(): void
@@ -53,8 +58,13 @@ class ValidateUserSlugTest extends TestCase
         ]);
     }
 
-    /** @test */
-    function valid_slug_pass()
+    /**
+     * Valid slug pass.
+     *
+     * @return void
+     */
+    #[Test]
+    public function valid_slug_pass()
     {
         foreach ($this->validUserSlug as $slug) {
             $message = '';
@@ -67,8 +77,13 @@ class ValidateUserSlugTest extends TestCase
         }
     }
 
-    /** @test */
-    function invalid_slug_dont_pass()
+    /**
+     * Invalid slug dont pass.
+     *
+     * @return void
+     */
+    #[Test]
+    public function invalid_slug_dont_pass()
     {
         foreach ($this->invalidUserSlug as $slug) {
             $message = '';
@@ -81,8 +96,13 @@ class ValidateUserSlugTest extends TestCase
         }
     }
 
-    /** @test */
-    function slug_is_taken()
+    /**
+     * Slug is taken.
+     *
+     * @return void
+     */
+    #[Test]
+    public function slug_is_taken()
     {
         $this->rule = new ValidateUserSlug();
 

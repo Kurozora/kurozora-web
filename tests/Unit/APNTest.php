@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 use App\Models\SessionAttribute;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\ProvidesTestUser;
 
@@ -11,8 +12,13 @@ class APNTest extends TestCase
 {
     use DatabaseMigrations, ProvidesTestUser;
 
-    /** @test */
-    function routeNotificationForApn_returns_the_device_tokens(): void
+    /**
+     * routeNotificationForApn returns the device tokens.
+     *
+     * @return void
+     */
+    #[Test]
+    public function routeNotificationForApn_returns_the_device_tokens(): void
     {
         // Create some sessions for the user
         /** @var SessionAttribute[] $sessionAttributes */
