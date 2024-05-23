@@ -82,7 +82,7 @@ class ResetPasswordTest extends TestCase
     function password_request_can_be_requested_with_unknown_email_address(): void
     {
         $response = $this->json('POST', 'v1/users/reset-password', [
-            'email' => 'unknown@example.com'
+            'email' => 'unknown@kurozora.app'
         ]);
         $response->assertSuccessfulAPIResponse();
     }
@@ -98,7 +98,7 @@ class ResetPasswordTest extends TestCase
     {
         // Attempt to request password reset
         $response = $this->json('POST', 'v1/users/reset-password', [
-            'email' => 'unknown@example.com'
+            'email' => 'unknown@kurozora.app'
         ]);
         $response->assertSuccessfulAPIResponse();
 
