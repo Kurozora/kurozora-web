@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use PHPUnit\Framework\Attributes\Test;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileCannotBeAdded;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
@@ -22,8 +23,8 @@ class MeTest extends TestCase
      * User can get own details with authentication token.
      *
      * @return void
-     * @test
      */
+    #[Test]
     public function user_can_get_own_details_with_authentication_token(): void
     {
         // Send request
@@ -40,8 +41,8 @@ class MeTest extends TestCase
      * User cannot get own details without authentication token.
      *
      * @return void
-     * @test
      */
+    #[Test]
     public function user_cannot_get_own_details_without_authentication_token(): void
     {
         // Send request
@@ -56,9 +57,9 @@ class MeTest extends TestCase
      * User can update their biography.
      *
      * @return void
-     * @test
      */
-    function user_can_update_their_biography(): void
+    #[Test]
+    public function user_can_update_their_biography(): void
     {
         // Remove the user's biography
         $this->user->update(['biography' => null]);
@@ -80,9 +81,9 @@ class MeTest extends TestCase
      * User can remove their biography.
      *
      * @return void
-     * @test
      */
-    function user_can_remove_their_biography(): void
+    #[Test]
+    public function user_can_remove_their_biography(): void
     {
         // Set the user's biography
         $this->user->update(['biography' => 'I love Kurozora!']);
@@ -104,9 +105,9 @@ class MeTest extends TestCase
      * User can update their profile image.
      *
      * @return void
-     * @test
      */
-    function user_can_update_their_profile_image(): void
+    #[Test]
+    public function user_can_update_their_profile_image(): void
     {
         // Create fake storage
         Storage::fake('profile_images');
@@ -136,11 +137,12 @@ class MeTest extends TestCase
      * User can remove their profile image.
      *
      * @return void
-     * @throws FileDoesNotExist
+     * @return void
      * @throws FileIsTooBig
      * @throws FileCannotBeAdded
-     * @test
+     * @throws FileDoesNotExist
      */
+    #[Test]
     function user_can_remove_their_profile_image(): void
     {
         // Create fake storage
@@ -169,9 +171,9 @@ class MeTest extends TestCase
      * User can update their banner.
      *
      * @return void
-     * @test
      */
-    function user_can_update_their_banner(): void
+    #[Test]
+    public function user_can_update_their_banner(): void
     {
         // Create fake storage
         Storage::fake('banners');
@@ -201,11 +203,12 @@ class MeTest extends TestCase
      * User can remove their banner.
      *
      * @return void
-     * @throws FileDoesNotExist
+     * @return void
      * @throws FileIsTooBig
      * @throws FileCannotBeAdded
-     * @test
+     * @throws FileDoesNotExist
      */
+    #[Test]
     function user_can_remove_their_banner(): void
     {
         // Create fake storage
@@ -234,9 +237,9 @@ class MeTest extends TestCase
      * User can get their list of followers.
      *
      * @return void
-     * @test
      */
-    function user_can_get_their_followers_list(): void
+    #[Test]
+    public function user_can_get_their_followers_list(): void
     {
         // Add a follower
         /** @var User $anotherUser */
@@ -258,9 +261,9 @@ class MeTest extends TestCase
      * User can get their list of following.
      *
      * @return void
-     * @test
      */
-    function user_can_get_their_following_list(): void
+    #[Test]
+    public function user_can_get_their_following_list(): void
     {
         // Add a user to the following list
         /** @var User $anotherUser */
@@ -282,9 +285,9 @@ class MeTest extends TestCase
      * User can get a list of their auth token related session attributes.
      *
      * @return void
-     * @test
      */
-    function user_can_get_a_list_of_their_auth_token_related_session_attributes(): void
+    #[Test]
+    public function user_can_get_a_list_of_their_auth_token_related_session_attributes(): void
     {
         // Create some sessions for the user
         $personalAccessTokens = [];
@@ -307,5 +310,4 @@ class MeTest extends TestCase
         // Check whether the response contains the sessions
         $this->assertCount(25, $response->json()['data']);
     }
-
 }

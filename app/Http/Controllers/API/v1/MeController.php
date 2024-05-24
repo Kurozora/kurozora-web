@@ -33,7 +33,8 @@ class MeController extends Controller
     public function me(Request $request): JsonResponse
     {
         // Get authenticated session
-        $personalAccessToken = auth()->user()->currentAccessToken()
+        $personalAccessToken = auth()->user()
+            ->currentAccessToken()
             ->load(['session_attribute']);
 
         $user = $request->user()
@@ -187,7 +188,7 @@ class MeController extends Controller
     {
         // Get the authenticated user
         $user = auth()->user();
-        
+
         return (new LibraryController())
             ->index($request, $user);
     }
