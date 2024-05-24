@@ -5,6 +5,7 @@ namespace Tests\Unit\Middleware;
 use App\Helpers\JSONResult;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Route;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\ProvidesTestUser;
 
@@ -19,16 +20,26 @@ class CheckKurozoraUserAuthenticationTest extends TestCase
         $this->registerTestRoutes();
     }
 
-    /** @test */
-    function routes_that_require_authentication_cannot_be_accessed_without_being_authenticated(): void
+    /**
+     * Routes that require authentication cannot be accessed without being authenticated.
+     *
+     * @return void
+     */
+    #[Test]
+    public function routes_that_require_authentication_cannot_be_accessed_without_being_authenticated(): void
     {
         $response = $this->get('/auth-required');
 
         $this->assertEquals(403, $response->json('errors.0.status'));
     }
 
-    /** @test */
-    function routes_that_require_authentication_can_be_accessed_when_authenticated(): void
+    /**
+     * Routes that require authentication can be accessed when authenticated.
+     *
+     * @return void
+     */
+    #[Test]
+    public function routes_that_require_authentication_can_be_accessed_when_authenticated(): void
     {
         $response = $this->auth()->get('/auth-required');
         $json = $response->json();
@@ -38,8 +49,13 @@ class CheckKurozoraUserAuthenticationTest extends TestCase
         $this->assertSame($this->user->id, $json['authenticated_user_id']);
     }
 
-    /** @test */
-    function routes_with_optional_authentication_can_be_accessed_without_being_authenticated(): void
+    /**
+     * Routes with optional authentication can be accessed without being authenticated.
+     *
+     * @return void
+     */
+    #[Test]
+    public function routes_with_optional_authentication_can_be_accessed_without_being_authenticated(): void
     {
         $response = $this->get('/auth-optional');
         $json = $response->json();
@@ -48,8 +64,13 @@ class CheckKurozoraUserAuthenticationTest extends TestCase
         $this->assertSame(false, $json['is_authenticated']);
     }
 
-    /** @test */
-    function routes_with_optional_authentication_can_be_accessed_when_authenticated(): void
+    /**
+     * Routes with optional authentication can be accessed when authenticated.
+     *
+     * @return void
+     */
+    #[Test]
+    public function routes_with_optional_authentication_can_be_accessed_when_authenticated(): void
     {
         $response = $this->auth()->get('/auth-optional');
         $json = $response->json();
