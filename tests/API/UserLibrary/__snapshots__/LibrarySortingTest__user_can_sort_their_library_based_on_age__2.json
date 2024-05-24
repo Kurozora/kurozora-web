@@ -1,99 +1,7 @@
 {
     "shows": [
         {
-            "id": 2,
-            "uuid": "2",
-            "type": "show",
-            "href": "\/v1\/anime\/2",
-            "attributes": {
-                "anidbID": null,
-                "anilistID": null,
-                "animePlanetID": null,
-                "anisearchID": null,
-                "imdbID": null,
-                "kitsuID": null,
-                "malID": null,
-                "notifyID": null,
-                "syoboiID": null,
-                "traktID": null,
-                "tvdbID": null,
-                "slug": "be-a-good-person",
-                "videoUrl": null,
-                "poster": null,
-                "banner": null,
-                "logo": null,
-                "originalTitle": "Be a good person",
-                "title": "Be a good person!",
-                "synonymTitles": [
-                    "Est quia est vitae consequuntur.",
-                    "Deserunt veniam pariatur eligendi cumque maiores.",
-                    "Minima laboriosam minima praesentium nihil officia."
-                ],
-                "tagline": "Odio nesciunt vel eveniet esse.",
-                "synopsis": "A story about being a good person.",
-                "genres": [],
-                "themes": [],
-                "studio": null,
-                "languages": [],
-                "tvRating": {
-                    "name": "z",
-                    "description": "Eveniet maxime commodi eum ut explicabo officia ipsam doloribus."
-                },
-                "type": {
-                    "name": "Rafaela Hegmann",
-                    "description": "Aliquid placeat libero qui eos atque omnis."
-                },
-                "source": {
-                    "name": "Sherman Zieme PhD",
-                    "description": "Provident labore et dolorem qui."
-                },
-                "status": {
-                    "name": "iusto minus",
-                    "description": "Mollitia totam nulla ut tenetur saepe soluta dolor.",
-                    "color": "#b01b3a"
-                },
-                "episodeCount": 0,
-                "seasonCount": 0,
-                "stats": {
-                    "ratingCountList": [
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0
-                    ],
-                    "ratingAverage": 4,
-                    "ratingCount": 0,
-                    "rankGlobal": 0,
-                    "rankTotal": 0,
-                    "sentiment": "Not enough ratings",
-                    "highestRatingPercentage": 0
-                },
-                "startedAt": 67046400,
-                "firstAired": 67046400,
-                "endedAt": 73094400,
-                "lastAired": 73094400,
-                "duration": "24 minutes",
-                "durationTotal": "24 minutes",
-                "airSeason": "Winter",
-                "airTime": "07:30",
-                "airDay": "Wednesday",
-                "isNSFW": true,
-                "copyright": "\u2117 2018 Abernathy-Daniel",
-                "givenRating": 1.2,
-                "givenReview": null,
-                "libraryStatus": 0,
-                "isFavorited": false,
-                "isReminded": false
-            }
-        },
-        {
-            "id": 1,
+            "id": "1",
             "uuid": "1",
             "type": "show",
             "href": "\/v1\/anime\/1",
@@ -177,11 +85,111 @@
                 "airDay": "Sunday",
                 "isNSFW": false,
                 "copyright": "\u00ae 2012 Steuber Group",
-                "givenRating": 3,
-                "givenReview": null,
-                "libraryStatus": 0,
-                "isFavorited": false,
-                "isReminded": false
+                "library": {
+                    "rating": 3,
+                    "review": null,
+                    "status": 0,
+                    "rewatchCount": null,
+                    "isHidden": false,
+                    "isFavorited": false,
+                    "isReminded": false
+                }
+            }
+        },
+        {
+            "id": "2",
+            "uuid": "2",
+            "type": "show",
+            "href": "\/v1\/anime\/2",
+            "attributes": {
+                "anidbID": null,
+                "anilistID": null,
+                "animePlanetID": null,
+                "anisearchID": null,
+                "imdbID": null,
+                "kitsuID": null,
+                "malID": null,
+                "notifyID": null,
+                "syoboiID": null,
+                "traktID": null,
+                "tvdbID": null,
+                "slug": "be-a-good-person",
+                "videoUrl": null,
+                "poster": null,
+                "banner": null,
+                "logo": null,
+                "originalTitle": "Be a good person",
+                "title": "Be a good person!",
+                "synonymTitles": [
+                    "Est quia est vitae consequuntur.",
+                    "Deserunt veniam pariatur eligendi cumque maiores.",
+                    "Minima laboriosam minima praesentium nihil officia."
+                ],
+                "tagline": "Odio nesciunt vel eveniet esse.",
+                "synopsis": "A story about being a good person.",
+                "genres": [],
+                "themes": [],
+                "studio": null,
+                "languages": [],
+                "tvRating": {
+                    "name": "z",
+                    "description": "Eveniet maxime commodi eum ut explicabo officia ipsam doloribus."
+                },
+                "type": {
+                    "name": "Rafaela Hegmann",
+                    "description": "Aliquid placeat libero qui eos atque omnis."
+                },
+                "source": {
+                    "name": "Sherman Zieme PhD",
+                    "description": "Provident labore et dolorem qui."
+                },
+                "status": {
+                    "name": "iusto minus",
+                    "description": "Mollitia totam nulla ut tenetur saepe soluta dolor.",
+                    "color": "#b01b3a"
+                },
+                "episodeCount": 0,
+                "seasonCount": 0,
+                "stats": {
+                    "ratingCountList": [
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "ratingAverage": 4,
+                    "ratingCount": 0,
+                    "rankGlobal": 0,
+                    "rankTotal": 0,
+                    "sentiment": "Not enough ratings",
+                    "highestRatingPercentage": 0
+                },
+                "startedAt": 67046400,
+                "firstAired": 67046400,
+                "endedAt": 73094400,
+                "lastAired": 73094400,
+                "duration": "24 minutes",
+                "durationTotal": "24 minutes",
+                "airSeason": "Winter",
+                "airTime": "07:30",
+                "airDay": "Wednesday",
+                "isNSFW": true,
+                "copyright": "\u2117 2018 Abernathy-Daniel",
+                "library": {
+                    "rating": 1.2,
+                    "review": null,
+                    "status": 0,
+                    "rewatchCount": null,
+                    "isHidden": false,
+                    "isFavorited": false,
+                    "isReminded": false
+                }
             }
         }
     ]

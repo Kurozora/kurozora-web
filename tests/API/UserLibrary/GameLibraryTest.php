@@ -30,7 +30,7 @@ class GameLibraryTest extends TestCase
         $this->user->track($this->game, UserLibraryStatus::InProgress());
 
         // Send the request
-        $response = $this->auth()->getJson(route('api.me.library', [
+        $response = $this->auth()->getJson(route('api.me.library.index', [
             'library' => UserLibraryKind::Game,
             'status' => UserLibraryStatus::InProgress,
         ]));
@@ -54,7 +54,7 @@ class GameLibraryTest extends TestCase
         $this->user->track($this->game, UserLibraryStatus::Dropped());
 
         // Send the request
-        $response = $this->auth()->getJson(route('api.me.library', [
+        $response = $this->auth()->getJson(route('api.me.library.index', [
             'library' => UserLibraryKind::Game,
             'status' => UserLibraryStatus::Dropped,
         ]));
@@ -78,7 +78,7 @@ class GameLibraryTest extends TestCase
         $this->user->track($this->game, UserLibraryStatus::Planning());
 
         // Send the request
-        $response = $this->auth()->getJson(route('api.me.library', [
+        $response = $this->auth()->getJson(route('api.me.library.index', [
             'library' => UserLibraryKind::Game,
             'status' => UserLibraryStatus::Planning,
         ]));
@@ -102,7 +102,7 @@ class GameLibraryTest extends TestCase
         $this->user->track($this->game, UserLibraryStatus::Completed());
 
         // Send the request
-        $response = $this->auth()->getJson(route('api.me.library', [
+        $response = $this->auth()->getJson(route('api.me.library.index', [
             'library' => UserLibraryKind::Game,
             'status' => UserLibraryStatus::Completed,
         ]));
@@ -126,7 +126,7 @@ class GameLibraryTest extends TestCase
         $this->user->track($this->game, UserLibraryStatus::OnHold());
 
         // Send the request
-        $response = $this->auth()->getJson(route('api.me.library', [
+        $response = $this->auth()->getJson(route('api.me.library.index', [
             'library' => UserLibraryKind::Game,
             'status' => UserLibraryStatus::OnHold,
         ]));
@@ -147,7 +147,7 @@ class GameLibraryTest extends TestCase
     function user_cannot_get_the_game_in_their_library_with_an_invalid_status(): void
     {
         // Send the request
-        $response = $this->auth()->getJson(route('api.me.library', [
+        $response = $this->auth()->getJson(route('api.me.library.index', [
             'library' => UserLibraryKind::Game,
             'status' => 'Invalid Status'
         ]));
@@ -350,16 +350,17 @@ class GameLibraryTest extends TestCase
     /**
      * Sends an API request to add game to a user's library.
      *
-     * @param Model $model
+     * @param Model                  $model
      * @param UserLibraryStatus|null $status
+     *
      * @return TestResponse
      */
     private function addModelToLibraryAPIRequest(Model $model, ?UserLibraryStatus $status): TestResponse
     {
-        return $this->auth()->postJson(route('api.me.library', [
-            'library'   => UserLibraryKind::Game,
-            'model_id'  => $model->getKey(),
-            'status'    => $status?->key ?? 'Invalid status'
+        return $this->auth()->postJson(route('api.me.library.index', [
+            'library' => UserLibraryKind::Game,
+            'model_id' => $model->getKey(),
+            'status' => $status?->key ?? 'Invalid status'
         ]));
     }
 }

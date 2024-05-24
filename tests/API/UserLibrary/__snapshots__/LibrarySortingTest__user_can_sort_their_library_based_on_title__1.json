@@ -1,7 +1,7 @@
 {
     "shows": [
         {
-            "id": 1,
+            "id": "1",
             "uuid": "1",
             "type": "show",
             "href": "\/v1\/anime\/1",
@@ -85,15 +85,19 @@
                 "airDay": "Sunday",
                 "isNSFW": false,
                 "copyright": "\u00ae 2012 Steuber Group",
-                "givenRating": 3,
-                "givenReview": null,
-                "libraryStatus": 0,
-                "isFavorited": false,
-                "isReminded": false
+                "library": {
+                    "rating": 3,
+                    "review": null,
+                    "status": 0,
+                    "rewatchCount": null,
+                    "isHidden": false,
+                    "isFavorited": false,
+                    "isReminded": false
+                }
             }
         },
         {
-            "id": 2,
+            "id": "2",
             "uuid": "2",
             "type": "show",
             "href": "\/v1\/anime\/2",
@@ -177,11 +181,15 @@
                 "airDay": "Wednesday",
                 "isNSFW": true,
                 "copyright": "\u2117 2018 Abernathy-Daniel",
-                "givenRating": 1.2,
-                "givenReview": null,
-                "libraryStatus": 0,
-                "isFavorited": false,
-                "isReminded": false
+                "library": {
+                    "rating": 1.2,
+                    "review": null,
+                    "status": 0,
+                    "rewatchCount": null,
+                    "isHidden": false,
+                    "isFavorited": false,
+                    "isReminded": false
+                }
             }
         }
     ]
