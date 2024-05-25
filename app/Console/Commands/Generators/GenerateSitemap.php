@@ -21,9 +21,10 @@ use App\Models\Song;
 use App\Models\Studio;
 use App\Models\Theme;
 use App\Models\User;
+use DateTimeInterface;
 use DB;
 use Illuminate\Console\Command;
-use Spatie\Sitemap\Sitemap;
+use Illuminate\Database\Eloquent\Collection;
 use Spatie\Sitemap\SitemapIndex;
 
 class GenerateSitemap extends Command
@@ -57,155 +58,126 @@ class GenerateSitemap extends Command
         //========== Explore Category sitemap ==========//
         $this->info('- Generating explore categories...');
         ExploreCategory::withoutGlobalScopes()
-            ->select(['slug'])
-            ->chunk(20000, function ($exploreCategory, int $page) use ($sitemapIndex) {
-                $path = 'sitemaps/explore_category_' . $page . '_sitemap.xml';
-                $this->info($path);
-                Sitemap::create()
-                    ->add($exploreCategory)
-                    ->writeToFile(public_path($path));
-                $sitemapIndex->add($path);
+            ->withoutEagerLoads()
+            ->select(['slug', 'updated_at'])
+            ->chunk(20000, function (Collection $exploreCategories, int $page) use ($sitemapIndex) {
+                $this->generateSitemapFor(ExploreCategory::TABLE_NAME, $page, $exploreCategories, $sitemapIndex);
             });
 
         //========== Anime sitemap ==========//
         $this->info('- Generating anime...');
         Anime::withoutGlobalScopes()
-            ->select(['slug'])
-            ->chunk(20000, function ($anime, int $page) use ($sitemapIndex) {
-                $path = 'sitemaps/anime_' . $page . '_sitemap.xml';
-                $this->info($path);
-                Sitemap::create()
-                    ->add($anime)
-                    ->writeToFile(public_path($path));
-                $sitemapIndex->add($path);
+            ->withoutEagerLoads()
+            ->select(['slug', 'updated_at'])
+            ->chunk(20000, function (Collection $anime, int $page) use ($sitemapIndex) {
+                $this->generateSitemapFor(Anime::TABLE_NAME, $page, $anime, $sitemapIndex);
             });
 
         //========== Anime Cast sitemap ==========//
         $this->info('- Generating anime cast...');
         DB::statement("SET SQL_MODE=''");
         AnimeCast::withoutGlobalScopes()
-            ->with('anime')
-            ->select(['anime_id'])
+            ->withoutEagerLoads()
+            ->with([
+                'anime' => function ($query) {
+                    $query->select(['id', 'slug'])
+                        ->withoutGlobalScopes();
+                },
+            ])
+            ->select(['anime_id', 'updated_at'])
             ->groupBy('anime_id')
-            ->chunk(20000, function ($animeCast, int $page) use ($sitemapIndex) {
-                $path = 'sitemaps/anime_cast_' . $page . '_sitemap.xml';
-                $this->info($path);
-                Sitemap::create()
-                    ->add($animeCast)
-                    ->writeToFile(public_path($path));
-                $sitemapIndex->add($path);
+            ->chunk(20000, function (Collection $animeCast, int $page) use ($sitemapIndex) {
+                $this->generateSitemapFor(AnimeCast::TABLE_NAME, $page, $animeCast, $sitemapIndex);
             });
         DB::statement('SET SQL_MODE=only_full_group_by');
 
         //========== Characters sitemap ==========//
         $this->info('- Generating characters...');
         Character::withoutGlobalScopes()
-            ->select(['slug'])
-            ->chunk(20000, function ($characters, int $page) use ($sitemapIndex) {
-                $path = 'sitemaps/characters_' . $page . '_sitemap.xml';
-                $this->info($path);
-                Sitemap::create()
-                    ->add($characters)
-                    ->writeToFile(public_path($path));
-                $sitemapIndex->add($path);
+            ->withoutEagerLoads()
+            ->select(['slug', 'updated_at'])
+            ->chunk(20000, function (Collection $characters, int $page) use ($sitemapIndex) {
+                $this->generateSitemapFor(Character::TABLE_NAME, $page, $characters, $sitemapIndex);
             });
 
         //========== Episodes sitemap ==========//
         $this->info('- Generating episodes...');
         Episode::withoutGlobalScopes()
-            ->select(['id'])
-            ->chunk(20000, function ($episodes, int $page) use ($sitemapIndex) {
-                $path = 'sitemaps/episodes_' . $page . '_sitemap.xml';
-                $this->info($path);
-                Sitemap::create()
-                    ->add($episodes)
-                    ->writeToFile(public_path($path));
-                $sitemapIndex->add($path);
+            ->withoutEagerLoads()
+            ->select(['id', 'updated_at'])
+            ->chunk(20000, function (Collection $episodes, int $page) use ($sitemapIndex) {
+                $this->generateSitemapFor(Episode::TABLE_NAME, $page, $episodes, $sitemapIndex);
             });
 
         //========== Games sitemap ==========//
         $this->info('- Generating games...');
         Game::withoutGlobalScopes()
-            ->select(['slug'])
-            ->chunk(20000, function ($game, int $page) use ($sitemapIndex) {
-                $path = 'sitemaps/game_' . $page . '_sitemap.xml';
-                $this->info($path);
-                Sitemap::create()
-                    ->add($game)
-                    ->writeToFile(public_path($path));
-                $sitemapIndex->add($path);
+            ->withoutEagerLoads()
+            ->select(['slug', 'updated_at'])
+            ->chunk(20000, function (Collection $games, int $page) use ($sitemapIndex) {
+                $this->generateSitemapFor(Game::TABLE_NAME, $page, $games, $sitemapIndex);
             });
 
         //========== Game Cast sitemap ==========//
         $this->info('- Generating game cast...');
         DB::statement("SET SQL_MODE=''");
         GameCast::withoutGlobalScopes()
-            ->with('game')
-            ->select(['game_id'])
+            ->withoutEagerLoads()
+            ->with([
+                'game' => function ($query) {
+                    $query->select(['id', 'slug'])
+                        ->withoutGlobalScopes();
+                },
+            ])
+            ->select(['game_id', 'updated_at'])
             ->groupBy('game_id')
-            ->chunk(20000, function ($gameCast, int $page) use ($sitemapIndex) {
-                $path = 'sitemaps/game_cast_' . $page . '_sitemap.xml';
-                $this->info($path);
-                Sitemap::create()
-                    ->add($gameCast)
-                    ->writeToFile(public_path($path));
-                $sitemapIndex->add($path);
+            ->chunk(20000, function (Collection $gameCast, int $page) use ($sitemapIndex) {
+                $this->generateSitemapFor(GameCast::TABLE_NAME, $page, $gameCast, $sitemapIndex);
             });
         DB::statement('SET SQL_MODE=only_full_group_by');
 
         //========== Genres sitemap ==========//
         $this->info('- Generating genres...');
         Genre::withoutGlobalScopes()
-            ->select(['slug'])
-            ->chunk(20000, function ($genres, int $page) use ($sitemapIndex) {
-                $path = 'sitemaps/genres_' . $page . '_sitemap.xml';
-                $this->info($path);
-                Sitemap::create()
-                    ->add($genres)
-                    ->writeToFile(public_path($path));
-                $sitemapIndex->add($path);
+            ->withoutEagerLoads()
+            ->select(['slug', 'updated_at'])
+            ->chunk(20000, function (Collection $genres, int $page) use ($sitemapIndex) {
+                $this->generateSitemapFor(Genre::TABLE_NAME, $page, $genres, $sitemapIndex);
             });
 
         //========== Themes sitemap ==========//
         $this->info('- Generating themes...');
         Theme::withoutGlobalScopes()
-            ->select(['slug'])
-            ->chunk(20000, function ($genres, int $page) use ($sitemapIndex) {
-                $path = 'sitemaps/themes_' . $page . '_sitemap.xml';
-                $this->info($path);
-                Sitemap::create()
-                    ->add($genres)
-                    ->writeToFile(public_path($path));
-                $sitemapIndex->add($path);
+            ->withoutEagerLoads()
+            ->select(['slug', 'updated_at'])
+            ->chunk(20000, function (Collection $themes, int $page) use ($sitemapIndex) {
+                $this->generateSitemapFor(Theme::TABLE_NAME, $page, $themes, $sitemapIndex);
             });
 
         //========== Manga sitemap ==========//
         $this->info('- Generating manga...');
         Manga::withoutGlobalScopes()
-            ->select(['slug'])
-            ->chunk(20000, function ($manga, int $page) use ($sitemapIndex) {
-                $path = 'sitemaps/manga_' . $page . '_sitemap.xml';
-                $this->info($path);
-                Sitemap::create()
-                    ->add($manga)
-                    ->writeToFile(public_path($path));
-                $sitemapIndex->add($path);
+            ->withoutEagerLoads()
+            ->select(['slug', 'updated_at'])
+            ->chunk(20000, function (Collection $manga, int $page) use ($sitemapIndex) {
+                $this->generateSitemapFor(Manga::TABLE_NAME, $page, $manga, $sitemapIndex);
             });
 
         //========== Manga Cast sitemap ==========//
         $this->info('- Generating manga cast...');
         DB::statement("SET SQL_MODE=''");
         MangaCast::withoutGlobalScopes()
-            ->with('manga')
-            ->select(['manga_id'])
+            ->withoutEagerLoads()
+            ->with([
+                'manga' => function ($query) {
+                    $query->select(['id', 'slug'])
+                        ->withoutGlobalScopes();
+                },
+            ])
+            ->select(['manga_id', 'updated_at'])
             ->groupBy('manga_id')
-            ->chunk(20000, function ($mangaCast, int $page) use ($sitemapIndex) {
-                $path = 'sitemaps/manga_cast_' . $page . '_sitemap.xml';
-                $this->info($path);
-                Sitemap::create()
-                    ->add($mangaCast)
-                    ->writeToFile(public_path($path));
-                $sitemapIndex->add($path);
+            ->chunk(20000, function (Collection $mangaCast, int $page) use ($sitemapIndex) {
+                $this->generateSitemapFor(MangaCast::TABLE_NAME, $page, $mangaCast, $sitemapIndex);
             });
         DB::statement('SET SQL_MODE=only_full_group_by');
 
@@ -213,16 +185,17 @@ class GenerateSitemap extends Command
         $this->info('- Generating media songs...');
         DB::statement("SET SQL_MODE=''");
         MediaSong::withoutGlobalScopes()
-            ->with('model')
-            ->select(['model_type', 'model_id'])
+            ->withoutEagerLoads()
+            ->with([
+                'model' => function ($query) {
+                    $query->select(['id', 'slug'])
+                        ->withoutGlobalScopes();
+                },
+            ])
+            ->select(['model_type', 'model_id', 'updated_at'])
             ->groupBy(['model_type', 'model_id'])
-            ->chunk(20000, function ($mediaSongs, int $page) use ($sitemapIndex) {
-                $path = 'sitemaps/media_songs_' . $page . '_sitemap.xml';
-                $this->info($path);
-                Sitemap::create()
-                    ->add($mediaSongs)
-                    ->writeToFile(public_path($path));
-                $sitemapIndex->add($path);
+            ->chunk(20000, function (Collection $mediaSongs, int $page) use ($sitemapIndex) {
+                $this->generateSitemapFor(MediaSong::TABLE_NAME, $page, $mediaSongs, $sitemapIndex);
             });
         DB::statement('SET SQL_MODE=only_full_group_by');
 
@@ -230,16 +203,17 @@ class GenerateSitemap extends Command
         $this->info('- Generating media staff...');
         DB::statement("SET SQL_MODE=''");
         MediaStaff::withoutGlobalScopes()
-            ->with('model')
-            ->select(['model_type', 'model_id'])
+            ->withoutEagerLoads()
+            ->with([
+                'model' => function ($query) {
+                    $query->select(['id', 'slug'])
+                        ->withoutGlobalScopes();
+                },
+            ])
+            ->select(['model_type', 'model_id', 'updated_at'])
             ->groupBy(['model_type', 'model_id'])
-            ->chunk(20000, function ($mediaStaff, int $page) use ($sitemapIndex) {
-                $path = 'sitemaps/media_staff_' . $page . '_sitemap.xml';
-                $this->info($path);
-                Sitemap::create()
-                    ->add($mediaStaff)
-                    ->writeToFile(public_path($path));
-                $sitemapIndex->add($path);
+            ->chunk(20000, function (Collection $mediaStaff, int $page) use ($sitemapIndex) {
+                $this->generateSitemapFor(MediaStaff::TABLE_NAME, $page, $mediaStaff, $sitemapIndex);
             });
         DB::statement('SET SQL_MODE=only_full_group_by');
 
@@ -247,82 +221,63 @@ class GenerateSitemap extends Command
         $this->info('- Generating media studios...');
         DB::statement("SET SQL_MODE=''");
         MediaStudio::withoutGlobalScopes()
-            ->with('model')
-            ->select(['model_type', 'model_id'])
+            ->withoutEagerLoads()
+            ->with([
+                'model' => function ($query) {
+                    $query->select(['id', 'slug'])
+                        ->withoutGlobalScopes();
+                },
+            ])
+            ->select(['model_type', 'model_id', 'updated_at'])
             ->groupBy(['model_type', 'model_id'])
-            ->chunk(20000, function ($mediaStudios, int $page) use ($sitemapIndex) {
-                $path = 'sitemaps/media_studios_' . $page . '_sitemap.xml';
-                $this->info($path);
-                Sitemap::create()
-                    ->add($mediaStudios)
-                    ->writeToFile(public_path($path));
-                $sitemapIndex->add($path);
+            ->chunk(20000, function (Collection $mediaStudios, int $page) use ($sitemapIndex) {
+                $this->generateSitemapFor(MediaStudio::TABLE_NAME, $page, $mediaStudios, $sitemapIndex);
             });
         DB::statement('SET SQL_MODE=only_full_group_by');
 
         //========== People sitemap ==========//
         $this->info('- Generating people...');
         Person::withoutGlobalScopes()
-            ->select(['slug'])
-            ->chunk(20000, function ($people, int $page) use ($sitemapIndex) {
-                $path = 'sitemaps/people_' . $page . '_sitemap.xml';
-                $this->info($path);
-                Sitemap::create()
-                    ->add($people)
-                    ->writeToFile(public_path($path));
-                $sitemapIndex->add($path);
+            ->withoutEagerLoads()
+            ->select(['slug', 'updated_at'])
+            ->chunk(20000, function (Collection $people, int $page) use ($sitemapIndex) {
+                $this->generateSitemapFor(Person::TABLE_NAME, $page, $people, $sitemapIndex);
             });
 
         //========== Season Episodes sitemap ==========//
         $this->info('- Generating season...');
         Season::withoutGlobalScopes()
-            ->select(['id'])
-            ->chunk(20000, function ($seasons, int $page) use ($sitemapIndex) {
-                $path = 'sitemaps/season_episodes_' . $page . '_sitemap.xml';
-                $this->info($path);
-                Sitemap::create()
-                    ->add($seasons)
-                    ->writeToFile(public_path($path));
-                $sitemapIndex->add($path);
+            ->withoutEagerLoads()
+            ->select(['id', 'updated_at'])
+            ->chunk(20000, function (Collection $seasons, int $page) use ($sitemapIndex) {
+                $this->generateSitemapFor(Season::TABLE_NAME, $page, $seasons, $sitemapIndex);
             });
 
         //========== Studios sitemap ==========//
         $this->info('- Generating songs...');
         Song::withoutGlobalScopes()
-            ->select(['id'])
-            ->chunk(20000, function ($songs, int $page) use ($sitemapIndex) {
-                $path = 'sitemaps/songs_' . $page . '_sitemap.xml';
-                $this->info($path);
-                Sitemap::create()
-                    ->add($songs)
-                    ->writeToFile(public_path($path));
-                $sitemapIndex->add($path);
+            ->withoutEagerLoads()
+            ->select(['id', 'updated_at'])
+            ->chunk(20000, function (Collection $songs, int $page) use ($sitemapIndex) {
+                $this->generateSitemapFor(Song::TABLE_NAME, $page, $songs, $sitemapIndex);
             });
 
         //========== Studios sitemap ==========//
         $this->info('- Generating studios...');
         Studio::withoutGlobalScopes()
-            ->select(['slug'])
-            ->chunk(20000, function ($studios, int $page) use ($sitemapIndex) {
-                $path = 'sitemaps/studios_' . $page . '_sitemap.xml';
-                $this->info($path);
-                Sitemap::create()
-                    ->add($studios)
-                    ->writeToFile(public_path($path));
-                $sitemapIndex->add($path);
+            ->withoutEagerLoads()
+            ->select(['slug', 'updated_at'])
+            ->chunk(20000, function (Collection $studios, int $page) use ($sitemapIndex) {
+                $this->generateSitemapFor(Studio::TABLE_NAME, $page, $studios, $sitemapIndex);
             });
 
         //========== Users sitemap ==========//
         $this->info('- Generating users...');
         User::withoutGlobalScopes()
-            ->select(['slug'])
-            ->chunk(20000, function ($users, int $page) use ($sitemapIndex) {
-                $path = 'sitemaps/users_' . $page . '_sitemap.xml';
-                $this->info($path);
-                Sitemap::create()
-                    ->add($users)
-                    ->writeToFile(public_path($path));
-                $sitemapIndex->add($path);
+            ->withoutEagerLoads()
+            ->select(['slug', 'updated_at'])
+            ->chunk(20000, function (Collection $users, int $page) use ($sitemapIndex) {
+                $this->generateSitemapFor(User::TABLE_NAME, $page, $users, $sitemapIndex);
             });
 
         //========== Sitemap Index ==========//
@@ -331,5 +286,38 @@ class GenerateSitemap extends Command
 
         $this->info('- Done -');
         return Command::SUCCESS;
+    }
+
+    /**
+     * @param string       $table
+     * @param int          $page
+     * @param Collection   $models
+     * @param SitemapIndex $sitemapIndex
+     *
+     * @return void
+     */
+    private function generateSitemapFor(string $table, int $page, Collection $models, SitemapIndex $sitemapIndex): void
+    {
+        $path = 'sitemaps/' . $table . '_' . $page . '_sitemap.xml';
+
+        $this->info($path);
+
+        $sitemap = '<?xml version="1.0" encoding="UTF-8"?>';
+        $sitemap .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">';
+
+        foreach ($models as $model) {
+            $tag = $model->toSitemapTag();
+            $sitemap .= '<url>';
+            $sitemap .= '<loc>' . $tag->url . '</loc>';
+            $sitemap .= '<changefreq>' . $tag->changeFrequency . '</changefreq>';
+            $sitemap .= '<lastmod>' . $tag->lastModificationDate->format(DateTimeInterface::ATOM) . '</lastmod>';
+            $sitemap .= '</url>';
+        }
+
+        $sitemap .= '</urlset>';
+
+        file_put_contents(public_path($path), $sitemap);
+
+        $sitemapIndex->add($path);
     }
 }
