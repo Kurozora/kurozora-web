@@ -26,7 +26,6 @@ class MediaStaff extends KModel implements Sitemapable
     public function model(): MorphTo
     {
         return $this->morphTo();
-//            ->withoutTvRatings();
     }
 
     /**
@@ -59,10 +58,13 @@ class MediaStaff extends KModel implements Sitemapable
         return match ($this->model_type) {
             Anime::class => Url::create(route('anime.staff', $this->model))
                 ->setChangeFrequency('weekly')
-                ->setLastModificationDate($this->model->updated_at),
+                ->setLastModificationDate($this->updated_at),
+            Game::class => Url::create(route('games.staff', $this->model))
+                ->setChangeFrequency('weekly')
+                ->setLastModificationDate($this->updated_at),
             Manga::class => Url::create(route('manga.staff', $this->model))
                 ->setChangeFrequency('weekly')
-                ->setLastModificationDate($this->model->updated_at),
+                ->setLastModificationDate($this->updated_at),
             default => [],
         };
     }

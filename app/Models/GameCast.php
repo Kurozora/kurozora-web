@@ -76,6 +76,6 @@ class GameCast extends KModel implements Sitemapable
     {
         return Url::create(route('games.cast', $this->game))
             ->setChangeFrequency('weekly')
-            ->setLastModificationDate($this->game->updated_at);
+            ->setLastModificationDate($this->updated_at);
     }
 }

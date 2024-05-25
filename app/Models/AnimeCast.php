@@ -76,6 +76,6 @@ class AnimeCast extends KModel implements Sitemapable
     {
         return Url::create(route('anime.cast', $this->anime))
             ->setChangeFrequency('weekly')
-            ->setLastModificationDate($this->anime->updated_at);
+            ->setLastModificationDate($this->updated_at);
     }
 }

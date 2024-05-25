@@ -809,7 +809,7 @@ class Manga extends KModel implements HasMedia, Sitemapable
     public function toSitemapTag(): Url|string|array
     {
         return Url::create(route('manga.details', $this))
-            ->setChangeFrequency('dail')
+            ->setChangeFrequency('daily')
             ->setLastModificationDate($this->updated_at);
     }
 }

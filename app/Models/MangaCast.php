@@ -56,6 +56,6 @@ class MangaCast extends KModel implements Sitemapable
     {
         return Url::create(route('manga.cast', $this->manga))
             ->setChangeFrequency('weekly')
-            ->setLastModificationDate($this->manga->updated_at);
+            ->setLastModificationDate($this->updated_at);
     }
 }

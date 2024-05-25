@@ -69,13 +69,13 @@ class MediaStudio extends MorphPivot implements Sitemapable
         return match ($this->model_type) {
             Anime::class => Url::create(route('anime.studios', $this->model))
                 ->setChangeFrequency('weekly')
-            ->setLastModificationDate($this->model->updated_at),
+            ->setLastModificationDate($this->updated_at),
             Manga::class => Url::create(route('manga.studios', $this->model))
                 ->setChangeFrequency('weekly')
-            ->setLastModificationDate($this->model->updated_at),
+            ->setLastModificationDate($this->updated_at),
             Game::class => Url::create(route('games.studios', $this->model))
                 ->setChangeFrequency('weekly')
-            ->setLastModificationDate($this->model->updated_at),
+            ->setLastModificationDate($this->updated_at),
             default => [],
         };
     }
