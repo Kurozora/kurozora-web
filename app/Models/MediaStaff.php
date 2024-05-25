@@ -58,9 +58,11 @@ class MediaStaff extends KModel implements Sitemapable
     {
         return match ($this->model_type) {
             Anime::class => Url::create(route('anime.staff', $this->model))
-                ->setChangeFrequency('weekly'),
+                ->setChangeFrequency('weekly')
+                ->setLastModificationDate($this->model->updated_at),
             Manga::class => Url::create(route('manga.staff', $this->model))
-                ->setChangeFrequency('weekly'),
+                ->setChangeFrequency('weekly')
+                ->setLastModificationDate($this->model->updated_at),
             default => [],
         };
     }

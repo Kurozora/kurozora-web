@@ -286,6 +286,7 @@ class Studio extends KModel implements HasMedia, Sitemapable
     public function toSitemapTag(): Url|string|array
     {
         return Url::create(route('studios.details', $this))
-            ->setChangeFrequency('weekly');
+            ->setChangeFrequency('daily')
+            ->setLastModificationDate($this->updated_at);
     }
 }

@@ -90,9 +90,11 @@ class MediaSong extends KModel implements Sitemapable
     {
         return match ($this->model_type) {
             Anime::class => Url::create(route('anime.songs', $this->model))
-                ->setChangeFrequency('weekly'),
+                ->setChangeFrequency('weekly')
+                ->setLastModificationDate($this->model->updated_at),
             Game::class => Url::create(route('games.songs', $this->model))
-                ->setChangeFrequency('weekly'),
+                ->setChangeFrequency('weekly')
+                ->setLastModificationDate($this->model->updated_at),
             default => [],
         };
     }

@@ -199,6 +199,7 @@ class Platform extends KModel implements HasMedia, Sitemapable
     public function toSitemapTag(): Url|string|array
     {
         return Url::create(route('platforms.details', $this))
-            ->setChangeFrequency('weekly');
+            ->setChangeFrequency('weekly')
+            ->setLastModificationDate($this->updated_at);
     }
 }

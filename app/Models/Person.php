@@ -388,6 +388,7 @@ class Person extends KModel implements HasMedia, Sitemapable
     public function toSitemapTag(): Url|string|array
     {
         return Url::create(route('people.details', $this))
-            ->setChangeFrequency('weekly');
+            ->setChangeFrequency('weekly')
+            ->setLastModificationDate($this->updated_at);
     }
 }

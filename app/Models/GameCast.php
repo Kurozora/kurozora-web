@@ -75,6 +75,7 @@ class GameCast extends KModel implements Sitemapable
     public function toSitemapTag(): Url|string|array
     {
         return Url::create(route('games.cast', $this->game))
-            ->setChangeFrequency('weekly');
+            ->setChangeFrequency('weekly')
+            ->setLastModificationDate($this->game->updated_at);
     }
 }

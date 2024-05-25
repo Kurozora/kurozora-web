@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Traits\Model\HasSessionAttribute;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -11,8 +10,7 @@ use Laravel\Sanctum\PersonalAccessToken as SanctumPersonalAccessToken;
 
 class PersonalAccessToken extends SanctumPersonalAccessToken
 {
-    use HasFactory,
-        HasSessionAttribute;
+    use HasSessionAttribute;
 
     // Table name
     const string TABLE_NAME = 'personal_access_tokens';

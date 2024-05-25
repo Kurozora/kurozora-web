@@ -723,7 +723,8 @@ class Anime extends KModel implements HasMedia, Sitemapable
     public function toSitemapTag(): Url|string|array
     {
         return Url::create(route('anime.details', $this))
-            ->setChangeFrequency('weekly');
+            ->setChangeFrequency('daily')
+            ->setLastModificationDate($this->updated_at);
     }
 
     /**

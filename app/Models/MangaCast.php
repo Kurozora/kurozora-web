@@ -55,6 +55,7 @@ class MangaCast extends KModel implements Sitemapable
     public function toSitemapTag(): Url|string|array
     {
         return Url::create(route('manga.cast', $this->manga))
-            ->setChangeFrequency('weekly');
+            ->setChangeFrequency('weekly')
+            ->setLastModificationDate($this->manga->updated_at);
     }
 }
