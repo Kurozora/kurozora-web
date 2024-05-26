@@ -11,6 +11,7 @@ use App\Notifications\LibraryImportFinished;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Http\UploadedFile;
 use Notification;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\ProvidesTestMultipleAnime;
 use Tests\Traits\ProvidesTestUser;
@@ -188,8 +189,8 @@ class LibraryImportTest extends TestCase
      * User can import MAL library with overwrite behavior.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function user_can_import_mal_library_with_overwrite_behavior(): void
     {
         // Attach anime with id 21
@@ -207,10 +208,10 @@ class LibraryImportTest extends TestCase
 
         // Request import
         $response = $this->auth()->json('POST', route('api.me.library.import'), [
-            'library'   => UserLibraryKind::Anime,
-            'service'   => ImportService::MAL,
-            'file'      => $uploadFile,
-            'behavior'  => ImportBehavior::Overwrite,
+            'library' => UserLibraryKind::Anime,
+            'service' => ImportService::MAL,
+            'file' => $uploadFile,
+            'behavior' => ImportBehavior::Overwrite,
         ]);
         $response->assertSuccessfulAPIResponse();
 
@@ -227,8 +228,9 @@ class LibraryImportTest extends TestCase
     /**
      * User can import MAL library with merge behavior.
      *
-     * @test
+     * @return void
      */
+    #[Test]
     function user_can_import_mal_library_with_merge_behavior(): void
     {
         // Attach anime with id 21
@@ -246,10 +248,10 @@ class LibraryImportTest extends TestCase
 
         // Request import
         $response = $this->auth()->json('POST', route('api.me.library.import'), [
-            'library'   => UserLibraryKind::Anime,
-            'service'   => ImportService::MAL,
-            'file'      => $uploadFile,
-            'behavior'  => ImportBehavior::Merge,
+            'library' => UserLibraryKind::Anime,
+            'service' => ImportService::MAL,
+            'file' => $uploadFile,
+            'behavior' => ImportBehavior::Merge,
         ]);
         $response->assertSuccessfulAPIResponse();
 

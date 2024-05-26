@@ -76,10 +76,10 @@ trait ProvidesTestGame
         // Create a relationship between main and related game
         MediaRelation::factory()
             ->create([
-                'model_id'      => $this->game->id,
-                'model_type'    => $this->game->getMorphClass(),
-                'related_id'    => $this->relatedGame->id,
-                'related_type'  => $this->relatedGame->getMorphClass(),
+                'model_id' => $this->game->id,
+                'model_type' => $this->game->getMorphClass(),
+                'related_id' => $this->relatedGame->id,
+                'related_type' => $this->relatedGame->getMorphClass(),
             ]);
     }
 }

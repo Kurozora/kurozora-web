@@ -32,11 +32,11 @@ abstract class TestCase extends BaseTestCase
         });
 
         // API response macro's
-        TestResponse::macro('assertSuccessfulAPIResponse', function() {
+        TestResponse::macro('assertSuccessfulAPIResponse', function () {
             $this->assertSuccessful();
         });
 
-        TestResponse::macro('assertUnsuccessfulAPIResponse', function() {
+        TestResponse::macro('assertUnsuccessfulAPIResponse', function () {
             PHPUnit::assertFalse(
                 $this->isSuccessful(),
                 'Response status code [' . $this->getStatusCode() . '] is not an unsuccessful status code.'

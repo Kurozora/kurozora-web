@@ -5,6 +5,7 @@ namespace Tests\API;
 use App\Enums\UserLibraryStatus;
 use App\Models\Episode;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\ProvidesTestAnime;
 use Tests\Traits\ProvidesTestUser;
@@ -17,8 +18,8 @@ class EpisodeTest extends TestCase
      * A user can view specific episode details.
      *
      * @return void
-     * @test
      */
+    #[Test]
     public function a_user_can_view_specific_episode_details(): void
     {
         /** @var Episode $episode */
@@ -37,8 +38,8 @@ class EpisodeTest extends TestCase
      * An authenticated user can view specific episode details.
      *
      * @return void
-     * @test
      */
+    #[Test]
     public function an_authenticated_user_can_view_specific_episode_details(): void
     {
         /** @var Episode $episode */
@@ -57,8 +58,8 @@ class EpisodeTest extends TestCase
      * Test if an episode cannot be watched if anime not in library.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function an_episode_can_not_be_watched_if_anime_not_in_library(): void
     {
         $response = $this->auth()->json('POST', 'v1/episodes/' . $this->episode->id . '/watched');
@@ -74,8 +75,8 @@ class EpisodeTest extends TestCase
      * Test if an episode cannot be unwatched if anime is not in library.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function an_episode_can_not_be_unwatched_if_anime_not_in_library(): void
     {
         $response = $this->auth()->json('POST', 'v1/episodes/' . $this->episode->id . '/watched');
@@ -91,8 +92,8 @@ class EpisodeTest extends TestCase
      * Test if an episode can be watched if anime in library.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function an_episode_can_be_watched_if_anime_in_library(): void
     {
         // Add the Anime to the library
@@ -112,8 +113,8 @@ class EpisodeTest extends TestCase
      * Test if an episode can be unwatched if anime is in library.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function an_episode_can_be_unwatched_if_anime_in_library(): void
     {
         // Add the Anime to the library and mark episode as watched

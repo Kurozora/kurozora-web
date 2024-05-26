@@ -88,10 +88,10 @@ trait ProvidesTestAnime
         // Create a relationship between main and related anime
         MediaRelation::factory()
             ->create([
-                'model_id'      => $this->anime->id,
-                'model_type'    => Anime::class,
-                'related_id'    => $this->relatedAnime->id,
-                'related_type'  => Anime::class,
+                'model_id' => $this->anime->id,
+                'model_type' => Anime::class,
+                'related_id' => $this->relatedAnime->id,
+                'related_type' => Anime::class,
             ]);
     }
 }

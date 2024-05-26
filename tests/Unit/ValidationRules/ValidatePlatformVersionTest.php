@@ -48,7 +48,7 @@ class ValidatePlatformVersionTest extends TestCase
     #[Test]
     public function valid_platform_versions_pass(): void
     {
-        foreach($this->validPlatformVersions as $platformVersion) {
+        foreach ($this->validPlatformVersions as $platformVersion) {
             $message = '';
 
             $this->rule->validate('platform_version', $platformVersion, function ($error) use (&$message) {
@@ -67,7 +67,7 @@ class ValidatePlatformVersionTest extends TestCase
     #[Test]
     public function invalid_platform_versions_dont_pass(): void
     {
-        foreach($this->invalidPlatformVersions as $platformVersion) {
+        foreach ($this->invalidPlatformVersions as $platformVersion) {
             $message = '';
 
             $this->rule->validate('platform_version', $platformVersion, function ($error) use (&$message) {

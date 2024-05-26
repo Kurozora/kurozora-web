@@ -87,19 +87,18 @@ class CheckKurozoraUserAuthenticationTest extends TestCase
      */
     private function registerTestRoutes(): void
     {
-        $userInfoResponse = function()
-        {
+        $userInfoResponse = function () {
             return JSONResult::success([
-                'is_authenticated'      => auth()->check(),
+                'is_authenticated' => auth()->check(),
                 'authenticated_user_id' => auth()->check() ? auth()->id() : null
             ]);
         };
 
-        Route::get('/auth-required', function() use ($userInfoResponse) {
+        Route::get('/auth-required', function () use ($userInfoResponse) {
             return $userInfoResponse();
         })->middleware('auth.kurozora');
 
-        Route::get('/auth-optional', function() use ($userInfoResponse) {
+        Route::get('/auth-optional', function () use ($userInfoResponse) {
             return $userInfoResponse();
         })->middleware('auth.kurozora:optional');
     }

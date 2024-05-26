@@ -46,7 +46,7 @@ class ValidatePlatformNameTest extends TestCase
     #[Test]
     public function valid_platform_names_pass(): void
     {
-        foreach($this->validPlatformNames as $validPlatformName) {
+        foreach ($this->validPlatformNames as $validPlatformName) {
             $message = '';
 
             $this->rule->validate('platform', $validPlatformName, function ($error) use (&$message) {
@@ -65,7 +65,7 @@ class ValidatePlatformNameTest extends TestCase
     #[Test]
     public function invalid_platform_names_dont_pass(): void
     {
-        foreach($this->invalidPlatformNames as $invalidPlatformName) {
+        foreach ($this->invalidPlatformNames as $invalidPlatformName) {
             $message = '';
 
             $this->rule->validate('platform', $invalidPlatformName, function ($error) use (&$message) {

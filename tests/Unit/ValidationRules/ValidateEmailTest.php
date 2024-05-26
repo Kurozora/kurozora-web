@@ -73,7 +73,7 @@ class ValidateEmailTest extends TestCase
     #[Test]
     public function valid_email_addresses_pass(): void
     {
-        foreach($this->validEmailAddresses as $email) {
+        foreach ($this->validEmailAddresses as $email) {
             $message = '';
 
             $this->rule->validate('email', $email, function ($error) use (&$message) {
@@ -92,7 +92,7 @@ class ValidateEmailTest extends TestCase
     #[Test]
     public function invalid_email_addresses_dont_pass(): void
     {
-        foreach($this->invalidEmailAddresses as $email) {
+        foreach ($this->invalidEmailAddresses as $email) {
             $message = '';
 
             $this->rule->validate('email', $email, function ($error) use (&$message) {
@@ -185,7 +185,7 @@ class ValidateEmailTest extends TestCase
 
         new ValidateEmail([
             'must-be-available' => true,
-            'must-be-taken'     => true
+            'must-be-taken' => true
         ]);
     }
 }

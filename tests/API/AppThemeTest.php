@@ -5,6 +5,7 @@ namespace Tests\API;
 use App\Enums\AppThemeDownloadKind;
 use App\Models\AppTheme;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\ProvidesTestUser;
 
@@ -16,8 +17,8 @@ class AppThemeTest extends TestCase
      * A user can view all app themes.
      *
      * @return void
-     * @test
      */
+    #[Test]
     public function a_user_can_view_all_app_themes(): void
     {
         AppTheme::factory(2)->create();
@@ -35,8 +36,8 @@ class AppThemeTest extends TestCase
      * A user can view specific app theme details.
      *
      * @return void
-     * @test
      */
+    #[Test]
     public function a_user_can_view_specific_app_theme_details(): void
     {
         /** @var AppTheme $theme */
@@ -55,8 +56,8 @@ class AppThemeTest extends TestCase
      * A user cannot download an app theme when not subscribed or pro.
      *
      * @return void
-     * @test
      */
+    #[Test]
     public function a_user_cannot_download_an_app_theme_when_not_subscribed_or_pro(): void
     {
         /** @var AppTheme $theme */
@@ -72,8 +73,8 @@ class AppThemeTest extends TestCase
      * A user can download an app theme as plist.
      *
      * @return void
-     * @test
      */
+    #[Test]
     public function a_user_can_download_an_app_theme_as_plist(): void
     {
         /** @var AppTheme $theme */
@@ -98,8 +99,8 @@ class AppThemeTest extends TestCase
      * A user can download an app theme as css.
      *
      * @return void
-     * @test
      */
+    #[Test]
     public function a_user_can_download_an_app_theme_as_css(): void
     {
         /** @var AppTheme $theme */

@@ -5,6 +5,7 @@ namespace Tests\API;
 use App\Models\MediaStudio;
 use App\Models\Studio;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class StudioTest extends TestCase
@@ -29,8 +30,8 @@ class StudioTest extends TestCase
      * A user can view specific studio details.
      *
      * @return void
-     * @test
      */
+    #[Test]
     public function a_user_can_view_specific_studio_details(): void
     {
         $response = $this->get('v1/studios/'.$this->studio->id);
@@ -46,8 +47,8 @@ class StudioTest extends TestCase
      * A user can view specific studio details including relationships.
      *
      * @return void
-     * @test
      */
+    #[Test]
     public function a_user_can_view_specific_studio_details_including_relationships(): void
     {
         $response = $this->get('v1/studios/'.$this->studio->id.'?include=shows');
@@ -67,8 +68,8 @@ class StudioTest extends TestCase
      * A user can view specific studio anime.
      *
      * @return void
-     * @test
      */
+    #[Test]
     public function a_user_can_view_specific_studio_anime(): void
     {
         // Prepare studio anime

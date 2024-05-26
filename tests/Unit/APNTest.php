@@ -32,7 +32,7 @@ class APNTest extends TestCase
         // Create the expected return value
         $expectedArray = [];
 
-        foreach($sessionAttributes as $sessionAttribute) {
+        foreach ($sessionAttributes as $sessionAttribute) {
             if ($sessionAttribute->apn_device_token !== null)
                 $expectedArray[] = $sessionAttribute->apn_device_token;
         }

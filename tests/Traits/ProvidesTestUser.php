@@ -21,11 +21,11 @@ trait ProvidesTestUser
     protected function setupProvidesTestUser(): void
     {
         $this->user = User::factory()->create([
-            'username'          => 'KurozoraTester',
-            'email'             => 'tester@kurozora.app',
+            'username' => 'KurozoraTester',
+            'email' => 'tester@kurozora.app',
             'email_verified_at' => now(),
-            'password'          => Hash::make($this->userPassword),
-            'biography'         => 'Hi! This is my Kurozora account.',
+            'password' => Hash::make($this->userPassword),
+            'biography' => 'Hi! This is my Kurozora account.',
         ]);
     }
 }

@@ -30,9 +30,9 @@ class FeedMessageTest extends TestCase
     function user_can_post_a_normal_message_to_the_feed(): void
     {
         $this->auth()->json('POST', 'v1/feed', [
-            'content'       => 'Hello, Kurozora!',
-            'is_nsfw'       => 0,
-            'is_spoiler'    => 0,
+            'content' => 'Hello, Kurozora!',
+            'is_nsfw' => 0,
+            'is_spoiler' => 0,
         ])->assertSuccessfulAPIResponse();
 
         // Check whether the feed message was created
@@ -48,9 +48,9 @@ class FeedMessageTest extends TestCase
     function user_can_post_an_nsfw_message_to_the_feed(): void
     {
         $this->auth()->json('POST', 'v1/feed', [
-            'content'       => 'Hello, Kurozora!',
-            'is_nsfw'       => 1,
-            'is_spoiler'    => 0,
+            'content' => 'Hello, Kurozora!',
+            'is_nsfw' => 1,
+            'is_spoiler' => 0,
         ])->assertSuccessfulAPIResponse();
 
         // Check whether the feed message was created
@@ -66,9 +66,9 @@ class FeedMessageTest extends TestCase
     function user_can_post_a_spoiler_message_to_the_feed(): void
     {
         $this->auth()->json('POST', 'v1/feed', [
-            'content'       => 'Hello, Kurozora!',
-            'is_nsfw'       => 0,
-            'is_spoiler'    => 1,
+            'content' => 'Hello, Kurozora!',
+            'is_nsfw' => 0,
+            'is_spoiler' => 1,
         ])->assertSuccessfulAPIResponse();
 
         // Check whether the feed message was created
@@ -84,9 +84,9 @@ class FeedMessageTest extends TestCase
     function user_can_post_an_nsfw_and_spoiler_message_to_the_feed(): void
     {
         $this->auth()->json('POST', 'v1/feed', [
-            'content'       => 'Hello, Kurozora!',
-            'is_nsfw'       => 1,
-            'is_spoiler'    => 1,
+            'content' => 'Hello, Kurozora!',
+            'is_nsfw' => 1,
+            'is_spoiler' => 1,
         ])->assertSuccessfulAPIResponse();
 
         // Check whether the feed message was created
@@ -104,12 +104,12 @@ class FeedMessageTest extends TestCase
         $parent = FeedMessage::factory()->create();
 
         $response = $this->auth()->json('POST', 'v1/feed', [
-            'content'       => 'Hello, Kurozora!',
-            'parent_id'     => $parent->id,
-            'is_reply'      => 1,
-            'is_reshare'    => 0,
-            'is_nsfw'       => 0,
-            'is_spoiler'    => 0,
+            'content' => 'Hello, Kurozora!',
+            'parent_id' => $parent->id,
+            'is_reply' => 1,
+            'is_reshare' => 0,
+            'is_nsfw' => 0,
+            'is_spoiler' => 0,
         ]);
 
         $response->assertSuccessfulAPIResponse();
@@ -129,24 +129,24 @@ class FeedMessageTest extends TestCase
         $parent = FeedMessage::factory()->create();
 
         $this->auth()->json('POST', 'v1/feed', [
-            'content'       => 'Hello, Kurozora!',
-            'parent_id'     => $parent->id,
-            'is_reply'      => 0,
-            'is_reshare'    => 1,
-            'is_nsfw'       => 0,
-            'is_spoiler'    => 0,
+            'content' => 'Hello, Kurozora!',
+            'parent_id' => $parent->id,
+            'is_reply' => 0,
+            'is_reshare' => 1,
+            'is_nsfw' => 0,
+            'is_spoiler' => 0,
         ])->assertSuccessfulAPIResponse();
 
         // Check whether the feed message was created
         $this->assertEquals(1, $this->user->feed_messages()->where('is_reshare', 1)->count());
 
         $this->auth()->json('POST', 'v1/feed', [
-            'content'       => 'Hello, Kurozora!',
-            'parent_id'     => $parent->id,
-            'is_reply'      => 0,
-            'is_reshare'    => 1,
-            'is_nsfw'       => 0,
-            'is_spoiler'    => 0,
+            'content' => 'Hello, Kurozora!',
+            'parent_id' => $parent->id,
+            'is_reply' => 0,
+            'is_reshare' => 1,
+            'is_nsfw' => 0,
+            'is_spoiler' => 0,
         ])->assertUnsuccessfulAPIResponse();
     }
 
@@ -163,12 +163,12 @@ class FeedMessageTest extends TestCase
         ]);
 
         $this->auth()->json('POST', 'v1/feed', [
-            'content'       => 'Hello, Kurozora!',
-            'parent_id'     => $parent->id,
-            'is_reply'      => 1,
-            'is_reshare'    => 0,
-            'is_nsfw'       => 0,
-            'is_spoiler'    => 0,
+            'content' => 'Hello, Kurozora!',
+            'parent_id' => $parent->id,
+            'is_reply' => 1,
+            'is_reshare' => 0,
+            'is_nsfw' => 0,
+            'is_spoiler' => 0,
         ])->assertSuccessfulAPIResponse();
     }
 
@@ -181,9 +181,9 @@ class FeedMessageTest extends TestCase
     function user_cannot_post_to_the_feed_if_not_logged_in(): void
     {
         $this->json('POST', 'v1/feed', [
-            'content'       => 'Hello, Kurozora!',
-            'is_nsfw'       => 0,
-            'is_spoiler'    => 0,
+            'content' => 'Hello, Kurozora!',
+            'is_nsfw' => 0,
+            'is_spoiler' => 0,
         ])->assertUnsuccessfulAPIResponse();
     }
 
@@ -196,15 +196,15 @@ class FeedMessageTest extends TestCase
     function feed_messages_cannot_cross_maximum_content_length(): void
     {
         $this->auth()->json('POST', 'v1/feed', [
-            'content'       => Str::random(FeedMessage::MAX_CONTENT_LENGTH),
-            'is_nsfw'       => 0,
-            'is_spoiler'    => 0,
+            'content' => Str::random(FeedMessage::MAX_CONTENT_LENGTH),
+            'is_nsfw' => 0,
+            'is_spoiler' => 0,
         ])->assertSuccessfulAPIResponse();
 
         $this->auth()->json('POST', 'v1/feed', [
-            'content'       => Str::random(FeedMessage::MAX_CONTENT_LENGTH + 1),
-            'is_nsfw'       => 0,
-            'is_spoiler'    => 0,
+            'content' => Str::random(FeedMessage::MAX_CONTENT_LENGTH + 1),
+            'is_nsfw' => 0,
+            'is_spoiler' => 0,
         ])->assertUnsuccessfulAPIResponse();
     }
 }

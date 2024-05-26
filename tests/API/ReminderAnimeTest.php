@@ -6,6 +6,7 @@ use App\Enums\UserLibraryKind;
 use App\Enums\UserLibraryStatus;
 use App\Models\Anime;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\ProvidesTestUser;
 
@@ -17,8 +18,8 @@ class ReminderAnimeTest extends TestCase
      * Test if a normal user cannot add anime to their reminders.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function a_normal_user_cannot_add_anime_to_their_reminders(): void
     {
         // Send request to add anime to the user's reminders
@@ -43,8 +44,8 @@ class ReminderAnimeTest extends TestCase
      * Test if a subscribed user can add anime to their reminders.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function a_subscribed_user_can_add_anime_to_their_reminders(): void
     {
         // Add anime to the user's library
@@ -75,8 +76,8 @@ class ReminderAnimeTest extends TestCase
      * Test if a subscribed_user can remove anime from their reminders.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function a_subscribed_user_can_remove_anime_from_their_reminders(): void
     {
         // Add the anime to the user's library and reminders
@@ -109,8 +110,8 @@ class ReminderAnimeTest extends TestCase
      * Test if a user can get a list of the anime in their reminders.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function a_user_can_get_a_list_of_the_anime_in_their_reminders(): void
     {
         // Add some anime to the user's reminders

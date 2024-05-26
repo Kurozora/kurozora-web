@@ -6,6 +6,7 @@ use App\Models\Session;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Str;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\ProvidesTestUser;
 
@@ -17,8 +18,8 @@ class SessionTest extends TestCase
      * User can get the details of their session.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function user_can_get_the_details_of_their_session(): void
     {
         // Create a session for the user
@@ -39,8 +40,8 @@ class SessionTest extends TestCase
      * User cannot get the details of another user's session.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function user_cannot_get_the_details_of_another_users_session(): void
     {
         // Create a session for the user
@@ -61,8 +62,8 @@ class SessionTest extends TestCase
      * User can delete their session.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function user_can_delete_their_session(): void
     {
         // Create a session for the user
@@ -83,8 +84,8 @@ class SessionTest extends TestCase
      * User cannot delete another user's session.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function user_cannot_delete_another_users_session(): void
     {
         // Create a session for the user
@@ -108,8 +109,8 @@ class SessionTest extends TestCase
      * User cannot update the apn device token of another users' session.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function user_cannot_update_the_apn_device_token_of_another_users_session(): void
     {
         // Create a session for the user

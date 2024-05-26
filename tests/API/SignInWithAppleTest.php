@@ -5,6 +5,7 @@ namespace Tests\API;
 use App\Models\PersonalAccessToken;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class SignInWithAppleTest extends TestCase
@@ -15,8 +16,8 @@ class SignInWithAppleTest extends TestCase
      * An account can be signed up.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function an_account_can_be_signed_up_via_siwa(): void
     {
         $this->json('POST', 'v1/users/siwa/signin', [
@@ -42,8 +43,8 @@ class SignInWithAppleTest extends TestCase
      * Test if a user can sign in via SIWA.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function a_user_can_sign_in_via_SIWA(): void
     {
         // Create a SIWA user

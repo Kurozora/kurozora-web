@@ -66,10 +66,10 @@ trait ProvidesTestManga
         // Create a relationship between main and related manga
         MediaRelation::factory()
             ->create([
-                'model_id'      => $this->manga->id,
-                'model_type'    => Manga::class,
-                'related_id'    => $this->relatedManga->id,
-                'related_type'  => Manga::class,
+                'model_id' => $this->manga->id,
+                'model_type' => Manga::class,
+                'related_id' => $this->relatedManga->id,
+                'related_type' => Manga::class,
             ]);
     }
 }

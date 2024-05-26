@@ -10,6 +10,7 @@ use App\Models\Manga;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Testing\TestResponse;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\ProvidesTestManga;
 use Tests\Traits\ProvidesTestUser;
@@ -22,8 +23,8 @@ class MangaLibraryTest extends TestCase
      * User can get the watching manga in their library.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function user_can_get_the_watching_manga_in_their_library(): void
     {
         // Add a manga to the list
@@ -46,8 +47,8 @@ class MangaLibraryTest extends TestCase
      * User can get the dropped manga in their library.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function user_can_get_the_dropped_manga_in_their_library(): void
     {
         // Add a manga to the list
@@ -70,8 +71,8 @@ class MangaLibraryTest extends TestCase
      * User can get the planning manga in their library.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function user_can_get_the_planning_manga_in_their_library(): void
     {
         // Add a manga to the list
@@ -94,8 +95,8 @@ class MangaLibraryTest extends TestCase
      * User can get the completed manga in their library.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function user_can_get_the_completed_manga_in_their_library(): void
     {
         // Add a manga to the list
@@ -118,8 +119,8 @@ class MangaLibraryTest extends TestCase
      * User can get the on-hold manga in their library.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function user_can_get_the_on_hold_manga_in_their_library(): void
     {
         // Add a manga to the list
@@ -142,8 +143,8 @@ class MangaLibraryTest extends TestCase
      * User cannot get the manga in their library with an invalid status.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function user_cannot_get_the_manga_in_their_library_with_an_invalid_status(): void
     {
         // Send the request
@@ -160,8 +161,8 @@ class MangaLibraryTest extends TestCase
      * User can add manga to their watching library.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function user_can_add_manga_to_their_watching_library(): void
     {
         // Send request to add first manga to library
@@ -184,8 +185,8 @@ class MangaLibraryTest extends TestCase
      * User can add manga to their dropped library.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function user_can_add_manga_to_their_dropped_library(): void
     {
         // Send request to add first manga to library
@@ -208,8 +209,8 @@ class MangaLibraryTest extends TestCase
      * User can add manga to their planning library.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function user_can_add_manga_to_their_planning_library(): void
     {
         // Send request to add first manga to library
@@ -232,8 +233,8 @@ class MangaLibraryTest extends TestCase
      * User can add manga to their completed library.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function user_can_add_manga_to_their_completed_library(): void
     {
         // Send request to add first manga to library
@@ -256,8 +257,8 @@ class MangaLibraryTest extends TestCase
      * User can add manga to their on-hold library.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function user_can_add_manga_to_their_on_hold_library(): void
     {
         // Send request to add first manga to library
@@ -280,8 +281,8 @@ class MangaLibraryTest extends TestCase
      * User cannot add manga to their library with an invalid status.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function user_cannot_add_manga_to_their_library_with_an_invalid_status(): void
     {
         // Send request to add first manga to library
@@ -297,8 +298,8 @@ class MangaLibraryTest extends TestCase
      * User can delete manga from their library.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function user_can_delete_manga_from_their_library(): void
     {
         // Add a manga to the list
@@ -321,8 +322,8 @@ class MangaLibraryTest extends TestCase
      * User can search in own library.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function user_can_search_in_own_library(): void
     {
         // Add a manga to the user's list

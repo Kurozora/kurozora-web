@@ -4,6 +4,7 @@ namespace Tests\API;
 
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\ProvidesTestUser;
 
@@ -15,8 +16,8 @@ class SignInTest extends TestCase
      * Test if a user can sign in.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function a_user_can_sign_in(): void
     {
         $this->json('POST', 'v1/users/signin', [
@@ -36,8 +37,8 @@ class SignInTest extends TestCase
      * Test if a user cannot sign in with an incorrect password.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function a_user_cannot_sign_in_with_an_incorrect_password(): void
     {
         $this->json('POST', 'v1/users/signin', [
@@ -57,8 +58,8 @@ class SignInTest extends TestCase
      * Test if a user cannot sign in with an unknown email.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function a_user_cannot_sign_in_with_an_unknown_email(): void
     {
         $this->json('POST', 'v1/users/signin', [
@@ -75,8 +76,8 @@ class SignInTest extends TestCase
      * Test if a user can only attempt to sign in 3 times per 5 minutes.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function a_user_can_only_attempt_to_sign_in_3_times_per_5_minutes(): void
     {
         // Make 3 sign in attempts with wrong password
@@ -118,8 +119,8 @@ class SignInTest extends TestCase
      * Test if a user receives a notification when someone logs into their account.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function a_user_receives_a_notification_when_someone_logs_into_their_account(): void
     {
         $this->json('POST', 'v1/users/signin', [

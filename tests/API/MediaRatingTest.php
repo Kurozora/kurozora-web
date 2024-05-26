@@ -6,6 +6,7 @@ use App\Enums\UserLibraryStatus;
 use App\Models\Anime;
 use App\Models\Episode;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\ProvidesTestAnime;
 use Tests\Traits\ProvidesTestUser;
@@ -18,8 +19,8 @@ class MediaRatingTest extends TestCase
      * User cannot rate anime if not in library.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function user_cannot_rate_anime_if_not_in_library(): void
     {
         // Rate the anime
@@ -36,8 +37,8 @@ class MediaRatingTest extends TestCase
      * User can rate anime if in library.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function user_can_rate_anime_if_in_library(): void
     {
         // Add anime to library
@@ -59,8 +60,8 @@ class MediaRatingTest extends TestCase
      * User can remove anime rating.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function user_can_remove_anime_rating(): void
     {
         // Add anime to library
@@ -89,8 +90,8 @@ class MediaRatingTest extends TestCase
      * User cannot rate episode if not watched.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function user_cannot_rate_episode_if_not_watched(): void
     {
         // Get the episode
@@ -110,8 +111,8 @@ class MediaRatingTest extends TestCase
      * User can rate episode if watched.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function user_can_rate_episode_if_watched(): void
     {
         // Get the episode
@@ -136,8 +137,8 @@ class MediaRatingTest extends TestCase
      * User can remove episode rating.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function user_can_remove_episode_rating(): void
     {
         // Get the episode

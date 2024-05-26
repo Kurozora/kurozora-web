@@ -4,6 +4,7 @@ namespace Tests\API;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\ProvidesTestUser;
 
@@ -15,8 +16,8 @@ class FollowTest extends TestCase
      * Test if a user can follow another user.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function a_user_can_follow_another_user(): void
     {
         /** @var User $anotherUser */
@@ -35,8 +36,8 @@ class FollowTest extends TestCase
      * Test if a user can unfollow another user.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function a_user_can_unfollow_another_user(): void
     {
         /** @var User $anotherUser */
@@ -59,8 +60,8 @@ class FollowTest extends TestCase
      * Test if a user cannot follow a non-existing user.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function a_user_cannot_follow_an_invalid_user(): void
     {
         $this->auth()->json('POST', 'v1/users/' . 99999 . '/follow')->assertNotFound();
@@ -73,8 +74,8 @@ class FollowTest extends TestCase
      * Test if a user can get their list of followers.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function a_user_can_get_someone_elses_followers_list(): void
     {
         // Add a follower
@@ -97,8 +98,8 @@ class FollowTest extends TestCase
      * Test if a user can get their list of following.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function a_user_can_get_someone_elses_following_list(): void
     {
         // Add a user to the following list
@@ -121,8 +122,8 @@ class FollowTest extends TestCase
      * Test if a user receives a notification when someone follows them.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function a_user_receives_a_notification_when_someone_follows_them(): void
     {
         /** @var User $anotherUser */

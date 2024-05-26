@@ -3,6 +3,7 @@
 namespace Tests\API;
 
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\ProvidesTestAnime;
 
@@ -14,8 +15,8 @@ class CharactersTest extends TestCase
      * A user can view specific character details.
      *
      * @return void
-     * @test
      */
+    #[Test]
     public function a_user_can_view_specific_character_details(): void
     {
         $response = $this->get('v1/characters/'.$this->character->id);
@@ -31,8 +32,8 @@ class CharactersTest extends TestCase
      * A user can view specific character details including relationships.
      *
      * @return void
-     * @test
      */
+    #[Test]
     public function a_user_can_view_specific_character_details_including_relationships(): void
     {
         $response = $this->get('v1/characters/'.$this->character->id . '?include=shows,people');
@@ -54,8 +55,8 @@ class CharactersTest extends TestCase
      * A user can view specific character people.
      *
      * @return void
-     * @test
      */
+    #[Test]
     public function a_user_can_view_specific_character_people(): void
     {
         $response = $this->get('v1/characters/'.$this->character->id.'/people');
@@ -71,8 +72,8 @@ class CharactersTest extends TestCase
      * A user can view specific character anime.
      *
      * @return void
-     * @test
      */
+    #[Test]
     public function a_user_can_view_specific_character_anime(): void
     {
         $response = $this->get('v1/characters/'.$this->character->id.'/anime');

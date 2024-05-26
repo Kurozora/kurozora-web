@@ -3,6 +3,7 @@
 namespace Tests\API;
 
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\ProvidesTestAnime;
 use Tests\Traits\ProvidesTestUser;
@@ -15,9 +16,9 @@ class AnimeTest extends TestCase
      * A user can view the cast of an anime.
      *
      * @return void
-     * @test
      */
-     public function a_user_can_view_the_cast_of_an_anime(): void
+    #[Test]
+    public function a_user_can_view_the_cast_of_an_anime(): void
      {
          $response = $this->getJson(route('api.anime.cast', $this->anime->id));
 
@@ -32,8 +33,8 @@ class AnimeTest extends TestCase
      * A user can view the related anime of an anime.
      *
      * @return void
-     * @test
      */
+    #[Test]
     public function a_user_can_view_the_related_anime_of_an_anime(): void
     {
         $response = $this->getJson(route('api.anime.related-shows', $this->anime->id));
@@ -49,8 +50,8 @@ class AnimeTest extends TestCase
      * An authenticated user can view the related anime of an anime with personal information.
      *
      * @return void
-     * @test
      */
+    #[Test]
     public function an_authenticated_user_can_view_the_related_anime_of_an_anime_with_personal_information(): void
     {
         $response = $this->auth()->getJson(route('api.anime.related-shows',$this->anime->id));
@@ -66,8 +67,8 @@ class AnimeTest extends TestCase
      * Anime has media stat on create.
      *
      * @return void
-     * @test
      */
+    #[Test]
     public function anime_has_media_stat_on_create(): void
     {
         $this->assertNotNull($this->anime->mediaStat);

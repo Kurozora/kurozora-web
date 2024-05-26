@@ -12,6 +12,7 @@ use App\Models\Status;
 use App\Models\TvRating;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\ProvidesTestUser;
 
@@ -30,8 +31,8 @@ class LibrarySortingTest extends TestCase
      * User can sort their library based on title.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function user_can_sort_their_library_based_on_title(): void
     {
         // Send the request and sort by title ascending
@@ -55,8 +56,8 @@ class LibrarySortingTest extends TestCase
      * User can sort their library based on age.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function user_can_sort_their_library_based_on_age(): void
     {
         // Send the request and sort by age newest
@@ -80,8 +81,8 @@ class LibrarySortingTest extends TestCase
      * User can sort their library based on rating.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function user_can_sort_their_library_based_on_rating(): void
     {
         // Send the request and sort by rating best
@@ -105,8 +106,8 @@ class LibrarySortingTest extends TestCase
      * User can sort their library based on their own giving rating.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function user_can_sort_their_library_based_on_their_own_given_rating(): void
     {
         // Send the request and sort by my rating best
