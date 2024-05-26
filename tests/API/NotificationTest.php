@@ -7,6 +7,7 @@ use App\Models\Notification;
 use App\Models\User;
 use App\Notifications\NewFollower;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\ProvidesTestUser;
 
@@ -18,8 +19,8 @@ class NotificationTest extends TestCase
      * Test if a user can get their own notifications.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function a_user_can_get_their_own_notifications(): void
     {
         // Add 10 notifications to the user
@@ -45,8 +46,8 @@ class NotificationTest extends TestCase
      * Test if a user can get the details of their notification.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function a_user_can_get_the_details_of_their_notification(): void
     {
         // Add a notification to the user
@@ -69,8 +70,8 @@ class NotificationTest extends TestCase
      * Test if a user cannot get the details of another user's notification.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function a_user_cannot_get_the_details_of_another_users_notification(): void
     {
         /** @var User $otherUser */
@@ -93,8 +94,8 @@ class NotificationTest extends TestCase
      * Test if a user can delete their own notification.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function a_user_can_delete_their_own_notification(): void
     {
         // Add a notification to the user
@@ -118,8 +119,8 @@ class NotificationTest extends TestCase
      * Test if a user cannot delete the notification of someone else.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function a_user_cannot_delete_the_notification_of_someone_else(): void
     {
         /** @var User $otherUser */
@@ -142,8 +143,8 @@ class NotificationTest extends TestCase
      * Test if a user can mark a single notification as read.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function a_user_can_mark_a_single_notification_as_read(): void
     {
         // Add a notification to the user
@@ -170,8 +171,8 @@ class NotificationTest extends TestCase
      * Test if a user can mark a single notification as unread.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function a_user_can_mark_a_single_notification_as_unread(): void
     {
         // Add a notification to the user
@@ -202,8 +203,8 @@ class NotificationTest extends TestCase
      * Test if a user can mark all their notifications as read using all string.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function a_user_can_mark_all_their_notifications_as_read_using_all_string(): void
     {
         // Add 20 notifications to the user
@@ -230,8 +231,8 @@ class NotificationTest extends TestCase
      * Test if a user can mark all their notifications as read using ids.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function a_user_can_mark_all_their_notifications_as_read_using_ids(): void
     {
         // Authenticate user for request
@@ -274,8 +275,8 @@ class NotificationTest extends TestCase
      * Test if a user can mark all their notifications as unread.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function a_user_can_mark_all_their_notifications_as_unread(): void
     {
         // Authenticate user for request
@@ -319,8 +320,8 @@ class NotificationTest extends TestCase
      * Test if a user can mark multiple notifications as read.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function a_user_can_mark_multiple_notifications_as_read(): void
     {
         // Authenticate user for request
@@ -368,8 +369,8 @@ class NotificationTest extends TestCase
      * Test if a user can mark multiple notifications as unread.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function a_user_can_mark_multiple_notifications_as_unread(): void
     {
         // Authenticate user for request
@@ -420,8 +421,8 @@ class NotificationTest extends TestCase
      * Test if a user cannot update notifications of others.
      *
      * @return void
-     * @test
      */
+    #[Test]
     function a_user_cannot_update_notifications_of_others(): void
     {
         /** @var User $otherUser */
