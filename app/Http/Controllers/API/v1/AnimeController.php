@@ -166,7 +166,12 @@ class AnimeController extends Controller
                         break;
                     case 'songs':
                         $includeArray['mediaSongs'] = function ($query) {
-                            $query->with(['song.media', 'song.mediaStat', 'model'])
+                            $query->with([
+                                'song' => function ($query) {
+                                    $query->with(['media', 'mediaStat', 'translations']);
+                                },
+                                'model'
+                            ])
                                 ->limit(Anime::MAXIMUM_RELATIONSHIPS_LIMIT);
                         };
                         break;
