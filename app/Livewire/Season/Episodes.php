@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Season;
 
-use App\Events\SeasonViewed;
+use App\Events\ModelViewed;
 use App\Models\Season;
 use App\Traits\Livewire\WithEpisodeSearch;
 use Illuminate\Contracts\Foundation\Application;
@@ -54,8 +54,8 @@ class Episodes extends Component
      */
     public function mount(Season $season): void
     {
-        // Call the SeasonViewed event
-        SeasonViewed::dispatch($season);
+        // Call the ModelViewed event
+        ModelViewed::dispatch($season, request()->ip());
 
         $this->season = $season;
     }

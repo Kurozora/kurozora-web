@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Enums\SearchScope;
 use App\Enums\SearchType;
-use App\Events\StudioViewed;
+use App\Events\ModelViewed;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GetStudioAnimeRequest;
@@ -63,8 +63,8 @@ class StudioController extends Controller
      */
     public function details(Request $request, Studio $studio): JsonResponse
     {
-        // Call the StudioViewed event
-        StudioViewed::dispatch($studio);
+        // Call the ModelViewed event
+        ModelViewed::dispatch($studio, $request->ip());
 
         $studio->load(['media']);
 

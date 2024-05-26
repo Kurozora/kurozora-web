@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Enums\SearchScope;
 use App\Enums\SearchType;
-use App\Events\GameViewed;
+use App\Events\ModelViewed;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GetGameCharactersRequest;
@@ -81,8 +81,8 @@ class GameController extends Controller
      */
     public function view(Request $request, Game $game): JsonResponse
     {
-        // Call the GameViewed event
-        GameViewed::dispatch($game);
+        // Call the ModelViewed event
+        ModelViewed::dispatch($game, $request->ip());
 
         $user = auth()->user();
 

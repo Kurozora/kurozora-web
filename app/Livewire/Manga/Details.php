@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Manga;
 
-use App\Events\MangaViewed;
+use App\Events\ModelViewed;
 use App\Models\Manga;
 use App\Models\MediaRating;
 use App\Models\Studio;
@@ -93,8 +93,8 @@ class Details extends Component
      */
     public function mount(Manga $manga): void
     {
-        // Call the MangaViewed event
-        MangaViewed::dispatch($manga);
+        // Call the ModelViewed event
+        ModelViewed::dispatch($manga, request()->ip());
 
         $this->manga = $manga->loadMissing(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'themes', 'translations', 'status', 'tv_rating'])
             ->when(auth()->user(), function ($query, $user) use ($manga) {

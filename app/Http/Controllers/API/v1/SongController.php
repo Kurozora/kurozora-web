@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Enums\SearchScope;
 use App\Enums\SearchType;
-use App\Events\SongViewed;
+use App\Events\ModelViewed;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GetSongAnimesRequest;
@@ -61,13 +61,15 @@ class SongController extends Controller
     /**
      * Shows song details.
      *
-     * @param Song $song
+     * @param Request $request
+     * @param Song    $song
+     *
      * @return JsonResponse
      */
-    public function view(Song $song): JsonResponse
+    public function view(Request $request, Song $song): JsonResponse
     {
-        // Call the SongViewed event
-        SongViewed::dispatch($song);
+        // Call the ModelViewed event
+        ModelViewed::dispatch($song, $request->ip());
 
         $song->load(['media', 'mediaStat', 'translations'])
             ->when(auth()->user(), function ($query, $user) use ($song) {
@@ -87,7 +89,8 @@ class SongController extends Controller
      * Returns anime information for a Song
      *
      * @param GetSongAnimesRequest $request
-     * @param Song $song
+     * @param Song                 $song
+     *
      * @return JsonResponse
      */
     public function anime(GetSongAnimesRequest $request, Song $song): JsonResponse
@@ -129,7 +132,8 @@ class SongController extends Controller
      * Returns anime information for a Song
      *
      * @param GetSongGamesRequest $request
-     * @param Song $song
+     * @param Song                $song
+     *
      * @return JsonResponse
      */
     public function games(GetSongGamesRequest $request, Song $song): JsonResponse
@@ -171,7 +175,8 @@ class SongController extends Controller
      * Adds a rating for a Song item
      *
      * @param RateSongRequest $request
-     * @param Song $song
+     * @param Song            $song
+     *
      * @return JsonResponse
      * @throws AuthorizationException
      * @throws Exception
@@ -203,19 +208,19 @@ class SongController extends Controller
             } else {
                 // Update the current rating
                 $foundRating->update([
-                    'rating'        => $givenRating,
-                    'description'   => $description ?? $foundRating->description,
+                    'rating' => $givenRating,
+                    'description' => $description ?? $foundRating->description,
                 ]);
             }
         } else {
             // Only insert the rating if it's rated higher than 0
             if ($givenRating > 0) {
                 MediaRating::create([
-                    'user_id'       => $user->id,
-                    'model_id'      => $song->id,
-                    'model_type'    => $song->getMorphClass(),
-                    'rating'        => $givenRating,
-                    'description'   => $description
+                    'user_id' => $user->id,
+                    'model_id' => $song->id,
+                    'model_type' => $song->getMorphClass(),
+                    'rating' => $givenRating,
+                    'description' => $description
                 ]);
             }
         }
@@ -227,7 +232,8 @@ class SongController extends Controller
      * Returns the reviews of an Song.
      *
      * @param GetSongReviewsRequest $request
-     * @param Song $song
+     * @param Song                  $song
+     *
      * @return JsonResponse
      */
     public function reviews(GetSongReviewsRequest $request, Song $song): JsonResponse

@@ -3,7 +3,7 @@
 namespace App\Livewire\Episode;
 
 use App\Enums\VideoSource;
-use App\Events\EpisodeViewed;
+use App\Events\ModelViewed;
 use App\Models\Anime;
 use App\Models\Episode;
 use App\Models\MediaRating;
@@ -129,8 +129,8 @@ class Details extends Component
      */
     public function mount(Episode $episode): void
     {
-        // Call the EpisodeViewed event
-        EpisodeViewed::dispatch($episode);
+        // Call the ModelViewed event
+        ModelViewed::dispatch($episode, request()->ip());
 
         $this->episode = $episode->loadMissing([
             'anime' => function (HasOneThrough $hasOneThrough) {

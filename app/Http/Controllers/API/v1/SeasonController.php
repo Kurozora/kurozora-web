@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\API\v1;
 
-use App\Events\SeasonViewed;
+use App\Events\ModelViewed;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GetSeasonEpisodesRequest;
@@ -11,25 +11,28 @@ use App\Http\Resources\EpisodeResourceIdentity;
 use App\Http\Resources\SeasonResource;
 use App\Models\Season;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class SeasonController extends Controller
 {
     /**
      * Returns the information for a season
      *
-     * @param Season $season
+     * @param Request $request
+     * @param Season  $season
+     *
      * @return JsonResponse
      */
-    public function details(Season $season): JsonResponse
+    public function details(Request $request, Season $season): JsonResponse
     {
-        // Call the SeasonViewed event
-        SeasonViewed::dispatch($season);
+        // Call the ModelViewed event
+        ModelViewed::dispatch($season, $request->ip());
 
         $season->load(['anime', 'media'])
             ->loadCount(['episodes']);
 
         return JSONResult::success([
-            'data' => SeasonResource::collection([$season])
+            'data' => SeasonResource::collection([$season]),
         ]);
     }
 
@@ -37,7 +40,8 @@ class SeasonController extends Controller
      * Returns the episodes for a season
      *
      * @param GetSeasonEpisodesRequest $request
-     * @param Season $season
+     * @param Season                   $season
+     *
      * @return JsonResponse
      */
     public function episodes(GetSeasonEpisodesRequest $request, Season $season): JsonResponse
@@ -60,7 +64,7 @@ class SeasonController extends Controller
 
         return JSONResult::success([
             'data' => EpisodeResourceIdentity::collection($episodes),
-            'next' => empty($nextPageURL) ? null : $nextPageURL
+            'next' => empty($nextPageURL) ? null : $nextPageURL,
         ]);
     }
 
@@ -69,7 +73,7 @@ class SeasonController extends Controller
      * Marks an episode as watched or not watched.
      *
      * @param MarkSeasonAsWatchedRequest $request
-     * @param Season $season
+     * @param Season                     $season
      *
      * @return JsonResponse
      */
@@ -95,8 +99,8 @@ class SeasonController extends Controller
 
         return JSONResult::success([
             'data' => [
-                'isWatched' => !$isAlreadyWatched
-            ]
+                'isWatched' => !$isAlreadyWatched,
+            ],
         ]);
     }
 }

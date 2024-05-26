@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\API\v1;
 
-use App\Events\EpisodeViewed;
+use App\Events\ModelViewed;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GetEpisodeReviewsRequest;
@@ -28,8 +28,8 @@ class EpisodeController extends Controller
      */
     public function details(Request $request, Episode $episode): JsonResponse
     {
-        // Call the EpisodeViewed event
-        EpisodeViewed::dispatch($episode);
+        // Call the ModelViewed event
+        ModelViewed::dispatch($episode, $request->ip());
 
         $includeArray = [
             'media',

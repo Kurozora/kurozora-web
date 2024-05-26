@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Person;
 
-use App\Events\PersonViewed;
+use App\Events\ModelViewed;
 use App\Models\MediaRating;
 use App\Models\Person;
 use App\Traits\Livewire\WithReviewBox;
@@ -64,8 +64,8 @@ class Details extends Component
      */
     public function mount(Person $person): void
     {
-        // Call the PersonViewed event
-        PersonViewed::dispatch($person);
+        // Call the ModelViewed event
+        ModelViewed::dispatch($person, request()->ip());
 
         $this->person = $person->load(['media'])
             ->when(auth()->user(), function ($query, $user) use ($person) {

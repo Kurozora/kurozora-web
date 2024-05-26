@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Song;
 
-use App\Events\SongViewed;
+use App\Events\ModelViewed;
 use App\Models\MediaRating;
 use App\Models\Song;
 use App\Traits\Livewire\WithReviewBox;
@@ -45,8 +45,8 @@ class Details extends Component
      */
     public function mount(Song $song): void
     {
-        // Call the SongViewed event
-        SongViewed::dispatch($song);
+        // Call the ModelViewed event
+        ModelViewed::dispatch($song, request()->ip());
 
         $this->song = $song->load(['media'])
             ->when(auth()->user(), function ($query, $user) use ($song) {

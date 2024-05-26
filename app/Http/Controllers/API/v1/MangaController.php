@@ -4,7 +4,8 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Enums\SearchScope;
 use App\Enums\SearchType;
-use App\Events\MangaViewed;
+use App\Events\ModelViewed;
+use App\EventsModelViewed;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GetMangaCastRequest;
@@ -79,8 +80,8 @@ class MangaController extends Controller
      */
     public function view(Request $request, Manga $manga): JsonResponse
     {
-        // Call the MangaViewed event
-        MangaViewed::dispatch($manga);
+        // Call the ModelViewed event
+        ModelViewed::dispatch($manga, $request->ip());
 
         $manga->load(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating'])
             ->when(auth()->user(), function ($query, $user) use ($manga) {

@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Studio;
 
-use App\Events\StudioViewed;
+use App\Events\ModelViewed;
 use App\Models\MediaRating;
 use App\Models\Studio;
 use App\Traits\Livewire\WithReviewBox;
@@ -46,8 +46,8 @@ class Details extends Component
      */
     public function mount(Studio $studio): void
     {
-        // Call the StudioViewed event
-        StudioViewed::dispatch($studio);
+        // Call the ModelViewed event
+        ModelViewed::dispatch($studio, request()->ip());
 
         $this->studio = $studio->load(['media'])
             ->when(auth()->user(), function ($query, $user) use ($studio) {

@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Game;
 
-use App\Events\GameViewed;
+use App\Events\ModelViewed;
 use App\Models\Game;
 use App\Models\MediaRating;
 use App\Models\Studio;
@@ -100,8 +100,8 @@ class Details extends Component
      */
     public function mount(Game $game): void
     {
-        // Call the GameViewed event
-        GameViewed::dispatch($game);
+        // Call the ModelViewed event
+        ModelViewed::dispatch($game, request()->ip());
 
         $this->game = $game->loadMissing(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'themes', 'translations', 'status', 'tv_rating'])
             ->when(auth()->user(), function ($query, $user) use ($game) {

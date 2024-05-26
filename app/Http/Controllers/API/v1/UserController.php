@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API\v1;
 
 use App\Contracts\DeletesUsers;
-use App\Events\UserViewed;
+use App\Events\ModelViewed;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DeleteUserRequest;
@@ -19,6 +19,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 
@@ -27,13 +28,15 @@ class UserController extends Controller
     /**
      * Returns the profile details for a user
      *
-     * @param User $user
+     * @param Request $request
+     * @param User    $user
+     *
      * @return JsonResponse
      */
-    public function profile(User $user): JsonResponse
+    public function profile(Request $request, User $user): JsonResponse
     {
-        // Call the UserViewed event
-        UserViewed::dispatch($user);
+        // Call the ModelViewed event
+        ModelViewed::dispatch($user, $request->ip());
 
         $user->load([
             'badges' => function ($query) {

@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Platform;
 
-use App\Events\PlatformViewed;
+use App\Events\ModelViewed;
 use App\Models\Platform;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -34,8 +34,8 @@ class Details extends Component
      */
     public function mount(Platform $platform): void
     {
-        // Call the PlatformViewed event
-        PlatformViewed::dispatch($platform);
+        // Call the ModelViewed event
+        ModelViewed::dispatch($platform, request()->ip());
 
         $this->platform = $platform->load(['media']);
     }

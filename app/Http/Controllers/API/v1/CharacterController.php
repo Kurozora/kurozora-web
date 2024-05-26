@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Enums\SearchScope;
 use App\Enums\SearchType;
-use App\Events\CharacterViewed;
+use App\Events\ModelViewed;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GetCharacterAnimeRequest;
@@ -65,8 +65,8 @@ class CharacterController extends Controller
      */
     public function details(Request $request, Character $character): JsonResponse
     {
-        // Call the CharacterViewed event
-        CharacterViewed::dispatch($character);
+        // Call the ModelViewed event
+        ModelViewed::dispatch($character, $request->ip());
 
         $character->load(['media', 'translations']);
 

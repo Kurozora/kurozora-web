@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Anime;
 
-use App\Events\AnimeViewed;
+use App\Events\ModelViewed;
 use App\Models\Anime;
 use App\Models\MediaRating;
 use App\Models\Studio;
@@ -100,8 +100,8 @@ class Details extends Component
      */
     public function mount(Anime $anime): void
     {
-        // Call the AnimeViewed event
-        AnimeViewed::dispatch($anime);
+        // Call the ModelViewed event
+        ModelViewed::dispatch($anime, request()->ip());
 
         $this->anime = $anime->loadMissing(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'themes', 'translations', 'status', 'tv_rating'])
             ->when(auth()->user(), function ($query, $user) use ($anime) {

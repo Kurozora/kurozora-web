@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Profile;
 
-use App\Events\UserViewed;
+use App\Events\ModelViewed;
 use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -85,8 +85,8 @@ class Details extends Component
      */
     public function mount(User $user): void
     {
-        // Call the UserViewed event
-        UserViewed::dispatch($user);
+        // Call the ModelViewed event
+        ModelViewed::dispatch($user, request()->ip());
 
         $this->user = $user->load(['media'])
             ->loadCount([
