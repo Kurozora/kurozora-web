@@ -32,17 +32,16 @@ return [
 
     'disks' => [
 
-        // Default filesystem
-        'project' => [
-            'driver' => 'local',
-            'root' => base_path(),
-            'url' => env('APP_URL'),
-            'throw' => false,
-        ],
-
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app'),
+            'throw' => false,
+        ],
+
+        'test' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/testing'),
+            'url' => env('APP_URL').'/storage/testing',
             'throw' => false,
         ],
 

@@ -25,7 +25,8 @@ class GenerateImageAttributesJob implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @var Media $media
+     * @param Media $media
+     *
      * @return void
      */
     public function __construct(Media $media)
@@ -60,6 +61,7 @@ class GenerateImageAttributesJob implements ShouldQueue
      * Generate colors for the given image URL/path.
      *
      * @param string $path
+     *
      * @return array
      */
     protected function generateColorsFor(string $path): array
@@ -84,11 +86,12 @@ class GenerateImageAttributesJob implements ShouldQueue
      * Generate dimensions for the given image URL/path.
      *
      * @param string $path
+     *
      * @return array
      */
     protected function generateDimensionsFor(string $path): array
     {
-        list($width, $height) = getimagesize($path);
+        [$width, $height] = getimagesize($path);
 
         return [
             'width' => $width,
