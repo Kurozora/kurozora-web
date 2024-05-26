@@ -44,7 +44,8 @@ trait HasMediaRelations
      */
     public function mediaRelations(): MorphMany
     {
-        return $this->morphMany(MediaRelation::class, 'model');
+        return $this->morphMany(MediaRelation::class, 'model')
+            ->select(MediaRelation::TABLE_NAME . '.*');
     }
 
     /**
@@ -98,6 +99,7 @@ trait HasMediaRelations
                 $join->on(Game::TABLE_NAME . '.id', '=', MediaRelation::TABLE_NAME . '.related_id');
 
                 $preferredTvRating = config('app.tv_rating');
+
                 if ($preferredTvRating > 0) {
                     $join->where('tv_rating_id', '<=', $preferredTvRating);
                 }
