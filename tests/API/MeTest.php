@@ -5,9 +5,10 @@ namespace Tests\API;
 use App\Enums\MediaCollection;
 use App\Models\SessionAttribute;
 use App\Models\User;
+use File;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
+use Mockery\Exception\InvalidCountException;
 use PHPUnit\Framework\Attributes\Test;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileCannotBeAdded;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
@@ -18,6 +19,20 @@ use Tests\Traits\ProvidesTestUser;
 class MeTest extends TestCase
 {
     use DatabaseMigrations, ProvidesTestUser;
+
+    /**
+     * Clean up the testing environment before the next test.
+     *
+     * @return void
+     *
+     * @throws InvalidCountException
+     */
+    protected function tearDown(): void
+    {
+        File::deleteDirectory(config('filesystems.disks.test.root'));
+
+        parent::tearDown(); // Keep at bottom or 'Target class [config] does not exist'
+    }
 
     /**
      * User can get own details with authentication token.
@@ -109,9 +124,6 @@ class MeTest extends TestCase
     #[Test]
     public function user_can_update_their_profile_image(): void
     {
-        // Create fake storage
-        Storage::fake('profile_images');
-
         // Create fake 100kb image
         $uploadFile = UploadedFile::fake()->image('ProfileImage.jpg', 250, 250)->size(100);
 
@@ -145,9 +157,6 @@ class MeTest extends TestCase
     #[Test]
     function user_can_remove_their_profile_image(): void
     {
-        // Create fake storage
-        Storage::fake('profile_images');
-
         // Create fake 100kb image and set it as the profile image
         $uploadFile = UploadedFile::fake()->image('ProfileImage.jpg', 250, 250)->size(100);
 
@@ -175,9 +184,6 @@ class MeTest extends TestCase
     #[Test]
     public function user_can_update_their_banner(): void
     {
-        // Create fake storage
-        Storage::fake('banners');
-
         // Create fake 100kb image
         $uploadFile = UploadedFile::fake()->image('banner.jpg', 250, 250)->size(100);
 
@@ -211,9 +217,6 @@ class MeTest extends TestCase
     #[Test]
     function user_can_remove_their_banner(): void
     {
-        // Create fake storage
-        Storage::fake('banners');
-
         // Create fake 100kb image and set it as the banner
         $uploadFile = UploadedFile::fake()->image('banner.jpg', 250, 250)->size(100);
 
