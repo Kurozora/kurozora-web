@@ -21,6 +21,5 @@ Route::prefix('/notifications')
             });
 
         Route::post('/update', [NotificationController::class, 'update'])
-            ->can('update', 'notification')
             ->name('.update');
     });

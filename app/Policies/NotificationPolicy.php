@@ -63,7 +63,7 @@ class NotificationPolicy
             return false;
         }
 
-        return $user->can('updateNotification') || (int) $user->id === $notification->notifiable->id;
+        return $user->can('updateNotification') || $user->id === (int) $notification->notifiable->id;
     }
 
     /**

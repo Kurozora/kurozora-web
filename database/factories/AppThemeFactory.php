@@ -63,7 +63,7 @@ class AppThemeFactory extends Factory
     public function configure(): AppThemeFactory
     {
         return $this->afterCreating(function (AppTheme $theme) {
-            $theme->updateImageMedia(MediaCollection::Screenshot(), $this->faker->image(storage_path('framework/testing/disks'), 768, 1024));
+            $theme->updateImageMedia(MediaCollection::Screenshot(), $this->faker->image(storage_path('framework/testing'), 768, 1024));
         });
     }
 }
