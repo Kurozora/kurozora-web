@@ -7,6 +7,7 @@ use App\Models\MediaStat;
 use App\Models\UserWatchedEpisode;
 use DB;
 use Illuminate\Console\Command;
+use Illuminate\Support\Collection;
 
 class CalculateEpisodeStats extends Command
 {
@@ -41,33 +42,51 @@ class CalculateEpisodeStats extends Command
      */
     public function handle(): int
     {
+        DB::disableQueryLog();
+
+        $chunkSize = 100;
+
+        $this->info('Calculating stats for: ' . Episode::class);
+
+        $totalCount = UserWatchedEpisode::select(['episode_id'])
+            ->distinct(['episode_id']) // Method takes in a parameter using `func_get_args()`
+            ->count();
+        $bar = $this->output->createProgressBar($totalCount);
+
         // Get episode_id, status and count per status
-        $userWatchedEpisodes = UserWatchedEpisode::select(['episode_id', DB::raw('COUNT(*) as total')])
+        UserWatchedEpisode::select(['episode_id', DB::raw('COUNT(*) as total')])
             ->groupBy('episode_id')
-            ->get();
+            ->chunkById($chunkSize, function (Collection $userWatchedEpisodes) use ($bar) {
+                DB::transaction(function () use ($userWatchedEpisodes, $bar) {
+                    // Get unique episode id's
+                    $userWatchedEpisodes->unique('episode_id')
+                        ->pluck('episode_id')
+                        ->each(function ($episodeID) use ($bar, $userWatchedEpisodes) {
+                            // Find or create media stat for the episode
+                            $mediaStat = MediaStat::firstOrCreate([
+                                'model_type' => Episode::class,
+                                'model_id' => $episodeID,
+                            ]);
 
-        // Get unique episode id's
-        $episodeIDs = $userWatchedEpisodes->unique('episode_id')
-            ->pluck('episode_id');
+                            // Get all current episode records from user watched episode
+                            $episodeInLibrary = $userWatchedEpisodes->where('episode_id', '=', $episodeID);
 
-        foreach ($episodeIDs as $episodeID) {
-            // Find or create media stat for the episode
-            $mediaStat = MediaStat::firstOrCreate([
-                'model_type' => Episode::class,
-                'model_id' => $episodeID,
-            ]);
+                            // Get all counts
+                            $modelCount = $episodeInLibrary->values()[0]['total'] ?? 0;
 
-            // Get all current episode records from user watched episode
-            $episodeInLibrary = $userWatchedEpisodes->where('episode_id', '=', $episodeID);
+                            // Update media stat
+                            $mediaStat->updateQuietly([
+                                'model_count' => $modelCount,
+                            ]);
 
-            // Get all counts
-            $modelCount = $episodeInLibrary->values()[0]['total'] ?? 0;
+                            $bar->advance();
+                        });
+                });
+            }, 'episode_id');
 
-            // Update media stat
-            $mediaStat->update([
-                'model_count' => $modelCount,
-            ]);
-        }
+        $bar->finish();
+
+        DB::enableQueryLog();
 
         return Command::SUCCESS;
     }
