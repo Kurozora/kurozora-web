@@ -13,7 +13,7 @@
         </picture>
     </div>
 
-    <a class="absolute bottom-0 w-full h-full" href="{{ route('episodes.details', $episode) }}"></a>
+    <a class="absolute bottom-0 w-full h-full" href="{{ route('episodes.details', $episode) }}" wire:navigate></a>
 
     <div class="relative flex flex-grow mt-2">
         <div class="flex flex-col w-full gap-2 justify-between">

@@ -14,7 +14,7 @@
             <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-full"></div>
         </picture>
 
-        <a class="absolute w-full h-full" href="{{ route('characters.details', $character) }}"></a>
+        <a class="absolute w-full h-full" href="{{ route('characters.details', $character) }}" wire:navigate></a>
     </div>
 
     <div class="flex flex-grow mt-2">

@@ -69,7 +69,7 @@
                 <p class="text-sm leading-tight font-semibold">#{{ $rank }}</p>
             @endif
 
-            <a class="flex gap-2 justify-between" href="{{ route('songs.details', $song) }}">
+            <a class="flex gap-2 justify-between" href="{{ route('songs.details', $song) }}" wire:navigate>
                 <p class="line-clamp-2" x-text="songTitle">{{ $song->original_title }}</p>
 
                 @if ($type && !$showModel || $type && $anime)
@@ -80,7 +80,7 @@
             <p class="opacity-75 line-clamp-2" x-text="artistName">{{ $song->artist }}</p>
 
             @if ($anime && $showModel)
-                <x-simple-link class="text-sm" href="{{ route('anime.details', $anime) }}">{{ $anime->title }}</x-simple-link>
+                <x-simple-link class="text-sm" href="{{ route('anime.details', $anime) }}" wire:navigate>{{ $anime->title }}</x-simple-link>
             @endif
 
             @if (!empty($episodes) && $showEpisodes)

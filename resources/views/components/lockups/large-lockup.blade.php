@@ -26,7 +26,7 @@
     </div>
 
     <div class="relative mt-4">
-        <a class="absolute w-full h-full" href="{{ route('anime.details', $anime) }}"></a>
+        <a class="absolute w-full h-full" href="{{ route('anime.details', $anime) }}" wire:navigate></a>
 
         <div class="flex gap-2 justify-between">
             <div>

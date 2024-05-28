@@ -1,7 +1,7 @@
 @props(['genre' => null, 'theme' => null, 'href' => '', 'title' => '', 'backgroundColor' => 'transparent', 'backgroundImage' => ''])
 
 @if (!empty($genre))
-    <a href="{{ route('genres.details', $genre) }}" class="relative pb-2 snap-normal snap-center">
+    <a href="{{ route('genres.details', $genre) }}" wire:navigate class="relative pb-2 snap-normal snap-center">
         <div
             class="flex justify-center w-64 h-40 rounded-lg"
             style="background: linear-gradient(-180deg, {{ $genre->background_color_1 }} 32%, {{ $genre->background_color_2 }} 98%);"
@@ -24,7 +24,7 @@
         @endif
     </a>
 @elseif (!empty($theme))
-    <a href="{{ route('themes.details', $theme) }}" class="relative pb-2 snap-normal snap-center">
+    <a href="{{ route('themes.details', $theme) }}" wire:navigate class="relative pb-2 snap-normal snap-center">
         <div
             class="flex justify-center w-64 h-40 rounded-lg"
             style="background: linear-gradient(-180deg, {{ $theme->background_color_1 }} 32%, {{ $theme->background_color_2 }} 98%);"
@@ -47,7 +47,7 @@
         @endif
     </a>
 @else
-    <a href="{{ $href }}" class="relative pb-2 snap-normal snap-center">
+    <a href="{{ $href }}" wire:navigate class="relative pb-2 snap-normal snap-center">
         <div class="flex justify-center w-64 h-40 rounded-lg border-2 border-solid border-black/5" style="background-color: {{ $backgroundColor }};">
             <picture class="relative">
                 <img class="h-full m-auto lazyload" data-sizes="auto" data-src="{{ $backgroundImage }}" alt="{{ $title }} Symbol" title="{{ $title }}">

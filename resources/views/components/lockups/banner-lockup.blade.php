@@ -29,7 +29,7 @@
         </picture>
     </div>
 
-    <a class="absolute bottom-0 w-full h-full" href="{{ route('anime.details', $anime) }}"></a>
+    <a class="absolute bottom-0 w-full h-full" href="{{ route('anime.details', $anime) }}" wire:navigate></a>
 
     <div class="absolute bottom-0 right-0 pt-3 pr-3 pl-3 pb-5">
         <div class="flex h-10 mt-auto">

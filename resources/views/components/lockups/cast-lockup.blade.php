@@ -16,7 +16,7 @@
             </picture>
 
             @if (!empty($cast->person))
-                <a class="absolute w-full h-full" href="{{ route('people.details', $cast->person) }}"></a>
+                <a class="absolute w-full h-full" href="{{ route('people.details', $cast->person) }}" wire:navigate></a>
             @endif
         </section>
 
@@ -43,7 +43,7 @@
                 <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-lg"></div>
             </picture>
 
-            <a class="absolute w-full h-full" href="{{ route('characters.details', $cast->character) }}"></a>
+            <a class="absolute w-full h-full" href="{{ route('characters.details', $cast->character) }}" wire:navigate></a>
         </section>
     </div>
 </div>

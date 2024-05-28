@@ -1,6 +1,6 @@
 @props(['genre'])
 
-<a class="relative" href="{{ route('genres.details', ['genre' => $genre]) }}">
+<a class="relative" href="{{ route('genres.details', ['genre' => $genre]) }}" wire:navigate>
     <div class="flex">
         <picture
             class="relative rounded-lg overflow-hidden"
