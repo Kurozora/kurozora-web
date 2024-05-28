@@ -7,8 +7,10 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Livewire\Attributes\Isolate;
 use Livewire\Component;
 
+#[Isolate]
 class Reviews extends Component
 {
     /**

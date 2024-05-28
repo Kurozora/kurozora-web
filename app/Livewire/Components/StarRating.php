@@ -7,8 +7,10 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Livewire\Attributes\Isolate;
 use Livewire\Component;
 
+#[Isolate]
 class StarRating extends Component
 {
     /**

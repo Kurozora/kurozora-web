@@ -7,8 +7,10 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Livewire\Attributes\Isolate;
 use Livewire\Component;
 
+#[Isolate]
 class ReviewBox extends Component
 {
     /**

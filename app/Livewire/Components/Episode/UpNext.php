@@ -8,8 +8,10 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Support\Collection;
+use Livewire\Attributes\Isolate;
 use Livewire\Component;
 
+#[Isolate]
 class UpNext extends Component
 {
     /**
