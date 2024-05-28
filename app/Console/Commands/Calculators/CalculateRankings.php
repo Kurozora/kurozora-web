@@ -43,7 +43,7 @@ class CalculateRankings extends Command
     public function handle(): int
     {
         $page = 1;
-        $perPage = 1000;
+        $perPage = 500;
         $class = $this->argument('model');
         $isGlobal = $this->option('global');
 
@@ -77,24 +77,29 @@ class CalculateRankings extends Command
             $mediaStat->where('model_type', '=', $class);
         }
 
-        $mediaStat->chunk($perPage, function ($mediaStats) use ($isGlobal, $perPage, &$page) {
-            foreach ($mediaStats as $index => $mediaStat) {
-                $rank = ($page - 1) * $perPage + $index + 1;
+        $mediaStat->chunk($perPage, function ($mediaStats) use ($class, $isGlobal, $perPage, &$page) {
+            DB::transaction(function () use ($mediaStats, $class, $isGlobal, $perPage, &$page) {
+                foreach ($mediaStats as $index => $mediaStat) {
+                    $rank = ($page - 1) * $perPage + $index + 1;
 
-                if ($isGlobal) {
-                    $mediaStat->rank_global = $rank;
-                } else {
-                    $mediaStat->rank_total = $rank;
-                    $mediaStat->model_type::withoutGlobalScopes()
-                        ->where('id', '=', $mediaStat->model_id)
-                        ->update([
+                    if ($isGlobal) {
+                        $mediaStat->rank_global = $rank;
+                    } else {
+                        $mediaStat->rank_total = $rank;
+                        $mediaStat->model_type::withoutGlobalScopes()
+                            ->where('id', '=', $mediaStat->model_id)
+                            ->update([
                             'rank_total' => $rank
                         ]);
+                    }
+                    $mediaStat->save();
                 }
-                $mediaStat->save();
-            }
 
-            $page++;
+                $key = $mediaStats->last()->id;
+                $this->line('<comment>Calculated ['.$class.'] models up to ID:</comment> '.$key);
+
+                $page++;
+            });
         });
 
         DB::enableQueryLog();
