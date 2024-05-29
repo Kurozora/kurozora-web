@@ -140,7 +140,7 @@ class AnimeSpider extends BasicSpider
 
         $imageUrl = $this->cleanImageUrl($response, 'div.leftside div a img[itemprop="image"]');
         $videoUrl = $this->cleanVideoUrl($response, 'div.video-promotion a');
-        $relations = $this->cleanRelations($response, 'table[class*="anime_detail_related_anime"]');
+        $relations = $this->cleanRelations($response, 'div.related-entries');
         $openings = $this->cleanSongs($response, 'div[class*="theme-songs opnening"] table'); // typo on the website
         $endings = $this->cleanSongs($response, 'div[class*="theme-songs ending"] table');
 
@@ -298,21 +298,51 @@ class AnimeSpider extends BasicSpider
         $relations = [];
 
         $response->filter($div)
+            ->children('div.entries-tile')
+            ->children('.entry')
+            ->each(function (Crawler $item, int $index) use (&$relations) {
+                $digitRegex = '/(\d+)\//';
+                $wordRegex = '/\/(\w+)\//';
+                $typeRegx = '/\(\w+\)/';
+
+                if ($item->filter('.relation')->count() === 0) {
+                    return;
+                }
+
+                $relationType = str($item->filter('.relation')->innerText())
+                    ->replaceMatches($typeRegx, '')
+                    ->trim()
+                    ->value();
+                $titleElement = $item->filter('div.title a');
+
+                $relations[$relationType][] = [
+                    'mal_id' => str($titleElement->attr('href'))
+                        ->match($digitRegex)
+                        ->value(),
+                    'type' => str($titleElement->attr('href'))
+                        ->match($wordRegex)
+                        ->value(),
+                    'original_title' => str($titleElement->text())
+                        ->trim()
+                        ->value()
+                ];
+            });
+
+        $response->filter($div)
+            ->filter('table[class*="entries-table"]')
             ->filter('tr')
-            ->each(function(Crawler $item, int $index) use (&$relations) {
+            ->each(function (Crawler $item, int $index) use (&$relations) {
                 $relationType = str($item->children('td')->first()->innerText())
                     ->replaceLast(':', '')
                     ->value();
-                $relationItems = [];
 
-                $item->children('td')
-                    ->last()
+                $item->children('td ul li')
                     ->children('a')
-                    ->each(function (Crawler $item, int $index) use (&$relationItems) {
+                    ->each(function (Crawler $item, int $index) use ($relationType, &$relations) {
                         $digitRegex = '/(\d+)\//';
-                        $wordRegex = '/(\w+)\//';
+                        $wordRegex = '/\/(\w+)\//';
 
-                        $relationItems[] = [
+                        $relations[$relationType][] = [
                             'mal_id' => str($item->attr('href'))
                                 ->match($digitRegex)
                                 ->value(),
@@ -323,9 +353,7 @@ class AnimeSpider extends BasicSpider
                                 ->trim()
                                 ->value()
                         ];
-                });
-
-                $relations[$relationType] = $relationItems;
+                    });
             });
 
         return $relations;

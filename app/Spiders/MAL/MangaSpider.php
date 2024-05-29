@@ -98,7 +98,7 @@ class MangaSpider extends BasicSpider
         if ($response->getStatus() >= 400) {
             logger()->error('Manga: ' . $id);
             if ($response->getStatus() != 404) {
-                logger()->warning('Manga: '. $response->getStatus());
+                logger()->warning('Manga: ' . $response->getStatus());
             }
             return $this->item([]);
         }
@@ -108,7 +108,7 @@ class MangaSpider extends BasicSpider
             ->innerText();
         $attributes = $response->filter('div.leftside')
             ->filter('.spaceit_pad')
-            ->each(function($item) {
+            ->each(function ($item) {
                 return str($item->text());
             });
         try {
@@ -119,7 +119,7 @@ class MangaSpider extends BasicSpider
         }
 
         $studios = $response->filter('div.leftside a[href*="/manga/magazine/"]')
-            ->each(function(Crawler $item) {
+            ->each(function (Crawler $item) {
                 $regex = '/(\d+)\//';
                 $id = str($item->attr('href'))
                     ->remove(['/manga/magazine/'])
@@ -129,7 +129,7 @@ class MangaSpider extends BasicSpider
             });
 
         $genres = $response->filter('div.leftside a[href*="/manga/genre/"]')
-            ->each(function(Crawler $item) {
+            ->each(function (Crawler $item) {
                 $regex = '/(\d+)\//';
                 $id = str($item->attr('href'))
                     ->remove(['/manga/genre/'])
@@ -139,7 +139,7 @@ class MangaSpider extends BasicSpider
             });
 
         $authors = $response->filter('div.leftside a[href*="/people/"]')
-            ->each(function(Crawler $item) {
+            ->each(function (Crawler $item) {
                 $regex = '/(\d+)\//';
                 $id = str($item->attr('href'))
                     ->remove(['/people/'])
@@ -149,7 +149,7 @@ class MangaSpider extends BasicSpider
             });
 
         $imageUrl = $this->cleanImageUrl($response, 'div.leftside div a img[itemprop="image"]');
-        $relations = $this->cleanRelations($response, 'table[class*="anime_detail_related_anime"]');
+        $relations = $this->cleanRelations($response, 'div.related-entries');
 
         logger()->channel('stderr')->info('✅️ [MAL_ID:MANGA:' . $id . '] Done parsing');
 
@@ -167,7 +167,7 @@ class MangaSpider extends BasicSpider
 
         // Stats
         $statsPageLink = config('scraper.domains.mal.base') . $response->filter('a[href*="/stats"]')
-            ->attr('href');
+                ->attr('href');
         yield ParseResult::request('GET', $statsPageLink, [$this, 'parseStatsPage']);
     }
 
@@ -184,7 +184,7 @@ class MangaSpider extends BasicSpider
         logger()->channel('stderr')->info('🕷 [MAL_ID:MANGA:' . $id . '] Parsing stats response');
 
         $scores = $response->filter('table.score-stats tr')
-            ->each(function(Crawler $item) {
+            ->each(function (Crawler $item) {
                 $scoreLabel = $item->filter('td.score-label')->text();
                 $score = $item->filter('td small')->text();
 
@@ -213,8 +213,9 @@ class MangaSpider extends BasicSpider
      * https://cdn.myanimelist.net/r/76x120/images/userimages/6098374.jpg?s=4b8e4f091fbb3ecda6b9833efab5bd9b => https://cdn.myanimelist.net/images/userimages/6098374.jpg
      * https://cdn.myanimelist.net/r/76x120/images/questionmark_50.gif?s=8e0400788aa6af2a2f569649493e2b0f => empty string
      *
-     * @param Response $response
+     * @param Response    $response
      * @param string|null $div
+     *
      * @return string|null
      */
     private function cleanImageUrl(Response $response, ?string $div): ?string
@@ -258,7 +259,8 @@ class MangaSpider extends BasicSpider
      * Clean relations response.
      *
      * @param Response $response
-     * @param string $div
+     * @param string   $div
+     *
      * @return array
      */
     private function cleanRelations(Response $response, string $div): array
@@ -266,21 +268,51 @@ class MangaSpider extends BasicSpider
         $relations = [];
 
         $response->filter($div)
+            ->children('div.entries-tile')
+            ->children('.entry')
+            ->each(function (Crawler $item, int $index) use (&$relations) {
+                $digitRegex = '/(\d+)\//';
+                $wordRegex = '/\/(\w+)\//';
+                $typeRegx = '/\(\w+\)/';
+
+                if ($item->filter('.relation')->count() === 0) {
+                    return;
+                }
+
+                $relationType = str($item->filter('.relation')->innerText())
+                    ->replaceMatches($typeRegx, '')
+                    ->trim()
+                    ->value();
+                $titleElement = $item->filter('div.title a');
+
+                $relations[$relationType][] = [
+                    'mal_id' => str($titleElement->attr('href'))
+                        ->match($digitRegex)
+                        ->value(),
+                    'type' => str($titleElement->attr('href'))
+                        ->match($wordRegex)
+                        ->value(),
+                    'original_title' => str($titleElement->text())
+                        ->trim()
+                        ->value()
+                ];
+            });
+
+        $response->filter($div)
+            ->filter('table[class*="entries-table"]')
             ->filter('tr')
-            ->each(function(Crawler $item, int $index) use (&$relations) {
+            ->each(function (Crawler $item, int $index) use (&$relations) {
                 $relationType = str($item->children('td')->first()->innerText())
                     ->replaceLast(':', '')
                     ->value();
-                $relationItems = [];
 
-                $item->children('td')
-                    ->last()
+                $item->children('td ul li')
                     ->children('a')
-                    ->each(function (Crawler $item, int $index) use (&$relationItems) {
+                    ->each(function (Crawler $item, int $index) use ($relationType, &$relations) {
                         $digitRegex = '/(\d+)\//';
-                        $wordRegex = '/(\w+)\//';
+                        $wordRegex = '/\/(\w+)\//';
 
-                        $relationItems[] = [
+                        $relations[$relationType][] = [
                             'mal_id' => str($item->attr('href'))
                                 ->match($digitRegex)
                                 ->value(),
@@ -292,10 +324,9 @@ class MangaSpider extends BasicSpider
                                 ->value()
                         ];
                     });
-
-                $relations[$relationType] = $relationItems;
             });
 
+        dd($relations);
         return $relations;
     }
 }
