@@ -89,14 +89,14 @@ class CalculateRankings extends Command
                         $mediaStat->model_type::withoutGlobalScopes()
                             ->where('id', '=', $mediaStat->model_id)
                             ->update([
-                            'rank_total' => $rank
-                        ]);
+                                'rank_total' => $rank
+                            ]);
                     }
                     $mediaStat->save();
                 }
 
                 $key = $mediaStats->last()->id;
-                $this->line('<comment>Calculated ['.$class.'] models up to ID:</comment> '.$key);
+                $this->line('<comment>Calculated [' . $class . '] models up to ID:</comment> ' . $key);
 
                 $page++;
             });
