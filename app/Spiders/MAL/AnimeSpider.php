@@ -307,7 +307,7 @@ class AnimeSpider extends BasicSpider
                 ->each(function (Crawler $item, int $index) use (&$relations) {
                     $digitRegex = '/(\d+)\//';
                     $wordRegex = '/\/(\w+)\//';
-                    $typeRegx = '/\(\w+\)/';
+                    $typeRegx = '/\(\w+.*\)/';
 
                     if ($item->filter('.relation')->count() === 0) {
                         return;
