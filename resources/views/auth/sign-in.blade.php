@@ -102,7 +102,7 @@
                     </label>
 
                     @if (Route::has('password.request'))
-                        <x-link class="text-sm" href="{{ route('password.request') }}">
+                        <x-link class="text-sm" href="{{ route('password.request') }}" wire:navigate>
                             {{ __('Forgot your password? Let’s reset it 📧') }}
                         </x-link>
                     @endif
@@ -118,7 +118,7 @@
             <div class="flex flex-col items-center justify-end gap-4 mt-4 text-center">
                 <p class="tracking-wide font-black">{{ __('———— or ————') }}</p>
 
-                <x-link class="text-sm" href="{{ route('sign-up') }}">
+                <x-link class="text-sm" href="{{ route('sign-up') }}" wire:navigate>
                     {{ __('New to Kurozora? Join us 🔥') }}
                 </x-link>
 
@@ -142,7 +142,7 @@
         {{-- Legal --}}
         <section class="space-y-1 mt-16 text-center text-sm">
             <p class="text-gray-500">{{ __('Your Kurozora ID information is used to enable Kurozora services when you sign in. Kurozora services includes the library where you can keep track of the shows you are interested in.') }}</p>
-            <x-link href="{{ route('legal.privacy-policy') }}">{{ __('See how your data is managed...') }}</x-link>
+            <x-link href="{{ route('legal.privacy-policy') }}" wire:navigate>{{ __('See how your data is managed...') }}</x-link>
         </section>
     </div>
 </x-app-layout>

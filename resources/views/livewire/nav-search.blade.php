@@ -108,7 +108,7 @@
                         </x-slot:title>
 
                         <x-slot:action>
-                            <x-section-nav-link href="{{ route('search.index', ['q' => $this->searchQuery, 'type' => $searchResult['search_type']]) }}">{{ __('See All') }}</x-section-nav-link>
+                            <x-section-nav-link href="{{ route('search.index', ['q' => $this->searchQuery, 'type' => $searchResult['search_type']]) }}"  wire:navigate>{{ __('See All') }}</x-section-nav-link>
                         </x-slot:action>
                     </x-search-header>
 

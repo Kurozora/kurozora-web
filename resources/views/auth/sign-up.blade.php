@@ -84,7 +84,7 @@
 
             <section class="mt-8 text-center">
                 <p class="text-gray-500 text-sm">
-                    {{ __('Your Kurozora ID information is used to allow you to sign in securely and access your data. Kurozora records certain usage data for security and support purposes.') }} <x-link href="{{ route('legal.privacy-policy') }}">{{ __('See how your data is managed.') }}</x-link>
+                    {{ __('Your Kurozora ID information is used to allow you to sign in securely and access your data. Kurozora records certain usage data for security and support purposes.') }} <x-link href="{{ route('legal.privacy-policy') }}"  wire:navigate>{{ __('See how your data is managed.') }}</x-link>
                 </p>
             </section>
 
@@ -95,7 +95,7 @@
 
                 <p class="tracking-wide font-black">{{ __('———— or ————') }}</p>
 
-                <x-link class="text-sm" href="{{ route('sign-in') }}">
+                <x-link class="text-sm" href="{{ route('sign-in') }}"  wire:navigate>
                     {{ __('Already have an account? Let’s sign in') }} 🔥
                 </x-link>
             </section>

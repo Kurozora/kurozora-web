@@ -268,7 +268,7 @@
                     </div>
 
                     <div id="seasonBadge" class="flex-grow px-12 border-l-2">
-                        <a href="{{ route('anime.seasons', $this->anime) }}">
+                        <a href="{{ route('anime.seasons', $this->anime) }}"  wire:navigate>
                             <p class="font-bold">#{{ $this->season->number }}</p>
                             <p class="text-sm text-gray-500">{{ __('Season') }}</p>
                         </a>
@@ -276,7 +276,7 @@
 
                     @if($episode->previous_episode_id)
                         <div id="previousEpisodeBadge" class="flex-grow px-12 border-l-2">
-                            <a href="{{ route('episodes.details', $episode->previous_episode_id) }}">
+                            <a href="{{ route('episodes.details', $episode->previous_episode_id) }}"  wire:navigate>
                                 <p class="font-bold">{{ __('Episode :x', ['x' => $episode->previous_episode->number_total]) }}</p>
                                 <p class="text-sm text-gray-500">{{ __('Previous') }}</p>
                             </a>
@@ -285,7 +285,7 @@
 
                     @if($episode->next_episode_id)
                         <div id="nextEpisodeBadge" class="flex-grow px-12 border-l-2">
-                            <a href="{{ route('episodes.details', $episode->next_episode_id) }}">
+                            <a href="{{ route('episodes.details', $episode->next_episode_id) }}"  wire:navigate>
                                 <p class="font-bold">{{ __('Episode :x', ['x' => $episode->next_episode->number_total]) }}</p>
                                 <p class="text-sm text-gray-500">{{ __('Next') }}</p>
                             </a>
@@ -293,7 +293,7 @@
                     @endif
 
                     <div id="animeBadge" class="flex-grow px-12 border-l-2">
-                        <a href="{{ route('anime.details', $this->anime) }}">
+                        <a href="{{ route('anime.details', $this->anime) }}"  wire:navigate>
                             <p class="font-bold line-clamp-1">{{ substr($this->anime->title, 0, 25) }}</p>
                             <p class="text-sm text-gray-500">{{ __('Anime') }}</p>
                         </a>
@@ -323,7 +323,7 @@
                         </x-slot:title>
 
                         <x-slot:action>
-                            <x-section-nav-link class="whitespace-nowrap" href="{{ route('episodes.reviews', $episode) }}">{{ __('See All') }}</x-section-nav-link>
+                            <x-section-nav-link class="whitespace-nowrap" href="{{ route('episodes.reviews', $episode) }}"  wire:navigate>{{ __('See All') }}</x-section-nav-link>
                         </x-slot:action>
                     </x-section-nav>
 

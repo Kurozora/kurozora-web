@@ -415,12 +415,12 @@
                                         </x-dropdown-link>
                                     </form>
                                 @else
-                                    <x-dropdown-link href="{{ route('sign-in') }}">
+                                    <x-dropdown-link href="{{ route('sign-in') }}"  wire:navigate>
                                         {{ __('Sign in') }}
                                     </x-dropdown-link>
 
                                     @if (Route::has('sign-up'))
-                                        <x-dropdown-link href="{{ route('sign-up') }}">
+                                        <x-dropdown-link href="{{ route('sign-up') }}"  wire:navigate>
                                             {{ __('Create Account') }}
                                         </x-dropdown-link>
                                     @endif
@@ -581,11 +581,13 @@
                         </x-responsive-nav-link>
 
 {{--                        <x-responsive-nav-link href="{{ route('profile.manga.reminders', $user) }}"--}}
+{{--                                               wire:navigate--}}
 {{--                                               :active="request()->routeIs('profile.manga.reminders', $user)">--}}
 {{--                            {{ __('Manga Reminders') }}--}}
 {{--                        </x-responsive-nav-link>--}}
 
 {{--                        <x-responsive-nav-link href="{{ route('profile.games.reminders', $user) }}"--}}
+{{--                                               wire:navigate--}}
 {{--                                               :active="request()->routeIs('profile.games.reminders', $user)">--}}
 {{--                            {{ __('Game Reminders') }}--}}
 {{--                        </x-responsive-nav-link>--}}

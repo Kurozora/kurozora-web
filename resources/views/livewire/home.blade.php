@@ -24,7 +24,7 @@
         </section>
 
 {{--        <section>--}}
-{{--            <a href="{{ route('recap.index') }}">--}}
+{{--            <a href="{{ route('recap.index') }}"  wire:navigate>--}}
 {{--                <x-picture>--}}
 {{--                    <img class="w-full object-cover h-40 rounded-lg shadow md:h-80" src="{{ asset('images/static/banners/kurozora_recap_2023.webp') }}" alt="Kurozora Recap 2023">--}}
 {{--                </x-picture>--}}
@@ -84,7 +84,7 @@
 {{--                        }--}}
 {{--                    @endphp--}}
 
-{{--                    <a class="relative pb-2 snap-normal snap-center min-w-[18rem] md:min-w-[30rem]" href="{{ route('profile.details', $user) }}">--}}
+{{--                    <a class="relative pb-2 snap-normal snap-center min-w-[18rem] md:min-w-[30rem]" href="{{ route('profile.details', $user) }}"  wire:navigate>--}}
 {{--                        <div class="rounded-lg shadow-sm overflow-hidden" style="background-color: {{ $backgroundColor }};">--}}
 {{--                            <div class="relative flex justify-center bg-gray-800">--}}
 {{--                                <picture class="relative overflow-hidden">--}}
@@ -163,7 +163,7 @@
         @else
             @guest
                 <section>
-                    <a href="{{ route('recap.index') }}">
+                    <a href="{{ route('recap.index') }}"  wire:navigate>
                         <x-picture>
                             <img class="w-full object-cover h-40 rounded-lg shadow md:h-80" src="{{ asset('images/static/banners/kurozora_recap.webp') }}" alt="Kurozora Recap 2023">
                         </x-picture>
@@ -179,7 +179,7 @@
                 </x-section-nav>
 
                 <div class="grid gap-4 md:grid-cols-3">
-                    <x-simple-link href="{{ route('anime.seasons.index') }}" class="justify-between w-full pt-4 pr-4 pb-4 pl-4 text-sm bg-gray-100 rounded-lg" :hover-underline-enabled="false">
+                    <x-simple-link href="{{ route('anime.seasons.index') }}"  wire:navigate class="justify-between w-full pt-4 pr-4 pb-4 pl-4 text-sm bg-gray-100 rounded-lg" :hover-underline-enabled="false">
                         <span>
                             {{ __('Browse by Season') }}
                         </span>
@@ -187,7 +187,7 @@
                         @svg('chevron_forward', 'fill-current', ['width' => 12])
                     </x-simple-link>
 
-                    <x-simple-link href="{{ route('genres.index') }}" class="justify-between w-full pt-4 pr-4 pb-4 pl-4 text-sm bg-gray-100 rounded-lg" :hover-underline-enabled="false">
+                    <x-simple-link href="{{ route('genres.index') }}"  wire:navigate class="justify-between w-full pt-4 pr-4 pb-4 pl-4 text-sm bg-gray-100 rounded-lg" :hover-underline-enabled="false">
                         <span>
                             {{ __('Browse by Genre') }}
                         </span>
@@ -195,7 +195,7 @@
                         @svg('chevron_forward', 'fill-current', ['width' => 12])
                     </x-simple-link>
 
-                    <x-simple-link href="{{ route('themes.index') }}" class="justify-between w-full pt-4 pr-4 pb-4 pl-4 text-sm bg-gray-100 rounded-lg" :hover-underline-enabled="false">
+                    <x-simple-link href="{{ route('themes.index') }}" wire:navigate class="justify-between w-full pt-4 pr-4 pb-4 pl-4 text-sm bg-gray-100 rounded-lg" :hover-underline-enabled="false">
                         <span>
                             {{ __('Browse by Theme') }}
                         </span>
@@ -203,7 +203,7 @@
                         @svg('chevron_forward', 'fill-current', ['width' => 12])
                     </x-simple-link>
 
-                    <x-simple-link href="{{ route('schedule') }}" class="justify-between w-full pt-4 pr-4 pb-4 pl-4 text-sm bg-gray-100 rounded-lg" :hover-underline-enabled="false">
+                    <x-simple-link href="{{ route('schedule') }}" wire:navigate class="justify-between w-full pt-4 pr-4 pb-4 pl-4 text-sm bg-gray-100 rounded-lg" :hover-underline-enabled="false">
                         <span>
                             {{ __('Broadcast Schedule') }}
                         </span>
@@ -211,7 +211,7 @@
                         @svg('chevron_forward', 'fill-current', ['width' => 12])
                     </x-simple-link>
 
-                    <x-simple-link href="{{ route('charts.index') }}" class="justify-between w-full pt-4 pr-4 pb-4 pl-4 text-sm bg-gray-100 rounded-lg" :hover-underline-enabled="false">
+                    <x-simple-link href="{{ route('charts.index') }}" wire:navigate class="justify-between w-full pt-4 pr-4 pb-4 pl-4 text-sm bg-gray-100 rounded-lg" :hover-underline-enabled="false">
                         <span>
                             {{ __('Charts') }}
                         </span>
