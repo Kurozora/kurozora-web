@@ -16,7 +16,7 @@
             <div class="mt-5">
                 <x-select id="timezone" wire:model="state.timezone">
                     @foreach ($this->timezones as $key => $timezone)
-                        <option value="{{ $key }}">{{ $timezone }}</option>
+                        <option value="{{ $key }}" {{ $key == $state['timezone'] ? 'selected' : '' }}>{{ $timezone }}</option>
                     @endforeach
                 </x-select>
                 <x-input-error for="timezone" class="mt-2" />

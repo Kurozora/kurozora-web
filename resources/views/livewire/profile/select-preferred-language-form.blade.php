@@ -19,7 +19,7 @@
             <div class="mt-5">
                 <x-select id="language" wire:model="state.language">
                     @foreach ($this->languages as $language)
-                        <option value="{{ $language->code }}">{{ $language->name }}</option>
+                        <option value="{{ $language->code }}" {{ $language->code == $state['language'] ? 'selected' : '' }}>{{ $language->name }}</option>
                     @endforeach
                 </x-select>
                 <x-input-error for="language" class="mt-2" />

@@ -19,7 +19,7 @@
                 <x-select id="tv_rating" wire:model="state.tv_rating">
                     <option value="-1">{{ __('Allow All Titles') }}</option>
                     @foreach ($this->tvRatings as $tvRating)
-                        <option value="{{ $tvRating->weight }}">{{ $tvRating->full_name }}</option>
+                        <option value="{{ $tvRating->weight }}" {{ $tvRating->weight == $state['tv_rating'] ? 'selected' : '' }}>{{ $tvRating->full_name }}</option>
                     @endforeach
                 </x-select>
                 <x-input-error for="tv_rating" class="mt-2" />
