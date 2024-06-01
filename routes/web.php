@@ -9,7 +9,8 @@ use App\Livewire\Welcome;
 
 Route::get('chat', function () {
     return view('chat');
-});
+})
+->name('chat');
 
 Route::get('/', Home::class)
     ->name('home');
