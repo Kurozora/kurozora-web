@@ -24,6 +24,8 @@ use Illuminate\Auth\Middleware\Authorize;
 use Illuminate\Auth\Middleware\EnsureEmailIsVerified;
 use Illuminate\Auth\Middleware\RedirectIfAuthenticated;
 use Illuminate\Auth\Middleware\RequirePassword;
+use Illuminate\Contracts\Auth\Middleware\AuthenticatesRequests;
+use Illuminate\Contracts\Session\Middleware\AuthenticatesSessions;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -31,12 +33,14 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull;
+use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
 use Illuminate\Foundation\Http\Middleware\TrimStrings;
 use Illuminate\Foundation\Http\Middleware\ValidatePostSize;
 use Illuminate\Http\Middleware\HandleCors;
 use Illuminate\Http\Middleware\SetCacheHeaders;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Routing\Middleware\ThrottleRequests;
+use Illuminate\Routing\Middleware\ThrottleRequestsWithRedis;
 use Illuminate\Routing\Middleware\ValidateSignature;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Route;
@@ -126,6 +130,24 @@ return Application::configure(basePath: dirname(__DIR__))
                 'user.is-pro-or-subscribed' => UserIsProOrSubscribed::class,
                 'verified' => EnsureEmailIsVerified::class,
                 'explore.always-enabled' => ExploreCategoryAlwaysEnabled::class
+            ])
+            ->priority([
+                HandlePrecognitiveRequests::class,
+                EncryptCookies::class,
+                AddQueuedCookiesToResponse::class,
+                EnsureAPIRequestsAreStateful::class,
+                StartSession::class,
+                'auth.session',
+                Localization::class,
+                Timezone::class,
+                TVRating::class,
+                ShareErrorsFromSession::class,
+                AuthenticatesRequests::class,
+                ThrottleRequests::class,
+                ThrottleRequestsWithRedis::class,
+                AuthenticatesSessions::class,
+                SubstituteBindings::class,
+                Authorize::class,
             ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
