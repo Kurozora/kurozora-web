@@ -77,6 +77,9 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware
+            ->redirectGuestsTo(function() {
+                return route('sign-in');
+            })
             ->use([
                 // \App\Http\Middleware\TrustHosts::class,
                 TrustProxies::class,
@@ -266,4 +269,5 @@ return Application::configure(basePath: dirname(__DIR__))
 
                 return null;
             });
-    })->create();
+    })
+    ->create();
