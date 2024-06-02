@@ -7,7 +7,7 @@
         {{ __('Update your account’s profile information, such as nickname and profile image.') }}
     </x-slot:description>
 
-    <x-slot:form>
+    <x-slot:header>
         {{-- Banner Image --}}
         <div x-data="{bannerImageName: null, bannerImagePreview: @entangle('bannerImage').live}" class="col-span-6 sm:col-span-6">
             {{-- Banner Image File Input --}}
@@ -177,7 +177,9 @@
 
             <x-input-error for="profileImage" class="mt-2" />
         </div>
+    </x-slot:header>
 
+    <x-slot:form>
         {{-- Nickname --}}
         <div class="col-span-6">
             <x-label for="nickname" value="{{ __('Nickname') }}" />

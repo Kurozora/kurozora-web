@@ -1,4 +1,4 @@
-@props(['submit'])
+@props(['submit', 'padded'])
 
 <div {{ $attributes->merge(['class' => 'md:grid md:grid-cols-3 md:gap-6']) }}>
     <x-section-title>
@@ -15,8 +15,14 @@
         <form wire:submit="{{ $submit }}">
             @csrf
 
-            <div class="shadow overflow-hidden sm:rounded-md">
-                <div class="pt-4 pr-4 pb-4 pl-4 bg-white sm:p-6">
+            <div class="bg-white shadow overflow-hidden sm:rounded-md">
+                @if (isset($header))
+                    <div>
+                        {{ $header }}
+                    </div>
+                @endif
+
+                <div class="pt-4 pr-4 pb-4 pl-4 sm:p-6">
                     <div class="grid grid-cols-6 gap-6">
                         {{ $form }}
                     </div>
