@@ -13,13 +13,13 @@
                 @if(app()->isDownForMaintenance())
                     <p class="text-gray-500 text-2xl md:text-3xl font-light mb-8 leading-normal max-w-prose">{{ __('Kurozora is currently under maintenance. All services will be available shortly. If this continues for more than an hour, you can follow the status on Twitter.') }}</p>
 
-                    <x-outlined-link-button href="{{ config('social.twitter.url') }}" class="text-violet-500 text-base font-bold py-3 px-6 border-2 border-violet-500 hover:bg-violet-400 hover:border-violet-400 focus:border-violet-600 focus:ring-violet active:bg-violet-600">
+                    <x-outlined-link-button href="{{ config('social.twitter.url') }}" class="text-base font-bold py-3 px-6 border-2" color="violet">
                         {{ __('Go to Twitter') }}
                     </x-outlined-link-button>
                 @else
                     <p class="text-gray-500 text-2xl md:text-3xl font-light mb-8 leading-normal max-w-prose">{{ __('Our crack team is on the ca... couch. O-oh dear...') }}</p>
 
-                    <x-outlined-link-button href="{{ url('/') }}" class="text-violet-500 text-base font-bold py-3 px-6 border-2 border-violet-500 hover:bg-violet-400 hover:border-violet-400 focus:border-violet-600 focus:ring-violet active:bg-violet-600">
+                    <x-outlined-link-button href="{{ url('/') }}" class="text-base font-bold py-3 px-6 border-2" color="violet">
                         {{ __('Go Home') }}
                     </x-outlined-link-button>
                 @endif

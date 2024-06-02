@@ -12,7 +12,7 @@
 
                 <p class="text-grey-500 text-2xl md:text-3xl font-light mb-8 leading-normal">{{ __('You’re not authorized to view this page.') }}</p>
 
-                <x-outlined-link-button href="{{ url('/') }}" class="text-blue-500 text-base font-bold py-3 px-6 border-2 border-blue-500 hover:bg-blue-400 hover:border-blue-400 focus:border-blue-600 focus:ring-blue active:bg-blue-600">
+                <x-outlined-link-button href="{{ url('/') }}" class="text-base font-bold py-3 px-6 border-2" color="blue">
                     {{ __('Go Home?') }}
                 </x-outlined-link-button>
             </div>

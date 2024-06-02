@@ -12,7 +12,7 @@
 
                 <p class="text-grey-500 text-2xl md:text-3xl font-light mb-8 leading-normal">{{ __('Unable to process your request. If you’re not a bot, wait a bit before trying again.') }}</p>
 
-                <x-outlined-link-button href="{{ url('/') }}" class="text-pink-500 text-base font-bold py-3 px-6 border-2 border-pink-500 hover:bg-pink-400 hover:border-pink-400 focus:border-pink-600 focus:ring-pink active:bg-pink-600">
+                <x-outlined-link-button href="{{ url('/') }}" class="text-base font-bold py-3 px-6 border-2" color="pink">
                     {{ __('Go Home?') }}
                 </x-outlined-link-button>
             </div>
