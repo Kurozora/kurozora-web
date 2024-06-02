@@ -12,9 +12,9 @@ use DB;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Collection;
 use Livewire\Component;
+use Livewire\Features\SupportRedirects\Redirector;
 use Session;
 
 class MergeLibrary extends Component
@@ -102,7 +102,7 @@ class MergeLibrary extends Component
      *
      * @param string $jsonString
      *
-     * @return RedirectResponse|void
+     * @return Redirector|void
      */
     public function mergeLibrary(string $jsonString)
     {
@@ -120,7 +120,7 @@ class MergeLibrary extends Component
      *
      * @param string $jsonString
      *
-     * @return RedirectResponse|void
+     * @return Redirector|void
      */
     public function overwriteLibrary(string $jsonString)
     {
@@ -138,9 +138,9 @@ class MergeLibrary extends Component
      *
      * @param bool $merging
      *
-     * @return RedirectResponse
+     * @return Redirector
      */
-    public function finishMerge(bool $merging): RedirectResponse
+    public function finishMerge(bool $merging): Redirector
     {
         if ($merging) {
             Session::flash('success', __('Local Library import is in progress.'));
@@ -152,9 +152,9 @@ class MergeLibrary extends Component
     /**
      * Go to home page.
      *
-     * @return RedirectResponse
+     * @return Redirector
      */
-    public function goToHome(): RedirectResponse
+    public function goToHome(): Redirector
     {
         return redirect()->intended();
     }
