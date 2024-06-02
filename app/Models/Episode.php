@@ -62,20 +62,23 @@ class Episode extends KModel implements HasMedia, Sitemapable
     ];
 
     /**
-     * The attributes that should be cast.
+     * Get the attributes that should be cast.
      *
-     * @var array
+     * @return array
      */
-    protected $casts = [
-        'is_filler' => 'bool',
-        'is_nsfw' => 'bool',
-        'is_premiere' => 'bool',
-        'is_finale' => 'bool',
-        'is_special' => 'bool',
-        'is_verified' => 'bool',
-        'started_at' => 'datetime',
-        'ended_at' => 'datetime'
-    ];
+    protected function casts(): array
+    {
+        return [
+            'is_filler' => 'bool',
+            'is_nsfw' => 'bool',
+            'is_premiere' => 'bool',
+            'is_finale' => 'bool',
+            'is_special' => 'bool',
+            'is_verified' => 'bool',
+            'started_at' => 'datetime',
+            'ended_at' => 'datetime',
+        ];
+    }
 
     /**
      * Bootstrap the model and its traits.

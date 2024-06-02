@@ -47,14 +47,17 @@ class Studio extends KModel implements HasMedia, Sitemapable
     protected $table = self::TABLE_NAME;
 
     /**
-     * Casts rules.
+     * Get the attributes that should be cast.
      *
-     * @var array
+     * @return array
      */
-    protected $casts = [
-        'founded' => 'date',
-        'website_urls' => AsArrayObject::class,
-    ];
+    protected function casts(): array
+    {
+        return [
+            'founded' => 'date',
+            'website_urls' => AsArrayObject::class,
+        ];
+    }
 
     /**
      * Get the options for generating the slug.

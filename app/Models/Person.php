@@ -46,16 +46,19 @@ class Person extends KModel implements HasMedia, Sitemapable
     protected $table = self::TABLE_NAME;
 
     /**
-     * The attributes that should be cast.
+     * Get the attributes that should be cast.
      *
-     * @var array
+     * @return array
      */
-    protected $casts = [
-        'alternative_names' => AsArrayObject::class,
-        'birthdate'         => 'date',
-        'deceased_date'     => 'date',
-        'website_urls'      => AsArrayObject::class,
-    ];
+    protected function casts(): array
+    {
+        return [
+            'alternative_names' => AsArrayObject::class,
+            'birthdate'         => 'date',
+            'deceased_date'     => 'date',
+            'website_urls'      => AsArrayObject::class,
+        ];
+    }
 
     /**
      * Registers the media collections for the model.

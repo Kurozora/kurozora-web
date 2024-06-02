@@ -93,14 +93,17 @@ class Game extends KModel implements HasMedia, Sitemapable
     ];
 
     /**
-     * Casts rules.
+     * Get the attributes that should be cast.
      *
-     * @var array
+     * @return array
      */
-    protected $casts = [
-        'synonym_titles' => AsArrayObject::class,
-        'published_at' => 'date',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'synonym_titles' => AsArrayObject::class,
+            'published_at' => 'date',
+        ];
+    }
 
     /**
      * Bootstrap the model and its traits.

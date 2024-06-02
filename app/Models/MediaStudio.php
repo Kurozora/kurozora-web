@@ -27,17 +27,20 @@ class MediaStudio extends MorphPivot implements Sitemapable
     public $incrementing = true;
 
     /**
-     * The attributes that should be cast.
+     * Get the attributes that should be cast.
      *
-     * @var array
+     * @return array
      */
-    protected $casts = [
-        'is_licensor'   => 'boolean',
-        'is_producer'   => 'boolean',
-        'is_studio'     => 'boolean',
-        'is_publisher'  => 'boolean',
-        'is_developer'  => 'boolean',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'is_licensor'   => 'boolean',
+            'is_producer'   => 'boolean',
+            'is_studio'     => 'boolean',
+            'is_publisher'  => 'boolean',
+            'is_developer'  => 'boolean',
+        ];
+    }
 
     /**
      * Returns the anime belonging to the studio.

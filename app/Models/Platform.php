@@ -49,15 +49,18 @@ class Platform extends KModel implements HasMedia, Sitemapable
     ];
 
     /**
-     * Casts rules.
+     * Get the attributes that should be cast.
      *
-     * @var array
+     * @return array
      */
-    protected $casts = [
-        'synonym_names' => AsArrayObject::class,
-        'started_at' => 'date',
-        'ended_at' => 'date',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'synonym_names' => AsArrayObject::class,
+            'started_at' => 'date',
+            'ended_at' => 'date',
+        ];
+    }
 
     /**
      * Get the options for generating the slug.

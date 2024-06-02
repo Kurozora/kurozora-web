@@ -17,15 +17,18 @@ class UserLibrary extends KModel
     protected $table = self::TABLE_NAME;
 
     /**
-     * The attributes that should be cast.
+     * Get the attributes that should be cast.
      *
-     * @var array
+     * @return array
      */
-    protected $casts = [
-        'is_hidden' => 'boolean',
-        'started_at' => 'datetime',
-        'ended_at' => 'datetime',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'is_hidden' => 'boolean',
+            'started_at' => 'datetime',
+            'ended_at' => 'datetime',
+        ];
+    }
 
     /**
      * Bootstrap the model and its traits.

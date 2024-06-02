@@ -83,11 +83,11 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         TwoFactorAuthenticatable;
 
     // Cache user's calendar
-    const CACHE_KEY_CALENDAR_SECONDS = 60 * 60 * 24;
+    const int|float CACHE_KEY_CALENDAR_SECONDS = 60 * 60 * 24;
 
     // Cache user's reputation count
-    const CACHE_KEY_REPUTATION_COUNT = 'user-reputation-%d';
-    const CACHE_KEY_REPUTATION_COUNT_SECONDS = 10 * 60;
+    const string CACHE_KEY_REPUTATION_COUNT = 'user-reputation-%d';
+    const int|float CACHE_KEY_REPUTATION_COUNT_SECONDS = 10 * 60;
 
     // Length limits
     const int MAX_BIOGRAPHY_LENGTH = 500;
@@ -104,22 +104,25 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     protected $guarded = [];
 
     /**
-     * The attributes that should be cast to native types.
+     * Get the attributes that should be cast.
      *
-     * @var array
+     * @return array
      */
-    protected $casts = [
-        'anime_imported_at' => 'datetime',
-        'manga_imported_at' => 'datetime',
-        'subscribed_at' => 'datetime',
-        'is_developer' => 'bool',
-        'is_early_supporter' => 'bool',
-        'is_staff' => 'bool',
-        'is_pro' => 'bool',
-        'is_subscribed' => 'bool',
-        'is_verified' => 'bool',
-        'can_change_username' => 'bool',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'anime_imported_at' => 'datetime',
+            'manga_imported_at' => 'datetime',
+            'subscribed_at' => 'datetime',
+            'is_developer' => 'bool',
+            'is_early_supporter' => 'bool',
+            'is_staff' => 'bool',
+            'is_pro' => 'bool',
+            'is_subscribed' => 'bool',
+            'is_verified' => 'bool',
+            'can_change_username' => 'bool',
+        ];
+    }
 
     /**
      * Bootstrap the model and its traits.
@@ -136,7 +139,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
 
             // Parse user mentions
             $parser = new MentionParser($user, [
-                'notify' => false
+                'notify' => false,
             ]);
             $user->biography_markdown = $parser->parse($user->biography);
 
@@ -153,7 +156,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     public function uniqueIds(): array
     {
         return [
-            'uuid'
+            'uuid',
         ];
     }
 
@@ -274,7 +277,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
             ['email_verified_at', '=', null],
             ['is_pro', '=', false],
             ['is_subscribed', '=', false],
-            ['created_at', '<', now()->subDays(30)]
+            ['created_at', '<', now()->subDays(30)],
         ]);
     }
 
@@ -449,7 +452,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         $cacheKey = self::TABLE_NAME . '-name-reminders-id-' . $this->id . '-reminder_count-' . $animes->count();
 
         // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_CALENDAR_SECONDS, function() use ($animes) {
+        return Cache::remember($cacheKey, self::CACHE_KEY_CALENDAR_SECONDS, function () use ($animes) {
             $appName = config('app.name');
             $productIdentifier = '-//Kurozora//' . $appName . '//' . strtoupper(config('app.locale'));
 
@@ -593,8 +596,9 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      * - `notify`: should the user be notified of the new session, true by default.
      *
      * @param Session|PersonalAccessToken $model
-     * @param array $options
-     * @param bool $notify
+     * @param array                       $options
+     * @param bool                        $notify
+     *
      * @return SessionAttribute
      */
     function createSessionAttributes(Session|PersonalAccessToken $model, array $options = [], bool $notify = false): SessionAttribute
@@ -686,10 +690,10 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
             $foundRep = UserReputation::where('given_user_id', $this->id)->sum('amount');
 
             if ($foundRep === null) return 0;
-            return (int)$foundRep;
+            return (int) $foundRep;
         });
 
-        return (int)$repCount;
+        return (int) $repCount;
     }
 
     /**
@@ -777,6 +781,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      * Send the password reset notification.
      *
      * @param string $token
+     *
      * @return void
      */
     public function sendPasswordResetNotification($token): void

@@ -15,13 +15,16 @@ class Recap extends KModel
     protected $table = self::TABLE_NAME;
 
     /**
-     * Casts rules.
+     * Get the attributes that should be cast.
      *
-     * @var array
+     * @return array
      */
-    protected $casts = [
-        'year' => 'int'
-    ];
+    protected function casts(): array
+    {
+        return [
+            'year' => 'int',
+        ];
+    }
 
     /**
      * The first background color of the recap.

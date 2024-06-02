@@ -29,16 +29,19 @@ class FeedMessage extends KModel implements ReactableContract
     const int MAX_CONTENT_LENGTH_PLUS = 1000;
 
     /**
-     * The attributes that should be cast to native types.
+     * Get the attributes that should be cast.
      *
-     * @var array
+     * @return array
      */
-    protected $casts = [
-        'is_nsfw' => 'bool',
-        'is_spoiler' => 'bool',
-        'is_reshare' => 'bool',
-        'is_reply' => 'bool',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'is_nsfw' => 'bool',
+            'is_spoiler' => 'bool',
+            'is_reshare' => 'bool',
+            'is_reply' => 'bool',
+        ];
+    }
 
     /**
      * Bootstrap the model and its traits.

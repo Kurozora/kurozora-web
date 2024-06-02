@@ -44,14 +44,17 @@ class Season extends KModel implements HasMedia, Sitemapable
     ];
 
     /**
-     * The attributes that should be cast.
+     * Get the attributes that should be cast.
      *
-     * @var array
+     * @return array
      */
-    protected $casts = [
-        'started_at' => 'datetime',
-        'ended_at' => 'datetime',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'started_at' => 'datetime',
+            'ended_at' => 'datetime',
+        ];
+    }
 
     /**
      * Bootstrap the model and its traits.

@@ -58,13 +58,16 @@ class Character extends KModel implements HasMedia, Sitemapable
     ];
 
     /**
-     * The attributes that should be cast.
+     * Get the attributes that should be cast.
      *
-     * @var array
+     * @return array
      */
-    protected $casts = [
-        'nicknames' => AsArrayObject::class,
-    ];
+    protected function casts(): array
+    {
+        return [
+            'nicknames' => AsArrayObject::class,
+        ];
+    }
 
     /**
      * The accessors to append to the model's array form.
