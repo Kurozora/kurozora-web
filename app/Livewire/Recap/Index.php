@@ -42,7 +42,7 @@ class Index extends Component
      *
      * @return array
      */
-    public function getQueryString(): array
+    protected function queryString(): array
     {
         return [
             'year' => ['except' => now()->year],
@@ -57,7 +57,7 @@ class Index extends Component
     public function mount(): void
     {
         if (empty($this->year)) {
-            $this->year = 2023;
+            $this->year = now()->year;
         }
     }
 

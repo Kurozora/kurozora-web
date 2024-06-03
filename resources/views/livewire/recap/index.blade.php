@@ -138,7 +138,13 @@
                 x-init="loadingScreenEnabled = false"
             >
                 <div class="flex flex-col items-center mt-12">
-                    <h2 class="max-w-sm text-2xl text-center font-semibold md:text-4xl">{{ __('Series that defined your arc') }}</h2>
+                    <h2 class="max-w-sm text-2xl text-center font-semibold md:text-4xl">
+                        @if ($year == now()->year)
+                            {{ __('Series that defined your arc in :x', ['x' => now()->subMonth()->monthName]) }}
+                        @else
+                            {{ __('Series that defined your arc in :x', ['x' => $year]) }}
+                        @endif
+                    </h2>
                 </div>
 
                 @foreach ($this->recaps as $recap)
