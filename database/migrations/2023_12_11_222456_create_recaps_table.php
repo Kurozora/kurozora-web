@@ -19,6 +19,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->year('year');
+            $table->tinyInteger('month');
             $table->string('type');
             $table->unsignedSmallInteger('total_type_count')->default(0);
             $table->unsignedBigInteger('total_parts_count')->default(0);
@@ -33,7 +34,7 @@ return new class extends Migration
             $table->index('deleted_at');
 
             // Set unique key constraints
-            $table->unique(['type', 'user_id', 'year']);
+            $table->unique(['type', 'user_id', 'year', 'month']);
 
             // Set foreign key constraints
             $table->foreign('user_id')

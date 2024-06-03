@@ -115,8 +115,8 @@ class GenerateRecaps extends Command
                         ->with(['episode']);
                 },
             ])
-            ->chunkById(10, function (Collection $users) use ($year, $types) {
-                $users->each(function (User $user) use ($types, $year) {
+            ->chunkById(10, function (Collection $users) use ($endMonth, $year, $types) {
+                $users->each(function (User $user) use ($types, $endMonth, $year) {
                     $baseScore = [
                         Anime::class => 0,
                         Manga::class => 0,
@@ -297,7 +297,7 @@ class GenerateRecaps extends Command
                         });
 
                     // Save Re:Cap results
-                    $types->each(function($type) use ($topModels, $topGenres, $topThemes, $totalPartsCount, $totalPartsDurations, $year, $user) {
+                    $types->each(function($type) use ($topModels, $topGenres, $topThemes, $totalPartsCount, $totalPartsDurations, $endMonth, $year, $user) {
                         $this->line('Saving recap for: ' . $type);
                         switch ($type) {
                             case Genre::class:
@@ -308,6 +308,7 @@ class GenerateRecaps extends Command
                                 $recap = Recap::updateOrCreate([
                                     'user_id' => $user->id,
                                     'year' => $year,
+                                    'month' => $endMonth,
                                     'type' => $type
                                 ]);
 
