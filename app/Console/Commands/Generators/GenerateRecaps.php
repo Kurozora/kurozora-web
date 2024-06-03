@@ -16,6 +16,7 @@ use App\Models\Theme;
 use App\Models\User;
 use App\Models\UserLibrary;
 use App\Models\UserWatchedEpisode;
+use Carbon\Carbon;
 use DB;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Builder;
@@ -31,7 +32,8 @@ class GenerateRecaps extends Command
      */
     protected $signature = 'generate:recaps
                             {userID=all : The user for whom the recap is generated. ID|all}
-                            {year? : The year of the recap. Empty for current year}';
+                            {year? : The year of the recap. Empty for current year}
+                            {month? : The month of the recap. Empty all months}';
 
     /**
      * The console command description.
@@ -49,6 +51,16 @@ class GenerateRecaps extends Command
     {
         $user = $this->argument('userID');
         $year = $this->argument('year') ?? now()->year;
+        $month = $this->argument('month');
+
+        $startMonth = sprintf('%02d', (int) ($month ?? '1'));
+        $endMonth = $month ?: '12';
+        $startedAt = Carbon::createFromDate($year, $startMonth, 1)
+            ->toDateString();
+        $endedAt = Carbon::createFromDate($year, $endMonth, 1)
+            ->endOfMonth()
+            ->toDateString();
+
         $types = collect([
             Anime::class,
             Manga::class,
@@ -63,38 +75,38 @@ class GenerateRecaps extends Command
                 $query->where('id', '=', $user);
             })
             ->with([
-                'library' => function ($query) use ($year) {
+                'library' => function ($query) use ($startedAt, $endedAt, $year) {
                     $query->where([
-                        ['started_at', '>=', $year . '-01-01'],
-                        ['started_at', '<=', $year . '-12-31'],
+                        ['started_at', '>=', $startedAt],
+                        ['started_at', '<=', $endedAt],
                     ])
                         ->orWhere([
-                            ['started_at', '>=', $year . '-01-01'],
-                            ['ended_at', '<=', $year . '-12-31'],
+                            ['started_at', '>=', $startedAt],
+                            ['ended_at', '<=', $endedAt],
                         ])
                         ->with([
                             'trackable.genres',
                             'trackable.themes'
                         ]);
                 },
-                'user_watched_episodes' => function (HasMany $query) use ($year) {
+                'user_watched_episodes' => function (HasMany $query) use ($startedAt, $endedAt, $year) {
                     $query->where([
-                        [UserWatchedEpisode::TABLE_NAME . '.created_at', '>=', $year . '-01-01'],
-                        [UserWatchedEpisode::TABLE_NAME . '.created_at', '<=', $year . '-12-31'],
+                        [UserWatchedEpisode::TABLE_NAME . '.created_at', '>=', $startedAt],
+                        [UserWatchedEpisode::TABLE_NAME . '.created_at', '<=', $endedAt],
                     ])
                         ->join(Episode::TABLE_NAME, UserWatchedEpisode::TABLE_NAME . '.episode_id', '=', Episode::TABLE_NAME . '.id')
                         ->join(Season::TABLE_NAME, Episode::TABLE_NAME . '.season_id', '=', Season::TABLE_NAME . '.id')
                         ->join(Anime::TABLE_NAME, Season::TABLE_NAME . '.anime_id', '=', Anime::TABLE_NAME . '.id')
-                        ->whereIn(Anime::TABLE_NAME . '.id', function ($subQuery) use ($year) {
+                        ->whereIn(Anime::TABLE_NAME . '.id', function ($subQuery) use ($startedAt, $endedAt, $year) {
                             $subQuery->select('trackable_id')
                                 ->from(UserLibrary::TABLE_NAME)
                                 ->where([
-                                    [UserLibrary::TABLE_NAME . '.started_at', '>=', $year . '-01-01'],
-                                    [UserLibrary::TABLE_NAME . '.started_at', '<=', $year . '-12-31'],
+                                    [UserLibrary::TABLE_NAME . '.started_at', '>=', $startedAt],
+                                    [UserLibrary::TABLE_NAME . '.started_at', '<=', $endedAt],
                                 ])
                                 ->orWhere([
-                                    [UserLibrary::TABLE_NAME . '.started_at', '>=', $year . '-01-01'],
-                                    [UserLibrary::TABLE_NAME . '.ended_at', '<=', $year . '-12-31'],
+                                    [UserLibrary::TABLE_NAME . '.started_at', '>=', $startedAt],
+                                    [UserLibrary::TABLE_NAME . '.ended_at', '<=', $endedAt],
                                 ])
                                 ->where(UserLibrary::TABLE_NAME . '.trackable_type', '=', Anime::class)
                                 ->whereIn(UserLibrary::TABLE_NAME . '.status', [UserLibraryStatus::InProgress, UserLibraryStatus::Completed, UserLibraryStatus::OnHold]);
@@ -131,6 +143,7 @@ class GenerateRecaps extends Command
                     // Populate genreCount, themeCount and totalDurations.
                     $user->library->each(function (UserLibrary $userLibrary) use ($user, &$totalPartsDurations, &$genresArray, &$themesArray) {
                         $model = $userLibrary->trackable;
+                        $this->line('Populating count for: ' . $userLibrary->trackable_type);
 
                         if ($model == null) {
                             $this->info('empty model for: ' . $userLibrary->id);
@@ -143,17 +156,20 @@ class GenerateRecaps extends Command
                         // and themes.
                         if ($userLibrary->status != UserLibraryStatus::Ignored) {
                             // Determine favorite genre
+                            $this->line('Counting genres');
                             $model->genres->each(function ($genre) use (&$genresArray) {
                                 $genresArray[$genre->id] = isset($genresArray[$genre->id]) ? $genresArray[$genre->id] + 1 : 1;
                             });
 
                             // Determine favorite genre
+                            $this->line('Counting themes');
                             $model->themes->each(function ($theme) use (&$themesArray) {
                                 $themesArray[$theme->id] = isset($themesArray[$theme->id]) ? $themesArray[$theme->id] + 1 : 1;
                             });
                         }
 
                         // Determine progress duration
+                        $this->line('Counting progress');
                         switch ($userLibrary->status) {
                             case UserLibraryStatus::Completed:
                                 $totalPartsDurations[$userLibrary->trackable_type] += match ($userLibrary->trackable_type) {
@@ -187,6 +203,7 @@ class GenerateRecaps extends Command
 
                     // Get base score per type
                     $types->each(function ($type) use ($user, &$totalPartsDurations, &$totalPartsCount, &$baseScore) {
+                        $this->line('Counting base score for: ' . $type);
                         switch ($type) {
                             case Anime::class:
                                 // Sum total parts duration
@@ -209,6 +226,7 @@ class GenerateRecaps extends Command
                                 return;
                         }
 
+                        $this->line('Counting average user rating: ' . $type);
                         $averageUserRating = MediaRating::where('user_id', '=', $user->id)
                             ->where('model_type', '=', $type)
                             ->avg('rating');
@@ -220,6 +238,8 @@ class GenerateRecaps extends Command
 
                     // Populate top models
                     $user->library->each(function (UserLibrary $userLibrary) use ($baseScore, $user, &$topModels) {
+                        $this->line('Populating top models for: ' . $userLibrary->trackable_type);
+
                         if (
                             $userLibrary->status == UserLibraryStatus::Planning ||
                             $userLibrary->status == UserLibraryStatus::Dropped ||
@@ -240,6 +260,7 @@ class GenerateRecaps extends Command
                         }
 
                         // Add weight based on the user's rating
+                        $this->line('Populating average rating: ' . $userLibrary->trackable_type);
                         $userRating = MediaRating::where('user_id', '=', $user->id)
                             ->where('model_type', '=', $userLibrary->trackable_type)
                             ->where('model_id', '=', $userLibrary->trackable_id)
@@ -277,6 +298,7 @@ class GenerateRecaps extends Command
 
                     // Save Re:Cap results
                     $types->each(function($type) use ($topModels, $topGenres, $topThemes, $totalPartsCount, $totalPartsDurations, $year, $user) {
+                        $this->line('Saving recap for: ' . $type);
                         switch ($type) {
                             case Genre::class:
                                 if ($topGenres->isEmpty()) {
@@ -363,6 +385,8 @@ class GenerateRecaps extends Command
 
         // Calculate top percentile per type
         $types->each(function ($type) use ($year, $user) {
+            $this->line('Calculating top percentile for: ' . $type);
+
             if ($type == Genre::class || $type == Theme::class) {
                 return;
             }
@@ -372,6 +396,8 @@ class GenerateRecaps extends Command
             $totalRecaps =  Recap::withoutGlobalScopes()
                 ->where('type', '=', $type)
                 ->count();
+
+            $this->line('Total recaps: ' . $totalRecaps);
 
             Recap::withoutGlobalScopes()
                 ->when($user != 'all', function (Builder $query) use ($user) {
@@ -392,6 +418,8 @@ class GenerateRecaps extends Command
 
                             $offset++;
                         });
+
+                        $this->line('Calculated up to recap: ' . $recaps->last()->id);
                     });
                 });
         });
