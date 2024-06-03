@@ -40,7 +40,7 @@ class Index extends Component
      *
      * @return array
      */
-    public function getQueryString(): array
+    protected function queryString(): array
     {
         return [
             'type' => ['except' => ScheduleKind::Anime()->key],
