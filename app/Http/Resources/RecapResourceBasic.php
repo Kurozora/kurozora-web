@@ -19,6 +19,7 @@ class RecapResourceBasic extends JsonResource
      * Transform the resource into an array.
      *
      * @param Request $request
+     *
      * @return array<string, mixed>
      */
     public function toArray(Request $request): array
@@ -26,11 +27,12 @@ class RecapResourceBasic extends JsonResource
         $resource = RecapResourceIdentity::make($this->resource)->toArray($request);
         $resource = array_merge($resource, [
             'attributes' => [
-                'year'              => $this->resource->year,
-                'description'       => null,
-                'backgroundColor1'  => $this->resource->background_color1,
-                'backgroundColor2'  => $this->resource->background_color2,
-                'artwork'           => null,
+                'year' => $this->resource->year,
+                'month' => $this->resource->month,
+                'description' => null,
+                'backgroundColor1' => $this->resource->background_color1,
+                'backgroundColor2' => $this->resource->background_color2,
+                'artwork' => null,
             ]
         ]);
         return $resource;
