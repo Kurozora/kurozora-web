@@ -143,3 +143,25 @@ Schedule::command('calculate:rankings -g')
     ->weekly()
     ->name('Calculate global rankings')
     ->onOneServer();
+
+/**********************************************/
+// Generate ReCAP every month except January and December
+Schedule::command('generate:recaps', ['month' => now()->subMonth()->month])
+    ->cron('0 0 1 2,3,4,5,6,7,8,9,10,11 *')
+    ->name('Generate monthly recaps')
+    ->onOneServer();
+
+/**********************************************/
+// Generate yearly ReCAP every week in December
+Schedule::command('generate:recaps', ['year' => now()->year])
+    ->yearlyOn(12)
+    ->fridays()
+    ->name('Generate yearly recaps')
+    ->onOneServer();
+
+/**********************************************/
+// Generate previous year's ReCAP every year on January
+Schedule::command('generate:recaps', ['year' => now()->subYear()->year])
+    ->yearly()
+    ->name('Generate previous year’s recaps')
+    ->onOneServer();
