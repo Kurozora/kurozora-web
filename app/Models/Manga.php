@@ -279,10 +279,22 @@ class Manga extends KModel implements HasMedia, Sitemapable
                 'selected' => null,
             ],
             'status_id' => [
-                'title' => __('Airing Status'),
+                'title' => __('Publication Status'),
                 'type' => 'multiselect',
                 'options' => Status::where('type', 'manga')->pluck('name', 'id'),
                 'selected' => null,
+            ],
+            'genres:id' => [
+                'title' => __('Genres'),
+                'type' => 'multiselect',
+                'options' => Genre::all()->sortBy('name')->pluck('name', 'id'),
+                'selected' => null
+            ],
+            'themes:id' => [
+                'title' => __('Themes'),
+                'type' => 'multiselect',
+                'options' => Theme::all()->sortBy('name')->pluck('name', 'id'),
+                'selected' => null
             ],
             'publication_time' => [
                 'title' => __('Publication Time'),

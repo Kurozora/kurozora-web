@@ -840,6 +840,18 @@ class Anime extends KModel implements HasMedia, Sitemapable
                 'options' => Status::where('type', 'anime')->pluck('name', 'id'),
                 'selected' => null,
             ],
+            'genres:id' => [
+                'title' => __('Genres'),
+                'type' => 'multiselect',
+                'options' => Genre::all()->sortBy('name')->pluck('name', 'id'),
+                'selected' => null
+            ],
+            'themes:id' => [
+                'title' => __('Themes'),
+                'type' => 'multiselect',
+                'options' => Theme::all()->sortBy('name')->pluck('name', 'id'),
+                'selected' => null
+            ],
             'air_time' => [
                 'title' => __('Air Time'),
                 'type' => 'time',

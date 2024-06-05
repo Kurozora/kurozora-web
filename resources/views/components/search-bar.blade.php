@@ -58,7 +58,7 @@
 
                 <x-slot:content>
                     @foreach($this->filter as $filter)
-                        @if($filter['selected'] != null)
+                        @if ($filter['selected'] != null)
                             {{-- Reset Order --}}
                             <button class="block w-full pl-4 pr-4 pt-2 pb-2 bg-gray-100 text-xs text-center text-gray-400 font-semibold hover:bg-gray-50 focus:bg-gray-200" wire:click="resetFilter">
                                 {{ __('Reset Filters') }}

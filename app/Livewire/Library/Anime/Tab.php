@@ -133,19 +133,25 @@ class Tab extends Component
 
         // Filter
         $wheres = [];
+        $whereIns = [];
         foreach ($this->filter as $attribute => $filter) {
             $attribute = str_replace(':', '.', $attribute);
             $selected = $filter['selected'];
             $type = $filter['type'];
 
             if ((is_numeric($selected) && $selected >= 0) || !empty($selected)) {
-                $wheres[$attribute] = match ($type) {
-                    'date' => Carbon::createFromFormat('Y-m-d', $selected)
-                        ?->setTime(0, 0)
-                        ->timestamp,
-                    'time' => $selected . ':00',
-                    default => $selected,
-                };
+                if ($type === 'multiselect') {
+                    $whereIns[$attribute] = $selected;
+                } else {
+                    $wheres[$attribute] = match ($type) {
+                        'date' => Carbon::createFromFormat('Y-m-d', $selected)
+                            ?->setTime(0, 0)
+                            ->timestamp,
+                        'time' => $selected . ':00',
+                        'double' => number_format($selected, 2, '.', ''),
+                        default => $selected,
+                    };
+                }
             }
         }
 
@@ -154,7 +160,7 @@ class Tab extends Component
         $userLibraryStatus = UserLibraryStatus::fromKey($status);
 
         // If no search was performed, return all anime
-        if (empty($this->search) && empty($wheres) && empty($orders)) {
+        if (empty($this->search) && empty($wheres) && empty($whereIns)) {
             $animes = $this->user
                 ->whereTracked(Anime::class)
                 ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
@@ -176,10 +182,13 @@ class Tab extends Component
             ->items()['hits'] ?? [])
             ->pluck('trackable_id')
             ->toArray();
+        $whereIns['id'] = $animeIDs;
+
         $animes = Anime::search($this->search);
-        $animes->whereIn('id', $animeIDs);
-        $animes->wheres = $wheres;
         $animes->orders = $orders;
+        $animes->wheres = $wheres;
+        $animes->whereIns = $whereIns;
+
         $animes->query(function (Builder $query) {
             $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
                 ->when(auth()->user(), function ($query, $user) {
