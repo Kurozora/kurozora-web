@@ -71,6 +71,7 @@ class MediaSong extends Resource
      */
     public static $with = [
         'song',
+        'song.translations',
         'model'
     ];
 
@@ -89,7 +90,8 @@ class MediaSong extends Resource
      * @var array
      */
     public static array $searchRelations = [
-        'song' => ['id', 'title', 'artist'],
+        'song' => ['id', 'original_title', 'artist'],
+        'song.translations' => ['title'],
         'model' => ['id', 'original_title'],
     ];
 
@@ -155,7 +157,7 @@ class MediaSong extends Resource
     {
         $mediaSong = $this->resource;
 
-        return $mediaSong->song->title . ' | ' . $mediaSong->model?->original_title . ' (ID: ' . $mediaSong->id . ')';
+        return $mediaSong->song->original_title . ' | ' . $mediaSong->model?->original_title . ' (ID: ' . $mediaSong->id . ')';
     }
 
     /**
