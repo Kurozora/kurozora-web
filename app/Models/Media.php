@@ -33,8 +33,6 @@ class Media extends MediaLibrary
         });
     }
 
-    public static function findWithTemporaryUploadInCurrentSession(array $uuids) { }
-
     public function temporaryUpload(): BelongsTo
     {
         return $this->belongsTo(Media::class);
