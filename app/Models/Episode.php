@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\MediaCollection;
+use App\Scopes\TvRatingScope;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\Actionable;
 use App\Traits\Model\HasComments;
@@ -17,6 +18,7 @@ use Carbon\CarbonInterval;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -385,6 +387,20 @@ class Episode extends KModel implements HasMedia, Sitemapable
     {
         return $this->morphMany(Video::class, 'videoable')
             ->orderBy('source');
+    }
+
+    /**
+     * Retrieve the model for a bound value.
+     *
+     * @param  Model|\Illuminate\Database\Eloquent\Relations\Relation  $query
+     * @param  mixed  $value
+     * @param  string|null  $field
+     * @return \Illuminate\Contracts\Database\Eloquent\Builder
+     */
+    public function resolveRouteBindingQuery($query, $value, $field = null): \Illuminate\Contracts\Database\Eloquent\Builder
+    {
+        return parent::resolveRouteBindingQuery($query, $value, $field)
+            ->withoutGlobalScopes([TvRatingScope::class]);
     }
 
     /**
