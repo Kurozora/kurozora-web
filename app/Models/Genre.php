@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Enums\MediaCollection;
-use App\Scopes\TvRatingScope;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\HasSlug;
 use App\Traits\Model\TvRated;
@@ -123,7 +122,7 @@ class Genre extends KModel implements HasMedia, Sitemapable
     public function resolveRouteBindingQuery($query, $value, $field = null): \Illuminate\Contracts\Database\Eloquent\Builder
     {
         return parent::resolveRouteBindingQuery($query, $value, $field)
-            ->withoutGlobalScopes([TvRatingScope::class]);
+            ->withoutTvRatings();
     }
 
     /**

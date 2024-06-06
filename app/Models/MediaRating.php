@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Scopes\TvRatingScope;
 use App\Traits\Model\MorphTvRated;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -48,11 +48,11 @@ class MediaRating extends KModel
      * @param  Model|\Illuminate\Database\Eloquent\Relations\Relation  $query
      * @param  mixed  $value
      * @param  string|null  $field
-     * @return \Illuminate\Contracts\Database\Eloquent\Builder
+     * @return Builder
      */
-    public function resolveRouteBindingQuery($query, $value, $field = null): \Illuminate\Contracts\Database\Eloquent\Builder
+    public function resolveRouteBindingQuery($query, $value, $field = null): Builder
     {
         return parent::resolveRouteBindingQuery($query, $value, $field)
-            ->withoutGlobalScopes([TvRatingScope::class]);
+            ->withoutTvRatings();
     }
 }

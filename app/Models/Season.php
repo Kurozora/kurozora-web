@@ -3,11 +3,11 @@
 namespace App\Models;
 
 use App\Enums\MediaCollection;
-use App\Scopes\TvRatingScope;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\HasViews;
 use App\Traits\Model\TvRated;
 use Astrotomic\Translatable\Translatable;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -124,12 +124,12 @@ class Season extends KModel implements HasMedia, Sitemapable
      * @param  Model|\Illuminate\Database\Eloquent\Relations\Relation  $query
      * @param  mixed  $value
      * @param  string|null  $field
-     * @return \Illuminate\Contracts\Database\Eloquent\Builder
+     * @return Builder
      */
-    public function resolveRouteBindingQuery($query, $value, $field = null): \Illuminate\Contracts\Database\Eloquent\Builder
+    public function resolveRouteBindingQuery($query, $value, $field = null): Builder
     {
         return parent::resolveRouteBindingQuery($query, $value, $field)
-            ->withoutGlobalScopes([TvRatingScope::class]);
+            ->withoutTvRatings();
     }
 
     /**
