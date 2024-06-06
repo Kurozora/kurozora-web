@@ -33,6 +33,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Prevent dangerous actions
+        DB::prohibitDestructiveCommands(app()->isProduction());
+
         // Rate limits
         RateLimiter::for('api', function (Request $request) {
             $method = $request->method();
@@ -43,7 +46,7 @@ class AppServiceProvider extends ServiceProvider
             };
         });
 
-        // register events
+        // Register events
         Event::listen(SocialiteWasCalled::class, AppleExtendSocialite::class.'@handle');
 
         /// Register gates
