@@ -59,6 +59,7 @@ class Episode extends Command
                 ->firstWhere('tvdb_id', '=', $tvdbID);
             $episodes = $anime
                 ->episodes()
+                ->with(['mediaStat', 'translations'])
                 ->orderBy('number_total')
                 ->get();
 

@@ -187,20 +187,28 @@ class EpisodeSpider extends BasicSpider
         preg_match($episodeRegex, $absoluteBreadcrumb, $episodeNumberTotal);
 
         // Episode duration
-        $episodeDuration = $response->filter('ul.list-group li.list-group-item.clearfix strong:contains("Runtime")')
-            ->ancestors()
-            ->filter('span')
-            ->text();
+        try {
+            $episodeDuration = $response->filter('strong:contains("Runtime")')
+                ->ancestors()
+                ->filter('span')
+                ->text();
+        } catch (Exception $exception) {
+            $episodeDuration = null;
+        }
 
         // Episode first aired
-        $episodeStarted_at = $response->filter('ul.list-group li.list-group-item.clearfix strong:contains("Originally Aired")')
-            ->ancestors()
-            ->filter('span a')
-            ->text();
+        try {
+            $episodeStartedAt = $response->filter('strong:contains("Originally Aired")')
+                ->ancestors()
+                ->filter('span a')
+                ->text();
+        }  catch (Exception $exception) {
+            $episodeStartedAt = null;
+        }
 
         // Episode image
         try {
-            $episodeBannerImageUrl = $response->filter('.thumbnail.platypus-image.lightbox img[src*="/episodes/"]')
+            $episodeBannerImageUrl = $response->filter('img[src*="/episode/"]')
                 ->attr('src');
         } catch (Exception $exception) {
             $episodeBannerImageUrl = null;
@@ -214,7 +222,7 @@ class EpisodeSpider extends BasicSpider
                 'episode_number' => $episodeNumber,
                 'episode_number_total' => $episodeNumberTotal,
                 'episode_duration' => $episodeDuration,
-                'episode_started_at' => $episodeStarted_at,
+                'episode_started_at' => $episodeStartedAt,
                 'episode_banner_image_url' => $episodeBannerImageUrl,
             ]);
 

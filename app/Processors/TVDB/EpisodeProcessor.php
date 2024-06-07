@@ -121,8 +121,12 @@ class EpisodeProcessor implements ItemProcessorInterface
     {
         $cleanTranslations = [];
         foreach ($translations as $translation) {
-            $language = Language::where('iso_639_3', '=', $translation['code'])
-            ->orWhere('code', '=', $translation['code'])
+            $code = match ($translation['code']) {
+                'zhtw' => 'tw',
+                default => $translation['code']
+            };
+            $language = Language::where('iso_639_3', '=', $code)
+            ->orWhere('code', '=', $code)
             ->first();
 
             $cleanTranslations[$language->code] = [
@@ -166,11 +170,16 @@ class EpisodeProcessor implements ItemProcessorInterface
     /**
      * Get the duration of the episode.
      *
-     * @param string $value
-     * @return int
+     * @param null|string $value
+     *
+     * @return null|int
      */
-    private function getDuration(string $value): int
+    private function getDuration(?string $value): ?int
     {
+        if (empty($value)) {
+            return null;
+        }
+
         $seconds = 0;
 
         $duration = trim($value);
