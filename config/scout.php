@@ -175,7 +175,7 @@ return [
             ],
             \App\Models\Song::TABLE_NAME => [
                 'searchableAttributes' => ['original_title', 'title', 'artist', 'original_lyrics', 'lyrics', 'translations'],
-                'sortableAttributes'=> ['artist', 'title', 'rank_total', 'created_at', 'update_at'],
+                'sortableAttributes'=> ['artist', 'original_title', 'rank_total', 'created_at', 'update_at'],
                 'filterableAttributes'=> ['id', 'artist'],
             ],
             \App\Models\Studio::TABLE_NAME => [
