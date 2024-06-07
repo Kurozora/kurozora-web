@@ -8,7 +8,10 @@
     @switch($mediaRating->model_type)
         @case(\App\Models\Anime::class)
             <div class="flex flex-nowrap gap-2">
-                <picture class="relative shrink-0 w-28 h-40 rounded-lg overflow-hidden">
+                <picture
+                    class="relative shrink-0 w-28 h-40 rounded-lg overflow-hidden"
+                    style="background-color: {{ $mediaRating->model->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? '#000000' }};"
+                >
                     <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $mediaRating->model->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $mediaRating->model->title }} Poster" title="{{ $mediaRating->model->title }}">
 
                     <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-lg"></div>
@@ -39,7 +42,10 @@
             @break
         @case(\App\Models\Character::class)
             <div class="flex flex-nowrap gap-2">
-                <picture class="relative shrink-0 w-28 aspect-square rounded-full overflow-hidden">
+                <picture
+                    class="relative shrink-0 w-28 aspect-square rounded-full overflow-hidden"
+                    style="background-color: {{ $mediaRating->model->getFirstMedia(\App\Enums\MediaCollection::Profile)?->custom_properties['background_color'] ?? '#000000' }};"
+                >
                     <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $mediaRating->model->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/person_poster.webp') }}" alt="{{ $mediaRating->model->name }} Profile Image" title="{{ $mediaRating->model->name }}">
 
                     <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-full"></div>
@@ -70,7 +76,10 @@
             @break
         @case(\App\Models\Episode::class)
             <div class="flex flex-nowrap gap-2">
-                <picture class="relative shrink-0 w-28 aspect-video rounded-lg overflow-hidden">
+                <picture
+                    class="relative shrink-0 w-28 aspect-video rounded-lg overflow-hidden"
+                    style="background-color: {{ $mediaRating->model->getFirstMedia(\App\Enums\MediaCollection::Banner)?->custom_properties['background_color'] ?? '#000000' }};"
+                >
                     <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $mediaRating->model->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? asset('images/static/placeholders/episode_banner.webp') }}" alt="{{ $mediaRating->model->title }} Banner" title="{{ $mediaRating->model->title }}">
 
                     <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-lg"></div>
@@ -101,7 +110,10 @@
             @break
         @case(\App\Models\Game::class)
             <div class="flex flex-nowrap gap-2">
-                <picture class="relative shrink-0 w-28 h-28 rounded-3xl overflow-hidden">
+                <picture
+                    class="relative shrink-0 w-28 h-28 rounded-3xl overflow-hidden"
+                    style="background-color: {{ $mediaRating->model->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? '#000000' }};"
+                >
                     <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $mediaRating->model->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $mediaRating->model->title }} Poster" title="{{ $mediaRating->model->title }}">
 
                     <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-3xl"></div>
@@ -132,7 +144,10 @@
             @break
         @case(\App\Models\Manga::class)
             <div class="flex flex-nowrap gap-2">
-                <svg class="relative shrink-0 w-28 h-40 overflow-hidden">
+                <svg
+                    class="relative shrink-0 w-28 h-40 overflow-hidden"
+                    style="background-color: {{ $mediaRating->model->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? '#000000' }};"
+                >
                     <foreignObject width="112" height="160" mask="url(#svg-mask-book-cover)">
                         <img class="h-full w-full object-cover lazyload" data-sizes="auto" data-src="{{ $mediaRating->model->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $mediaRating->model->title }} Poster" title="{{ $mediaRating->model->title }}" />
                     </foreignObject>
@@ -169,7 +184,10 @@
             @break
         @case(\App\Models\Person::class)
             <div class="flex flex-nowrap gap-2">
-                <picture class="relative shrink-0 w-28 aspect-square rounded-full overflow-hidden">
+                <picture
+                    class="relative shrink-0 w-28 aspect-square rounded-full overflow-hidden"
+                    style="background-color: {{ $mediaRating->model->getFirstMedia(\App\Enums\MediaCollection::Profile)?->custom_properties['background_color'] ?? '#000000' }};"
+                >
                     <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $mediaRating->model->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/person_poster.webp') }}" alt="{{ $mediaRating->model->full_name }} Profile Image" title="{{ $mediaRating->model->full_name }}">
 
                     <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-full"></div>
@@ -279,7 +297,10 @@
             @break
         @case(\App\Models\Studio::class)
             <div class="flex flex-nowrap gap-2">
-                <picture class="relative shrink-0 w-28 rounded-full overflow-hidden">
+                <picture
+                    class="relative shrink-0 w-28 rounded-full overflow-hidden"
+                    style="background-color: {{ $mediaRating->model->getFirstMedia(\App\Enums\MediaCollection::Profile)?->custom_properties['background_color'] ?? '#000000' }};"
+                >
                     <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $mediaRating->model->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/studio_profile.webp') }}" alt="{{ $mediaRating->model->name }} Logo" title="{{ $mediaRating->model->name }}">
 
                     <div class="absolute top-0 left-0 h-full w-full border-2 border-solid border-black/20 rounded-full"></div>

@@ -124,7 +124,10 @@
                             @if ($this->video)
                                 {!! $this->video->getEmbed(['currentTime' => $this->timestamp]) !!}
                             @else
-                                <x-picture class="h-full">
+                                <x-picture
+                                    class="h-full"
+                                    style="background-color: {{ $episode->getFirstMedia(\App\Enums\MediaCollection::Banner)?->custom_properties['background_color'] ?? '#000000' }};"
+                                >
                                     <img class="w-full h-full aspect-video object-cover lazyload" data-sizes="auto" data-src="{{ $episode->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $this->season->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $episode->title }} Banner" title="{{ $episode->title }}">
                                 </x-picture>
                             @endif
@@ -159,7 +162,10 @@
                 <section class="flex flex-row flex-wrap justify-between gap-1 pl-4 pr-4 sm:flex-nowrap lg:pl-0 lg:pr-0">
                     <div class="flex justify-between gap-1 w-full">
                         <div class="flex flex-nowrap">
-                            <picture class="relative min-w-[100px] max-w-[100px] min-h-[150px] max-h-[150px] mr-2 rounded-lg overflow-hidden">
+                            <picture
+                                class="relative min-w-[100px] max-w-[100px] min-h-[150px] max-h-[150px] mr-2 rounded-lg overflow-hidden"
+                                style="background-color: {{ $this->season->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? '#000000' }};"
+                            >
                                 <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $this->season->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $this->season->title }} Poster" title="{{ $this->season->title }}">
                                 <div class="absolute top-0 left-0 h-full w-full ring-1 ring-gray-100 ring-opacity-25 ring-inset rounded-lg"></div>
                             </picture>

@@ -6,7 +6,10 @@
 
 <div {{ $attributes->merge(['class' => 'relative flex flex-col flex-grow w-64 md:w-80 ' . $class]) }}>
     <div class="flex flex-nowrap">
-        <picture class="relative w-full aspect-video rounded-lg overflow-hidden">
+        <picture
+            class="relative w-full aspect-video rounded-lg overflow-hidden"
+            style="background-color: {{ $studio->getFirstMedia(\App\Enums\MediaCollection::Banner)?->custom_properties['background_color'] ?? '#000000' }};"
+        >
             <img class="w-full h-full object-cover lazyload"
                  data-sizes="auto"
                  data-src="{{ $studio->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $studio->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/studio_profile.webp') }}"

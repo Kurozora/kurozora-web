@@ -4,7 +4,10 @@
     <x-hr class="mb-4" />
 
     <div class="flex flex-nowrap">
-        <picture class="relative w-64 h-40 mt-2 rounded-lg overflow-hidden sm:w-[35rem] sm:h-[22rem] md:w-[42rem] md:h-[26rem]">
+        <picture
+            class="relative w-64 h-40 mt-2 rounded-lg overflow-hidden sm:w-[35rem] sm:h-[22rem] md:w-[42rem] md:h-[26rem]"
+            style="background-color: {{ $anime->getFirstMedia(\App\Enums\MediaCollection::Banner)?->custom_properties['background_color'] ?? '#000000' }};"
+        >
             <img
                 class="w-full h-full object-cover lazyload"
                 data-sizes="auto"

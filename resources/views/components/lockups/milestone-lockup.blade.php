@@ -80,7 +80,10 @@
                         <div class="flex justify-center gap-4 h-40" style="width: 147%;">
                             @foreach($recap->recapItems->concat($recap->recapItems)->take(4)->pad(4, $recap->recapItems->last()) as $key => $recapItem)
                                 <a class="flex w-1/3 mt-auto" href="{{ route('anime.details', $recapItem->model) }}" wire:navigate style="min-height: 108px; aspect-ratio: 3/4.23;">
-                                    <picture class="relative w-full rounded-lg overflow-hidden">
+                                    <picture
+                                        class="relative w-full rounded-lg overflow-hidden"
+                                        style="background-color: {{ $recapItem->model->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? '#000000' }};"
+                                    >
                                         <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $recapItem->model->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $recapItem->model->title }} Poster" title="{{ $recapItem->model->title }}">
 
                                         <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-lg"></div>
@@ -93,7 +96,10 @@
                         <div class="flex justify-center gap-4 h-40" style="max-width: 260%; width: 100vw;">
                             @foreach($recap->recapItems->reverse()->concat($recap->recapItems->reverse())->take(3)->pad(3, $recap->recapItems->last()) as $key => $recapItem)
                                 <a class="flex w-1/3 mt-auto aspect-video" href="{{ route('anime.details', $recapItem->model) }}" wire:navigate style="min-height: 108px;">
-                                    <picture class="relative w-full rounded-lg overflow-hidden">
+                                    <picture
+                                        class="relative w-full rounded-lg overflow-hidden"
+                                        style="background-color: {{ $recapItem->model->getFirstMedia(\App\Enums\MediaCollection::Banner)?->custom_properties['background_color'] ?? '#000000' }};"
+                                    >
                                         <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $recapItem->model->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $recapItem->model->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $recapItem->model->title }} Banner" title="{{ $recapItem->model->title }}">
                                         <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-lg"></div>
                                     </picture>
@@ -108,7 +114,10 @@
                 <div class="flex justify-center gap-4 h-40" style="width: 150%;">
                     @foreach($recap->recapItems->concat($recap->recapItems)->take(3)->pad(3, $recap->recapItems->last()) as $key => $recapItem)
                         <a class="flex w-1/3 mt-auto aspect-square" href="{{ route('games.details', $recapItem->model) }}" wire:navigate style="min-height: 108px;">
-                            <picture class="relative aspect-square rounded-3xl overflow-hidden">
+                            <picture
+                                class="relative aspect-square rounded-3xl overflow-hidden"
+                                style="background-color: {{ $recapItem->model->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? '#000000' }};"
+                            >
                                 <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $recapItem->model->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $recapItem->model->title }} Poster" title="{{ $recapItem->model->title }}">
 
                                 <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-3xl"></div>
@@ -138,7 +147,10 @@
                     <div class="flex justify-center gap-4 h-40" style="width: 147%;">
                         @foreach($recap->recapItems->concat($recap->recapItems)->take(4)->pad(4, $recap->recapItems->last()) as $key => $recapItem)
                             <a class="flex w-1/3 mt-auto" href="{{ route('anime.details', $recapItem->model) }}" wire:navigate style="min-height: 108px; aspect-ratio: 3/4.23;">
-                                <picture class="relative w-full rounded-lg overflow-hidden">
+                                <picture
+                                    class="relative w-full rounded-lg overflow-hidden"
+                                    style="background-color: {{ $recapItem->model->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? '#000000' }};"
+                                >
                                     <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $recapItem->model->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $recapItem->model->title }} Poster" title="{{ $recapItem->model->title }}">
 
                                     <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-lg"></div>

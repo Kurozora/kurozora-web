@@ -7,7 +7,10 @@
 <div {{ $attributes->merge(['class' => 'relative flex-grow w-64 md:w-80 ' . $class]) }}>
     @if(!empty($anime))
         <div class="flex flex-nowrap gap-2">
-            <picture class="relative shrink-0 w-28 h-40 rounded-lg overflow-hidden">
+            <picture
+                class="relative shrink-0 w-28 h-40 rounded-lg overflow-hidden"
+                style="background-color: {{ $anime->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? '#000000' }};"
+            >
                 <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $anime->title }} Poster" title="{{ $anime->title }}">
 
                 <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-lg"></div>
@@ -55,7 +58,10 @@
         </div>
     @elseif(!empty($game))
         <div class="flex flex-nowrap gap-2">
-            <picture class="relative shrink-0 w-28 h-28 rounded-3xl overflow-hidden">
+            <picture
+                class="relative shrink-0 w-28 h-28 rounded-3xl overflow-hidden"
+                style="background-color: {{ $game->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? '#000000' }};"
+            >
                 <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $game->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $game->title }} Poster" title="{{ $game->title }}">
 
                 <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-3xl"></div>
@@ -103,9 +109,12 @@
         </div>
     @elseif(!empty($manga))
         <div class="flex flex-nowrap gap-2">
-            <svg class="relative shrink-0 w-28 h-40 overflow-hidden">
+            <svg
+                class="relative shrink-0 w-28 h-40 overflow-hidden"
+                style="background-color: {{ $manga->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? '#000000' }};"
+            >
                 <foreignObject width="112" height="160" mask="url(#svg-mask-book-cover)">
-                    <img class="h-full w-full object-cover lazyload" data-sizes="auto" data-src="{{ $manga->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $manga->title }} Poster" title="{{ $manga->title }}" />
+                    <img class="h-full w-full object-cover lazyload" data-sizes="auto" data-src="{{ $manga->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $manga->title }} Poster" title="{{ $manga->title }}">
                 </foreignObject>
 
                 <g opacity="0.40">

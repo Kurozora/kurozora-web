@@ -9,7 +9,10 @@
 <div {{ $attributes->merge(['class' => 'relative flex-grow w-64 md:w-80 ' . $class]) }}>
     <div class="flex flex-nowrap justify-between">
         <div class="flex items-center">
-            <picture class="relative shrink-0 w-16 aspect-square rounded-full overflow-hidden">
+            <picture
+                class="relative shrink-0 w-16 aspect-square rounded-full overflow-hidden"
+                style="background-color: {{ $user->getFirstMedia(\App\Enums\MediaCollection::Profile)?->custom_properties['background_color'] ?? '#000000' }};"
+            >
                 <img
                     class="w-full h-full object-cover lazyload"
                     data-sizes="auto"

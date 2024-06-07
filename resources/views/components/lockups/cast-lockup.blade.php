@@ -9,7 +9,10 @@
 <div {{ $attributes->merge(['class' => 'relative pb-2 ' . $containerWidth]) }}>
     <div class="flex flex-nowrap">
         <section class="relative flex">
-            <picture class="relative shrink-0 w-28 h-40 mr-2 rounded-lg overflow-hidden">
+            <picture
+                class="relative shrink-0 w-28 h-40 mr-2 rounded-lg overflow-hidden"
+                style="background-color: {{ $cast->person?->getFirstMedia(\App\Enums\MediaCollection::Profile)?->custom_properties['background_color'] ?? '#000000' }};"
+            >
                 <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $cast->person?->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/person_poster.webp') }}" alt="{{ $cast->person?->full_name ?? __('Unknown') }} Profile Image" title="{{ $cast->person?->full_name ?? __('Unknown') }}">
 
                 <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-lg"></div>
@@ -37,7 +40,10 @@
         </section>
 
         <section class="relative flex">
-            <picture class="relative shrink-0 w-28 h-40 rounded-lg overflow-hidden">
+            <picture
+                class="relative shrink-0 w-28 h-40 rounded-lg overflow-hidden"
+                style="background-color: {{ $cast->character->getFirstMedia(\App\Enums\MediaCollection::Profile)?->custom_properties['background_color'] ?? '#000000' }};"
+            >
                 <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $cast->character->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/person_poster.webp') }}" alt="{{ $cast->character->name }} Profile Image" title="{{ $cast->character->name }}">
 
                 <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-lg"></div>

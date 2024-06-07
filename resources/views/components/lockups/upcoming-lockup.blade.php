@@ -3,7 +3,10 @@
 @if(!empty($anime))
     <div class="relative pb-2">
         <div class="flex flex-nowrap">
-            <picture class="relative w-64 h-80 rounded-lg overflow-hidden sm:w-80 sm:h-[25rem] md:w-[22rem] md:h-[27rem]">
+            <picture
+                class="relative w-64 h-80 rounded-lg overflow-hidden sm:w-80 sm:h-[25rem] md:w-[22rem] md:h-[27rem]"
+                style="background-color: {{ $anime->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? '#000000' }};"
+            >
                 <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $anime->title }} Banner" title="{{ $anime->title }}" />
 
                 <div
@@ -51,7 +54,10 @@
 @elseif(!empty($game))
     <div class="relative pb-2">
         <div class="flex flex-nowrap">
-            <picture class="relative w-64 h-80 rounded-lg overflow-hidden sm:w-80 sm:h-[25rem] md:w-[22rem] md:h-[27rem]">
+            <picture
+                class="relative w-64 h-80 rounded-lg overflow-hidden sm:w-80 sm:h-[25rem] md:w-[22rem] md:h-[27rem]"
+                style="background-color: {{ $game->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? '#000000' }};"
+            >
                 <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $game->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $game->title }} Banner" title="{{ $game->title }}" />
 
                 <div
@@ -99,7 +105,10 @@
 @elseif(!empty($manga))
     <div class="relative pb-2">
         <div class="flex flex-nowrap">
-            <picture class="relative w-64 h-80 rounded-lg overflow-hidden sm:w-80 sm:h-[25rem] md:w-[22rem] md:h-[27rem]">
+            <picture
+                class="relative w-64 h-80 rounded-lg overflow-hidden sm:w-80 sm:h-[25rem] md:w-[22rem] md:h-[27rem]"
+                style="background-color: {{ $manga->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? '#000000' }};"
+            >
                 <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $manga->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $manga->title }} Banner" title="{{ $manga->title }}" />
 
                 <div

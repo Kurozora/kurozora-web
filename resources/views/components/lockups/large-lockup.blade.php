@@ -2,7 +2,10 @@
 
 <div class="relative w-64 pb-2 snap-normal snap-center md:w-80">
     <div class="flex flex-col">
-        <picture class="relative aspect-video rounded-lg overflow-hidden">
+        <picture
+            class="relative aspect-video rounded-lg overflow-hidden"
+            style="background-color: {{ $anime->getFirstMedia(\App\Enums\MediaCollection::Banner)?->custom_properties['background_color'] ?? '#000000' }};"
+        >
         @if(empty($anime->video_url))
             <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $anime->title }} Banner" title="{{ $anime->title }}">
 

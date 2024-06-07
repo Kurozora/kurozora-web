@@ -26,7 +26,7 @@
                 <div class="flex flex-col flex-wrap text-center items-center">
                     <picture
                         class="relative aspect-square rounded-full overflow-hidden"
-                        style="height: 128px;"
+                        style="height: 128px; background-color: {{ $character->getFirstMedia(\App\Enums\MediaCollection::Profile)?->custom_properties['background_color'] ?? '#000000' }};"
                     >
                         <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $character->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/person_poster.webp') }}" alt="{{ $character->name }} Profile Image" title="{{ $character->name }}">
 

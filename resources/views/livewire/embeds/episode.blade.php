@@ -93,7 +93,10 @@
                 @if (!empty($this->video))
                     {!! $this->video->getEmbed(['currentTime' => $t]) !!}
                 @else
-                    <x-picture class="h-full">
+                    <x-picture
+                        class="h-full"
+                        style="background-color: {{ $episode->getFirstMedia(\App\Enums\MediaCollection::Banner)?->custom_properties['background_color'] ?? '#000000' }};"
+                    >
                         <img class="w-full h-full aspect-video object-cover lazyload" data-sizes="auto" data-src="{{ $episode->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $episode->title }} Banner" title="{{ $episode->title }}">
                     </x-picture>
                 @endif
