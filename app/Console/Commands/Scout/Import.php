@@ -13,7 +13,6 @@ use App\Models\Song;
 use App\Models\Studio;
 use App\Models\User;
 use App\Models\UserLibrary;
-use Artisan;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Events\Dispatcher;
 use Laravel\Scout\Console\ImportCommand;
@@ -51,17 +50,17 @@ class Import extends ImportCommand
             return Command::SUCCESS;
         }
 
-        Artisan::call('scout:import', ['model' => User::class], $this->output);
-        Artisan::call('scout:import', ['model' => UserLibrary::class], $this->output);
-        Artisan::call('scout:import', ['model' => Anime::class], $this->output);
-        Artisan::call('scout:import', ['model' => AppTheme::class], $this->output);
-        Artisan::call('scout:import', ['model' => Manga::class], $this->output);
-        Artisan::call('scout:import', ['model' => Game::class], $this->output);
-        Artisan::call('scout:import', ['model' => Episode::class], $this->output);
-        Artisan::call('scout:import', ['model' => Song::class], $this->output);
-        Artisan::call('scout:import', ['model' => Studio::class], $this->output);
-        Artisan::call('scout:import', ['model' => Character::class], $this->output);
-        Artisan::call('scout:import', ['model' => Person::class], $this->output);
+        $this->call('scout:import', ['model' => User::class]);
+        $this->call('scout:import', ['model' => UserLibrary::class]);
+        $this->call('scout:import', ['model' => Anime::class]);
+        $this->call('scout:import', ['model' => AppTheme::class]);
+        $this->call('scout:import', ['model' => Manga::class]);
+        $this->call('scout:import', ['model' => Game::class]);
+        $this->call('scout:import', ['model' => Song::class]);
+        $this->call('scout:import', ['model' => Studio::class]);
+        $this->call('scout:import', ['model' => Character::class]);
+        $this->call('scout:import', ['model' => Person::class]);
+        $this->call('scout:import', ['model' => Episode::class]);
 
         return Command::SUCCESS;
     }

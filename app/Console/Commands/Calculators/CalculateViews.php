@@ -9,7 +9,6 @@ use App\Models\Game;
 use App\Models\Manga;
 use App\Models\Song;
 use App\Models\View;
-use Artisan;
 use DB;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Builder;
@@ -51,7 +50,7 @@ class CalculateViews extends Command
                 ->select(['viewable_type'])
                 ->pluck('viewable_type')
                 ->each(function ($modelType) {
-                    Artisan::call('calculate:views', ['model' => $modelType]);
+                    $this->call('calculate:views', ['model' => $modelType]);
                 });
 
             return Command::SUCCESS;

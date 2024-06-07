@@ -3,7 +3,6 @@
 namespace App\Console\Commands\Fixers;
 
 use App\Models\Anime;
-use Artisan;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -40,7 +39,7 @@ class AnimeBanner extends Command
 
                 /** @var Anime $anime */
                 foreach ($animes as $anime) {
-                    Artisan::call('scrape:tvdb_banners', ['tvdbID' => $anime->tvdb_id]);
+                    $this->call('scrape:tvdb_banners', ['tvdbID' => $anime->tvdb_id]);
                 }
             });
 

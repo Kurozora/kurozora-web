@@ -4,7 +4,6 @@ namespace App\Console\Commands\Fixers;
 
 use App\Models\Anime;
 use App\Models\MediaStat;
-use Artisan;
 use DB;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
@@ -53,7 +52,7 @@ class AnimeScores extends Command
             ])
             ->select([Anime::TABLE_NAME . '.id as AS', 'mal_id'])
             ->chunkById(5, function (Collection $animes) use (&$skip) {
-                Artisan::call('scrape:mal_anime', ['malID' => $animes->pluck('mal_id')->join(',')]);
+                $this->call('scrape:mal_anime', ['malID' => $animes->pluck('mal_id')->join(',')]);
             }, Anime::TABLE_NAME . '.id', 'AS');
 
         DB::enableQueryLog();

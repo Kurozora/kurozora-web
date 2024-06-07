@@ -3,7 +3,6 @@
 namespace App\Console\Commands\Fixers;
 
 use App\Models\Anime;
-use Artisan;
 use Illuminate\Console\Command;
 
 class AnimeDetails extends Command
@@ -37,7 +36,7 @@ class AnimeDetails extends Command
 
         $this->info('Fixing ' . $animes->count() . ' anime');
 
-        Artisan::call('scrape:mal_anime', ['malID' => $animes->implode(',')]);
+        $this->call('scrape:mal_anime', ['malID' => $animes->implode(',')]);
 
         return Command::SUCCESS;
     }

@@ -3,7 +3,6 @@
 namespace App\Console\Commands\Fixers;
 
 use App\Models\Studio;
-use Artisan;
 use Illuminate\Console\Command;
 
 class StudioBanner extends Command
@@ -36,7 +35,7 @@ class StudioBanner extends Command
             ->pluck('id')
             ->implode(',');
 
-        Artisan::call('generate:studio_banner', ['studioID' => $studios]);
+        $this->call('generate:studio_banner', ['studioID' => $studios]);
 
         return Command::SUCCESS;
     }

@@ -3,7 +3,6 @@
 namespace App\Console\Commands\Fixers;
 
 use App\Models\Manga;
-use Artisan;
 use Illuminate\Console\Command;
 
 class MangaDetails extends Command
@@ -37,7 +36,7 @@ class MangaDetails extends Command
 
         $this->info('Fixing ' . $mangas->count() . ' manga');
 
-        Artisan::call('scrape:mal_manga', ['malID' => $mangas->implode(',')]);
+        $this->call('scrape:mal_manga', ['malID' => $mangas->implode(',')]);
 
         return Command::SUCCESS;
     }

@@ -3,7 +3,6 @@
 namespace App\Console\Commands\Importers;
 
 use App\Models\Anime;
-use Artisan;
 use Http;
 use Illuminate\Console\Command;
 use JsonMachine\Exception\InvalidArgumentException;
@@ -79,7 +78,7 @@ class ImportAnimeListID extends Command
                     $this->output->info('Missing MAL ID: ' . $sources['mal_id'] ?? 'N/A');
                     $this->output->info('Missing anime: ' . print_r($sources, true));
 
-                    Artisan::call('scrape:mal_anime', ['malID' => $sources['mal_id']]);
+                    $this->call('scrape:mal_anime', ['malID' => $sources['mal_id']]);
 
                     $anime = Anime::withoutGlobalScopes()
                         ->where('mal_id', '=', $sources['mal_id'])

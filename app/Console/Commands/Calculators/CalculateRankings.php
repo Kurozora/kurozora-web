@@ -3,7 +3,6 @@
 namespace App\Console\Commands\Calculators;
 
 use App\Models\MediaStat;
-use Artisan;
 use DB;
 use Illuminate\Console\Command;
 
@@ -60,7 +59,7 @@ class CalculateRankings extends Command
                 ->select(['model_type'])
                 ->pluck('model_type')
                 ->each(function ($modelType) {
-                    Artisan::call('calculate:rankings', ['model' => $modelType]);
+                    $this->call('calculate:rankings', ['model' => $modelType]);
                 });
 
             return Command::SUCCESS;
