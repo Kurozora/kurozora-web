@@ -10,8 +10,10 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
+use Livewire\Attributes\Isolate;
 use Livewire\Component;
 
+#[Isolate]
 class FavoritesSection extends Component
 {
     /**

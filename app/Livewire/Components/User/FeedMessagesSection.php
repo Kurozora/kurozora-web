@@ -10,9 +10,11 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
+use Livewire\Attributes\Isolate;
 use Livewire\Component;
 use Livewire\WithPagination;
 
+#[Isolate]
 class FeedMessagesSection extends Component
 {
     use WithPagination;
