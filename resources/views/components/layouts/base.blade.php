@@ -114,6 +114,14 @@
 
         <livewire:navigation-dropdown />
 
+        @if (!auth()->user()->hasVerifiedEmail())
+            <x-alert
+                :message="__('You have not confirmed your email address yet. Please check your email inbox or spam folder.')"
+                :is-ephemeral="false"
+                type="warning"
+            ></x-alert>
+        @endif
+
         @if (Session::has('success'))
             <x-alert :message="Session::get('success')" type="success"></x-alert>
         @endif
