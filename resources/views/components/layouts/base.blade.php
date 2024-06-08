@@ -118,6 +118,10 @@
             <x-alert :message="Session::get('success')" type="success"></x-alert>
         @endif
 
+        @if (Session::has('error'))
+            <x-alert :message="Session::get('error')" type="error"></x-alert>
+        @endif
+
         {{ $slot }}
 
         <x-footer />
