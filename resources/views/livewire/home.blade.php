@@ -16,13 +16,6 @@
     </x-slot:appArgument>
 
     <div class="max-w-7xl mx-auto pl-4 pr-4 pb-6 sm:px-6">
-        <section class="relative mt-4 mb-4 pt-2 pr-2 pb-2 pl-2 bg-orange-500 text-white font-semibold rounded-lg">
-            <a class="after:absolute after:inset-0" href="{{ config('services.open_collective.url') }}" target="_blank">
-                {{ __('Enjoying Kurozora? Please consider supporting us with keeping it online.') }}
-            </a>
-            <a href="#" target="_blank"></a>
-        </section>
-
 {{--        <section>--}}
 {{--            <a href="{{ route('recap.index') }}"  wire:navigate>--}}
 {{--                <x-picture>--}}
