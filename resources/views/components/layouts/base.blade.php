@@ -115,7 +115,7 @@
         <livewire:navigation-dropdown />
 
         @if (Session::has('success'))
-            <x-alert :message="Session::get('success')"></x-alert>
+            <x-alert :message="Session::get('success')" type="success"></x-alert>
         @endif
 
         {{ $slot }}

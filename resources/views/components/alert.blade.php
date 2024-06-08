@@ -1,10 +1,24 @@
-@props(['message'])
+@props(['message', 'isEphemeral' => true, 'type' => 'success'])
+
+@php
+    $colorCSS = match($type) {
+        'warning' => 'bg-yellow-500',
+        'error' => 'bg-red-500',
+        default => 'bg-green-500'
+    };
+    $svgName = match($type) {
+        'warning' => 'exclamationmark_circle',
+        'error' => 'xmark_circle',
+        default => 'checkmark_circle'
+    };
+@endphp
 
 <div
     x-data="{
+        isEphemeral: @json($isEphemeral),
         openAlertBox: true
     }"
-    x-init="setTimeout(function () { openAlertBox = false }, 2500)"
+    x-init="setTimeout(function () { openAlertBox = !isEphemeral }, 2500)"
 >
     <div
         class="fixed top-0 right-0 py-16 pl-4 pr-4 z-[999]"
@@ -16,14 +30,16 @@
         x-transition:leave-end="opacity-0"
         x-show="openAlertBox"
     >
-        <div class="flex items-center bg-green-500 text-white text-sm font-bold pl-4 pr-4 py-3 rounded shadow-md" role="alert">
-            <svg fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5 mr-2 text-white"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        <div class="flex items-center gap-2 {{ $colorCSS }} text-white text-sm pl-4 pr-4 pt-3 pb-3 rounded shadow-md" role="alert">
+            @svg($svgName, 'fill-current', ['width' => 20])
+
             <span class="flex">{{ $message }}</span>
-            <button type="button" class="flex" @click="openAlertBox = false">
-                <svg fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" viewBox="0 0 24 24" stroke="currentColor" class="w-4 h-4 ml-4">
-                    <path d="M6 18L18 6M6 6l12 12"></path>
-                </svg>
-            </button>
+
+            @if ($isEphemeral)
+                <button type="button" class="flex" @click="openAlertBox = false">
+                    @svg('xmark', 'fill-current', ['width' => 16])
+                </button>
+            @endif
         </div>
     </div>
 </div>
