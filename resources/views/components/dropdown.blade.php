@@ -1,19 +1,26 @@
-@props(['align' => 'right', 'width' => '48', 'maxHeight' => null, 'contentClasses' => 'bg-white'])
+@props(['id', 'align' => 'right', 'width' => '48', 'maxHeight' => null, 'contentClasses' => 'bg-white'])
 
 @php
+    $id = $id ?? md5($attributes->wire('model'));
     $alignmentClasses = match ($align) {
         'left' => 'origin-top-left left-0',
         'top' => 'origin-top',
         default => 'origin-top-right right-0'
     };
-
     $width = match ($width) {
         '48'=>'w-48',
         '64'=>'w-64'
     };
 @endphp
 
-<div class="relative" x-data="{ open: false }" @click.away="open = false" @close.stop="open = false">
+<div
+    id="{{ $id }}"
+    class="relative"
+    x-data="{ open: false }"
+    @click.away="open = false"
+    @close.stop="open = false"
+    wire:key="dropdown-{{ $id }}"
+>
     <div @click="open = ! open">
         {{ $trigger }}
     </div>

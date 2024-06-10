@@ -248,7 +248,7 @@
                             @svg('magnifyingglass', 'fill-current', ['width' => '18'])
                         </button>
 
-                        <x-dropdown align="right" width="64">
+                        <x-dropdown id="nav-notification" align="right" width="64">
                             <x-slot:trigger>
                                 <button
                                     class="inline-flex h-8 w-8 items-center justify-center text-gray-500 cursor-pointer transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none focus:text-gray-700"
@@ -271,7 +271,7 @@
                         </x-dropdown>
 
                         {{-- Settings Dropdown --}}
-                        <x-dropdown align="right" width="48" content-classes="hidden bg-white md:block">
+                        <x-dropdown id="more-settings" align="right" width="48" content-classes="hidden bg-white md:block">
                             <x-slot:trigger>
                                 <button
                                     class="hidden md:flex text-sm border-2 border-transparent rounded-full transition duration-150 ease-in-out focus:outline-none focus:border-gray-300"
