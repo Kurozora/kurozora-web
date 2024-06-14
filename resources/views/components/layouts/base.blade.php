@@ -113,7 +113,7 @@
 
         <livewire:navigation-dropdown />
 
-        @if (!auth()->user()->hasVerifiedEmail())
+        @if (!(auth()->user()?->hasVerifiedEmail() ?? true))
             <x-alert
                 :message="__('You have not confirmed your email address yet. Please check your email inbox or spam folder.')"
                 :is-ephemeral="false"
