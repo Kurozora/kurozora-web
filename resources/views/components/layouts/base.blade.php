@@ -36,9 +36,8 @@
         <link href="https://fonts.bunny.net/css?family=inter:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet" />
 
         <!-- Styles -->
-        <link rel="preload" href="{{ url(mix('css/app.css')) }}" as="style">
-        <link rel="stylesheet" href="{{ url(mix('css/app.css')) }}" />
-        @livewireStyles
+        <link rel="preload" href="{{ url(mix('css/app.css')) }}" as="style" data-navigate-track>
+        <link rel="stylesheet" href="{{ url(mix('css/app.css')) }}" data-navigate-track>
         {{ $styles ?? '' }}
 
         <!-- Search -->
@@ -48,14 +47,14 @@
         <link rel="manifest" href="{{ url('manifest.json') }}" />
 
         <!-- Scripts -->
-        <script src="{{ url(mix('js/manifest.js')) }}" defer></script>
-        <script src="{{ url(mix('js/vendor.js')) }}" defer></script>
-        <script src="{{ url(mix('js/app.js')) }}" defer></script>
-        <script src="{{ url(mix('js/db.js')) }}"></script>
+        <script src="{{ url(mix('js/manifest.js')) }}" defer data-navigate-track></script>
+        <script src="{{ url(mix('js/vendor.js')) }}" defer data-navigate-track></script>
+        <script src="{{ url(mix('js/app.js')) }}" defer data-navigate-track></script>
+        <script src="{{ url(mix('js/db.js')) }}"  data-navigate-track></script>
         @if (app()->isLocal())
-            <script src="{{ url(mix('js/debug.js')) }}" defer></script>
+            <script src="{{ url(mix('js/debug.js')) }}" defer data-navigate-track></script>
         @endif
-        <script src="{{ url(mix(('js/worker.js'))) }}" defer></script>
+        <script src="{{ url(mix(('js/worker.js'))) }}" defer data-navigate-track></script>
 
         <!-- CSRF Token -->
         <meta name="csrf-token" content="{{ csrf_token() }}" />
@@ -134,7 +133,6 @@
 
         <x-footer />
 
-        @livewireScripts
         <script src="{{ url(mix('js/listen.js')) }}"></script>
         <script src="https://js-cdn.music.apple.com/musickit/v1/musickit.js"></script>
         {{ $scripts ?? '' }}
