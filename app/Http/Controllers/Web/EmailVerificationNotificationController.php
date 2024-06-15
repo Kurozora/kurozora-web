@@ -2,25 +2,33 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Helpers\JSONResult;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
-class EmailVerificationNotificationController
+class EmailVerificationNotificationController extends Controller
 {
     /**
      * Send a new email verification notification.
      *
      * @param Request $request
-     * @return RedirectResponse
+     *
+     * @return JsonResponse|RedirectResponse
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request)
     {
         if ($request->user()->hasVerifiedEmail()) {
-            return redirect()->intended();
+            return $request->wantsJson()
+                ? JSONResult::success()
+                : redirect()->intended();
         }
 
         $request->user()->sendEmailVerificationNotification();
 
-        return back()->with('status', 'verification-link-sent');
+        return $request->wantsJson()
+            ? JSONResult::success()
+            : back()->with('status', 'verification-link-sent');
     }
 }
