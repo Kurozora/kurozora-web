@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot:title>
-        {{ __('Two Factor Authentication') }}
+        {{ __('Two-Factor Authentication') }}
     </x-slot:title>
 
     <x-slot:header>

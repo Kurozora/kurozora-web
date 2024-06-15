@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 class TwoFactorSignInRequest extends FormRequest
 {
     /**
-     * The user attempting the two factor challenge.
+     * The user attempting the two-factor challenge.
      *
      * @var User|null
      */
@@ -59,7 +59,7 @@ class TwoFactorSignInRequest extends FormRequest
     }
 
     /**
-     * Determine if the request has a valid two factor code.
+     * Determine if the request has a valid two-factor code.
      *
      * @return bool
      * @throws IncompatibleWithGoogleAuthenticatorException
@@ -114,7 +114,7 @@ class TwoFactorSignInRequest extends FormRequest
     }
 
     /**
-     * Get the user that is attempting the two factor challenge.
+     * Get the user that is attempting the two-factor challenge.
      *
      * @return User|null
      */
@@ -133,14 +133,14 @@ class TwoFactorSignInRequest extends FormRequest
     }
 
     /**
-     * Create an HTTP response for the failed two factor authentication.
+     * Create an HTTP response for the failed two-factor authentication.
      *
      * @return Response
      */
     public function failedTwoFactorSignInResponse(): Response
     {
         return redirect()->route('two-factor.sign-in')
-            ->withErrors(['code' => __('The provided two factor authentication code was invalid.')]);
+            ->withErrors(['code' => __('The provided two-factor authentication code was invalid.')]);
     }
 
     /**

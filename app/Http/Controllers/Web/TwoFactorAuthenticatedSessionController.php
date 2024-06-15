@@ -21,7 +21,7 @@ use Psr\SimpleCache\InvalidArgumentException;
 class TwoFactorAuthenticatedSessionController extends Controller
 {
     /**
-     * Show the two factor authentication challenge view.
+     * Show the two-factor authentication challenge view.
      *
      * @param TwoFactorSignInRequest $request
      * @return Application|Factory|View
@@ -36,7 +36,7 @@ class TwoFactorAuthenticatedSessionController extends Controller
     }
 
     /**
-     * Attempt to authenticate a new session using the two factor authentication code.
+     * Attempt to authenticate a new session using the two-factor authentication code.
      *
      * @param TwoFactorSignInRequest $request
      * @return RedirectResponse
@@ -54,7 +54,7 @@ class TwoFactorAuthenticatedSessionController extends Controller
 
             event(new RecoveryCodeReplaced($user, $code));
         } else if (!$request->hasValidCode()) {
-            return redirect()->route('two-factor.sign-in')->withErrors(['code' => __('The provided two factor authentication code was invalid.')]);
+            return redirect()->route('two-factor.sign-in')->withErrors(['code' => __('The provided two-factor authentication code was invalid.')]);
         }
 
         auth()->login($user, $request->remember());

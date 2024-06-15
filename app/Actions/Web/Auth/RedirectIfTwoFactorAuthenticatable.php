@@ -104,7 +104,7 @@ class RedirectIfTwoFactorAuthenticatable
     }
 
     /**
-     * Get the two factor authentication enabled response.
+     * Get the two-factor authentication enabled response.
      *
      * @param Request $request
      * @param User|null $user

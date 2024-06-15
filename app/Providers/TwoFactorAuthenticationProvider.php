@@ -13,7 +13,7 @@ use Psr\SimpleCache\InvalidArgumentException;
 class TwoFactorAuthenticationProvider implements TwoFactorAuthenticationProviderContract
 {
     /**
-     * The underlying library providing two factor authentication helper services.
+     * The underlying library providing two-factor authentication helper services.
      *
      * @var Google2FA
      */
@@ -27,7 +27,7 @@ class TwoFactorAuthenticationProvider implements TwoFactorAuthenticationProvider
     protected ?Repository $cache;
 
     /**
-     * Create a new two factor authentication provider instance.
+     * Create a new two-factor authentication provider instance.
      *
      * @param Google2FA $engine
      * @param Repository|null  $cache
@@ -53,7 +53,7 @@ class TwoFactorAuthenticationProvider implements TwoFactorAuthenticationProvider
     }
 
     /**
-     * Get the two factor authentication QR code URL.
+     * Get the two-factor authentication QR code URL.
      *
      * @param string $companyName
      * @param string $companyEmail

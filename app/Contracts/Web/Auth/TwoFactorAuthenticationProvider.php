@@ -12,7 +12,7 @@ interface TwoFactorAuthenticationProvider
     public function generateSecretKey(): string;
 
     /**
-     * Get the two factor authentication QR code URL.
+     * Get the two-factor authentication QR code URL.
      *
      * @param string $companyName
      * @param string $companyEmail

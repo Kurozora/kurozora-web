@@ -11,7 +11,7 @@ use Illuminate\Support\Collection;
 class EnableTwoFactorAuthentication
 {
     /**
-     * The two factor authentication provider.
+     * The two-factor authentication provider.
      *
      * @var TwoFactorAuthenticationProvider
      */
@@ -29,7 +29,7 @@ class EnableTwoFactorAuthentication
     }
 
     /**
-     * Enable two factor authentication for the user.
+     * Enable two-factor authentication for the user.
      *
      * @param User|null $user
      * @return void

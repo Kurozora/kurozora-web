@@ -9,7 +9,7 @@ use Illuminate\Routing\Controller;
 class TwoFactorSecretKeyController extends Controller
 {
     /**
-     * Get the current user's two factor authentication setup / secret key.
+     * Get the current user's two-factor authentication setup / secret key.
      *
      * @param Request $request
      * @return JsonResponse
@@ -17,7 +17,7 @@ class TwoFactorSecretKeyController extends Controller
     public function show(Request $request): JsonResponse
     {
         if (is_null($request->user()->two_factor_secret)) {
-            abort(404, __('Two factor authentication has not been enabled.'));
+            abort(404, __('Two-factor authentication has not been enabled.'));
         }
 
         return response()->json([

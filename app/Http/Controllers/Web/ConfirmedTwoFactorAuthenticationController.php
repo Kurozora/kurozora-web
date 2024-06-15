@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 class ConfirmedTwoFactorAuthenticationController extends Controller
 {
     /**
-     * Enable two factor authentication for the user.
+     * Enable two-factor authentication for the user.
      *
      * @param Request $request
      * @param ConfirmTwoFactorAuthentication $confirm

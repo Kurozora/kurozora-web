@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 class TwoFactorAuthenticationController extends Controller
 {
     /**
-     * Enable two factor authentication for the user.
+     * Enable two-factor authentication for the user.
      *
      * @param Request $request
      * @param EnableTwoFactorAuthentication $enable
@@ -25,7 +25,7 @@ class TwoFactorAuthenticationController extends Controller
     }
 
     /**
-     * Disable two factor authentication for the user.
+     * Disable two-factor authentication for the user.
      *
      * @param Request $request
      * @param DisableTwoFactorAuthentication $disable

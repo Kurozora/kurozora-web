@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 class RecoveryCodeController extends Controller
 {
     /**
-     * Get the two factor authentication recovery codes for authenticated user.
+     * Get the two-factor authentication recovery codes for authenticated user.
      *
      * @param Request $request
      * @return JsonResponse|array
@@ -29,7 +29,7 @@ class RecoveryCodeController extends Controller
     }
 
     /**
-     * Generate a fresh set of two factor authentication recovery codes.
+     * Generate a fresh set of two-factor authentication recovery codes.
      *
      * @param Request $request
      * @param GenerateNewRecoveryCodes $generate

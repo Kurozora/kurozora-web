@@ -41,7 +41,7 @@ trait TwoFactorAuthenticatable
     }
 
     /**
-     * Get the QR code SVG of the user's two factor authentication QR code URL.
+     * Get the QR code SVG of the user's two-factor authentication QR code URL.
      *
      * @return string
      */
@@ -58,7 +58,7 @@ trait TwoFactorAuthenticatable
     }
 
     /**
-     * Get the two factor authentication QR code URL.
+     * Get the two-factor authentication QR code URL.
      *
      * @return string
      */

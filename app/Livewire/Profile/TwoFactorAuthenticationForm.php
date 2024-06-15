@@ -18,28 +18,28 @@ class TwoFactorAuthenticationForm extends Component
     use ConfirmsPasswords;
 
     /**
-     * Indicates if two factor authentication QR code is being displayed.
+     * Indicates if two-factor authentication QR code is being displayed.
      *
      * @var bool
      */
     public bool $showingQrCode = false;
 
     /**
-     * Indicates if the two factor authentication confirmation input and button are being displayed.
+     * Indicates if the two-factor authentication confirmation input and button are being displayed.
      *
      * @var bool
      */
     public bool $showingConfirmation = false;
 
     /**
-     * Indicates if two factor authentication recovery codes are being displayed.
+     * Indicates if two-factor authentication recovery codes are being displayed.
      *
      * @var bool
      */
     public bool $showingRecoveryCodes = false;
 
     /**
-     * The OTP code for confirming two factor authentication.
+     * The OTP code for confirming two-factor authentication.
      *
      * @var string
      */
@@ -58,7 +58,7 @@ class TwoFactorAuthenticationForm extends Component
     }
 
     /**
-     * Enable two factor authentication for the user.
+     * Enable two-factor authentication for the user.
      *
      * @param EnableTwoFactorAuthentication $enable
      * @return void
@@ -74,7 +74,7 @@ class TwoFactorAuthenticationForm extends Component
     }
 
     /**
-     * Confirm two factor authentication for the user.
+     * Confirm two-factor authentication for the user.
      *
      * @param ConfirmTwoFactorAuthentication $confirm
      * @return void
@@ -118,7 +118,7 @@ class TwoFactorAuthenticationForm extends Component
     }
 
     /**
-     * Disable two factor authentication for the user.
+     * Disable two-factor authentication for the user.
      *
      * @param DisableTwoFactorAuthentication $disable
      * @return void
@@ -145,7 +145,7 @@ class TwoFactorAuthenticationForm extends Component
     }
 
     /**
-     * Determine if two factor authentication is enabled.
+     * Determine if two-factor authentication is enabled.
      *
      * @return bool
      */

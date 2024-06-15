@@ -8,9 +8,10 @@ use App\Models\User;
 class DisableTwoFactorAuthentication
 {
     /**
-     * Disable two factor authentication for the user.
+     * Disable two-factor authentication for the user.
      *
      * @param User|null $user
+     *
      * @return void
      */
     public function __invoke(?User $user): void

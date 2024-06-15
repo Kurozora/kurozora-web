@@ -90,7 +90,7 @@ Route::name('password')
             ->name('.update');
     });
 
-// Two Factor Authentication
+// Two-Factor Authentication
 Route::name('two-factor')
     ->group(function () {
         Route::get('/two-factor-challenge', [TwoFactorAuthenticatedSessionController::class, 'create'])
