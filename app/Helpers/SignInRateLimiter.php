@@ -97,8 +97,8 @@ class SignInRateLimiter
     {
         $email = $request->input('email');
 
-        if ($user = $request->challengedUser()) {
-            $email = $user->email;
+        if (empty($email) && method_exists($request, 'challengedUser')) {
+            $email =  $request->challengedUser()?->email;
         }
 
         return str(str($email)->lower() . '|' . $request->ip())->transliterate();
