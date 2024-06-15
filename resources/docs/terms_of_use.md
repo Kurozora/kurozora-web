@@ -52,9 +52,9 @@ By using the Site, you represent and warrant that:
 If you provide any information that is untrue, inaccurate, not current, or incomplete, we have the right to suspend or terminate your account and refuse any and all current or future use of the Site (or any portion thereof).
 
 ## Accounts, Passwords and Security
-Certain features or services offered on or through the Site may require you to open an account (including setting up a Kurozora ID and password). You agree to keep your password confidential and will be responsible for all use of your account and password. We reserve the right to remove, reclaim, or change a username you select if we determine, in our sole discretion, that such username is inappropriate, obscene, or otherwise objectionable.
+Certain features or services offered on or through the Site may require you to open an account (including setting up a Kurozora Account and password). You agree to keep your password confidential and will be responsible for all use of your account and password. We reserve the right to remove, reclaim, or change a username you select if we determine, in our sole discretion, that such username is inappropriate, obscene, or otherwise objectionable.
 
-You may not use anyone else’s Kurozora ID, password or account at any time without the express permission and consent of the holder of that Kurozora ID, password or account. Kurozora cannot and will not be liable for any loss or damage arising from your failure to comply with these obligations.
+You may not use anyone else’s Kurozora Account, password or account at any time without the express permission and consent of the holder of that Kurozora Account, password or account. Kurozora cannot and will not be liable for any loss or damage arising from your failure to comply with these obligations.
 
 ## Your Access to the Site
 You may not access or use the Site for any purpose other than that for which we make the Site available. The Site may not be used in connection with any commercial endeavors except those that are specifically endorsed or approved by us.

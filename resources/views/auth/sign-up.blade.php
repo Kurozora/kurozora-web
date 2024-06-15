@@ -5,7 +5,7 @@
 
     <x-slot:header>
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Kurozora ID') }}
+            {{ __('Kurozora Account') }}
         </h2>
     </x-slot:header>
 
@@ -84,7 +84,7 @@
 
             <section class="mt-8 text-center">
                 <p class="text-gray-500 text-sm">
-                    {{ __('Your Kurozora ID information is used to allow you to sign in securely and access your data. Kurozora records certain usage data for security and support purposes.') }} <x-link href="{{ route('legal.privacy-policy') }}"  wire:navigate>{{ __('See how your data is managed.') }}</x-link>
+                    {{ __('Your Kurozora Account information is used to allow you to sign in securely and access your data. Kurozora records certain usage data for security and support purposes.') }} <x-link href="{{ route('legal.privacy-policy') }}"  wire:navigate>{{ __('See how your data is managed.') }}</x-link>
                 </p>
             </section>
 

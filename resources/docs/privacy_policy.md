@@ -48,7 +48,7 @@ Personal information is data that can be used to identify or contact a single pe
 ### What personal information we collect
 <div></div>
 
-* When you create a Kurozora ID, connect to our services, contact us including by social media or participate in an online survey, we may collect a variety of information, including your name, phone number, email address, contact preferences, device identifiers, IP address, location information, and profile information where the contact is via social media.
+* When you create a Kurozora Account, connect to our services, contact us including by social media or participate in an online survey, we may collect a variety of information, including your name, phone number, email address, contact preferences, device identifiers, IP address, location information, and profile information where the contact is via social media.
 * When you share your content with family and friends using Kurozora services, send gift certificates, or invite others to participate in Kurozora services or feeds, Kurozora may collect the information you provide about those people such as name, email address, and phone number. Kurozora will use such information to fulfil your requests, provide the relevant service, or for anti-fraud purposes.
 <div></div>
 
@@ -58,7 +58,7 @@ We may process your personal information: for the purposes described in this Pri
 
 * The personal information we collect allows us to keep you posted on Kurozora’s latest product announcements, software updates, and upcoming events. If you don't want to be on our mailing list, you can opt-out anytime by updating your preferences.
 * We also use personal information to help us create, develop, operate, deliver, and improve our products, services, content, and for loss prevention and anti-fraud purposes. We may also use your personal information for account and network security purposes, including in order to protect our services for the benefit of all our users. We limit our uses of data for anti-fraud purposes to those which are strictly necessary and within our assessed legitimate interests to protect our users and our services.
-* We may use your personal information, including date of birth, to verify identity, assist with identification of users, and to determine appropriate services. For example, we may use date of birth to determine the age of Kurozora ID account holders.
+* We may use your personal information, including date of birth, to verify identity, assist with identification of users, and to determine appropriate services. For example, we may use date of birth to determine the age of Kurozora Account account holders.
 * From time to time, we may use your personal information to send important notices, such as communications about purchases and changes to our terms, conditions, and policies. Because this information is important to your interaction with Kurozora, you may not opt out of receiving these communications.
 * We may also use personal information for internal purposes such as auditing, data analysis, and research to improve Kurozora’s products, services, and user communications.
 * If you enter into a sweepstake, contest, or similar promotion we may use the information you provide to administer those programs.
@@ -92,7 +92,7 @@ In some of our email messages, we use a <q>click-through URL</q> linked to conte
 <div></div>
 
 ## Disclosure to Third Parties
-At times Kurozora may provide third parties with certain personal information to provide or improve our products and services, including to deliver products at your request, or to help Kurozora market to users. When we do, we require those third parties to handle it in accordance with relevant laws. Kurozora does not sell personal information, and personal information will never be shared with third parties for their marketing purposes. For example, when you register a Kurozora ID, you authorize Kurozora and the email delivery service to exchange your email address provided during the registration process to carry out service, such as sending an activation link. If you are approved for service, your account will be governed by Kurozora and the email delivery service’s respective privacy policies.
+At times Kurozora may provide third parties with certain personal information to provide or improve our products and services, including to deliver products at your request, or to help Kurozora market to users. When we do, we require those third parties to handle it in accordance with relevant laws. Kurozora does not sell personal information, and personal information will never be shared with third parties for their marketing purposes. For example, when you register a Kurozora Account, you authorize Kurozora and the email delivery service to exchange your email address provided during the registration process to carry out service, such as sending an activation link. If you are approved for service, your account will be governed by Kurozora and the email delivery service’s respective privacy policies.
 <div></div>
 
 ### Others

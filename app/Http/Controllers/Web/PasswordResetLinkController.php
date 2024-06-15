@@ -39,6 +39,6 @@ class PasswordResetLinkController extends Controller
         // need to show to the user. Finally, we'll send out a proper response.
         Password::sendResetLink($request->only('email'));
 
-        return back()->with('status', __('If an account exists with this Kurozora ID, you should receive an email with your reset link shortly.'));
+        return back()->with('status', __('If an account exists with this Kurozora Account, you should receive an email with your reset link shortly.'));
     }
 }

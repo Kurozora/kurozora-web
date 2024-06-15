@@ -19,8 +19,8 @@ class ResetPassword extends ResetPasswordNotification
         $expirationDuration = $expirationDuration / 60;
 
         return (new MailMessage)
-            ->subject(__('Reset your Kurozora ID password'))
-            ->line(__('You recently made a request to reset your Kurozora ID. Please click the button below to complete the process.'))
+            ->subject(__('Reset your Kurozora Account password'))
+            ->line(__('You recently made a request to reset your Kurozora Account. Please click the button below to complete the process.'))
             ->line(__('This password reset link will expire in :count hours.', [
                 'count' => $expirationDuration
             ]))
