@@ -53,7 +53,7 @@ class TwoFactorSignInRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'code'          => ['nullable', 'string'],
+            'code' => ['nullable', 'string'],
             'recovery_code' => ['nullable', 'string'],
         ];
     }
@@ -70,12 +70,12 @@ class TwoFactorSignInRequest extends FormRequest
     public function hasValidCode(): bool
     {
         return $this->code && tap(app(TwoFactorAuthenticationProvider::class)->verify(
-            decrypt($this->challengedUser()->two_factor_secret), $this->code
-        ), function ($result) {
-            if ($result) {
-                $this->session()->forget('sign-in.id');
-            }
-        });
+                decrypt($this->challengedUser()->two_factor_secret), $this->code
+            ), function ($result) {
+                if ($result) {
+                    $this->session()->forget('sign-in.id');
+                }
+            });
     }
 
     /**

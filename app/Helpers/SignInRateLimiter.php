@@ -57,9 +57,9 @@ class SignInRateLimiter
      *
      * @return void
      */
-    public function increment(Request $request)
+    public function increment(Request $request): void
     {
-        $this->limiter->hit($this->throttleKey($request));
+        $this->limiter->hit($this->throttleKey($request), 60);
     }
 
     /**
@@ -81,7 +81,7 @@ class SignInRateLimiter
      *
      * @return void
      */
-    public function clear(Request $request)
+    public function clear(Request $request): void
     {
         $this->limiter->clear($this->throttleKey($request));
     }
@@ -95,6 +95,12 @@ class SignInRateLimiter
      */
     protected function throttleKey(Request $request): string
     {
-        return str($request->input('email'))->lower() . '|' . $request->ip();
+        $email = $request->input('email');
+
+        if ($user = $request->challengedUser()) {
+            $email = $user->email;
+        }
+
+        return str(str($email)->lower() . '|' . $request->ip())->transliterate();
     }
 }

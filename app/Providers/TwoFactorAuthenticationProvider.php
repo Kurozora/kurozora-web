@@ -29,8 +29,9 @@ class TwoFactorAuthenticationProvider implements TwoFactorAuthenticationProvider
     /**
      * Create a new two-factor authentication provider instance.
      *
-     * @param Google2FA $engine
-     * @param Repository|null  $cache
+     * @param Google2FA       $engine
+     * @param Repository|null $cache
+     *
      * @return void
      */
     public function __construct(Google2FA $engine, Repository $cache = null)
@@ -58,6 +59,7 @@ class TwoFactorAuthenticationProvider implements TwoFactorAuthenticationProvider
      * @param string $companyName
      * @param string $companyEmail
      * @param string $secret
+     *
      * @return string
      */
     public function qrCodeUrl(string $companyName, string $companyEmail, string $secret): string
@@ -70,6 +72,7 @@ class TwoFactorAuthenticationProvider implements TwoFactorAuthenticationProvider
      *
      * @param string $secret
      * @param string $code
+     *
      * @return bool
      * @throws IncompatibleWithGoogleAuthenticatorException
      * @throws InvalidCharactersException

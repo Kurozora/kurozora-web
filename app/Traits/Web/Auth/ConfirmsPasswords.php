@@ -31,6 +31,7 @@ trait ConfirmsPasswords
      * Start confirming the user's password.
      *
      * @param string $confirmableId
+     *
      * @return void
      */
     public function startConfirmingPassword(string $confirmableId): void
@@ -88,6 +89,7 @@ trait ConfirmsPasswords
      * Ensure that the user's password has been recently confirmed.
      *
      * @param int|null $maximumSecondsSinceConfirmation
+     *
      * @return void
      */
     protected function ensurePasswordIsConfirmed(?int $maximumSecondsSinceConfirmation = null): void
@@ -103,6 +105,7 @@ trait ConfirmsPasswords
      * Determine if the user's password has been recently confirmed.
      *
      * @param int|null $maximumSecondsSinceConfirmation
+     *
      * @return bool
      */
     protected function passwordIsConfirmed(?int $maximumSecondsSinceConfirmation = null): bool

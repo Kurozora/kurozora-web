@@ -49,11 +49,11 @@ class SignUpUserController extends Controller
 
         // Create the user
         $newUser = User::create([
-            'username'              => $data['username'],
-            'email'                 => $data['email'],
-            'password'              => Hash::make($data['password']),
-            'can_change_username'   => false,
-            'tv_rating'             => 4
+            'username' => $data['username'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+            'can_change_username' => false,
+            'tv_rating' => 4
         ]);
 
         if ($request->hasFile('profileImage') &&
@@ -75,6 +75,7 @@ class SignUpUserController extends Controller
      * Get the authentication pipeline instance.
      *
      * @param SignUpRequest $request
+     *
      * @return Pipeline
      */
     protected function signInPipeline(SignUpRequest $request): Pipeline

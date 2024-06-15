@@ -14,7 +14,18 @@ use BaconQrCode\Writer;
 trait TwoFactorAuthenticatable
 {
     /**
-     * Get the user's two factor authentication recovery codes.
+     * Determine if two-factor authentication has been enabled.
+     *
+     * @return bool
+     */
+    public function hasEnabledTwoFactorAuthentication(): bool
+    {
+        return !is_null($this->two_factor_secret) &&
+            !is_null($this->two_factor_confirmed_at);
+    }
+
+    /**
+     * Get the user's two-factor authentication recovery codes.
      *
      * @return array
      */
@@ -27,9 +38,10 @@ trait TwoFactorAuthenticatable
      * Replace the given recovery code with a new one in the user's stored codes.
      *
      * @param string $code
+     *
      * @return void
      */
-    public function replaceRecoveryCode(string $code)
+    public function replaceRecoveryCode(string $code): void
     {
         $this->forceFill([
             'two_factor_recovery_codes' => encrypt(str_replace(

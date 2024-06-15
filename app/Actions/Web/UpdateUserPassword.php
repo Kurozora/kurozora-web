@@ -19,7 +19,7 @@ class UpdateUserPassword implements UpdatesUserPasswords
      * @return void
      * @throws ValidationException
      */
-    public function update($user, array $input)
+    public function update($user, array $input): void
     {
         Validator::make($input, [
             'current_password' => ['required', 'string'],
