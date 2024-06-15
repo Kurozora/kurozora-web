@@ -32,6 +32,7 @@ Route::post('/sign-in', [AuthenticatedSessionController::class, 'store'])
 
 // Sign Out
 Route::post('/sign-out', [AuthenticatedSessionController::class, 'destroy'])
+    ->middleware(['auth'])
     ->name('sign-out');
 
 // Sign Up
