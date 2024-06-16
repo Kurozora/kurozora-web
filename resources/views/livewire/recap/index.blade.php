@@ -267,7 +267,7 @@
                     <h2 class="max-w-sm text-2xl text-center font-semibold md:text-4xl">{{ __('These milestones marked your season finale') }}</h2>
                 </div>
 
-                <article class="flex flex-nowrap gap-4 mt-4 snap-x overflow-x-scroll no-scrollbar md:mt-12">
+                <article class="flex flex-nowrap gap-4 mt-4 snap-mandatory snap-x overflow-x-scroll no-scrollbar md:mt-12">
                     @foreach ($this->recaps as $recap)
                         @switch($recap->type)
                             @case(\App\Models\Anime::class)

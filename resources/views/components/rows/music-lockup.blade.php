@@ -1,7 +1,7 @@
 @props(['songs' => [], 'mediaSongs' => [], 'showEpisodes' => true, 'showModel' => false, 'page' => 1, 'perPage' => 25, 'isRanked' => false, 'isRow' => true])
 
 @php
-    $class = $isRow ? 'snap-x overflow-x-scroll no-scrollbar' : 'flex-wrap';
+    $class = $isRow ? 'snap-mandatory snap-x overflow-x-scroll no-scrollbar' : 'flex-wrap';
 @endphp
 
 <div {{ $attributes->merge(['class' => 'flex gap-4 justify-between ' . $class]) }}>

@@ -1,7 +1,7 @@
 @props(['animes' => [], 'relatedAnimes' => [], 'mangas' => [], 'relatedMangas' => [], 'games' => [], 'relatedGames' => [], 'page' => 1, 'perPage' => 25, 'trackingEnabled' => true, 'showsSchedule' => false, 'isRanked' => false, 'isRow' => true])
 
 @php
-    $class = $isRow ? 'snap-x overflow-x-scroll no-scrollbar' : 'flex-wrap';
+    $class = $isRow ? 'snap-mandatory snap-x overflow-x-scroll no-scrollbar' : 'flex-wrap';
 @endphp
 
 @if (!empty($animes) || !empty($relatedAnimes))
