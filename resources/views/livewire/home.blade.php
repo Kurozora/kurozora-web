@@ -15,7 +15,7 @@
         explore
     </x-slot:appArgument>
 
-    <div class="max-w-7xl mx-auto pl-4 pr-4 pb-6 sm:px-6">
+    <div>
 {{--        <section>--}}
 {{--            <a href="{{ route('recap.index') }}"  wire:navigate>--}}
 {{--                <x-picture>--}}
@@ -53,7 +53,7 @@
 {{--                </x-slot:action>--}}
 {{--            </x-section-nav>--}}
 
-{{--            <div class="flex flex-nowrap gap-4 snap-x overflow-x-scroll no-scrollbar">--}}
+{{--            <div class="flex flex-nowrap gap-4 snap-mandatory snap-x overflow-x-scroll no-scrollbar">--}}
 {{--                @foreach($this->users as $user)--}}
 {{--                    @php--}}
 {{--                        switch ($user->id) {--}}
@@ -131,48 +131,52 @@
 {{--        </section>--}}
 
         <section wire:init="loadPage">
-            @foreach($this->exploreCategories as $key => $exploreCategory)
+            @foreach ($this->exploreCategories as $exploreCategory)
                 @switch($exploreCategory->type)
                 @case(\App\Enums\ExploreCategoryTypes::MostPopularShows)
-                    <section class="pb-8">
-                        <div class="flex flex-nowrap gap-4 mt-5 snap-x overflow-x-scroll no-scrollbar">
-                            @foreach($exploreCategory->mostPopular(\App\Models\Anime::class)->exploreCategoryItems as $categoryItem)
+                    <section class="mx-auto max-w-7xl">
+                        <div class="no-scrollbar flex snap-mandatory snap-x flex-nowrap overflow-x-scroll xl:rounded-b-2xl">
+                            @foreach ($exploreCategory->mostPopular(\App\Models\Anime::class)->exploreCategoryItems as $index => $categoryItem)
                                 <x-lockups.banner-lockup :anime="$categoryItem->model" />
                             @endforeach
                         </div>
                     </section>
                     @break
                 @default
-                    <livewire:components.explore-category-section :exploreCategory="$exploreCategory" />
+                    <article class="mx-auto max-w-7xl">
+                        <livewire:components.explore-category-section :exploreCategory="$exploreCategory" />
+                    </article>
                 @endswitch
             @endforeach
         </section>
 
         @if (!$readyToLoad)
-           <x-skeletons.small-lockup />
-           <x-skeletons.small-lockup />
-           <x-skeletons.small-lockup />
-           <x-skeletons.small-lockup />
+            <section class="mx-auto max-w-7xl pb-6 pl-4 pr-4 sm:px-6">
+                <x-skeletons.small-lockup />
+                <x-skeletons.small-lockup />
+                <x-skeletons.small-lockup />
+                <x-skeletons.small-lockup />
+            </section>
         @else
             @guest
-                <section>
-                    <a href="{{ route('recap.index') }}"  wire:navigate>
+                <section class="mx-auto max-w-7xl">
+                    <a href="{{ route('recap.index') }}" wire:navigate>
                         <x-picture>
-                            <img class="w-full object-cover h-40 rounded-lg shadow md:h-80" src="{{ asset('images/static/banners/kurozora_recap.webp') }}" alt="Kurozora Recap 2023">
+                            <img class="h-40 w-full object-cover shadow md:h-80 xl:rounded-3xl" src="{{ asset('images/static/banners/kurozora_recap.webp') }}" alt="Kurozora Recap 2023">
                         </x-picture>
                     </a>
                 </section>
             @endguest
 
-            <section class="pt-5 pb-8 border-t-2">
-                <x-section-nav class="flex flex-nowrap justify-between mb-5">
+            <section class="mx-auto max-w-7xl pb-8 pl-4 pr-4 pt-5 sm:px-6">
+                <x-section-nav class="mb-5 flex flex-nowrap justify-between">
                     <x-slot:title>
                         {{ __('More to Explore') }}
-                    </x-slot:title>
+                    </x-slot>
                 </x-section-nav>
 
                 <div class="grid gap-4 md:grid-cols-3">
-                    <x-simple-link href="{{ route('anime.seasons.index') }}"  wire:navigate class="justify-between w-full pt-4 pr-4 pb-4 pl-4 text-sm bg-gray-100 rounded-lg" :hover-underline-enabled="false">
+                    <x-simple-link href="{{ route('anime.seasons.index') }}" wire:navigate class="w-full justify-between rounded-lg bg-gray-100 pb-4 pl-4 pr-4 pt-4 text-sm" :hover-underline-enabled="false">
                         <span>
                             {{ __('Browse by Season') }}
                         </span>
@@ -180,7 +184,7 @@
                         @svg('chevron_forward', 'fill-current', ['width' => 12])
                     </x-simple-link>
 
-                    <x-simple-link href="{{ route('genres.index') }}"  wire:navigate class="justify-between w-full pt-4 pr-4 pb-4 pl-4 text-sm bg-gray-100 rounded-lg" :hover-underline-enabled="false">
+                    <x-simple-link href="{{ route('genres.index') }}" wire:navigate class="w-full justify-between rounded-lg bg-gray-100 pb-4 pl-4 pr-4 pt-4 text-sm" :hover-underline-enabled="false">
                         <span>
                             {{ __('Browse by Genre') }}
                         </span>
@@ -188,7 +192,7 @@
                         @svg('chevron_forward', 'fill-current', ['width' => 12])
                     </x-simple-link>
 
-                    <x-simple-link href="{{ route('themes.index') }}" wire:navigate class="justify-between w-full pt-4 pr-4 pb-4 pl-4 text-sm bg-gray-100 rounded-lg" :hover-underline-enabled="false">
+                    <x-simple-link href="{{ route('themes.index') }}" wire:navigate class="w-full justify-between rounded-lg bg-gray-100 pb-4 pl-4 pr-4 pt-4 text-sm" :hover-underline-enabled="false">
                         <span>
                             {{ __('Browse by Theme') }}
                         </span>
@@ -196,7 +200,7 @@
                         @svg('chevron_forward', 'fill-current', ['width' => 12])
                     </x-simple-link>
 
-                    <x-simple-link href="{{ route('schedule') }}" wire:navigate class="justify-between w-full pt-4 pr-4 pb-4 pl-4 text-sm bg-gray-100 rounded-lg" :hover-underline-enabled="false">
+                    <x-simple-link href="{{ route('schedule') }}" wire:navigate class="w-full justify-between rounded-lg bg-gray-100 pb-4 pl-4 pr-4 pt-4 text-sm" :hover-underline-enabled="false">
                         <span>
                             {{ __('Broadcast Schedule') }}
                         </span>
@@ -204,7 +208,7 @@
                         @svg('chevron_forward', 'fill-current', ['width' => 12])
                     </x-simple-link>
 
-                    <x-simple-link href="{{ route('charts.index') }}" wire:navigate class="justify-between w-full pt-4 pr-4 pb-4 pl-4 text-sm bg-gray-100 rounded-lg" :hover-underline-enabled="false">
+                    <x-simple-link href="{{ route('charts.index') }}" wire:navigate class="w-full justify-between rounded-lg bg-gray-100 pb-4 pl-4 pr-4 pt-4 text-sm" :hover-underline-enabled="false">
                         <span>
                             {{ __('Charts') }}
                         </span>

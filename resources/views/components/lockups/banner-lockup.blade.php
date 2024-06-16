@@ -1,11 +1,9 @@
 @props(['anime'])
 
-<div class="relative pb-2 snap-normal snap-center">
-    <x-hr class="mb-4" />
-
+<div class="relative snap-normal snap-center">
     <div class="flex flex-nowrap">
         <picture
-            class="relative w-64 h-40 mt-2 rounded-lg overflow-hidden sm:w-[35rem] sm:h-[22rem] md:w-[42rem] md:h-[26rem]"
+            class="relative w-screen max-w-7xl aspect-video overflow-hidden"
             style="background-color: {{ $anime->getFirstMedia(\App\Enums\MediaCollection::Banner)?->custom_properties['background_color'] ?? '#000000' }};"
         >
             <img
@@ -28,7 +26,7 @@
                 </div>
             </div>
 
-            <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-lg"></div>
+            <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20"></div>
         </picture>
     </div>
 

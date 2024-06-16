@@ -284,7 +284,7 @@
                     previousSlide: 4,
                     goToNextSlide() {
                         this.activeSlide = this.nextSlide
-                    },
+                    }
                 }"
                 x-init="
                     setInterval(() => { if (isPlaying) { goToNextSlide() } }, 5000)
