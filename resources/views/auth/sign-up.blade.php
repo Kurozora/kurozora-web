@@ -63,12 +63,12 @@
             <section class="space-y-4" >
                 <div>
                     <x-label for="username" value="{{ __('Username') }}" />
-                    <x-input id="username" class="mt-1 block w-full" type="text" name="username" :value="old('username')" placeholder="{{ __('Pick a cool one') }} 🙉" required autofocus autocomplete="username" />
+                    <x-input id="username" class="mt-1 block w-full" type="text" name="username" :value="old('username')" placeholder="{{ __('Pick a cool one') }} 🙈" required autofocus autocomplete="username" />
                 </div>
 
                 <div>
                     <x-label for="email" value="{{ __('Email') }}" />
-                    <x-input id="email" class="mt-1 block w-full" type="email" name="email" :value="old('email')" placeholder="{{ __('We all forget our passwords') }} 🙈" required />
+                    <x-input id="email" class="mt-1 block w-full" type="email" name="email" :value="old('email')" placeholder="{{ __('We all forget our passwords') }} 🙉" required />
                 </div>
 
                 <div>
@@ -80,12 +80,6 @@
                     <x-label for="password_confirmation" value="{{ __('Confirm Password') }}" />
                     <x-input id="password_confirmation" class="mt-1 block w-full" type="password" name="password_confirmation" placeholder="{{ __('But keep it memorable') }} 🐵" required autocomplete="new-password" passwordrules="minlength: 5; maxlength: 255; required: lower; required: upper; required: digit; required: special;" />
                 </div>
-            </section>
-
-            <section class="mt-8 text-center">
-                <p class="text-gray-500 text-sm">
-                    {{ __('Your Kurozora Account information is used to allow you to sign in securely and access your data. Kurozora records certain usage data for security and support purposes.') }} <x-link href="{{ route('legal.privacy-policy') }}"  wire:navigate>{{ __('See how your data is managed.') }}</x-link>
-                </p>
             </section>
 
             <section class="flex flex-col items-center justify-end gap-4 mt-8 text-center">
@@ -100,5 +94,20 @@
                 </x-link>
             </section>
         </form>
+
+        {{-- Services --}}
+        <section class="flex flex-col items-center space-y-4 mt-16 text-center">
+            <x-picture class="max-w-sm">
+                <img src="{{ asset('images/static/promotional/kurozora_services.webp') }}" alt="Kurozora services" title="Kurozora services">
+            </x-picture>
+
+            <p class="text-sm">{{ __('Your Kurozora Account lets you access your library, favorites, reminders, reviews, and more on your devices, automatically.') }}</p>
+        </section>
+
+        {{-- Legal --}}
+        <section class="space-y-1 mt-16 text-center text-sm">
+            <p class="text-gray-500">{{ __('Your Kurozora Account information is used to enable Kurozora services when you sign in. Kurozora services includes the library where you can keep track of the shows you are interested in.') }}</p>
+            <x-link href="{{ route('legal.privacy-policy') }}" wire:navigate>{{ __('See how your data is managed...') }}</x-link>
+        </section>
     </div>
 </x-app-layout>

@@ -21,7 +21,7 @@
         <section>
             <div class="text-center mb-5">
                 <h1 class="text-2xl font-bold">{{ __('Welcome to Kurozora!') }}</h1>
-                <p>{{ __('Sign in with your Kurozora ID to use the library and other Kurozora services.') }}</p>
+                <p>{{ __('Sign in with your Kurozora Account to use the library and other Kurozora services.') }}</p>
             </div>
         </section>
 
@@ -85,8 +85,8 @@
 
                 <section class="space-y-4">
                     <div>
-                        <x-label for="email" value="{{ __('Kurozora ID') }}" />
-                        <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" placeholder="{{ __('The cool Kurozora ID you claimed 🙌') }}" required autofocus />
+                        <x-label for="email" value="{{ __('Email') }}" />
+                        <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" placeholder="{{ __('Your cool email address 🙌') }}" required autofocus />
                     </div>
 
                     <div>
@@ -136,12 +136,12 @@
                 <img src="{{ asset('images/static/promotional/kurozora_services.webp') }}" alt="Kurozora services" title="Kurozora services">
             </x-picture>
 
-            <p class="text-sm">{{ __('Your Kurozora ID is the email you use to access all Kurozora services.') }}</p>
+            <p class="text-sm">{{ __('Your Kurozora Account lets you access your library, favorites, reminders, reviews, and more on your devices, automatically.') }}</p>
         </section>
 
         {{-- Legal --}}
         <section class="space-y-1 mt-16 text-center text-sm">
-            <p class="text-gray-500">{{ __('Your Kurozora ID information is used to enable Kurozora services when you sign in. Kurozora services includes the library where you can keep track of the shows you are interested in.') }}</p>
+            <p class="text-gray-500">{{ __('Your Kurozora Account information is used to enable Kurozora services when you sign in. Kurozora services includes the library where you can keep track of the shows you are interested in.') }}</p>
             <x-link href="{{ route('legal.privacy-policy') }}" wire:navigate>{{ __('See how your data is managed...') }}</x-link>
         </section>
     </div>

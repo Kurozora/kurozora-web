@@ -11,7 +11,7 @@
         <div class="col-span-12">
             <div class="max-w-xl text-sm text-gray-600">
                 <p>{{ __('Changing the language will update the language of the user interface as well as the language of the information shown throughout the website.') }}</p>
-                <p>{{ __('These changes will also take effect in the app, and anywhere you are signed in with your Kurozora ID.') }}</p>
+                <p>{{ __('These changes will also take effect in the app, and anywhere you are signed in with your Kurozora Account.') }}</p>
                 <br />
                 <p>{{ __('If an information cannot be shown in your preferred language, English will be used instead.') }}</p>
             </div>

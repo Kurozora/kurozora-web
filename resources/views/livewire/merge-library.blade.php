@@ -4,13 +4,13 @@
     </x-slot:title>
 
     <x-slot:description>
-        {{ __('Connect your local library with your Kurozora ID — the largest, free online anime, manga, game & music database.') }}
+        {{ __('Connect your local library with your Kurozora Account — the largest, free online anime, manga, game & music database.') }}
     </x-slot:description>
 
     <x-slot:meta>
         <meta property="og:title" content="{{ __('Merge Library') }} — {{ config('app.name') }}" />
         <meta property="og:description"
-              content="{{ __('Connect your local library with your Kurozora ID — the largest, free online anime, manga, game & music database.') }}" />
+              content="{{ __('Connect your local library with your Kurozora Account — the largest, free online anime, manga, game & music database.') }}" />
         <meta property="og:image" content="{{ asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="og:type" content="website" />
         <link rel="canonical" href="{{ route('merge-library') }}">
