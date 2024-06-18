@@ -131,7 +131,7 @@
 {{--        </section>--}}
 
         <section wire:init="loadPage">
-            @foreach ($this->exploreCategories as $exploreCategory)
+            @foreach ($this->exploreCategories as $index => $exploreCategory)
                 @switch($exploreCategory->type)
                 @case(\App\Enums\ExploreCategoryTypes::MostPopularShows)
                     <section class="mx-auto max-w-7xl">
@@ -143,7 +143,7 @@
                     </section>
                     @break
                 @default
-                    <article class="mx-auto max-w-7xl">
+                    <article class="mx-auto max-w-7xl {{ $index != 1 ? 'border-t-2' : '' }}">
                         <livewire:components.explore-category-section :exploreCategory="$exploreCategory" />
                     </article>
                 @endswitch
