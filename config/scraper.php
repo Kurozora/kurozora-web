@@ -24,7 +24,16 @@ return [
             'manga' => 'https://myanimelist.net/manga',
             'top_manga' => 'https://myanimelist.net/topmanga.php',
             'upcoming_manga' => 'https://myanimelist.net/manga.php?o=9',
+            'animelist' => [
+                'base' => 'https://myanimelist.net/animelist/:x',
+                'json' => 'https://myanimelist.net/animelist/:x/load.json',
+            ],
+            'mangalist' => [
+                'base' => 'https://myanimelist.net/mangalist/:x',
+                'json' => 'https://myanimelist.net/mangalist/:x/load.json',
+            ],
         ],
+
         'tvdb' => [
             'base' => 'https://thetvdb.com',
             'dereferrer' => [
@@ -34,6 +43,7 @@ return [
                 'series' => 'https://thetvdb.com/?tab=series&id='
             ]
         ],
+
         'anime_filler_list' => [
             'base' => 'https://www.animefillerlist.com',
             'shows' => 'https://www.animefillerlist.com/shows',
