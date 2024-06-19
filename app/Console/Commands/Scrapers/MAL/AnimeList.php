@@ -47,8 +47,8 @@ class AnimeList extends Command
                 $animeArray['series_animedb_id'] = $anime->anime_id;
                 $animeArray['my_status'] = $anime->status;
                 $animeArray['my_score'] = $this->convertMALRating($anime->score ?? 0);
-                $animeArray['my_start_date'] = $this->convertMALDate($anime->start_date_string ?? '0000-00-00');
-                $animeArray['my_finish_date'] = $this->convertMALDate($anime->finish_date_string ?? '0000-00-00' );
+                $animeArray['my_start_date'] = $this->convertMALDate($anime->start_date_string ?? null);
+                $animeArray['my_finish_date'] = $this->convertMALDate($anime->finish_date_string ?? null);
 
                 $animes[] = $animeArray;
             }
@@ -79,7 +79,7 @@ class AnimeList extends Command
             ->replace(':x', $username)
             ->value();
 
-        $this->line('getting page: ' . $page);
+        $this->line('[] Getting page: ' . $page);
 
         // Get library items
         return Http::get($libraryURL, [
@@ -92,16 +92,17 @@ class AnimeList extends Command
      * Converts a MAL status string to our library status.
      *
      * @param int $malStatus
+     *
      * @return ?int
      */
     protected function convertMALStatus(int $malStatus): ?int
     {
         return match ($malStatus) {
             1 => UserLibraryStatus::InProgress,
-            2 => UserLibraryStatus::OnHold,
-            3 => UserLibraryStatus::Planning,
+            2 => UserLibraryStatus::Completed,
+            3 => UserLibraryStatus::OnHold,
             4 => UserLibraryStatus::Dropped,
-            6 => UserLibraryStatus::Completed,
+            6 => UserLibraryStatus::Planning,
             default => null,
         };
     }
@@ -110,6 +111,7 @@ class AnimeList extends Command
      * Converts and returns Kurozora specific rating.
      *
      * @param int $malRating
+     *
      * @return int
      */
     protected function convertMALRating(int $malRating): int
@@ -124,16 +126,18 @@ class AnimeList extends Command
     /**
      * Converts and returns Carbon dates from given string.
      *
-     * @param string $malDate
+     * @param null|string $malDate
+     *
      * @return Carbon|null
      */
-    protected function convertMALDate(string $malDate): ?Carbon
+    protected function convertMALDate(?string $malDate): ?Carbon
     {
-        if ($malDate === '0000-00-00') {
+        if (empty($malDate)) {
             return now();
         }
 
         $dateComponents = explode('-', $malDate);
-        return Carbon::createFromDate($dateComponents[2], $dateComponents[1], $dateComponents[0]);
+        // Two number years... in this day and age? smh
+        return Carbon::createFromDate('20' . $dateComponents[2], $dateComponents[1], $dateComponents[0]);
     }
 }
