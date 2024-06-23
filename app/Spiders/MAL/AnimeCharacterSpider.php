@@ -76,10 +76,12 @@ class AnimeCharacterSpider extends BasicSpider
                 $characterData = $item->filter('td')
                     ->eq(1)
                     ->children('.spaceit_pad');
-                $characterName = $characterData->eq(0)
-                    ->text();
-                $characterRole = $characterData->eq(1)
-                    ->text();
+                $characterName = str($characterData->eq(0)->text())
+                    ->trim()
+                    ->value();
+                $castRole = str($characterData->eq(1)->text())
+                    ->trim()
+                    ->value();
 
                 $actors = $item->filter('td')
                     ->eq(2)
@@ -90,10 +92,12 @@ class AnimeCharacterSpider extends BasicSpider
                             ->match($regex)
                             ->remove('/people/')
                             ->value();
-                        $personName = $item->filter('a[href^="https://myanimelist.net/people"]')
-                            ->text();
-                        $language = $item->filter('[class*="character-language"]')
-                            ->text();
+                        $personName = str($item->filter('a[href^="https://myanimelist.net/people"]')->text())
+                            ->trim()
+                            ->value();
+                        $language = str($item->filter('[class*="character-language"]')->text())
+                            ->trim()
+                            ->value();;
 
                         return [
                             'id' => $personID,
@@ -103,9 +107,11 @@ class AnimeCharacterSpider extends BasicSpider
                     });
 
                 return [
-                    'id' => $characterID,
-                    'name' => $characterName,
-                    'role' => $characterRole,
+                    'character' => [
+                        'id' => $characterID,
+                        'name' => $characterName,
+                    ],
+                    'cast_role' => $castRole,
                     'actors' => $actors
                 ];
             });
