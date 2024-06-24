@@ -146,9 +146,9 @@ trait Tracker
      */
     public function whereTracked(string $type): BelongsToMany
     {
-        return $this->belongsToMany($type, UserLibrary::class, 'user_id', 'trackable_id')
-            ->where('trackable_type', '=', $type)
-            ->withPivot('status') // Needed for get library API
+        return $this->belongsToMany($type, UserLibrary::class, 'user_id', UserLibrary::TABLE_NAME . '.trackable_id')
+            ->where(UserLibrary::TABLE_NAME . '.trackable_type', '=', $type)
+            ->withPivot(UserLibrary::TABLE_NAME . '.status') // Needed for get library API
             ->withTimestamps();
     }
 }
