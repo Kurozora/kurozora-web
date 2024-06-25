@@ -21,6 +21,7 @@ return [
             'anime_season' => 'https://myanimelist.net/anime/season',
             'top_anime' => 'https://myanimelist.net/topanime.php',
             'upcoming_anime' => 'https://myanimelist.net/anime.php?o=9',
+            'character' => 'https://myanimelist.net/character',
             'manga' => 'https://myanimelist.net/manga',
             'top_manga' => 'https://myanimelist.net/topmanga.php',
             'upcoming_manga' => 'https://myanimelist.net/manga.php?o=9',
