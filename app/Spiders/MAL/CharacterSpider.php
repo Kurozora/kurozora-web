@@ -13,7 +13,6 @@ use RoachPHP\Http\Response;
 use RoachPHP\Spider\BasicSpider;
 use RoachPHP\Spider\ParseResult;
 use Symfony\Component\DomCrawler\Crawler;
-use function in_array;
 
 class CharacterSpider extends BasicSpider
 {
@@ -175,8 +174,6 @@ class CharacterSpider extends BasicSpider
         ));
     }
 
-    private const array ALLOWED_NODES = ['p', 'i', 'b', 'br', 'strong', 'u'];
-
     /**
      * Removes all HTML elements so the text is left over.
      *
@@ -193,16 +190,16 @@ class CharacterSpider extends BasicSpider
 
         $crawler->children()->each(
             function (Crawler $crawler) {
+                $allowedNodes = ['p', 'i', 'b', 'br', 'strong', 'u'];
                 $node = $crawler->getNode(0);
 
-                if ($node === null || $node->nodeType === 3 || in_array($node->nodeName, self::ALLOWED_NODES)) {
+                if ($node === null || $node->nodeType === 3 || in_array($node->nodeName, $allowedNodes)) {
                     return;
                 }
 
                 $node->parentNode->removeChild($node);
             }
         );
-
 
         return $crawler;
     }

@@ -2,31 +2,29 @@
 
 namespace App\Console\Commands\Scrapers\MAL;
 
-use App\Spiders\MAL\AnimeSpider;
+use App\Spiders\MAL\PersonSpider;
 use Illuminate\Console\Command;
 use RoachPHP\Roach;
 use RoachPHP\Spider\Configuration\Overrides;
 
-class Anime extends Command
+class Person extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'scrape:mal_anime {malID? : The id of the anime. Accepts an array of comma seperated IDs}';
+    protected $signature = 'scrape:mal_person {malID? : The id of the person. Accepts an array of comma seperated IDs}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Scrape anime data from MAL for the given MAL ID.';
+    protected $description = 'Scrape person data from MAL for the given MAL ID.';
 
     /**
      * Execute the console command.
-     *
-     * @return int
      */
     public function handle(): int
     {
@@ -46,11 +44,11 @@ class Anime extends Command
         // Generate URLs
         $urls = [];
         foreach ($malIDs as $malID) {
-            $urls[] = config('scraper.domains.mal.anime') . '/' . $malID;
+            $urls[] = config('scraper.domains.mal.people') . '/' . $malID;
         }
 
         // Scrape
-        Roach::startSpider(AnimeSpider::class, new Overrides(startUrls: $urls));
+        Roach::startSpider(PersonSpider::class, new Overrides(startUrls: $urls));
 
         return Command::SUCCESS;
     }

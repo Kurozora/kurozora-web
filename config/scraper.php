@@ -25,6 +25,7 @@ return [
             'manga' => 'https://myanimelist.net/manga',
             'top_manga' => 'https://myanimelist.net/topmanga.php',
             'upcoming_manga' => 'https://myanimelist.net/manga.php?o=9',
+            'people' => 'https://myanimelist.net/people',
             'animelist' => [
                 'base' => 'https://myanimelist.net/animelist/:x',
                 'json' => 'https://myanimelist.net/animelist/:x/load.json',
