@@ -2,6 +2,7 @@
 
 namespace App\Spiders\MAL;
 
+use App\Processors\MAL\PersonProcessor;
 use App\Spiders\MAL\Models\PersonItem;
 use Exception;
 use Generator;
@@ -33,7 +34,7 @@ class PersonSpider extends BasicSpider
     ];
 
     public array $itemProcessors = [
-        //
+        PersonProcessor::class
     ];
 
     public array $extensions = [
@@ -106,7 +107,7 @@ class PersonSpider extends BasicSpider
         } catch (Exception $e) {
             $familyName = null;
         }
-        $japaneseName = implode(', ', array_filter([$givenName, $familyName]));
+        $japaneseName = implode(', ', array_filter([$familyName, $givenName]));
 
         try {
             $element = $response->filter('span:contains(\'Alternate names:\')');
@@ -115,11 +116,13 @@ class PersonSpider extends BasicSpider
             $alternativeNames = [];
         }
 
+        $websites = [];
         try {
-            $about = $this->cleanHTML($response
-                ->filter('div#content > table > tr > td.borderClass')
-                ->filter('.people-informantion-more')
-                ->html());
+            $element = $response
+                ->filter('.people-informantion-more');
+            $about = $this->cleanHTML($element->html());
+            $websites = $element->filter('a:not([href*=\'myanimelist.net\'])')
+                ->extract(['href']);
         } catch (Exception $e) {
             $about = null;
         }
@@ -139,9 +142,11 @@ class PersonSpider extends BasicSpider
                 ->nextAll()
                 ->filter('a')
                 ->attr('href');
-        } catch (Exception $e) {
-            $website = null;
-        }
+
+            if ($website !== 'http://') {
+                $websites[] = $website;
+            }
+        } catch (Exception $e) {}
 
         $animes = $response->filter('table.table-people-character tr')
             ->each(function (Crawler $item) {
@@ -218,7 +223,7 @@ class PersonSpider extends BasicSpider
             $alternativeNames,
             $about,
             $birthday,
-            $website,
+            $websites,
             $animes,
             $mangas,
             $staff

@@ -8,13 +8,13 @@ final class PersonItem extends AbstractItem
 {
     public function __construct(
         readonly string $id,
-        readonly ?string $imageUrl,
+        readonly ?string $imageURL,
         readonly string $name,
         readonly string $japaneseName,
-        readonly array $alternativeNames,
+        readonly ?array $alternativeNames,
         readonly ?string $about,
         readonly ?string $birthday,
-        readonly ?string $website,
+        readonly array $websites,
         readonly array $animes,
         readonly array $mangas,
         readonly array $staff,
