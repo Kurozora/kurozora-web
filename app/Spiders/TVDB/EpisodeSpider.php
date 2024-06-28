@@ -208,7 +208,7 @@ class EpisodeSpider extends BasicSpider
 
         // Episode image
         try {
-            $episodeBannerImageUrl = $response->filter('img[src*="/episode/"]')
+            $episodeBannerImageUrl = $response->filter('img[src*="/episode/"], img[src*="/series/"]')
                 ->attr('src');
         } catch (Exception $exception) {
             $episodeBannerImageUrl = null;
