@@ -120,7 +120,13 @@ class PersonSpider extends BasicSpider
         try {
             $element = $response
                 ->filter('.people-informantion-more');
-            $about = $this->cleanHTML($element->html());
+
+            $regex = '/(Twitter|Instagram|Facebook|Blog|Agency):(.*?)\n/';
+            $about = str($this->cleanHTML($element->html()))
+                ->replaceMatches($regex, '')
+                ->trim()
+                ->value();
+
             $websites = $element->filter('a:not([href*=\'myanimelist.net\'])')
                 ->extract(['href']);
         } catch (Exception $e) {
@@ -148,7 +154,28 @@ class PersonSpider extends BasicSpider
             }
         } catch (Exception $e) {}
 
-        $animes = $response->filter('table.table-people-character tr')
+        $animeCharacters = $response->filter('table.table-people-character tr')
+            ->each(function (Crawler $item) {
+                $regex = '/(\d+)\//';
+                $id = str($item->filter('td:nth-child(3) a[href*="/character/"]')
+                    ->attr('href'))
+                    ->match($regex)
+                    ->value();
+
+                $name = $item->filter('td:nth-child(3) a[href*="/character/"]')
+                    ->text();
+
+                $role = $this->cleanHTML($item->filter('td:nth-child(3) div:nth-child(2)')
+                    ->text());
+
+                return [
+                    'id' => $id,
+                    'name' => $name,
+                    'role' => $role
+                ];
+            });
+dd($animeCharacters);
+        $animeStaff = $response->filter('table.js-table-people-staff tr')
             ->each(function (Crawler $item) {
                 $regex = '/(\d+)\//';
                 $id = str($item->filter('td:nth-child(2) a[href*="/anime/"]')
@@ -159,13 +186,22 @@ class PersonSpider extends BasicSpider
                 $name = $item->filter('td:nth-child(2) a[href*="/anime/"]')
                     ->text();
 
-                $role = $this->cleanHTML($item->filter('td:nth-child(3) div:nth-child(2)')
-                    ->text());
+                $regex = '/\([^)]*\)/';
+                $roles = str($this->cleanHTML($item->filter('td:nth-child(2) div:nth-child(2) small')
+                    ->text()))
+                    ->explode(', ')
+                    ->transform(function (string $string) use ($regex) {
+                        return str($string)
+                            ->replaceMatches($regex, '')
+                            ->trim()
+                            ->value();
+                    })
+                    ->toArray();
 
                 return [
                     'id' => $id,
                     'name' => $name,
-                    'role' => $role
+                    'roles' => $roles
                 ];
             });
 
@@ -192,29 +228,6 @@ class PersonSpider extends BasicSpider
                 ];
             });
 
-        $staff = $response->filter('table.js-table-people-staff')
-            ->each(function (Crawler $item) {
-                $regex = '/(\d+)\//';
-                $id = str($item->filter('td:nth-child(2) a[href*="/anime/"]')
-                    ->attr('href'))
-                    ->match($regex)
-                    ->value();
-
-                $name = $item->filter('td:nth-child(2) a[href*="/anime/"]')
-                    ->text();
-
-                $roles = str($this->cleanHTML($item->filter('td:nth-child(2) div:nth-child(2) small')
-                    ->text()))
-                    ->explode(', ')
-                    ->toArray();
-
-                return [
-                    'id' => $id,
-                    'name' => $name,
-                    'role' => $roles
-                ];
-            });
-
         yield $this->item(new PersonItem(
             $id,
             $imageURL,
@@ -224,9 +237,9 @@ class PersonSpider extends BasicSpider
             $about,
             $birthday,
             $websites,
-            $animes,
-            $mangas,
-            $staff
+            $animeCharacters,
+            $animeStaff,
+            $mangas
         ));
     }
 

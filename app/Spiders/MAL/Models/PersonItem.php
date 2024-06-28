@@ -15,8 +15,8 @@ final class PersonItem extends AbstractItem
         readonly ?string $about,
         readonly ?string $birthday,
         readonly array $websites,
-        readonly array $animes,
+        readonly array $animeCharacters,
+        readonly array $animeStaff,
         readonly array $mangas,
-        readonly array $staff,
     ) {}
 }

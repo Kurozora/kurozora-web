@@ -4,19 +4,21 @@ namespace App\Processors\MAL;
 
 use App\Enums\AstrologicalSign;
 use App\Enums\MediaCollection;
+use App\Events\BareBonesAnimeAdded;
 use App\Events\BareBonesMangaAdded;
 use App\Events\BareBonesPersonAdded;
+use App\Models\Anime;
 use App\Models\Manga;
-use App\Models\MediaRelation;
+use App\Models\MediaStaff;
 use App\Models\Person;
-use App\Models\Relation;
+use App\Models\StaffRole;
 use App\Spiders\MAL\Models\PersonItem;
 use Carbon\Carbon;
+use DB;
 use Exception;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use RoachPHP\ItemPipeline\ItemInterface;
 use RoachPHP\ItemPipeline\Processors\CustomItemProcessor;
+use Throwable;
 
 class PersonProcessor extends CustomItemProcessor
 {
@@ -50,30 +52,18 @@ class PersonProcessor extends CustomItemProcessor
         $imageURL = $item->get('imageURL');
         $name = $this->getName($item->get('name'));
         $japaneseName = $this->getName($item->get('japaneseName'));
-        $alternativeNames = $this->getAlternativeNames($person, $item->get('alternativeNames'));
+        $alternativeNames = $this->getAlternativeNames($item->get('alternativeNames'), $person);
         $about = $this->getAbout($item->get('about'));
         $birthdate = $this->getBirthday($item->get('birthday'));
-        $websites = $item->get('websites');
-        $animes = $item->get('animes');
-        $mangas = $item->get('mangas');
-        $staff = $item->get('staff');
+        $websites = $item->get('websites') ?? [];
+        $animeCharacters = $item->get('animeCharacters') ?? [];
+        $animeStaff = $item->get('animeStaff') ?? [];
+        $mangas = $item->get('mangas') ?? [];
 
         if (empty($person)) {
             logger()->channel('stderr')->info('🖨 [MAL_ID:PERSON:' . $malID . '] Creating person');
             $astrologicalSign = $this->getAstrologicalSign($birthdate);
 
-            dd([
-                'new',
-                $name[0] ?? null,
-                $name[1] ?? null,
-                $japaneseName[0] ?? null,
-                $japaneseName[1] ?? null,
-                $alternativeNames,
-                $about,
-                $birthdate?->toDateString(),
-                $astrologicalSign?->value,
-                $websites,
-            ]);
             $person = Person::withoutGlobalScopes()
                 ->create([
                     'mal_id' => $malID,
@@ -95,7 +85,7 @@ class PersonProcessor extends CustomItemProcessor
             $newGivenName = empty($japaneseName[0]) ? $person->given_name : $japaneseName[0];
             $newFamilyName = empty($japaneseName[1]) ? $person->family_name : $japaneseName[1];
             $newAlternativeNames = array_values(array_unique(array_merge($person->alternative_names?->toArray() ?? [], $alternativeNames ?? [])));
-            $newWebsites = array_values(array_unique(array_merge($person->website_urls?->toArray() ?? [], $websites ?? [])));
+            $newWebsites = $this->getWebsites($websites, $person);
             $newBirthdate = empty($birthdate) ? $person->birthdate : $birthdate;
             $astrologicalSign = $this->getAstrologicalSign($newBirthdate);
 
@@ -115,14 +105,16 @@ class PersonProcessor extends CustomItemProcessor
         }
 
         // Add poster image
-        logger()->channel('stderr')->info('🌄 [MAL_ID:PERSON:' . $malID . '] Adding profile image');
         $this->addProfileImage($imageURL, $person);
-        logger()->channel('stderr')->info('✅️ [MAL_ID:PERSON:' . $malID . '] Done adding profile image');
 
-        // Add relations
-        logger()->channel('stderr')->info('↔️ [MAL_ID:PERSON:' . $malID . '] Adding relations');
-//        $this->addRelations($relations, $person);
-        logger()->channel('stderr')->info('✅️ [MAL_ID:PERSON:' . $malID . '] Done adding relations');
+        // Add anime staff
+        $this->addAnimeStaff($animeStaff, $person);
+
+        // Add anime characters
+        $this->addAnimeCharacters($animeCharacters, $person);
+
+        // Add manga staff
+        $this->addMangaStaff($mangas, $person);
 
         logger()->channel('stderr')->info('✅️ [MAL_ID:PERSON:' . $malID . '] Done processing person');
         return $item;
@@ -140,12 +132,12 @@ class PersonProcessor extends CustomItemProcessor
     /**
      * Get the alternative names.
      *
-     * @param Model|Person|null $person
-     * @param ?array            $alternativeNames
+     * @param ?array      $alternativeNames
+     * @param Person|null $person
      *
      * @return array|null
      */
-    private function getAlternativeNames(Model|Person|null $person, ?array $alternativeNames): ?array
+    private function getAlternativeNames(?array $alternativeNames, ?Person $person,): ?array
     {
         if (empty($alternativeNames)) {
             return null;
@@ -158,7 +150,29 @@ class PersonProcessor extends CustomItemProcessor
     }
 
     /**
-     * Get the astrological sign of the person
+     * Gt the websites of the person.
+     *
+     * @param null|array $websites
+     * @param Person     $person
+     *
+     * @return array
+     */
+    private function getWebsites(?array $websites, Person $person): array
+    {
+        return collect($websites ?? [])
+            ->merge($person->website_urls?->toArray() ?? [])
+            ->transform(function ($website) {
+                return str($website)
+                    ->trim()
+                    ->replaceEnd('/', '')
+                    ->value();
+            })
+            ->unique()
+            ->toArray();
+    }
+
+    /**
+     * Get the astrological sign of the person.
      *
      * @param null|Carbon $birthdate
      *
@@ -177,11 +191,12 @@ class PersonProcessor extends CustomItemProcessor
      * The 'about' string of the person.
      *
      * @param string|null $about
+     *
      * @return ?string
      */
     private function getAbout(?string $about): ?string
     {
-        $about = empty(trim($about)) ? null: $about;
+        $about = empty(trim($about)) ? null : $about;
 
         if (!empty($about)) {
             $about = preg_replace_array('/\(Source:[^ ]*|\)$/i', ['Source', ''], $about);
@@ -194,11 +209,12 @@ class PersonProcessor extends CustomItemProcessor
      * The birthday string of the person.
      *
      * @param string|null $birthday
+     *
      * @return ?Carbon
      */
     private function getBirthday(?string $birthday): ?Carbon
     {
-        $str = empty(trim($birthday)) ? null: $birthday;
+        $str = empty(trim($birthday)) ? null : $birthday;
 
         try {
             $date = Carbon::createFromFormat('M d, Y', $str);
@@ -220,7 +236,8 @@ class PersonProcessor extends CustomItemProcessor
                             ->day(1);
                         return $date;
                     }
-                } catch (Exception $exception) {}
+                } catch (Exception $exception) {
+                }
             }
         }
 
@@ -228,81 +245,230 @@ class PersonProcessor extends CustomItemProcessor
     }
 
     /**
-     * Add related media.
+     * Add anime staff relations
      *
-     * @param array|null $relations
-     * @param Model|Person|null $person
+     * @param array  $staff
+     * @param Person $person
+     *
      * @return void
      */
-    private function addRelations(?array $relations, Model|Person|null $person): void
+    private function addAnimeStaff(array $staff, Person $person): void
     {
-        $person = clone $person;
-
-        if (empty($relations)) {
+        if (empty($staff)) {
             return;
         }
 
-        foreach ($relations as $relationTypeKey => $relationsArray) {
-            $relationType = Relation::firstOrCreate([
-                'name' => $relationTypeKey
-            ]);
-            $mediaRelations = [];
+        $staffCollection = collect($staff);
+        $person = clone $person;
+        $roles = $staffCollection->pluck('roles')->flatten()->unique();
+        $staffRoles = StaffRole::whereIn('name', $roles->toArray());
 
-            foreach ($relationsArray as $key => $relation) {
-                $malID = $relation['mal_id'];
-                $originalTitle = $relation['original_title'];
-                $relatedModel = null;
+        // Add missing roles
+        if ($staffRoles->count() !== $roles->count()) {
+            logger()->channel('stderr')->error('🛠 [MAL_ID:PERSON:' . $person->mal_id . '] incorrect anime roles count');
 
-                // Some relationships are empty URLs or a dash "-" as title,
-                // likely due to the resource being deleted, but the
-                // relationship is not removed correctly.
-                if (empty($malID) || empty($originalTitle)) {
-                    continue;
-                }
+            $missingRoles = $roles->diff($staffRoles->pluck('name'));
 
-                switch ($relation['type']) {
-                    case 'anime':
-                        if ($foundPerson = Person::firstWhere([
-                            'mal_id' => $malID,
-                        ])) {
-                            $relatedModel = $foundPerson;
-                        } else {
-                            $relatedModel = Person::create([
-                                'mal_id' => $malID,
-                                'original_title' => $originalTitle
-                            ]);
+            dd($roles, $staffRoles->pluck('name'), $missingRoles);
+//            DB::transaction(function () use ($staffRoles, $missingRoles) {
+//                $missingRoles->each(function ($missingRole) use ($staffRoles) {
+//                    $staffRole = StaffRole::create([
+//                        'name' => $missingRole
+//                    ]);
+//
+//                    $staffRoles->add($staffRole);
+//                });
+//            });
+        }
 
-                            event(new BareBonesPersonAdded($relatedModel));
-                        }
-                        break;
-                    case 'manga':
-                        if ($foundManga = Manga::firstWhere([
-                            'mal_id' => $malID,
-                        ])) {
-                            $relatedModel = $foundManga;
-                        } else {
-                            $relatedModel = Manga::create([
-                                'mal_id' => $malID,
-                                'original_title' => $originalTitle
-                            ]);
+        // Add missing staff
+        try {
+            logger()->channel('stderr')->info('↔️ [MAL_ID:PERSON:' . $person->mal_id . '] Adding anime staff');
 
-                            event(new BareBonesMangaAdded($relatedModel));
-                        }
-                        break;
-                    default:
-                        break;
-                }
+            DB::transaction(function () use ($staffRoles, $person, $staffCollection) {
+                $staffCollection->each(function ($staff) use ($person, $staffRoles) {
+                    if ($foundAnime = Anime::firstWhere([
+                        'mal_id' => $staff['id'],
+                    ])) {
+                        $anime = $foundAnime;
+                    } else {
+                        $anime = Anime::create([
+                            'mal_id' => $staff['id'],
+                            'original_title' => $staff['name']
+                        ]);
 
-                $mediaRelations[] = [
-                    'model_id' => $person->id,
-                    'model_type' => $person->getMorphClass(),
-                    'relation_id' => $relationType->id,
-                    'related_id' => $relatedModel->id,
-                    'related_type' => $relatedModel->getMorphClass(),
-                ];
-            }
+                        event(new BareBonesAnimeAdded($anime));
+                    }
 
-            MediaRelation::upsert($mediaRelations, ['model_type', 'model_id', 'relation_id', 'related_type', 'related_id']);
+                    $roles = $staffRoles->whereIn('name', $staff['roles'])
+                        ->get();
+
+                    $roles->each(function (StaffRole $role) use ($person, $anime) {
+                        MediaStaff::firstOrCreate([
+                            'model_type' => $anime->getMorphClass(),
+                            'model_id' => $anime->id,
+                            'person_id' => $person->id,
+                            'staff_role_id' => $role->id,
+                        ]);
+                    });
+                });
+            });
+
+            logger()->channel('stderr')->info('✅️ [MAL_ID:PERSON:' . $person->mal_id . '] Done adding anime staff');
+        } catch (Throwable $e) {
+            logger()->channel('stderr')->error('❌ [MAL_ID:PERSON:' . $person->mal_id . '] Failed adding anime staff: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Add anime characters relations
+     *
+     * @param array  $characters
+     * @param Person $person
+     *
+     * @return void
+     */
+    private function addAnimeCharacters(array $characters, Person $person): void
+    {
+        if (empty($characters)) {
+            return;
+        }
+
+        $charactersCollection = collect($characters);
+        $person = clone $person;
+        $roles = $charactersCollection->pluck('roles')->flatten()->unique();
+        $staffRoles = StaffRole::whereIn('name', $roles->toArray());
+
+        // Add missing roles
+        if ($staffRoles->count() !== $roles->count()) {
+            logger()->channel('stderr')->error('🛠 [MAL_ID:PERSON:' . $person->mal_id . '] incorrect character count');
+
+            $missingRoles = $roles->diff($staffRoles->pluck('name'));
+
+            dd($roles, $staffRoles->pluck('name'), $missingRoles);
+//            DB::transaction(function () use ($staffRoles, $missingRoles) {
+//                $missingRoles->each(function ($missingRole) use ($staffRoles) {
+//                    $staffRole = StaffRole::create([
+//                        'name' => $missingRole
+//                    ]);
+//
+//                    $staffRoles->add($staffRole);
+//                });
+//            });
+        }
+
+        // Add missing staff
+        try {
+            logger()->channel('stderr')->info('↔️ [MAL_ID:PERSON:' . $person->mal_id . '] Adding character');
+
+            DB::transaction(function () use ($staffRoles, $person, $charactersCollection) {
+                $charactersCollection->each(function ($staff) use ($person, $staffRoles) {
+                    if ($foundAnime = Anime::firstWhere([
+                        'mal_id' => $staff['id'],
+                    ])) {
+                        $anime = $foundAnime;
+                    } else {
+                        $anime = Anime::create([
+                            'mal_id' => $staff['id'],
+                            'original_title' => $staff['name']
+                        ]);
+
+                        event(new BareBonesAnimeAdded($anime));
+                    }
+
+                    $roles = $staffRoles->whereIn('name', $staff['roles'])
+                        ->get();
+
+                    $roles->each(function (StaffRole $role) use ($person, $anime) {
+                        MediaStaff::firstOrCreate([
+                            'model_type' => $anime->getMorphClass(),
+                            'model_id' => $anime->id,
+                            'person_id' => $person->id,
+                            'staff_role_id' => $role->id,
+                        ]);
+                    });
+                });
+            });
+
+            logger()->channel('stderr')->info('✅️ [MAL_ID:PERSON:' . $person->mal_id . '] Done adding anime staff');
+        } catch (Throwable $e) {
+            logger()->channel('stderr')->error('❌ [MAL_ID:PERSON:' . $person->mal_id . '] Failed adding anime staff: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Add manga staff relations
+     *
+     * @param array  $mangas
+     * @param Person $person
+     *
+     * @return void
+     */
+    private function addMangaStaff(array $mangas, Person $person): void
+    {
+        if (empty($mangas)) {
+            return;
+        }
+
+        $staffCollection = collect($mangas);
+        $person = clone $person;
+        $roles = $staffCollection->pluck('roles')->flatten()->unique();
+        $staffRoles = StaffRole::whereIn('name', $roles->toArray());
+
+        // Add missing roles
+        if ($staffRoles->count() !== $roles->count()) {
+            logger()->channel('stderr')->error('🛠 [MAL_ID:PERSON:' . $person->mal_id . '] incorrect manga roles count');
+
+            $missingRoles = $roles->diff($staffRoles->pluck('name'));
+
+            dd($roles, $staffRoles->pluck('name'), $missingRoles);
+//            DB::transaction(function () use ($staffRoles, $missingRoles) {
+//                $missingRoles->each(function ($missingRole) use ($staffRoles) {
+//                    $staffRole = StaffRole::create([
+//                        'name' => $missingRole
+//                    ]);
+//
+//                    $staffRoles->add($staffRole);
+//                });
+//            });
+        }
+
+        // Add missing staff
+        try {
+            logger()->channel('stderr')->info('↔️ [MAL_ID:PERSON:' . $person->mal_id . '] Adding manga staff');
+
+            DB::transaction(function () use ($staffRoles, $person, $staffCollection) {
+                $staffCollection->each(function ($staff) use ($person, $staffRoles) {
+                    if ($foundManga = Manga::firstWhere([
+                        'mal_id' => $staff['id'],
+                    ])) {
+                        $manga = $foundManga;
+                    } else {
+                        $manga = Manga::create([
+                            'mal_id' => $staff['id'],
+                            'original_title' => $staff['name']
+                        ]);
+
+                        event(new BareBonesMangaAdded($manga));
+                    }
+
+                    $roles = $staffRoles->whereIn('name', $staff['roles'])
+                        ->get();
+
+                    $roles->each(function (StaffRole $role) use ($person, $manga) {
+                        MediaStaff::firstOrCreate([
+                            'model_type' => $manga->getMorphClass(),
+                            'model_id' => $manga->id,
+                            'person_id' => $person->id,
+                            'staff_role_id' => $role->id,
+                        ]);
+                    });
+                });
+            });
+
+            logger()->channel('stderr')->info('✅️ [MAL_ID:PERSON:' . $person->mal_id . '] Done adding manga staff');
+        } catch (Throwable $e) {
+            logger()->channel('stderr')->error('❌ [MAL_ID:PERSON:' . $person->mal_id . '] Failed adding manga staff: ' . $e->getMessage());
         }
     }
 
@@ -310,16 +476,21 @@ class PersonProcessor extends CustomItemProcessor
      * Download and link the given image to the specified person.
      *
      * @param string|null $imageUrl
-     * @param Model|Builder|Person $person
+     * @param Person      $person
+     *
      * @return void
      */
-    private function addProfileImage(?string $imageUrl, Model|Builder|Person $person): void
+    private function addProfileImage(?string $imageUrl, Person $person): void
     {
         if (!empty($imageUrl) && empty($person->getFirstMedia(MediaCollection::Profile))) {
             try {
+                logger()->channel('stderr')->info('🌄 [MAL_ID:PERSON:' . $person->mal_id . '] Adding profile image');
+
                 $person->updateImageMedia(MediaCollection::Profile(), $imageUrl, $person->full_name);
+
+                logger()->channel('stderr')->info('✅️ [MAL_ID:PERSON:' . $person->mal_id . '] Done adding profile image');
             } catch (Exception $e) {
-                logger()->channel('stderr')->error($e->getMessage());
+                logger()->channel('stderr')->error('❌️ [MAL_ID:PERSON:' . $person->mal_id . '] Failed adding profile image: ' . $e->getMessage());
             }
         }
     }
