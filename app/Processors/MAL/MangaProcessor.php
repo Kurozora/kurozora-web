@@ -131,7 +131,7 @@ class MangaProcessor extends CustomItemProcessor
         $tvRating = $this->getRating($this->getAttribute('Rating'), $genres, $themes);
         $isNSFW = $this->getIsNSFW($tvRating, $genres, $themes);
         $demographics = $this->getAttribute('Demographic');
-        $imageUrl = $item->get('imageUrl');
+        $imageURL = $item->get('imageURL');
         $published = $this->getAttribute('Published');
         $startedAt = $this->getStartedAt($published);
         $endedAt = $this->getEndedAt($published);
@@ -258,7 +258,7 @@ class MangaProcessor extends CustomItemProcessor
 
         // Add poster image
         logger()->channel('stderr')->info('🌄 [MAL_ID:MANGA:' . $malID . '] Adding poster');
-        $this->addPosterImage($imageUrl, $manga);
+        $this->addPosterImage($imageURL, $manga);
         logger()->channel('stderr')->info('✅️ [MAL_ID:MANGA:' . $malID . '] Done adding poster');
 
         // Add different studio relations
@@ -913,15 +913,15 @@ class MangaProcessor extends CustomItemProcessor
     /**
      * Download and link the given image to the specified manga.
      *
-     * @param string|null $imageUrl
+     * @param string|null $imageURL
      * @param Model|Builder|Manga $manga
      * @return void
      */
-    private function addPosterImage(?string $imageUrl, Model|Builder|Manga $manga): void
+    private function addPosterImage(?string $imageURL, Model|Builder|Manga $manga): void
     {
-        if (!empty($imageUrl) && empty($manga->getFirstMedia(MediaCollection::Poster))) {
+        if (!empty($imageURL) && empty($manga->getFirstMedia(MediaCollection::Poster))) {
             try {
-                $manga->updateImageMedia(MediaCollection::Poster(), $imageUrl, $manga->original_title);
+                $manga->updateImageMedia(MediaCollection::Poster(), $imageURL, $manga->original_title);
             } catch (Exception $e) {
                 logger()->channel('stderr')->error($e->getMessage());
             }

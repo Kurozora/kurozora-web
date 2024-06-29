@@ -120,7 +120,7 @@ class AnimeProcessor extends CustomItemProcessor
         $theme = $this->getAttribute('Theme') ?? [];
         $themes = ($this->getAttribute('Themes') ?? []) + $theme;
         $demographics = $this->getAttribute('Demographic');
-        $imageUrl = $item->get('imageUrl');
+        $imageURL = $item->get('imageURL');
         $videoUrl = $item->get('videoUrl');
         $duration = $this->getAttribute('Duration');
         $aired = $this->getAttribute('Aired');
@@ -248,7 +248,7 @@ class AnimeProcessor extends CustomItemProcessor
 
         // Add poster image
         logger()->channel('stderr')->info('🌄 [MAL_ID:ANIME:' . $malID . '] Adding poster');
-        $this->addPosterImage($imageUrl, $anime);
+        $this->addPosterImage($imageURL, $anime);
         logger()->channel('stderr')->info('✅️ [MAL_ID:ANIME:' . $malID . '] Done adding poster');
 
         // Add different studio relations
@@ -898,15 +898,15 @@ class AnimeProcessor extends CustomItemProcessor
     /**
      * Download and link the given image to the specified anime.
      *
-     * @param string|null $imageUrl
+     * @param string|null $imageURL
      * @param Model|Builder|Anime $anime
      * @return void
      */
-    private function addPosterImage(?string $imageUrl, Model|Builder|Anime $anime): void
+    private function addPosterImage(?string $imageURL, Model|Builder|Anime $anime): void
     {
-        if (!empty($imageUrl) && empty($anime->getFirstMedia(MediaCollection::Poster))) {
+        if (!empty($imageURL) && empty($anime->getFirstMedia(MediaCollection::Poster))) {
             try {
-                $anime->updateImageMedia(MediaCollection::Poster(), $imageUrl, $anime->original_title);
+                $anime->updateImageMedia(MediaCollection::Poster(), $imageURL, $anime->original_title);
             } catch (Exception $e) {
                 logger()->channel('stderr')->error($e->getMessage());
             }

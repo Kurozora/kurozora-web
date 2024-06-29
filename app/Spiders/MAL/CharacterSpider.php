@@ -2,6 +2,7 @@
 
 namespace App\Spiders\MAL;
 
+use App\Processors\MAL\CharacterProcessor;
 use App\Spiders\MAL\Models\CharacterItem;
 use Generator;
 use InvalidArgumentException;
@@ -33,7 +34,7 @@ class CharacterSpider extends BasicSpider
     ];
 
     public array $itemProcessors = [
-        //
+        CharacterProcessor::class
     ];
 
     public array $extensions = [
@@ -77,11 +78,17 @@ class CharacterSpider extends BasicSpider
 
         $name = $response->filter('h2[class="normal_header"]')
             ->innerText();
-        $japaneseName = $response
+        $japaneseName = str($response
             ->filter('h2[class="normal_header"] > span > small')
-            ->text();
-        $alternativeNames = $response->filter('h1')
-            ->text();
+            ->text())
+            ->trim('()')
+            ->value();
+        $alternativeNames = str($response->filter('h1')
+            ->text())
+            ->match('/"[^"]*"/')
+            ->replace('"', '')
+            ->explode(', ')
+            ->toArray();
         $synopsis = str($response->filter('#content > table > tr > td:nth-child(2)')->html())
             ->replace('<br>', '\n')
             ->value();
@@ -96,12 +103,12 @@ class CharacterSpider extends BasicSpider
         $animes = $response->filter('div:contains(\'Animeography\') + table tr')
         ->each(function (Crawler $item) {
             $regex = '/(\d+)\//';
-            $id = str($item->filter('td a[href*="/anime/"]')
+            $id = str($item->filter('td:nth-child(2) a[href*="/anime/"]')
                 ->attr('href'))
                 ->match($regex)
                 ->value();
 
-            $name = $item->filter('td a')
+            $name = $item->filter('td:nth-child(2) a')
                 ->text();
 
             $role = $item->filter('small')
@@ -118,12 +125,12 @@ class CharacterSpider extends BasicSpider
         $mangas = $response->filter('div:contains(\'Mangaography\') + table tr')
             ->each(function (Crawler $item) {
                 $regex = '/(\d+)\//';
-                $id = str($item->filter('td a[href*="/manga/"]')
+                $id = str($item->filter('td:nth-child(2) a[href*="/manga/"]')
                     ->attr('href'))
                     ->match($regex)
                     ->value();
 
-                $name = $item->filter('td a')
+                $name = $item->filter('td:nth-child(2) a')
                     ->text();
 
                 $role = $item->filter('small')
@@ -137,7 +144,7 @@ class CharacterSpider extends BasicSpider
                 ];
             });
 
-        $voiceActors = $response->filter('div:contains(\'Voice Actors\') ~ table tr')
+        $people = $response->filter('div:contains(\'Voice Actors\') ~ table tr')
             ->each(function (Crawler $item) {
                 $regex = '/(\d+)\//';
                 $id = str($item->filter('a[href*="/people/"]')
@@ -163,14 +170,14 @@ class CharacterSpider extends BasicSpider
 
         yield $this->item(new CharacterItem(
             $id,
+            $imageURL,
             $name,
             $japaneseName,
             $alternativeNames,
             $synopsis,
-            $imageURL,
             $animes,
             $mangas,
-            $voiceActors
+            $people
         ));
     }
 
