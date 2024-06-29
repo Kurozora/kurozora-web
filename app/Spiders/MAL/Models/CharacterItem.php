@@ -8,13 +8,13 @@ final class CharacterItem extends AbstractItem
 {
     public function __construct(
         readonly string $id,
+        readonly ?string $imageURL,
         readonly string $name,
         readonly string $japaneseName,
-        readonly string $alternativeNames,
-        readonly ?string $synopsis,
-        readonly ?string $imageUrl,
+        readonly ?array $alternativeNames,
+        readonly ?string $about,
         readonly array $animes,
         readonly array $mangas,
-        readonly array $voiceActors,
+        readonly array $people,
     ) {}
 }
