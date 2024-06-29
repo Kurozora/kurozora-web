@@ -5,9 +5,10 @@ namespace App\Processors\MAL;
 use App\Enums\AstrologicalSign;
 use App\Enums\MediaCollection;
 use App\Events\BareBonesAnimeAdded;
+use App\Events\BareBonesCharacterAdded;
 use App\Events\BareBonesMangaAdded;
-use App\Events\BareBonesPersonAdded;
 use App\Models\Anime;
+use App\Models\Character;
 use App\Models\Manga;
 use App\Models\MediaStaff;
 use App\Models\Person;
@@ -23,13 +24,6 @@ use Throwable;
 class PersonProcessor extends CustomItemProcessor
 {
     /**
-     * The current item.
-     *
-     * @var ItemInterface|null
-     */
-    private ?ItemInterface $item = null;
-
-    /**
      * @return array<int, class-string<ItemInterface>>
      */
     protected function getHandledItemClasses(): array
@@ -42,7 +36,6 @@ class PersonProcessor extends CustomItemProcessor
     public function processItem(ItemInterface $item): ItemInterface
     {
         $malID = $item->get('id');
-        $this->item = $item;
 
         logger()->channel('stderr')->info('🔄 [MAL_ID:PERSON:' . $malID . '] Processing ' . $malID);
 
@@ -137,7 +130,7 @@ class PersonProcessor extends CustomItemProcessor
      *
      * @return array|null
      */
-    private function getAlternativeNames(?array $alternativeNames, ?Person $person,): ?array
+    private function getAlternativeNames(?array $alternativeNames, ?Person $person): ?array
     {
         if (empty($alternativeNames)) {
             return null;
@@ -261,7 +254,7 @@ class PersonProcessor extends CustomItemProcessor
         $staffCollection = collect($staff);
         $person = clone $person;
         $roles = $staffCollection->pluck('roles')->flatten()->unique();
-        $staffRoles = StaffRole::whereIn('name', $roles->toArray());
+        $staffRoles = StaffRole::withoutGlobalScopes()->whereIn('name', $roles->toArray());
 
         // Add missing roles
         if ($staffRoles->count() !== $roles->count()) {
@@ -287,9 +280,10 @@ class PersonProcessor extends CustomItemProcessor
 
             DB::transaction(function () use ($staffRoles, $person, $staffCollection) {
                 $staffCollection->each(function ($staff) use ($person, $staffRoles) {
-                    if ($foundAnime = Anime::firstWhere([
-                        'mal_id' => $staff['id'],
-                    ])) {
+                    if ($foundAnime = Anime::withoutGlobalScopes()
+                        ->firstWhere([
+                            'mal_id' => $staff['id'],
+                        ])) {
                         $anime = $foundAnime;
                     } else {
                         $anime = Anime::create([
@@ -304,12 +298,13 @@ class PersonProcessor extends CustomItemProcessor
                         ->get();
 
                     $roles->each(function (StaffRole $role) use ($person, $anime) {
-                        MediaStaff::firstOrCreate([
-                            'model_type' => $anime->getMorphClass(),
-                            'model_id' => $anime->id,
-                            'person_id' => $person->id,
-                            'staff_role_id' => $role->id,
-                        ]);
+                        MediaStaff::withoutGlobalScopes()
+                            ->firstOrCreate([
+                                'model_type' => $anime->getMorphClass(),
+                                'model_id' => $anime->id,
+                                'person_id' => $person->id,
+                                'staff_role_id' => $role->id,
+                            ]);
                     });
                 });
             });
@@ -336,63 +331,36 @@ class PersonProcessor extends CustomItemProcessor
 
         $charactersCollection = collect($characters);
         $person = clone $person;
-        $roles = $charactersCollection->pluck('roles')->flatten()->unique();
-        $staffRoles = StaffRole::whereIn('name', $roles->toArray());
+        $malIDs = $charactersCollection->pluck('id')->flatten()->unique();
+        $characters = Character::withoutGlobalScopes()->whereIn('mal_id', $malIDs->toArray())
+            ->get();
 
-        // Add missing roles
-        if ($staffRoles->count() !== $roles->count()) {
-            logger()->channel('stderr')->error('🛠 [MAL_ID:PERSON:' . $person->mal_id . '] incorrect character count');
+        if ($characters->count() !== $malIDs->count()) {
+            // Add missing characters
+            $missingCharacters = $characters->pluck('mal_id')->diff($malIDs);
 
-            $missingRoles = $roles->diff($staffRoles->pluck('name'));
+            if ($missingCharacters->isNotEmpty()) {
+                try {
+                    logger()->channel('stderr')->info('↔️ [MAL_ID:PERSON:' . $person->mal_id . '] Adding character');
 
-            dd($roles, $staffRoles->pluck('name'), $missingRoles);
-//            DB::transaction(function () use ($staffRoles, $missingRoles) {
-//                $missingRoles->each(function ($missingRole) use ($staffRoles) {
-//                    $staffRole = StaffRole::create([
-//                        'name' => $missingRole
-//                    ]);
-//
-//                    $staffRoles->add($staffRole);
-//                });
-//            });
-        }
+                    DB::transaction(function () use ($missingCharacters, $person, $charactersCollection) {
+                        $missingCharacters->each(function ($missingCharacter) use ($charactersCollection) {
+                            $character = $charactersCollection->firstWhere('id', '=', $missingCharacter);
 
-        // Add missing staff
-        try {
-            logger()->channel('stderr')->info('↔️ [MAL_ID:PERSON:' . $person->mal_id . '] Adding character');
+                            $newCharacter = Character::create([
+                                'mal_id' => $character['id'],
+                                'name' => $character['name']
+                            ]);
 
-            DB::transaction(function () use ($staffRoles, $person, $charactersCollection) {
-                $charactersCollection->each(function ($staff) use ($person, $staffRoles) {
-                    if ($foundAnime = Anime::firstWhere([
-                        'mal_id' => $staff['id'],
-                    ])) {
-                        $anime = $foundAnime;
-                    } else {
-                        $anime = Anime::create([
-                            'mal_id' => $staff['id'],
-                            'original_title' => $staff['name']
-                        ]);
-
-                        event(new BareBonesAnimeAdded($anime));
-                    }
-
-                    $roles = $staffRoles->whereIn('name', $staff['roles'])
-                        ->get();
-
-                    $roles->each(function (StaffRole $role) use ($person, $anime) {
-                        MediaStaff::firstOrCreate([
-                            'model_type' => $anime->getMorphClass(),
-                            'model_id' => $anime->id,
-                            'person_id' => $person->id,
-                            'staff_role_id' => $role->id,
-                        ]);
+                            event(new BareBonesCharacterAdded($newCharacter));
+                        });
                     });
-                });
-            });
 
-            logger()->channel('stderr')->info('✅️ [MAL_ID:PERSON:' . $person->mal_id . '] Done adding anime staff');
-        } catch (Throwable $e) {
-            logger()->channel('stderr')->error('❌ [MAL_ID:PERSON:' . $person->mal_id . '] Failed adding anime staff: ' . $e->getMessage());
+                    logger()->channel('stderr')->info('✅️ [MAL_ID:PERSON:' . $person->mal_id . '] Done adding anime character');
+                } catch (Throwable $e) {
+                    logger()->channel('stderr')->error('❌ [MAL_ID:PERSON:' . $person->mal_id . '] Failed adding anime character: ' . $e->getMessage());
+                }
+            }
         }
     }
 
@@ -413,7 +381,7 @@ class PersonProcessor extends CustomItemProcessor
         $staffCollection = collect($mangas);
         $person = clone $person;
         $roles = $staffCollection->pluck('roles')->flatten()->unique();
-        $staffRoles = StaffRole::whereIn('name', $roles->toArray());
+        $staffRoles = StaffRole::withoutGlobalScopes()->whereIn('name', $roles->toArray());
 
         // Add missing roles
         if ($staffRoles->count() !== $roles->count()) {
@@ -439,9 +407,10 @@ class PersonProcessor extends CustomItemProcessor
 
             DB::transaction(function () use ($staffRoles, $person, $staffCollection) {
                 $staffCollection->each(function ($staff) use ($person, $staffRoles) {
-                    if ($foundManga = Manga::firstWhere([
-                        'mal_id' => $staff['id'],
-                    ])) {
+                    if ($foundManga = Manga::withoutGlobalScopes()
+                        ->firstWhere([
+                            'mal_id' => $staff['id'],
+                        ])) {
                         $manga = $foundManga;
                     } else {
                         $manga = Manga::create([
