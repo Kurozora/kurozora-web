@@ -16,7 +16,7 @@ class GenerateImageAttributes extends Command
      * @var string
      */
     protected $signature = 'generate:image-attr
-                            {id : the id of the image}';
+                            {id? : the id(s) of the image}';
 
     /**
      * The console command description.
@@ -42,19 +42,31 @@ class GenerateImageAttributes extends Command
      */
     public function handle(): int
     {
+        $ids = $this->argument('id');
+
+        if (empty($ids)) {
+            $ids = $this->ask('Image ID');
+        }
+
+        $ids = explode(',', $ids);
+
+        if (empty($ids)) {
+            $this->info('ID is empty. Exiting...');
+            return Command::INVALID;
+        }
+
         DB::disableQueryLog();
 
-        $id = $this->argument('id');
-
-        if ($media = Media::firstWhere('id', '=', $id)) {
-            (new GenerateImageAttributesJob($media))
-                ->handle();
-
-            if ($media->mime_type != 'image/webp') {
-                (new ConvertImageToWebPJob($media))
+        Media::whereIn('id', $ids)
+            ->each(function ($media) {
+                (new GenerateImageAttributesJob($media))
                     ->handle();
-            }
-        }
+
+                if ($media->mime_type != 'image/webp') {
+                    (new ConvertImageToWebPJob($media))
+                        ->handle();
+                }
+            });
 
         DB::enableQueryLog();
         return Command::SUCCESS;
