@@ -83,13 +83,16 @@ class EpisodeProcessor implements ItemProcessorInterface
 
             try {
                 logger()->channel('stderr')->info('🖨️ [tvdb_id:' . $tvdbID . '] Creating episode');
+                $duration = $anime->duration ?: $episodeDuration;
                 $episodeStartedAtDateTime = $this->updateEpisodeStartedAtTime($animeStartedAt, $episodeStartedAt);
+                $episodeEndedAtDateTime = $this->updateEpisodeEndedAtTime($episodeStartedAt, $duration);
                 $episodeAttributes = array_merge([
                     'tv_rating_id' => $season->tv_rating_id,
                     'number' => $episodeNumber,
                     'number_total' => $episodeNumberTotal,
                     'started_at' => $episodeStartedAtDateTime,
-                    'duration' => $anime->duration ?: $episodeDuration,
+                    'ended_at' => $episodeEndedAtDateTime,
+                    'duration' => $duration,
                     'is_nsfw' => $season->is_nsfw,
                 ], $translations);
 
@@ -140,13 +143,17 @@ class EpisodeProcessor implements ItemProcessorInterface
     /**
      * Cleans the season number and returns an int.
      *
-     * @param array $seasonNumber
+     * @param null|string $seasonNumber
+     *
      * @return Int
      */
-    protected function cleanSeasonNumber(array $seasonNumber): Int
+    protected function cleanSeasonNumber(?string $seasonNumber): Int
     {
-        $seasonNumberString = count($seasonNumber) >= 1 ? $seasonNumber[0] : null;
-        return (int) str($seasonNumberString)
+        if (empty($seasonNumber)) {
+            return 0;
+        }
+
+        return (int) str($seasonNumber)
             ->remove('Season')
             ->trim()
             ->value();
@@ -155,13 +162,16 @@ class EpisodeProcessor implements ItemProcessorInterface
     /**
      * Cleans the episode number and returns an int.
      *
-     * @param array $episodeNumber
+     * @param null|string $episodeNumber
      * @return Int
      */
-    protected function cleanEpisodeNumber(array $episodeNumber): Int
+    protected function cleanEpisodeNumber(?string $episodeNumber): Int
     {
-        $episodeNumberString = count($episodeNumber) >= 1 ? $episodeNumber[0] : null;
-        return (int) str($episodeNumberString)
+        if (empty($episodeNumber)) {
+            return 0;
+        }
+
+        return (int) str($episodeNumber)
             ->remove('Episode')
             ->trim()
             ->value();
@@ -227,7 +237,7 @@ class EpisodeProcessor implements ItemProcessorInterface
     }
 
     /**
-     * Update the time of the first aired date of the episode.
+     * Update the start datetime of the episode.
      *
      * @param Carbon|null $animeStartedAt
      * @param Carbon $episodeStartedAt
@@ -240,6 +250,25 @@ class EpisodeProcessor implements ItemProcessorInterface
         }
 
         return $episodeStartedAt->setTime($animeStartedAt->hour, $animeStartedAt->minute);
+    }
+
+    /**
+     * Update the end datetime of the episode.
+     *
+     * @param null|Carbon $episodeStartedAt
+     * @param int         $episodeDuration
+     *
+     * @return Carbon|null
+     */
+    protected function updateEpisodeEndedAtTime(?Carbon $episodeStartedAt, int $episodeDuration): ?Carbon
+    {
+        if (empty($episodeStartedAt)) {
+            return null;
+        }
+
+        $episodeEndedAt = $episodeStartedAt->copy();
+
+        return $episodeEndedAt->addSeconds($episodeDuration);
     }
 
     /**

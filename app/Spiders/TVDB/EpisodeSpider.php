@@ -179,12 +179,18 @@ class EpisodeSpider extends BasicSpider
 
         // Season
         $seasonRegex = '/Season \d+/';
-        preg_match($seasonRegex, $breadcrumb, $seasonNumber);
+        $seasonNumber = str($breadcrumb)
+            ->match($seasonRegex)
+            ->value();
 
         // Episode
         $episodeRegex = '/Episode \d+/';
-        preg_match($episodeRegex, $breadcrumb, $episodeNumber);
-        preg_match($episodeRegex, $absoluteBreadcrumb, $episodeNumberTotal);
+        $episodeNumber = str($breadcrumb)
+            ->match($episodeRegex)
+            ->value();
+        $episodeNumberTotal = str($absoluteBreadcrumb)
+            ->match($episodeRegex)
+            ->value();
 
         // Episode duration
         try {
@@ -208,7 +214,7 @@ class EpisodeSpider extends BasicSpider
 
         // Episode image
         try {
-            $episodeBannerImageUrl = $response->filter('img[src*="/episode/"], img[src*="/series/"]')
+            $episodeBannerImageUrl = $response->filter('img[src*="/episode/"], img[src*="/episodes/"], img[src*="/series/"]')
                 ->attr('src');
         } catch (Exception $exception) {
             $episodeBannerImageUrl = null;
