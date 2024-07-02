@@ -67,14 +67,18 @@ Schedule::command('telescope:prune --hours=48')
 
 /**********************************************/
 // Calculate total rankings every day
-Schedule::command('calculate:rankings', ['models' => 'all'])
+Schedule::command('calculate:rankings', [
+    'all'
+])
     ->daily()
     ->name('Calculate total rankings')
     ->onOneServer();
 
 /**********************************************/
 // Calculate anime views every day
-Schedule::command('calculate:views', ['model' => 'all'])
+Schedule::command('calculate:views', [
+    'all'
+])
     ->daily()
     ->name('Calculate views')
     ->onOneServer();
@@ -111,28 +115,36 @@ Schedule::command('activitylog:clean')
 
 /**********************************************/
 // Calculate anime ratings every week
-Schedule::command('calculate:ratings', ['model' => Anime::class])
+Schedule::command('calculate:ratings', [
+    Anime::class
+])
     ->weekly()
     ->name('Calculate anime rating')
     ->onOneServer();
 
 /**********************************************/
 // Calculate manga ratings every week
-Schedule::command('calculate:ratings', ['model' => Manga::class])
+Schedule::command('calculate:ratings', [
+    Manga::class
+])
     ->weekly()
     ->name('Calculate manga rating')
     ->onOneServer();
 
 /**********************************************/
 // Calculate game ratings every week
-Schedule::command('calculate:ratings', ['model' => Game::class])
+Schedule::command('calculate:ratings', [
+    Game::class
+])
     ->weekly()
     ->name('Calculate game rating')
     ->onOneServer();
 
 /**********************************************/
 // Calculate episode ratings every week
-Schedule::command('calculate:ratings', ['model' => Episode::class])
+Schedule::command('calculate:ratings', [
+    Episode::class
+])
     ->weekly()
     ->name('Calculate episode rating')
     ->onOneServer();
@@ -146,14 +158,21 @@ Schedule::command('calculate:rankings -g')
 
 /**********************************************/
 // Generate ReCAP every month except January and December
-Schedule::command('generate:recaps', ['month' => now()->subMonth()->month])
+Schedule::command('generate:recaps', [
+    'all',
+    now()->year,
+    now()->subMonth()->month
+])
     ->cron('0 0 1 2,3,4,5,6,7,8,9,10,11 *')
     ->name('Generate monthly recaps')
     ->onOneServer();
 
 /**********************************************/
 // Generate yearly ReCAP every week in December
-Schedule::command('generate:recaps', ['year' => now()->year])
+Schedule::command('generate:recaps', [
+    'all',
+    now()->year
+])
     ->yearlyOn(12)
     ->fridays()
     ->name('Generate yearly recaps')
@@ -161,7 +180,10 @@ Schedule::command('generate:recaps', ['year' => now()->year])
 
 /**********************************************/
 // Generate previous year's ReCAP every year on January
-Schedule::command('generate:recaps', ['year' => now()->subYear()->year])
+Schedule::command('generate:recaps', [
+    'all',
+    now()->subYear()->year
+])
     ->yearly()
     ->name('Generate previous year’s recaps')
     ->onOneServer();
