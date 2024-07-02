@@ -22,6 +22,7 @@ use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Throwable;
 
 class GenerateRecaps extends Command
 {
@@ -46,6 +47,7 @@ class GenerateRecaps extends Command
      * Execute the console command.
      *
      * @return int
+     * @throws Throwable
      */
     public function handle(): int
     {
@@ -69,7 +71,7 @@ class GenerateRecaps extends Command
             Theme::class,
         ]);
 
-        DB::connection('elb')->disableQueryLog();
+        DB::disableQueryLog();
         User::withoutGlobalScopes()
             ->when($user != 'all', function (Builder $query) use ($user) {
                 $query->where('id', '=', $user);
@@ -333,6 +335,7 @@ class GenerateRecaps extends Command
                                 $recap = Recap::updateOrCreate([
                                     'user_id' => $user->id,
                                     'year' => $year,
+                                    'month' => $endMonth,
                                     'type' => $type
                                 ]);
 
@@ -357,6 +360,7 @@ class GenerateRecaps extends Command
                                 $recap = Recap::updateOrCreate([
                                     'user_id' => $user->id,
                                     'year' => $year,
+                                    'month' => $endMonth,
                                     'type' => $type
                                 ], [
                                     'total_series_count' => $user->library
@@ -385,7 +389,7 @@ class GenerateRecaps extends Command
             });
 
         // Calculate top percentile per type
-        $types->each(function ($type) use ($year, $user) {
+        $types->each(function ($type) use ($month, $year, $user) {
             $this->line('Calculating top percentile for: ' . $type);
 
             if ($type == Genre::class || $type == Theme::class) {
@@ -404,8 +408,11 @@ class GenerateRecaps extends Command
                 ->when($user != 'all', function (Builder $query) use ($user) {
                     $query->where('user_id', '=', $user);
                 })
-                ->where('type', '=', $type)
-                ->where('year', '=', $year)
+                ->where([
+                    ['type', '=', $type],
+                    ['month', '=', $month],
+                    ['year', '=', $year]
+                ])
                 ->orderBy('total_series_count', 'desc')
                 ->chunkById($chunk, function (Collection $recaps) use ($totalRecaps, &$offset) {
                     DB::transaction(function () use (&$offset, $totalRecaps, $recaps) {
@@ -424,7 +431,7 @@ class GenerateRecaps extends Command
                     });
                 });
         });
-        DB::connection('elb')->enableQueryLog();
+        DB::enableQueryLog();
 
         return Command::SUCCESS;
     }
