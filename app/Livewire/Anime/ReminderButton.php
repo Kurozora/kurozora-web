@@ -44,7 +44,7 @@ class ReminderButton extends Component
         $this->anime = $anime;
 
         $this->isTracking = $anime->library->isNotEmpty();
-        $this->isReminded = $anime->isReminded;
+        $this->isReminded = (bool) $anime->isReminded;
     }
 
     /**
