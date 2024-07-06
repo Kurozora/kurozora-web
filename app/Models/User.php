@@ -16,6 +16,7 @@ use App\Traits\Model\Favoriter;
 use App\Traits\Model\HasSlug;
 use App\Traits\Model\HasViews;
 use App\Traits\Model\Impersonatable;
+use App\Traits\Model\Reminder;
 use App\Traits\Model\Tracker;
 use App\Traits\SearchFilterable;
 use App\Traits\Web\Auth\TwoFactorAuthenticatable;
@@ -77,6 +78,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         Notifiable,
         MassPrunable,
         Reacterable,
+        Reminder,
         Searchable,
         SearchFilterable,
         Tracker,
@@ -429,16 +431,6 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     }
 
     /**
-     * Returns the User-Reminder-Anime relationship for the user.
-     *
-     * @return HasMany
-     */
-    function user_reminder_anime(): HasMany
-    {
-        return $this->hasMany(UserReminderAnime::class);
-    }
-
-    /**
      * Returns the content of the calendar generated from the user's anime reminders.
      *
      * @return string
@@ -514,17 +506,6 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
             // Export calendar
             return $calendar->get();
         });
-    }
-
-    /**
-     * Returns the Anime that the user has added to their reminders.
-     *
-     * @return BelongsToMany
-     */
-    function reminderAnime(): BelongsToMany
-    {
-        return $this->belongsToMany(Anime::class, UserReminderAnime::class, 'user_id', 'anime_id')
-            ->withTimestamps();
     }
 
     /**
