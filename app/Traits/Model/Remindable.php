@@ -3,11 +3,11 @@
 namespace App\Traits\Model;
 
 use App\Models\User;
-use App\Models\UserReminderAnime;
+use App\Models\UserReminder;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 trait Remindable
@@ -40,11 +40,11 @@ trait Remindable
     /**
      * Get the model's reminded entries.
      *
-     * @return HasMany
+     * @return MorphMany
      */
-    function reminders(): HasMany
+    function reminders(): MorphMany
     {
-        return $this->hasMany(UserReminderAnime::class);
+        return $this->morphMany(UserReminder::class, 'remindable');
     }
 
     /**
@@ -54,7 +54,7 @@ trait Remindable
      */
     public function reminderers(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, UserReminderAnime::class, 'anime_id', 'user_id')
+        return $this->belongsToMany(User::class, UserReminder::class, 'remindable_id', 'user_id')
             ->withTimestamps();
     }
 
@@ -62,6 +62,7 @@ trait Remindable
      * Whether the model is reminded by the given user.
      *
      * @param User $user
+     *
      * @return bool
      */
     public function isRemindedBy(User $user): bool
@@ -85,6 +86,7 @@ trait Remindable
      * Whether the model is not reminded by the given user.
      *
      * @param User $user
+     *
      * @return bool
      */
     public function isNotRemindedBy(User $user): bool
@@ -111,8 +113,9 @@ trait Remindable
     /**
      * The formatted number of users who reminded the model.
      *
-     * @param int $precision
+     * @param int  $precision
      * @param bool $abbreviated
+     *
      * @return string
      */
     public function remindersCountForHumans(int $precision = 1, bool $abbreviated = false): string
@@ -124,7 +127,8 @@ trait Remindable
      * Eloquent builder scope that limits the query to the models reminded by the user.
      *
      * @param Builder $query
-     * @param Model $user
+     * @param Model   $user
+     *
      * @return Builder
      */
     public function scopeWhereRemindedBy(Builder $query, Model $user): Builder
@@ -138,7 +142,8 @@ trait Remindable
      * Eloquent builder scope that limits the query to the models not reminded by the user.
      *
      * @param Builder $query
-     * @param Model $user
+     * @param Model   $user
+     *
      * @return Builder
      */
     public function scopeWhereNotRemindedBy(Builder $query, Model $user): Builder

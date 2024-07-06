@@ -25,6 +25,7 @@ trait Tracker
      * The models tracked by the user.
      *
      * @param string $type
+     *
      * @return MorphToMany
      */
     protected function trackedModels(string $type): MorphToMany
@@ -37,6 +38,7 @@ trait Tracker
      * Whether the user has tracked the given model.
      *
      * @param Model $model
+     *
      * @return bool
      */
     public function hasTracked(Model $model): bool
@@ -51,6 +53,7 @@ trait Tracker
      * Whether the user has not tracked the given model.
      *
      * @param Model $model
+     *
      * @return bool
      */
     public function hasNotTracked(Model $model): bool
@@ -61,8 +64,9 @@ trait Tracker
     /**
      * Track the given model.
      *
-     * @param Model $model
+     * @param Model             $model
      * @param UserLibraryStatus $status
+     *
      * @return UserLibrary
      */
     public function track(Model $model, UserLibraryStatus $status): UserLibrary
@@ -91,6 +95,7 @@ trait Tracker
      * Un-track the given model
      *
      * @param Model $model
+     *
      * @return bool
      */
     public function untrack(Model $model): bool
@@ -106,7 +111,7 @@ trait Tracker
             $this->unsetRelation('library');
         }
 
-        return (bool)$this->trackedModels(get_class($model))
+        return (bool) $this->trackedModels(get_class($model))
             ->detach($model->getKey());
     }
 
@@ -114,6 +119,7 @@ trait Tracker
      * Clears the library of the given type.
      *
      * @param string|null $type
+     *
      * @return bool
      */
     public function clearLibrary(?string $type = null): bool
@@ -129,6 +135,7 @@ trait Tracker
      * Toggle tracking status of the given model.
      *
      * @param Model $model
+     *
      * @return UserLibrary|bool
      */
     public function toggleTracking(Model $model): bool|UserLibrary
@@ -142,6 +149,7 @@ trait Tracker
      * Eloquent builder scope that limits the query to the models of the specified type.
      *
      * @param string $type
+     *
      * @return BelongsToMany
      */
     public function whereTracked(string $type): BelongsToMany
