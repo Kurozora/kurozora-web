@@ -52,7 +52,7 @@ class Reminders extends Component
     public function randomAnime(): void
     {
         $anime = $this->user
-            ->reminderAnime()
+            ->whereReminded(Anime::class)
             ->inRandomOrder()
             ->first();
         $this->redirectRoute('anime.details', $anime);
@@ -114,7 +114,7 @@ class Reminders extends Component
         // If no search was performed, return all anime
         if (empty($this->search) && empty($wheres) && empty($orders)) {
             $animes = $this->user
-                ->reminderAnime()
+                ->whereReminded(Anime::class)
                 ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
                 ->when(auth()->user(), function ($query, $user) {
                     $query->with(['library' => function ($query) use ($user) {
@@ -125,9 +125,9 @@ class Reminders extends Component
         }
 
         $animeIDs = $this->user
-            ->reminderAnime()
+            ->whereReminded(Anime::class)
             ->limit(2000)
-            ->pluck('anime_id')
+            ->pluck('remindable_id')
             ->toArray();
         $animes = Anime::search($this->search);
         $animes->whereIn('id', $animeIDs);
