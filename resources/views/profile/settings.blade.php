@@ -39,7 +39,7 @@
         <x-hr class="hidden sm:block" />
 
         <div class="sm:mt-0">
-            <livewire:profile.import-form />
+            <livewire:profile.import-library-form />
         </div>
 
         <x-hr class="hidden sm:block" />

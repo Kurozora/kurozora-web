@@ -9,7 +9,7 @@ use Illuminate\View\View;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
-class ImportForm extends Component
+class ImportLibraryForm extends Component
 {
     use WithFileUploads;
 
@@ -25,7 +25,7 @@ class ImportForm extends Component
      *
      * @param ImportsUserLibrary $updater
      */
-    public function importUserLibrary(ImportsUserLibrary $updater)
+    public function importUserLibrary(ImportsUserLibrary $updater): void
     {
         $this->resetErrorBag();
 
@@ -41,6 +41,6 @@ class ImportForm extends Component
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.profile.import-form');
+        return view('livewire.profile.import-library-form');
     }
 }
