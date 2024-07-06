@@ -145,7 +145,8 @@ class ProcessMALImport implements ShouldQueue
             if ($this->behavior->value === ImportBehavior::Overwrite) {
                 $this->user->clearLibrary(Anime::class);
                 $this->user->clearFavorites(Anime::class);
-                $this->user->animeRatings()->forceDelete();
+                $this->user->clearReminders(Anime::class);
+                $this->user->clearRatings(Anime::class);
             }
 
             // Loop through the anime in the export file
@@ -164,7 +165,8 @@ class ProcessMALImport implements ShouldQueue
             if ($this->behavior->value === ImportBehavior::Overwrite) {
                 $this->user->clearLibrary(Anime::class);
                 $this->user->clearFavorites(Anime::class);
-                $this->user->animeRatings()->forceDelete();
+                $this->user->clearReminders(Anime::class);
+                $this->user->clearRatings(Anime::class);
             }
 
             // Loop through the anime in the export file
@@ -200,7 +202,8 @@ class ProcessMALImport implements ShouldQueue
             if ($this->behavior->value === ImportBehavior::Overwrite) {
                 $this->user->clearLibrary(Manga::class);
                 $this->user->clearFavorites(Manga::class);
-                $this->user->mangaRatings()->forceDelete();
+                $this->user->clearReminders(Manga::class);
+                $this->user->clearRatings(Manga::class);
             }
 
             // Loop through the manga in the export file

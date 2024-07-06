@@ -326,6 +326,22 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     /**
      * Returns the anime ratings the user has.
      *
+     * @param null|string $type
+     *
+     * @return bool
+     */
+    public function clearRatings(?string $type = null): bool
+    {
+        return $this->mediaRatings()
+            ->when($type != null, function ($query) use ($type) {
+                $query->where('model_type', '=', $type);
+            })
+            ->forceDelete();
+    }
+
+    /**
+     * Returns the anime ratings the user has.
+     *
      * @return HasMany
      */
     public function animeRatings(): HasMany
