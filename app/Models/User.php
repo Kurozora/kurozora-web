@@ -437,40 +437,43 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      */
     function getCalendar(): string
     {
-        /** @var Anime[] $animes */
-        $animes = $this->reminderAnime;
+        $reminders = $this->reminders;
 
         // Find location of cached data
-        $cacheKey = self::TABLE_NAME . '-name-reminders-id-' . $this->id . '-reminder_count-' . $animes->count();
+        $cacheKey = self::TABLE_NAME . '-name-reminders-id-' . $this->id . '-reminder_count-' . $reminders->count();
 
         // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_CALENDAR_SECONDS, function () use ($animes) {
+        return Cache::remember($cacheKey, self::CACHE_KEY_CALENDAR_SECONDS, function () use ($reminders) {
             $appName = config('app.name');
-            $productIdentifier = '-//Kurozora//' . $appName . '//' . strtoupper(config('app.locale'));
+            $appDomain = config('app.domain');
+            $appLocale = config('app.locale');
+            $productIdentifier = '-//' . $appName . '//' . $appName . '//' . strtoupper($appLocale);
 
-            $calendar = Calendar::create(UserReminderAnime::CAL_NAME);
-            $calendar->description(UserReminderAnime::CAL_DESCRIPTION)
+            $calendar = Calendar::create($appName);
+            $calendar->description(__('The Kurozora calendar group contains all reminders you have subscribed to in the Kurozora app.'))
                 ->productIdentifier($productIdentifier)
-                ->refreshInterval(UserReminderAnime::CAL_REFRESH_INTERVAL)
+                ->refreshInterval(UserReminder::CAL_REFRESH_INTERVAL)
                 ->appendProperty(TextProperty::create('CALSCALE', 'GREGORIAN'))
                 ->appendProperty(TextProperty::create('X-APPLE-CALENDAR-COLOR', '#FF9300'))
                 ->appendProperty(TextProperty::create('COLOR', 'orange'))
-                ->appendProperty(TextProperty::create('ORGANIZER', 'kurozoraapp@gmail.app')
-                    ->addParameter(Parameter::create('CN', 'Kurozora')));
+                ->appendProperty(TextProperty::create('ORGANIZER', 'reminder@' . $appDomain)
+                    ->addParameter(Parameter::create('CN', $appName)));
 
-            foreach ($animes as $anime) {
+            foreach ($reminders as $reminder) {
+                /** @var Anime $anime */
+                $anime = $reminder->remindable;
                 $episodes = $anime->episodes;
 
                 foreach ($episodes as $episode) {
-                    $uniqueIdentifier = Uuid::uuid4() . '@kurozora.app';
-                    $eventName = $anime->title . ' Episode ' . $episode->number . '(' . $episode->number_total . ')';
+                    $uniqueIdentifier = Uuid::uuid4() . '@' . $appDomain;
+                    $eventName = $anime->title . ' Episode ' . $episode->number . ' (' . $episode->number_total . ')';
                     $startsAt = $episode->started_at->setTimezone('Asia/Tokyo');
                     $endsAt = $episode->ended_at->setTimezone('Asia/Tokyo');
 
                     // Create event
                     $calendarEvent = Event::create($eventName)
                         ->description($episode->synopsis ?? $anime->synopsis ?? '')
-                        ->organizer('reminder@kurozora.app', 'Kurozora')
+                        ->organizer('reminder@' . $appDomain, $appName)
                         ->startsAt($startsAt)
                         ->endsAt($endsAt)
                         ->uniqueIdentifier($uniqueIdentifier);
@@ -480,19 +483,19 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
                         ->appendProperty(TextProperty::create('X-APPLE-TRAVEL-ADVISORY-BEHAVIOR', 'AUTOMATIC'));
 
                     // Add alerts
-                    $firstReminderMessage = $eventName . ' starts in ' . UserReminderAnime::CAL_FIRST_ALERT_MINUTES . ' minutes.';
-                    $secondReminderMessage = $eventName . ' starts in ' . UserReminderAnime::CAL_SECOND_ALERT_MINUTES . ' minutes.';
-                    $thirdReminderMessage = $eventName . ' starts in ' . UserReminderAnime::CAL_THIRD_ALERT_DAY . ' day.';
+                    $firstReminderMessage = $eventName . ' starts in ' . UserReminder::CAL_FIRST_ALERT_MINUTES . ' minutes.';
+                    $secondReminderMessage = $eventName . ' starts in ' . UserReminder::CAL_SECOND_ALERT_MINUTES . ' minutes.';
+                    $thirdReminderMessage = $eventName . ' starts in ' . UserReminder::CAL_THIRD_ALERT_DAY . ' day.';
 
-                    $firstAlert = Alert::minutesBeforeStart(UserReminderAnime::CAL_FIRST_ALERT_MINUTES)
+                    $firstAlert = Alert::minutesBeforeStart(UserReminder::CAL_FIRST_ALERT_MINUTES)
                         ->message($firstReminderMessage)
-                        ->appendProperty(TextProperty::create('UID', Uuid::uuid4() . '@kurozora.app'));
-                    $secondAlert = Alert::minutesBeforeStart(UserReminderAnime::CAL_SECOND_ALERT_MINUTES)
+                        ->appendProperty(TextProperty::create('UID', Uuid::uuid4() . '@' . $appDomain));
+                    $secondAlert = Alert::minutesBeforeStart(UserReminder::CAL_SECOND_ALERT_MINUTES)
                         ->message($secondReminderMessage)
-                        ->appendProperty(TextProperty::create('UID', Uuid::uuid4() . '@kurozora.app'));
-                    $thirdAlert = Alert::minutesBeforeStart(UserReminderAnime::CAL_THIRD_ALERT_DAY)
+                        ->appendProperty(TextProperty::create('UID', Uuid::uuid4() . '@' . $appDomain));
+                    $thirdAlert = Alert::minutesBeforeStart(UserReminder::CAL_THIRD_ALERT_DAY)
                         ->message($thirdReminderMessage)
-                        ->appendProperty(TextProperty::create('UID', Uuid::uuid4() . '@kurozora.app'));
+                        ->appendProperty(TextProperty::create('UID', Uuid::uuid4() . '@' . $appDomain));
 
                     $calendarEvent->alert($firstAlert)
                         ->alert($secondAlert)
