@@ -4226,7 +4226,7 @@
         }
       }
     },
-    "/me/reminder-anime": {
+    "/me/reminders": {
       "get": {
         "security": [
           {
@@ -4318,7 +4318,7 @@
         }
       }
     },
-    "/me/reminder-anime/download": {
+    "/me/reminders/download": {
       "get": {
         "security": [
           {
