@@ -67,10 +67,7 @@ class LibraryButton extends Component
         if ($this->libraryStatus < 0) {
             $user->untrack($this->model);
             $user->unfavorite($this->model);
-
-            if ($this->model->getMorphClass() == Anime::class) {
-                $user->reminderAnime()->detach($this->model->id);
-            }
+            $user->unremind($this->model);
 
             // Reset dropdown to "ADD".
             $this->libraryStatus = -1;
