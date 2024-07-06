@@ -75,6 +75,12 @@
         <x-hr class="hidden sm:block" />
 
         <div class="sm:mt-0">
+            <livewire:profile.delete-library-form />
+        </div>
+
+        <x-hr class="hidden sm:block" />
+
+        <div class="sm:mt-0">
             <livewire:profile.delete-user-form />
         </div>
     </div>
