@@ -16,7 +16,7 @@ class SubscribeToReminders extends Component
      */
     public function subscribeToReminders(): void
     {
-        $this->redirect(str(route('api.me.reminder-anime.download'))->replace(['https', 'http'], 'webcal'));
+        $this->redirect(str(route('api.me.reminders.download'))->replace(['https', 'http'], 'webcal'));
     }
 
     /**

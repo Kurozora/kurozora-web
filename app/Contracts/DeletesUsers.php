@@ -9,8 +9,9 @@ interface DeletesUsers
     /**
      * Delete the given user.
      *
-     * @param  User  $user
+     * @param User $user
+     *
      * @return void
      */
-    public function delete(User $user);
+    public function delete(User $user): void;
 }

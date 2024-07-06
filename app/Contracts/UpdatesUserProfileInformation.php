@@ -10,7 +10,8 @@ interface UpdatesUserProfileInformation
      * Validate and update the given user's profile information.
      *
      * @param User  $user
-     * @param array  $input
+     * @param array $input
+     *
      * @return void
      */
     public function update(User $user, array $input): void;
