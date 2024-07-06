@@ -14,8 +14,11 @@ use App\Models\Anime;
 use App\Models\Episode;
 use App\Models\Game;
 use App\Models\Manga;
+use App\Models\UserLibrary;
+use App\Models\UserReminder;
 use App\Traits\Model\Remindable;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
@@ -31,22 +34,29 @@ class UserReminderController extends Controller
     function index(GetAnimeReminderRequest $request): JsonResponse
     {
         $data = $request->validated();
+        $library = (int) ($data['library'] ?? UserLibraryKind::Anime);
 
         // Get the authenticated user
         $user = auth()->user();
 
         // Get morph class
-        $morphClass = match ((int) ($data['library'] ?? UserLibraryKind::Anime)) {
+        $morphClass = match ($library) {
             UserLibraryKind::Manga => Manga::class,
             UserLibraryKind::Game => Game::class,
             default => Anime::class,
         };
 
-        // Paginate the reminders
-        $userReminders = $user->reminderAnime()
+        // Paginate the reminded model
+        $userReminders = $user->whereReminded($morphClass)
+            ->when(auth()->user() !== $user, function (Builder $query) use ($user) {
+                $query->join(UserLibrary::TABLE_NAME, UserReminder::TABLE_NAME . '.remindable_id', '=', UserLibrary::TABLE_NAME . '.trackable_id')
+                    ->whereColumn(UserLibrary::TABLE_NAME . '.trackable_type', '=', UserReminder::TABLE_NAME . '.remindable_type')
+                    ->where(UserLibrary::TABLE_NAME . '.user_id', '=', $user->id)
+                    ->where(UserLibrary::TABLE_NAME . '.is_hidden', '=', false);
+            })
             ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating', 'mediaRatings' => function ($query) use ($user) {
                 $query->where([
-                    ['user_id', '=', $user->id],
+                    ['user_id', '=', $user->id]
                 ]);
             }, 'library' => function ($query) use ($user) {
                 $query->where('user_id', '=', $user->id);
@@ -115,19 +125,10 @@ class UserReminderController extends Controller
             };
         }
 
-        $isAlreadyReminded = $user->user_reminder_anime()
-            ->where('anime_id', $model->id)
-            ->exists();
-
-        if ($isAlreadyReminded) { // Don't remind the user
-            $user->reminderAnime()->detach($model->id);
-        } else { // Remind the user
-            $user->reminderAnime()->attach($model->id);
-        }
-
+        // Successful response
         return JSONResult::success([
             'data' => [
-                'isReminded' => !$isAlreadyReminded,
+                'isReminded' => !is_bool($user->toggleReminder($model))
             ],
         ]);
     }
@@ -152,14 +153,15 @@ class UserReminderController extends Controller
         $whereBetween = [$startDate, $endDate];
 
         $user = $user->load([
-            'reminderAnime' => function ($query) use ($whereBetween) {
-                $query->with([
-                    'translations',
-                    'episodes' => function ($query) use ($whereBetween) {
-                        $query->with(['translations'])
-                            ->whereBetween(Episode::TABLE_NAME . '.started_at', $whereBetween);
-                    },
-                ]);
+            'reminders' => function ($query) use ($whereBetween) {
+                $query->where('remindable_type', '=', Anime::class)
+                    ->with([
+                        'translations',
+                        'episodes' => function ($query) use ($whereBetween) {
+                            $query->with(['translations'])
+                                ->whereBetween(Episode::TABLE_NAME . '.started_at', $whereBetween);
+                        },
+                    ]);
             },
         ]);
         $calendarExportStream = $user->getCalendar();
@@ -167,7 +169,7 @@ class UserReminderController extends Controller
         // Headers to return for the download
         $headers = [
             'Content-type'          => 'text/calendar',
-            'Content-Disposition'   => sprintf('attachment; filename=%s', $user->username. '-reminder.ics'),
+            'Content-Disposition'   => sprintf('attachment; filename=%s', $user->username. '-reminders.ics'),
             'Content-Length'        => strlen($calendarExportStream),
         ];
 

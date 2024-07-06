@@ -264,10 +264,7 @@ class LibraryController extends Controller
         $user->unfavorite($model);
 
         // Remove from reminders as you can't be reminded and not have the anime in library
-        match ($libraryKind?->value ?? UserLibraryKind::Anime) {
-            UserLibraryKind::Anime => $user->reminderAnime()->detach($modelID),
-            default => null
-        };
+        $user->unremind($model);
 
         return JSONResult::success([
             'data' => [
