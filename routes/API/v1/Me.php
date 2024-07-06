@@ -30,6 +30,6 @@ Route::prefix('/me')
         require 'Me/Library.php';
         require 'Me/Notifications.php';
         require 'Me/Recap.php';
-        require 'Me/Reminder-Anime.php';
+        require 'Me/Reminders.php';
         require 'Me/Sessions.php';
     });
