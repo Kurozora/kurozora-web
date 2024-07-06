@@ -173,9 +173,13 @@ class EpisodeSpider extends BasicSpider
         $breadcrumb = $response->filter('div.page-toolbar div.crumbs a[href*="seasons/official"]')
             ->ancestors()
             ->text();
-        $absoluteBreadcrumb = $response->filter('div.page-toolbar div.crumbs a[href*="seasons/absolute"]')
-            ->ancestors()
-            ->text();
+        try {
+            $absoluteBreadcrumb = $response->filter('div.page-toolbar div.crumbs a[href*="seasons/absolute"]')
+                ->ancestors()
+                ->text();
+        } catch (Exception $exception) {
+            $absoluteBreadcrumb = $breadcrumb;
+        }
 
         // Season
         $seasonRegex = '/Season \d+/';

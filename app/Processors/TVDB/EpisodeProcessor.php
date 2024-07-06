@@ -85,16 +85,20 @@ class EpisodeProcessor implements ItemProcessorInterface
                 logger()->channel('stderr')->info('🖨️ [tvdb_id:' . $tvdbID . '] Creating episode');
                 $duration = $anime->duration ?: $episodeDuration;
                 $episodeStartedAtDateTime = $this->updateEpisodeStartedAtTime($animeStartedAt, $episodeStartedAt);
-                $episodeEndedAtDateTime = $this->updateEpisodeEndedAtTime($episodeStartedAt, $duration);
+                $episodeEndedAtDateTime = $this->updateEpisodeEndedAtTime($episodeStartedAtDateTime, $duration);
                 $episodeAttributes = array_merge([
                     'tv_rating_id' => $season->tv_rating_id,
                     'number' => $episodeNumber,
                     'number_total' => $episodeNumberTotal,
-                    'started_at' => $episodeStartedAtDateTime,
-                    'ended_at' => $episodeEndedAtDateTime,
                     'duration' => $duration,
                     'is_nsfw' => $season->is_nsfw,
                 ], $translations);
+                if ($episodeStartedAtDateTime) {
+                    $episodeAttributes['started_at'] = $episodeStartedAtDateTime;
+                }
+                if ($episodeEndedAtDateTime) {
+                    $episodeAttributes['ended_at'] = $episodeEndedAtDateTime;
+                }
 
                 // Update or create episode
                 $episode = $season->episodes()->updateOrCreate([
@@ -118,6 +122,7 @@ class EpisodeProcessor implements ItemProcessorInterface
      * Cleans the translations and returns an array.
      *
      * @param array $translations
+     *
      * @return array
      */
     protected function cleanTranslations(array $translations): array
@@ -147,7 +152,7 @@ class EpisodeProcessor implements ItemProcessorInterface
      *
      * @return Int
      */
-    protected function cleanSeasonNumber(?string $seasonNumber): Int
+    protected function cleanSeasonNumber(?string $seasonNumber): int
     {
         if (empty($seasonNumber)) {
             return 0;
@@ -163,9 +168,10 @@ class EpisodeProcessor implements ItemProcessorInterface
      * Cleans the episode number and returns an int.
      *
      * @param null|string $episodeNumber
+     *
      * @return Int
      */
-    protected function cleanEpisodeNumber(?string $episodeNumber): Int
+    protected function cleanEpisodeNumber(?string $episodeNumber): int
     {
         if (empty($episodeNumber)) {
             return 0;
@@ -219,10 +225,11 @@ class EpisodeProcessor implements ItemProcessorInterface
     /**
      * Get the first aired date of the episode.
      *
-     * @param string $value
+     * @param ?string $value
+     *
      * @return Carbon|null
      */
-    protected function getStartedAt(string $value): ?Carbon
+    protected function getStartedAt(?string $value): ?Carbon
     {
         try {
             $date = Carbon::createFromFormat('M d, Y', $value);
@@ -240,11 +247,16 @@ class EpisodeProcessor implements ItemProcessorInterface
      * Update the start datetime of the episode.
      *
      * @param Carbon|null $animeStartedAt
-     * @param Carbon $episodeStartedAt
+     * @param Carbon|null $episodeStartedAt
+     *
      * @return Carbon|null
      */
-    protected function updateEpisodeStartedAtTime(?Carbon $animeStartedAt, Carbon $episodeStartedAt): ?Carbon
+    protected function updateEpisodeStartedAtTime(?Carbon $animeStartedAt, ?Carbon $episodeStartedAt): ?Carbon
     {
+        if (empty($episodeStartedAt)) {
+            return null;
+        }
+
         if (empty($animeStartedAt)) {
             return $episodeStartedAt->setTime(9, 0);
         }
@@ -275,6 +287,7 @@ class EpisodeProcessor implements ItemProcessorInterface
      * Get the anime air date and time.
      *
      * @param Anime $anime
+     *
      * @return Carbon|null
      */
     protected function getAnimeAirDateTime(Anime $anime): ?Carbon
@@ -305,9 +318,10 @@ class EpisodeProcessor implements ItemProcessorInterface
     /**
      * Download and link the given image to the specified episode.
      *
-     * @param string|null $imageUrl
+     * @param string|null           $imageUrl
      * @param Model|Builder|Episode $episode
-     * @param string $tvdbID
+     * @param string                $tvdbID
+     *
      * @return void
      */
     private function addBannerImage(?string $imageUrl, Model|Builder|Episode $episode, string $tvdbID): void
