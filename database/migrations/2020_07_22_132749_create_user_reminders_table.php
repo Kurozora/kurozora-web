@@ -1,8 +1,7 @@
 <?php
 
-use App\Models\Anime;
 use App\Models\User;
-use App\Models\UserReminderAnime;
+use App\Models\UserReminder;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,23 +15,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create(UserReminderAnime::TABLE_NAME, function (Blueprint $table) {
+        Schema::create(UserReminder::TABLE_NAME, function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->unsigned();
-            $table->unsignedBigInteger('anime_id')->unsigned();
+            $table->unsignedBigInteger('user_id');
+            $table->morphs('remindable');
             $table->timestamps();
         });
 
-        Schema::table(UserReminderAnime::TABLE_NAME, function (Blueprint $table) {
+        Schema::table(UserReminder::TABLE_NAME, function (Blueprint $table) {
             // Set foreign key constraints
             $table->foreign('user_id')
                 ->references('id')
                 ->on(User::TABLE_NAME)
-                ->cascadeOnDelete()
-                ->cascadeOnUpdate();
-            $table->foreign('anime_id')
-                ->references('id')
-                ->on(Anime::TABLE_NAME)
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
         });
@@ -45,6 +39,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists(UserReminderAnime::TABLE_NAME);
+        Schema::dropIfExists(UserReminder::TABLE_NAME);
     }
 };
