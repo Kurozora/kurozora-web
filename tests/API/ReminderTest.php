@@ -3,16 +3,16 @@
 namespace Tests\API;
 
 use App\Enums\UserLibraryKind;
-use App\Enums\UserLibraryStatus;
 use App\Models\Anime;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
+use Tests\Traits\ProvidesTestAnime;
 use Tests\Traits\ProvidesTestUser;
 
-class ReminderAnimeTest extends TestCase
+class ReminderTest extends TestCase
 {
-    use DatabaseMigrations, ProvidesTestUser;
+    use DatabaseMigrations, ProvidesTestUser, ProvidesTestAnime;
 
     /**
      * Test if a normal user cannot add anime to their reminders.
@@ -23,21 +23,16 @@ class ReminderAnimeTest extends TestCase
     function a_normal_user_cannot_add_anime_to_their_reminders(): void
     {
         // Send request to add anime to the user's reminders
-        /** @var Anime $anime */
-        $anime = Anime::factory()->create();
-
-        $this->user->track($anime, UserLibraryStatus::InProgress());
-
-        $response = $this->auth()->json('POST', 'v1/me/reminder-anime', [
+        $response = $this->auth()->postJson(route('api.me.reminders.create'), [
             'library' => UserLibraryKind::Anime,
-            'model_id' => (string) $anime->id,
+            'model_id' => (string) $this->anime->id,
         ]);
 
         // Check whether the request was successful
         $response->assertUnsuccessfulAPIResponse();
 
         // Check whether the user now has 1 anime in their reminders
-        $this->assertEquals(0, $this->user->reminderAnime()->count());
+        $this->assertFalse($this->user->hasReminded($this->anime));
     }
 
     /**
@@ -48,28 +43,22 @@ class ReminderAnimeTest extends TestCase
     #[Test]
     function a_subscribed_user_can_add_anime_to_their_reminders(): void
     {
-        // Add anime to the user's library
-        /** @var Anime $anime */
-        $anime = Anime::factory()->create();
-
-        $this->user->track($anime, UserLibraryStatus::InProgress());
-
         // Make user a subscriber
         $this->user->update([
             'is_subscribed' => true
         ]);
 
         // Send request to add the anime to the user's reminders
-        $response = $this->auth()->json('POST', 'v1/me/reminder-anime', [
+        $response = $this->auth()->postJson(route('api.me.reminders.create'), [
             'library' => UserLibraryKind::Anime,
-            'model_id' => (string) $anime->id,
+            'model_id' => (string) $this->anime->id,
         ]);
 
         // Check whether the request was successful
         $response->assertSuccessfulAPIResponse();
 
         // Check whether the user now has 1 anime in their reminders
-        $this->assertEquals(1, $this->user->reminderAnime()->count());
+        $this->assertTrue($this->user->hasReminded($this->anime));
     }
 
     /**
@@ -80,12 +69,8 @@ class ReminderAnimeTest extends TestCase
     #[Test]
     function a_subscribed_user_can_remove_anime_from_their_reminders(): void
     {
-        // Add the anime to the user's library and reminders
-        /** @var Anime $anime */
-        $anime = Anime::factory()->create();
-
-        $this->user->track($anime, UserLibraryStatus::InProgress());
-        $this->user->reminderAnime()->attach($anime->id);
+        // Add the anime to the user's reminders.
+        $this->user->remind($this->anime);
 
         // Make user a subscriber
         $this->user->update([
@@ -93,17 +78,16 @@ class ReminderAnimeTest extends TestCase
         ]);
 
         // Send request to remove the anime from the user's reminders
-        $response = $this->auth()->json('POST', 'v1/me/reminder-anime', [
-            'library'       => UserLibraryKind::Anime,
-            'model_id'      => (string) $anime->id,
-            'is_reminded'   => 0
-        ]);
+        $response = $this->auth()->postJson(route('api.me.reminders.create', [
+            'library' => UserLibraryKind::Anime,
+            'model_id' => (string) $this->anime->getKey(),
+        ]));
 
         // Check whether the request was successful
         $response->assertSuccessfulAPIResponse();
 
         // Check whether the user now has no anime in their reminders
-        $this->assertEquals(0, $this->user->reminderAnime()->count());
+        $this->assertFalse($this->user->hasReminded($this->anime));
     }
 
     /**
@@ -119,11 +103,11 @@ class ReminderAnimeTest extends TestCase
         $animeList = Anime::factory(25)->create();
 
         foreach($animeList as $anime) {
-            $this->user->reminderAnime()->attach($anime->id);
+            $this->user->remind($anime);
         }
 
         // Send request for the list of anime
-        $response = $this->auth()->json('GET', 'v1/me/reminder-anime');
+        $response = $this->auth()->getJson(route('api.me.reminders.index'));
 
         // Check whether the request was successful
         $response->assertSuccessfulAPIResponse();
