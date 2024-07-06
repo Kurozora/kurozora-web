@@ -182,7 +182,7 @@ class Details extends Component
 
         if (!empty($user)) {
             $this->isTracking = $user->hasTracked($this->anime);
-            $this->isReminded = $user->reminderAnime()->where('anime_id', $this->anime->id)->exists();
+            $this->isReminded = $user->hasReminded($this->anime);
         }
     }
 
@@ -253,9 +253,9 @@ class Details extends Component
         if ($user->is_pro) {
             if ($this->isTracking) {
                 if ($this->isReminded) { // Don't remind the user
-                    $user->reminderAnime()->detach($this->anime->id);
+                    $user->unremind($this->anime);
                 } else { // Remind the user
-                    $user->reminderAnime()->attach($this->anime->id);
+                    $user->remind($this->anime);
                 }
 
                 $this->isReminded = !$this->isReminded;
