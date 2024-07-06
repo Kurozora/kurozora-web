@@ -202,9 +202,9 @@ class Details extends Component
         if ($user->is_subscribed) {
             if ($this->isTracking) {
                 if ($this->isReminded) { // Don't remind the user
-                    $user->reminderAnime()->detach($this->anime->id);
+                    $user->unremind($this->anime);
                 } else { // Remind the user
-                    $user->reminderAnime()->attach($this->anime->id);
+                    $user->remind($this->anime->id);
                 }
 
                 $this->isReminded = !$this->isReminded;

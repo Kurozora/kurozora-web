@@ -67,7 +67,7 @@ class ReminderButton extends Component
             $user->track($this->anime, UserLibraryStatus::Planning());
         }
 
-        $user->reminderAnime()->attach($this->anime->id);
+        $user->remind($this->anime);
         $this->isReminded = true;
     }
 
