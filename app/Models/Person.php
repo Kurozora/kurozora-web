@@ -88,7 +88,7 @@ class Person extends KModel implements HasMedia, Sitemapable
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
-            ->generateSlugsFrom('full_name')
+            ->generateSlugsFrom('slug_name')
             ->saveSlugsTo('slug');
     }
 
@@ -199,24 +199,33 @@ class Person extends KModel implements HasMedia, Sitemapable
     }
 
     /**
+     * Returns the slug name of the person.
+     *
+     * @return string
+     */
+    public function getSlugNameAttribute(): string
+    {
+        $fullName = array_filter([
+            $this->first_name,
+            $this->last_name
+        ]);
+
+        return implode(', ', $fullName);
+    }
+
+    /**
      * Returns the full name of the person.
      *
      * @return string
      */
     public function getFullNameAttribute(): string
     {
-        $lastNameEmpty = empty($this->last_name);
-        $firstNameEmpty = empty($this->first_name);
+        $fullName = array_filter([
+            $this->last_name,
+            $this->first_name
+        ]);
 
-        if ($lastNameEmpty && !$firstNameEmpty) {
-            return $this->first_name;
-        } else if ($firstNameEmpty && !$lastNameEmpty) {
-            return $this->last_name;
-        } else if ($firstNameEmpty && $lastNameEmpty) {
-            return '';
-        }
-
-        return $this->last_name . ', ' . $this->first_name;
+        return implode(', ', $fullName);
     }
 
     /**
@@ -226,18 +235,12 @@ class Person extends KModel implements HasMedia, Sitemapable
      */
     public function getFullGivenNameAttribute(): string
     {
-        $familyNameEmpty = empty($this->family_name);
-        $givenNameEmpty = empty($this->given_name);
+        $fullGivenName = array_filter([
+            $this->family_name,
+            $this->given_name
+        ]);
 
-        if ($familyNameEmpty && !$givenNameEmpty) {
-            return $this->given_name;
-        } else if ($givenNameEmpty && !$familyNameEmpty) {
-            return $this->family_name;
-        } else if ($givenNameEmpty && $familyNameEmpty) {
-            return '';
-        }
-
-        return $this->family_name . ', ' . $this->given_name;
+        return implode(', ', $fullGivenName);
     }
 
     /**
