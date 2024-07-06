@@ -3,11 +3,11 @@
 namespace App\Policies;
 
 use App\Models\User;
-use App\Models\UserReminderAnime;
+use App\Models\UserReminder;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Auth\Access\Response;
 
-class UserReminderAnimePolicy
+class UserReminderPolicy
 {
     use HandlesAuthorization;
 
@@ -15,6 +15,7 @@ class UserReminderAnimePolicy
      * Determine whether the user can view any models.
      *
      * @param User $user
+     *
      * @return Response|bool
      */
     public function viewAny(User $user): Response|bool
@@ -25,11 +26,12 @@ class UserReminderAnimePolicy
     /**
      * Determine whether the user can view the model.
      *
-     * @param User $user
-     * @param UserReminderAnime $userReminderAnime
+     * @param User         $user
+     * @param UserReminder $userReminder
+     *
      * @return Response|bool
      */
-    public function view(User $user, UserReminderAnime $userReminderAnime): Response|bool
+    public function view(User $user, UserReminder $userReminder): Response|bool
     {
         return true;
     }
@@ -38,6 +40,7 @@ class UserReminderAnimePolicy
      * Determine whether the user can create models.
      *
      * @param User $user
+     *
      * @return Response|bool
      */
     public function create(User $user): Response|bool
@@ -48,48 +51,52 @@ class UserReminderAnimePolicy
     /**
      * Determine whether the user can update the model.
      *
-     * @param User $user
-     * @param UserReminderAnime $userReminderAnime
+     * @param User         $user
+     * @param UserReminder $userReminder
+     *
      * @return Response|bool
      */
-    public function update(User $user, UserReminderAnime $userReminderAnime): Response|bool
+    public function update(User $user, UserReminder $userReminder): Response|bool
     {
-        return $user->can('updateUserReminderAnime') || $user->id === $userReminderAnime->user_id;
+        return $user->can('updateUserReminder') || $user->id === $userReminder->user_id;
     }
 
     /**
      * Determine whether the user can delete the model.
      *
-     * @param User $user
-     * @param UserReminderAnime $userReminderAnime
+     * @param User         $user
+     * @param UserReminder $userReminder
+     *
      * @return Response|bool
      */
-    public function delete(User $user, UserReminderAnime $userReminderAnime): Response|bool
+    public function delete(User $user, UserReminder $userReminder): Response|bool
     {
-        return $user->can('deleteUserReminderAnime') || $user->id === $userReminderAnime->user_id;
+        return $user->can('deleteUserReminder') || $user->id === $userReminder->user_id;
     }
 
     /**
      * Determine whether the user can restore the model.
      *
-     * @param User $user
-     * @param UserReminderAnime $userReminderAnime
+     * @param User         $user
+     * @param UserReminder $userReminder
+     *
      * @return Response|bool
      */
-    public function restore(User $user, UserReminderAnime $userReminderAnime): Response|bool
+    public function restore(User $user, UserReminder $userReminder): Response|bool
     {
-        return $user->can('restoreUserReminderAnime');
+        return $user->can('restoreUserReminder');
     }
 
     /**
      * Determine whether the user can permanently delete the model.
      *
-     * @param User $user
-     * @param UserReminderAnime $userReminderAnime
+     * @param User         $user
+     * @param UserReminder $userReminder
+     *
      * @return Response|bool
      */
-    public function forceDelete(User $user, UserReminderAnime $userReminderAnime): Response|bool
+    public function forceDelete(User $user, UserReminder $userReminder): Response|bool
     {
-        return $user->can('forceDeleteUserReminderAnime');
+        return $user->can('forceDeleteUserReminder');
     }
 }
