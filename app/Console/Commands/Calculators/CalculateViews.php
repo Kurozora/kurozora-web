@@ -51,6 +51,7 @@ class CalculateViews extends Command
                 ->pluck('viewable_type')
                 ->each(function ($modelType) {
                     $this->call('calculate:views', ['model' => $modelType]);
+                    $this->newLine();
                 });
 
             return Command::SUCCESS;
