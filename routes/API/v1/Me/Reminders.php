@@ -2,10 +2,11 @@
 
 use App\Http\Controllers\API\v1\UserReminderController;
 
+// TODO: - Delete this in favor of reminders endpoint
 Route::prefix('/reminder-anime')
     ->name('.reminder-anime')
     ->group(function () {
-        Route::get('/', [UserReminderController::class, 'index'])
+        Route::get('/', [UserReminderController::class, 'tempIndex'])
             ->middleware('auth.kurozora')
             ->name('.index');
 

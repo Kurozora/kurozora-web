@@ -6,7 +6,7 @@ use App\Enums\UserLibraryKind;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AddReminderRequest;
-use App\Http\Requests\GetAnimeReminderRequest;
+use App\Http\Requests\GetUserReminderRequest;
 use App\Http\Resources\AnimeResourceBasic;
 use App\Http\Resources\GameResourceBasic;
 use App\Http\Resources\LiteratureResourceBasic;
@@ -25,13 +25,15 @@ use Illuminate\Support\Facades\Response;
 
 class UserReminderController extends Controller
 {
+    // TODO: - Delete tempIndex in favor of index
     /**
      * Returns the list of user's reminders.
      *
-     * @param GetAnimeReminderRequest $request
+     * @param GetUserReminderRequest $request
+     *
      * @return JsonResponse
      */
-    function index(GetAnimeReminderRequest $request): JsonResponse
+    function tempIndex(GetUserReminderRequest $request): JsonResponse
     {
         $data = $request->validated();
         $library = (int) ($data['library'] ?? UserLibraryKind::Anime);
@@ -94,9 +96,79 @@ class UserReminderController extends Controller
     }
 
     /**
+     * Returns the list of user's reminders.
+     *
+     * @param GetUserReminderRequest $request
+     *
+     * @return JsonResponse
+     */
+    function index(GetUserReminderRequest $request): JsonResponse
+    {
+        $data = $request->validated();
+        $library = (int) ($data['library'] ?? UserLibraryKind::Anime);
+
+        // Get the authenticated user
+        $user = auth()->user();
+
+        // Get morph class
+        $morphClass = match ($library) {
+            UserLibraryKind::Manga => Manga::class,
+            UserLibraryKind::Game => Game::class,
+            default => Anime::class,
+        };
+
+        // Paginate the reminded model
+        $userReminders = $user->whereReminded($morphClass)
+            ->when(auth()->user() !== $user, function (Builder $query) use ($user) {
+                $query->join(UserLibrary::TABLE_NAME, UserReminder::TABLE_NAME . '.remindable_id', '=', UserLibrary::TABLE_NAME . '.trackable_id')
+                    ->whereColumn(UserLibrary::TABLE_NAME . '.trackable_type', '=', UserReminder::TABLE_NAME . '.remindable_type')
+                    ->where(UserLibrary::TABLE_NAME . '.user_id', '=', $user->id)
+                    ->where(UserLibrary::TABLE_NAME . '.is_hidden', '=', false);
+            })
+            ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating', 'mediaRatings' => function ($query) use ($user) {
+                $query->where([
+                    ['user_id', '=', $user->id]
+                ]);
+            }, 'library' => function ($query) use ($user) {
+                $query->where('user_id', '=', $user->id);
+            }])
+            ->withExists([
+                'favoriters as isFavorited' => function ($query) use ($user) {
+                    $query->where('user_id', '=', $user->id);
+                },
+            ])
+            ->when(in_array(Remindable::class, class_uses_recursive($morphClass)), function ($query) use ($user) {
+                // Add your logic here if the trait is used
+                $query->withExists([
+                    'reminderers as isReminded' => function ($query) use ($user) {
+                        $query->where('user_id', '=', $user->id);
+                    },
+                ]);
+            })
+            ->paginate($data['limit'] ?? 25);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $userReminders->nextPageUrl());
+
+        // Get data collection
+        $data = match ($library) {
+            UserLibraryKind::Manga => ['literatures' => LiteratureResourceBasic::collection($userReminders)],
+            UserLibraryKind::Game => ['games' => GameResourceBasic::collection($userReminders)],
+            default => ['shows' => AnimeResourceBasic::collection($userReminders)],
+        };
+
+        // Show successful response
+        return JSONResult::success([
+            'data' => $data,
+            'next' => empty($nextPageURL) ? null : $nextPageURL,
+        ]);
+    }
+
+    /**
      * Adds an anime to the user's reminders.
      *
      * @param AddReminderRequest $request
+     *
      * @return JsonResponse
      * @throws AuthorizationException
      */
@@ -119,9 +191,9 @@ class UserReminderController extends Controller
             $modelID = $data['model_id'];
             $libraryKind = UserLibraryKind::fromValue((int) $data['library']);
             $model = match ($libraryKind->value) {
-                UserLibraryKind::Manga  => Manga::findOrFail($modelID),
-                UserLibraryKind::Game   => Game::findOrFail($modelID),
-                default                 => Anime::findOrFail($modelID),
+                UserLibraryKind::Manga => Manga::findOrFail($modelID),
+                UserLibraryKind::Game => Game::findOrFail($modelID),
+                default => Anime::findOrFail($modelID),
             };
         }
 
@@ -137,6 +209,7 @@ class UserReminderController extends Controller
      * Serves the calendar file to be downloaded.
      *
      * @param Request $request
+     *
      * @return \Illuminate\Http\Response
      * @throws AuthorizationException
      */
@@ -168,9 +241,9 @@ class UserReminderController extends Controller
 
         // Headers to return for the download
         $headers = [
-            'Content-type'          => 'text/calendar',
-            'Content-Disposition'   => sprintf('attachment; filename=%s', $user->username. '-reminders.ics'),
-            'Content-Length'        => strlen($calendarExportStream),
+            'Content-type' => 'text/calendar',
+            'Content-Disposition' => sprintf('attachment; filename=%s', $user->username . '-reminders.ics'),
+            'Content-Length' => strlen($calendarExportStream),
         ];
 
         // Return the file
