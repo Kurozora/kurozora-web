@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use App\Enums\UserLibraryKind;
 use Illuminate\Foundation\Http\FormRequest;
 
-class GetAnimeReminderRequest extends FormRequest
+class GetUserReminderRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
