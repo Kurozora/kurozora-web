@@ -4,10 +4,10 @@ namespace App\Http\Requests;
 
 use App\Enums\UserLibraryKind;
 use App\Models\Anime;
-use App\Rules\ValidateAnimeIDIsTracked;
+use App\Rules\ValidateModelIsTracked;
 use Illuminate\Foundation\Http\FormRequest;
 
-class AddReminderRequest extends FormRequest
+class CreateUserReminderRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,9 +27,9 @@ class AddReminderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'anime_id' => ['bail', 'required_without:model_id,library', 'integer', 'exists:' . Anime::TABLE_NAME . ',id', new ValidateAnimeIDIsTracked],
+            'anime_id' => ['bail', 'required_without:model_id,library', 'integer', 'exists:' . Anime::TABLE_NAME . ',id', new ValidateModelIsTracked],
             'library' => ['bail', 'required_without:anime_id', 'integer', 'in:' . implode(',', UserLibraryKind::getValues())],
-            'model_id' => ['bail', 'required_without:anime_id', 'string'],
+            'model_id' => ['bail', 'required_without:anime_id', 'string', new ValidateModelIsTracked],
         ];
     }
 }

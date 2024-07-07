@@ -5,7 +5,7 @@ namespace App\Http\Controllers\API\v1;
 use App\Enums\UserLibraryKind;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\AddReminderRequest;
+use App\Http\Requests\CreateUserReminderRequest;
 use App\Http\Requests\GetUserReminderRequest;
 use App\Http\Resources\AnimeResourceBasic;
 use App\Http\Resources\GameResourceBasic;
@@ -167,12 +167,12 @@ class UserReminderController extends Controller
     /**
      * Adds an anime to the user's reminders.
      *
-     * @param AddReminderRequest $request
+     * @param CreateUserReminderRequest $request
      *
      * @return JsonResponse
      * @throws AuthorizationException
      */
-    function create(AddReminderRequest $request): JsonResponse
+    function create(CreateUserReminderRequest $request): JsonResponse
     {
         $data = $request->validated();
 

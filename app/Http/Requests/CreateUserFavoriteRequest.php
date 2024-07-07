@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Enums\UserLibraryKind;
 use App\Models\Anime;
+use App\Rules\ValidateModelIsTracked;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreateUserFavoriteRequest extends FormRequest
@@ -28,7 +29,7 @@ class CreateUserFavoriteRequest extends FormRequest
         return [
             'anime_id'  => ['bail', 'required_without:model_id,library', 'integer', 'exists:' . Anime::TABLE_NAME . ',id'],
             'library'   => ['bail', 'required_without:anime_id', 'integer', 'in:' . implode(',', UserLibraryKind::getValues())],
-            'model_id'  => ['bail', 'required_without:anime_id', 'string'],
+            'model_id'  => ['bail', 'required_without:anime_id', 'string', new ValidateModelIsTracked],
         ];
     }
 }
