@@ -138,8 +138,8 @@ class AnimeSpider extends BasicSpider
                 return [$id => $item->text()];
             });
 
-        $imageUrl = $this->cleanImageUrl($response, 'div.leftside div a img[itemprop="image"]');
-        $videoUrl = $this->cleanVideoUrl($response, 'div.video-promotion a');
+        $imageURL = $this->cleanImageURL($response, 'div.leftside div a img[itemprop="image"]');
+        $videoURL = $this->cleanVideoURL($response, 'div.video-promotion a');
         $relations = $this->cleanRelations($response, 'div.related-entries');
         $openings = $this->cleanSongs($response, 'div[class*="theme-songs opnening"] table'); // typo on the website
         $endings = $this->cleanSongs($response, 'div[class*="theme-songs ending"] table');
@@ -151,8 +151,8 @@ class AnimeSpider extends BasicSpider
             $originalTitle,
             $attributes,
             $synopsis,
-            $imageUrl,
-            $videoUrl,
+            $imageURL,
+            $videoURL,
             array_replace([], ...$studios),
             array_replace([], ...$genres),
             $relations,
@@ -217,41 +217,41 @@ class AnimeSpider extends BasicSpider
      *
      * @return string|null
      */
-    private function cleanImageUrl(Response $response, ?string $div): ?string
+    private function cleanImageURL(Response $response, ?string $div): ?string
     {
         try {
-            $imageUrl = $response->filter($div)
+            $imageURL = $response->filter($div)
                 ->attr('data-src');
         } catch (Exception $exception) {
             return null;
         }
 
         // If empty then return
-        $imageUrl = str(trim($imageUrl));
-        if (empty($imageUrl)) {
+        $imageURL = str(trim($imageURL));
+        if (empty($imageURL)) {
             return null;
         }
 
         // Don't return placeholders
-        $match = $imageUrl->contains(['questionmark', 'qm_50', 'na.gif']);
+        $match = $imageURL->contains(['questionmark', 'qm_50', 'na.gif']);
         if ($match) {
             return null;
         }
 
         // Get base image url
-        $cleanImageUrl = $imageUrl->replace('v.jpg', '.jpg');
-        $cleanImageUrl = $cleanImageUrl->replace('t.jpg', '.jpg');
-        $cleanImageUrl = $cleanImageUrl->replace('_thumb.jpg', '.jpg');
-        $cleanImageUrl = $cleanImageUrl->replace('userimages/thumbs', 'userimages');
-        $cleanImageUrl = $cleanImageUrl->value();
+        $cleanImageURL = $imageURL->replace('v.jpg', '.jpg');
+        $cleanImageURL = $cleanImageURL->replace('t.jpg', '.jpg');
+        $cleanImageURL = $cleanImageURL->replace('_thumb.jpg', '.jpg');
+        $cleanImageURL = $cleanImageURL->replace('userimages/thumbs', 'userimages');
+        $cleanImageURL = $cleanImageURL->value();
 
         // Remove queries and bs
         $regex = '/r\/\d{1,3}x\d{1,3}\//';
-        $cleanImageUrl = preg_replace($regex, '', $cleanImageUrl);
+        $cleanImageURL = preg_replace($regex, '', $cleanImageURL);
         $regex = '/\?.+/';
 
         // Return clean url
-        return preg_replace($regex, '', $cleanImageUrl);
+        return preg_replace($regex, '', $cleanImageURL);
     }
 
     /**
@@ -265,7 +265,7 @@ class AnimeSpider extends BasicSpider
      *
      * @return string|null
      */
-    private function cleanVideoUrl(Response $response, string $div): ?string
+    private function cleanVideoURL(Response $response, string $div): ?string
     {
         $videoURL = $response->filter($div);
         try {

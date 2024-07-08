@@ -121,7 +121,7 @@ class AnimeProcessor extends CustomItemProcessor
         $themes = ($this->getAttribute('Themes') ?? []) + $theme;
         $demographics = $this->getAttribute('Demographic');
         $imageURL = $item->get('imageURL');
-        $videoUrl = $item->get('videoUrl');
+        $videoURL = $item->get('videoURL');
         $duration = $this->getAttribute('Duration');
         $aired = $this->getAttribute('Aired');
         $startedAt = $this->getStartedAt($aired);
@@ -180,7 +180,7 @@ class AnimeProcessor extends CustomItemProcessor
 //            'media_type_id' => $mediaType,
 //            'status_id' => $status,
 //            'source_id' => $source,
-//            'video_url' => $videoUrl,
+//            'video_url' => $videoURL,
 //            'duration' => $duration,
 //            'started_at' => $startedAt,
 //            'ended_at' => $endedAt,
@@ -205,7 +205,7 @@ class AnimeProcessor extends CustomItemProcessor
                     'media_type_id' => $mediaType,
                     'status_id' => $status,
                     'source_id' => $source,
-                    'video_url' => $videoUrl,
+                    'video_url' => $videoURL,
                     'duration' => $duration,
                     'started_at' => $startedAt,
                     'ended_at' => $endedAt,
@@ -233,7 +233,7 @@ class AnimeProcessor extends CustomItemProcessor
                 'media_type_id' => $mediaType,
                 'status_id' => $status,
                 'source_id' => $source,
-                'video_url' => $videoUrl,
+                'video_url' => $videoURL,
                 'duration' => $newDuration,
                 'started_at' => $startedAt,
                 'ended_at' => $newEndedAt,
