@@ -58,7 +58,7 @@ class UserReminderController extends Controller
             })
             ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating', 'mediaRatings' => function ($query) use ($user) {
                 $query->where([
-                    ['user_id', '=', $user->id]
+                    ['user_id', '=', $user->id],
                 ]);
             }, 'library' => function ($query) use ($user) {
                 $query->where('user_id', '=', $user->id);
@@ -127,7 +127,7 @@ class UserReminderController extends Controller
             })
             ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating', 'mediaRatings' => function ($query) use ($user) {
                 $query->where([
-                    ['user_id', '=', $user->id]
+                    ['user_id', '=', $user->id],
                 ]);
             }, 'library' => function ($query) use ($user) {
                 $query->where('user_id', '=', $user->id);
@@ -200,7 +200,7 @@ class UserReminderController extends Controller
         // Successful response
         return JSONResult::success([
             'data' => [
-                'isReminded' => !is_bool($user->toggleReminder($model))
+                'isReminded' => !is_bool($user->toggleReminder($model)),
             ],
         ]);
     }
@@ -229,11 +229,15 @@ class UserReminderController extends Controller
             'reminders' => function ($query) use ($whereBetween) {
                 $query->where('remindable_type', '=', Anime::class)
                     ->with([
-                        'translations',
-                        'episodes' => function ($query) use ($whereBetween) {
-                            $query->with(['translations'])
-                                ->whereBetween(Episode::TABLE_NAME . '.started_at', $whereBetween);
-                        },
+                        'remindable' => function ($query) use ($whereBetween) {
+                            $query->with([
+                                'translations',
+                                'episodes' => function ($query) use ($whereBetween) {
+                                    $query->with(['translations'])
+                                        ->whereBetween(Episode::TABLE_NAME . '.started_at', $whereBetween);
+                                }
+                            ]);
+                        }
                     ]);
             },
         ]);
