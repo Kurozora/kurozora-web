@@ -10,7 +10,6 @@ Route::prefix('/store')
             ->name('.subscriptions')
             ->group(function () {
                 Route::post('/apple', function(\Illuminate\Http\Request $request) {
-                    logger()->channel('stack')->critical(print_r($request->all(), true));
                     Http::post(route('liap.serverNotifications', ['provider' => 'app-store']), $request->all());
                 })
                     ->name('.apple');
