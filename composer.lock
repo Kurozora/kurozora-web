@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "400d224c272f712abee24f567f999508",
+    "content-hash": "f16796b880d6314a928e54205683ca31",
     "packages": [
         {
             "name": "astrotomic/laravel-translatable",
@@ -2791,6 +2791,56 @@
                 "source": "https://github.com/hisorange/browser-detect/tree/5.0.3"
             },
             "time": "2024-02-05T08:21:06+00:00"
+        },
+        {
+            "name": "hoels/app-store-server-library-php",
+            "version": "1.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hoels/app-store-server-library-php.git",
+                "reference": "e11b298c47f104893222f552596e7b3e2f2a1141"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hoels/app-store-server-library-php/zipball/e11b298c47f104893222f552596e7b3e2f2a1141",
+                "reference": "e11b298c47f104893222f552596e7b3e2f2a1141",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "ext-openssl": "*",
+                "firebase/php-jwt": "^6.10",
+                "guzzlehttp/guzzle": "^7.8",
+                "php": ">=8.1",
+                "phpseclib/phpseclib": "^3.0",
+                "web-eid/ocsp-php": "^1.0"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^1.10",
+                "phpunit/phpunit": "^10.5",
+                "squizlabs/php_codesniffer": "^3.8"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "AppStoreServerLibrary\\": "src/AppStoreServerLibrary/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kai Hölscher"
+                }
+            ],
+            "description": "The PHP server library for the App Store Server API and App Store Server Notifications.",
+            "support": {
+                "issues": "https://github.com/hoels/app-store-server-library-php/issues",
+                "source": "https://github.com/hoels/app-store-server-library-php/tree/1.3.0"
+            },
+            "time": "2024-06-27T16:53:05+00:00"
         },
         {
             "name": "http-interop/http-factory-guzzle",
@@ -13756,6 +13806,52 @@
                 }
             ],
             "time": "2022-03-08T17:03:00+00:00"
+        },
+        {
+            "name": "web-eid/ocsp-php",
+            "version": "1.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/web-eid/ocsp-php.git",
+                "reference": "6a2aa24e5c22bb1477421b118e563d679ddd69b7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/web-eid/ocsp-php/zipball/6a2aa24e5c22bb1477421b118e563d679ddd69b7",
+                "reference": "6a2aa24e5c22bb1477421b118e563d679ddd69b7",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1",
+                "phpseclib/phpseclib": "3.0.*"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^10.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "web_eid\\ocsp_php\\": [
+                        "src"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Guido Gröön",
+                    "role": "developer"
+                }
+            ],
+            "description": "OCSP library for PHP",
+            "support": {
+                "issues": "https://github.com/web-eid/ocsp-php/issues",
+                "source": "https://github.com/web-eid/ocsp-php/tree/1.1.2"
+            },
+            "time": "2024-03-15T11:51:14+00:00"
         },
         {
             "name": "web-token/jwt-library",

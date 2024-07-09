@@ -39,6 +39,7 @@
         "guzzlehttp/guzzle": "^7.3",
         "halaxa/json-machine": "^1.0",
         "hisorange/browser-detect": "^5.0",
+        "hoels/app-store-server-library-php": "^1.3",
         "http-interop/http-factory-guzzle": "^1.2",
         "imdhemy/laravel-purchases": "^1.0",
         "intervention/image": "^2.7",
