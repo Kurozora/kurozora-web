@@ -37,6 +37,9 @@ return [
         'store_kit' => [
             'password' => env('SK_APP_PASSWORD'),
             'issuer_id' => env('SK_ISSUER_ID'),
+            'key_id' => env('SK_KEY_ID'),
+            'bundle_id' => env('SK_BUNDLE_ID'),
+            'private_key' => str_replace('#', "\n", env('SK_PRIVATE_KEY') ?? ''), // with double quote; otherwise \n isn't parsed.
         ],
         'client_id' => env('APPLE_CLIENT_ID', 'app.kurozora.web.tracker'),
         'client_secret' => env('MIX_APPLE_CLIENT_SECRET'),
