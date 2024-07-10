@@ -4,8 +4,11 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\RestoreOrderRequest;
 use App\Http\Requests\VerifyReceiptRequest;
 use App\Models\UserReceipt;
+use AppStoreServerLibrary\AppStoreServerAPIClient;
+use AppStoreServerLibrary\Models\Environment;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\JsonResponse;
 use Imdhemy\AppStore\Exceptions\InvalidReceiptException;
@@ -114,6 +117,45 @@ class StoreController extends Controller
                     'needsRefresh' => $needsRefresh
                 ]
             ]
+        ]);
+    }
+
+    /**
+     * Restore details of an order.
+     *
+     * @param RestoreOrderRequest $request
+     *
+     * @return JsonResponse
+     * @throws AppStoreServerAPIClient\APIException
+     */
+    function restoreOrder(RestoreOrderRequest $request): JsonResponse
+    {
+        $data = $request->validated();
+        $orderID = $data['orderID'];
+
+        $issuerId = config('services.apple.store_kit.issuer_id');
+        $keyId = config('services.apple.store_kit.key_id');
+        $bundleId = config('services.apple.store_kit.bundle_id');
+        $privateKey = config('services.apple.store_kit.private_key');
+        $environment = Environment::PRODUCTION;
+
+        $client = new AppStoreServerAPIClient(
+            signingKey: $privateKey,
+            keyId: $keyId,
+            issuerId: $issuerId,
+            bundleId: $bundleId,
+            environment: $environment
+        );
+
+        $response = $client->lookUpOrderId($orderID);
+        $signedTransactions = [];
+
+        if ($response->getSignedTransactions()) {
+            $signedTransactions = $response->getSignedTransactions();
+        }
+
+        return JSONResult::success([
+            'data' => $signedTransactions
         ]);
     }
 

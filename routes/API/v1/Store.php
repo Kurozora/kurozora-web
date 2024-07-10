@@ -15,6 +15,10 @@ Route::prefix('/store')
                     ->name('.apple');
             });
 
+        Route::post('/restore-order', [StoreController::class, 'restoreOrder'])
+            ->middleware('auth.kurozora:optional')
+            ->name('.restore-order');
+
         Route::post('/verify', [StoreController::class, 'verifyReceipt'])
             ->middleware('auth.kurozora:optional')
             ->name('.verify');
