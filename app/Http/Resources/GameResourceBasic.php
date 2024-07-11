@@ -76,7 +76,9 @@ class GameResourceBasic extends JsonResource
     protected function getUserSpecificDetails(): array
     {
         $givenRating = $this->resource->mediaRatings->first();
-        $library = $this->resource->pivot ?? $this->resource->library->first();
+        $library = $this->resource->relationLoaded('library')
+            ? $this->resource->library->first()
+            : $this->resource->pivot;
 
         // Return the array
         return [
