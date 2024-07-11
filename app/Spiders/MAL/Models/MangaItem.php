@@ -11,7 +11,7 @@ class MangaItem extends AbstractItem
         readonly string $originalTitle,
         readonly array $attributes,
         readonly ?string $synopsis,
-        readonly ?string $imageUrl,
+        readonly ?string $imageURL,
         readonly array $relations,
         readonly array $studios,
         readonly array $genres,
