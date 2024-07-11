@@ -109,12 +109,16 @@
         </div>
     @elseif(!empty($manga))
         <div class="flex flex-nowrap gap-2">
-            <svg
-                class="relative shrink-0 w-28 h-40 overflow-hidden"
-                style="background-color: {{ $manga->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? '#000000' }};"
-            >
+            <svg class="relative shrink-0 w-28 h-40 overflow-hidden">
                 <foreignObject width="112" height="160" mask="url(#svg-mask-book-cover)">
-                    <img class="h-full w-full object-cover lazyload" data-sizes="auto" data-src="{{ $manga->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $manga->title }} Poster" title="{{ $manga->title }}">
+                    <img
+                        class="h-full w-full object-cover lazyload"
+                        style="background-color: {{ $manga->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? '#000000' }};"
+                        data-sizes="auto"
+                        data-src="{{ $manga->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp') }}"
+                        alt="{{ $manga->title }} Poster"
+                        title="{{ $manga->title }}"
+                    >
                 </foreignObject>
 
                 <g opacity="0.40">
