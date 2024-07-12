@@ -1,5 +1,5 @@
 @auth
-    <div>
+    <div :key="library-button-{{ uniqid($this->model->id, true) }}">
         <x-select-button rounded="full" chevronClass="w-4 h-4 text-white sm:w-6 sm:h-6" class="w-24 pl-3 pr-5 pt-2 pb-2 bg-orange-500 text-xs text-white font-semibold border-0 shadow-md hover:bg-orange-400 active:bg-orange-600 focus:ring-0 sm:w-32 sm:pl-3 sm:pr-7" wire:model.live="libraryStatus" wire:change="updateLibraryStatus">
             <option value="-1" selected hidden disabled>{{ __('ADD') }}</option>
 
@@ -13,7 +13,7 @@
         </x-select-button>
     </div>
 @else
-    <div
+    <div :key="library-button-{{ uniqid($this->model->id, true) }}"
         x-data="{
             id: '{{ $this->model->slug }}',
             libraryStatus: -1,
