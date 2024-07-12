@@ -95,6 +95,7 @@ class Index extends Component
         $anime = $this->user
             ->whereTracked(Anime::class)
             ->wherePivot('status', $userLibraryStatus->value)
+            ->withoutIgnoreList()
             ->inRandomOrder()
             ->first();
         $this->redirectRoute('anime.details', $anime);
@@ -160,6 +161,7 @@ class Index extends Component
         if (empty($this->search) && empty($wheres) && empty($whereIns)) {
             $animes = $this->user
                 ->whereTracked(Anime::class)
+                ->withoutIgnoreList()
                 ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
                 ->when(auth()->user(), function ($query, $user) {
                     $query->with(['library' => function ($query) use ($user) {
