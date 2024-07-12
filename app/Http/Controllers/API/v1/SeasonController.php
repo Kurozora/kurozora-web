@@ -28,7 +28,12 @@ class SeasonController extends Controller
         // Call the ModelViewed event
         ModelViewed::dispatch($season, $request->ip());
 
-        $season->load(['anime', 'media'])
+        $season->load([
+            'anime' => function ($query) {
+                $query->withoutGlobalScopes();
+            },
+            'media'
+        ])
             ->loadCount(['episodes']);
 
         return JSONResult::success([

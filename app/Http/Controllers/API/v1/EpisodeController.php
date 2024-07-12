@@ -59,7 +59,8 @@ class EpisodeController extends Controller
         }
 
         $includeArray['anime'] = function ($query) {
-            $query->with(['media', 'translations']);
+            $query->withoutGlobalScopes()
+                ->with(['media', 'translations']);
         };
         $includeArray['season'] = function ($query) {
             $query->with(['media']);
