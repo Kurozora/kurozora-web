@@ -3,7 +3,6 @@
 use App\Http\Controllers\API\v1\RecapController;
 
 Route::prefix('/recap')
-    ->middleware(['auth.kurozora'])
     ->name('.recap')
     ->group(function () {
         Route::get('/', [RecapController::class, 'index'])
