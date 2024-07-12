@@ -74,7 +74,7 @@ class LibraryButton extends Component
         } else {
             // Update or create the user library entry.
             UserLibrary::withoutSyncingToSearch(function () use ($user) {
-                $model = UserLibrary::updateOrCreate([
+                $userLibrary = UserLibrary::updateOrCreate([
                         'user_id' => $user->id,
                         'trackable_type' => $this->model->getMorphClass(),
                         'trackable_id' => $this->model->id,
@@ -82,9 +82,9 @@ class LibraryButton extends Component
                         'status' => $this->libraryStatus,
                     ]);
 
-                $model->setRelation('trackable', $this->model);
+                $userLibrary->setRelation('trackable', $this->model);
 
-                $model->searchable();
+                $userLibrary->searchable();
             });
         }
 

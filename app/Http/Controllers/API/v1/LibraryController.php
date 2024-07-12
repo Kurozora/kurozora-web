@@ -22,6 +22,7 @@ use App\Models\Game;
 use App\Models\Manga;
 use App\Models\User;
 use App\Models\UserLibrary;
+use App\Scopes\IgnoreListScope;
 use App\Traits\Model\Remindable;
 use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
 use BenSampo\Enum\Exceptions\InvalidEnumMemberException;
@@ -65,6 +66,7 @@ class LibraryController extends Controller
 
         // Retrieve the model from the user's library with the correct status
         $model = $user->whereTracked($morphClass)
+            ->withoutGlobalScopes([IgnoreListScope::class])
             ->when(auth()->user() !== $user, function (Builder $query) use ($user) {
                 $query->where(UserLibrary::TABLE_NAME . '.is_hidden', '=', false);
             })
@@ -134,25 +136,35 @@ class LibraryController extends Controller
         // Get the model
         if (!empty($data['anime_id'])) {
             $modelID = $data['anime_id'];
-            $model = Anime::findOrFail($modelID);
+            $model = Anime::withoutGlobalScopes()
+                ->findOrFail($modelID);
         } else {
             $modelID = $data['model_id'];
             $libraryKind = UserLibraryKind::fromValue((int) $data['library']);
             $model = match ($libraryKind->value) {
-                UserLibraryKind::Manga => Manga::findOrFail($modelID),
-                UserLibraryKind::Game => Game::findOrFail($modelID),
-                default => Anime::findOrFail($modelID),
+                UserLibraryKind::Manga => Manga::withoutGlobalScopes()
+                    ->findOrFail($modelID),
+                UserLibraryKind::Game => Game::withoutGlobalScopes()
+                    ->findOrFail($modelID),
+                default => Anime::withoutGlobalScopes()
+                    ->findOrFail($modelID),
             };
         }
 
-        // Update or create the user library entry
-        UserLibrary::updateOrCreate([
-            'user_id' => $user->id,
-            'trackable_type' => $model->getMorphClass(),
-            'trackable_id' => $model->id,
-        ], [
-            'status' => $userLibraryStatus->value,
-        ]);
+        // Update or create the user library entry.
+        UserLibrary::withoutSyncingToSearch(function () use ($userLibraryStatus, $model, $user) {
+            $userLibrary = UserLibrary::updateOrCreate([
+                'user_id' => $user->id,
+                'trackable_type' => $model->getMorphClass(),
+                'trackable_id' => $model->id,
+            ], [
+                'status' => $userLibraryStatus->value,
+            ]);
+
+            $userLibrary->setRelation('trackable', $model);
+
+            $userLibrary->searchable();
+        });
 
         // Successful response
         return JSONResult::success([
@@ -237,14 +249,18 @@ class LibraryController extends Controller
         // Get the model
         if (!empty($data['anime_id'])) {
             $modelID = $data['anime_id'];
-            $model = Anime::findOrFail($modelID);
+            $model = Anime::withoutGlobalScopes()
+                ->findOrFail($modelID);
         } else {
             $modelID = $data['model_id'];
             $libraryKind = UserLibraryKind::fromValue((int) $data['library']);
             $model = match ($libraryKind->value) {
-                UserLibraryKind::Manga => Manga::findOrFail($modelID),
-                UserLibraryKind::Game => Game::findOrFail($modelID),
-                default => Anime::findOrFail($modelID),
+                UserLibraryKind::Manga => Manga::withoutGlobalScopes()
+                    ->findOrFail($modelID),
+                UserLibraryKind::Game => Game::withoutGlobalScopes()
+                    ->findOrFail($modelID),
+                default => Anime::withoutGlobalScopes()
+                    ->findOrFail($modelID),
             };
         }
 
