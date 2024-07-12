@@ -3,11 +3,9 @@
 namespace App\Scopes;
 
 use App\Enums\UserLibraryStatus;
-use App\Models\UserLibrary;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
-use Illuminate\Database\Query\JoinClause;
 
 class IgnoreListScope implements Scope
 {
@@ -24,14 +22,10 @@ class IgnoreListScope implements Scope
     public function apply(Builder $builder, Model $model): void
     {
         if ($user = auth()->user()) {
-            $builder->leftJoin(UserLibrary::TABLE_NAME . ' as ignored_entries', function (JoinClause $join) use ($model, $user) {
-                $join->on($model->getQualifiedIgnoreListColumn(), '=', 'ignored_entries.trackable_id')
-                    ->where('ignored_entries.trackable_type', '=', $model->getMorphClass())
-                    ->where('ignored_entries.status', '=', UserLibraryStatus::Ignored)
-                    ->where('ignored_entries.user_id', '=', $user->id);
-            })
-            ->whereNull('ignored_entries.trackable_id')
-            ->select($model::TABLE_NAME . '.*');
+            $builder->whereDoesntHave('library', function ($query) use ($user, $model) {
+                $query->where('status', '=', UserLibraryStatus::Ignored)
+                    ->where('user_id', '=', $user->id);
+            });
         }
     }
 
