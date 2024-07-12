@@ -1,4 +1,4 @@
-FROM php:8.3-fpm-alpine as app
+FROM php:8.3-fpm-alpine AS app
 
 # Set labels
 LABEL app.kurozora.authors="Kiritokatklian"
@@ -45,8 +45,8 @@ COPY ./docker/supervisor/supervisord.conf /etc/supervisor/supervisord.conf
 COPY ./docker/nginx/nginx.conf /etc/nginx/nginx.conf
 
 # Install Composer and dependencies
-ENV COMPOSER_HOME /composer
-ENV PATH ./vendor/bin:/composer/vendor/bin:$PATH
+ENV COMPOSER_HOME=/composer
+ENV PATH=./vendor/bin:/composer/vendor/bin:$PATH
 ENV COMPOSER_ALLOW_SUPERUSER=1
 RUN curl -s https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer && \
     composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev --no-cache && \
