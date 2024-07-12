@@ -21,6 +21,7 @@ use App\Traits\Model\HasMediaThemes;
 use App\Traits\Model\HasSlug;
 use App\Traits\Model\HasVideos;
 use App\Traits\Model\HasViews;
+use App\Traits\Model\Ignored;
 use App\Traits\Model\MediaRelated;
 use App\Traits\Model\Trackable;
 use App\Traits\Model\TvRated;
@@ -64,6 +65,7 @@ class Game extends KModel implements HasMedia, Sitemapable
         HasSlug,
         HasVideos,
         HasViews,
+        Ignored,
         InteractsWithMedia,
         InteractsWithMediaExtension,
         LogsActivity,

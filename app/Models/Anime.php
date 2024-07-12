@@ -6,6 +6,8 @@ use App\Casts\AsArrayObject;
 use App\Enums\DayOfWeek;
 use App\Enums\MediaCollection;
 use App\Enums\SeasonOfYear;
+use App\Scopes\IgnoreListScope;
+use App\Scopes\TvRatingScope;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\Actionable;
 use App\Traits\Model\Favorable;
@@ -21,6 +23,7 @@ use App\Traits\Model\HasMediaThemes;
 use App\Traits\Model\HasSlug;
 use App\Traits\Model\HasVideos;
 use App\Traits\Model\HasViews;
+use App\Traits\Model\Ignored;
 use App\Traits\Model\MediaRelated;
 use App\Traits\Model\Remindable;
 use App\Traits\Model\Trackable;
@@ -69,6 +72,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
         HasMediaThemes,
         HasVideos,
         HasViews,
+        Ignored,
         InteractsWithMedia,
         InteractsWithMediaExtension,
         LogsActivity,
