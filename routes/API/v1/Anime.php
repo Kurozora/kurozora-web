@@ -57,10 +57,10 @@ Route::prefix('/anime')
 
                 Route::post('/rate', [AnimeController::class, 'rateAnime'])
                     ->middleware('auth.kurozora')
-                ->name('.rate');
+                    ->name('.rate');
 
                 Route::get('/reviews', [AnimeController::class, 'reviews'])
                     ->middleware('auth.kurozora:optional')
-                ->name('.reviews');
+                    ->name('.reviews');
             });
     });

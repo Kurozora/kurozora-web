@@ -54,7 +54,7 @@ Route::prefix('/games')
 
                 Route::post('/rate', [GameController::class, 'rate'])
                     ->middleware('auth.kurozora')
-                ->name('.rate');
+                    ->name('.rate');
 
                 Route::get('/reviews', [GameController::class, 'reviews'])
                     ->middleware('auth.kurozora:optional')
