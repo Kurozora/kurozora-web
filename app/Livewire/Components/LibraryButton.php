@@ -73,18 +73,19 @@ class LibraryButton extends Component
             $this->libraryStatus = -1;
         } else {
             // Update or create the user library entry.
-            UserLibrary::with([
-                'trackable' => function ($query) {
-                    $query->withoutGlobalScopes();
-                }
-            ])
-                ->updateOrCreate([
-                    'user_id' => $user->id,
-                    'trackable_type' => $this->model->getMorphClass(),
-                    'trackable_id' => $this->model->id,
-                ], [
-                    'status' => $this->libraryStatus,
-                ]);
+            UserLibrary::withoutSyncingToSearch(function () use ($user) {
+                $model = UserLibrary::updateOrCreate([
+                        'user_id' => $user->id,
+                        'trackable_type' => $this->model->getMorphClass(),
+                        'trackable_id' => $this->model->id,
+                    ], [
+                        'status' => $this->libraryStatus,
+                    ]);
+
+                $model->setRelation('trackable', $this->model);
+
+                $model->searchable();
+            });
         }
 
         // Notify other components of an update in the model's data.
