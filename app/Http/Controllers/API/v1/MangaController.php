@@ -371,7 +371,6 @@ class MangaController extends Controller
         // Get the staff
         $staff = $manga->mediaStaff()
             ->with([
-                'model',
                 'person' => function ($query) {
                     $query->with(['media']);
                 },
@@ -381,6 +380,11 @@ class MangaController extends Controller
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $staff->nextPageUrl());
+
+        // Set model relation
+        $staff->each(function($song) use ($manga) {
+            $song->setRelation('model', $manga);
+        });
 
         return JSONResult::success([
             'data' => MediaStaffResource::collection($staff),

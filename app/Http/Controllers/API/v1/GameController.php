@@ -385,11 +385,24 @@ class GameController extends Controller
         // Get the seasons
         $limit = ($data['limit'] ?? -1) == -1 ? 150 : $data['limit'];
         $mediaSongs = $game->mediaSongs()
-            ->with(['song.media', 'song.mediaStat', 'model'])
+            ->with([
+                'song' => function ($query) {
+                    $query->with([
+                        'media',
+                        'mediaStat',
+                        'translations'
+                    ]);
+                },
+            ])
             ->paginate($limit, page: $data['page'] ?? 1);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $mediaSongs->nextPageUrl());
+
+        // Set model relation
+        $mediaSongs->each(function($song) use ($game) {
+            $song->setRelation('model', $game);
+        });
 
         return JSONResult::success([
             'data' => MediaSongResource::collection($mediaSongs),
@@ -411,7 +424,6 @@ class GameController extends Controller
         // Get the staff
         $staff = $game->mediaStaff()
             ->with([
-                'model',
                 'person' => function ($query) {
                     $query->with(['media']);
                 },
@@ -421,6 +433,11 @@ class GameController extends Controller
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $staff->nextPageUrl());
+
+        // Set model relation
+        $staff->each(function($song) use ($game) {
+            $song->setRelation('model', $game);
+        });
 
         return JSONResult::success([
             'data' => MediaStaffResource::collection($staff),
