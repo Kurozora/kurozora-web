@@ -3,6 +3,7 @@
 use App\Http\Controllers\API\v1\SessionController;
 
 Route::prefix('/sessions')
+    ->middleware('auth.kurozora')
     ->name('.sessions')
     ->group(function () {
         Route::get('/', [SessionController::class, 'index'])

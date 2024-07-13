@@ -4,6 +4,7 @@ use App\Http\Controllers\API\v1\LibraryController;
 use App\Http\Controllers\API\v1\MeController;
 
 Route::prefix('/library')
+    ->middleware('auth.kurozora')
     ->name('.library')
     ->group(function () {
         Route::get('/', [MeController::class, 'getLibrary'])

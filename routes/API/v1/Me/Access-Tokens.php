@@ -3,6 +3,7 @@
 use App\Http\Controllers\API\v1\AccessTokenController;
 
 Route::prefix('/access-tokens')
+    ->middleware('auth.kurozora')
     ->name('.access-tokens')
     ->group(function () {
         Route::get('/', [AccessTokenController::class, 'index'])
