@@ -19,6 +19,7 @@ return [
             'base' => 'https://myanimelist.net',
             'anime' => 'https://myanimelist.net/anime',
             'anime_season' => 'https://myanimelist.net/anime/season',
+            'anime_stats' => 'https://myanimelist.net/anime/:x/MAL/stats',
             'top_anime' => 'https://myanimelist.net/topanime.php',
             'upcoming_anime' => 'https://myanimelist.net/anime.php?o=9',
             'character' => 'https://myanimelist.net/character',
