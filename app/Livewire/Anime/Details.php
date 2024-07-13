@@ -204,7 +204,7 @@ class Details extends Component
                 if ($this->isReminded) { // Don't remind the user
                     $user->unremind($this->anime);
                 } else { // Remind the user
-                    $user->remind($this->anime->id);
+                    $user->remind($this->anime);
                 }
 
                 $this->isReminded = !$this->isReminded;
