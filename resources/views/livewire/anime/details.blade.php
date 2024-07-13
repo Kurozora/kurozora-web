@@ -94,7 +94,7 @@
                         <div class="flex flex-col justify-center items-center h-full md:pb-40 lg:pb-0">
                             <button
                                 class="inline-flex items-center pt-5 pr-5 pb-5 pl-5 bg-white/60 backdrop-blur border border-transparent rounded-full font-semibold text-xs text-gray-500 uppercase tracking-widest shadow-md hover:opacity-75 active:opacity-50 focus:outline-none disabled:bg-gray-100 disabled:text-gray-300 disabled:cursor-default disabled:opacity-100 transition ease-in-out duration-150"
-                                wire:click="showVideo"
+                                wire:click="showTrailerVideo"
                             >
                                 @svg('play_fill', 'fill-current', ['width' => '34'])
                             </button>
@@ -441,35 +441,35 @@
                 </div>
             </section>
 
-            @if ($readyToLoad)
-                <livewire:components.anime-seasons-section :anime="$anime" />
+{{--            @if ($readyToLoad)--}}
+{{--                <livewire:components.anime-seasons-section :anime="$anime" />--}}
 
-                <livewire:components.anime-cast-section :anime="$anime" />
+{{--                <livewire:components.anime-cast-section :anime="$anime" />--}}
 
-                <livewire:components.anime-staff-section :anime="$anime" />
+{{--                <livewire:components.anime-staff-section :anime="$anime" />--}}
 
-                <livewire:components.anime-songs-section :anime="$anime" />
+{{--                <livewire:components.anime-songs-section :anime="$anime" />--}}
 
-                <livewire:components.anime-studios-section :anime="$anime" />
+{{--                <livewire:components.anime-studios-section :anime="$anime" />--}}
 
-                <div class="bg-orange-50">
-                    @if (!empty($this->studio))
-                        <livewire:components.anime-more-by-studio-section :anime="$anime" :studio="$this->studio" />
-                    @endif
+{{--                <div class="bg-orange-50">--}}
+{{--                    @if (!empty($this->studio))--}}
+{{--                        <livewire:components.anime-more-by-studio-section :anime="$anime" :studio="$this->studio" />--}}
+{{--                    @endif--}}
 
-                    <livewire:components.anime.anime-relations-section :anime="$anime" />
+{{--                    <livewire:components.anime.anime-relations-section :anime="$anime" />--}}
 
-                    <livewire:components.anime.manga-relations-section :anime="$anime" />
+{{--                    <livewire:components.anime.manga-relations-section :anime="$anime" />--}}
 
-                    <livewire:components.anime.game-relations-section :anime="$anime" />
+{{--                    <livewire:components.anime.game-relations-section :anime="$anime" />--}}
 
-                    @if (!empty($anime->copyright))
-                        <section class="pt-4 pr-4 pb-4 pl-4 border-t">
-                            <p class="text-sm text-gray-400">{!! nl2br(e($anime->copyright)) !!}</p>
-                        </section>
-                    @endif
-                </div>
-            @endif
+{{--                    @if (!empty($anime->copyright))--}}
+{{--                        <section class="pt-4 pr-4 pb-4 pl-4 border-t">--}}
+{{--                            <p class="text-sm text-gray-400">{!! nl2br(e($anime->copyright)) !!}</p>--}}
+{{--                        </section>--}}
+{{--                    @endif--}}
+{{--                </div>--}}
+{{--            @endif--}}
         </div>
     </div>
 

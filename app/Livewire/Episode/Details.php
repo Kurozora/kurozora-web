@@ -191,7 +191,7 @@ class Details extends Component
      *
      * @return void
      */
-    public function showVideo(): void
+    public function showTrailerVideo(): void
     {
         $this->showVideo = true;
     }

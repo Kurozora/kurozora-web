@@ -94,7 +94,7 @@
                         <div class="flex flex-col justify-center items-center h-full md:pb-40 lg:pb-0">
                             <button
                                 class="inline-flex items-center pt-5 pr-5 pb-5 pl-5 bg-white/60 backdrop-blur border border-transparent rounded-full font-semibold text-xs text-gray-500 uppercase tracking-widest shadow-md hover:opacity-75 active:opacity-50 focus:outline-none disabled:bg-gray-100 disabled:text-gray-300 disabled:cursor-default disabled:opacity-100 transition ease-in-out duration-150"
-                                wire:click="showVideo"
+                                wire:click="showTrailerVideo"
                             >
                                 @svg('play_fill', 'fill-current', ['width' => '34'])
                             </button>
