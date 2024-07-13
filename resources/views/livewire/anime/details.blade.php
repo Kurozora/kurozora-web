@@ -441,35 +441,35 @@
                 </div>
             </section>
 
-{{--            @if ($readyToLoad)--}}
-{{--                <livewire:components.anime-seasons-section :anime="$anime" />--}}
+            @if ($readyToLoad)
+                <livewire:components.anime-seasons-section :anime="$anime" />
 
-{{--                <livewire:components.anime-cast-section :anime="$anime" />--}}
+                <livewire:components.anime-cast-section :anime="$anime" />
 
-{{--                <livewire:components.anime-staff-section :anime="$anime" />--}}
+                <livewire:components.anime-staff-section :anime="$anime" />
 
-{{--                <livewire:components.anime-songs-section :anime="$anime" />--}}
+                <livewire:components.anime-songs-section :anime="$anime" />
 
-{{--                <livewire:components.anime-studios-section :anime="$anime" />--}}
+                <livewire:components.anime-studios-section :anime="$anime" />
 
-{{--                <div class="bg-orange-50">--}}
-{{--                    @if (!empty($this->studio))--}}
-{{--                        <livewire:components.anime-more-by-studio-section :anime="$anime" :studio="$this->studio" />--}}
-{{--                    @endif--}}
+                <div class="bg-orange-50">
+                    @if (!empty($this->studio))
+                        <livewire:components.anime-more-by-studio-section :anime="$anime" :studio="$this->studio" />
+                    @endif
 
-{{--                    <livewire:components.anime.anime-relations-section :anime="$anime" />--}}
+                    <livewire:components.anime.anime-relations-section :anime="$anime" />
 
-{{--                    <livewire:components.anime.manga-relations-section :anime="$anime" />--}}
+                    <livewire:components.anime.manga-relations-section :anime="$anime" />
 
-{{--                    <livewire:components.anime.game-relations-section :anime="$anime" />--}}
+                    <livewire:components.anime.game-relations-section :anime="$anime" />
 
-{{--                    @if (!empty($anime->copyright))--}}
-{{--                        <section class="pt-4 pr-4 pb-4 pl-4 border-t">--}}
-{{--                            <p class="text-sm text-gray-400">{!! nl2br(e($anime->copyright)) !!}</p>--}}
-{{--                        </section>--}}
-{{--                    @endif--}}
-{{--                </div>--}}
-{{--            @endif--}}
+                    @if (!empty($anime->copyright))
+                        <section class="pt-4 pr-4 pb-4 pl-4 border-t">
+                            <p class="text-sm text-gray-400">{!! nl2br(e($anime->copyright)) !!}</p>
+                        </section>
+                    @endif
+                </div>
+            @endif
         </div>
     </div>
 
