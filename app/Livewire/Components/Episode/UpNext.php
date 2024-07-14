@@ -64,9 +64,11 @@ class UpNext extends Component
             ->next_episode()
             ->with([
                 'anime' => function (HasOneThrough $hasOneThrough) {
-                    $hasOneThrough->with([
-                        'translations',
-                    ]);
+                    $hasOneThrough
+                        ->withoutGlobalScopes()
+                        ->with([
+                            'translations',
+                        ]);
                 },
                 'media',
                 'season' => function ($query) {
