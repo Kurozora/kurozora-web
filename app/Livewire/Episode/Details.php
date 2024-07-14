@@ -134,11 +134,13 @@ class Details extends Component
 
         $this->episode = $episode->loadMissing([
             'anime' => function (HasOneThrough $hasOneThrough) {
-                $hasOneThrough->with([
-                    'studios',
-                    'translations',
-                    'orderedVideos'
-                ]);
+                $hasOneThrough
+                    ->withoutGlobalScopes()
+                    ->with([
+                        'studios',
+                        'translations',
+                        'orderedVideos'
+                    ]);
             },
             'media',
             'mediaStat',
@@ -147,13 +149,14 @@ class Details extends Component
             },
             'translations',
             'tv_rating',
-        ])->when(auth()->user(), function ($query, $user) use ($episode) {
-            return $episode->loadMissing(['mediaRatings' => function ($query) {
-                $query->where('user_id', '=', auth()->user()->id);
-            }]);
-        }, function() use ($episode) {
-            return $episode;
-        });
+        ])
+            ->when(auth()->user(), function ($query, $user) use ($episode) {
+                return $episode->loadMissing(['mediaRatings' => function ($query) {
+                    $query->where('user_id', '=', auth()->user()->id);
+                }]);
+            }, function () use ($episode) {
+                return $episode;
+            });
 
         if (!auth()->check()) {
             $this->episode->setRelation('mediaRatings', collect());
