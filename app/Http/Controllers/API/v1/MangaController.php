@@ -5,7 +5,6 @@ namespace App\Http\Controllers\API\v1;
 use App\Enums\SearchScope;
 use App\Enums\SearchType;
 use App\Events\ModelViewed;
-use App\EventsModelViewed;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GetMangaCastRequest;
@@ -30,6 +29,7 @@ use App\Http\Resources\MediaStaffResource;
 use App\Http\Resources\StudioResource;
 use App\Models\Manga;
 use App\Models\MediaRating;
+use App\Scopes\TvRatingScope;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
@@ -75,7 +75,8 @@ class MangaController extends Controller
      * Returns detailed information of a Manga.
      *
      * @param Request $request
-     * @param Manga $manga
+     * @param Manga   $manga
+     *
      * @return JsonResponse
      */
     public function view(Request $request, Manga $manga): JsonResponse
@@ -123,7 +124,8 @@ class MangaController extends Controller
                         $includeArray['animeRelations'] = function ($query) {
                             $query->with([
                                 'related' => function ($query) {
-                                    $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating']);
+                                    $query->withoutGlobalScopes([TvRatingScope::class])
+                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating']);
                                 },
                                 'relation'
                             ])
@@ -134,7 +136,8 @@ class MangaController extends Controller
                         $includeArray['mangaRelations'] = function ($query) {
                             $query->with([
                                 'related' => function ($query) {
-                                    $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating']);
+                                    $query->withoutGlobalScopes([TvRatingScope::class])
+                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating']);
                                 },
                                 'relation'
                             ])
@@ -145,7 +148,8 @@ class MangaController extends Controller
                         $includeArray['gameRelations'] = function ($query) {
                             $query->with([
                                 'related' => function ($query) {
-                                    $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating']);
+                                    $query->withoutGlobalScopes([TvRatingScope::class])
+                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating']);
                                 },
                                 'relation'
                             ])
@@ -178,7 +182,8 @@ class MangaController extends Controller
      * Returns character information of a Manga.
      *
      * @param GetMangaCharactersRequest $request
-     * @param Manga $manga
+     * @param Manga                     $manga
+     *
      * @return JsonResponse
      */
     public function characters(GetMangaCharactersRequest $request, Manga $manga): JsonResponse
@@ -202,7 +207,8 @@ class MangaController extends Controller
      * Returns the cast information of a Manga.
      *
      * @param GetMangaCastRequest $request
-     * @param Manga $manga
+     * @param Manga               $manga
+     *
      * @return JsonResponse
      */
     public function cast(GetMangaCastRequest $request, Manga $manga): JsonResponse
@@ -226,7 +232,8 @@ class MangaController extends Controller
      * Returns related-shows information of a Manga.
      *
      * @param GetMediaRelatedShowsRequest $request
-     * @param Manga $manga
+     * @param Manga                       $manga
+     *
      * @return JsonResponse
      */
     public function relatedShows(GetMediaRelatedShowsRequest $request, Manga $manga): JsonResponse
@@ -237,7 +244,8 @@ class MangaController extends Controller
         $relatedShows = $manga->animeRelations()
             ->with([
                 'related' => function ($query) {
-                    $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating'])
+                    $query->withoutGlobalScopes([TvRatingScope::class])
+                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating'])
                         ->when(auth()->user(), function ($query, $user) {
                             $query->with(['mediaRatings' => function ($query) use ($user) {
                                 $query->where([
@@ -273,7 +281,8 @@ class MangaController extends Controller
      * Returns related-mangas information of a Manga.
      *
      * @param GetMediaRelatedLiteraturesRequest $request
-     * @param Manga $manga
+     * @param Manga                             $manga
+     *
      * @return JsonResponse
      */
     public function relatedLiteratures(GetMediaRelatedLiteraturesRequest $request, Manga $manga): JsonResponse
@@ -284,7 +293,8 @@ class MangaController extends Controller
         $relatedLiteratures = $manga->mangaRelations()
             ->with([
                 'related' => function ($query) {
-                    $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating'])
+                    $query->withoutGlobalScopes([TvRatingScope::class])
+                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating'])
                         ->when(auth()->useR(), function ($query, $user) {
                             $query->with(['mediaRatings' => function ($query) use ($user) {
                                 $query->where([
@@ -317,7 +327,8 @@ class MangaController extends Controller
      * Returns related-mangas information of a Manga.
      *
      * @param GetMediaRelatedGamesRequest $request
-     * @param Manga $manga
+     * @param Manga                       $manga
+     *
      * @return JsonResponse
      */
     public function relatedGames(GetMediaRelatedGamesRequest $request, Manga $manga): JsonResponse
@@ -328,7 +339,8 @@ class MangaController extends Controller
         $relatedGames = $manga->gameRelations()
             ->with([
                 'related' => function ($query) {
-                    $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating'])
+                    $query->withoutGlobalScopes([TvRatingScope::class])
+                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating'])
                         ->when(auth()->user(), function ($query, $user) {
                             $query->with(['mediaRatings' => function ($query) use ($user) {
                                 $query->where([
@@ -361,7 +373,8 @@ class MangaController extends Controller
      * Returns staff information of a Manga.
      *
      * @param GetMediaStaffRequest $request
-     * @param Manga $manga
+     * @param Manga                $manga
+     *
      * @return JsonResponse
      */
     public function staff(GetMediaStaffRequest $request, Manga $manga): JsonResponse
@@ -382,7 +395,7 @@ class MangaController extends Controller
         $nextPageURL = str_replace($request->root(), '', $staff->nextPageUrl());
 
         // Set model relation
-        $staff->each(function($song) use ($manga) {
+        $staff->each(function ($song) use ($manga) {
             $song->setRelation('model', $manga);
         });
 
@@ -396,7 +409,8 @@ class MangaController extends Controller
      * Returns the studios information of a Manga.
      *
      * @param GetMangaStudiosRequest $request
-     * @param Manga $manga
+     * @param Manga                  $manga
+     *
      * @return JsonResponse
      */
     public function studios(GetMangaStudiosRequest $request, Manga $manga): JsonResponse
@@ -421,7 +435,8 @@ class MangaController extends Controller
      * Returns the more manga made by the same studio.
      *
      * @param GetMangaMoreByStudioRequest $request
-     * @param Manga $manga
+     * @param Manga                       $manga
+     *
      * @return JsonResponse
      */
     public function moreByStudio(GetMangaMoreByStudioRequest $request, Manga $manga): JsonResponse
@@ -453,7 +468,8 @@ class MangaController extends Controller
      * Adds a rating for a Manga item
      *
      * @param RateMangaRequest $request
-     * @param Manga $manga
+     * @param Manga            $manga
+     *
      * @return JsonResponse
      * @throws AuthorizationException
      * @throws Exception
@@ -490,19 +506,19 @@ class MangaController extends Controller
             } else {
                 // Update the current rating
                 $foundRating->update([
-                    'rating'        => $givenRating,
-                    'description'   => $description ?? $foundRating->description,
+                    'rating' => $givenRating,
+                    'description' => $description ?? $foundRating->description,
                 ]);
             }
         } else {
             // Only insert the rating if it's rated higher than 0
             if ($givenRating > 0) {
                 MediaRating::create([
-                    'user_id'       => $user->id,
-                    'model_id'      => $manga->id,
-                    'model_type'    => $manga->getMorphClass(),
-                    'rating'        => $givenRating,
-                    'description'   => $description,
+                    'user_id' => $user->id,
+                    'model_id' => $manga->id,
+                    'model_type' => $manga->getMorphClass(),
+                    'rating' => $givenRating,
+                    'description' => $description,
                 ]);
             }
         }
@@ -514,6 +530,7 @@ class MangaController extends Controller
      * Retrieves upcoming Manga results
      *
      * @param GetUpcomingMangaRequest $request
+     *
      * @return JsonResponse
      */
     public function upcoming(GetUpcomingMangaRequest $request): JsonResponse
@@ -536,7 +553,8 @@ class MangaController extends Controller
      * Returns the reviews of a Manga.
      *
      * @param GetMangaReviewsRequest $request
-     * @param Manga $manga
+     * @param Manga                  $manga
+     *
      * @return JsonResponse
      */
     public function reviews(GetMangaReviewsRequest $request, Manga $manga): JsonResponse

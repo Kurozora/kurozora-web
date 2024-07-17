@@ -33,6 +33,7 @@ use App\Http\Resources\ShowCastResourceIdentity;
 use App\Http\Resources\StudioResource;
 use App\Models\Anime;
 use App\Models\MediaRating;
+use App\Scopes\TvRatingScope;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
@@ -59,8 +60,8 @@ class AnimeController extends Controller
         $request->merge([
             'scope' => SearchScope::Kurozora,
             'types' => [
-                SearchType::Shows
-            ]
+                SearchType::Shows,
+            ],
         ]);
 
         // Convert request type
@@ -78,7 +79,8 @@ class AnimeController extends Controller
      * Returns detailed information of an Anime.
      *
      * @param Request $request
-     * @param Anime $anime
+     * @param Anime   $anime
+     *
      * @return JsonResponse
      */
     public function view(Request $request, Anime $anime): JsonResponse
@@ -90,7 +92,7 @@ class AnimeController extends Controller
             ->when(auth()->user(), function ($query, $user) use ($anime) {
                 $anime->load(['mediaRatings' => function ($query) use ($user) {
                     $query->where([
-                        ['user_id', '=', $user->id]
+                        ['user_id', '=', $user->id],
                     ]);
                 }, 'library' => function ($query) use ($user) {
                     $query->where('user_id', '=', $user->id);
@@ -129,9 +131,10 @@ class AnimeController extends Controller
                         $includeArray['animeRelations'] = function ($query) {
                             $query->with([
                                 'related' => function ($query) {
-                                    $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating']);
+                                    $query->withoutGlobalScopes([TvRatingScope::class])
+                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating']);
                                 },
-                                'relation'
+                                'relation',
                             ])
                                 ->limit(Anime::MAXIMUM_RELATIONSHIPS_LIMIT);
                         };
@@ -140,9 +143,10 @@ class AnimeController extends Controller
                         $includeArray['mangaRelations'] = function ($query) {
                             $query->with([
                                 'related' => function ($query) {
-                                    $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating']);
+                                    $query->withoutGlobalScopes([TvRatingScope::class])
+                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating']);
                                 },
-                                'relation'
+                                'relation',
                             ])
                                 ->limit(Anime::MAXIMUM_RELATIONSHIPS_LIMIT);
                         };
@@ -151,9 +155,10 @@ class AnimeController extends Controller
                         $includeArray['gameRelations'] = function ($query) {
                             $query->with([
                                 'related' => function ($query) {
-                                    $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating']);
+                                    $query->withoutGlobalScopes([TvRatingScope::class])
+                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating']);
                                 },
-                                'relation'
+                                'relation',
                             ])
                                 ->limit(Anime::MAXIMUM_RELATIONSHIPS_LIMIT);
                         };
@@ -170,7 +175,7 @@ class AnimeController extends Controller
                                 'song' => function ($query) {
                                     $query->with(['media', 'mediaStat', 'translations']);
                                 },
-                                'model'
+                                'model',
                             ])
                                 ->limit(Anime::MAXIMUM_RELATIONSHIPS_LIMIT);
                         };
@@ -193,7 +198,7 @@ class AnimeController extends Controller
 
         // Show the Anime details response
         return JSONResult::success([
-            'data' => AnimeResource::collection([$anime])
+            'data' => AnimeResource::collection([$anime]),
         ]);
     }
 
@@ -201,7 +206,8 @@ class AnimeController extends Controller
      * Returns character information of an Anime.
      *
      * @param GetAnimeCharactersRequest $request
-     * @param Anime $anime
+     * @param Anime                     $anime
+     *
      * @return JsonResponse
      */
     public function characters(GetAnimeCharactersRequest $request, Anime $anime): JsonResponse
@@ -217,7 +223,7 @@ class AnimeController extends Controller
 
         return JSONResult::success([
             'data' => CharacterResourceIdentity::collection($characters),
-            'next' => empty($nextPageURL) ? null : $nextPageURL
+            'next' => empty($nextPageURL) ? null : $nextPageURL,
         ]);
     }
 
@@ -225,7 +231,8 @@ class AnimeController extends Controller
      * Returns the cast information of an Anime.
      *
      * @param GetMediaCastRequest $request
-     * @param Anime $anime
+     * @param Anime               $anime
+     *
      * @return JsonResponse
      */
     public function cast(GetMediaCastRequest $request, Anime $anime): JsonResponse
@@ -241,7 +248,7 @@ class AnimeController extends Controller
 
         return JSONResult::success([
             'data' => ShowCastResourceIdentity::collection($animeCast),
-            'next' => empty($nextPageURL) ? null : $nextPageURL
+            'next' => empty($nextPageURL) ? null : $nextPageURL,
         ]);
     }
 
@@ -249,7 +256,8 @@ class AnimeController extends Controller
      * Returns related-shows information of an Anime.
      *
      * @param GetMediaRelatedShowsRequest $request
-     * @param Anime $anime
+     * @param Anime                       $anime
+     *
      * @return JsonResponse
      */
     public function relatedShows(GetMediaRelatedShowsRequest $request, Anime $anime): JsonResponse
@@ -260,11 +268,12 @@ class AnimeController extends Controller
         $relatedShows = $anime->animeRelations()
             ->with([
                 'related' => function ($query) {
-                    $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating'])
+                    $query->withoutGlobalScopes([TvRatingScope::class])
+                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating'])
                         ->when(auth()->user(), function ($query, $user) {
                             $query->with(['mediaRatings' => function ($query) use ($user) {
                                 $query->where([
-                                    ['user_id', '=', $user->id]
+                                    ['user_id', '=', $user->id],
                                 ]);
                             }, 'library' => function ($query) use ($user) {
                                 $query->where('user_id', '=', $user->id);
@@ -279,7 +288,7 @@ class AnimeController extends Controller
                                 ]);
                         });
                 },
-                'relation'
+                'relation',
             ])
             ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
 
@@ -288,7 +297,7 @@ class AnimeController extends Controller
 
         return JSONResult::success([
             'data' => MediaRelatedResource::collection($relatedShows),
-            'next' => empty($nextPageURL) ? null : $nextPageURL
+            'next' => empty($nextPageURL) ? null : $nextPageURL,
         ]);
     }
 
@@ -296,7 +305,8 @@ class AnimeController extends Controller
      * Returns related-literatures information of an Anime.
      *
      * @param GetMediaRelatedLiteraturesRequest $request
-     * @param Anime $anime
+     * @param Anime                             $anime
+     *
      * @return JsonResponse
      */
     public function relatedLiteratures(GetMediaRelatedLiteraturesRequest $request, Anime $anime): JsonResponse
@@ -307,11 +317,12 @@ class AnimeController extends Controller
         $relatedLiterature = $anime->mangaRelations()
             ->with([
                 'related' => function ($query) {
-                    $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating'])
+                    $query->withoutGlobalScopes([TvRatingScope::class])
+                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating'])
                         ->when(auth()->useR(), function ($query, $user) {
                             $query->with(['mediaRatings' => function ($query) use ($user) {
                                 $query->where([
-                                    ['user_id', '=', $user->id]
+                                    ['user_id', '=', $user->id],
                                 ]);
                             }, 'library' => function ($query) use ($user) {
                                 $query->where('user_id', '=', $user->id);
@@ -319,11 +330,11 @@ class AnimeController extends Controller
                                 ->withExists([
                                     'favoriters as isFavorited' => function ($query) use ($user) {
                                         $query->where('user_id', '=', $user->id);
-                                    }
+                                    },
                                 ]);
                         });
                 },
-                'relation'
+                'relation',
             ])
             ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
 
@@ -332,7 +343,7 @@ class AnimeController extends Controller
 
         return JSONResult::success([
             'data' => MediaRelatedResource::collection($relatedLiterature),
-            'next' => empty($nextPageURL) ? null : $nextPageURL
+            'next' => empty($nextPageURL) ? null : $nextPageURL,
         ]);
     }
 
@@ -340,7 +351,8 @@ class AnimeController extends Controller
      * Returns related-literatures information of an Anime.
      *
      * @param GetMediaRelatedGamesRequest $request
-     * @param Anime $anime
+     * @param Anime                       $anime
+     *
      * @return JsonResponse
      */
     public function relatedGames(GetMediaRelatedGamesRequest $request, Anime $anime): JsonResponse
@@ -351,11 +363,12 @@ class AnimeController extends Controller
         $relatedGame = $anime->gameRelations()
             ->with([
                 'related' => function ($query) {
-                    $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating'])
+                    $query->withoutGlobalScopes([TvRatingScope::class])
+                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating'])
                         ->when(auth()->user(), function ($query, $user) {
                             $query->with(['mediaRatings' => function ($query) use ($user) {
                                 $query->where([
-                                    ['user_id', '=', $user->id]
+                                    ['user_id', '=', $user->id],
                                 ]);
                             }, 'library' => function ($query) use ($user) {
                                 $query->where('user_id', '=', $user->id);
@@ -363,11 +376,11 @@ class AnimeController extends Controller
                                 ->withExists([
                                     'favoriters as isFavorited' => function ($query) use ($user) {
                                         $query->where('user_id', '=', $user->id);
-                                    }
+                                    },
                                 ]);
                         });
                 },
-                'relation'
+                'relation',
             ])
             ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
 
@@ -376,7 +389,7 @@ class AnimeController extends Controller
 
         return JSONResult::success([
             'data' => MediaRelatedResource::collection($relatedGame),
-            'next' => empty($nextPageURL) ? null : $nextPageURL
+            'next' => empty($nextPageURL) ? null : $nextPageURL,
         ]);
     }
 
@@ -384,7 +397,8 @@ class AnimeController extends Controller
      * Returns season information for an Anime
      *
      * @param GetAnimeSeasonsRequest $request
-     * @param Anime $anime
+     * @param Anime                  $anime
+     *
      * @return JsonResponse
      */
     public function seasons(GetAnimeSeasonsRequest $request, Anime $anime): JsonResponse
@@ -402,7 +416,7 @@ class AnimeController extends Controller
 
         return JSONResult::success([
             'data' => SeasonResourceIdentity::collection($seasons),
-            'next' => empty($nextPageURL) ? null : $nextPageURL
+            'next' => empty($nextPageURL) ? null : $nextPageURL,
         ]);
     }
 
@@ -410,7 +424,8 @@ class AnimeController extends Controller
      * Returns song information for an Anime
      *
      * @param GetMediaSongsRequest $request
-     * @param Anime $anime
+     * @param Anime                $anime
+     *
      * @return JsonResponse
      */
     public function songs(GetMediaSongsRequest $request, Anime $anime): JsonResponse
@@ -425,9 +440,9 @@ class AnimeController extends Controller
                     $query->with([
                         'media',
                         'mediaStat',
-                        'translations'
+                        'translations',
                     ]);
-                }
+                },
             ])
             ->paginate($limit, page: $data['page'] ?? 1);
 
@@ -435,13 +450,13 @@ class AnimeController extends Controller
         $nextPageURL = str_replace($request->root(), '', $mediaSongs->nextPageUrl());
 
         // Set model relation
-        $mediaSongs->each(function($song) use ($anime) {
+        $mediaSongs->each(function ($song) use ($anime) {
             $song->setRelation('model', $anime);
         });
 
         return JSONResult::success([
             'data' => MediaSongResource::collection($mediaSongs),
-            'next' => empty($nextPageURL) ? null : $nextPageURL
+            'next' => empty($nextPageURL) ? null : $nextPageURL,
         ]);
     }
 
@@ -449,7 +464,8 @@ class AnimeController extends Controller
      * Returns staff information of an Anime.
      *
      * @param GetMediaStaffRequest $request
-     * @param Anime $anime
+     * @param Anime                $anime
+     *
      * @return JsonResponse
      */
     public function staff(GetMediaStaffRequest $request, Anime $anime): JsonResponse
@@ -462,7 +478,7 @@ class AnimeController extends Controller
                 'person' => function ($query) {
                     $query->with(['media']);
                 },
-                'staff_role'
+                'staff_role',
             ])
             ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
 
@@ -470,13 +486,13 @@ class AnimeController extends Controller
         $nextPageURL = str_replace($request->root(), '', $staff->nextPageUrl());
 
         // Set model relation
-        $staff->each(function($song) use ($anime) {
+        $staff->each(function ($song) use ($anime) {
             $song->setRelation('model', $anime);
         });
 
         return JSONResult::success([
             'data' => MediaStaffResource::collection($staff),
-            'next' => empty($nextPageURL) ? null : $nextPageURL
+            'next' => empty($nextPageURL) ? null : $nextPageURL,
         ]);
     }
 
@@ -484,7 +500,8 @@ class AnimeController extends Controller
      * Returns the studios information of an Anime.
      *
      * @param GetAnimeStudiosRequest $request
-     * @param Anime $anime
+     * @param Anime                  $anime
+     *
      * @return JsonResponse
      */
     public function studios(GetAnimeStudiosRequest $request, Anime $anime): JsonResponse
@@ -501,7 +518,7 @@ class AnimeController extends Controller
 
         return JSONResult::success([
             'data' => StudioResource::collection($mediaStudios),
-            'next' => empty($nextPageURL) ? null : $nextPageURL
+            'next' => empty($nextPageURL) ? null : $nextPageURL,
         ]);
     }
 
@@ -509,7 +526,8 @@ class AnimeController extends Controller
      * Returns the more anime made by the same studio.
      *
      * @param GetAnimeMoreByStudioRequest $request
-     * @param Anime $anime
+     * @param Anime                       $anime
+     *
      * @return JsonResponse
      */
     public function moreByStudio(GetAnimeMoreByStudioRequest $request, Anime $anime): JsonResponse
@@ -533,7 +551,7 @@ class AnimeController extends Controller
 
         return JSONResult::success([
             'data' => AnimeResourceIdentity::collection($studioAnimes),
-            'next' => empty($nextPageURL) ? null : $nextPageURL
+            'next' => empty($nextPageURL) ? null : $nextPageURL,
         ]);
     }
 
@@ -541,7 +559,8 @@ class AnimeController extends Controller
      * Adds a rating for an Anime item
      *
      * @param RateAnimeRequest $request
-     * @param Anime $anime
+     * @param Anime            $anime
+     *
      * @return JsonResponse
      * @throws AuthorizationException
      * @throws Exception
@@ -578,19 +597,19 @@ class AnimeController extends Controller
             } else {
                 // Update the current rating
                 $foundRating->update([
-                    'rating'        => $givenRating,
-                    'description'   => $description ?? $foundRating->description,
+                    'rating' => $givenRating,
+                    'description' => $description ?? $foundRating->description,
                 ]);
             }
         } else {
             // Only insert the rating if it's rated higher than 0
             if ($givenRating > 0) {
                 MediaRating::create([
-                    'user_id'       => $user->id,
-                    'model_id'      => $anime->id,
-                    'model_type'    => $anime->getMorphClass(),
-                    'rating'        => $givenRating,
-                    'description'   => $description
+                    'user_id' => $user->id,
+                    'model_id' => $anime->id,
+                    'model_type' => $anime->getMorphClass(),
+                    'rating' => $givenRating,
+                    'description' => $description,
                 ]);
             }
         }
@@ -602,6 +621,7 @@ class AnimeController extends Controller
      * Retrieves upcoming Anime results
      *
      * @param GetUpcomingAnimeRequest $request
+     *
      * @return JsonResponse
      */
     public function upcoming(GetUpcomingAnimeRequest $request): JsonResponse
@@ -616,7 +636,7 @@ class AnimeController extends Controller
 
         return JSONResult::success([
             'data' => AnimeResourceIdentity::collection($anime),
-            'next' => empty($nextPageURL) ? null : $nextPageURL
+            'next' => empty($nextPageURL) ? null : $nextPageURL,
         ]);
     }
 
@@ -624,7 +644,8 @@ class AnimeController extends Controller
      * Returns the reviews of an Anime.
      *
      * @param GetAnimeReviewsRequest $request
-     * @param Anime $anime
+     * @param Anime                  $anime
+     *
      * @return JsonResponse
      */
     public function reviews(GetAnimeReviewsRequest $request, Anime $anime): JsonResponse
@@ -650,7 +671,7 @@ class AnimeController extends Controller
                         },
                     ])
                         ->withCount(['followers', 'following', 'mediaRatings']);
-                }
+                },
             ])
             ->where('description', '!=', null)
             ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
@@ -660,7 +681,7 @@ class AnimeController extends Controller
 
         return JSONResult::success([
             'data' => MediaRatingResource::collection($reviews),
-            'next' => empty($nextPageURL) ? null : $nextPageURL
+            'next' => empty($nextPageURL) ? null : $nextPageURL,
         ]);
     }
 }

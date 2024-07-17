@@ -31,6 +31,7 @@ use App\Http\Resources\ShowCastResourceIdentity;
 use App\Http\Resources\StudioResource;
 use App\Models\Game;
 use App\Models\MediaRating;
+use App\Scopes\TvRatingScope;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
@@ -76,7 +77,8 @@ class GameController extends Controller
      * Returns detailed information of a game.
      *
      * @param Request $request
-     * @param game $game
+     * @param game    $game
+     *
      * @return JsonResponse
      */
     public function view(Request $request, Game $game): JsonResponse
@@ -126,7 +128,8 @@ class GameController extends Controller
                         $includeArray['animeRelations'] = function ($query) {
                             $query->with([
                                 'related' => function ($query) {
-                                    $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating']);
+                                    $query->withoutGlobalScopes([TvRatingScope::class])
+                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating']);
                                 },
                                 'relation'
                             ])
@@ -137,7 +140,8 @@ class GameController extends Controller
                         $includeArray['mangaRelations'] = function ($query) {
                             $query->with([
                                 'related' => function ($query) {
-                                    $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating']);
+                                    $query->withoutGlobalScopes([TvRatingScope::class])
+                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating']);
                                 },
                                 'relation'
                             ])
@@ -148,7 +152,8 @@ class GameController extends Controller
                         $includeArray['gameRelations'] = function ($query) {
                             $query->with([
                                 'related' => function ($query) {
-                                    $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating']);
+                                    $query->withoutGlobalScopes([TvRatingScope::class])
+                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating']);
                                 },
                                 'relation'
                             ])
@@ -192,7 +197,8 @@ class GameController extends Controller
      * Returns character information of a game.
      *
      * @param GetGameCharactersRequest $request
-     * @param game $game
+     * @param game                     $game
+     *
      * @return JsonResponse
      */
     public function characters(GetGameCharactersRequest $request, game $game): JsonResponse
@@ -216,7 +222,8 @@ class GameController extends Controller
      * Returns the cast information of a game.
      *
      * @param GetMediaCastRequest $request
-     * @param game $game
+     * @param game                $game
+     *
      * @return JsonResponse
      */
     public function cast(GetMediaCastRequest $request, game $game): JsonResponse
@@ -240,7 +247,8 @@ class GameController extends Controller
      * Returns related-shows information of a game.
      *
      * @param GetMediaRelatedShowsRequest $request
-     * @param game $game
+     * @param game                        $game
+     *
      * @return JsonResponse
      */
     public function relatedShows(GetMediaRelatedShowsRequest $request, game $game): JsonResponse
@@ -251,7 +259,8 @@ class GameController extends Controller
         $relatedShows = $game->animeRelations()
             ->with([
                 'related' => function ($query) {
-                    $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating'])
+                    $query->withoutGlobalScopes([TvRatingScope::class])
+                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating'])
                         ->when(auth()->user(), function ($query, $user) {
                             $query->with(['mediaRatings' => function ($query) use ($user) {
                                 $query->where([
@@ -287,7 +296,8 @@ class GameController extends Controller
      * Returns related-literatures information of a game.
      *
      * @param GetMediaRelatedLiteraturesRequest $request
-     * @param game $game
+     * @param game                              $game
+     *
      * @return JsonResponse
      */
     public function relatedLiteratures(GetMediaRelatedLiteraturesRequest $request, game $game): JsonResponse
@@ -298,7 +308,8 @@ class GameController extends Controller
         $relatedLiterature = $game->mangaRelations()
             ->with([
                 'related' => function ($query) {
-                    $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating'])
+                    $query->withoutGlobalScopes([TvRatingScope::class])
+                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating'])
                         ->when(auth()->user(), function ($query, $user) {
                             $query->with(['mediaRatings' => function ($query) use ($user) {
                                 $query->where([
@@ -331,7 +342,8 @@ class GameController extends Controller
      * Returns related-games information of a game.
      *
      * @param GetMediaRelatedGamesRequest $request
-     * @param game $game
+     * @param game                        $game
+     *
      * @return JsonResponse
      */
     public function relatedGames(GetMediaRelatedGamesRequest $request, game $game): JsonResponse
@@ -342,7 +354,8 @@ class GameController extends Controller
         $relatedGame = $game->gameRelations()
             ->with([
                 'related' => function ($query) {
-                    $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating'])
+                    $query->withoutGlobalScopes([TvRatingScope::class])
+                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating'])
                         ->when(auth()->user(), function ($query, $user) {
                             $query->with(['mediaRatings' => function ($query) use ($user) {
                                 $query->where([
@@ -375,7 +388,8 @@ class GameController extends Controller
      * Returns song information for a game
      *
      * @param GetMediaSongsRequest $request
-     * @param game $game
+     * @param game                 $game
+     *
      * @return JsonResponse
      */
     public function songs(GetMediaSongsRequest $request, game $game): JsonResponse
@@ -400,7 +414,7 @@ class GameController extends Controller
         $nextPageURL = str_replace($request->root(), '', $mediaSongs->nextPageUrl());
 
         // Set model relation
-        $mediaSongs->each(function($song) use ($game) {
+        $mediaSongs->each(function ($song) use ($game) {
             $song->setRelation('model', $game);
         });
 
@@ -414,7 +428,8 @@ class GameController extends Controller
      * Returns staff information of a game.
      *
      * @param GetMediaStaffRequest $request
-     * @param game $game
+     * @param game                 $game
+     *
      * @return JsonResponse
      */
     public function staff(GetMediaStaffRequest $request, game $game): JsonResponse
@@ -435,7 +450,7 @@ class GameController extends Controller
         $nextPageURL = str_replace($request->root(), '', $staff->nextPageUrl());
 
         // Set model relation
-        $staff->each(function($song) use ($game) {
+        $staff->each(function ($song) use ($game) {
             $song->setRelation('model', $game);
         });
 
@@ -449,7 +464,8 @@ class GameController extends Controller
      * Returns the studios information of a game.
      *
      * @param GetGameStudiosRequest $request
-     * @param game $game
+     * @param game                  $game
+     *
      * @return JsonResponse
      */
     public function studios(GetGameStudiosRequest $request, game $game): JsonResponse
@@ -474,7 +490,8 @@ class GameController extends Controller
      * Returns the more anime made by the same studio.
      *
      * @param GetGameMoreByStudioRequest $request
-     * @param game $game
+     * @param game                       $game
+     *
      * @return JsonResponse
      */
     public function moreByStudio(GetGameMoreByStudioRequest $request, game $game): JsonResponse
@@ -506,7 +523,8 @@ class GameController extends Controller
      * Adds a rating for an game item
      *
      * @param RateGameRequest $request
-     * @param game $game
+     * @param game            $game
+     *
      * @return JsonResponse
      * @throws AuthorizationException
      * @throws Exception
@@ -543,19 +561,19 @@ class GameController extends Controller
             } else {
                 // Update the current rating
                 $foundRating->update([
-                    'rating'        => $givenRating,
-                    'description'   => $description
+                    'rating' => $givenRating,
+                    'description' => $description
                 ]);
             }
         } else {
             // Only insert the rating if it's rated higher than 0
             if ($givenRating > 0) {
                 MediaRating::create([
-                    'user_id'       => $user->id,
-                    'model_id'      => $game->id,
-                    'model_type'    => $game->getMorphClass(),
-                    'rating'        => $givenRating,
-                    'description'   => $description
+                    'user_id' => $user->id,
+                    'model_id' => $game->id,
+                    'model_type' => $game->getMorphClass(),
+                    'rating' => $givenRating,
+                    'description' => $description
                 ]);
             }
         }
@@ -567,6 +585,7 @@ class GameController extends Controller
      * Retrieves upcoming games results
      *
      * @param GetUpcomingGameRequest $request
+     *
      * @return JsonResponse
      */
     public function upcoming(GetUpcomingGameRequest $request): JsonResponse
@@ -589,7 +608,8 @@ class GameController extends Controller
      * Returns the reviews of a Game.
      *
      * @param GetGameReviewsRequest $request
-     * @param Game $game
+     * @param Game                  $game
+     *
      * @return JsonResponse
      */
     public function reviews(GetGameReviewsRequest $request, Game $game): JsonResponse
