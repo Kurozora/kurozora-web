@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\MediaCollection;
+use App\Scopes\TvRatingScope;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\HasViews;
 use App\Traits\Model\TvRated;
@@ -129,7 +130,7 @@ class Season extends KModel implements HasMedia, Sitemapable
     public function resolveRouteBindingQuery($query, $value, $field = null): Builder
     {
         return parent::resolveRouteBindingQuery($query, $value, $field)
-            ->withoutTvRatings();
+            ->withoutGlobalScopes([TvRatingScope::class]);
     }
 
     /**

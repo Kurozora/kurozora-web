@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Casts\AsArrayObject;
 use App\Enums\MediaCollection;
 use App\Enums\StudioType;
+use App\Scopes\TvRatingScope;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\HasMediaRatings;
 use App\Traits\Model\HasMediaStat;
@@ -293,7 +294,7 @@ class Studio extends KModel implements HasMedia, Sitemapable
     public function resolveRouteBindingQuery($query, $value, $field = null): \Illuminate\Contracts\Database\Eloquent\Builder
     {
         return parent::resolveRouteBindingQuery($query, $value, $field)
-            ->withoutTvRatings();
+            ->withoutGlobalScopes([TvRatingScope::class]);
     }
 
     /**

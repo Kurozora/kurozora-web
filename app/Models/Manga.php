@@ -6,6 +6,8 @@ use App\Casts\AsArrayObject;
 use App\Enums\DayOfWeek;
 use App\Enums\MediaCollection;
 use App\Enums\SeasonOfYear;
+use App\Scopes\IgnoreListScope;
+use App\Scopes\TvRatingScope;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\Actionable;
 use App\Traits\Model\Favorable;
@@ -679,7 +681,7 @@ class Manga extends KModel implements HasMedia, Sitemapable
     public function resolveRouteBindingQuery($query, $value, $field = null): \Illuminate\Contracts\Database\Eloquent\Builder
     {
         return parent::resolveRouteBindingQuery($query, $value, $field)
-            ->withoutTvRatings();
+            ->withoutGlobalScopes([TvRatingScope::class, IgnoreListScope::class]);
     }
 
     /**
