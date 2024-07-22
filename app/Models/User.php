@@ -303,6 +303,11 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         return !$this->hasRole('superAdmin');
     }
 
+    public function getNameAttribute(): string
+    {
+        return $this->username;
+    }
+
     /**
      * Returns the language the user has.
      *
