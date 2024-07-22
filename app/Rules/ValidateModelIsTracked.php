@@ -33,15 +33,20 @@ class ValidateModelIsTracked implements DataAwareRule, ValidationRule
     {
         $library = (int) ($this->data['library'] ?? UserLibraryKind::Anime);
         $model = match($library) {
-            UserLibraryKind::Game => Game::with('translations')
+            UserLibraryKind::Game => Game::withoutGlobalScopes()
+                ->with('translations')
                 ->firstWhere(Game::TABLE_NAME . '.id', '=', $value),
-            UserLibraryKind::Manga => Manga::with('translations')
+            UserLibraryKind::Manga => Manga::withoutGlobalScopes()
+                ->with('translations')
                 ->firstWhere(Manga::TABLE_NAME . '.id', '=', $value),
-            default => Anime::with('translations')
+            default => Anime::withoutGlobalScopes()
+                ->with('translations')
                 ->firstWhere(Anime::TABLE_NAME . '.id', '=', $value)
         };
 
-        if (!auth()->user()->hasTracked($model)) {
+        if ($model == null) {
+            $fail(__('The specified title cannot be found. Please try again.'));
+        } else if (!auth()->user()->hasTracked($model)) {
             $fail($this->message($model->title));
         }
     }
