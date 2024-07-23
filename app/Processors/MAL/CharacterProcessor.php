@@ -53,27 +53,26 @@ class CharacterProcessor extends CustomItemProcessor
             $character = Character::withoutGlobalScopes()
                 ->create([
                     'mal_id' => $malID,
-                    'name' => $name,
-                    'jp' => [
+                    'name' => $name,                    'ja' => [
                         'name' => $japaneseName,
                         'about' => null
                     ],
-                    'alternative_names' => $alternativeNames,
+                    'nicknames' => $alternativeNames,
                     'about' => $about
                 ]);
             logger()->channel('stderr')->info('✅️ [MAL_ID:CHARACTER:' . $malID . '] Done creating character');
         } else {
             logger()->channel('stderr')->info('🛠 [MAL_ID:CHARACTER:' . $malID . '] Updating attributes');
-            $newAlternativeNames = array_values(array_unique(array_merge($character->alternative_names?->toArray() ?? [], $alternativeNames ?? [])));
+            $newAlternativeNames = array_values(array_unique(array_merge($character->nicknames?->toArray() ?? [], $alternativeNames ?? [])));
 
             $character->update([
                 'mal_id' => $malID,
                 'name' => $name,
-                'jp' => [
+                'ja' => [
                     'name' => $japaneseName,
                     'about' => null
                 ],
-                'alternative_names' => $newAlternativeNames,
+                'nicknames' => $newAlternativeNames,
                 'about' => $about,
             ]);
             logger()->channel('stderr')->info('✅️ [MAL_ID:CHARACTER:' . $malID . '] Done updating attributes');
