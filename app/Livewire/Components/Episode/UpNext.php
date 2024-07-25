@@ -7,7 +7,6 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
-use Illuminate\Support\Collection;
 use Livewire\Attributes\Isolate;
 use Livewire\Component;
 
@@ -15,68 +14,34 @@ use Livewire\Component;
 class UpNext extends Component
 {
     /**
-     * The object containing the episode data.
+     * The object containing the next episode data.
      *
-     * @var Episode $episode
+     * @var Episode $nextEpisode
      */
-    public Episode $episode;
-
-    /**
-     * Whether the component is ready to load.
-     *
-     * @var bool $readyToLoad
-     */
-    public bool $readyToLoad = false;
+    public Episode $nextEpisode;
 
     /**
      * Prepare the component.
      *
-     * @param Episode $episode
-     * @return void
-     */
-    public function mount(Episode $episode): void
-    {
-        $this->episode = $episode->withoutRelations();
-    }
-
-    /**
-     * Sets the property to load the section.
+     * @param Episode $nextEpisode
      *
      * @return void
      */
-    public function loadSection(): void
+    public function mount(Episode $nextEpisode): void
     {
-        $this->readyToLoad = true;
-    }
-
-    /**
-     * Get the next episode.
-     *
-     * @return Collection
-     */
-    public function getNextEpisodeProperty(): Collection
-    {
-        if (!$this->readyToLoad) {
-            return collect();
-        }
-
-        return $this->episode
-            ->next_episode()
-            ->with([
-                'anime' => function (HasOneThrough $hasOneThrough) {
-                    $hasOneThrough
-                        ->withoutGlobalScopes()
-                        ->with([
-                            'translations',
-                        ]);
-                },
-                'media',
-                'season' => function ($query) {
-                    $query->with(['translations']);
-                },
-                'translations'
-            ])
-            ->get();
+        $this->nextEpisode = $nextEpisode->load([
+            'anime' => function (HasOneThrough $hasOneThrough) {
+                $hasOneThrough
+                    ->withoutGlobalScopes()
+                    ->with([
+                        'translations',
+                    ]);
+            },
+            'season' => function ($query) {
+                $query->withoutGlobalScopes()
+                    ->with(['translations']);
+            }
+        ]);
     }
 
     /**
