@@ -3,6 +3,7 @@
 namespace App\Livewire\Season;
 
 use App\Events\ModelViewed;
+use App\Models\Anime;
 use App\Models\Season;
 use App\Traits\Livewire\WithEpisodeSearch;
 use Illuminate\Contracts\Foundation\Application;
@@ -28,6 +29,13 @@ class Episodes extends Component
      * @var Season $season
      */
     public Season $season;
+
+    /**
+     * The object containing the anime data.
+     *
+     * @var Anime $anime
+     */
+    public Anime $anime;
 
     /**
      * Determines whether to load the page.
@@ -57,7 +65,15 @@ class Episodes extends Component
         // Call the ModelViewed event
         ModelViewed::dispatch($season, request()->ip());
 
-        $this->season = $season;
+        $this->season = $season->loadMissing([
+            'anime' => function ($query) {
+                $query->withoutGlobalScopes()
+                    ->with(['media', 'translations']);
+            },
+            'media',
+            'translations'
+        ]);
+        $this->anime = $this->season->anime;
     }
 
     /**
@@ -79,13 +95,16 @@ class Episodes extends Component
     public function searchIndexQuery(EloquentBuilder $query): EloquentBuilder
     {
         return $this->parentSearchIndexQuery($query)
+            ->withoutGlobalScopes()
             ->with([
                 'anime' => function ($query) {
-                    $query->with(['media', 'translations']);
+                    $query->withoutGlobalScopes()
+                        ->with(['media', 'translations']);
                 },
                 'media',
                 'season' => function ($query) {
-                    $query->with(['translations']);
+                    $query->withoutGlobalScopes()
+                        ->with(['translations']);
                 },
                 'translations'
             ]);
@@ -101,13 +120,16 @@ class Episodes extends Component
     {
         return $this->parentSearchQuery($query)
             ->query(function (EloquentBuilder $query) {
-                $query->with([
+                $query->withoutGlobalScopes()
+                    ->with([
                     'anime' => function ($query) {
-                        $query->with(['media', 'translations']);
+                        $query->withoutGlobalScopes()
+                            ->with(['media', 'translations']);
                     },
                     'media',
                     'season' => function ($query) {
-                        $query->with(['translations']);
+                        $query->withoutGlobalScopes()
+                            ->with(['translations']);
                     },
                     'translations'
                 ]);
