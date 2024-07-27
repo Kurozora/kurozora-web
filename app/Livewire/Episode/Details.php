@@ -14,6 +14,7 @@ use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Support\Collection;
 use Livewire\Component;
@@ -28,6 +29,34 @@ class Details extends Component
      * @var Episode $episode
      */
     public Episode $episode;
+
+    /**
+     * The object containing the previous episode data.
+     *
+     * @var null|Episode $previousEpisode
+     */
+    public ?Episode $previousEpisode;
+
+    /**
+     * The object containing the next episode data.
+     *
+     * @var null|Episode $nextEpisode
+     */
+    public ?Episode $nextEpisode;
+
+    /**
+     * The object containing the season data.
+     *
+     * @var Season $season
+     */
+    public Season $season;
+
+    /**
+     * The object containing the anime data.
+     *
+     * @var Anime $anime
+     */
+    public Anime $anime;
 
     /**
      * The object containing the user's rating data.
@@ -93,7 +122,7 @@ class Details extends Component
     public array $popupData = [
         'title' => '',
         'message' => '',
-        'type' => 'default'
+        'type' => 'default',
     ];
 
     /**
@@ -118,13 +147,14 @@ class Details extends Component
      * @var array
      */
     protected $listeners = [
-        'preferredVideoSourceChanged' => 'selectPreferredSource'
+        'preferredVideoSourceChanged' => 'selectPreferredSource',
     ];
 
     /**
      * Prepare the component.
      *
      * @param Episode $episode
+     *
      * @return void
      */
     public function mount(Episode $episode): void
@@ -139,13 +169,37 @@ class Details extends Component
                     ->with([
                         'studios',
                         'translations',
-                        'orderedVideos'
+                        'orderedVideos',
                     ]);
+            },
+            'previous_episode' => function (BelongsTo $belongsTo) {
+                $belongsTo->withoutGlobalScopes();
+            },
+            'next_episode' => function (BelongsTo $belongsTo) {
+                $belongsTo->withoutGlobalScopes()
+                ->with([
+                    'media',
+                    'translations',
+                    'anime' => function (HasOneThrough $hasOneThrough) {
+                        $hasOneThrough
+                            ->withoutGlobalScopes()
+                            ->with([
+                                'translations',
+                            ]);
+                    },
+                    'season' => function ($query) {
+                        $query->with(['translations']);
+                    }
+                ]);
             },
             'media',
             'mediaStat',
             'season' => function ($query) {
-                $query->with(['media', 'translations']);
+                $query->withoutGlobalScopes()
+                    ->with([
+                        'media',
+                        'translations',
+                    ]);
             },
             'translations',
             'tv_rating',
@@ -157,6 +211,10 @@ class Details extends Component
             }, function () use ($episode) {
                 return $episode;
             });
+        $this->previousEpisode = $episode->previous_episode;
+        $this->nextEpisode = $episode->next_episode;
+        $this->season = $episode->season;
+        $this->anime = $episode->anime;
 
         if (!auth()->check()) {
             $this->episode->setRelation('mediaRatings', collect());
@@ -164,6 +222,24 @@ class Details extends Component
 
         $this->userRating = $episode->mediaRatings;
         $this->setupActions();
+    }
+
+    public function hydrateSeason(): void
+    {
+        $this->season->loadMissing([
+            'media',
+            'translations',
+        ]);
+    }
+
+    public function hydrateAnime(): void
+    {
+        $this->anime->loadMissing([
+            'media',
+            'studios',
+            'translations',
+            'orderedVideos',
+        ]);
     }
 
     /**
@@ -203,6 +279,7 @@ class Details extends Component
      * Select the preferred video source.
      *
      * @param string $source
+     *
      * @return void
      */
     public function selectPreferredSource(string $source): void
@@ -278,26 +355,6 @@ class Details extends Component
             ];
             $this->showPopup = true;
         }
-    }
-
-    /**
-     * The object containing the anime data.
-     *
-     * @return Anime|null
-     */
-    public function getAnimeProperty(): ?Anime
-    {
-        return $this->episode->anime;
-    }
-
-    /**
-     * The object containing the season data.
-     *
-     * @return Season|null
-     */
-    public function getSeasonProperty(): ?Season
-    {
-        return $this->episode->season;
     }
 
     /**

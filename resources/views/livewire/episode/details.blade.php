@@ -1,6 +1,6 @@
 <main>
     <x-slot:title>
-        {!! __('Watch :x episode :y', ['x' => $this->anime->title, 'y' => $episode->number_total]) !!} | {!! $episode->title !!}
+        {!! __('Watch :x episode :y', ['x' => $anime->title, 'y' => $episode->number_total]) !!} | {!! $episode->title !!}
     </x-slot:title>
 
     <x-slot:description>
@@ -9,12 +9,12 @@
     </x-slot:description>
 
     <x-slot:meta>
-        <meta property="og:title" content="{{ __(':x episode :y', ['x' => $this->anime->title, 'y' => $episode->number_total]) }} | {{ $episode->title }} — {{ config('app.name') }}" />
+        <meta property="og:title" content="{{ __(':x episode :y', ['x' => $anime->title, 'y' => $episode->number_total]) }} | {{ $episode->title }} — {{ config('app.name') }}" />
         <meta property="og:description" content="{{ $episode->synopsis ?? __('app.description') }}" />
-        <meta property="og:image" content="{{ $episode->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $this->season->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/episode_banner.webp') }}" />
+        <meta property="og:image" content="{{ $episode->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $season->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/episode_banner.webp') }}" />
         <meta property="og:type" content="video.episode" />
         <meta property="og:video:type" content="text/html">
-        <meta property="video:series" content="{{ $this->anime->title }}" />
+        <meta property="video:series" content="{{ $anime->title }}" />
         <meta property="og:video:url" content="{{ route('embed.episodes', $episode) }}">
         <meta property="og:video:height" content="1080">
         <meta property="og:video:width" content="1920">
@@ -23,22 +23,22 @@
         <meta property="twitter:title" content="{{ $episode->title }} — {{ config('app.name') }}" />
         <meta property="twitter:description" content="{{ $episode->synopsis }}" />
         <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:image" content="{{ $episode->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $this->season->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}" />
+        <meta property="twitter:image" content="{{ $episode->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $season->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="twitter:image:alt" content="{{ $episode->synopsis }}" />
         <link rel="canonical" href="{{ route('episodes.details', $episode) }}">
         <x-misc.schema>
             "@type":"TVEpisode",
             "url":"/episode/{{ $episode->id }}/",
             "name": "{{ $episode->title }}",
-            "alternateName": "{{ $this->anime->original_title }}",
-            "image": "{{ $episode->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $this->season->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}",
+            "alternateName": "{{ $anime->original_title }}",
+            "image": "{{ $episode->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $season->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}",
             "description": "{{ $episode->synopsis }}",
             "aggregateRating": {
                 "@type":"AggregateRating",
                 "itemReviewed": {
                     "@type": "TVEpisode",
                     "image": [
-                        "{{ $episode->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $this->season->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}"
+                        "{{ $episode->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $season->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}"
                     ],
                     "name": "{{ $episode->title }}"
                 },
@@ -47,23 +47,23 @@
                 "worstRating": 0,
                 "ratingValue": {{ $episode->mediaStat->rating_average ?? 2.5 }}
             },
-            "contentRating": "{{ $this->anime->tv_rating->name }}",
-            "genre": {!! $this->anime->genres->pluck('name') !!},
+            "contentRating": "{{ $anime->tv_rating->name }}",
+            "genre": {!! $anime->genres->pluck('name') !!},
             "datePublished": "{{ $episode->started_at?->format('Y-m-d') }}",
-            "keywords": "anime,episode{{ (',' . $this->anime->keywords) ?? '' }}",
+            "keywords": "anime,episode{{ (',' . $anime->keywords) ?? '' }}",
             "creator":[
                 {
                     "@type":"Organization",
-                    "url":"/studio/{{ $this->anime->studios?->firstWhere('is_studio', '=', true)?->id ?? $this->anime->studios?->first()?->id }}/"
+                    "url":"/studio/{{ $anime->studios?->firstWhere('is_studio', '=', true)?->id ?? $anime->studios?->first()?->id }}/"
                 }
             ]
-            @if(!empty($episode->videos->first()?->getUrl()) || !empty($this->anime->videos->first()?->getUrl()))
+            @if(!empty($episode->videos->first()?->getUrl()) || !empty($anime->videos->first()?->getUrl()))
                 ,"trailer": {
                     "@type":"VideoObject",
                     "name":"{{ $episode->title }}",
                     "description":"Official Trailer",
-                    "embedUrl": "{{ $episode->videos->first()->getUrl() ?? $this->anime->videos->first()->getUrl() }}",
-                    "thumbnailUrl": "{{ $episode->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $this->anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}",
+                    "embedUrl": "{{ $episode->videos->first()->getUrl() ?? $anime->videos->first()->getUrl() }}",
+                    "thumbnailUrl": "{{ $episode->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}",
                     "uploadDate": "{{ $episode->started_at?->format('Y-m-d') }}"
                 }
             @endif
@@ -128,7 +128,7 @@
                                     class="h-full"
                                     style="background-color: {{ $episode->getFirstMedia(\App\Enums\MediaCollection::Banner)?->custom_properties['background_color'] ?? '#000000' }};"
                                 >
-                                    <img class="w-full h-full aspect-video object-cover lazyload" data-sizes="auto" data-src="{{ $episode->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $this->season->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $episode->title }} Banner" title="{{ $episode->title }}">
+                                    <img class="w-full h-full aspect-video object-cover lazyload" data-sizes="auto" data-src="{{ $episode->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $episode->title }} Banner" title="{{ $episode->title }}">
                                 </x-picture>
                             @endif
                         </div>
@@ -164,9 +164,9 @@
                         <div class="flex flex-nowrap">
                             <picture
                                 class="relative min-w-[100px] max-w-[100px] min-h-[150px] max-h-[150px] mr-2 rounded-lg overflow-hidden"
-                                style="background-color: {{ $this->season->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? '#000000' }};"
+                                style="background-color: {{ $season->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? '#000000' }};"
                             >
-                                <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $this->season->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $this->season->title }} Poster" title="{{ $this->season->title }}">
+                                <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $season->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $season->title }} Poster" title="{{ $season->title }}">
                                 <div class="absolute top-0 left-0 h-full w-full ring-1 ring-gray-100 ring-opacity-25 ring-inset rounded-lg"></div>
                             </picture>
 
@@ -274,33 +274,33 @@
                     </div>
 
                     <div id="seasonBadge" class="flex-grow px-12 border-l-2">
-                        <a href="{{ route('anime.seasons', $this->anime) }}"  wire:navigate>
-                            <p class="font-bold">#{{ $this->season->number }}</p>
+                        <a href="{{ route('anime.seasons', $anime) }}"  wire:navigate>
+                            <p class="font-bold">#{{ $season->number }}</p>
                             <p class="text-sm text-gray-500">{{ __('Season') }}</p>
                         </a>
                     </div>
 
-                    @if($episode->previous_episode_id)
+                    @if($previousEpisode)
                         <div id="previousEpisodeBadge" class="flex-grow px-12 border-l-2">
-                            <a href="{{ route('episodes.details', $episode->previous_episode_id) }}"  wire:navigate>
-                                <p class="font-bold">{{ __('Episode :x', ['x' => $episode->previous_episode->number_total]) }}</p>
+                            <a href="{{ route('episodes.details', $previousEpisode) }}"  wire:navigate>
+                                <p class="font-bold">{{ __('Episode :x', ['x' => $previousEpisode->number_total]) }}</p>
                                 <p class="text-sm text-gray-500">{{ __('Previous') }}</p>
                             </a>
                         </div>
                     @endif
 
-                    @if($episode->next_episode_id)
+                    @if($nextEpisode)
                         <div id="nextEpisodeBadge" class="flex-grow px-12 border-l-2">
-                            <a href="{{ route('episodes.details', $episode->next_episode_id) }}"  wire:navigate>
-                                <p class="font-bold">{{ __('Episode :x', ['x' => $episode->next_episode->number_total]) }}</p>
+                            <a href="{{ route('episodes.details', $nextEpisode) }}"  wire:navigate>
+                                <p class="font-bold">{{ __('Episode :x', ['x' => $nextEpisode->number_total]) }}</p>
                                 <p class="text-sm text-gray-500">{{ __('Next') }}</p>
                             </a>
                         </div>
                     @endif
 
                     <div id="animeBadge" class="flex-grow px-12 border-l-2">
-                        <a href="{{ route('anime.details', $this->anime) }}"  wire:navigate>
-                            <p class="font-bold line-clamp-1">{{ substr($this->anime->title, 0, 25) }}</p>
+                        <a href="{{ route('anime.details', $anime) }}"  wire:navigate>
+                            <p class="font-bold line-clamp-1">{{ substr($anime->title, 0, 25) }}</p>
                             <p class="text-sm text-gray-500">{{ __('Anime') }}</p>
                         </a>
                     </div>
@@ -329,7 +329,7 @@
                         </x-slot:title>
 
                         <x-slot:action>
-                            <x-section-nav-link class="whitespace-nowrap" href="{{ route('episodes.reviews', $episode) }}"  wire:navigate>{{ __('See All') }}</x-section-nav-link>
+                            <x-section-nav-link class="whitespace-nowrap" href="{{ route('episodes.reviews', $episode) }}" wire:navigate>{{ __('See All') }}</x-section-nav-link>
                         </x-slot:action>
                     </x-section-nav>
 
@@ -427,9 +427,11 @@
             </div>
 
             <div class="flex flex-col gap-4 pb-4 lg:w-1/4">
-                @if ($readyToLoad)
-                    <livewire:components.episode.up-next :episode="$this->episode" />
+                @if ($nextEpisode)
+                    <livewire:components.episode.up-next :next-episode="$nextEpisode" />
+                @endif
 
+                @if ($readyToLoad)
                     <livewire:components.episode.suggested-episodes :title="$this->episode->title" :next-episode-id="$this->episode->next_episode_id" />
                 @endif
             </div>
@@ -457,7 +459,7 @@
         :link="route('episodes.details', $this->episode)"
         :embed-link="route('embed.episodes', $this->episode)"
         :title="$this->episode->title"
-        :image-url="$this->episode->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $this->anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner())"
+        :image-url="$this->episode->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner())"
         :type="'episode'"
     />
 </main>
