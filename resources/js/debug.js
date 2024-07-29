@@ -1,4 +1,4 @@
-(function() {
+document.addEventListener('livewire:navigated', () => {
     let breakpoints = {
         '': 0,
         'sm': 640,
@@ -39,7 +39,7 @@
     window.onresize = function(event) {
         calculateBreakpoint()
     }
-})()
+})
 
 // var viewFullScreen = document.querySelector("main");
 // if (viewFullScreen) {
