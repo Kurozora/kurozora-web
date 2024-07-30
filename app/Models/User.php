@@ -553,7 +553,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      */
     function hasWatchedSeason(Season $season): bool
     {
-        return $this->episodes()->where('season_id', $season->id)->count() === $season->episodes()->count();
+        return $this->episodes()->where('season_id', $season->id)->count() === $season->episodes()->withoutGlobalScopes()->count();
     }
 
     /**
