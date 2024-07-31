@@ -70,8 +70,7 @@
                     type="text"
                     name="q"
                     placeholder="{{ [__('I’m searching for…'), __('Search faster with ⌘+K, ctrl+K or /')][array_rand([0,1])] }}"
-                    x-ref="search"
-                    wire:model.live.debounce.500ms="searchQuery"
+                    x-ref="search" wire:model.live.debounce.500ms="searchQuery"
                 />
             </form>
 
@@ -108,7 +107,7 @@
                         </x-slot:title>
 
                         <x-slot:action>
-                            <x-section-nav-link href="{{ route('search.index', ['q' => $this->searchQuery, 'type' => $searchResult['search_type']]) }}"  wire:navigate>{{ __('See All') }}</x-section-nav-link>
+                            <x-section-nav-link href="{{ route('search.index', ['q' => $this->searchQuery, 'type' => $searchResult['search_type']]) }}" wire:navigate>{{ __('See All') }}</x-section-nav-link>
                         </x-slot:action>
                     </x-search-header>
 

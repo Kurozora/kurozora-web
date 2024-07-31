@@ -415,12 +415,12 @@
                                         </x-dropdown-link>
                                     </form>
                                 @else
-                                    <x-dropdown-link href="{{ route('sign-in') }}"  wire:navigate>
+                                    <x-dropdown-link href="{{ route('sign-in') }}" wire:navigate>
                                         {{ __('Sign in') }}
                                     </x-dropdown-link>
 
                                     @if (Route::has('sign-up'))
-                                        <x-dropdown-link href="{{ route('sign-up') }}"  wire:navigate>
+                                        <x-dropdown-link href="{{ route('sign-up') }}" wire:navigate>
                                             {{ __('Create Account') }}
                                         </x-dropdown-link>
                                     @endif

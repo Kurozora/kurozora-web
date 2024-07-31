@@ -17,7 +17,7 @@
 
     <div>
 {{--        <section>--}}
-{{--            <a href="{{ route('recap.index') }}"  wire:navigate>--}}
+{{--            <a href="{{ route('recap.index') }}" wire:navigate>--}}
 {{--                <x-picture>--}}
 {{--                    <img class="w-full object-cover h-40 rounded-lg shadow md:h-80" src="{{ asset('images/static/banners/kurozora_recap_2023.webp') }}" alt="Kurozora Recap 2023">--}}
 {{--                </x-picture>--}}
@@ -77,7 +77,7 @@
 {{--                        }--}}
 {{--                    @endphp--}}
 
-{{--                    <a class="relative pb-2 snap-normal snap-center min-w-[18rem] md:min-w-[30rem]" href="{{ route('profile.details', $user) }}"  wire:navigate>--}}
+{{--                    <a class="relative pb-2 snap-normal snap-center min-w-[18rem] md:min-w-[30rem]" href="{{ route('profile.details', $user) }}" wire:navigate>--}}
 {{--                        <div class="rounded-lg shadow-sm overflow-hidden" style="background-color: {{ $backgroundColor }};">--}}
 {{--                            <div class="relative flex justify-center bg-gray-800">--}}
 {{--                                <picture class="relative overflow-hidden">--}}

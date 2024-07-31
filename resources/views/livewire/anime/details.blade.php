@@ -188,7 +188,7 @@
                 @endif
 
                 <div id="rankingBadge" class="flex-grow px-12 border-l-2">
-                    <a class="flex flex-col items-center" href="{{ route('charts.top', App\Enums\ChartKind::Anime) }}"  wire:navigate>
+                    <a class="flex flex-col items-center" href="{{ route('charts.top', App\Enums\ChartKind::Anime) }}" wire:navigate>
                         <p class="font-bold">{{ trans_choice('{0} -|[1,*] #:x', $anime->mediaStat->rank_total ?? 0, ['x' => $anime->mediaStat->rank_total]) }}</p>
                         <p class="text-orange-500">
                             @svg('chart_bar_fill', 'fill-current', ['width' => '20'])
@@ -209,7 +209,7 @@
 
                 @if (!empty($this->studio))
                     <div id="studioBadge" class="flex-grow px-12 border-l-2">
-                        <a class="flex flex-col items-center" href="{{ route('studios.details', $this->studio) }}"  wire:navigate>
+                        <a class="flex flex-col items-center" href="{{ route('studios.details', $this->studio) }}" wire:navigate>
                             <p class="font-bold">{{ $this->studio->name }}</p>
                             <p class="text-orange-500">
                                 @svg('building_2_fill', 'fill-current', ['width' => '20'])
@@ -253,7 +253,7 @@
                     </x-slot:title>
 
                     <x-slot:action>
-                        <x-section-nav-link class="whitespace-nowrap" href="{{ route('anime.reviews', $anime) }}"  wire:navigate>{{ __('See All') }}</x-section-nav-link>
+                        <x-section-nav-link class="whitespace-nowrap" href="{{ route('anime.reviews', $anime) }}" wire:navigate>{{ __('See All') }}</x-section-nav-link>
                     </x-slot:action>
                 </x-section-nav>
 

@@ -89,7 +89,7 @@
 
                 <p class="tracking-wide font-black">{{ __('———— or ————') }}</p>
 
-                <x-link class="text-sm" href="{{ route('sign-in') }}"  wire:navigate>
+                <x-link class="text-sm" href="{{ route('sign-in') }}" wire:navigate>
                     {{ __('Already have an account? Let’s sign in') }} 🔥
                 </x-link>
             </section>
