@@ -16,9 +16,9 @@
 
                 <div class="absolute top-0 bottom-0 left-0 right-0 h-full w-full text-center">
                     @if (empty($anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Logo())))
-                        <p class="relative top-1/2 -translate-y-1/2 px-8 text-3xl text-white font-bold line-clamp-2" style="text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);">{{ $anime->title }}</p>
+                        <p class="relative top-1/2 -translate-y-1/2 pr-8 pl-8 text-3xl text-white font-bold line-clamp-2" style="text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);">{{ $anime->title }}</p>
                     @else
-                        <img class="relative top-1/2 -translate-y-1/2 px-8 lazyload" data-sizes="auto" data-src="{{ $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Logo()) }}"
+                        <img class="relative top-1/2 -translate-y-1/2 pr-8 pl-8 lazyload" data-sizes="auto" data-src="{{ $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Logo()) }}"
                         alt="{{ $anime->title }} Logo" title="{{ $anime->title }}" />
                     @endif
                 </div>
@@ -67,9 +67,9 @@
 
                 <div class="absolute top-0 bottom-0 left-0 right-0 h-full w-full text-center">
                     @if (empty($game->getFirstMediaFullUrl(\App\Enums\MediaCollection::Logo())))
-                        <p class="relative top-1/2 -translate-y-1/2 px-8 text-3xl text-white font-bold line-clamp-2" style="text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);">{{ $game->title }}</p>
+                        <p class="relative top-1/2 -translate-y-1/2 pr-8 pl-8 text-3xl text-white font-bold line-clamp-2" style="text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);">{{ $game->title }}</p>
                     @else
-                        <img class="relative top-1/2 -translate-y-1/2 px-8 lazyload" data-sizes="auto" data-src="{{ $game->getFirstMediaFullUrl(\App\Enums\MediaCollection::Logo()) }}"
+                        <img class="relative top-1/2 -translate-y-1/2 pr-8 pl-8 lazyload" data-sizes="auto" data-src="{{ $game->getFirstMediaFullUrl(\App\Enums\MediaCollection::Logo()) }}"
                              alt="{{ $game->title }} Logo" title="{{ $game->title }}" />
                     @endif
                 </div>
@@ -118,9 +118,9 @@
 
                 <div class="absolute top-0 bottom-0 left-0 right-0 h-full w-full text-center">
                     @if (empty($manga->getFirstMediaFullUrl(\App\Enums\MediaCollection::Logo())))
-                        <p class="relative top-1/2 -translate-y-1/2 px-8 text-3xl text-white font-bold line-clamp-2" style="text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);">{{ $manga->title }}</p>
+                        <p class="relative top-1/2 -translate-y-1/2 pr-8 pl-8 text-3xl text-white font-bold line-clamp-2" style="text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);">{{ $manga->title }}</p>
                     @else
-                        <img class="relative top-1/2 -translate-y-1/2 px-8 lazyload" data-sizes="auto" data-src="{{ $manga->getFirstMediaFullUrl(\App\Enums\MediaCollection::Logo()) }}"
+                        <img class="relative top-1/2 -translate-y-1/2 pr-8 pl-8 lazyload" data-sizes="auto" data-src="{{ $manga->getFirstMediaFullUrl(\App\Enums\MediaCollection::Logo()) }}"
                              alt="{{ $manga->title }} Logo" title="{{ $manga->title }}" />
                     @endif
                 </div>
