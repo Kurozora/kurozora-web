@@ -1,58 +1,115 @@
-<div
-    class="hidden md:flex bg-white border-e border-black"
-    style="min-width: 18rem;"
->
-    <nav class="flex flex-col ml-4 mr-4 w-full">
-        <x-sidebar-nav-link href="{{ route('home') }}" wire:navigate :active="request()->routeIs('home')">
-{{--            @svg('bell_fill', 'fill-current', ['width' => '18']) --}} {{ __('Explore') }}
-        </x-sidebar-nav-link>
+<nav class="hidden md:flex flex-col bg-white border-e border-black"
+     style="min-width: 18rem;">
+    <div class="flex flex-col gap-6 mt-4 mr-4 ml-4">
+        <a class="inline-flex items-center w-full space-x-2 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none focus:text-gray-700"
+           href="/"
+           wire:navigate
+           x-transition:enter="ease-out duration-150 delay-100 transform sm:delay-[0ms]"
+           x-transition:enter-start="opacity-0 scale-75"
+           x-transition:enter-end="opacity-100 scale-100"
+           x-transition:leave="ease-in duration-200 delay-[50ms] transform sm:delay-[400ms]"
+           x-transition:leave-start="opacity-100 scale-100"
+           x-transition:leave-end="opacity-0 scale-75"
+        >
+            <x-logo class="block h-6 w-auto" />
+            <p class="font-bold">{{ __(config('app.name')) }}</p>
+        </a>
 
-        <x-sidebar-nav-link href="{{ route('anime.index') }}"  wire:navigate :active="request()->routeIs('anime.index')">
-{{--            @svg('bell_fill', 'fill-current', ['width' => '18']) --}} {{ __('Anime') }}
-        </x-sidebar-nav-link>
+        <div class="w-full">
+            <form
+                id="search"
+                class="relative flex items-center gap-2 w-full"
+                action="{{ route('search.index') }}"
+                method="get"
+                x-transition:enter="ease duration-[500ms] delay-300 transform"
+                x-transition:enter-start="opacity-0 translate-x-8"
+                x-transition:enter-end="opacity-100 translate-x-0"
+                x-transition:leave="ease-in duration-200"
+                x-transition:leave-start="opacity-100"
+                x-transition:leave-end="opacity-0"
+            >
+                {{-- Search icon --}}
+                <div class="absolute left-0 flex pl-4 h-full text-gray-500 sm:pl-3">
+                    @svg('magnifyingglass', 'fill-current', ['width' => '14'])
+                </div>
 
-        <x-sidebar-nav-link href="{{ route('manga.index') }}"  wire:navigate :active="request()->routeIs('manga.index')">
-{{--            @svg('bell_fill', 'fill-current', ['width' => '18']) --}} {{ __('Manga') }}
-        </x-sidebar-nav-link>
+                {{-- Search field --}}
+                <input
+                    class="pr-8 pl-8 h-8 w-full text-sm rounded-md focus:border-orange-500 focus:ring-orange-500"
+                    type="text"
+                    name="q"
+                    placeholder="{{ [__('Search'), '⌘+K, ctrl+K or /'][array_rand([0,1])] }}"
+                    x-ref="search" wire:model.live.debounce.500ms="searchQuery"
+                />
+            </form>
+        </div>
+    </div>
 
-        <x-sidebar-nav-link href="{{ route('games.index') }}"  wire:navigate :active="request()->routeIs('games.index')">
-{{--           @svg('bell_fill', 'fill-current', ['width' => '18']) --}} {{ __('Game') }}
-        </x-sidebar-nav-link>
+    <div class="flex flex-col justify-between w-full h-full">
+        <div class="mt-4 mr-4 ml-4">
+            <x-sidebar-nav-link href="{{ route('home') }}" wire:navigate :active="request()->routeIs('home')">
+                @svg('house', 'fill-current', ['width' => '18']) {{ __('Explore') }}
+            </x-sidebar-nav-link>
 
-        <x-sidebar-nav-link href="#">
-{{--           @svg('bell_fill', 'fill-current', ['width' => '18']) --}} {{ __('Live Action') }}
-        </x-sidebar-nav-link>
+            <x-sidebar-nav-link href="{{ route('anime.index') }}" wire:navigate :active="request()->routeIs('anime.index')">
+                @svg('tv', 'fill-current', ['width' => '18'])  {{ __('Anime') }}
+            </x-sidebar-nav-link>
 
-        <x-sidebar-nav-link href="{{ route('songs.index') }}"  wire:navigate :active="request()->routeIs('songs.index')">
-{{--           @svg('bell_fill', 'fill-current', ['width' => '18']) --}} {{ __('Songs') }}
-        </x-sidebar-nav-link>
+            <x-sidebar-nav-link href="{{ route('manga.index') }}" wire:navigate :active="request()->routeIs('manga.index')">
+                @svg('book', 'fill-current', ['width' => '18'])  {{ __('Manga') }}
+            </x-sidebar-nav-link>
 
-        <x-sidebar-nav-link href="{{ route('schedule') }}"  wire:navigate :active="request()->routeIs('schedule')">
-{{--           @svg('bell_fill', 'fill-current', ['width' => '18']) --}} {{ __('Schedule') }}
-        </x-sidebar-nav-link>
+            <x-sidebar-nav-link href="{{ route('games.index') }}" wire:navigate :active="request()->routeIs('games.index')">
+                @svg('gamecontroller', 'fill-current', ['width' => '18']) {{ __('Game') }}
+            </x-sidebar-nav-link>
 
-        <x-sidebar-nav-link href="{{ route('charts.index') }}"  wire:navigate :active="request()->routeIs('charts.index')">
-{{--           @svg('bell_fill', 'fill-current', ['width' => '18']) --}} {{ __('Charts') }}
-        </x-sidebar-nav-link>
+            <x-sidebar-nav-link href="#">
+                @svg('person_tv', 'fill-current', ['width' => '18']) {{ __('Live Action') }}
+            </x-sidebar-nav-link>
 
-        <x-sidebar-nav-link href="{{ route('characters.index') }}"  wire:navigate :active="request()->routeIs('characters.index')">
-{{--           @svg('bell_fill', 'fill-current', ['width' => '18']) --}} {{ __('Characters') }}
-        </x-sidebar-nav-link>
+            <x-sidebar-nav-link href="{{ route('songs.index') }}" wire:navigate :active="request()->routeIs('songs.index')">
+                @svg('music_note', 'fill-current', ['width' => '18']) {{ __('Songs') }}
+            </x-sidebar-nav-link>
 
-        <x-sidebar-nav-link href="{{ route('people.index') }}"  wire:navigate :active="request()->routeIs('people.index')">
-{{--           @svg('bell_fill', 'fill-current', ['width' => '18']) --}} {{ __('People') }}
-        </x-sidebar-nav-link>
+            <x-sidebar-nav-link href="{{ route('schedule') }}" wire:navigate :active="request()->routeIs('schedule')">
+                @svg('calendar', 'fill-current', ['width' => '18']) {{ __('Schedule') }}
+            </x-sidebar-nav-link>
 
-        <x-sidebar-nav-link href="{{ route('studios.index') }}"  wire:navigate :active="request()->routeIs('studios.index')">
-{{--           @svg('bell_fill', 'fill-current', ['width' => '18']) --}} {{ __('Studios') }}
-        </x-sidebar-nav-link>
+            <x-sidebar-nav-link href="{{ route('charts.index') }}" wire:navigate :active="request()->routeIs('charts.index')">
+                @svg('chart_bar', 'fill-current', ['width' => '18']) {{ __('Charts') }}
+            </x-sidebar-nav-link>
 
-        <x-sidebar-nav-link href="{{ route('platforms.index') }}"  wire:navigate :active="request()->routeIs('platforms.index')">
-{{--           @svg('bell_fill', 'fill-current', ['width' => '18']) --}} {{ __('Platforms') }}
-        </x-sidebar-nav-link>
+            <x-sidebar-nav-link href="{{ route('characters.index') }}" wire:navigate :active="request()->routeIs('characters.index')">
+                @svg('totoro', 'fill-current', ['width' => '18']) {{ __('Characters') }}
+            </x-sidebar-nav-link>
 
-        <x-sidebar-nav-link href="{{ config('app.ios.store_url') }}" :external="true">
-{{--            @svg('bell_fill', 'fill-current', ['width' => '18']) --}} App
-        </x-sidebar-nav-link>
-    </nav>
-</div>
+            <x-sidebar-nav-link href="{{ route('people.index') }}" wire:navigate :active="request()->routeIs('people.index')">
+                @svg('person', 'fill-current', ['width' => '18']) {{ __('People') }}
+            </x-sidebar-nav-link>
+
+            <x-sidebar-nav-link href="{{ route('studios.index') }}" wire:navigate :active="request()->routeIs('studios.index')">
+                @svg('building_2', 'fill-current', ['width' => '18']) {{ __('Studios') }}
+            </x-sidebar-nav-link>
+
+            <x-sidebar-nav-link href="{{ route('platforms.index') }}" wire:navigate :active="request()->routeIs('platforms.index')">
+                @svg('tv_and_mediabox', 'fill-current', ['width' => '18']) {{ __('Platforms') }}
+            </x-sidebar-nav-link>
+        </div>
+
+        <a href="{{ empty($user) ? route('sign-in') : route('me') }}" class="flex items-center pl-4 pt-4 pr-4 pb-4 border-t" wire:navigate>
+        <div class="shrink-0">
+            <div
+                class="h-10 w-10 bg-cover rounded-full"
+                style="background-image: url({{ $user?->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/user_profile.webp') }});"
+                alt="{{ $user?->username ?? __('Guest') }} {{ __('Profile') }}"
+                title="{{ $user?->username ?? __('Guest') }}"
+                role="img"
+            ></div>
+        </div>
+
+        <div class="ml-3">
+            <div class="font-medium text-base text-gray-800">{{ $user?->username ?? __('Sign In') }}</div>
+        </div>
+    </a>
+    </div>
+</nav>
