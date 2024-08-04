@@ -3,10 +3,14 @@
 namespace App\Console\Commands\Calculators;
 
 use App\Enums\UserLibraryStatus;
+use App\Models\Anime;
+use App\Models\Game;
+use App\Models\Manga;
 use App\Models\MediaStat;
 use App\Models\UserLibrary;
 use DB;
 use Illuminate\Console\Command;
+use Illuminate\Support\Collection;
 
 class CalculateLibraryStats extends Command
 {
@@ -44,65 +48,106 @@ class CalculateLibraryStats extends Command
     {
         DB::disableQueryLog();
 
+        $chunkSize = 100;
         $class = $this->argument('model');
+
+        if ($class === 'all') {
+            UserLibrary::withoutGlobalScopes()
+                ->distinct()
+                ->select(['trackable_type'])
+                ->pluck('trackable_type')
+                ->each(function ($modelType) {
+                    $this->call('calculate:library_stats', ['model' => $modelType]);
+                    $this->newLine();
+                });
+
+            return Command::SUCCESS;
+        }
+
+        $model = match ($class) {
+            Anime::class => Anime::withoutGlobalScopes(),
+            Manga::class => Manga::withoutGlobalScopes(),
+            Game::class => Game::withoutGlobalScopes(),
+            default => null
+        };
+
+        if (empty($model)) {
+            $this->error('Unsupported model.');
+            return Command::FAILURE;
+        }
 
         $this->info('Calculating stats for: ' . $class);
 
-        // Get trackable_id, status and count per status
-        $userLibraries = UserLibrary::select(['trackable_id', 'trackable_type', 'status', DB::raw('COUNT(*) as total')])
-            ->where('trackable_type', '=', $class)
-            ->groupBy(['trackable_id', 'trackable_type', 'status'])
-            ->get();
+        $modelsInLibraryCount = $model->whereHas('library')
+            ->count();
+        $bar = $this->output->createProgressBar($modelsInLibraryCount);
 
-        $bar = $this->output->createProgressBar($userLibraries->count());
+        $model->whereHas('library')
+            ->with([
+                'mediaStat'
+            ])
+            ->withCount([
+                'library as library_count',
+                'library as in_progress_count' => function ($query) {
+                    $query->where('status', '=', UserLibraryStatus::InProgress);
+                },
+                'library as dropped_count' => function ($query) {
+                    $query->where('status', '=', UserLibraryStatus::Dropped);
+                },
+                'library as planning_count' => function ($query) {
+                    $query->where('status', '=', UserLibraryStatus::Planning);
+                },
+                'library as completed_count' => function ($query) {
+                    $query->where('status', '=', UserLibraryStatus::Completed);
+                },
+                'library as on_hold_count' => function ($query) {
+                    $query->where('status', '=', UserLibraryStatus::OnHold);
+                },
+                'library as ignored_count' => function ($query) {
+                    $query->where('status', '=', UserLibraryStatus::Ignored);
+                },
+            ])
+            ->chunkById($chunkSize, function (Collection $models) use ($bar) {
+                DB::transaction(function () use ($models, $bar) {
+                    $models->each(function ($model) use ($bar) {
+                        // Find or create media stat for the model
+                        $mediaStat = $model->mediaStat;
 
-        // Get unique model id's
-        DB::transaction(function () use ($class, $userLibraries, $bar) {
-            $userLibraries->unique('trackable_id')
-                ->pluck('trackable_id')
-                ->each(function ($modelID) use ($bar, $class, $userLibraries) {
-                    // Find or create media stat for the model
-                    $mediaStat = MediaStat::firstOrCreate([
-                        'model_type' => $class,
-                        'model_id' => $modelID,
-                    ]);
+                        if (empty($mediaStat)) {
+                            $mediaStat = MediaStat::create([
+                                'model_type' => $model->getMorphClass(),
+                                'model_id' => $model->id,
+                            ]);
+                        }
 
-                    // Get all current model records from user library
-                    $modelInLibrary = $userLibraries->where('trackable_id', '=', $modelID);
+                        // Get all current model records from user library
+                        $modelCount = $model->library_count;
 
-                    // Get library status' for the model
-                    $planningCount = $modelInLibrary->where('status', '=', UserLibraryStatus::Planning);
-                    $inProgressCount = $modelInLibrary->where('status', '=', UserLibraryStatus::InProgress);
-                    $completedCount = $modelInLibrary->where('status', '=', UserLibraryStatus::Completed);
-                    $onHoldCount = $modelInLibrary->where('status', '=', UserLibraryStatus::OnHold);
-                    $droppedCount = $modelInLibrary->where('status', '=', UserLibraryStatus::Dropped);
-                    $ignoredCount = $modelInLibrary->where('status', '=', UserLibraryStatus::Ignored);
+                        // Get library status' for the model
+                        $planningCount = $model->planning_count;
+                        $inProgressCount = $model->in_progress_count;
+                        $completedCount = $model->completed_count;
+                        $onHoldCount = $model->on_hold_count;
+                        $droppedCount = $model->dropped_count;
+                        $ignoredCount = $model->ignored_count;
 
-                    // Get all counts
-                    $planningCount = $planningCount->values()[0]['total'] ?? 0;
-                    $inProgressCount = $inProgressCount->values()[0]['total'] ?? 0;
-                    $completedCount = $completedCount->values()[0]['total'] ?? 0;
-                    $onHoldCount = $onHoldCount->values()[0]['total'] ?? 0;
-                    $droppedCount = $droppedCount->values()[0]['total'] ?? 0;
-                    $ignoredCount = $ignoredCount->values()[0]['total'] ?? 0;
-                    $modelCount = $planningCount + $inProgressCount + $completedCount + $onHoldCount + $droppedCount + $ignoredCount;
+                        // Update media stat
+                        $mediaStat->updateQuietly([
+                            'model_count' => $modelCount,
+                            'planning_count' => $planningCount,
+                            'in_progress_count' => $inProgressCount,
+                            'completed_count' => $completedCount,
+                            'on_hold_count' => $onHoldCount,
+                            'dropped_count' => $droppedCount,
+                            'ignored_count' => $ignoredCount,
+                        ]);
 
-                    // Update media stat
-                    $mediaStat->updateQuietly([
-                        'model_count' => $modelCount,
-                        'planning_count' => $planningCount,
-                        'in_progress_count' => $inProgressCount,
-                        'completed_count' => $completedCount,
-                        'on_hold_count' => $onHoldCount,
-                        'dropped_count' => $droppedCount,
-                        'ignored_count' => $ignoredCount,
-                    ]);
-
-                    $bar->advance();
+                        $bar->advance();
+                    });
                 });
+            });
 
-            $bar->finish();
-        });
+        $bar->finish();
 
         DB::enableQueryLog();
 
