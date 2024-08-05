@@ -2,6 +2,9 @@
 
 namespace App\Console\Commands\Calculators;
 
+use App\Models\Anime;
+use App\Models\Game;
+use App\Models\Manga;
 use App\Models\MediaRating;
 use App\Models\MediaStat;
 use DB;
@@ -52,97 +55,108 @@ class CalculateRatings extends Command
             ->where('model_type', '=', $class)
             ->avg('rating');
 
-        // Get model_id, rating and count per rating
-        $mediaRatings = MediaRating::withoutGlobalScopes()
-            ->select(['model_id', 'rating', DB::raw('COUNT(*) as total')])
-            ->where('model_type', '=', $class)
-            ->groupBy(['model_id', 'rating'])
-            ->get();
-
         // Get unique Model IDs
-        $modelIDs = $mediaRatings->pluck('model_id')->unique();
+        $model = match ($class) {
+            Anime::class => Anime::withoutGlobalScopes(),
+            Manga::class => Manga::withoutGlobalScopes(),
+            Game::class => Game::withoutGlobalScopes(),
+            default => null
+        };
 
-        // Loop through chunks
-        $modelIDs->chunk($chunkSize)
-            ->each(function (Collection $chunk) use ($mediaRatings, $class, $meanRating) {
-                $existingMediaStats = MediaStat::withoutGlobalScopes()
-                    ->where('model_type', '=', $class)
-                    ->whereIn('model_id', $chunk)
-                    ->get()
-                    ->keyBy('model_id');
+        if (empty($model)) {
+            $this->error('Unsupported model.');
+            return Command::FAILURE;
+        }
 
-                $updates = [];
-                $newMediaStats = [];
+        $this->info('Calculating ratings for: ' . $class);
 
-                foreach ($chunk as $modelID) {
-                    /** @var ?MediaStat $mediaStat */
-                    $mediaStat = $existingMediaStats->get($modelID);
-                    $isNew = false;
+        $modelsInLibraryCount = $model->count();
+        $bar = $this->output->createProgressBar($modelsInLibraryCount);
 
-                    // If MediaStat doesn't exist for this Model, create a new one.
-                    if (!$mediaStat) {
-                        $mediaStat = (new MediaStat([
-                            'model_type' => $class,
-                            'model_id' => $modelID,
-                        ]));
-                        $isNew = true;
-                    }
-
-                    // Get all current Model records from MediaRating
-                    $mediaRatingForModel = $mediaRatings->where('model_id', $modelID);
-
-                    // Total amount of ratings this Model has
-                    $totalRatingCount = $mediaRatingForModel->sum('total');
-
-                    // Average score for this Model
-                    $basicAverageRating = $mediaRatingForModel->avg('rating');
-
-                    // Calculate weighted rating
-                    $weightedRating = ($totalRatingCount / ($totalRatingCount + $class::MINIMUM_RATINGS_REQUIRED)) * $basicAverageRating + ($class::MINIMUM_RATINGS_REQUIRED / ($totalRatingCount + $class::MINIMUM_RATINGS_REQUIRED)) * $meanRating;
-
-                    // Get count of ratings from 0.5 to 5.0
-                    $ratingCounts = $mediaRatingForModel->whereIn('rating', ['0.5', '1.0', '1.5', '2.0', '2.5', '3.0', '3.5', '4.0', '4.5', '5.0'])
-                        ->mapWithKeys(function ($rating) {
-                            // Convert 0.5...5 to 1...10
-                            return [($rating->rating * 2) => $rating->total];
-                        })
-                        ->toArray();
-
-                    // Update media stat
-                    $attributes = [
-                        'model_id' => $modelID,
-                        'model_type' => $class,
-                        'rating_1' => $ratingCounts[1] ?? 0,
-                        'rating_2' => $ratingCounts[2] ?? 0,
-                        'rating_3' => $ratingCounts[3] ?? 0,
-                        'rating_4' => $ratingCounts[4] ?? 0,
-                        'rating_5' => $ratingCounts[5] ?? 0,
-                        'rating_6' => $ratingCounts[6] ?? 0,
-                        'rating_7' => $ratingCounts[7] ?? 0,
-                        'rating_8' => $ratingCounts[8] ?? 0,
-                        'rating_9' => $ratingCounts[9] ?? 0,
-                        'rating_10' => $ratingCounts[10] ?? 0,
-                        'rating_average' => $weightedRating,
-                        'rating_count' => $totalRatingCount,
-                    ];
-
-                    if ($isNew) {
-                        $mediaStat->fill($attributes);
-                        $newMediaStats[$modelID] = $mediaStat->toArray();
-                    } else {
-                        $updates[] = $attributes;
-                    }
+        $model
+            ->withCount([
+                'mediaRatings as rating_0_5_count' => function ($query) {
+                    $query->where('rating', '=', 0.5);
+                },
+                'mediaRatings as rating_1_0_count' => function ($query) {
+                    $query->where('rating', '=', 1.0);
+                },
+                'mediaRatings as rating_1_5_count' => function ($query) {
+                    $query->where('rating', '=', 1.5);
+                },
+                'mediaRatings as rating_2_0_count' => function ($query) {
+                    $query->where('rating', '=', 2.0);
+                },
+                'mediaRatings as rating_2_5_count' => function ($query) {
+                    $query->where('rating', '=', 2.5);
+                },
+                'mediaRatings as rating_3_0_count' => function ($query) {
+                    $query->where('rating', '=', 3.0);
+                },
+                'mediaRatings as rating_3_5_count' => function ($query) {
+                    $query->where('rating', '=', 3.5);
+                },
+                'mediaRatings as rating_4_0_count' => function ($query) {
+                    $query->where('rating', '=', 4.0);
+                },
+                'mediaRatings as rating_4_5_count' => function ($query) {
+                    $query->where('rating', '=', 4.5);
+                },
+                'mediaRatings as rating_5_0_count' => function ($query) {
+                    $query->where('rating', '=', 5.0);
                 }
+            ])
+            ->with([
+                'mediaStat'
+            ])
+            ->withAvg('mediaRatings', 'rating')
+            ->chunkById($chunkSize, function (Collection $models) use ($class, $meanRating, $bar) {
+                DB::transaction(function () use ($class, $models, $meanRating, $bar) {
+                    $models->each(function ($model) use ($class, $meanRating, $bar) {
+                        // Find or create media stat for the model
+                        $mediaStat = $model->mediaStat;
 
-                // Create MediaStat for the Model
-                if (!empty($newMediaStats)) {
-                    MediaStat::upsert($newMediaStats, ['model_type', 'model_id']);
-                }
+                        if (empty($mediaStat)) {
+                            $mediaStat = MediaStat::create([
+                                'model_type' => $model->getMorphClass(),
+                                'model_id' => $model->id,
+                            ]);
+                        }
 
-                // Update the MediaStat of the Model
-                if (!empty($updates)) {
-                    MediaStat::upsert($updates, ['model_type', 'model_id']);
-                }
+                        // Total amount of ratings this Model has
+                        $totalRatingCount = $model->rating_0_5_count
+                            + $model->rating_1_0_count + $model->rating_1_5_count
+                            + $model->rating_2_0_count + $model->rating_2_5_count
+                            + $model->rating_3_0_count + $model->rating_3_5_count
+                            + $model->rating_4_0_count + $model->rating_4_5_count
+                            + $model->rating_5_0_count;
+
+                        // Average score for this Model
+                        $basicAverageRating = $model->media_ratings_avg_rating;
+
+                        // Calculate weighted rating
+                        $weightedRating = ($totalRatingCount / ($totalRatingCount + $class::MINIMUM_RATINGS_REQUIRED)) * $basicAverageRating
+                            + ($class::MINIMUM_RATINGS_REQUIRED / ($totalRatingCount + $class::MINIMUM_RATINGS_REQUIRED)) * $meanRating;
+
+                        // Update media stat
+                        $mediaStat->updateQuietly([
+                            'rating_1' => $model->rating_0_5_count,
+                            'rating_2' => $model->rating_1_0_count,
+                            'rating_3' => $model->rating_1_5_count,
+                            'rating_4' => $model->rating_2_0_count,
+                            'rating_5' => $model->rating_2_5_count,
+                            'rating_6' => $model->rating_3_0_count,
+                            'rating_7' => $model->rating_3_5_count,
+                            'rating_8' => $model->rating_4_0_count,
+                            'rating_9' => $model->rating_4_5_count,
+                            'rating_10' => $model->rating_5_0_count,
+                            'rating_average' => $weightedRating,
+                            'rating_count' => $totalRatingCount,
+                        ]);
+
+                        $bar->advance();
+                    });
+                });
             });
 
         DB::enableQueryLog();
