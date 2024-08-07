@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -376,6 +377,16 @@ class Episode extends KModel implements HasMedia, Sitemapable
     function previous_episode(): BelongsTo
     {
         return $this->belongsTo(Episode::class);
+    }
+
+    /**
+     * Returns the episode's UserWatchedEpisode relations.
+     *
+     * @return HasMany
+     */
+    function user_watched_episodes(): HasMany
+    {
+        return $this->hasMany(UserWatchedEpisode::class);
     }
 
     /**
