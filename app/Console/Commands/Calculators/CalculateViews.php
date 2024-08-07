@@ -71,22 +71,22 @@ class CalculateViews extends Command
             ->with(['viewable' => function (MorphTo $morphTo) {
                 $morphTo->constrain([
                     Anime::class => function (Builder $query) {
-                        $query->with(['genres', 'languages', 'mediaStat', 'media_type', 'source', 'status', 'themes', 'translations', 'tv_rating']);
+                        $query->with(['mediaStat']);
                     },
                     Character::class => function (Builder $query) {
-                        $query->with(['mediaStat', 'translations']);
+                        $query->with(['mediaStat']);
                     },
                     Episode::class => function (Builder $query) {
-                        $query->with(['mediaStat', 'translations']);
+                        $query->with(['mediaStat']);
                     },
                     Game::class => function (Builder $query) {
-                        $query->with(['genres', 'languages', 'mediaStat', 'media_type', 'source', 'status', 'themes', 'translations', 'tv_rating']);
+                        $query->with(['mediaStat']);
                     },
                     Manga::class => function (Builder $query) {
-                        $query->with(['genres', 'languages', 'mediaStat', 'media_type', 'source', 'status', 'themes', 'translations', 'tv_rating']);
+                        $query->with(['mediaStat']);
                     },
                     Song::class => function (Builder $query) {
-                        $query->with(['mediaStat', 'translations']);
+                        $query->with(['mediaStat']);
                     },
                 ]);
             }])

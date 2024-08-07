@@ -87,7 +87,6 @@ class CalculateLibraryStats extends Command
                 'mediaStat'
             ])
             ->withCount([
-                'library as library_count',
                 'library as in_progress_count' => function ($query) {
                     $query->where('status', '=', UserLibraryStatus::InProgress);
                 },
@@ -120,16 +119,18 @@ class CalculateLibraryStats extends Command
                             ]);
                         }
 
-                        // Get all current model records from user library
-                        $modelCount = $model->library_count;
-
-                        // Get library status' for the model
+                        // Get library count per status
                         $planningCount = $model->planning_count;
                         $inProgressCount = $model->in_progress_count;
                         $completedCount = $model->completed_count;
                         $onHoldCount = $model->on_hold_count;
                         $droppedCount = $model->dropped_count;
                         $ignoredCount = $model->ignored_count;
+
+                        // Sum library count of all statuses
+                        $modelCount = $planningCount + $inProgressCount
+                            + $completedCount + $onHoldCount
+                            + $droppedCount + $ignoredCount;
 
                         // Update media stat
                         $mediaStat->updateQuietly([
