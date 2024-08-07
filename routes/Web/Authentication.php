@@ -28,7 +28,7 @@ Route::get('/sign-in', [AuthenticatedSessionController::class, 'create'])
     ->name('sign-in');
 
 Route::post('/sign-in', [AuthenticatedSessionController::class, 'store'])
-    ->middleware(['guest', 'honey', 'honey-recaptcha', 'throttle:6,1']);
+    ->middleware(['guest', 'throttle:6,1']);
 
 // Sign Out
 Route::post('/sign-out', [AuthenticatedSessionController::class, 'destroy'])
