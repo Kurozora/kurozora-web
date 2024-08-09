@@ -157,66 +157,66 @@
                 <x-skeletons.small-lockup />
                 <x-skeletons.small-lockup />
             </section>
-        @else
-            @guest
-                <section class="mx-auto max-w-7xl">
-                    <a href="{{ route('recap.index') }}" wire:navigate>
-                        <x-picture>
-                            <img class="h-40 w-full object-cover shadow md:h-80 xl:rounded-3xl" src="{{ asset('images/static/banners/kurozora_recap.webp') }}" alt="Kurozora Recap 2023">
-                        </x-picture>
-                    </a>
-                </section>
-            @endguest
-
-            <section class="mx-auto max-w-7xl pb-8 pl-4 pr-4 pt-5 sm:px-6">
-                <x-section-nav class="mb-5 flex flex-nowrap justify-between">
-                    <x-slot:title>
-                        {{ __('More to Explore') }}
-                    </x-slot>
-                </x-section-nav>
-
-                <div class="grid gap-4 md:grid-cols-3">
-                    <x-simple-link href="{{ route('anime.seasons.index') }}" wire:navigate class="w-full justify-between rounded-lg bg-gray-100 pb-4 pl-4 pr-4 pt-4 text-sm" :hover-underline-enabled="false">
-                        <span>
-                            {{ __('Browse by Season') }}
-                        </span>
-
-                        @svg('chevron_forward', 'fill-current', ['width' => 12])
-                    </x-simple-link>
-
-                    <x-simple-link href="{{ route('genres.index') }}" wire:navigate class="w-full justify-between rounded-lg bg-gray-100 pb-4 pl-4 pr-4 pt-4 text-sm" :hover-underline-enabled="false">
-                        <span>
-                            {{ __('Browse by Genre') }}
-                        </span>
-
-                        @svg('chevron_forward', 'fill-current', ['width' => 12])
-                    </x-simple-link>
-
-                    <x-simple-link href="{{ route('themes.index') }}" wire:navigate class="w-full justify-between rounded-lg bg-gray-100 pb-4 pl-4 pr-4 pt-4 text-sm" :hover-underline-enabled="false">
-                        <span>
-                            {{ __('Browse by Theme') }}
-                        </span>
-
-                        @svg('chevron_forward', 'fill-current', ['width' => 12])
-                    </x-simple-link>
-
-                    <x-simple-link href="{{ route('schedule') }}" wire:navigate class="w-full justify-between rounded-lg bg-gray-100 pb-4 pl-4 pr-4 pt-4 text-sm" :hover-underline-enabled="false">
-                        <span>
-                            {{ __('Broadcast Schedule') }}
-                        </span>
-
-                        @svg('chevron_forward', 'fill-current', ['width' => 12])
-                    </x-simple-link>
-
-                    <x-simple-link href="{{ route('charts.index') }}" wire:navigate class="w-full justify-between rounded-lg bg-gray-100 pb-4 pl-4 pr-4 pt-4 text-sm" :hover-underline-enabled="false">
-                        <span>
-                            {{ __('Charts') }}
-                        </span>
-
-                        @svg('chevron_forward', 'fill-current', ['width' => 12])
-                    </x-simple-link>
-                </div>
-            </section>
         @endif
+
+        @guest
+            <section class="mx-auto max-w-7xl">
+                <a href="{{ route('recap.index') }}" wire:navigate>
+                    <x-picture>
+                        <img class="h-40 w-full object-cover shadow md:h-80 xl:rounded-3xl" src="{{ asset('images/static/banners/kurozora_recap.webp') }}" alt="Kurozora Recap 2023">
+                    </x-picture>
+                </a>
+            </section>
+        @endguest
+
+        <section class="mx-auto max-w-7xl pb-8 pl-4 pr-4 pt-5 sm:px-6">
+            <x-section-nav class="mb-5 flex flex-nowrap justify-between">
+                <x-slot:title>
+                    {{ __('More to Explore') }}
+                </x-slot>
+            </x-section-nav>
+
+            <div class="grid gap-4 md:grid-cols-3">
+                <x-simple-link href="{{ route('anime.seasons.index') }}" wire:navigate class="w-full justify-between rounded-lg bg-gray-100 pb-4 pl-4 pr-4 pt-4 text-sm" :hover-underline-enabled="false">
+                    <span>
+                        {{ __('Browse by Season') }}
+                    </span>
+
+                    @svg('chevron_forward', 'fill-current', ['width' => 12])
+                </x-simple-link>
+
+                <x-simple-link href="{{ route('genres.index') }}" wire:navigate class="w-full justify-between rounded-lg bg-gray-100 pb-4 pl-4 pr-4 pt-4 text-sm" :hover-underline-enabled="false">
+                    <span>
+                        {{ __('Browse by Genre') }}
+                    </span>
+
+                    @svg('chevron_forward', 'fill-current', ['width' => 12])
+                </x-simple-link>
+
+                <x-simple-link href="{{ route('themes.index') }}" wire:navigate class="w-full justify-between rounded-lg bg-gray-100 pb-4 pl-4 pr-4 pt-4 text-sm" :hover-underline-enabled="false">
+                    <span>
+                        {{ __('Browse by Theme') }}
+                    </span>
+
+                    @svg('chevron_forward', 'fill-current', ['width' => 12])
+                </x-simple-link>
+
+                <x-simple-link href="{{ route('schedule') }}" wire:navigate class="w-full justify-between rounded-lg bg-gray-100 pb-4 pl-4 pr-4 pt-4 text-sm" :hover-underline-enabled="false">
+                    <span>
+                        {{ __('Broadcast Schedule') }}
+                    </span>
+
+                    @svg('chevron_forward', 'fill-current', ['width' => 12])
+                </x-simple-link>
+
+                <x-simple-link href="{{ route('charts.index') }}" wire:navigate class="w-full justify-between rounded-lg bg-gray-100 pb-4 pl-4 pr-4 pt-4 text-sm" :hover-underline-enabled="false">
+                    <span>
+                        {{ __('Charts') }}
+                    </span>
+
+                    @svg('chevron_forward', 'fill-current', ['width' => 12])
+                </x-simple-link>
+            </div>
+        </section>
     </div>
 </main>
