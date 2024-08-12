@@ -10,8 +10,10 @@ use App\Http\Requests\GetFollowersRequest;
 use App\Http\Requests\GetFollowingRequest;
 use App\Http\Requests\GetLibraryRequest;
 use App\Http\Requests\GetRatingsRequest;
+use App\Http\Requests\GetUpcomingEpisodesRequest;
 use App\Http\Requests\GetUserFavoritesRequest;
 use App\Http\Requests\UpdateProfileRequest;
+use App\Http\Resources\EpisodeResourceIdentity;
 use App\Http\Resources\UserResource;
 use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
 use BenSampo\Enum\Exceptions\InvalidEnumMemberException;
@@ -254,5 +256,28 @@ class MeController extends Controller
     {
         return (new UserController())
             ->getRatings($request, auth()->user());
+    }
+
+    /**
+     * Returns a list of the user's ratings.
+     *
+     * @param GetUpcomingEpisodesRequest $request
+     * @return JsonResponse
+     */
+    function upcomingEpisodes(GetUpcomingEpisodesRequest $request): JsonResponse
+    {
+        $data = $request->validated();
+
+        // Get the feed messages
+        $mediaRatings = auth()->user()->upcoming_episodes()
+            ->cursorPaginate($data['limit'] ?? 25);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $mediaRatings->nextPageUrl());
+
+        return JSONResult::success([
+            'data' => EpisodeResourceIdentity::collection($mediaRatings),
+            'next' => empty($nextPageURL) ? null : $nextPageURL
+        ]);
     }
 }

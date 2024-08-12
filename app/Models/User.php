@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\MediaCollection;
 use App\Enums\UserActivityStatus;
+use App\Enums\UserLibraryStatus;
 use App\Helpers\OptionsBag;
 use App\Jobs\FetchSessionLocation;
 use App\Notifications\NewSession;
@@ -23,6 +24,7 @@ use App\Traits\Web\Auth\TwoFactorAuthenticatable;
 use Carbon\Carbon;
 use Cog\Contracts\Love\Reacterable\Models\Reacterable as ReacterableContract;
 use Cog\Laravel\Love\Reacterable\Models\Traits\Reacterable;
+use DB;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -575,6 +577,51 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     function user_watched_episodes(): HasMany
     {
         return $this->hasMany(UserWatchedEpisode::class);
+    }
+
+    /**
+     * Get the user's upcoming episodes.
+     *
+     * @param null|Anime $anime
+     *
+     * @return Builder
+     */
+    function upcoming_episodes(?Anime $anime = null): Builder
+    {
+        $subquery = Episode::join(Season::TABLE_NAME, Episode::TABLE_NAME . '.season_id', '=', Season::TABLE_NAME . '.id')
+            ->join(Anime::TABLE_NAME, Season::TABLE_NAME . '.anime_id', '=', Anime::TABLE_NAME . '.id')
+            ->join(UserLibrary::TABLE_NAME, function ($join) use ($anime) {
+                $join->on(UserLibrary::TABLE_NAME . '.trackable_id', '=', Anime::TABLE_NAME . '.id')
+                    ->where(UserLibrary::TABLE_NAME . '.trackable_type', '=', Anime::class)
+                    ->when($anime, function($query) use ($anime) {
+                        $query->where(UserLibrary::TABLE_NAME . '.trackable_id', '=', $anime->id);
+                    })
+                    ->where(UserLibrary::TABLE_NAME . '.user_id', '=', 2)
+                    ->where(UserLibrary::TABLE_NAME . '.status', '=', UserLibraryStatus::InProgress);
+            })
+            ->leftJoin(UserWatchedEpisode::TABLE_NAME, function ($join) {
+                $join->on(UserWatchedEpisode::TABLE_NAME . '.episode_id', '=', Episode::TABLE_NAME . '.id')
+                    ->where(UserWatchedEpisode::TABLE_NAME . '.user_id', '=', 2);
+            })
+            ->whereNull(UserWatchedEpisode::TABLE_NAME . '.id') // Episode is not watched
+            ->where(Episode::TABLE_NAME . '.started_at', '<=', now()) // Episode has already aired
+            ->select([DB::raw('MIN(' . Episode::TABLE_NAME . '.id) as episode_id'), Season::TABLE_NAME . '.anime_id'])
+            ->groupBy(Season::TABLE_NAME . '.anime_id');
+
+        return Episode::with([
+            'anime' => function ($query) {
+                $query->with(['media', 'translations']);
+            },
+            'media',
+            'season' => function ($query) {
+                $query->with(['translations']);
+            },
+            'translations'
+        ])
+            ->joinSub($subquery, 'subquery', function ($join) {
+                $join->on(Episode::TABLE_NAME . '.id', '=', 'subquery.episode_id');
+            })
+            ->orderBy(Episode::TABLE_NAME . '.started_at');
     }
 
     /**
