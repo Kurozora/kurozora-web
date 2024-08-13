@@ -71,6 +71,7 @@ class Details extends Component
         }
 
         $exploreCategory = match ($this->exploreCategory->type) {
+            ExploreCategoryTypes::UpNextEpisodes => $this->exploreCategory->upNextEpisodes(25),
             ExploreCategoryTypes::MostPopularShows => $this->exploreCategory->mostPopular(Anime::class, null, 25),
             ExploreCategoryTypes::UpcomingShows => $this->exploreCategory->upcoming(Anime::class, null, 25),
             ExploreCategoryTypes::NewShows => $this->exploreCategory->recentlyAdded(Anime::class, null, 25),

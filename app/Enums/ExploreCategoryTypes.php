@@ -5,6 +5,7 @@ namespace App\Enums;
 use BenSampo\Enum\Enum;
 
 /**
+ * @method static ExploreCategoryTypes UpNextEpisodes()
  * @method static ExploreCategoryTypes Shows()
  * @method static ExploreCategoryTypes MostPopularShows()
  * @method static ExploreCategoryTypes ContinuingShows()
@@ -36,6 +37,7 @@ use BenSampo\Enum\Enum;
  */
 final class ExploreCategoryTypes extends Enum
 {
+    const string UpNextEpisodes = 'up-next-episodes';
     const string Shows = 'shows';
     const string MostPopularShows = 'most-popular-shows';
     const string ContinuingShows = 'anime-continuing';

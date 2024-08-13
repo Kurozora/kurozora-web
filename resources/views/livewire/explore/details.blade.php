@@ -63,6 +63,9 @@
 
         @if ($this->exploreCategoryItems->count())
             @switch($exploreCategory->type)
+                @case(\App\Enums\ExploreCategoryTypes::UpNextEpisodes)
+                    <x-rows.episode-lockup :episodes="$this->exploreCategoryItems" :is-row="false" />
+                    @break
                 @case(\App\Enums\ExploreCategoryTypes::MostPopularShows)
                 @case(\App\Enums\ExploreCategoryTypes::UpcomingShows)
                 @case(\App\Enums\ExploreCategoryTypes::NewShows)

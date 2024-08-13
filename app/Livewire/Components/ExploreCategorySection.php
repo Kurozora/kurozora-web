@@ -102,6 +102,7 @@ class ExploreCategorySection extends Component
         }
 
         $exploreCategory = match ($this->exploreCategory->type) {
+            ExploreCategoryTypes::UpNextEpisodes => $this->exploreCategory->upNextEpisodes(),
             ExploreCategoryTypes::MostPopularShows => $this->exploreCategory->mostPopular(Anime::class, $this->genre ?? $this->theme),
             ExploreCategoryTypes::UpcomingShows => $this->exploreCategory->upcoming(Anime::class, $this->genre ?? $this->theme),
             ExploreCategoryTypes::NewShows => $this->exploreCategory->recentlyAdded(Anime::class, $this->genre ?? $this->theme),

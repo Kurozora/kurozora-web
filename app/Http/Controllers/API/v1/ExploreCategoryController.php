@@ -83,6 +83,7 @@ class ExploreCategoryController extends Controller
         // Loop and set special exploreCategoryItems.model relations
         $exploreCategories = $exploreCategories->map(function (ExploreCategory $exploreCategory) use ($genreOrTheme) {
             return match ($exploreCategory->type) {
+                ExploreCategoryTypes::UpNextEpisodes => $exploreCategory->upNextEpisodes(10),
                 ExploreCategoryTypes::MostPopularShows => $exploreCategory->mostPopular(Anime::class, $genreOrTheme, 10, false),
                 ExploreCategoryTypes::UpcomingShows => $exploreCategory->upcoming(Anime::class, $genreOrTheme, 10, false),
                 ExploreCategoryTypes::NewShows => $exploreCategory->recentlyAdded(Anime::class, $genreOrTheme, 10, false),
@@ -162,6 +163,7 @@ class ExploreCategoryController extends Controller
         }
 
         $exploreCategory = match ($exploreCategory->type) {
+            ExploreCategoryTypes::UpNextEpisodes => $exploreCategory->upNextEpisodes(25),
             ExploreCategoryTypes::MostPopularShows => $exploreCategory->mostPopular(Anime::class, $genreOrTheme, 25),
             ExploreCategoryTypes::UpcomingShows => $exploreCategory->upcoming(Anime::class, $genreOrTheme, 25),
             ExploreCategoryTypes::NewShows => $exploreCategory->recentlyAdded(Anime::class, $genreOrTheme, 25),
