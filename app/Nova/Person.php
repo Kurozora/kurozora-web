@@ -167,12 +167,12 @@ class Person extends Resource
                 ->nullable(),
 
             Date::make('Birthdate')
-                ->rules(['date'])
+                ->rules(['nullable', 'date'])
                 ->nullable()
                 ->sortable(),
 
             Date::make('Deceased date')
-                ->rules(['date'])
+                ->rules(['nullable', 'date'])
                 ->nullable()
                 ->sortable(),
 
