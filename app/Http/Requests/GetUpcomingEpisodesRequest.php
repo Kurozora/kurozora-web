@@ -24,6 +24,7 @@ class GetUpcomingEpisodesRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'model_id' => ['bail', 'nullable', 'string'],
             'limit' => ['bail', 'integer', 'min:1', 'max:100'],
             'page' => ['bail', 'integer', 'min:1']
         ];

@@ -269,7 +269,7 @@ class MeController extends Controller
         $data = $request->validated();
 
         // Get the feed messages
-        $mediaRatings = auth()->user()->upcoming_episodes()
+        $mediaRatings = auth()->user()->upcoming_episodes($data['model_id'] ?? null)
             ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
