@@ -30,7 +30,6 @@ class Song extends KModel implements HasMedia, Sitemapable
 {
     use Actionable,
         HasFactory,
-        HasMediaRatings,
         HasMediaStat,
         HasSlug,
         HasViews,
@@ -41,6 +40,9 @@ class Song extends KModel implements HasMedia, Sitemapable
         SearchFilterable,
         SoftDeletes,
         Translatable;
+    use HasMediaRatings {
+        mediaRatings as protected parentMediaRatings;
+    }
 
     // Table name
     const string TABLE_NAME = 'songs';
@@ -174,6 +176,17 @@ class Song extends KModel implements HasMedia, Sitemapable
     public function mediaSongs(): HasMany
     {
         return $this->hasMany(MediaSong::class);
+    }
+
+    /**
+     * Get the model's ratings.
+     *
+     * @return MorphMany
+     */
+    public function mediaRatings(): MorphMany
+    {
+        return $this->parentMediaRatings()
+            ->withoutGlobalScopes();
     }
 
     /**

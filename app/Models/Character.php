@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Scout\Searchable;
 use Spatie\MediaLibrary\HasMedia;
@@ -29,7 +30,6 @@ use Spatie\Sluggable\SlugOptions;
 class Character extends KModel implements HasMedia, Sitemapable
 {
     use HasFactory,
-        HasMediaRatings,
         HasMediaStat,
         HasTranslatableSlug,
         HasViews,
@@ -39,6 +39,9 @@ class Character extends KModel implements HasMedia, Sitemapable
         SearchFilterable,
         SoftDeletes,
         Translatable;
+    use HasMediaRatings {
+        mediaRatings as protected parentMediaRatings;
+    }
 
     // Maximum relationships fetch limit
     const int MAXIMUM_RELATIONSHIPS_LIMIT = 10;
@@ -356,6 +359,17 @@ class Character extends KModel implements HasMedia, Sitemapable
         }
 
         return $format ? $birthdate->format($format) : null;
+    }
+
+    /**
+     * Get the model's ratings.
+     *
+     * @return MorphMany
+     */
+    public function mediaRatings(): MorphMany
+    {
+        return $this->parentMediaRatings()
+            ->withoutGlobalScopes();
     }
 
     /**
