@@ -118,12 +118,13 @@ class StarRating extends Component
             }
 
             // Update authenticated user's rating
-            $user->mediaRatings()->updateOrCreate([
-                'model_id' => $this->modelID,
-                'model_type' => $this->modelType,
-            ], [
-                'rating' => $this->rating,
-            ]);
+            $user->mediaRatings()->withoutGlobalScopes()
+                ->updateOrCreate([
+                    'model_id' => $this->modelID,
+                    'model_type' => $this->modelType,
+                ], [
+                    'rating' => $this->rating,
+                ]);
         }
 
         $this->dispatch($this->listenerKey(), id: $this->getID(), modelID: $this->modelID, modelType: $this->modelType, rating: $this->rating);
