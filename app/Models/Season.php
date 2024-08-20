@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -107,6 +108,17 @@ class Season extends KModel implements HasMedia, Sitemapable
     public function episodes(): HasMany
     {
         return $this->hasMany(Episode::class);
+    }
+
+    /**
+     * Returns the episodes associated with the season
+     *
+     * @return HasManyThrough
+     */
+    public function episodesMediaStats(): HasManyThrough
+    {
+        return $this->hasManyThrough(MediaStat::class, Episode::class, 'season_id', 'model_id')
+            ->where('model_type', '=', Episode::class);
     }
 
     /**
