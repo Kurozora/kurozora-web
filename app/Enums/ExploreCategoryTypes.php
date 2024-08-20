@@ -5,7 +5,6 @@ namespace App\Enums;
 use BenSampo\Enum\Enum;
 
 /**
- * @method static ExploreCategoryTypes UpNextEpisodes()
  * @method static ExploreCategoryTypes Shows()
  * @method static ExploreCategoryTypes MostPopularShows()
  * @method static ExploreCategoryTypes ContinuingShows()
@@ -29,6 +28,8 @@ use BenSampo\Enum\Enum;
  * @method static ExploreCategoryTypes NewGames()
  * @method static ExploreCategoryTypes RecentlyUpdateGames()
  * @method static ExploreCategoryTypes Characters()
+ * @method static ExploreCategoryTypes UpNextEpisodes()
+ * @method static ExploreCategoryTypes Episodes()
  * @method static ExploreCategoryTypes People()
  * @method static ExploreCategoryTypes Genres()
  * @method static ExploreCategoryTypes Themes()
@@ -37,7 +38,6 @@ use BenSampo\Enum\Enum;
  */
 final class ExploreCategoryTypes extends Enum
 {
-    const string UpNextEpisodes = 'up-next-episodes';
     const string Shows = 'shows';
     const string MostPopularShows = 'most-popular-shows';
     const string ContinuingShows = 'anime-continuing';
@@ -61,6 +61,8 @@ final class ExploreCategoryTypes extends Enum
     const string NewGames = 'new-games';
     const string RecentlyUpdateGames = 'recently-update-games';
     const string Characters = 'characters';
+    const string UpNextEpisodes = 'up-next-episodes';
+    const string Episodes = 'episodes';
     const string People = 'people';
     const string Genres = 'genres';
     const string Themes = 'themes';
