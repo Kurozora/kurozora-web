@@ -150,6 +150,16 @@ class Anime extends KModel implements HasMedia, Sitemapable
     }
 
     /**
+     * Minimum ratings required to calculate average
+     *
+     * @return int
+     */
+    public static function minimumRatingsRequired(): int
+    {
+        return 999999999;
+    }
+
+    /**
      * The season in which the anime aired.
      *
      * @return ?int
