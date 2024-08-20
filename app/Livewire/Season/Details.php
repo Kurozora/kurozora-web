@@ -63,8 +63,17 @@ class Details extends Component
         }
 
         return $this->anime->seasons()
-            ->with(['media', 'translations'])
+            ->with([
+                'anime',
+                'media',
+                'translations'
+            ])
             ->withCount(['episodes'])
+            ->withAvg([
+                'episodesMediaStats' => function ($query) {
+                    $query->where('rating_average', '!=', 0);
+                }
+            ], 'rating_average')
             ->paginate(25);
     }
 
