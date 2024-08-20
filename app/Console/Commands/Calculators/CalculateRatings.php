@@ -3,10 +3,15 @@
 namespace App\Console\Commands\Calculators;
 
 use App\Models\Anime;
+use App\Models\Character;
+use App\Models\Episode;
 use App\Models\Game;
 use App\Models\Manga;
 use App\Models\MediaRating;
 use App\Models\MediaStat;
+use App\Models\Person;
+use App\Models\Song;
+use App\Models\Studio;
 use DB;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
@@ -55,13 +60,37 @@ class CalculateRatings extends Command
             ->where('model_type', '=', $class)
             ->avg('rating');
 
+        if ($class === 'all') {
+            MediaStat::withoutGlobalScopes()
+                ->distinct()
+                ->select(['model_type'])
+                ->pluck('model_type')
+                ->each(function ($modelType) {
+                    $this->call('calculate:ratings', ['model' => $modelType]);
+                    $this->newLine();
+                });
+
+            return Command::SUCCESS;
+        }
+
+        if ($class::minimumRatingsRequired() == 999999999) {
+            $this->warn('Calculating ' . $class . ' ratings is blocked for now.');
+            DB::enableQueryLog();
+            return Command::SUCCESS;
+        }
+
         // Get unique Model IDs
-        $model = match ($class) {
+        $model = (match ($class) {
             Anime::class => Anime::withoutGlobalScopes(),
-            Manga::class => Manga::withoutGlobalScopes(),
+            Character::class => Character::withoutGlobalScopes(),
+            Episode::class => Episode::withoutGlobalScopes(),
             Game::class => Game::withoutGlobalScopes(),
+            Manga::class => Manga::withoutGlobalScopes(),
+            Person::class => Person::withoutGlobalScopes(),
+            Song::class => Song::withoutGlobalScopes(),
+            Studio::class => Studio::withoutGlobalScopes(),
             default => null
-        };
+        })->whereHas('mediaRatings');
 
         if (empty($model)) {
             $this->error('Unsupported model.');
@@ -135,8 +164,8 @@ class CalculateRatings extends Command
                         $basicAverageRating = $model->media_ratings_avg_rating;
 
                         // Calculate weighted rating
-                        $weightedRating = ($totalRatingCount / ($totalRatingCount + $class::MINIMUM_RATINGS_REQUIRED)) * $basicAverageRating
-                            + ($class::MINIMUM_RATINGS_REQUIRED / ($totalRatingCount + $class::MINIMUM_RATINGS_REQUIRED)) * $meanRating;
+                        $weightedRating = ($totalRatingCount / ($totalRatingCount + $class::minimumRatingsRequired())) * $basicAverageRating
+                            + ($class::minimumRatingsRequired() / ($totalRatingCount + $class::minimumRatingsRequired())) * $meanRating;
 
                         // Update media stat
                         $mediaStat->updateQuietly([
