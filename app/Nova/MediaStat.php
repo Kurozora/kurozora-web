@@ -2,12 +2,14 @@
 
 namespace App\Nova;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\MorphTo;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Http\Requests\NovaRequest;
 
 class MediaStat extends Resource
 {
@@ -287,5 +289,31 @@ class MediaStat extends Resource
     public function actions(Request $request): array
     {
         return [];
+    }
+
+    public static function indexQuery(NovaRequest $request, $query): Builder
+    {
+        return parent::indexQuery($request, $query)
+            ->with([
+                'model' => function (\Illuminate\Database\Eloquent\Relations\MorphTo $morphTo) {
+                    $morphTo->constrain([
+                        \App\Models\Anime::class => function (Builder $query) {
+                            $query->with(['translations']);
+                        },
+                        \App\Models\Episode::class => function (Builder $query) {
+                            $query->with(['translations']);
+                        },
+                        \App\Models\Game::class => function (Builder $query) {
+                            $query->with(['translations']);
+                        },
+                        \App\Models\Manga::class => function (Builder $query) {
+                            $query->with(['translations']);
+                        },
+                        \App\Models\Song::class => function (Builder $query) {
+                            $query->with(['translations']);
+                        },
+                    ]);
+                }
+            ]);
     }
 }
