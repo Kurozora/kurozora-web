@@ -70,7 +70,7 @@ class Details extends Component
             ])
             ->withCount(['episodes'])
             ->withAvg([
-                'episodesMediaStats' => function ($query) {
+                'episodesMediaStats as rating_average' => function ($query) {
                     $query->where('rating_average', '!=', 0);
                 }
             ], 'rating_average')

@@ -32,9 +32,15 @@ class SeasonController extends Controller
             'anime' => function ($query) {
                 $query->withoutGlobalScopes();
             },
-            'media'
+            'media',
+            'translations',
         ])
-            ->loadCount(['episodes']);
+            ->loadCount(['episodes'])
+            ->loadAvg([
+                'episodesMediaStats as rating_average' => function ($query) {
+                    $query->where('rating_average', '!=', 0);
+                }
+            ], 'rating_average');
 
         return JSONResult::success([
             'data' => SeasonResource::collection([$season]),

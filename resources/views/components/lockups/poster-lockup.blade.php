@@ -38,7 +38,7 @@
 
                 <div class="flex flex-wrap w-full justify-between">
                     <p class="text-sm opacity-75">{{ __('Score') }}</p>
-                    <p class="text-sm">{{ number_shorten($season->episodes_media_stats_avg_rating_average, 1) }}</p>
+                    <p class="text-sm">{{ number_shorten($season->rating_average ?? 0, 1) }}</p>
                 </div>
             </div>
         </div>

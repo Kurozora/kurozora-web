@@ -21,24 +21,26 @@ class SeasonResource extends JsonResource
      * Transform the resource into an array.
      *
      * @param Request $request
+     *
      * @return array
      */
     public function toArray(Request $request): array
     {
         $resource = SeasonResourceIdentity::make($this->resource)->toArray($request);
         $resource = array_merge($resource, [
-            'attributes'    => [
-                'poster'        => ImageResource::make(
+            'attributes' => [
+                'poster' => ImageResource::make(
                     $this->resource->media->firstWhere('collection_name', '=', MediaCollection::Poster) ??
                     $this->resource->anime->media->firstWhere('collection_name', '=', MediaCollection::Poster)
                 ),
-                'number'        => $this->resource->number,
-                'title'         => $this->resource->title,
-                'synopsis'      => $this->resource->synopsis,
-                'episodeCount'  => $this->resource->episodes_count,
-                'startedAt'     => $this->resource->started_at?->timestamp,
-                'firstAired'    => $this->resource->started_at?->timestamp,
-                'endedAt'       => $this->resource->ended_at?->timestamp,
+                'number' => $this->resource->number,
+                'title' => $this->resource->title,
+                'synopsis' => $this->resource->synopsis,
+                'episodeCount' => $this->resource->episodes_count,
+                'ratingAverage' => round($this->resource->rating_average ?? 0, 1),
+                'startedAt' => $this->resource->started_at?->timestamp,
+                'firstAired' => $this->resource->started_at?->timestamp,
+                'endedAt' => $this->resource->ended_at?->timestamp,
             ]
         ]);
 
@@ -48,7 +50,6 @@ class SeasonResource extends JsonResource
 
         return $resource;
     }
-
 
     /**
      * Returns the user specific details for the resource.
