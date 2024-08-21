@@ -68,8 +68,8 @@ class Songs extends Component
                 }
             ])
             ->get()
-            ->groupBy('type.description')
-            ->sortBy(['type.value', 'position']);
+            ->sortBy(['position'])
+            ->groupBy('type.description');
     }
 
     /**
