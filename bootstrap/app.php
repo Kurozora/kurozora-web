@@ -29,6 +29,7 @@ use Illuminate\Contracts\Session\Middleware\AuthenticatesSessions;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -257,6 +258,15 @@ return Application::configure(basePath: dirname(__DIR__))
                         $apiError->detail = $e->getMessage();
                         return JSONResult::error([$apiError]);
                     }
+                    // Custom render for query exceptions
+                    else if ($e instanceof QueryException) {
+                        $apiError = new APIError();
+                        $apiError->id = 50003;
+                        $apiError->status = 503;
+                        $apiError->title = 'Query Exception';
+                        $apiError->detail = implode(' ', $e->errorInfo ?? []);
+                        return JSONResult::error([$apiError]);
+                    }
                     // Custom render for service unavailable
                     else if ($e instanceof ServiceUnavailableHttpException) {
                         $apiError = new APIError();
@@ -281,6 +291,15 @@ return Application::configure(basePath: dirname(__DIR__))
                         'user' => auth()->user()?->username,
                         'url' => $request->url(),
                         'input' => $request->all(),
+                    ]);
+                } else if ($e instanceof QueryException) {
+                    logger()->emergency($e->getMessage(), [
+                        'url' => $request->url(),
+                        'input' => $request->all(),
+                    ]);
+
+                    return response()->view('errors.503', [
+                        'exception' => $e
                     ]);
                 } else if (str($e->getTraceAsString())->contains('ServerNotificationController') && !$request->has('provider')) {
                     logger()->channel('stack')->critical(print_r($request->all(), true));

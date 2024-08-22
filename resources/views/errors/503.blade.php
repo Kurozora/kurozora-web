@@ -17,6 +17,10 @@
                         {{ __('Go to Twitter') }}
                     </x-outlined-link-button>
                 @else
+                    @if (isset($exception) && $exception instanceof \Illuminate\Database\QueryException)
+                        <p class="text-gray-500 text-2xl md:text-3xl font-light mb-8 leading-normal max-w-prose">{{ implode(' ', $exception->errorInfo ?? []) }}</p>
+                    @endif
+
                     <p class="text-gray-500 text-2xl md:text-3xl font-light mb-8 leading-normal max-w-prose">{{ __('Our crack team is on the ca... couch. O-oh dear...') }}</p>
 
                     <x-outlined-link-button href="{{ url('/') }}" class="text-base font-bold py-3 px-6 border-2" color="violet">
