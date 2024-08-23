@@ -66,6 +66,11 @@ class AnimeSeasonsSection extends Component
         return $this->anime->seasons()
             ->with(['media', 'translations'])
             ->withCount(['episodes'])
+            ->withAvg([
+                'episodesMediaStats as rating_average' => function ($query) {
+                    $query->where('rating_average', '!=', 0);
+                }
+            ], 'rating_average')
             ->orderBy('number', 'desc')
             ->limit(Anime::MAXIMUM_RELATIONSHIPS_LIMIT)
             ->get()
