@@ -16,7 +16,7 @@
 
             <div class="grid grid-flow-col-dense gap-4 justify-start overflow-x-scroll no-scrollbar">
                 @foreach($this->seasons as $season)
-                    <x-lockups.poster-lockup :season="$season" />
+                    <x-lockups.season-lockup :season="$season" />
                 @endforeach
             </div>
         </section>

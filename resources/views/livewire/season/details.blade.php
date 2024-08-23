@@ -38,7 +38,7 @@
         @if ($this->seasons->count())
             <section class="grid gap-4 sm:grid-cols-2 sm:auto-cols-[unset] lg:grid-cols-3">
                 @foreach($this->seasons as $season)
-                    <x-lockups.poster-lockup :season="$season" :isRow="false" />
+                    <x-lockups.season-lockup :season="$season" :isRow="false" />
                 @endforeach
             </section>
 
