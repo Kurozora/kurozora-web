@@ -25,27 +25,16 @@ class EpisodeResource extends JsonResource
     {
         $resource = EpisodeResourceBasic::make($this->resource)->toArray($request);
 
-        if ($includeInput = $request->input('include')) {
-            // Include relation propagates to nested Resource objects.
-            // To avoid loading unnecessary relations, we set it to
-            // an empty value.
-            $request->merge(['include' => '']);
-            if (is_string($includeInput)) {
-                $includeInput = explode(',', $includeInput);
-            }
-            $includes = array_unique($includeInput);
+        // Include relation propagates to nested Resource objects.
+        // To avoid loading unnecessary relations, we set it to
+        // an empty value.
+        $request->merge(['include' => '']);
 
-            $relationships = [];
-            foreach ($includes as $include) {
-                $relationships = match ($include) {
-                    'show' => array_merge($relationships, $this->getShowRelationship()),
-                    'season' => array_merge($relationships, $this->getSeasonRelationship()),
-                    default => $relationships
-                };
-            }
+        $relationships = [];
+        $relationships = array_merge($relationships, $this->getShowRelationship());
+        $relationships = array_merge($relationships, $this->getSeasonRelationship());
 
-            $resource = array_merge($resource, ['relationships' => $relationships]);
-        }
+        $resource = array_merge($resource, ['relationships' => $relationships]);
 
         return $resource;
     }
