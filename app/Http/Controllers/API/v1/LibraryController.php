@@ -106,7 +106,8 @@ class LibraryController extends Controller
 
         return JSONResult::success([
             'data' => $data,
-            'next' => empty($nextPageURL) ? null : $nextPageURL
+            'next' => empty($nextPageURL) ? null : $nextPageURL,
+            'total' => $model->total()
         ]);
     }
 
