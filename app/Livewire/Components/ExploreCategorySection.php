@@ -102,7 +102,6 @@ class ExploreCategorySection extends Component
         }
 
         $exploreCategory = match ($this->exploreCategory->type) {
-            ExploreCategoryTypes::UpNextEpisodes => $this->exploreCategory->upNextEpisodes(),
             ExploreCategoryTypes::MostPopularShows => $this->exploreCategory->mostPopular(Anime::class, $this->genre ?? $this->theme),
             ExploreCategoryTypes::UpcomingShows => $this->exploreCategory->upcoming(Anime::class, $this->genre ?? $this->theme),
             ExploreCategoryTypes::NewShows => $this->exploreCategory->recentlyAdded(Anime::class, $this->genre ?? $this->theme),
@@ -123,6 +122,7 @@ class ExploreCategorySection extends Component
             ExploreCategoryTypes::RecentlyUpdateGames => $this->exploreCategory->recentlyUpdated(Game::class, $this->genre ?? $this->theme),
             ExploreCategoryTypes::GamesSeason => $this->exploreCategory->currentSeason(Game::class, $this->genre ?? $this->theme),
             ExploreCategoryTypes::Characters => $this->exploreCategory->charactersBornToday(),
+            ExploreCategoryTypes::UpNextEpisodes => $this->exploreCategory->upNextEpisodes(),
             ExploreCategoryTypes::People => $this->exploreCategory->peopleBornToday(),
             ExploreCategoryTypes::ReCAP => $this->exploreCategory->reCAP(),
             default => $this->exploreCategory->load([

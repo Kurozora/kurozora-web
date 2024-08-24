@@ -628,7 +628,7 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
      */
     public function upNextEpisodes(int $limit = 10): ExploreCategory
     {
-        $models = auth()->user()?->upcoming_episodes()
+        $models = auth()->user()?->up_next_episodes()
             ->limit($limit)
             ->get();
 

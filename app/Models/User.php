@@ -580,13 +580,13 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     }
 
     /**
-     * Get the user's upcoming episodes.
+     * Get the user's up-next episodes.
      *
      * @param null|Anime $anime
      *
      * @return Builder
      */
-    function upcoming_episodes(?Anime $anime = null): Builder
+    function up_next_episodes(?Anime $anime = null): Builder
     {
         $subquery = Episode::join(Season::TABLE_NAME, Episode::TABLE_NAME . '.season_id', '=', Season::TABLE_NAME . '.id')
             ->join(Anime::TABLE_NAME, Season::TABLE_NAME . '.anime_id', '=', Anime::TABLE_NAME . '.id')

@@ -6,6 +6,6 @@ Route::prefix('/episodes')
     ->middleware('auth.kurozora')
     ->name('.episodes')
     ->group(function () {
-        Route::get('/up-next', [MeController::class, 'upcomingEpisodes'])
+        Route::get('/up-next', [MeController::class, 'upNextEpisodes'])
             ->name('.up-next');
     });

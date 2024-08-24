@@ -10,7 +10,7 @@ use App\Http\Requests\GetFollowersRequest;
 use App\Http\Requests\GetFollowingRequest;
 use App\Http\Requests\GetLibraryRequest;
 use App\Http\Requests\GetRatingsRequest;
-use App\Http\Requests\GetUpcomingEpisodesRequest;
+use App\Http\Requests\GetUpNextEpisodesRequest;
 use App\Http\Requests\GetUserFavoritesRequest;
 use App\Http\Requests\UpdateProfileRequest;
 use App\Http\Resources\EpisodeResourceIdentity;
@@ -261,15 +261,15 @@ class MeController extends Controller
     /**
      * Returns a list of the user's ratings.
      *
-     * @param GetUpcomingEpisodesRequest $request
+     * @param GetUpNextEpisodesRequest $request
      * @return JsonResponse
      */
-    function upcomingEpisodes(GetUpcomingEpisodesRequest $request): JsonResponse
+    function upNextEpisodes(GetUpNextEpisodesRequest $request): JsonResponse
     {
         $data = $request->validated();
 
         // Get the feed messages
-        $mediaRatings = auth()->user()->upcoming_episodes($data['model_id'] ?? null)
+        $mediaRatings = auth()->user()->up_next_episodes($data['model_id'] ?? null)
             ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
