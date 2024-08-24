@@ -76,7 +76,7 @@ class CharacterTranslation extends Resource
                 ->required(),
 
             Textarea::make('About')
-                ->required(),
+                ->nullable(),
         ];
     }
 

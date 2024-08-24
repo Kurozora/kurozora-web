@@ -55,6 +55,15 @@ class Character extends Resource
     ];
 
     /**
+     * The relationships that should be eager loaded on index queries.
+     *
+     * @var array
+     */
+    public static $with = [
+        'translations',
+    ];
+
+    /**
      * The logical group associated with the resource.
      *
      * @var string
@@ -238,6 +247,8 @@ class Character extends Resource
                     return $astrologicalSign?->key;
                 })
                 ->sortable(),
+
+            HasMany::make('Translations', 'character_translations', CharacterTranslation::class),
 
             HasMany::make('Cast', 'cast', AnimeCast::class),
 
