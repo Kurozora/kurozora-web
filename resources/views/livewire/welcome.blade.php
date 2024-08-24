@@ -442,58 +442,69 @@
 
                 <p class="my-2 text-4xl font-bold leading-tight md:text-6xl">{{ __('Use Kurozora anywhere you go.') }}</p>
 
-                <p class="font-semibold md:text-xl">{{ __('Explore on iPhone. Track on Mac. Share on iPad. Find the Kurozora app on your favorite Apple devices. Or use Kurozora online at') }} <x-link href="{{ route('home') }}">
+                <p class="font-semibold md:text-xl">{{ __('Explore on iPhone. Track on Mac. Share on iPad. Find the Kurozora app on your favorite devices. Or use Kurozora online at') }} <x-link href="{{ route('home') }}">
                 {{ config('app.domain') }}</x-link></p>
             </div>
 
             <div
-                class="flex flex-wrap space-y-4 m-auto mt-16 max-w-2xl sm:space-y-0"
+                class="flex flex-wrap items-end justify-evenly m-auto mt-16 max-w-2xl sm:space-y-0"
                 x-data="{shown: false}"
                 x-intersect.full="shown = true"
             >
-                <div
-                    class="flex flex-col basis-1/2 items-center text-center sm:basis-1/4"
+                <figure
+                    class="flex flex-col basis-1/3 items-center text-center4 sm:basis-auto"
                     x-show="shown"
                     x-transition:enter="transition duration-1000"
                     x-transition:enter-start="opacity-0"
                     x-transition:enter-end="opacity-100"
                 >
-                    @svg('iphone_landscape', 'fill-current', ['width' => '82'])
-                    <p class="font-semibold">iPhone</p>
-                </div>
+                    @svg('iphone_landscape', 'fill-current', ['width' => '64'])
+                    <figcaption class="mb-6 text-sm font-semibold">iPhone & Android</figcaption>
+                </figure>
 
-                <div
-                    class="flex flex-col basis-1/2 items-center text-center sm:basis-1/4"
+                <figure
+                    class="flex flex-col basis-1/3 items-center text-center4 sm:basis-auto"
                     x-show="shown"
                     x-transition:enter="transition duration-1000 delay-100"
                     x-transition:enter-start="opacity-0"
                     x-transition:enter-end="opacity-100"
                 >
-                    @svg('ipad_landscape', 'fill-current', ['width' => '82'])
-                    <p class="font-semibold">iPad</p>
-                </div>
+                    @svg('ipad_landscape', 'fill-current', ['width' => '64'])
+                    <figcaption class="mb-6 text-sm font-semibold">iPad</figcaption>
+                </figure>
 
-                <div
-                    class="flex flex-col basis-1/2 items-center text-center sm:basis-1/4"
+                <figure
+                    class="flex flex-col basis-1/3 items-center text-center4 sm:basis-auto"
                     x-show="shown"
                     x-transition:enter="transition duration-1000 delay-200"
                     x-transition:enter-start="opacity-0"
                     x-transition:enter-end="opacity-100"
                 >
-                    @svg('macbook', 'fill-current', ['width' => '82'])
-                    <p class="font-semibold">Mac</p>
-                </div>
+                    @svg('macbook', 'fill-current', ['width' => '64'])
+                    <figcaption class="mb-6 text-sm font-semibold">Mac & Windows</figcaption>
+                </figure>
 
-                <div
-                    class="flex flex-col basis-1/2 items-center text-center sm:basis-1/4"
+                <figure
+                    class="flex flex-col basis-1/3 items-center text-center4 sm:basis-auto"
+                    x-show="shown"
+                    x-transition:enter="transition duration-1000 delay-200"
+                    x-transition:enter-start="opacity-0"
+                    x-transition:enter-end="opacity-100"
+                >
+                    @svg('vision_pro', 'fill-current', ['width' => '64'])
+                    <figcaption class="mb-6 text-sm font-semibold">Apple Vision Pro</figcaption>
+                </figure>
+
+                <figure
+                    class="flex flex-col basis-1/3 items-center text-center4 sm:basis-auto"
                     x-show="shown"
                     x-transition:enter="transition duration-1000 delay-300"
                     x-transition:enter-start="opacity-0"
                     x-transition:enter-end="opacity-100"
                 >
-                    @svg('browser', 'fill-current', ['width' => '82'])
-                    <p class="font-semibold">Web</p>
-                </div>
+                    @svg('browser', 'fill-current', ['width' => '64'])
+                    <figcaption class="mb-6 text-sm font-semibold">Web & PWA</figcaption>
+                </figure>
             </div>
 
             <div class="flex flex-wrap gap-4 justify-center mt-12 pr-5 pl-5">
@@ -602,10 +613,10 @@
                             x-show="expanded"
                             x-collapse
                         >
-                            <p>{{ __('You can download the app on the') }} <x-link target="_blank" href="{{ config('app.ios.store_url') }}">App Store</x-link> {{ __('on your favorite Apple device. Kurozora works on iPhone, iPad, iPod Touch and Mac.') }}</p>
+                            <p>{{ __('You can download the app on the') }} <x-link target="_blank" href="{{ config('app.ios.store_url') }}">App Store</x-link> {{ __('on your favorite device. Kurozora works on iPhone, iPad, iPod Touch, Mac, and Apple Vision Pro.') }}</p>
                             <br />
                             <br />
-                            <p>{{ __('Kurozora can also be used on all other devices through the website, or as a Progressive Web App (PWA), at') }} <x-link href="{{ route('home') }}">kurozora.app</x-link>.</p>
+                            <p>{{ __('Kurozora can also be used on Android, Windows, Linux and all other devices through the website, or as a Progressive Web App (PWA), at') }} <x-link href="{{ route('home') }}">kurozora.app</x-link>.</p>
                         </div>
                     </div>
                 </li>
