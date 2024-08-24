@@ -40,9 +40,7 @@
                     @break
                     @case(\App\Enums\ExploreCategoryTypes::UpNextEpisodes)
                         <div class="flex flex-nowrap gap-4 pl-4 pr-4 sm:px-6 snap-mandatory snap-x overflow-x-scroll no-scrollbar">
-                            @foreach($this->exploreCategoryItems as $episode)
-                                <x-lockups.episode-lockup :episode="$episode" />
-                            @endforeach
+                            <livewire:components.episode.up-next-section />
                         </div>
                     @break
                     @case(\App\Enums\ExploreCategoryTypes::UpcomingShows)
