@@ -83,6 +83,7 @@ class WatchButton extends Component
         // Notify other components of an update in the anime's data
         $this->dispatch('update-episode');
         $this->dispatch('update-episode')->to('season.watch-button');
+        $this->dispatch('refresh-up-next-section')->to('components.episode.up-next-section');
 
         return null;
     }
