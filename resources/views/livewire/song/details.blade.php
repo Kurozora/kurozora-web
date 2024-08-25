@@ -10,7 +10,7 @@
     <x-slot:meta>
         <meta property="og:title" content="{{ $song->original_title }} — {{ config('app.name') }}" />
         <meta property="og:description" content="{{ __('Listen to :x songs for free. Only on Kurozora, the largest, free online anime, manga, game & music database in the world.', ['x' => $song->original_title]) }}" />
-        <meta property="og:image" content="{{ $song->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? asset('images/static/placeholders/song_banner.webp') }}" />
+        <meta property="og:image" content="{{ $song->getFirstMediaFullUrl(\App\Enums\MediaCollection::Artwork()) ?? asset('images/static/placeholders/song_banner.webp') }}" />
         <meta property="og:type" content="music.song" />
         <meta property="og:url" content="{{ route('embed.songs', $song) }}">
         <meta property="twitter:title" content="{{ $song->original_title }} — {{ config('app.name') }}" />

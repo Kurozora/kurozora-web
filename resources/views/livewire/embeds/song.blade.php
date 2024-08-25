@@ -10,7 +10,7 @@
     <x-slot:meta>
         <meta property="og:title" content="{{ $song->title }} — {{ config('app.name') }}" />
         <meta property="og:description" content="{{ __('app.description') }}" />
-        <meta property="og:image" content="{{ $song->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? asset('images/static/placeholders/song_banner.webp') }}" />
+        <meta property="og:image" content="{{ $song->getFirstMediaFullUrl(\App\Enums\MediaCollection::Artwork()) ?? asset('images/static/placeholders/song_banner.webp') }}" />
         <meta property="og:type" content="music.song" />
         <meta property="og:url" content="{{ route('embed.songs', $song) }}">
         <meta property="twitter:title" content="{{ $song->title }} — {{ config('app.name') }}" />

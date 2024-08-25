@@ -8,9 +8,9 @@
     </x-slot:description>
 
     <x-slot:meta>
-        <meta property="og:title" content="{{ __('Ratings & Reviews') }} | {{ $song->title }} — {{ config('app.name') }}" />
-        <meta property="og:description" content="{{ __('Discover all :x reviews & ratings on Kurozora, the largest, free online anime, manga, game & music database in the world.', ['x' => $song->title]) }}" />
-        <meta property="og:image" content="{{ $song->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? asset('images/static/placeholders/song_banner.webp') }}" />
+        <meta property="og:title" content="{{ __('Ratings & Reviews') }} | {{ $song->original_title }} — {{ config('app.name') }}" />
+        <meta property="og:description" content="{{ __('Discover all :x reviews & ratings on Kurozora, the largest, free online anime, manga, game & music database in the world.', ['x' => $song->original_title]) }}" />
+        <meta property="og:image" content="{{ $song->getFirstMediaFullUrl(\App\Enums\MediaCollection::Artwork()) ?? asset('images/static/placeholders/song_banner.webp') }}" />
         <meta property="og:type" content="music.song" />
         <meta property="og:url" content="{{ route('embed.songs', $song) }}">
         <link rel="canonical" href="{{ route('songs.reviews', $song) }}">
