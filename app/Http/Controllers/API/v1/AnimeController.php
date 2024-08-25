@@ -319,7 +319,7 @@ class AnimeController extends Controller
                 'related' => function ($query) {
                     $query->withoutGlobalScopes([TvRatingScope::class])
                         ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating'])
-                        ->when(auth()->useR(), function ($query, $user) {
+                        ->when(auth()->user(), function ($query, $user) {
                             $query->with(['mediaRatings' => function ($query) use ($user) {
                                 $query->where([
                                     ['user_id', '=', $user->id],

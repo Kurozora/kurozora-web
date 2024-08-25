@@ -28,6 +28,11 @@ class UpNextSection extends Component
     {
     }
 
+    /**
+     * Returns the list of up-next episodes.
+     *
+     * @return Collection|array
+     */
     public function getEpisodesProperty(): Collection|array
     {
         return auth()->user()?->up_next_episodes()

@@ -87,7 +87,7 @@ class Episodes extends Component
     }
 
     /**
-     * Build an 'search index' query for the given resource.
+     * Build a 'search index' query for the given resource.
      *
      * @param EloquentBuilder $query
      * @return EloquentBuilder
