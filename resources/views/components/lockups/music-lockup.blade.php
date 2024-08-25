@@ -21,7 +21,7 @@
                 this.bgColor = '#' + this.song.attributes.artwork.bgColor
                 this.songTitle = this.song.attributes.name
                 this.artistName = this.song.attributes.artistName
-                this.artworkURL = musicManager.getArtworkURL(this.song, 320, 320)
+                this.artworkURL = musicManager.getArtworkURL(this.song, 500, 500)
             }
         }
     }"

@@ -42,7 +42,7 @@
                     window.song = this.song
                     this.bgColor = '#' + this.song.attributes.artwork.bgColor
                     this.songTitle = this.song.attributes.name
-                    this.artworkURL = musicManager.getArtworkURL(song, 320, 320)
+                    this.artworkURL = musicManager.getArtworkURL(song, 500, 500)
                     this.songURL = this.song.attributes.url
                 }
             }
@@ -55,7 +55,7 @@
                     <x-picture class="aspect-square rounded-lg shadow-md overflow-hidden">
                         <img class="w-full h-full object-cover"
                              alt="{{ $song->original_title }} Artwork" title="{{ $song->original_title }}"
-                             width="320" height="320"
+                             width="500" height="500"
                              x-bind:title="songTitle"
                              x-bind:alt="songTitle + ' Artwork'"
                              x-bind:src="artworkURL"

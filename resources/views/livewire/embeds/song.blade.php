@@ -58,9 +58,9 @@
                         x-on:click="await musicManager.playSong(song)"
                     >
                         <img class="object-cover"
-                             alt="{{ $song->title }} Banner" title="{{ $song->title }}"
-                             width="320" height="320"
-                             x-bind:src="musicManager.getArtworkURL(song, 320, 320)"
+                             alt="{{ $song->original_title }} Artwork" title="{{ $song->original_title }}"
+                             width="500" height="500"
+                             x-bind:src="musicManager.getArtworkURL(song, 500, 500)"
                              x-bind:style="{'background-color': '#' + song.attributes.artwork.bgColor}"
                         >
 
