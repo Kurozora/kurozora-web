@@ -19,7 +19,12 @@
         <meta property="og:description" content="{{ __('Look back at the top anime, manga, games and songs that defined your year. Discover your personalized :x Kurozora Re:CAP.', ['x' => $this->year]) }}" />
         <meta property="og:image" content="{{ asset('images/static/banners/kurozora_recap_23.webp') }}" />
         <meta property="og:type" content="website" />
+        <link rel="canonical" href="{{ route('recap.index') }}">
     </x-slot:meta>
+
+    <x-slot:appArgument>
+        recap?year={{  $this->year }}
+    </x-slot:appArgument>
 
     @if ($this->recapYears->count())
         <header
