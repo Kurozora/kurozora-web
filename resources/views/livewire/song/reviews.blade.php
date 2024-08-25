@@ -1,10 +1,10 @@
 <main>
     <x-slot:title>
-        {!! __('Ratings & Reviews') !!} | {!! $song->title !!}
+        {!! __('Ratings & Reviews') !!} | {!! $song->original_title !!}
     </x-slot:title>
 
     <x-slot:description>
-        {{ __('Discover all :x reviews & ratings only on Kurozora, the largest, free online anime, manga, game & music database in the world.', ['x' => $song->title]) }}
+        {{ __('Discover all :x reviews & ratings only on Kurozora, the largest, free online anime, manga, game & music database in the world.', ['x' => $song->original_title]) }}
     </x-slot:description>
 
     <x-slot:meta>
@@ -25,7 +25,7 @@
             <div>
                 <div class="flex gap-1">
                     <div class="flex flex-wrap items-center w-full">
-                        <h1 class="text-2xl font-bold">{{ __(':x’s Ratings & Reviews', ['x' => $song->title]) }}</h1>
+                        <h1 class="text-2xl font-bold">{{ __(':x’s Ratings & Reviews', ['x' => $song->original_title]) }}</h1>
                     </div>
 
                     <div class="flex flex-wrap flex-1 justify-end items-center w-full">

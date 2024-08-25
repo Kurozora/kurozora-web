@@ -1,6 +1,6 @@
 <main>
     <x-slot:title>
-        {!! $song->title !!}
+        {!! $song->original_title !!}
     </x-slot:title>
 
     <x-slot:description>
@@ -8,12 +8,12 @@
     </x-slot:description>
 
     <x-slot:meta>
-        <meta property="og:title" content="{{ $song->title }} — {{ config('app.name') }}" />
+        <meta property="og:title" content="{{ $song->original_title }} — {{ config('app.name') }}" />
         <meta property="og:description" content="{{ __('app.description') }}" />
         <meta property="og:image" content="{{ $song->getFirstMediaFullUrl(\App\Enums\MediaCollection::Artwork()) ?? asset('images/static/placeholders/song_banner.webp') }}" />
         <meta property="og:type" content="music.song" />
         <meta property="og:url" content="{{ route('embed.songs', $song) }}">
-        <meta property="twitter:title" content="{{ $song->title }} — {{ config('app.name') }}" />
+        <meta property="twitter:title" content="{{ $song->original_title }} — {{ config('app.name') }}" />
 
         <link rel="canonical" href="{{ route('embed.songs', $song) }}">
         <link rel="alternate" type="application/json+oembed" href="{{ route('oembed', ['format' => 'json', 'url' => route('songs.details', $song)]) }}">
@@ -76,7 +76,7 @@
                                     class="leading-tight line-clamp-2 font-bold"
                                     x-bind:style="{color: '#' + song.attributes.artwork.textColor1}"
                                     x-text="song.attributes.name"
-                                >{{ $song->title }}</p>
+                                >{{ $song->original_title }}</p>
                                 <p
                                     class="text-sm leading-tight opacity-75 line-clamp-2"
                                     x-bind:style="{color: '#' + song.attributes.artwork.textColor2}"
