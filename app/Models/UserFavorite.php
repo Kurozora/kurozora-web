@@ -49,6 +49,6 @@ class UserFavorite extends MorphPivot
      */
     public function scopeWithType(Builder $query, string $type): Builder
     {
-        return $query->where('favorable_type', '=', $type);
+        return $query->where('favorable_type', '=', app($type)->getMorphClass());
     }
 }

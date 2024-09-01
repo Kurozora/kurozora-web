@@ -55,6 +55,6 @@ class UserReminder extends MorphPivot
      */
     public function scopeWithType(Builder $query, string $type): Builder
     {
-        return $query->where('remindable_type', '=', $type);
+        return $query->where('remindable_type', '=', app($type)->getMorphClass());
     }
 }

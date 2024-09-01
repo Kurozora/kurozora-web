@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
-class UserFollow extends KModel
+use Illuminate\Database\Eloquent\Relations\Pivot;
+
+class UserFollow extends Pivot
 {
     // Table name
     const string TABLE_NAME = 'user_follows';
