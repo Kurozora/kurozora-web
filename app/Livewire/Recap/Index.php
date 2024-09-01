@@ -62,6 +62,20 @@ class Index extends Component
     }
 
     /**
+     * Get the month.
+     *
+     * @return int
+     */
+    public function getMonthProperty(): int
+    {
+        if ($this->year == now()->year) {
+            return now()->subMonth()->month;
+        }
+
+        return 12;
+    }
+
+    /**
      * Sets the property to load the page.
      *
      * @return void
@@ -114,6 +128,7 @@ class Index extends Component
                 }
             ])
             ->where('year', '=', $this->year)
+            ->where('month', '=', $this->month)
             ->get();
 
         $this->loadingScreenEnabled = false;

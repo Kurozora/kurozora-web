@@ -23,7 +23,7 @@
     </x-slot:meta>
 
     <x-slot:appArgument>
-        recap?year={{  $this->year }}
+        recap?year={{  $this->year }}&month={{  $this->month }}
     </x-slot:appArgument>
 
     @if ($this->recapYears->count())
@@ -144,10 +144,10 @@
             >
                 <div class="flex flex-col items-center mt-12">
                     <h2 class="max-w-sm text-2xl text-center font-semibold md:text-4xl">
-                        @if ($year == now()->year)
+                        @if ($this->year == now()->year)
                             {{ __('Series that defined your arc in :x', ['x' => now()->subMonth()->monthName]) }}
                         @else
-                            {{ __('Series that defined your arc in :x', ['x' => $year]) }}
+                            {{ __('Series that defined your arc in :x', ['x' => $this->year]) }}
                         @endif
                     </h2>
                 </div>
