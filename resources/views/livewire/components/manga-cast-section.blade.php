@@ -14,10 +14,8 @@
                 </x-slot:action>
             </x-section-nav>
 
-            <div class="grid grid-flow-col-dense gap-4 justify-start overflow-x-scroll no-scrollbar">
-                @foreach($this->mangaCast as $cast)
-                    <x-lockups.cast-lockup :cast="$cast" />
-                @endforeach
+            <div class="flex flex-nowrap gap-4 snap-mandatory snap-x overflow-x-scroll no-scrollbar">
+                <x-rows.character-lockup :manga-casts="$this->mangaCast" />
             </div>
         </section>
     @elseif (!$readyToLoad)
