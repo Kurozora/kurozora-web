@@ -111,7 +111,7 @@ trait Tracker
             $this->unsetRelation('library');
         }
 
-        return (bool) $this->trackedModels(get_class($model))
+        return (bool) $this->trackedModels($model::class)
             ->detach($model->getKey());
     }
 

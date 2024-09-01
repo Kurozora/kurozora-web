@@ -15,7 +15,8 @@ trait Favoriter
      *
      * @return HasMany
      */
-    public function favorites(): HasMany {
+    public function favorites(): HasMany
+    {
         return $this->hasMany(UserFavorite::class);
     }
 
@@ -102,7 +103,7 @@ trait Favoriter
             $this->unsetRelation('favorites');
         }
 
-        return (bool) $this->favoritedModels(get_class($model))
+        return (bool) $this->favoritedModels($model::class)
             ->detach($model->getKey());
     }
 

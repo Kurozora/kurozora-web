@@ -15,7 +15,8 @@ trait Reminder
      *
      * @return HasMany
      */
-    public function reminders(): HasMany {
+    public function reminders(): HasMany
+    {
         return $this->hasMany(UserReminder::class);
     }
 
@@ -102,7 +103,7 @@ trait Reminder
             $this->unsetRelation('reminders');
         }
 
-        return (bool) $this->remindedModels(get_class($model))
+        return (bool) $this->remindedModels($model::class)
             ->detach($model->getKey());
     }
 
