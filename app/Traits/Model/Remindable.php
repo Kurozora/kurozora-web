@@ -74,9 +74,9 @@ trait Remindable
         }
 
         return (
-            $this->relationLoaded('reminders')
-                ? $this->reminders
-                : $this->reminders()
+            $this->relationLoaded('reminderers')
+                ? $this->reminderers
+                : $this->reminderers()
         )
             ->where('user_id', '=', $user->id)
             ->exists();

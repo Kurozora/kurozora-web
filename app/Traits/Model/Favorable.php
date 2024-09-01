@@ -66,10 +66,10 @@ trait Favorable
      */
     public function isFavoritedBy(User $user): bool
     {
-        $favoritersLoaded = $this->relationLoaded('favoriters');
+        $favoritesLoaded = $this->relationLoaded('favorites');
 
-        if ($favoritersLoaded) {
-            return $this->favoriters->contains($user);
+        if ($favoritesLoaded) {
+            return $this->favorites->contains($user);
         }
 
         return (

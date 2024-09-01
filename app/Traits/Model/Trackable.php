@@ -66,10 +66,10 @@ trait Trackable
      */
     public function isTrackedBy(User $user): bool
     {
-        $trackersLoaded = $this->relationLoaded('trackers');
+        $libraryLoaded = $this->relationLoaded('library');
 
-        if ($trackersLoaded) {
-            return $this->trackers->contains($user);
+        if ($libraryLoaded) {
+            return $this->library->contains($user);
         }
 
         return (
