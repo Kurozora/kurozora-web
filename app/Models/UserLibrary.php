@@ -6,9 +6,10 @@ use App\Enums\UserLibraryStatus;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 use Laravel\Scout\Searchable;
 
-class UserLibrary extends KModel
+class UserLibrary extends Pivot
 {
     use Searchable;
 
