@@ -46,7 +46,7 @@ Schedule::command('fix:anime_details')
 /**********************************************/
 // Scrape upcoming manga every six hours
 Schedule::command('fix:manga_details')
-    ->everySixHours()
+    ->everySixHours(59)
     ->name('Fix manga details')
     ->onOneServer();
 
@@ -79,21 +79,21 @@ Schedule::command('calculate:rankings', [
 Schedule::command('calculate:views', [
     'all'
 ])
-    ->daily()
+    ->dailyAt('1:00')
     ->name('Calculate views')
     ->onOneServer();
 
 /**********************************************/
 // Calculate episode stats every week
 Schedule::command('calculate:episode_stats')
-    ->daily()
+    ->dailyAt('2:00')
     ->name('Calculate episode stats')
     ->onOneServer();
 
 /**********************************************/
 // Prune all models that match their respective criteria every day
 Schedule::command('model:prune')
-    ->daily()
+    ->dailyAt('3:00')
     ->name('Prune models')
     ->onOneServer();
 
@@ -102,14 +102,14 @@ Schedule::command('model:prune')
 Schedule::call(function() {
     LoginAttempt::truncate();
 })
-    ->daily()
+    ->dailyAt('3:30')
     ->name('Clear login attempts')
     ->onOneServer();
 
 /**********************************************/
 // Delete all activity logs every week
 Schedule::command('activitylog:clean')
-    ->weekly()
+    ->weeklyOn(0, '3:35')
     ->name('Clean activity log')
     ->onOneServer();
 
@@ -118,7 +118,7 @@ Schedule::command('activitylog:clean')
 Schedule::command('calculate:ratings', [
     Anime::class
 ])
-    ->weekly()
+    ->weeklyOn(0, '4:00')
     ->name('Calculate anime rating')
     ->onOneServer();
 
@@ -127,7 +127,7 @@ Schedule::command('calculate:ratings', [
 Schedule::command('calculate:ratings', [
     Manga::class
 ])
-    ->weekly()
+    ->weeklyOn(0, '4:30')
     ->name('Calculate manga rating')
     ->onOneServer();
 
@@ -136,7 +136,7 @@ Schedule::command('calculate:ratings', [
 Schedule::command('calculate:ratings', [
     Game::class
 ])
-    ->weekly()
+    ->weeklyOn(0, '5:00')
     ->name('Calculate game rating')
     ->onOneServer();
 
@@ -145,14 +145,14 @@ Schedule::command('calculate:ratings', [
 Schedule::command('calculate:ratings', [
     Episode::class
 ])
-    ->weekly()
+    ->weeklyOn(0, '5:30')
     ->name('Calculate episode rating')
     ->onOneServer();
 
 /**********************************************/
 // Calculate global ranking every week
 Schedule::command('calculate:rankings -g')
-    ->weekly()
+    ->weeklyOn(0, '6:00')
     ->name('Calculate global rankings')
     ->onOneServer();
 
@@ -163,7 +163,7 @@ Schedule::command('generate:recaps', [
     now()->year,
     now()->subMonth()->month
 ])
-    ->cron('0 0 1 2,3,4,5,6,7,8,9,10,11 *')
+    ->cron('0 9 1 2,3,4,5,6,7,8,9,10,11 *')
     ->name('Generate monthly recaps')
     ->onOneServer();
 
@@ -173,7 +173,7 @@ Schedule::command('generate:recaps', [
     'all',
     now()->year
 ])
-    ->yearlyOn(12)
+    ->yearlyOn(12, 1, '9:00')
     ->fridays()
     ->name('Generate yearly recaps')
     ->onOneServer();
@@ -184,6 +184,6 @@ Schedule::command('generate:recaps', [
     'all',
     now()->subYear()->year
 ])
-    ->yearly()
+    ->yearlyOn(1, 1, '9:00')
     ->name('Generate previous year’s recaps')
     ->onOneServer();
