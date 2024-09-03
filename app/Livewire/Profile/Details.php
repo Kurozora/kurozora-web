@@ -92,7 +92,7 @@ class Details extends Component
             ->loadCount([
                 'badges',
                 'followers',
-                'following',
+                'followedModels as following_count',
                 'mediaRatings'
             ]);
 

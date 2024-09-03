@@ -670,7 +670,7 @@ class AnimeController extends Controller
                                 ->limit(1);
                         },
                     ])
-                        ->withCount(['followers', 'following', 'mediaRatings']);
+                        ->withCount(['followers', 'followedModels as following_count', 'mediaRatings']);
                 },
             ])
             ->where('description', '!=', null)

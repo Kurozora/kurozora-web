@@ -201,7 +201,7 @@ class SignInWithAppleController extends Controller
                             ->limit(1);
                     },
                 ])
-                ->withCount(['followers', 'following', 'mediaRatings'])
+                ->withCount(['followers', 'followedModels as following_count', 'mediaRatings'])
                 ->first();
         } else {
             try {
@@ -221,7 +221,7 @@ class SignInWithAppleController extends Controller
                                 ->limit(1);
                         },
                     ])
-                    ->withCount(['followers', 'following', 'mediaRatings'])
+                    ->withCount(['followers', 'followedModels as following_count', 'mediaRatings'])
                     ->first();
             } catch (Exception $exception) {
                 try {
@@ -241,7 +241,7 @@ class SignInWithAppleController extends Controller
                                     ->limit(1);
                             },
                         ])
-                        ->withCount(['followers', 'following', 'mediaRatings'])
+                        ->withCount(['followers', 'followedModels as following_count', 'mediaRatings'])
                         ->first();
                 } catch (Exception $exception) {
                     return null;

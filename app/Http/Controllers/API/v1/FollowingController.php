@@ -24,16 +24,14 @@ class FollowingController extends Controller
     {
         $authUser = auth()->user();
 
-        $isAlreadyFollowing = $user->followers()
-            ->where('user_id', '=', $authUser->id)
-            ->exists();
+        $isAlreadyFollowing = $authUser->hasFollowed($user);
 
         if ($isAlreadyFollowing) {
             // Delete follow
-            $user->followers()->detach($authUser);
+            $authUser->follow($user);
         } else {
             // Follow the user
-            $user->followers()->attach($authUser);
+            $authUser->unfollow($user);
 
             // Send notification
             $user->notify(new NewFollower($authUser));
@@ -84,7 +82,7 @@ class FollowingController extends Controller
         $data = $request->validated();
 
         // Get the following
-        $following = $user->following()
+        $following = $user->followedModels()
             ->orderBy(UserFollow::TABLE_NAME . '.created_at', 'desc')
             ->cursorPaginate($data['limit'] ?? 25);
 

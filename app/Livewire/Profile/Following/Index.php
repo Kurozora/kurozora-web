@@ -71,7 +71,7 @@ class Index extends Component
         // as Livewire is concerned, `fnc` is also empty. So,
         // `fnc` doesn't show up in the query params in the
         // browser.
-        return $this->user->following()
+        return $this->user->followedModels()
             ->with(['media'])
             ->withCount(['followers'])
             ->when(auth()->user(), function ($query, $user) {

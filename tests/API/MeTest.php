@@ -272,7 +272,7 @@ class MeTest extends TestCase
         /** @var User $anotherUser */
         $anotherUser = User::factory()->create();
 
-        $this->user->following()->attach($anotherUser);
+        $this->user->followedModels()->attach($anotherUser);
 
         // Request the list of following
         $response = $this->auth()->json('GET', 'v1/me/following');

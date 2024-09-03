@@ -132,7 +132,7 @@ class FeedController extends Controller
                     ->limit(1);
             },
         ])
-            ->withCount(['followers', 'following', 'mediaRatings'])
+            ->withCount(['followers', 'followedModels as following_count', 'mediaRatings'])
             ->when(auth()->check(), function ($query) {
                 $query->withExists(['followers as isFollowed' => function ($query) {
                     $query->where('user_id', '=', auth()->user()->id);
@@ -154,7 +154,7 @@ class FeedController extends Controller
         $user = auth()->user();
 
         // Get the user IDs of all the users that should appear on the user's personal feed.
-        $userIDs = $user->following()
+        $userIDs = $user->followedModels()
             ->pluck(User::TABLE_NAME . '.id')
             ->add($user->id);
 

@@ -183,7 +183,7 @@ class EpisodeController extends Controller
             ->with([
                 'user' => function ($query) {
                     $query->with(['media'])
-                        ->withCount(['followers', 'following', 'mediaRatings']);
+                        ->withCount(['followers', 'followedModels as following_count', 'mediaRatings']);
                 }
             ])
             ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);

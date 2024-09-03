@@ -14,6 +14,8 @@ use App\Parsers\MentionParser;
 use App\Traits\HeartActionTrait;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\Favoriter;
+use App\Traits\Model\Followable;
+use App\Traits\Model\Follower;
 use App\Traits\Model\HasSlug;
 use App\Traits\Model\HasViews;
 use App\Traits\Model\Impersonatable;
@@ -63,6 +65,8 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
 {
     use Authorizable,
         Favoriter,
+        Follower,
+        Followable,
         HasApiTokens,
         HasFactory,
         HasJsonRelationships,
@@ -683,28 +687,6 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         }
 
         return $sessionAttribute;
-    }
-
-    /**
-     * Get the user's followers
-     *
-     * @return BelongsToMany
-     */
-    public function followers(): BelongsToMany
-    {
-        return $this->belongsToMany(User::class, UserFollow::class, 'following_user_id', 'user_id')
-            ->withTimestamps();
-    }
-
-    /**
-     * Get the user's following users.
-     *
-     * @return BelongsToMany
-     */
-    public function following(): BelongsToMany
-    {
-        return $this->belongsToMany(User::class, UserFollow::class, 'user_id', 'following_user_id')
-            ->withTimestamps();
     }
 
     /**

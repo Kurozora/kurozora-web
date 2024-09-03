@@ -54,7 +54,7 @@ class UserController extends Controller
                     ->limit(1);
             },
         ])
-            ->loadCount(['followers', 'following', 'mediaRatings']);
+            ->loadCount(['followers', 'followedModels as following_count', 'mediaRatings']);
 
         // Show profile response
         return JSONResult::success([
@@ -188,7 +188,7 @@ class UserController extends Controller
                     ->limit(1);
             },
         ])
-            ->withCount(['followers', 'following', 'mediaRatings'])
+            ->withCount(['followers', 'followedModels as following_count', 'mediaRatings'])
             ->when(auth()->check(), function ($query) {
                 $query->withExists(['followers as isFollowed' => function ($query) {
                     $query->where('user_id', '=', auth()->user()->id);
