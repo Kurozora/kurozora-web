@@ -43,7 +43,7 @@
                                 {{
                                    $isFollowed ?
                                    __('Followed by you.') :
-                                   __('Followed by one user.')
+                                   __('Followed by one fan.')
                                 }}
                             @endif
                         @elseif ($followersCount >= 2 && $followersCount <= 999)
@@ -52,8 +52,8 @@
                             @else
                                 {{
                                     $isFollowed ?
-                                    __('Followed by you and :x users.', ['x' => $followersCount - 1]) :
-                                    __('Followed by :x users.', ['x' => $followersCount])
+                                    trans_choice('{1}Followed by you and one fan.|[2,*] Followed by you and :x fans.', $followersCount - 1, ['x' => $followersCount - 1]) :
+                                    __('Followed by :x fans.', ['x' => $followersCount])
                                 }}
                             @endif
                         @else
@@ -62,8 +62,8 @@
                             @else
                                 {{
                                     $isFollowed ?
-                                    __('Followed by you and :x users.', ['x' => number_shorten($followersCount - 1)]) :
-                                    __('Followed by :x users.', ['x' => number_shorten($followersCount)])
+                                    trans_choice('{1}Followed by you and one fan.|[2,*] Followed by you and :x fans.',$followersCount - 1, ['x' => number_shorten($followersCount - 1)]) :
+                                    __('Followed by :x fans.', ['x' => number_shorten($followersCount)])
                                 }}
                             @endif
                         @endif
