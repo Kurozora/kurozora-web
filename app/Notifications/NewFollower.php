@@ -34,7 +34,8 @@ class NewFollower extends Notification implements ShouldQueue
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function via(mixed $notifiable): array
@@ -45,15 +46,16 @@ class NewFollower extends Notification implements ShouldQueue
     /**
      * Get the database representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function toDatabase(mixed $notifiable): array
     {
         return [
-            'userID'            => (string) $this->follower->id,
-            'username'          => $this->follower->username,
-            'profileImageURL'   => $this->follower->getFirstMediaFullUrl(MediaCollection::Profile())
+            'userID' => (string) $this->follower->id,
+            'username' => $this->follower->username,
+            'profileImageURL' => $this->follower->getFirstMediaFullUrl(MediaCollection::Profile())
         ];
     }
 
@@ -61,13 +63,14 @@ class NewFollower extends Notification implements ShouldQueue
      * Get the APN representation of the notification.
      *
      * @param User $notifiable
+     *
      * @return ApnMessage
      */
     public function toApn(User $notifiable): ApnMessage
     {
         return ApnMessage::create()
-            ->title('New follower')
+            ->title(__('New follower'))
             ->badge($notifiable->unreadNotifications()->count())
-            ->body($this->follower->username . ' followed you.');
+            ->body(__(':x followed you.', ['x' => $this->follower->username]));
     }
 }
