@@ -4,17 +4,20 @@ namespace App\Livewire\Profile\Ratings;
 
 use App\Models\Anime;
 use App\Models\Character;
+use App\Models\Episode;
 use App\Models\Game;
 use App\Models\Manga;
 use App\Models\MediaSong;
 use App\Models\Person;
+use App\Models\Studio;
 use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
-use Illuminate\Pagination\CursorPaginator;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -30,27 +33,11 @@ class Index extends Component
     public User $user;
 
     /**
-     * The current page query parameter's alias.
+     * Whether the component is ready to load.
      *
-     * @var string $rgc
+     * @var bool $readyToLoad
      */
-    public string $rgc = '';
-
-    /**
-     * The current page query parameter.
-     *
-     * @var string $cursor
-     */
-    public string $cursor = '';
-
-    /**
-     * The query strings of the component.
-     *
-     * @var string[] $queryString
-     */
-    protected $queryString = [
-        'cursor' => ['as' => 'rgc']
-    ];
+    public bool $readyToLoad = false;
 
     /**
      * Prepare the component.
@@ -65,12 +52,26 @@ class Index extends Component
     }
 
     /**
+     * Sets the property to load the page.
+     *
+     * @return void
+     */
+    public function loadPage(): void
+    {
+        $this->readyToLoad = true;
+    }
+
+    /**
      * The user's media ratings list.
      *
-     * @return CursorPaginator
+     * @return Collection|LengthAwarePaginator
      */
-    public function getMediaRatingsProperty(): CursorPaginator
+    public function getMediaRatingsProperty(): Collection|LengthAwarePaginator
     {
+        if (!$this->readyToLoad) {
+            return collect();
+        }
+
         // We're aliasing `cursorName` as `rgc`, and setting
         // query rule to never show `cursor` param when it's
         // empty. Since `cursor` is also aliased as `rgc` in
@@ -88,6 +89,9 @@ class Index extends Component
                         Character::class => function (Builder $query) {
                             $query->with(['media']);
                         },
+                        Episode::class => function (Builder $query) {
+                            $query->with(['media', 'translations']);
+                        },
                         Game::class => function (Builder $query) {
                             $query->with(['media', 'translations']);
                         },
@@ -95,6 +99,9 @@ class Index extends Component
                             $query->with(['media', 'translations']);
                         },
                         Person::class => function (Builder $query) {
+                            $query->with(['media']);
+                        },
+                        Studio::class => function (Builder $query) {
                             $query->with(['media']);
                         },
                         MediaSong::class => function (Builder $query) {
@@ -108,7 +115,7 @@ class Index extends Component
                 }
             ])
             ->orderBy('created_at', 'desc')
-            ->cursorPaginate(25, ['*'], 'rgc');
+            ->paginate(25);
     }
 
     /**

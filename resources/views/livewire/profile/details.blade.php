@@ -70,7 +70,7 @@
                     <x-slot:description>{{ number_shorten($counts['followers_count'], 0, true) }}</x-slot:description>
                 </x-profile-information-badge>
 
-                <x-profile-information-badge wire:click="togglePopupFor('ratingsAndReviews')">
+                <x-profile-information-badge href="{{ route('profile.ratings.index', $user) }}" wire:navigate>
                     <x-slot:title>{{ __('Reviews') }}</x-slot:title>
                     <x-slot:description>{{ number_shorten($counts['media_ratings_count'], 0, true) }}</x-slot:description>
                 </x-profile-information-badge>
@@ -131,15 +131,6 @@
             </x-slot:title>
 
             <livewire:profile.following.index :user="$user" />
-        </x-page-modal>
-        @break
-    @case ('ratingsAndReviews')
-        <x-page-modal maxWidth="sm" model="showPopup">
-            <x-slot:title>
-                {{ __('Ratings & Reviews') }}
-            </x-slot:title>
-
-            <livewire:profile.ratings.index :user="$user" />
         </x-page-modal>
         @break
     @endswitch

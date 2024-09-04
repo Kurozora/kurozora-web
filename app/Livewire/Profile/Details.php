@@ -64,7 +64,6 @@ class Details extends Component
         'achievements',
         'following',
         'followers',
-        'reviews',
     ];
 
     /**

@@ -13,6 +13,7 @@ use App\Livewire\Profile\Library\Game\Favorites as FavoriteGame;
 use App\Livewire\Profile\Library\Game\Index as GameLibrary;
 use App\Livewire\Profile\Library\Manga\Favorites as FavoriteManga;
 use App\Livewire\Profile\Library\Manga\Index as MangaLibrary;
+use App\Livewire\Profile\Ratings\Index as RatingsIndex;
 
 Route::prefix('/profile')
     ->name('profile')
@@ -65,6 +66,13 @@ Route::prefix('/profile')
 
 //                Route::get('/reminders', MangaReminders::class)
 //                    ->name('.reminders');
+            });
+
+        Route::prefix('/{user}/ratings')
+            ->name('.ratings')
+            ->group(function () {
+                Route::get('/', RatingsIndex::class)
+                    ->name('.index');
             });
     });
 
