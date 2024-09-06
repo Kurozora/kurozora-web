@@ -7,6 +7,7 @@ use App\Http\Controllers\Web\Profile\MangaLibraryController;
 use App\Http\Controllers\Web\UserProfileController;
 use App\Livewire\Profile\Details;
 use App\Livewire\Profile\Followers\Index as FollowersIndex;
+use App\Livewire\Profile\Following\Index as FollowingIndex;
 use App\Livewire\Profile\Library\Anime\Favorites as FavoriteAnime;
 use App\Livewire\Profile\Library\Anime\Index as AnimeLibrary;
 use App\Livewire\Profile\Library\Anime\Reminders as AnimeReminders;
@@ -76,6 +77,9 @@ Route::prefix('/profile')
                     ->name('.index');
                 Route::get('/followers', FollowersIndex::class)
                     ->name('.followers');
+
+                Route::get('/following', FollowingIndex::class)
+                    ->name('.following');
             });
     });
 

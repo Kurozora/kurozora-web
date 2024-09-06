@@ -7,7 +7,8 @@ use App\Models\UserFollow;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Pagination\CursorPaginator;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -23,27 +24,11 @@ class Index extends Component
     public User $user;
 
     /**
-     * The current page query parameter's alias.
+     * Whether the component is ready to load.
      *
-     * @var string $fnc
+     * @var bool $readyToLoad
      */
-    public string $fnc = '';
-
-    /**
-     * The current page query parameter.
-     *
-     * @var string $cursor
-     */
-    public string $cursor = '';
-
-    /**
-     * The query strings of the component.
-     *
-     * @var string[] $queryString
-     */
-    protected $queryString = [
-        'cursor' => ['as' => 'fnc']
-    ];
+    public bool $readyToLoad = false;
 
     /**
      * Prepare the component.
@@ -58,19 +43,26 @@ class Index extends Component
     }
 
     /**
+     * Sets the property to load the page.
+     *
+     * @return void
+     */
+    public function loadPage(): void
+    {
+        $this->readyToLoad = true;
+    }
+
+    /**
      * The user's following list.
      *
-     * @return CursorPaginator
+     * @return Collection|LengthAwarePaginator
      */
-    public function getFollowingsProperty(): CursorPaginator
+    public function getFollowingProperty(): Collection|LengthAwarePaginator
     {
-        // We're aliasing `cursorName` as `fnc`, and setting
-        // query rule to never show `cursor` param when it's
-        // empty. Since `cursor` is also aliased as `fnc` in
-        // query rules, and we always keep it empty, as far
-        // as Livewire is concerned, `fnc` is also empty. So,
-        // `fnc` doesn't show up in the query params in the
-        // browser.
+        if (!$this->readyToLoad) {
+            return collect();
+        }
+
         return $this->user->followedModels()
             ->with(['media'])
             ->withCount(['followers'])
@@ -80,7 +72,7 @@ class Index extends Component
                 }]);
             })
             ->orderBy(UserFollow::TABLE_NAME . '.created_at', 'desc')
-            ->cursorPaginate(25, ['*'], 'fnc');
+            ->paginate(25);
     }
 
     /**

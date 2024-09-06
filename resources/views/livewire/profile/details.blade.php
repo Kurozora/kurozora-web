@@ -60,12 +60,12 @@
                     <x-slot:description>{{ number_shorten($counts['achievements_count'], 0, true) }}</x-slot:description>
                 </x-profile-information-badge>
 
-                <x-profile-information-badge wire:click="togglePopupFor('following')">
+                <x-profile-information-badge href="{{ route('profile.following', $user) }}" wire:navigate>
                     <x-slot:title>{{ __('Following') }}</x-slot:title>
                     <x-slot:description>{{ number_shorten($counts['following_count'], 0, true) }}</x-slot:description>
                 </x-profile-information-badge>
 
-                <x-profile-information-badge wire:click="togglePopupFor('followers')">
+                <x-profile-information-badge href="{{ route('profile.followers', $user) }}" wire:navigate>
                     <x-slot:title>{{ __('Followers') }}</x-slot:title>
                     <x-slot:description>{{ number_shorten($counts['followers_count'], 0, true) }}</x-slot:description>
                 </x-profile-information-badge>
@@ -113,24 +113,6 @@
             </x-slot:title>
 
             <livewire:profile.badges :user="$user" />
-        </x-page-modal>
-        @break
-    @case ('followers')
-        <x-page-modal maxWidth="sm" model="showPopup">
-            <x-slot:title>
-                {{ __('Followers') }}
-            </x-slot:title>
-
-            <livewire:profile.followers.index :user="$user" />
-        </x-page-modal>
-        @break
-    @case ('following')
-        <x-page-modal maxWidth="sm" model="showPopup">
-            <x-slot:title>
-                {{ __('Following') }}
-            </x-slot:title>
-
-            <livewire:profile.following.index :user="$user" />
         </x-page-modal>
         @break
     @endswitch
