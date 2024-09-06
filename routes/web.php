@@ -10,7 +10,7 @@ use App\Livewire\Welcome;
 Route::get('chat', function () {
     return view('chat');
 })
-->name('chat');
+    ->name('chat');
 
 Route::get('/', Home::class)
     ->name('home');
@@ -34,7 +34,7 @@ Route::prefix('.well-known')
 Route::get('schedule', ScheduleIndex::class)
     ->name('schedule');
 
-Route::get('/settings', function() {
+Route::get('/settings', function () {
     return to_route('profile.settings');
 })
     ->name('settings');

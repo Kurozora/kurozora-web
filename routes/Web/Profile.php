@@ -28,58 +28,58 @@ Route::prefix('/profile')
             ->middleware(['auth', 'verified'])
             ->name('.settings');
 
-        Route::get('/{user}', Details::class)
-            ->name('.details');
-
-        Route::prefix('/{user}/anime')
-            ->name('.anime')
+        Route::prefix('/{user}')
             ->group(function () {
-                Route::get('/', AnimeLibrary::class)
-                    ->name('.library');
+                Route::get('/', Details::class)
+                    ->name('.details');
 
-                Route::get('/favorites', FavoriteAnime::class)
-                    ->name('.favorites');
+                Route::prefix('/anime')
+                    ->name('.anime')
+                    ->group(function () {
+                        Route::get('/', AnimeLibrary::class)
+                            ->name('.library');
 
-                Route::get('/reminders', AnimeReminders::class)
-                    ->name('.reminders');
-            });
+                        Route::get('/favorites', FavoriteAnime::class)
+                            ->name('.favorites');
 
-        Route::prefix('/{user}/games')
-            ->name('.games')
-            ->group(function () {
-                Route::get('/', GameLibrary::class)
-                    ->name('.library');
+                        Route::get('/reminders', AnimeReminders::class)
+                            ->name('.reminders');
+                    });
 
-                Route::get('/favorites', FavoriteGame::class)
-                    ->name('.favorites');
+                Route::prefix('/games')
+                    ->name('.games')
+                    ->group(function () {
+                        Route::get('/', GameLibrary::class)
+                            ->name('.library');
 
-//                Route::get('/reminders', GameReminders::class)
-//                    ->name('.reminders');
-            });
+                        Route::get('/favorites', FavoriteGame::class)
+                            ->name('.favorites');
 
-        Route::prefix('/{user}/manga')
-            ->name('.manga')
-            ->group(function () {
-                Route::get('/', MangaLibrary::class)
-                    ->name('.library');
+//                        Route::get('/reminders', GameReminders::class)
+//                            ->name('.reminders');
+                    });
 
-                Route::get('/favorites', FavoriteManga::class)
-                    ->name('.favorites');
+                Route::prefix('/manga')
+                    ->name('.manga')
+                    ->group(function () {
+                        Route::get('/', MangaLibrary::class)
+                            ->name('.library');
 
-//                Route::get('/reminders', MangaReminders::class)
-//                    ->name('.reminders');
-            });
+                        Route::get('/favorites', FavoriteManga::class)
+                            ->name('.favorites');
 
-        Route::prefix('/{user}/ratings')
-            ->name('.ratings')
-            ->group(function () {
-                Route::get('/', RatingsIndex::class)
-                    ->name('.index');
+//                        Route::get('/reminders', MangaReminders::class)
+//                            ->name('.reminders');
+                    });
+
                 Route::get('/followers', FollowersIndex::class)
                     ->name('.followers');
 
                 Route::get('/following', FollowingIndex::class)
                     ->name('.following');
+
+                Route::get('/ratings', RatingsIndex::class)
+                    ->name('.ratings');
             });
     });
 

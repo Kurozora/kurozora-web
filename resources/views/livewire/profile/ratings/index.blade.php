@@ -12,7 +12,7 @@
         <meta property="og:description" content="{{ __('Browse :x’s ratings and reviews on Kurozora. Join the Kurozora community and create your anime, manga and game list. Discover songs, episodes and read reviews and news!', ['x' => $user->username]) }}" />
         <meta property="og:image" content="{{ $user->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) }}" />
         <meta property="og:type" content="website" />
-        <link rel="canonical" href="{{ route('profile.ratings.index', $user) }}">
+        <link rel="canonical" href="{{ route('profile.ratings', $user) }}">
     </x-slot:meta>
 
     <x-slot:appArgument>
@@ -52,7 +52,7 @@
         @else
             <section class="flex flex-col items-center mt-4 text-center">
                 <x-picture>
-                    <img class="w-full max-w-sm" src="{{ asset('images/static/placeholders/empty_anime_library.webp') }}" alt="Empty Anime Index" title="Empty Anime Index">
+                    <img class="w-full max-w-sm" src="{{ asset('images/static/placeholders/empty_anime_library.webp') }}" alt="No reviews" title="No reviews">
                 </x-picture>
 
                 <p class="font-bold">{{ __('No Reviews') }}</p>

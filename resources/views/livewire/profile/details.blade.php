@@ -70,7 +70,7 @@
                     <x-slot:description>{{ number_shorten($counts['followers_count'], 0, true) }}</x-slot:description>
                 </x-profile-information-badge>
 
-                <x-profile-information-badge href="{{ route('profile.ratings.index', $user) }}" wire:navigate>
+                <x-profile-information-badge href="{{ route('profile.ratings', $user) }}" wire:navigate>
                     <x-slot:title>{{ __('Reviews') }}</x-slot:title>
                     <x-slot:description>{{ number_shorten($counts['media_ratings_count'], 0, true) }}</x-slot:description>
                 </x-profile-information-badge>
