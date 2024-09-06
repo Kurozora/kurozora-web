@@ -26,7 +26,11 @@
                         <p class="text-sm font-semibold">#{{ $rank }}</p>
                     @endif
 
-                    <p class="text-xs line-clamp-2">{{ __('S:x · E:y', ['x' => $episode->season->number, 'y' => $episode->number_total]) }}</p>
+                    @if ($episode->number != $episode->number_total)
+                        <p class="text-xs line-clamp-2" aria-label="{{ __('Season :x, episode :y. (Episode :z in total)', ['x' => $episode->season->number, 'y' => $episode->number, 'z' => $episode->number_total]) }}">{{ __('S:x · E:y (E:z)', ['x' => $episode->season->number, 'y' => $episode->number, 'z' => $episode->number_total]) }}</p>
+                    @else
+                        <p class="text-xs line-clamp-2" aria-label="{{ __('Season :x, episode :y.', ['x' => $episode->season->number, 'y' => $episode->number]) }}">{{ __('S:x · E:y', ['x' => $episode->season->number, 'y' => $episode->number]) }}</p>
+                    @endif
 
                     <p class="line-clamp-2">{{ $episode->title }}</p>
                 </a>
