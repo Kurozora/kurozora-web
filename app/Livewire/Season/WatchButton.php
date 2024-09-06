@@ -6,8 +6,8 @@ use App\Models\Season;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
 use Livewire\Component;
+use Livewire\Features\SupportRedirects\Redirector;
 
 class WatchButton extends Component
 {
@@ -56,9 +56,9 @@ class WatchButton extends Component
     /**
      * Marks the season as (un)watched.
      *
-     * @return RedirectResponse|null
+     * @return null|Redirector
      */
-    public function updateWatchStatus(): ?RedirectResponse
+    public function updateWatchStatus(): ?Redirector
     {
         $user = auth()->user();
 
