@@ -16,10 +16,11 @@ return new class extends Migration
     {
         Schema::create(Badge::TABLE_NAME, function (Blueprint $table) {
             $table->id();
-            $table->string('name')->nullable()->default(null);
+            $table->string('name');
             $table->string('description')->nullable()->default(null);
             $table->string('text_color', 10)->default('#000000');
             $table->string('background_color', 10)->default('#FFFFFF');
+            $table->boolean('is_unlockable')->default('false');
             $table->timestamps();
             $table->softDeletes();
         });
