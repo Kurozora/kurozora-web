@@ -5,6 +5,7 @@ namespace App\Nova;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsToMany;
+use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Number;
@@ -13,7 +14,7 @@ use Laravel\Nova\Fields\Textarea;
 use Outl1ne\NovaColorField\Color;
 use Ramsey\Uuid\Uuid;
 
-class Badge extends Resource
+class Achievement extends Resource
 {
     /**
      * The model the resource corresponds to.
@@ -135,6 +136,11 @@ class Badge extends Resource
                 ->slider()
                 ->rules('required'),
 
+            Boolean::make('Is Unlockable')
+                ->default(true)
+                ->required()
+                ->help('Determines if the achievement is unlockable by all users. Set to false for achievements unlocked by certain users only, or once special events have ended.'),
+
             BelongsToMany::make('Users')
                 ->searchable(),
         ];
@@ -147,9 +153,9 @@ class Badge extends Resource
      */
     public function title(): string
     {
-        $badge = $this->resource;
+        $achievement = $this->resource;
 
-        return $badge->name . ' (ID: ' . $badge->id . ')';
+        return $achievement->name . ' (ID: ' . $achievement->id . ')';
     }
 
     /**

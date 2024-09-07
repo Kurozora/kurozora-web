@@ -32,7 +32,7 @@ class DatabaseSeeder extends Seeder
 //            MediaSongSeeder::class,
 //            PersonSeeder::class,
             UserSeeder::class,
-            BadgeSeeder::class,
+            AchievementSeeder::class,
             AppThemeSeeder::class,
         ]);
     }

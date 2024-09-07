@@ -20,6 +20,18 @@ class Badge extends KModel implements HasMedia
     protected $table = self::TABLE_NAME;
 
     /**
+     * Get the attributes that should be cast.
+     *
+     * @return array
+     */
+    protected function casts(): array
+    {
+        return [
+            'is_unlockable' => 'bool',
+        ];
+    }
+
+    /**
      * Registers the media collections for the model.
      */
     public function registerMediaCollections(): void

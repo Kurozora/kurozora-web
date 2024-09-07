@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Profile\Badges;
+namespace App\Livewire\Profile\Achievements;
 
 use App\Models\Badge;
 use App\Models\User;
@@ -78,6 +78,6 @@ class Index extends Component
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.profile.badges.index');
+        return view('livewire.profile.achievements.index');
     }
 }

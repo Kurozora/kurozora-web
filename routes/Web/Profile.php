@@ -5,7 +5,7 @@ use App\Http\Controllers\Web\Profile\AnimeLibraryController;
 use App\Http\Controllers\Web\Profile\GameLibraryController;
 use App\Http\Controllers\Web\Profile\MangaLibraryController;
 use App\Http\Controllers\Web\UserProfileController;
-use App\Livewire\Profile\Badges\Index as AchievementsIndex;
+use App\Livewire\Profile\Achievements\Index as AchievementsIndex;
 use App\Livewire\Profile\Details;
 use App\Livewire\Profile\Followers\Index as FollowersIndex;
 use App\Livewire\Profile\Following\Index as FollowingIndex;
