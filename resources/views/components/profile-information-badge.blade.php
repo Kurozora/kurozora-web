@@ -1,6 +1,6 @@
 @props(['disabled' => false])
 
-<button {{ $attributes->merge(['class' => 'w-48 text-center']) }} {{ $disabled ? 'disabled' : '' }}>
+<a {{ $attributes->merge(['class' => 'w-48 text-center']) }} {{ $disabled ? 'disabled' : '' }}>
     <p class="font-semibold">{{ $description }}</p>
     <p class="text-gray-500 text-sm font-semibold">{{ $title }}</p>
-</button>
+</a>
