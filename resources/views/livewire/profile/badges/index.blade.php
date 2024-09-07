@@ -1,33 +1,72 @@
-<div>
-    <style>
-        ul#badgesList > li:nth-child(even) {
-            flex-direction: row-reverse;
-        }
-    </style>
+<main>
+    <x-slot:title>
+        {{ __(':x’s Followers', ['x' => $user->username]) }}
+    </x-slot:title>
 
-    <ul id="badgesList" class="m-0 space-y-4">
-        @foreach($this->badges as $badge)
-            @php
-                $borderColor = strtolower($badge->text_color) == '#ffffffff' ? '#ffffff80' : $badge->text_color;
-            @endphp
-            <li class="relative flex space-x-2 pt-4 pr-4 pb-4 pl-4 rounded-lg" style="background-color: {{ $badge->background_color }};">
-                <picture class="relative w-16 h-16 aspect-square rounded-full overflow-hidden">
-                    <img class="w-full" src="{{ $badge->getFirstMediaFullUrl(\App\Enums\MediaCollection::Symbol()) }}" alt="{{ $badge->name }} Badge Image" width="{{ $badge->getFirstMedia(\App\Enums\MediaCollection::Symbol)?->custom_properties['width'] ?? 96 }}" height="{{ $badge->getFirstMedia(\App\Enums\MediaCollection::Symbol)?->custom_properties['height'] ?? 96 }}">
+    <x-slot:description>
+        {{ __('Browse :x’s achievements on Kurozora. Join the Kurozora community and create your anime, manga and game list. Discover songs, episodes and read reviews and news!', ['x' => $user->username]) }}
+    </x-slot:description>
 
-                    <div class="absolute top-0 left-0 h-full w-full border-2 rounded-full" style="border-color: {{ $borderColor }};"></div>
-                </picture>
+    <x-slot:meta>
+        <meta property="og:title" content="{{ __(':x’s Followers', ['x' => $user->username]) }} — {{ config('app.name') }}" />
+        <meta property="og:description" content="{{ __('Browse :x’s achievements on Kurozora. Join the Kurozora community and create your anime, manga and game list. Discover songs, episodes and read reviews and news!', ['x' => $user->username]) }}" />
+        <meta property="og:image" content="{{ $user->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) }}" />
+        <meta property="og:type" content="website" />
+        <link rel="canonical" href="{{ route('profile.achievements', $user) }}">
+    </x-slot:meta>
 
-                <div class="flex-1" style="color: {{ $badge->text_color }};">
-                    <p class="font-semibold">{{ $badge->name }}</p>
-                    <p class="text-sm">{{ $badge->description }}</p>
+    <x-slot:appArgument>
+        users/{{ $user->id }}/achievements
+    </x-slot:appArgument>
+
+    <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6" wire:init="loadPage">
+        <section class="mb-4">
+            <div>
+                <div class="flex gap-1">
+                    <div class="flex flex-wrap items-center w-full">
+                        <h1 class="text-2xl font-bold">{{ __(':x’s Achievements', ['x' => $user->username]) }}</h1>
+                    </div>
+
+                    <div class="flex flex-wrap flex-1 justify-end items-center w-full">
+                    </div>
                 </div>
+            </div>
+        </section>
 
-                <div class="absolute top-0 right-0 w-full h-full border-2 rounded-lg" style="border-color: {{ $borderColor }};"></div>
-            </li>
-        @endforeach
-    </ul>
+        @if ($this->achievements->count())
+            <section class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                @foreach($this->achievements as $achievement)
+                   <x-lockups.achievement-lockup :achievement="$achievement" />
+                @endforeach
+            </section>
 
-    <div class="mt-4">
-        {{ $this->badges->links() }}
+            <div class="mt-4">
+                {{ $this->achievements->links() }}
+            </div>
+        @elseif (!$readyToLoad)
+            <section class="mt-4">
+                <div class="flex gap-4 justify-between flex-wrap">
+                    @foreach(range(1,25) as $range)
+                        <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                    @endforeach
+                    <div class="w-64 md:w-80 flex-grow"></div>
+                    <div class="w-64 md:w-80 flex-grow"></div>
+                </div>
+            </section>
+        @else
+            <section class="flex flex-col items-center mt-4 text-center">
+                <x-picture>
+                    <img class="w-full max-w-sm" src="{{ asset('images/static/placeholders/empty_anime_library.webp') }}" alt="No reviews" title="No achievements">
+                </x-picture>
+
+                <p class="font-bold">{{ __('No Achievements') }}</p>
+
+                @if ($user->id == auth()->user()?->id)
+                    <p class="text-sm text-gray-500">{{ __('Your unlocked achievements will show up here!') }}</p>
+                @else
+                    <p class="text-sm text-gray-500">{{ __(':x has no achievements unlocked yet.', ['x' => $user->username]) }}</p>
+                @endif
+            </section>
+        @endif
     </div>
-</div>
+</main>

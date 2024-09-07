@@ -2,12 +2,14 @@
 
 namespace App\Livewire\Profile\Badges;
 
+use App\Models\Badge;
 use App\Models\User;
 use App\Models\UserBadge;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Pagination\CursorPaginator;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -23,27 +25,11 @@ class Index extends Component
     public User $user;
 
     /**
-     * The current page query parameter's alias.
+     * Whether the component is ready to load.
      *
-     * @var string $bgc
+     * @var bool $readyToLoad
      */
-    public string $bgc = '';
-
-    /**
-     * The current page query parameter.
-     *
-     * @var string $cursor
-     */
-    public string $cursor = '';
-
-    /**
-     * The query strings of the component.
-     *
-     * @var string[] $queryString
-     */
-    protected $queryString = [
-        'cursor' => ['as' => 'bgc']
-    ];
+    public bool $readyToLoad = false;
 
     /**
      * Prepare the component.
@@ -58,23 +44,31 @@ class Index extends Component
     }
 
     /**
-     * The user's badge list.
+     * Sets the property to load the page.
      *
-     * @return CursorPaginator
+     * @return void
      */
-    public function getBadgesProperty(): CursorPaginator
+    public function loadPage(): void
     {
-        // We're aliasing `cursorName` as `bgc`, and setting
-        // query rule to never show `cursor` param when it's
-        // empty. Since `cursor` is also aliased as `bgc` in
-        // query rules, and we always keep it empty, as far
-        // as Livewire is concerned, `bgc` is also empty. So,
-        // `bgc` doesn't show up in the query params in the
-        // browser.
-        return $this->user->badges()
-            ->with(['media'])
-            ->orderBy(UserBadge::TABLE_NAME . '.created_at', 'desc')
-            ->cursorPaginate(25, ['*'], 'bgc');
+        $this->readyToLoad = true;
+    }
+
+    /**
+     * The user's achievement list.
+     *
+     * @return LengthAwarePaginator|Collection
+     */
+    public function getAchievementsProperty(): LengthAwarePaginator|Collection
+    {
+        if (!$this->readyToLoad) {
+            return collect();
+        }
+
+        return Badge::achievedUserBadges($this->user)
+            ->with('media')
+            ->orderBy('is_achieved', 'desc')
+            ->orderBy(UserBadge::TABLE_NAME . '.created_at')
+            ->paginate(25);
     }
 
     /**

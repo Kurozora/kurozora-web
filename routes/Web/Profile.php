@@ -5,6 +5,7 @@ use App\Http\Controllers\Web\Profile\AnimeLibraryController;
 use App\Http\Controllers\Web\Profile\GameLibraryController;
 use App\Http\Controllers\Web\Profile\MangaLibraryController;
 use App\Http\Controllers\Web\UserProfileController;
+use App\Livewire\Profile\Badges\Index as AchievementsIndex;
 use App\Livewire\Profile\Details;
 use App\Livewire\Profile\Followers\Index as FollowersIndex;
 use App\Livewire\Profile\Following\Index as FollowingIndex;
@@ -71,6 +72,9 @@ Route::prefix('/profile')
 //                        Route::get('/reminders', MangaReminders::class)
 //                            ->name('.reminders');
                     });
+
+                Route::get('/achievements', AchievementsIndex::class)
+                    ->name('.achievements');
 
                 Route::get('/followers', FollowersIndex::class)
                     ->name('.followers');

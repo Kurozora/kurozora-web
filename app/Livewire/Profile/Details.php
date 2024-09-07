@@ -61,7 +61,6 @@ class Details extends Component
      */
     private array $popupTypes = [
         'edit',
-        'achievements',
     ];
 
     /**
