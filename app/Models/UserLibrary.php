@@ -18,6 +18,13 @@ class UserLibrary extends Pivot
     protected $table = self::TABLE_NAME;
 
     /**
+     * Indicates if the IDs are auto-incrementing.
+     *
+     * @var bool
+     */
+    public $incrementing = true;
+
+    /**
      * Get the attributes that should be cast.
      *
      * @return array

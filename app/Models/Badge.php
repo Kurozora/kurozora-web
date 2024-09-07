@@ -3,8 +3,10 @@
 namespace App\Models;
 
 use App\Enums\MediaCollection;
+use App\Scopes\UserAchievementsScope;
 use App\Traits\InteractsWithMediaExtension;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
@@ -31,9 +33,19 @@ class Badge extends KModel implements HasMedia
      *
      * @return BelongsToMany
      */
-    function users(): BelongsToMany
+    public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, UserBadge::class, 'badge_id', 'user_id')
+        return $this->belongsToMany(User::class, UserBadge::class)
             ->withTimestamps();
+    }
+
+    /**
+     * Returns the associated user_badges
+     *
+     * @return HasMany
+     */
+    public function user_badges(): HasMany
+    {
+        return $this->hasMany(UserBadge::class);
     }
 }

@@ -635,8 +635,18 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      */
     function badges(): BelongsToMany
     {
-        return $this->belongsToMany(Badge::class, UserBadge::class, 'user_id', 'badge_id')
+        return $this->belongsToMany(Badge::class, UserBadge::class)
             ->withTimestamps();
+    }
+
+    /**
+     * Relation to UserBadge model directly
+     *
+     * @return HasMany
+     */
+    public function user_badges(): HasMany
+    {
+        return $this->hasMany(UserBadge::class);
     }
 
     /**
