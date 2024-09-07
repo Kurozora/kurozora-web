@@ -35,6 +35,10 @@ Route::prefix('/users')
                     ->middleware('auth.kurozora:optional')
                     ->name('.library');
 
+                Route::get('/achievements', [AchievementController::class, 'index'])
+                    ->middleware('auth.kurozora:optional')
+                    ->name('.achievements');
+
                 Route::get('/favorites', [UserFavoriteController::class, 'index'])
                     ->middleware('auth.kurozora:optional')
                     ->name('.favorites');

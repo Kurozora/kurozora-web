@@ -25,6 +25,7 @@ Route::prefix('/me')
             ->name('.reviews');
 
         require 'Me/Access-Tokens.php';
+        require 'Me/Achievements.php';
         require 'Me/Episodes.php';
         require 'Me/Favorites.php';
         require 'Me/Feed-Messages.php';

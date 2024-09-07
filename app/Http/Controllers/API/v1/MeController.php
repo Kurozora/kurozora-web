@@ -11,6 +11,7 @@ use App\Http\Requests\GetFollowingRequest;
 use App\Http\Requests\GetLibraryRequest;
 use App\Http\Requests\GetRatingsRequest;
 use App\Http\Requests\GetUpNextEpisodesRequest;
+use App\Http\Requests\GetUserAchievementsRequest;
 use App\Http\Requests\GetUserFavoritesRequest;
 use App\Http\Requests\UpdateProfileRequest;
 use App\Http\Resources\EpisodeResourceIdentity;
@@ -30,6 +31,7 @@ class MeController extends Controller
      * Returns the profile details for the authenticated user.
      *
      * @param Request $request
+     *
      * @return JsonResponse
      */
     public function me(Request $request): JsonResponse
@@ -69,6 +71,7 @@ class MeController extends Controller
      * Update profile information.
      *
      * @param UpdateProfileRequest $request
+     *
      * @return JsonResponse
      * @throws AuthorizationException
      * @throws FileDoesNotExist
@@ -196,9 +199,26 @@ class MeController extends Controller
     }
 
     /**
+     * Returns a list of the authenticated user's achievements.
+     *
+     * @param GetUserAchievementsRequest $request
+     *
+     * @return JsonResponse
+     */
+    function getAchievements(GetUserAchievementsRequest $request): JsonResponse
+    {
+        // Get the authenticated user
+        $user = auth()->user();
+
+        return (new AchievementController())
+            ->index($request, $user);
+    }
+
+    /**
      * Returns a list of the authenticated user's favorites.
      *
      * @param GetUserFavoritesRequest $request
+     *
      * @return JsonResponse
      */
     function getFavorites(GetUserFavoritesRequest $request): JsonResponse
@@ -214,6 +234,7 @@ class MeController extends Controller
      * Returns a list of the user's feed messages.
      *
      * @param GetFeedMessagesRequest $request
+     *
      * @return JsonResponse
      */
     function getFeedMessages(GetFeedMessagesRequest $request): JsonResponse
@@ -226,6 +247,7 @@ class MeController extends Controller
      * Returns a list of the user's followers.
      *
      * @param GetFollowersRequest $request
+     *
      * @return JsonResponse
      */
     function getFollowers(GetFollowersRequest $request): JsonResponse
@@ -238,6 +260,7 @@ class MeController extends Controller
      * Returns a list of the user's following.
      *
      * @param GetFollowingRequest $request
+     *
      * @return JsonResponse
      */
     function getFollowing(GetFollowingRequest $request): JsonResponse
@@ -250,6 +273,7 @@ class MeController extends Controller
      * Returns a list of the user's ratings.
      *
      * @param GetRatingsRequest $request
+     *
      * @return JsonResponse
      */
     function getRatings(GetRatingsRequest $request): JsonResponse
@@ -262,6 +286,7 @@ class MeController extends Controller
      * Returns a list of the user's ratings.
      *
      * @param GetUpNextEpisodesRequest $request
+     *
      * @return JsonResponse
      */
     function upNextEpisodes(GetUpNextEpisodesRequest $request): JsonResponse
