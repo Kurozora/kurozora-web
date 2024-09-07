@@ -48,4 +48,18 @@ class Badge extends KModel implements HasMedia
     {
         return $this->hasMany(UserBadge::class);
     }
+
+    /**
+     * Scope the badges to the ones achieved by the specified user.
+     *
+     * @param $query
+     * @param $user
+     *
+     * @return void
+     */
+    public function scopeAchievedUserBadges($query, $user): void
+    {
+        $bornToday = new UserAchievementsScope($user);
+        $bornToday->apply($query, $this);
+    }
 }

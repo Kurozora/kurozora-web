@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\v1\AccessTokenController;
+use App\Http\Controllers\API\v1\AchievementController;
 use App\Http\Controllers\API\v1\FollowingController;
 use App\Http\Controllers\API\v1\LibraryController;
 use App\Http\Controllers\API\v1\RegistrationController;
