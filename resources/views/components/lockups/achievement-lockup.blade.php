@@ -1,9 +1,5 @@
 @props(['achievement'])
 
-@php
-    $borderColor = strtolower($achievement->text_color) == '#ffffffff' ? '#ffffff80' : $achievement->text_color;
-@endphp
-
 <div
     class="flex flex-col items-center justify-center border-2 border-white rounded-xl shadow-lg overflow-hidden"
     style="min-height: 392px; background: linear-gradient(0deg, #d7d7d7 0%, #fdfdfd 100%);"
