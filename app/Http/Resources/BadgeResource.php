@@ -35,6 +35,7 @@ class BadgeResource extends JsonResource
                 'textColor' => $this->resource->text_color,
                 'backgroundColor' => $this->resource->background_color,
                 'symbol' => ImageResource::make($this->resource->media->firstWhere('collection_name', '=', MediaCollection::Symbol)),
+                'achieved_at' => $this->resource->achieved_at?->timestamp,
             ]
         ];
     }
