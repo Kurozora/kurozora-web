@@ -7,7 +7,7 @@ use App\Models\Badge;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class BadgeResource extends JsonResource
+class AchievementResource extends JsonResource
 {
     /**
      * The resource instance.

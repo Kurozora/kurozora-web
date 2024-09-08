@@ -5,7 +5,7 @@ namespace App\Http\Controllers\API\v1;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GetUserAchievementsRequest;
-use App\Http\Resources\BadgeResource;
+use App\Http\Resources\AchievementResource;
 use App\Models\Badge;
 use App\Models\User;
 use App\Models\UserBadge;
@@ -37,7 +37,7 @@ class AchievementController extends Controller
 
         // Show profile response
         return JSONResult::success([
-            'data' => BadgeResource::collection($badges),
+            'data' => AchievementResource::collection($badges),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
