@@ -68,6 +68,7 @@ class Index extends Component
             ->with('media')
             ->orderBy('is_achieved', 'desc')
             ->orderBy(UserBadge::TABLE_NAME . '.created_at')
+            ->orderBy(Badge::TABLE_NAME . '.name')
             ->paginate(25);
     }
 
