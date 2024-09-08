@@ -1,6 +1,6 @@
 <main>
     <x-slot:title>
-        {{ __(':x’s Followers', ['x' => $user->username]) }}
+        {{ __(':x’s Achievements', ['x' => $user->username]) }}
     </x-slot:title>
 
     <x-slot:description>
@@ -8,7 +8,7 @@
     </x-slot:description>
 
     <x-slot:meta>
-        <meta property="og:title" content="{{ __(':x’s Followers', ['x' => $user->username]) }} — {{ config('app.name') }}" />
+        <meta property="og:title" content="{{ __(':x’s Achievements', ['x' => $user->username]) }} — {{ config('app.name') }}" />
         <meta property="og:description" content="{{ __('Browse :x’s achievements on Kurozora. Join the Kurozora community and create your anime, manga and game list. Discover songs, episodes and read reviews and news!', ['x' => $user->username]) }}" />
         <meta property="og:image" content="{{ $user->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) }}" />
         <meta property="og:type" content="website" />
