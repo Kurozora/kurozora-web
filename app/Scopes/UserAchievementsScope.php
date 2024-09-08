@@ -34,7 +34,7 @@ class UserAchievementsScope implements Scope
      */
     public function apply(Builder $builder, Model $model): void
     {
-        $builder->select([Badge::TABLE_NAME . '.*', DB::raw('IF(' . UserBadge::TABLE_NAME . '.id IS NOT NULL, true, false) as is_achieved')])
+        $builder->select([Badge::TABLE_NAME . '.*', UserBadge::TABLE_NAME . '.created_at as achieved_at', DB::raw('IF(' . UserBadge::TABLE_NAME . '.id IS NOT NULL, true, false) as is_achieved')])
             ->leftJoin(UserBadge::TABLE_NAME, function ($join) {
                 $join->on(Badge::TABLE_NAME . '.id', '=', UserBadge::TABLE_NAME . '.badge_id')
                     ->where(UserBadge::TABLE_NAME . '.user_id', '=', $this->user->id);
@@ -42,6 +42,9 @@ class UserAchievementsScope implements Scope
             ->where(function ($query) {
                 $query->where(Badge::TABLE_NAME . '.is_unlockable', true)
                     ->orWhereNotNull(UserBadge::TABLE_NAME . '.id'); // Include if the user unlocked it, even if is_unlockable is false
-            });
+            })
+            ->withCasts([
+                'achieved_at' => 'datetime',
+            ]);
     }
 }
