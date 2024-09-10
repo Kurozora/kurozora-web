@@ -46,13 +46,6 @@ class Episodes extends Component
     public bool $readyToLoad = false;
 
     /**
-     * Determines whether episode data is being updated.
-     *
-     * @var bool $isUpdatingEpisodeData
-     */
-    public bool $isUpdatingEpisodeData = false;
-
-    /**
      * The component's listeners.
      *
      * @var array
@@ -179,13 +172,7 @@ class Episodes extends Component
      */
     public function updateEpisodes(): void
     {
-        if ($this->isUpdatingEpisodeData) {
-            return;
-        }
-
-        $this->isUpdatingEpisodeData = true;
         Artisan::call('scrape:tvdb_episode', ['tvdbID' => $this->anime->tvdb_id]);
-        $this->isUpdatingEpisodeData = false;
     }
 
     /**

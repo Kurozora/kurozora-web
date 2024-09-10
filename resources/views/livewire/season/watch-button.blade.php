@@ -4,6 +4,7 @@
             :color="'orange'"
             :title="$this->hasWatched ? __('Mark all episodes as unwatched') : __('Mark all episodes as watched')"
             wire:click="updateWatchStatus"
+            wire:loading.attr="disabled"
         >
             @if ($this->hasWatched)
                 @svg('checkmark', 'fill-current', ['width' => 12])

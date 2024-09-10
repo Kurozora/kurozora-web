@@ -37,7 +37,7 @@ class WatchButton extends Component
         $this->episode = $episode;
 
         // Set watch status, else default to "disabled"
-        $this->hasWatched = auth()->user()?->hasWatched($this->episode) ?? false;
+        $this->hasWatched = $episode->isWatched ?? false;
     }
 
     /**

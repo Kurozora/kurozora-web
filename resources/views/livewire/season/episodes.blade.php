@@ -33,7 +33,10 @@
                         <livewire:season.watch-button :season="$season" />
 
                         @if ($this->canUpdateEpisodes && app()->isLocal())
-                            <x-circle-button wire:click="updateEpisodes">
+                            <x-circle-button
+                                wire:click="updateEpisodes"
+                                wire:loading.attr="disabled"
+                            >
                                 @svg('arrow_clockwise', 'fill-current', ['width' => '44'])
                             </x-circle-button>
                         @endif

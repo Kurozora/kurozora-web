@@ -3,6 +3,7 @@
         :color="'orange'"
         :title="$hasWatched ? __('Mark as Unwatched') : __('Mark as Watched')"
         wire:click="updateWatchStatus"
+        wire:loading.attr="disabled"
     >
         @if ($hasWatched)
             @svg('checkmark', 'fill-current', ['width' => 12])
