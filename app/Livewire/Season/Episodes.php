@@ -6,6 +6,7 @@ use App\Events\ModelViewed;
 use App\Models\Anime;
 use App\Models\Season;
 use App\Traits\Livewire\WithEpisodeSearch;
+use Artisan;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -43,6 +44,13 @@ class Episodes extends Component
      * @var bool $readyToLoad
      */
     public bool $readyToLoad = false;
+
+    /**
+     * Determines whether episode data is being updated.
+     *
+     * @var bool $isUpdatingEpisodeData
+     */
+    public bool $isUpdatingEpisodeData = false;
 
     /**
      * The component's listeners.
@@ -107,11 +115,18 @@ class Episodes extends Component
                         ->with(['translations']);
                 },
                 'translations'
-            ]);
+            ])
+            ->when(auth()->user(), function ($query, $user) {
+                return $query->withExists([
+                    'user_watched_episodes as isWatched' => function ($query) use ($user) {
+                        $query->where('user_id', $user->id);
+                    }
+                ]);
+            });
     }
 
     /**
-     * Build an 'search' query for the given resource.
+     * Build a 'search' query for the given resource.
      *
      * @param ScoutBuilder $query
      * @return ScoutBuilder
@@ -122,17 +137,24 @@ class Episodes extends Component
             ->query(function (EloquentBuilder $query) {
                 $query->withoutGlobalScopes()
                     ->with([
-                    'anime' => function ($query) {
-                        $query->withoutGlobalScopes()
-                            ->with(['media', 'translations']);
-                    },
-                    'media',
-                    'season' => function ($query) {
-                        $query->withoutGlobalScopes()
-                            ->with(['translations']);
-                    },
-                    'translations'
-                ]);
+                        'anime' => function ($query) {
+                            $query->withoutGlobalScopes()
+                                ->with(['media', 'translations']);
+                        },
+                        'media',
+                        'season' => function ($query) {
+                            $query->withoutGlobalScopes()
+                                ->with(['translations']);
+                        },
+                        'translations'
+                    ])
+                    ->when(auth()->user(), function ($query, $user) {
+                        return $query->withExists([
+                            'user_watched_episodes as isWatched' => function ($query) use ($user) {
+                                $query->where('user_id', $user->id);
+                            }
+                        ]);
+                    });
             });
     }
 
@@ -148,6 +170,32 @@ class Episodes extends Component
         }
 
         return $this->getParentSearchResultsProperty();
+    }
+
+    /**
+     * Runs a command to update episode data.
+     *
+     * @return void
+     */
+    public function updateEpisodes(): void
+    {
+        if ($this->isUpdatingEpisodeData) {
+            return;
+        }
+
+        $this->isUpdatingEpisodeData = true;
+        Artisan::call('scrape:tvdb_episode', ['tvdbID' => $this->anime->tvdb_id]);
+        $this->isUpdatingEpisodeData = false;
+    }
+
+    /**
+     * Determines whether episode data can be updated.
+     *
+     * @return bool
+     */
+    public function getCanUpdateEpisodesProperty(): Bool
+    {
+        return $this->anime->tvdb_id != null && $this->anime->season_count == 1;
     }
 
     /**

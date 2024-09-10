@@ -32,6 +32,12 @@
                     <div class="flex flex-wrap justify-end items-center gap-2 w-full">
                         <livewire:season.watch-button :season="$season" />
 
+                        @if ($this->canUpdateEpisodes && app()->isLocal())
+                            <x-circle-button wire:click="updateEpisodes">
+                                @svg('arrow_clockwise', 'fill-current', ['width' => '44'])
+                            </x-circle-button>
+                        @endif
+
                         <x-nova-link :resource="\App\Nova\Season::class" :model="$season">
                             @svg('pencil', 'fill-current', ['width' => '44'])
                         </x-nova-link>
