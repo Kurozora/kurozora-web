@@ -205,9 +205,16 @@ class Details extends Component
             'tv_rating',
         ])
             ->when(auth()->user(), function ($query, $user) use ($episode) {
-                return $episode->loadMissing(['mediaRatings' => function ($query) {
-                    $query->where('user_id', '=', auth()->user()->id);
-                }]);
+                return $episode->loadMissing([
+                    'mediaRatings' => function ($query) {
+                        $query->where('user_id', '=', auth()->user()->id);
+                    }
+                ])
+                    ->loadExists([
+                        'user_watched_episodes as isWatched' => function ($query) use ($user) {
+                            $query->where('user_id', $user->id);
+                        }
+                    ]);
             }, function () use ($episode) {
                 return $episode;
             });
@@ -222,6 +229,17 @@ class Details extends Component
 
         $this->userRating = $episode->mediaRatings;
         $this->setupActions();
+    }
+
+    public function hydrateEpisode(): void
+    {
+        $this->episode->when(auth()->user(), function ($query, $user) {
+            $this->episode->loadExists([
+                'user_watched_episodes as isWatched' => function ($query) use ($user) {
+                    $query->where('user_id', $user->id);
+                }
+            ]);
+        });
     }
 
     public function hydrateSeason(): void
