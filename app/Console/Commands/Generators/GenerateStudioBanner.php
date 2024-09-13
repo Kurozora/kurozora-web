@@ -65,7 +65,7 @@ class GenerateStudioBanner extends Command
                 return Command::INVALID;
             }
 
-            if (empty($studio->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner())) || $force) {
+            if (empty($studio->getFirstMediaFullUrl(MediaCollection::Banner())) || $force) {
                 // Determine the number of anime the studio has.
                 $animeCount = $studio->anime()->count();
 
