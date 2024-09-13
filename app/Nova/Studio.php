@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use App\Enums\MediaCollection;
 use App\Enums\StudioType;
 use App\Nova\Actions\FixStudioBanner;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
@@ -82,9 +83,9 @@ class Studio extends Resource
 
             Avatar::make('Profile')
                 ->thumbnail(function () {
-                    return $this->resource->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/studio_profile.webp');
+                    return $this->resource->getFirstMediaFullUrl(MediaCollection::Profile()) ?? asset('images/static/placeholders/studio_profile.webp');
                 })->preview(function () {
-                    return $this->resource->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/studio_profile.webp');
+                    return $this->resource->getFirstMediaFullUrl(MediaCollection::Profile()) ?? asset('images/static/placeholders/studio_profile.webp');
                 })
                 ->rounded()
                 ->deletable(false)

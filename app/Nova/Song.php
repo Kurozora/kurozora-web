@@ -105,9 +105,9 @@ class Song extends Resource
 
             Avatar::make('Artwork')
                 ->thumbnail(function () {
-                    return $this->resource->getFirstMediaFullUrl(\App\Enums\MediaCollection::Artwork()) ?? asset('images/static/placeholders/music_album.webp');
+                    return $this->resource->getFirstMediaFullUrl(MediaCollection::Artwork()) ?? asset('images/static/placeholders/music_album.webp');
                 })->preview(function () {
-                    return $this->resource->getFirstMediaFullUrl(\App\Enums\MediaCollection::Artwork()) ?? asset('images/static/placeholders/music_album.webp');
+                    return $this->resource->getFirstMediaFullUrl(MediaCollection::Artwork()) ?? asset('images/static/placeholders/music_album.webp');
                 })
                 ->rounded()
                 ->deletable(false)

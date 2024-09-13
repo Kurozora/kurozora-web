@@ -3,6 +3,7 @@
 namespace App\Nova;
 
 use App\Enums\AstrologicalSign;
+use App\Enums\MediaCollection;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Avatar;
@@ -80,9 +81,9 @@ class Person extends Resource
 
             Avatar::make('Profile')
                 ->thumbnail(function () {
-                    return $this->resource->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/person_poster.webp');
+                    return $this->resource->getFirstMediaFullUrl(MediaCollection::Profile()) ?? asset('images/static/placeholders/person_poster.webp');
                 })->preview(function () {
-                    return $this->resource->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/person_poster.webp');
+                    return $this->resource->getFirstMediaFullUrl(MediaCollection::Profile()) ?? asset('images/static/placeholders/person_poster.webp');
                 })
                 ->rounded()
                 ->deletable(false)
