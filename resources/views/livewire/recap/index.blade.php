@@ -23,7 +23,7 @@
     </x-slot:meta>
 
     <x-slot:appArgument>
-        recap?year={{  $this->year }}&month={{  $this->month }}
+        recap?year={{ $this->year }}&month={{ $this->month }}
     </x-slot:appArgument>
 
     @if ($this->recapYears->count())
@@ -107,18 +107,18 @@
                             <p class="text-2xl text-white font-semibold">{{ __('Select a year to see your recap') }}</p>
                         </li>
 
-                        @foreach($this->recapYears as $recapYear)
+                        @foreach ($this->recapYears as $recapYear)
                             <li
-                                wire:key="{{  uniqid($recapYear, true) }}"
+                                wire:key="{{ uniqid($recapYear, true) }}"
                             >
                                 <button
                                     class="flex w-full pt-6 text-6xl text-white font-semibold hover:text-orange-500"
                                     x-bind:class="{
                                         'opacity-25 hover:opacity-100': year !== {{ $recapYear }}
                                     }"
-                                    x-on:click="loadingScreenEnabled = true; year = {{ $recapYear}}"
+                                    x-on:click="loadingScreenEnabled = true; year = {{ $recapYear }}"
                                 >
-                                    <p>{{  __('’:x', ['x' => substr($recapYear, -2)]) }}</p>
+                                    <p>{{ __('’:x', ['x' => substr($recapYear, -2)]) }}</p>
                                 </button>
                             </li>
                         @endforeach
@@ -224,7 +224,7 @@
                                                 <h2 class="font-semibold md:text-2xl">{{ __('Top Genres') }}</h2>
                                             </div>
 
-                                            @foreach($recap->recapItems->take(5) as $key => $recapItem)
+                                            @foreach ($recap->recapItems->take(5) as $key => $recapItem)
                                                 <a class="flex flex-row items-center gap-2" href="{{ route('genres.details', $recapItem->model) }}">
                                                     <p class="leading-tight font-semibold break-all md:text-2xl">{{ $key + 1 }}</p>
 
@@ -247,7 +247,7 @@
                                                 <h2 class="font-semibold md:text-2xl">{{ __('Top Themes') }}</h2>
                                             </div>
 
-                                            @foreach($recap->recapItems->take(5) as $key => $recapItem)
+                                            @foreach ($recap->recapItems->take(5) as $key => $recapItem)
                                                 <a class="flex flex-row items-center gap-2" href="{{ route('themes.details', $recapItem->model) }}">
                                                     <p class="leading-tight font-semibold md:text-2xl">{{ $key + 1 }}</p>
 

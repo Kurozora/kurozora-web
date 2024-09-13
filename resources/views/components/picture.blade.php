@@ -1,6 +1,6 @@
 @props(['border' => false, 'borderRoundness' => 'rounded-lg'])
 
-<div {{ $attributes->merge(['class' => 'relative'])}}>
+<div {{ $attributes->merge(['class' => 'relative']) }}>
     <picture>
         {{ $slot }}
     </picture>

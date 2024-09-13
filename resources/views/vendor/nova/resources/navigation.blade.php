@@ -1,6 +1,6 @@
 @if (count(Nova::availableResources(request())))
 <ul class="sidemenu">
-    @foreach($navigation as $group => $resources)
+    @foreach ($navigation as $group => $resources)
       @if (count($groups) > 1)
       <li class="sidebar-dropdown mb-2">
         <input type="checkbox" />
@@ -9,7 +9,7 @@
             <span class="sidebar-label ml-8">{{ $group }}</span>
         </a>
         <ul class="dropdown-menu">
-          @foreach($resources as $resource)
+          @foreach ($resources as $resource)
           <li>
             <router-link :to="{
                 name: 'index',
@@ -17,9 +17,9 @@
                     resourceName: '{{ $resource::uriKey() }}'
                 }
             }" class="flex items-center font-normal text-white mb-4 text-base no-underline dim">
-                @if(property_exists($resource, 'icon'))
+                @if (property_exists($resource, 'icon'))
                     {!! $resource::$icon !!}
-                @elseif(method_exists($resource, 'icon'))
+                @elseif (method_exists($resource, 'icon'))
                     {!! $resource::icon() !!}
                 @else
                 <svg class="sidebar-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -35,7 +35,7 @@
       </li>
 
       @else
-        @foreach($resources as $resource)
+        @foreach ($resources as $resource)
         <li class="sidebar-dropdown">
             <router-link :to="{
                 name: 'index',
@@ -43,9 +43,9 @@
                     resourceName: '{{ $resource::uriKey() }}'
                 }
             }" class="flex items-center font-normal text-white mb-6 text-base no-underline dim">
-                @if(property_exists($resource, 'icon'))
+                @if (property_exists($resource, 'icon'))
                     {!! $resource::$icon !!}
-                @elseif(method_exists($resource, 'icon'))
+                @elseif (method_exists($resource, 'icon'))
                     {!! $resource::icon() !!}
                 @else
                 <svg class="sidebar-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">

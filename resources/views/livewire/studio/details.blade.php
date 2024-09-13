@@ -103,7 +103,7 @@
                 </div>
 
                 <div class="flex justify-between">
-                    <x-simple-button class="flex gap-1" wire:click="$dispatch('show-review-box', { 'id': '{{  $this->reviewBoxID }}' })">
+                    <x-simple-button class="flex gap-1" wire:click="$dispatch('show-review-box', { 'id': '{{ $this->reviewBoxID }}' })">
                         @svg('pencil', 'fill-current', ['width' => 18])
                         {{ __('Write a Review') }}
                     </x-simple-button>
@@ -147,7 +147,7 @@
                     <x-slot:information>
                         @if (!empty($studio->website_urls))
                             <ul class="list-disc">
-                                @foreach($studio->website_urls as $website_url)
+                                @foreach ($studio->website_urls as $website_url)
                                     <li>
                                         <x-link href="{{ $website_url }}" target="_blank">
                                             {{ str_ireplace('www.', '', parse_url($website_url, PHP_URL_HOST)) ?? $website_url }}

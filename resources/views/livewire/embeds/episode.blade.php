@@ -59,7 +59,7 @@
                     "url":"/studio/{{ $this->anime?->studios?->firstWhere('is_studio', '=', true)?->id ?? $this->anime?->studios->first()?->id }}/"
                 }
             ]
-            @if(!empty($this->video))
+            @if (!empty($this->video))
                 ,"trailer": {
                     "@type":"VideoObject",
                     "name":"{{ $episode->title }}",

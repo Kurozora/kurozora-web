@@ -16,7 +16,7 @@
             </div>
 
             <div class="flex flex-row justify-center gap-4">
-                @foreach([__('Live'), __('Top')] as $chatOptionKey => $chatOptionValue)
+                @foreach ([__('Live'), __('Top')] as $chatOptionKey => $chatOptionValue)
                     <template x-if="parseInt(selectedChatOption) === {{ $chatOptionKey }}">
                         <x-button>{{ $chatOptionValue }}</x-button>
                     </template>
@@ -41,7 +41,7 @@
                         </div>
 
                         <div class="flex flex-col pl-4 pr-4 pt-2 pb-2">
-                            @foreach([__('Cozy'), __('Compact')] as $optionKey => $option)
+                            @foreach ([__('Cozy'), __('Compact')] as $optionKey => $option)
                                 <x-radio value="{{ $optionKey }}" name="selectedCommentDisplayOption" wire:model.live="selectedCommentDisplayOption">
                                     {{ $option }}
                                 </x-radio>
@@ -66,7 +66,7 @@
     {{-- Body --}}
     <div class="flex flex-col-reverse gap-2 pt-2 pb-2 h-full overflow-scroll z-10">
         @if ($this->comments->count())
-            @foreach($this->comments as $comment)
+            @foreach ($this->comments as $comment)
                 @if ($selectedCommentDisplayOption === 0)
                     <x-lockups.cozy-comment-lockup :comment="$comment" :showTime="$showTime" />
                 @else

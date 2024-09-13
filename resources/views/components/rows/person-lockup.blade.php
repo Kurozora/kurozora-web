@@ -5,11 +5,11 @@
 @endphp
 
 <div {{ $attributes->merge(['class' => 'flex gap-4 justify-between ' . $class]) }}>
-    @foreach($people as $index => $person)
+    @foreach ($people as $index => $person)
         <x-lockups.person-lockup :person="$person" :rank="($page - 1) * $perPage + $index + 1" :is-ranked="$isRanked" :is-row="$isRow" />
     @endforeach
 
-    @foreach($mediaStaff as $index => $staff)
+    @foreach ($mediaStaff as $index => $staff)
         <x-lockups.person-lockup :person="$staff->person" :staff-role="$staff->staff_role->name" :rank="($page - 1) * $perPage + $index + 1" :is-ranked="$isRanked" :is-row="$isRow" />
     @endforeach
 

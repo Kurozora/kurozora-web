@@ -15,7 +15,7 @@
             </x-section-nav>
 
             <div class="grid grid-flow-col-dense gap-4 justify-start overflow-x-scroll no-scrollbar">
-                @foreach($this->animeCast as $cast)
+                @foreach ($this->animeCast as $cast)
                     <x-lockups.cast-lockup :cast="$cast" />
                 @endforeach
             </div>

@@ -54,7 +54,7 @@
                     <x-slot:rightBarButtonItems>
                         <div>
                             <x-select wire:model.live="scope">
-                                @foreach(\App\Enums\SearchScope::asSelectArray() as $key => $value)
+                                @foreach (\App\Enums\SearchScope::asSelectArray() as $key => $value)
                                     <option value="{{ $key }}">{{ __($value) }}</option>
                                 @endforeach
                             </x-select>
@@ -65,7 +65,7 @@
                 <x-hr class="mt-4 mb-4" />
 
                 <div class="flex gap-2 overflow-x-scroll no-scrollbar">
-                    @foreach(\App\Enums\SearchType::asWebSelectArray($this->scope) as $key => $value)
+                    @foreach (\App\Enums\SearchType::asWebSelectArray($this->scope) as $key => $value)
                         <template x-if="type === '{{ $key }}'">
                             <x-button>{{ $value }}</x-button>
                         </template>

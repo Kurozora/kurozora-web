@@ -5,7 +5,7 @@
 @endphp
 
 <div {{ $attributes->merge(['class' => 'flex gap-4 justify-between ' . $class]) }}>
-    @foreach($reviews as $review)
+    @foreach ($reviews as $review)
         <x-lockups.review-lockup :review="$review" :is-row="$isRow" />
     @endforeach
 

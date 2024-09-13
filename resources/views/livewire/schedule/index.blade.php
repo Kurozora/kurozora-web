@@ -44,7 +44,7 @@
                     <x-outlined-button x-on:click="selectedDate = null">{{ __('All') }}</x-outlined-button>
                 </template>
 
-                @foreach($this->dates as $date)
+                @foreach ($this->dates as $date)
                     <template x-if="selectedDate === '{{ $date->toDateString() }}'">
                         <x-button>{{ $date->format('l') }}</x-button>
                     </template>
@@ -57,7 +57,7 @@
         </section>
 
         <section class="flex flex-col">
-            @foreach($this->dates as $date)
+            @foreach ($this->dates as $date)
                 <div
                     x-show="selectedDate === '{{ $date->toDateString() }}' || selectedDate === null"
                     class="pb-10"

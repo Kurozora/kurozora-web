@@ -21,7 +21,7 @@
 
     <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6">
         <section class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            @foreach($themes as $theme)
+            @foreach ($themes as $theme)
                 <x-lockups.theme-lockup :theme="$theme" />
             @endforeach
         </section>

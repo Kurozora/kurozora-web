@@ -16,7 +16,7 @@
 
     <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6">
         <div class="flex flex-nowrap gap-4 justify-between text-center whitespace-nowrap overflow-x-scroll no-scrollbar">
-            @foreach(\App\Enums\UserLibraryStatus::asAnimeSelectArray() as $key => $value)
+            @foreach (\App\Enums\UserLibraryStatus::asAnimeSelectArray() as $key => $value)
                 <button
                     class="pl-4 pr-4 pb-2 border-b-2 hover:border-orange-500"
                     :class="{'border-orange-500': '{{ strtolower($status) }}' === '{{ strtolower($value) }}', 'border-gray-300': '{{ strtolower($status) }}' !== '{{ strtolower($value) }}'}"
@@ -37,8 +37,8 @@
                 </x-search-bar>
             </section>
 
-            @if(!empty($this->searchResults))
-                @if(!empty($this->searchResults->total()))
+            @if (!empty($this->searchResults))
+                @if (!empty($this->searchResults->total()))
                     <section class="mt-4" wire:key="not-empty-{{ strtolower($status) }}">
                         <x-rows.small-lockup :animes="$this->searchResults" :is-row="false" />
 

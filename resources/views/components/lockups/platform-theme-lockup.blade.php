@@ -4,7 +4,7 @@
     <x-picture
         style="background-color: {{ $theme->getFirstMedia(\App\Enums\MediaCollection::Screenshot)?->custom_properties['background_color'] ?? '#000000' }};"
     >
-        <img class="w-full aspect-square object-cover object-bottom lazyload" data-sizes="auto" data-src="{{ $theme->getFirstMediaFullUrl(\App\Enums\MediaCollection::Screenshot()) }}" alt="{{ $theme->name }}" title="{{ $theme->name}}" style="background-color: {{ $theme->getFirstMedia(\App\Enums\MediaCollection::Screenshot)?->custom_properties['background_color'] ?? '#FFFFFF' }};">
+        <img class="w-full aspect-square object-cover object-bottom lazyload" data-sizes="auto" data-src="{{ $theme->getFirstMediaFullUrl(\App\Enums\MediaCollection::Screenshot()) }}" alt="{{ $theme->name }}" title="{{ $theme->name }}" style="background-color: {{ $theme->getFirstMedia(\App\Enums\MediaCollection::Screenshot)?->custom_properties['background_color'] ?? '#FFFFFF' }};">
     </x-picture>
 
     <div class="pt-4 pr-2 pb-4 pl-2">

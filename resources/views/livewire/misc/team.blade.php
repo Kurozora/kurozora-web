@@ -21,7 +21,7 @@
         </x-picture>
 
         <div class="flex flex-col flex-wrap mt-8 sm:flex-row">
-            @foreach($this->users as $user)
+            @foreach ($this->users as $user)
                 @php
                     switch ($user->id) {
                     case 1:

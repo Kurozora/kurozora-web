@@ -120,7 +120,7 @@
                     </div>
 
                     <div class="flex items-center gap-2">
-                        @if(!empty($song->am_id))
+                        @if (!empty($song->am_id))
                             <button
                                 class="inline-flex items-center pt-2 pr-2 pb-2 pl-2 border border-transparent rounded-full font-semibold text-xs uppercase tracking-widest shadow-md hover:opacity-75 active:opacity-50 focus:outline-none disabled:bg-gray-100 disabled:text-gray-300 disabled:cursor-default disabled:opacity-100 transition ease-in-out duration-150"
                                 x-on:click="await musicManager.playSong(song)"

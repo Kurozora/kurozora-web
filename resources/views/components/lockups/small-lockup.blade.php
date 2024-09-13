@@ -5,7 +5,7 @@
 @endphp
 
 <div {{ $attributes->merge(['class' => 'relative flex-grow w-64 md:w-80 ' . $class]) }}>
-    @if(!empty($anime))
+    @if (!empty($anime))
         <div class="flex flex-nowrap gap-2">
             <picture
                 class="relative shrink-0 w-28 h-40 rounded-lg overflow-hidden"
@@ -56,7 +56,7 @@
                @endif
             </div>
         </div>
-    @elseif(!empty($game))
+    @elseif (!empty($game))
         <div class="flex flex-nowrap gap-2">
             <picture
                 class="relative shrink-0 w-28 h-28 rounded-3xl overflow-hidden"
@@ -107,7 +107,7 @@
                  @endif
             </div>
         </div>
-    @elseif(!empty($manga))
+    @elseif (!empty($manga))
         <div class="flex flex-nowrap gap-2">
             <svg class="relative shrink-0 w-28 h-40 overflow-hidden">
                 <foreignObject width="112" height="160" mask="url(#svg-mask-book-cover)">

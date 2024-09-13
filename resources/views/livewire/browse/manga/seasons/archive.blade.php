@@ -54,11 +54,11 @@
                 </tr>
                 </thead>
                 <tbody>
-                @foreach(range(now()->year + 2, 1917) as $year)
+                @foreach (range(now()->year + 2, 1917) as $year)
                     <tr class="{{ $year === now()->year ? 'bg-orange-50' : '' }}">
                         <td>{{ $year }}</td>
 
-                        @foreach(\App\Enums\SeasonOfYear::asSelectArray() as $seasonOfYear)
+                        @foreach (\App\Enums\SeasonOfYear::asSelectArray() as $seasonOfYear)
                             <td class="pt-2 pr-2 pb-2 pl-2 sm:p-4 {{ $year === now()->year && $seasonOfYear === season_of_year()->key ? 'font-semibold' : '' }}">
                                 <x-simple-link href="{{ route('manga.seasons.year.season', [$year, $seasonOfYear]) }}">{{ $seasonOfYear }}</x-simple-link>
                             </td>

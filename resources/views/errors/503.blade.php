@@ -10,7 +10,7 @@
 
                 <div class="w-16 h-1 bg-violet-300 my-3 md:my-6"></div>
 
-                @if(app()->isDownForMaintenance())
+                @if (app()->isDownForMaintenance())
                     <p class="text-gray-500 text-2xl md:text-3xl font-light mb-8 leading-normal max-w-prose">{{ __('Kurozora is currently under maintenance. All services will be available shortly. If this continues for more than an hour, you can follow the status on Twitter.') }}</p>
 
                     <x-outlined-link-button href="{{ config('social.twitter.url') }}" class="text-base font-bold py-3 px-6 border-2" color="violet">

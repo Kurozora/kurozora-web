@@ -30,7 +30,7 @@
         </section>
 
         <section class="mt-4">
-            @foreach($chartKinds as $chartKind)
+            @foreach ($chartKinds as $chartKind)
                 <livewire:components.chart.section :chart-kind="$chartKind" />
             @endforeach
         </section>

@@ -20,8 +20,8 @@ $scrollIntoViewJsSnippet = ($scrollTo !== false)
                         {!! __('pagination.previous') !!}
                     </span>
                 @else
-                    @if(method_exists($paginator,'getCursorName'))
-                        <button type="button" dusk="previousPage" wire:key="cursor-{{ $paginator->getCursorName() }}-{{ $paginator->previousCursor()->encode() }}" wire:click="setPage('{{$paginator->previousCursor()->encode()}}','{{ $paginator->getCursorName() }}')" x-on:click="{{ $scrollIntoViewJsSnippet }}" wire:loading.attr="disabled" class="relative inline-flex items-center pl-4 pr-4 pt-2 pb-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 rounded-md hover:text-gray-500 focus:outline-none focus:shadow-outline-orange focus:border-orange-300 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150">
+                    @if (method_exists($paginator,'getCursorName'))
+                        <button type="button" dusk="previousPage" wire:key="cursor-{{ $paginator->getCursorName() }}-{{ $paginator->previousCursor()->encode() }}" wire:click="setPage('{{$paginator->previousCursor()->encode() }}','{{ $paginator->getCursorName() }}')" x-on:click="{{ $scrollIntoViewJsSnippet }}" wire:loading.attr="disabled" class="relative inline-flex items-center pl-4 pr-4 pt-2 pb-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 rounded-md hover:text-gray-500 focus:outline-none focus:shadow-outline-orange focus:border-orange-300 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150">
                                 {!! __('pagination.previous') !!}
                         </button>
                     @else
@@ -36,8 +36,8 @@ $scrollIntoViewJsSnippet = ($scrollTo !== false)
             <span>
                 {{-- Next Page Link --}}
                 @if ($paginator->hasMorePages())
-                    @if(method_exists($paginator,'getCursorName'))
-                        <button type="button" dusk="nextPage" wire:key="cursor-{{ $paginator->getCursorName() }}-{{ $paginator->nextCursor()->encode() }}" wire:click="setPage('{{$paginator->nextCursor()->encode()}}','{{ $paginator->getCursorName() }}')" x-on:click="{{ $scrollIntoViewJsSnippet }}" wire:loading.attr="disabled" class="relative inline-flex items-center pl-4 pr-4 pt-2 pb-2 ml-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 rounded-md hover:text-gray-500 focus:outline-none focus:shadow-outline-orange focus:border-orange-300 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150">
+                    @if (method_exists($paginator,'getCursorName'))
+                        <button type="button" dusk="nextPage" wire:key="cursor-{{ $paginator->getCursorName() }}-{{ $paginator->nextCursor()->encode() }}" wire:click="setPage('{{$paginator->nextCursor()->encode() }}','{{ $paginator->getCursorName() }}')" x-on:click="{{ $scrollIntoViewJsSnippet }}" wire:loading.attr="disabled" class="relative inline-flex items-center pl-4 pr-4 pt-2 pb-2 ml-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 rounded-md hover:text-gray-500 focus:outline-none focus:shadow-outline-orange focus:border-orange-300 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150">
                                 {!! __('pagination.next') !!}
                         </button>
                     @else

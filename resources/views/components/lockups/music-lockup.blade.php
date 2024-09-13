@@ -43,7 +43,7 @@
 
             <div class="absolute top-0 bottom-0 left-0 right-0">
                 <div class="flex flex-col justify-center items-center h-full">
-                    @if(!empty($song->am_id))
+                    @if (!empty($song->am_id))
                         <button
                             class="inline-flex items-center pt-5 pr-5 pb-5 pl-5 bg-white/60 backdrop-blur border border-transparent rounded-full font-semibold text-xs text-gray-500 uppercase tracking-widest shadow-md hover:opacity-75 active:opacity-50 focus:outline-none disabled:bg-gray-100 disabled:text-gray-300 disabled:cursor-default disabled:opacity-100 transition ease-in-out duration-150"
                             x-on:click="await musicManager?.playSong(song)"

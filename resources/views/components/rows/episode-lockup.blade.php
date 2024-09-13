@@ -5,7 +5,7 @@
 @endphp
 
 <div {{ $attributes->merge(['class' => 'flex gap-4 justify-between ' . $class]) }}>
-    @foreach($episodes as $index => $episode)
+    @foreach ($episodes as $index => $episode)
         <x-lockups.episode-lockup :episode="$episode" :rank="($page - 1) * $perPage + $index + 1" :is-ranked="$isRanked" :is-row="$isRow" />
     @endforeach
 

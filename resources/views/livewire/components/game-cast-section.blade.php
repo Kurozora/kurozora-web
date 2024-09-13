@@ -15,7 +15,7 @@
             </x-section-nav>
 
             <div class="grid grid-flow-col-dense gap-4 justify-start overflow-x-scroll no-scrollbar">
-                @foreach($this->gameCast as $cast)
+                @foreach ($this->gameCast as $cast)
                     <x-lockups.cast-lockup :cast="$cast" />
                 @endforeach
             </div>

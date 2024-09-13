@@ -65,7 +65,7 @@
             $previousYear = $year;
         @endphp
 
-        @foreach(range(0, $onEachSide - 1) as $ignored)
+        @foreach (range(0, $onEachSide - 1) as $ignored)
             @php
                 // Determine next season and year
                 $nextSeasonOfYear = $previousSeasonOfYear->next();
@@ -116,7 +116,7 @@
 
         <x-label>
             <x-select x-model="season">
-                @foreach(\App\Enums\SeasonOfYear::asSelectArray() as $seasonOfYearValue)
+                @foreach (\App\Enums\SeasonOfYear::asSelectArray() as $seasonOfYearValue)
                     <option value="{{ $seasonOfYearValue }}">{{ __($seasonOfYearValue) }}</option>
                 @endforeach
             </x-select>

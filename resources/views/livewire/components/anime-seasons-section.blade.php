@@ -15,7 +15,7 @@
             </x-section-nav>
 
             <div class="grid grid-flow-col-dense gap-4 justify-start overflow-x-scroll no-scrollbar">
-                @foreach($this->seasons as $season)
+                @foreach ($this->seasons as $season)
                     <x-lockups.season-lockup :season="$season" />
                 @endforeach
             </div>

@@ -11,9 +11,9 @@
         <meta property="og:url" content="{{ url()->current() }}" />
         <meta property="og:site_name" content="{{ config('app.name') }}" />
         <meta property="twitter:site" content="{{ '@' . config('social.twitter.username') }}" />
-        <meta name="theme-color" content="{{ $themeColor ?? '#F3F4F6'}}">
-        <meta name="theme-color" content="{{ $lightThemeColor ?? '#F3F4F6'}}" media="(prefers-color-scheme: light)">
-        <meta name="theme-color" content="{{ $darkThemeColor ?? '#353A50'}}" media="(prefers-color-scheme: dark)">
+        <meta name="theme-color" content="{{ $themeColor ?? '#F3F4F6' }}">
+        <meta name="theme-color" content="{{ $lightThemeColor ?? '#F3F4F6' }}" media="(prefers-color-scheme: light)">
+        <meta name="theme-color" content="{{ $darkThemeColor ?? '#353A50' }}" media="(prefers-color-scheme: dark)">
         {{ $meta ?? '' }}
 
         @if (empty($title))
@@ -145,7 +145,7 @@
 {{--            <livewire:navigation-dropdown />--}}
 
 {{--            <div class="overflow-y-scroll">--}}
-{{--                @if(Session::has('success'))--}}
+{{--                @if (Session::has('success'))--}}
 {{--                    <x-alert :message="Session::get('success')"></x-alert>--}}
 {{--                @endif--}}
 

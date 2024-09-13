@@ -1,6 +1,6 @@
 <main>
     <x-slot:title>
-        {{  __('Games') }} | {!! $character->name !!}
+        {{ __('Games') }} | {!! $character->name !!}
     </x-slot:title>
 
     <x-slot:description>
@@ -8,7 +8,7 @@
     </x-slot:description>
 
     <x-slot:meta>
-        <meta property="og:title" content="{{  __('Games') }} | {{ $character->name }} — {{ config('app.name') }}" />
+        <meta property="og:title" content="{{ __('Games') }} | {{ $character->name }} — {{ config('app.name') }}" />
         <meta property="og:description" content="{{ __('Discover the extensive list of games that :x appears in only on Kurozora, the largest, free online anime, manga, game & music database in the world.', ['x', $character->name]) }}" />
         <meta property="og:image" content="{{ $character->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/character_poster.webp') }}" />
         <meta property="og:type" content="profile" />
@@ -43,7 +43,7 @@
         @else
             <section>
                 <div class="flex gap-4 justify-between flex-wrap">
-                    @foreach(range(1,25) as $range)
+                    @foreach (range(1,25) as $range)
                         <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
                     @endforeach
                     <div class="w-64 md:w-80 flex-grow"></div>

@@ -54,7 +54,7 @@
             </picture>
         </div>
 
-        @if(!empty($title))
+        @if (!empty($title))
             <p class="pt-3">{{ $title }}</p>
         @endif
     </a>

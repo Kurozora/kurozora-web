@@ -54,7 +54,7 @@
 {{--            </x-section-nav>--}}
 
 {{--            <div class="flex flex-nowrap gap-4 snap-mandatory snap-x overflow-x-scroll no-scrollbar">--}}
-{{--                @foreach($this->users as $user)--}}
+{{--                @foreach ($this->users as $user)--}}
 {{--                    @php--}}
 {{--                        switch ($user->id) {--}}
 {{--                        case 363:--}}

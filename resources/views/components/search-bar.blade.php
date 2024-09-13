@@ -20,21 +20,21 @@
                 </x-slot:trigger>
 
                 <x-slot:content>
-                    @if(collect($this->order)->contains('selected', '!=', null))
+                    @if (collect($this->order)->contains('selected', '!=', null))
                         {{-- Reset Order --}}
                         <button class="block w-full pl-4 pr-4 pt-2 pb-2 bg-gray-100 text-xs text-center text-gray-400 font-semibold hover:bg-gray-50 focus:bg-gray-200" wire:click="resetOrder">
                             {{ __('Reset Order') }}
                         </button>
                     @endif
 
-                    @foreach($this->order as $key => $order)
+                    @foreach ($this->order as $key => $order)
                         <div class="block pl-4 pr-4 pt-2 pb-2 bg-gray-100 text-xs text-gray-400 font-semibold">
                             {{ $order['title'] }}
                         </div>
 
                         <div class="block pl-4 pr-4 pt-2 pb-2">
                             <x-select id="{{ $key }}" wire:model.live="order.{{ $key }}.selected">
-                                @foreach($order['options'] as $optionKey => $option)
+                                @foreach ($order['options'] as $optionKey => $option)
                                     <option value="{{ $option }}">{{ __($optionKey) }}</option>
                                 @endforeach
                             </x-select>
@@ -54,14 +54,14 @@
                 </x-slot:trigger>
 
                 <x-slot:content>
-                    @if(collect($this->filter)->contains('selected', '!=', null))
+                    @if (collect($this->filter)->contains('selected', '!=', null))
                         {{-- Reset Order --}}
                         <button class="block w-full pl-4 pr-4 pt-2 pb-2 bg-gray-100 text-xs text-center text-gray-400 font-semibold hover:bg-gray-50 focus:bg-gray-200" wire:click="resetFilter">
                             {{ __('Reset Filters') }}
                         </button>
                     @endif
 
-                    @foreach($this->filter as $key => $filter)
+                    @foreach ($this->filter as $key => $filter)
                         {{-- Per Page --}}
                         <div class="block pl-4 pr-4 pt-2 pb-2 bg-gray-100 text-xs text-gray-400 font-semibold">
                             {{ $filter['title'] }}
@@ -90,7 +90,7 @@
                                 @case('day')
                                     <x-select id="{{ $key }}" wire:model.live="filter.{{ $key }}.selected">
                                         <option value="">{{ __('Default') }}</option>
-                                        @foreach(range(1, 31) as $day)
+                                        @foreach (range(1, 31) as $day)
                                             <option value="{{ strlen($day) == 1 ? '0' . $day : $day }}">
                                                 {{ strlen($day) == 1 ? '0' . $day : $day }}
                                             </option>
@@ -100,7 +100,7 @@
                                 @case('month')
                                     <x-select id="{{ $key }}" wire:model.live="filter.{{ $key }}.selected">
                                         <option value="">{{ __('Default') }}</option>
-                                        @foreach(range(1, 12) as $month)
+                                        @foreach (range(1, 12) as $month)
                                             <option value="{{ $month }}">
                                                 {{ date('F', strtotime('2018-' . $month)) }}
                                             </option>
@@ -109,29 +109,29 @@
                                     @break
                                 @case('multiselect')
                                     <x-select id="{{ $key }}" wire:model.live="filter.{{ $key }}.selected" multiple>
-                                        @foreach($filter['options'] as $optionKey => $option)
+                                        @foreach ($filter['options'] as $optionKey => $option)
                                             <option value="{{ $optionKey }}">{{ __($option) }}</option>
                                         @endforeach
                                     </x-select>
                                     @break
-                                    @foreach($filter['options'] as $optionKey => $option)
+                                    @foreach ($filter['options'] as $optionKey => $option)
                                         <option value="{{ (int) ($optionKey == 0) }}">{{ __($option) }}</option>
                                     @endforeach
                                 @case('select')
                                     <option value="">{{ __('Default') }}</option>
                                     <x-select id="{{ $key }}" wire:model.live="filter.{{ $key }}.selected">
-                                        @foreach($filter['options'] as $optionKey => $option)
+                                        @foreach ($filter['options'] as $optionKey => $option)
                                             <option value="{{ $optionKey }}">{{ __($option) }}</option>
                                         @endforeach
                                     </x-select>
                                     @break
-                                    @foreach($filter['options'] as $optionKey => $option)
+                                    @foreach ($filter['options'] as $optionKey => $option)
                                         <option value="{{ (int) ($optionKey == 0) }}">{{ __($option) }}</option>
                                     @endforeach
                                 @case('bool')
                                     <x-select id="{{ $key }}" wire:model.live="filter.{{ $key }}.selected">
                                         <option value="">{{ __('Default') }}</option>
-                                        @foreach($filter['options'] as $optionKey => $option)
+                                        @foreach ($filter['options'] as $optionKey => $option)
                                             <option value="{{ (int) ($optionKey == 0) }}">{{ __($option) }}</option>
                                         @endforeach
                                     </x-select>

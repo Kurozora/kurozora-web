@@ -40,11 +40,7 @@
                             @if ($user->id == auth()->user()->id)
                                 {{ __('Followed by you... and one fan!') }}
                             @else
-                                {{
-                                   $isFollowed ?
-                                   __('Followed by you.') :
-                                   __('Followed by one fan.')
-                                }}
+                                {{ $isFollowed ? __('Followed by you.') : __('Followed by one fan.') }}
                             @endif
                         @elseif ($followersCount >= 2 && $followersCount <= 999)
                             @if ($user->id == auth()->user()->id)

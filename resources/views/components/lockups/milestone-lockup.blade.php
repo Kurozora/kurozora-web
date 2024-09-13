@@ -78,7 +78,7 @@
                 @switch ($mediaCollection)
                     @case('poster')
                         <div class="flex justify-center gap-4 h-40" style="width: 147%;">
-                            @foreach($recap->recapItems->concat($recap->recapItems)->take(4)->pad(4, $recap->recapItems->last()) as $key => $recapItem)
+                            @foreach ($recap->recapItems->concat($recap->recapItems)->take(4)->pad(4, $recap->recapItems->last()) as $key => $recapItem)
                                 <a class="flex w-1/3 mt-auto" href="{{ route('anime.details', $recapItem->model) }}" wire:navigate style="min-height: 108px; aspect-ratio: 3/4.23;">
                                     <picture
                                         class="relative w-full rounded-lg overflow-hidden"
@@ -94,7 +94,7 @@
                         @break
                     @case('banner')
                         <div class="flex justify-center gap-4 h-40" style="max-width: 260%; width: 100vw;">
-                            @foreach($recap->recapItems->reverse()->concat($recap->recapItems->reverse())->take(3)->pad(3, $recap->recapItems->last()) as $key => $recapItem)
+                            @foreach ($recap->recapItems->reverse()->concat($recap->recapItems->reverse())->take(3)->pad(3, $recap->recapItems->last()) as $key => $recapItem)
                                 <a class="flex w-1/3 mt-auto aspect-video" href="{{ route('anime.details', $recapItem->model) }}" wire:navigate style="min-height: 108px;">
                                     <picture
                                         class="relative w-full rounded-lg overflow-hidden"
@@ -112,7 +112,7 @@
                 @break
             @case(\App\Models\Game::class)
                 <div class="flex justify-center gap-4 h-40" style="width: 150%;">
-                    @foreach($recap->recapItems->concat($recap->recapItems)->take(3)->pad(3, $recap->recapItems->last()) as $key => $recapItem)
+                    @foreach ($recap->recapItems->concat($recap->recapItems)->take(3)->pad(3, $recap->recapItems->last()) as $key => $recapItem)
                         <a class="flex w-1/3 mt-auto aspect-square" href="{{ route('games.details', $recapItem->model) }}" wire:navigate style="min-height: 108px;">
                             <picture
                                 class="relative aspect-square rounded-3xl overflow-hidden"
@@ -128,7 +128,7 @@
                 @break
             @case(\App\Models\Manga::class)
 {{--                <div class="flex justify-center gap-4 h-40" style="width: 100%;">--}}
-{{--                    @foreach($recap->recapItems->reverse()->concat($recap)->take(4)->pad(4, $recap->recapItems->last()) as $key => $recapItem)--}}
+{{--                    @foreach ($recap->recapItems->reverse()->concat($recap)->take(4)->pad(4, $recap->recapItems->last()) as $key => $recapItem)--}}
 {{--                        <a class="flex w-1/3 mt-auto" href="{{ route('manga.details', $recapItem->model) }}" wire:navigate style="min-height: 108px; aspect-ratio: 3/4.23;">--}}
 {{--                            <svg class="relative overflow-hidden">--}}
 {{--                                <foreignObject width="112" height="160" mask="url(#svg-mask-book-cover)">--}}
@@ -145,7 +145,7 @@
 {{--                    @endforeach--}}
 {{--                </div>--}}
                     <div class="flex justify-center gap-4 h-40" style="width: 147%;">
-                        @foreach($recap->recapItems->concat($recap->recapItems)->take(4)->pad(4, $recap->recapItems->last()) as $key => $recapItem)
+                        @foreach ($recap->recapItems->concat($recap->recapItems)->take(4)->pad(4, $recap->recapItems->last()) as $key => $recapItem)
                             <a class="flex w-1/3 mt-auto" href="{{ route('anime.details', $recapItem->model) }}" wire:navigate style="min-height: 108px; aspect-ratio: 3/4.23;">
                                 <picture
                                     class="relative w-full rounded-lg overflow-hidden"

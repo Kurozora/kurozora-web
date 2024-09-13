@@ -19,7 +19,7 @@
         <meta property="og:type" content="video.tv_show" />
         <meta property="video:duration" content="{{ $game->duration }}" />
         <meta property="video:release_date" content="{{ $game->published_at?->toIso8601String() }}" />
-        @foreach($game->tags() as $tag)
+        @foreach ($game->tags() as $tag)
             <meta property="video:tag" content="{{ $tag->name }}" />
         @endforeach
         <meta property="twitter:title" content="{{ $game->title }} — {{ config('app.name') }}" />
@@ -287,7 +287,7 @@
                     </div>
 
                     <div class="flex justify-between">
-                        <x-simple-button class="flex gap-1" wire:click="$dispatch('show-review-box', { 'id': '{{  $this->reviewBoxID }}' })">
+                        <x-simple-button class="flex gap-1" wire:click="$dispatch('show-review-box', { 'id': '{{ $this->reviewBoxID }}' })">
                             @svg('pencil', 'fill-current', ['width' => 18])
                             {{ __('Write a Review') }}
                         </x-simple-button>

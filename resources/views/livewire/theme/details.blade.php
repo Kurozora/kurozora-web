@@ -39,12 +39,12 @@
         </section>
 
         <section wire:init="loadPage">
-            @foreach($this->exploreCategories as $key => $exploreCategory)
+            @foreach ($this->exploreCategories as $key => $exploreCategory)
                 @switch($exploreCategory->type)
                 @case(\App\Enums\ExploreCategoryTypes::MostPopularShows)
                     <section class="pb-8">
                         <div class="flex flex-nowrap gap-4 mt-5 snap-mandatory snap-x overflow-x-scroll no-scrollbar">
-                            @foreach($exploreCategory->mostPopular(\App\Models\Anime::class, $theme)->exploreCategoryItems as $categoryItem)
+                            @foreach ($exploreCategory->mostPopular(\App\Models\Anime::class, $theme)->exploreCategoryItems as $categoryItem)
                                 <x-lockups.banner-lockup :anime="$categoryItem->model" />
                             @endforeach
                         </div>

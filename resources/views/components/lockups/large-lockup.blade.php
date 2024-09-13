@@ -6,7 +6,7 @@
             class="relative aspect-video rounded-lg overflow-hidden"
             style="background-color: {{ $anime->getFirstMedia(\App\Enums\MediaCollection::Banner)?->custom_properties['background_color'] ?? '#000000' }};"
         >
-        @if(empty($anime->video_url))
+        @if (empty($anime->video_url))
             <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $anime->title }} Banner" title="{{ $anime->title }}">
 
             <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-lg"></div>

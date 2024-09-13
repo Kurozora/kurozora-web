@@ -17,7 +17,7 @@
         <meta property="og:image" content="{{ $manga->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $manga->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="og:type" content="book" />
         <meta property="book:release_date" content="{{ $manga->started_at?->toIso8601String() }}" />
-        @foreach($manga->tags() as $tag)
+        @foreach ($manga->tags() as $tag)
             <meta property="book:tag" content="{{ $tag->name }}" />
         @endforeach
         <meta property="twitter:title" content="{{ $manga->title }} — {{ config('app.name') }}" />
@@ -281,7 +281,7 @@
                     </div>
 
                     <div class="flex justify-between">
-                        <x-simple-button class="flex gap-1" wire:click="$dispatch('show-review-box', { 'id': '{{  $this->reviewBoxID }}' })">
+                        <x-simple-button class="flex gap-1" wire:click="$dispatch('show-review-box', { 'id': '{{ $this->reviewBoxID }}' })">
                             @svg('pencil', 'fill-current', ['width' => 18])
                             {{ __('Write a Review') }}
                         </x-simple-button>

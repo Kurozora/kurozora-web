@@ -15,7 +15,7 @@
                  data-src="{{ $platform->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $platform->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/platform_profile.webp') }}"
                  alt="{{ $platform->name }} Banner"
                  title="{{ $platform->name }}"
-                 width="{{ ($platform->getFirstMedia(\App\Enums\MediaCollection::Banner) ?? $platform->getFirstMedia(\App\Enums\MediaCollection::Profile))?->custom_properties['width'] ?? 300}}"
+                 width="{{ ($platform->getFirstMedia(\App\Enums\MediaCollection::Banner) ?? $platform->getFirstMedia(\App\Enums\MediaCollection::Profile))?->custom_properties['width'] ?? 300 }}"
                  height="{{ ($platform->getFirstMedia(\App\Enums\MediaCollection::Banner) ?? $platform->getFirstMedia(\App\Enums\MediaCollection::Profile))?->custom_properties['height'] ?? 300 }}"
             >
 

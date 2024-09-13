@@ -1,6 +1,6 @@
 @props(['anime' => null, 'manga' => null, 'game' => null])
 
-@if(!empty($anime))
+@if (!empty($anime))
     <div class="relative pb-2">
         <div class="flex flex-nowrap">
             <picture
@@ -51,7 +51,7 @@
             </div>
         </div>
     </div>
-@elseif(!empty($game))
+@elseif (!empty($game))
     <div class="relative pb-2">
         <div class="flex flex-nowrap">
             <picture
@@ -102,7 +102,7 @@
             </div>
         </div>
     </div>
-@elseif(!empty($manga))
+@elseif (!empty($manga))
     <div class="relative pb-2">
         <div class="flex flex-nowrap">
             <picture

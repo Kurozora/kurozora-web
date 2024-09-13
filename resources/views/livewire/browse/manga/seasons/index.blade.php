@@ -44,7 +44,7 @@
                     <x-outlined-button x-on:click="selectedMediaType = null">{{ __('All') }}</x-outlined-button>
                 </template>
 
-                @foreach($this->mediaTypes as $mediaType)
+                @foreach ($this->mediaTypes as $mediaType)
                     <template x-if="selectedMediaType === '{{ $mediaType->name }}'">
                         <x-button>{{ $mediaType->name }}</x-button>
                     </template>
@@ -57,7 +57,7 @@
         </section>
 
         <section class="space-y-10">
-            @foreach($this->mediaTypes as $mediaType)
+            @foreach ($this->mediaTypes as $mediaType)
                 <div x-show="selectedMediaType === '{{ $mediaType->name }}' || selectedMediaType === null">
                     <livewire:components.browse.seasons-section :class="\App\Models\Manga::class" :media-type="$mediaType" :season-of-year="$this->seasonOfYear->value" :year="$year" />
                 </div>

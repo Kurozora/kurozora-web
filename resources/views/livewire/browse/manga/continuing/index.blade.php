@@ -37,7 +37,7 @@
             </div>
         </section>
 
-        @if($this->searchResults->count())
+        @if ($this->searchResults->count())
             <section class="mt-4">
                 <x-rows.small-lockup :mangas="$this->searchResults" :is-row="false" />
             </section>
@@ -48,7 +48,7 @@
         @elseif (!$readyToLoad)
             <section>
                 <div class="flex gap-4 justify-between flex-wrap">
-                    @foreach(range(1,25) as $range)
+                    @foreach (range(1,25) as $range)
                         <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
                     @endforeach
                     <div class="w-64 md:w-80 flex-grow"></div>

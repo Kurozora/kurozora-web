@@ -33,7 +33,7 @@
                 @switch($exploreCategory->type)
                     @case(\App\Enums\ExploreCategoryTypes::MostPopularShows)
                         <div class="flex flex-nowrap gap-4 pl-4 pr-4 sm:px-6 snap-mandatory snap-x overflow-x-scroll no-scrollbar">
-                            @foreach($this->exploreCategoryItems as $show)
+                            @foreach ($this->exploreCategoryItems as $show)
                                 <x-lockups.banner-lockup :anime="$show" />
                             @endforeach
                         </div>
@@ -45,7 +45,7 @@
                     @break
                     @case(\App\Enums\ExploreCategoryTypes::UpcomingShows)
                         <div class="flex flex-nowrap gap-4 pl-4 pr-4 sm:px-6 snap-mandatory snap-x overflow-x-scroll no-scrollbar">
-                            @foreach($this->exploreCategoryItems as $shows)
+                            @foreach ($this->exploreCategoryItems as $shows)
                                 <x-lockups.upcoming-lockup :anime="$shows" />
                             @endforeach
                         </div>
@@ -61,7 +61,7 @@
                         @switch($exploreCategory->size)
                             @case(\App\Enums\ExploreCategorySize::Large)
                                 <div class="flex flex-nowrap gap-4 pl-4 pr-4 sm:px-6 snap-mandatory snap-x overflow-x-scroll no-scrollbar">
-                                    @foreach($this->exploreCategoryItems as $categoryItem)
+                                    @foreach ($this->exploreCategoryItems as $categoryItem)
                                         <x-lockups.large-lockup :anime="$categoryItem->model" />
                                     @endforeach
                                 </div>
@@ -72,7 +72,7 @@
                             @case(\App\Enums\ExploreCategorySize::Video)
                                 <div class="flex overflow-x-scroll no-scrollbar">
                                     <div class="flex flex-nowrap gap-4 pl-4 pr-4 sm:px-6">
-                                    @foreach($this->exploreCategoryItems as $anime)
+                                    @foreach ($this->exploreCategoryItems as $anime)
                                         <x-lockups.video-lockup :anime="$anime" />
                                     @endforeach
                                 </div>
@@ -85,7 +85,7 @@
                     @break
                     @case(\App\Enums\ExploreCategoryTypes::UpcomingLiteratures)
                         <div class="flex flex-nowrap gap-4 pl-4 pr-4 sm:px-6 snap-mandatory snap-x overflow-x-scroll no-scrollbar">
-                            @foreach($this->exploreCategoryItems as $literature)
+                            @foreach ($this->exploreCategoryItems as $literature)
                                 <x-lockups.upcoming-lockup :manga="$literature" />
                             @endforeach
                         </div>
@@ -100,7 +100,7 @@
                     @break
                     @case(\App\Enums\ExploreCategoryTypes::UpcomingGames)
                         <div class="flex flex-nowrap gap-4 pl-4 pr-4 sm:px-6 snap-mandatory snap-x overflow-x-scroll no-scrollbar">
-                            @foreach($this->exploreCategoryItems as $game)
+                            @foreach ($this->exploreCategoryItems as $game)
                                 <x-lockups.upcoming-lockup :game="$game" />
                             @endforeach
                         </div>
@@ -113,14 +113,14 @@
                     @break
                     @case(\App\Enums\ExploreCategoryTypes::Genres)
                         <div class="flex flex-nowrap gap-4 pl-4 pr-4 sm:px-6 snap-mandatory snap-x overflow-x-scroll no-scrollbar">
-                            @foreach($this->exploreCategoryItems as $genre)
+                            @foreach ($this->exploreCategoryItems as $genre)
                                 <x-lockups.medium-lockup :genre="$genre" />
                             @endforeach
                         </div>
                     @break
                     @case(\App\Enums\ExploreCategoryTypes::Themes)
                         <div class="flex flex-nowrap gap-4 pl-4 pr-4 sm:px-6 snap-mandatory snap-x overflow-x-scroll no-scrollbar">
-                            @foreach($this->exploreCategoryItems as $theme)
+                            @foreach ($this->exploreCategoryItems as $theme)
                                 <x-lockups.medium-lockup :theme="$theme" />
                             @endforeach
                         </div>

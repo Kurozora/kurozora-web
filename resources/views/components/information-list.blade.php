@@ -3,7 +3,7 @@
 <div {{ $attributes->merge(['class' => 'flex flex-col justify-between pt-4 pr-4 pb-4 pl-4 min-h-[150px] bg-gray-100 rounded-lg']) }}>
     <div>
         <div class="flex flex-wrap w-full">
-            @if(!empty($icon))
+            @if (!empty($icon))
                 <div
                     class="aspect-square bg-gray-500 mr-1"
                     style="width: 22px; -webkit-mask: url('{{ $icon }}'); mask: url('{{ $icon }}');"

@@ -13,7 +13,7 @@
         <meta property="og:image" content="{{ $manga->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp') }}" />
         <meta property="og:type" content="book" />
         <meta property="book:release_date" content="{{ $manga->started_at?->toIso8601String() }}" />
-        @foreach($manga->tags() as $tag)
+        @foreach ($manga->tags() as $tag)
             <meta property="book:tag" content="{{ $tag->name }}" />
         @endforeach
         <link rel="canonical" href="{{ route('anime.staff', $manga) }}">
@@ -46,7 +46,7 @@
         @elseif (!$readyToLoad)
             <section>
                 <div class="flex gap-4 justify-between flex-wrap">
-                    @foreach(range(1,25) as $range)
+                    @foreach (range(1,25) as $range)
                         <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
                     @endforeach
                     <div class="w-64 md:w-80 flex-grow"></div>

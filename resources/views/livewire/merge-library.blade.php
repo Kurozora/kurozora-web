@@ -284,15 +284,15 @@
                     <h1 class="text-lg font-semibold">{{ __('Kurozora Library') }}</h1>
 
                     <ul class="m-0 mb-4 list-none">
-                        @foreach($this->userLibrary as $type => $userLibrary)
+                        @foreach ($this->userLibrary as $type => $userLibrary)
                             <li>
                                 @switch($type)
                                     @case(App\Models\Anime::class)
                                         <p class="text-gray-400 text-sm font-semibold">{{ __('Anime') }}</p>
                                         <ul>
-                                            @foreach($userLibrary as $key => $item)
+                                            @foreach ($userLibrary as $key => $item)
                                                 <li>
-                                                    {{ $key }}: {{  $item['total'] }}
+                                                    {{ $key }}: {{ $item['total'] }}
                                                 </li>
                                             @endforeach
                                         </ul>
@@ -301,9 +301,9 @@
                                     @case(App\Models\Game::class)
                                         <p class="text-gray-400 text-sm font-semibold">{{ __('Game') }}</p>
                                         <ul>
-                                            @foreach($userLibrary as $key => $item)
+                                            @foreach ($userLibrary as $key => $item)
                                                 <li>
-                                                    {{ $key }}: {{  $item['total'] }}
+                                                    {{ $key }}: {{ $item['total'] }}
                                                 </li>
                                             @endforeach
                                         </ul>
@@ -312,9 +312,9 @@
                                     @case(App\Models\Manga::class)
                                         <p class="text-gray-400 text-sm font-semibold">{{ __('Manga') }}</p>
                                         <ul>
-                                            @foreach($userLibrary as $key => $item)
+                                            @foreach ($userLibrary as $key => $item)
                                                 <li>
-                                                    {{ $key }}: {{  $item['total'] }}
+                                                    {{ $key }}: {{ $item['total'] }}
                                                 </li>
                                             @endforeach
                                         </ul>

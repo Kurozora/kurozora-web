@@ -57,7 +57,7 @@
                     "url":"/studio/{{ $anime->studios?->firstWhere('is_studio', '=', true)?->id ?? $anime->studios?->first()?->id }}/"
                 }
             ]
-            @if(!empty($episode->videos->first()?->getUrl()) || !empty($anime->videos->first()?->getUrl()))
+            @if (!empty($episode->videos->first()?->getUrl()) || !empty($anime->videos->first()?->getUrl()))
                 ,"trailer": {
                     "@type":"VideoObject",
                     "name":"{{ $episode->title }}",
@@ -280,7 +280,7 @@
                         </a>
                     </div>
 
-                    @if($previousEpisode)
+                    @if ($previousEpisode)
                         <div id="previousEpisodeBadge" class="flex-grow px-12 border-l-2">
                             <a href="{{ route('episodes.details', $previousEpisode) }}" wire:navigate>
                                 <p class="font-bold">{{ __('Episode :x', ['x' => $previousEpisode->number_total]) }}</p>
@@ -289,7 +289,7 @@
                         </div>
                     @endif
 
-                    @if($nextEpisode)
+                    @if ($nextEpisode)
                         <div id="nextEpisodeBadge" class="flex-grow px-12 border-l-2">
                             <a href="{{ route('episodes.details', $nextEpisode) }}" wire:navigate>
                                 <p class="font-bold">{{ __('Episode :x', ['x' => $nextEpisode->number_total]) }}</p>
@@ -362,7 +362,7 @@
                         </div>
 
                         <div class="flex justify-between">
-                            <x-simple-button class="flex gap-1" wire:click="$dispatch('show-review-box', { 'id': '{{  $this->reviewBoxID }}' })">
+                            <x-simple-button class="flex gap-1" wire:click="$dispatch('show-review-box', { 'id': '{{ $this->reviewBoxID }}' })">
                                 @svg('pencil', 'fill-current', ['width' => 18])
                                 {{ __('Write a Review') }}
                             </x-simple-button>
