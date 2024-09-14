@@ -4,19 +4,27 @@ namespace App\Spiders\AnimeFillerList;
 
 use App\Processors\AnimeFillerList\FillerProcessor;
 use Generator;
+use RoachPHP\Downloader\DownloaderMiddlewareInterface;
 use RoachPHP\Downloader\Middleware\RequestDeduplicationMiddleware;
+use RoachPHP\Downloader\Middleware\RequestMiddlewareInterface;
+use RoachPHP\Downloader\Middleware\ResponseMiddlewareInterface;
 use RoachPHP\Downloader\Middleware\UserAgentMiddleware;
+use RoachPHP\Extensions\ExtensionInterface;
 use RoachPHP\Extensions\LoggerExtension;
 use RoachPHP\Extensions\StatsCollectorExtension;
 use RoachPHP\Http\Response;
+use RoachPHP\ItemPipeline\Processors\ItemProcessorInterface;
 use RoachPHP\Spider\BasicSpider;
 use RoachPHP\Spider\ParseResult;
+use RoachPHP\Spider\SpiderMiddlewareInterface;
 use Symfony\Component\DomCrawler\Crawler;
 
 class FillerSpider extends BasicSpider
 {
     /**
-     * @var array $startUrls
+     * The list of start urls.
+     *
+     * @var list<string> $startUrls
      */
     public array $startUrls = [
         //
@@ -26,7 +34,7 @@ class FillerSpider extends BasicSpider
     /**
      * The downloader middleware that should be used for runs of this spider.
      *
-     * @var array|string[] $downloaderMiddleware
+     * @var list<class-string<DownloaderMiddlewareInterface|RequestMiddlewareInterface|ResponseMiddlewareInterface>> $downloaderMiddleware
      */
     public array $downloaderMiddleware = [
         RequestDeduplicationMiddleware::class,
@@ -39,7 +47,7 @@ class FillerSpider extends BasicSpider
     /**
      * The spider middleware that should be used for runs of this spider.
      *
-     * @var array $spiderMiddleware
+     * @var list<class-string<SpiderMiddlewareInterface>> $spiderMiddleware
      */
     public array $spiderMiddleware = [
         //
@@ -48,7 +56,7 @@ class FillerSpider extends BasicSpider
     /**
      * The item processors that emitted items will be sent through.
      *
-     * @var array $itemProcessors
+     * @var list<class-string<ItemProcessorInterface>> $itemProcessors
      */
     public array $itemProcessors = [
         FillerProcessor::class
@@ -57,7 +65,7 @@ class FillerSpider extends BasicSpider
     /**
      * The extensions that should be used for runs of this spider.
      *
-     * @var array|string[] $extensions
+     * @var list<class-string<ExtensionInterface>> $extensions
      */
     public array $extensions = [
         LoggerExtension::class,
