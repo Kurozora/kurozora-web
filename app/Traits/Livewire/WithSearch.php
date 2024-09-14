@@ -107,7 +107,7 @@ trait WithSearch
     }
 
     /**
-     * Build an 'search index' query for the given resource.
+     * Build a 'search index' query for the given resource.
      *
      * @param EloquentBuilder $query
      * @return EloquentBuilder
@@ -118,7 +118,7 @@ trait WithSearch
     }
 
     /**
-     * Build an 'search' query for the given resource.
+     * Build a 'search' query for the given resource.
      *
      * @param ScoutBuilder $query
      * @return ScoutBuilder

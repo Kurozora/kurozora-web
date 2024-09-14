@@ -31,7 +31,7 @@ trait WithEpisodeSearch
     }
 
     /**
-     * Build an 'search index' query for the given resource.
+     * Build a 'search index' query for the given resource.
      *
      * @param EloquentBuilder $query
      * @return EloquentBuilder
@@ -42,7 +42,7 @@ trait WithEpisodeSearch
     }
 
     /**
-     * Build an 'search' query for the given resource.
+     * Build a 'search' query for the given resource.
      *
      * @param ScoutBuilder $query
      * @return ScoutBuilder

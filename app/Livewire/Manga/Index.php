@@ -35,7 +35,7 @@ class Index extends Component
     }
 
     /**
-     * Build an 'search index' query for the given resource.
+     * Build a 'search index' query for the given resource.
      *
      * @param EloquentBuilder $query
      * @return EloquentBuilder
@@ -51,7 +51,7 @@ class Index extends Component
     }
 
     /**
-     * Build an 'search' query for the given resource.
+     * Build a 'search' query for the given resource.
      *
      * @param ScoutBuilder $query
      * @return ScoutBuilder
