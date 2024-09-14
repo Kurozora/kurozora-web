@@ -255,7 +255,7 @@ class EpisodeSpider extends BasicSpider
                 'method' => 'HEAD'
             ]
         ]);
-        $headers = get_headers($url, 1);
+        $headers = get_headers($url, true);
 
         if ($headers !== false && isset($headers['Location'])) {
             if (is_string($headers['Location'])) {
