@@ -15,7 +15,7 @@
             <x-dropdown align="right" width="48" max-height="350px">
                 <x-slot:trigger>
                     <x-square-button>
-                        @svg('arrow_up_arrow_down_circle', 'fill-current', ['aria-labelledby' => 'filter', 'width' => '28'])
+                        @svg('arrow_up_arrow_down_circle', 'fill-current', ['aria-labelledby' => 'order', 'width' => '28'])
                     </x-square-button>
                 </x-slot:trigger>
 
@@ -114,20 +114,14 @@
                                         @endforeach
                                     </x-select>
                                     @break
-                                    @foreach ($filter['options'] as $optionKey => $option)
-                                        <option value="{{ (int) ($optionKey == 0) }}">{{ __($option) }}</option>
-                                    @endforeach
                                 @case('select')
-                                    <option value="">{{ __('Default') }}</option>
                                     <x-select id="{{ $key }}" wire:model.live="filter.{{ $key }}.selected">
+                                        <option value="">{{ __('Default') }}</option>
                                         @foreach ($filter['options'] as $optionKey => $option)
                                             <option value="{{ $optionKey }}">{{ __($option) }}</option>
                                         @endforeach
                                     </x-select>
                                     @break
-                                    @foreach ($filter['options'] as $optionKey => $option)
-                                        <option value="{{ (int) ($optionKey == 0) }}">{{ __($option) }}</option>
-                                    @endforeach
                                 @case('bool')
                                     <x-select id="{{ $key }}" wire:model.live="filter.{{ $key }}.selected">
                                         <option value="">{{ __('Default') }}</option>
