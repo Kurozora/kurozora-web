@@ -97,6 +97,9 @@ class MediaSection extends Component
 
         return match ($this->type) {
             Anime::class => $this->studio->anime()
+                ->when(!auth()->check(), function ($query) {
+                    return $query->withoutGlobalScopes();
+                })
                 ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
                 ->when(auth()->user(), function ($query, $user) {
                     $query->with(['library' => function ($query) use ($user) {
@@ -106,6 +109,9 @@ class MediaSection extends Component
                 ->limit(Studio::MAXIMUM_RELATIONSHIPS_LIMIT)
                 ->get(),
             Manga::class => $this->studio->manga()
+                ->when(!auth()->check(), function ($query) {
+                    return $query->withoutGlobalScopes();
+                })
                 ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
                 ->when(auth()->user(), function ($query, $user) {
                     $query->with(['library' => function ($query) use ($user) {
@@ -115,6 +121,9 @@ class MediaSection extends Component
                 ->limit(Studio::MAXIMUM_RELATIONSHIPS_LIMIT)
                 ->get(),
             Game::class => $this->studio->games()
+                ->when(!auth()->check(), function ($query) {
+                    return $query->withoutGlobalScopes();
+                })
                 ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
                 ->when(auth()->user(), function ($query, $user) {
                     $query->with(['library' => function ($query) use ($user) {
