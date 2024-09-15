@@ -31,6 +31,8 @@ class StudioResource extends JsonResource
             $relationships = [];
             foreach ($includes as $include) {
                 $relationships = match ($include) {
+                    'predecessors' => array_merge($relationships, $this->getPredecessorsRelationship()),
+                    'successors' => array_merge($relationships, $this->getSuccessorRelationship()),
                     'shows' => array_merge($relationships, $this->getAnimeRelationship()),
                     'games' => array_merge($relationships, $this->getGamesRelationship()),
                     'literatures' => array_merge($relationships, $this->getMangaRelationship()),
@@ -45,6 +47,36 @@ class StudioResource extends JsonResource
     }
 
     /**
+     * Returns the predecessors relationship for the resource.
+     *
+     * @return array
+     */
+    protected function getPredecessorsRelationship(): array
+    {
+        return [
+            'studios' => [
+                'href' => route('api.studios.predecessors', $this->resource, false),
+                'data' => StudioResourceIdentity::collection($this->resource->predecessors)
+            ]
+        ];
+    }
+
+    /**
+     * Returns the successor relationship for the resource.
+     *
+     * @return array
+     */
+    protected function getSuccessorRelationship(): array
+    {
+        return [
+            'studios' => [
+                'href' => route('api.studios.successors', $this->resource, false),
+                'data' => StudioResourceIdentity::collection($this->resource->successor)
+            ]
+        ];
+    }
+
+    /**
      * Returns the anime relationship for the resource.
      *
      * @return array
@@ -53,7 +85,7 @@ class StudioResource extends JsonResource
     {
         return [
             'shows' => [
-                'href' => route('api.studios.anime', $this->resource, false),
+                'href' => route('.studios.anime', $this->resource, false),
                 'data' => AnimeResourceIdentity::collection($this->resource->anime)
             ]
         ];

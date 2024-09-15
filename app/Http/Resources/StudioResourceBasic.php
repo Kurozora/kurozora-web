@@ -21,6 +21,7 @@ class StudioResourceBasic extends JsonResource
      * Transform the resource into an array.
      *
      * @param Request $request
+     *
      * @return array
      */
     public function toArray(Request $request): array
@@ -28,25 +29,33 @@ class StudioResourceBasic extends JsonResource
         $resource = StudioResourceIdentity::make($this->resource)->toArray($request);
 
         return array_merge($resource, [
-            'attributes'    => [
-                'slug'          => $this->resource->slug,
-                'profile'       => ImageResource::make($this->resource->media->firstWhere('collection_name','=', MediaCollection::Profile)),
-                'banner'        => ImageResource::make($this->resource->media->firstWhere('collection_name','=', MediaCollection::Banner)),
-                'logo'          => ImageResource::make($this->resource->media->firstWhere('collection_name','=', MediaCollection::Logo)),
-                'name'          => $this->resource->name,
-                'about'         => $this->resource->about,
-                'address'       => $this->resource->address,
-                'founded'       => $this->resource->founded?->timestamp,
-                'websiteUrls'   => $this->resource->website_urls,
-                'isProducer'    => $this->whenPivotLoaded(MediaStudio::TABLE_NAME, function () {
+            'attributes' => [
+                'slug' => $this->resource->slug,
+                'profile' => ImageResource::make($this->resource->media->firstWhere('collection_name', '=', MediaCollection::Profile)),
+                'banner' => ImageResource::make($this->resource->media->firstWhere('collection_name', '=', MediaCollection::Banner)),
+                'logo' => ImageResource::make($this->resource->media->firstWhere('collection_name', '=', MediaCollection::Logo)),
+                'name' => $this->resource->name,
+                'japaneseName' => $this->resource->japanese_name,
+                'alternativeNames' => $this->resource->alternative_names,
+                'predecessors' => $this->resource->predecessors?->pluck('name')->toArray(),
+                'successors' => $this->resource->successor?->name,
+                'about' => $this->resource->about,
+                'address' => $this->resource->address,
+                'socialURLs' => $this->resource->social_urls,
+                'websiteURLs' => $this->resource->website_urls,
+                'isProducer' => $this->whenPivotLoaded(MediaStudio::TABLE_NAME, function () {
                     return $this->resource->pivot->is_producer;
                 }),
-                'isStudio'      => $this->whenPivotLoaded(MediaStudio::TABLE_NAME, function () {
+                'isStudio' => $this->whenPivotLoaded(MediaStudio::TABLE_NAME, function () {
                     return $this->resource->pivot->is_studio;
                 }),
-                'isLicensor'    => $this->whenPivotLoaded(MediaStudio::TABLE_NAME, function () {
+                'isLicensor' => $this->whenPivotLoaded(MediaStudio::TABLE_NAME, function () {
                     return $this->resource->pivot->is_licensor;
                 }),
+                'isNSFW' => (bool) $this->resource->is_nsfw,
+                'founded' => $this->resource->founded_at?->timestamp, // MARK: - Remove after 1.10.0
+                'foundedAt' => $this->resource->founded_at?->timestamp,
+                'defunctAt' => $this->resource->defunct_at?->timestamp,
             ]
         ]);
     }
