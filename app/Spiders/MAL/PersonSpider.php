@@ -67,10 +67,7 @@ class PersonSpider extends BasicSpider
         $id = basename($response->getUri());
 
         if ($response->getStatus() >= 400) {
-            logger()->error('Person: ' . $id);
-            if ($response->getStatus() != 404) {
-                logger()->warning('Person: ' . $response->getStatus());
-            }
+            logger()->error('Person: ' . $id . ';status:' . $response->getStatus());
             return $this->item([]);
         }
 

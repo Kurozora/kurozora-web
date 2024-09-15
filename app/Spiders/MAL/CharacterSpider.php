@@ -67,10 +67,7 @@ class CharacterSpider extends BasicSpider
         $id = basename($response->getUri());
 
         if ($response->getStatus() >= 400) {
-            logger()->error('Character: ' . $id);
-            if ($response->getStatus() != 404) {
-                logger()->warning('Character: ' . $response->getStatus());
-            }
+            logger()->error('Character: ' . $id . ';status:' . $response->getStatus());
             return $this->item([]);
         }
 

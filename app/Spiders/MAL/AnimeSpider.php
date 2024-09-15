@@ -104,10 +104,7 @@ class AnimeSpider extends BasicSpider
         $id = basename($response->getUri());
 
         if ($response->getStatus() >= 400) {
-            logger()->error('Anime: ' . $id);
-            if ($response->getStatus() != 404) {
-                logger()->warning('Anime: ' . $response->getStatus());
-            }
+            logger()->error('Anime: ' . $id . ';status:' . $response->getStatus());
             return $this->item([]);
         }
 

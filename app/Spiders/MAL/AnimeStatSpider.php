@@ -103,10 +103,7 @@ class AnimeStatSpider extends BasicSpider
         $id = $uri->match($regex)->remove('/anime/')->value();
 
         if ($response->getStatus() >= 400) {
-            logger()->error('Anime: ' . $id);
-            if ($response->getStatus() != 404) {
-                logger()->warning('Anime: ' . $response->getStatus());
-            }
+            logger()->error('Anime Stat: ' . $id . ';status:' . $response->getStatus());
             return $this->item([]);
         }
 

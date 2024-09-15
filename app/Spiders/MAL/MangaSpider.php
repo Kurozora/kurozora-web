@@ -104,10 +104,7 @@ class MangaSpider extends BasicSpider
         $id = basename($response->getUri());
 
         if ($response->getStatus() >= 400) {
-            logger()->error('Manga: ' . $id);
-            if ($response->getStatus() != 404) {
-                logger()->warning('Manga: ' . $response->getStatus());
-            }
+            logger()->error('Manga: ' . $id . ';status:' . $response->getStatus());
             return $this->item([]);
         }
 
