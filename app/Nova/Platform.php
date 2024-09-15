@@ -230,7 +230,7 @@ class Platform extends Resource
                 ->sortable()
                 ->required(),
 
-            Code::make('Synonym Names')
+            Code::make('Alternative Names')
                 ->json()
                 ->sortable()
                 ->rules(['json'])

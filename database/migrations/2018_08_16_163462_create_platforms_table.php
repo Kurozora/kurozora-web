@@ -18,7 +18,7 @@ return new class extends Migration
             $table->id();
             $table->string('slug');
             $table->string('original_name');
-            $table->json('synonym_names')->nullable();
+            $table->json('alternative_names')->nullable();
             $table->mediumText('about')->nullable();
             $table->unsignedTinyInteger('type');
             $table->unsignedTinyInteger('generation');

@@ -56,7 +56,7 @@ class Platform extends KModel implements HasMedia, Sitemapable
     protected function casts(): array
     {
         return [
-            'synonym_names' => AsArrayObject::class,
+            'alternative_names' => AsArrayObject::class,
             'started_at' => 'date',
             'ended_at' => 'date',
         ];
