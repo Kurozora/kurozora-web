@@ -315,7 +315,7 @@ class User extends Resource
 
             HasMany::make('Favorites', 'favorites', UserFavorite::class),
 
-            BelongsToMany::make('Badges')
+            BelongsToMany::make('Badges', 'badges', Achievement::class)
                 ->searchable(),
 
             HasMany::make('Sessions'),
