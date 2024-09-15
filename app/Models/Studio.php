@@ -56,8 +56,11 @@ class Studio extends KModel implements HasMedia, Sitemapable
     protected function casts(): array
     {
         return [
-            'founded' => 'date',
+            'alternative_names' => AsArrayObject::class,
+            'social_urls' => AsArrayObject::class,
             'website_urls' => AsArrayObject::class,
+            'founded_at' => 'date',
+            'defunct_at' => 'date',
         ];
     }
 
@@ -84,6 +87,26 @@ class Studio extends KModel implements HasMedia, Sitemapable
             ->singleFile();
         $this->addMediaCollection(MediaCollection::Logo)
             ->singleFile();
+    }
+
+    /**
+     * The studio's predecessors.
+     *
+     * @return HasMany
+     */
+    public function predecessors(): HasMany
+    {
+        return $this->hasMany(Studio::class, 'successor_id');
+    }
+
+    /**
+     * The studio's successor.
+     *
+     * @return BelongsTo
+     */
+    public function successor(): BelongsTo
+    {
+        return $this->belongsTo(Studio::class);
     }
 
     /**
@@ -136,8 +159,17 @@ class Studio extends KModel implements HasMedia, Sitemapable
                 ],
                 'selected' => null,
             ],
-            'founded' => [
+            'founded_at' => [
                 'title' => __('Founded'),
+                'options' => [
+                    'Default' => null,
+                    'Recent' => 'desc',
+                    'Oldest' => 'asc',
+                ],
+                'selected' => null,
+            ],
+            'defunct_at' => [
+                'title' => __('Defunct'),
                 'options' => [
                     'Default' => null,
                     'Recent' => 'desc',
@@ -169,8 +201,13 @@ class Studio extends KModel implements HasMedia, Sitemapable
                 'type' => 'string',
                 'selected' => null,
             ],
-            'founded' => [
+            'founded_at' => [
                 'title' => __('Founded'),
+                'type' => 'date',
+                'selected' => null,
+            ],
+            'defunct_at' => [
+                'title' => __('Defunct'),
                 'type' => 'date',
                 'selected' => null,
             ],
@@ -210,7 +247,10 @@ class Studio extends KModel implements HasMedia, Sitemapable
     public function toSearchableArray(): array
     {
         $studio = $this->toArray();
-        $studio['founded'] = $this->founded?->timestamp;
+        unset($studio['media']);
+        $studio['successor'] = $this->successor?->toSearchableArray();
+        $studio['founded_at'] = $this->founded_at?->timestamp;
+        $studio['defunct_at'] = $this->defunct_at?->timestamp;
         $studio['created_at'] = $this->created_at?->timestamp;
         $studio['updated_at'] = $this->updated_at?->timestamp;
         return $studio;
