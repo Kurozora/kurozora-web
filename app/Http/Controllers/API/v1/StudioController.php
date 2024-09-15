@@ -10,11 +10,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\GetStudioAnimeRequest;
 use App\Http\Requests\GetStudioGamesRequest;
 use App\Http\Requests\GetStudioLiteraturesRequest;
+use App\Http\Requests\GetStudioSuccessorsRequest;
 use App\Http\Requests\SearchRequest;
 use App\Http\Resources\AnimeResourceIdentity;
 use App\Http\Resources\GameResourceIdentity;
 use App\Http\Resources\LiteratureResourceIdentity;
 use App\Http\Resources\StudioResource;
+use App\Http\Resources\StudioResourceIdentity;
 use App\Models\Studio;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Contracts\Container\BindingResolutionException;
@@ -100,6 +102,54 @@ class StudioController extends Controller
         // Show studio details
         return JSONResult::success([
             'data' => StudioResource::collection([$studio])
+        ]);
+    }
+
+    /**
+     * Returns predecessors information of a Studio.
+     *
+     * @param GetStudioSuccessorsRequest $request
+     * @param Studio $studio
+     * @return JsonResponse
+     */
+    public function predecessors(GetStudioSuccessorsRequest $request, Studio $studio): JsonResponse
+    {
+        $data = $request->validated();
+
+        // Get the anime
+        $anime = $studio->predecessors()
+            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $anime->nextPageUrl());
+
+        return JSONResult::success([
+            'data' => StudioResourceIdentity::collection($anime),
+            'next' => empty($nextPageURL) ? null : $nextPageURL
+        ]);
+    }
+
+    /**
+     * Returns successors information of a Studio.
+     *
+     * @param GetStudioSuccessorsRequest $request
+     * @param Studio $studio
+     * @return JsonResponse
+     */
+    public function successors(GetStudioSuccessorsRequest $request, Studio $studio): JsonResponse
+    {
+        $data = $request->validated();
+
+        // Get the anime
+        $anime = $studio->successor()
+            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $anime->nextPageUrl());
+
+        return JSONResult::success([
+            'data' => StudioResourceIdentity::collection($anime),
+            'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
 

@@ -15,6 +15,14 @@ Route::prefix('/studios')
                     ->middleware('auth.kurozora:optional')
                     ->name('.details');
 
+                Route::get('/predecessors', [StudioController::class, 'predecessors'])
+                    ->middleware('auth.kurozora:optional')
+                    ->name('.predecessors');
+
+                Route::get('/successors', [StudioController::class, 'successors'])
+                    ->middleware('auth.kurozora:optional')
+                    ->name('.successors');
+
                 Route::get('/anime', [StudioController::class, 'anime'])
                     ->middleware('auth.kurozora:optional')
                     ->name('.anime');
