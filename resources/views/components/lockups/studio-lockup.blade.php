@@ -52,8 +52,8 @@
 
                 <p class="line-clamp-2">{{ $studio->name }}</p>
 
-                @if (!empty($studio->founded))
-                    <p class="text-sm">{{ __('Founded on :x', ['x' => $studio->founded->toFormattedDateString()]) }}</p>
+                @if (!empty($studio->founded_at))
+                    <p class="text-sm">{{ __('Founded on :x', ['x' => $studio->founded_at->toFormattedDateString()]) }}</p>
                 @endif
             </div>
         </div>
