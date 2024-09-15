@@ -169,7 +169,7 @@ return [
                 'filterableAttributes'=> ['id', 'astrological_sign', 'birthdate', 'deceased_date'],
             ],
             \App\Models\Platform::TABLE_NAME => [
-                'searchableAttributes' => ['original_name', 'name', 'synonym_names', 'translations', 'about', 'tagline',],
+                'searchableAttributes' => ['original_name', 'name', 'alternative_names', 'translations', 'about', 'tagline',],
                 'sortableAttributes'=> ['original_name', 'name', 'generation', 'type', 'rank_total', 'started_at', 'ended_at', 'created_at', 'update_at'],
                 'filterableAttributes'=> ['id', 'generation', 'type', 'started_at', 'ended_at'],
             ],
@@ -179,9 +179,9 @@ return [
                 'filterableAttributes'=> ['id', 'artist'],
             ],
             \App\Models\Studio::TABLE_NAME => [
-                'searchableAttributes' => ['name', 'address'],
-                'sortableAttributes'=> ['address', 'founded', 'name', 'created_at', 'update_at'],
-                'filterableAttributes'=> ['id', 'address', 'founded', 'is_nsfw', 'type'],
+                'searchableAttributes' => ['name', 'japanese_name', 'alternative_names', 'address'],
+                'sortableAttributes'=> ['address', 'name', 'japanese_name', 'founded_at', 'defunct_at', 'created_at', 'update_at'],
+                'filterableAttributes'=> ['id', 'address', 'tv_rating_id', 'is_nsfw', 'type', 'founded_at', 'defunct_at'],
             ],
             \App\Models\UserLibrary::TABLE_NAME => [
                 'searchableAttributes' => ['trackable.original_title', 'trackable.title', 'trackable.synonym_titles', 'trackable.translations', 'trackable.synopsis', 'trackable.tagline'],
