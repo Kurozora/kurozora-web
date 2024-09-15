@@ -69,7 +69,7 @@ class Anime extends Component
                     $query->where('user_id', '=', $user->id);
                 }]);
             })
-            ->paginate(5);
+            ->paginate(25);
     }
 
     /**
