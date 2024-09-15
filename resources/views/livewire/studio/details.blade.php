@@ -40,11 +40,57 @@
                             @svg('pencil', 'fill-current', ['width' => '44'])
                         </x-nova-link>
                     </div>
-                    @if (!empty($studio->founded))
-                        <p class="text-lg">{{ __('Founded on :x', ['x' => $studio->founded->toFormattedDateString()]) }}</p>
+                    @if (!empty($studio->founded_at))
+                        <p class="text-lg">{{ __('Founded on :x', ['x' => $studio->founded_at->toFormattedDateString()]) }}</p>
                     @endif
                 </div>
             </div>
+        </section>
+
+        <section id="badges" class="flex flex-row flex-nowrap whitespace-nowrap justify-between items-center text-center pb-5 pl-4 pr-4 overflow-x-scroll no-scrollbar">
+            <div id="ratingBadge" class="flex-grow pr-12">
+                <a href="#ratingsAndReviews">
+                    <p class="font-bold text-orange-500">
+                        {{ number_format($studio->mediaStat->rating_average, 1) }}
+                    </p>
+
+                    <livewire:components.star-rating :rating="$studio->mediaStat->rating_average" :star-size="'sm'" :disabled="true" />
+
+                    <p class="text-sm text-gray-500">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x reviews', (int) $studio->mediaStat->rating_count, ['x' => number_shorten((int) $studio->mediaStat->rating_count, 0, true)]) }}</p>
+                </a>
+            </div>
+
+            <div id="rankingBadge" class="flex-grow px-12 border-l-2">
+                <a class="flex flex-col items-center" href="{{ route('charts.top', App\Enums\ChartKind::Studios) }}" wire:navigate>
+                    <p class="font-bold">{{ trans_choice('{0} -|[1,*] #:x', $studio->mediaStat->rank_total ?? 0, ['x' => $studio->mediaStat->rank_total]) }}</p>
+                    <p class="text-orange-500">
+                        @svg('chart_bar_fill', 'fill-current', ['width' => '20'])
+                    </p>
+                    <p class="text-sm text-gray-500">{{ __('Chart') }}</p>
+                </a>
+            </div>
+
+            <div id="tvRatingBadge" class="flex-grow px-12 border-l-2">
+                <a class="flex flex-col items-center" href="#tvRating">
+                    <p class="font-bold">{{ $studio->tv_rating->name }}</p>
+                    <p class="text-orange-500">
+                        @svg('tv_fill', 'fill-current', ['width' => '20'])
+                    </p>
+                    <p class="text-sm text-gray-500">{{ __('Rated') }}</p>
+                </a>
+            </div>
+
+            @if (!empty($this->studio->successor))
+                <div id="studioBadge" class="flex-grow px-12 border-l-2">
+                    <a class="flex flex-col items-center" href="{{ route('studios.details', $this->studio->successor) }}" wire:navigate>
+                        <p class="font-bold">{{ $this->studio->successor->name }}</p>
+                        <p class="text-orange-500">
+                            @svg('building_2_fill', 'fill-current', ['width' => '20'])
+                        </p>
+                        <p class="text-sm text-gray-500">{{ __('Successor') }}</p>
+                    </a>
+                </div>
+            @endif
         </section>
 
         @if ($studio->about)
@@ -125,14 +171,38 @@
             </x-section-nav>
 
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
+                <x-information-list id="aliases" title="{{ __('Aliases') }}" icon="{{ asset('images/symbols/person.svg') }}">
+                    <x-slot:information>
+                        @if (!empty($studio->japanese_name))
+                            {{ __('Japanese: :x', ['x' => $studio->japanese_name]) }} <br />
+                        @endif
+
+                        @if (count(array_filter((array)$studio->alternative_names)))
+                            {{ __('Nicknames: :x', ['x' => collect(array_filter((array)$studio->alternative_names))->join(', ', ' and ')]) }} <br />
+                        @endif
+                    </x-slot:information>
+                </x-information-list>
+
                 <x-information-list id="founded" title="{{ __('Founded') }}" icon="{{ asset('images/symbols/calendar.svg') }}">
                     <x-slot:information>
-                        {{ $studio->founded?->toFormattedDateString() ?? '-' }}
+                        {{ $studio->founded_at?->toFormattedDateString() ?? '-' }}
                     </x-slot:information>
 
                     <x-slot:footer>
-                        @if (!empty($studio->founded))
-                            {{ __('The studio was founded :x years ago.', ['x' => $studio->founded?->age]) }}
+                        @if (!empty($studio->founded_at))
+                            {{ __('The studio was founded :x years ago.', ['x' => $studio->founded_at?->age]) }}
+                        @endif
+                    </x-slot:footer>
+                </x-information-list>
+
+                <x-information-list id="defunct" title="{{ __('Defunct') }}" icon="{{ asset('images/symbols/calendar_badge_exclamationmark.svg') }}">
+                    <x-slot:information>
+                        {{ $studio->defunct_at?->toFormattedDateString() ?? '-' }}
+                    </x-slot:information>
+
+                    <x-slot:footer>
+                        @if (!empty($studio->defunct_at))
+                            {{ __('The studio has been defunct for :x years.', ['x' => $studio->defunct_at?->age]) }}
                         @endif
                     </x-slot:footer>
                 </x-information-list>
@@ -143,7 +213,35 @@
                     </x-slot:information>
                 </x-information-list>
 
-                <x-information-list id="Website" title="{{ __('Website') }}" icon="{{ asset('images/symbols/safari.svg') }}">
+                <x-information-list id="tvRating" title="{{ __('Rating') }}" icon="{{ asset('images/symbols/tv_rating.svg') }}">
+                    <x-slot:information>
+                        {{ $studio->tv_rating->name }}
+                    </x-slot:information>
+
+                    <x-slot:footer>
+                        <p class="text-sm">{{ $studio->tv_rating->description }}.</p>
+                    </x-slot:footer>
+                </x-information-list>
+
+                <x-information-list id="socialsURLs" title="{{ __('Socials') }}" icon="{{ asset('images/symbols/globe.svg') }}">
+                    <x-slot:information>
+                        @if (!empty($studio->social_urls))
+                            <ul class="list-disc">
+                                @foreach ($studio->social_urls as $social_url)
+                                    <li>
+                                        <x-link href="{{ $social_url }}" target="_blank">
+                                            {{ str_ireplace('www.', '', parse_url($social_url, PHP_URL_HOST)) ?? $social_url }}
+                                        </x-link>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @else
+                            -
+                        @endif
+                    </x-slot:information>
+                </x-information-list>
+
+                <x-information-list id="websites" title="{{ __('Websites') }}" icon="{{ asset('images/symbols/safari.svg') }}">
                     <x-slot:information>
                         @if (!empty($studio->website_urls))
                             <ul class="list-disc">
