@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Avatar;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
+use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\HasMany;
@@ -236,22 +237,51 @@ class Studio extends Resource
                 ->rules('required')
                 ->sortable(),
 
+            Text::make('Japanese Name')
+                ->hideFromIndex(),
+
+            Code::make('Alternative Names')
+                ->json()
+                ->hideFromIndex()
+                ->nullable(),
+
             Textarea::make('About')
                 ->help('A description of the studio.'),
 
             Text::make('Address')
                 ->help('The address of the studio.'),
 
-            Date::make('Founded')
+            Date::make('Founded At')
                 ->displayUsing(function ($founded) {
                     return $founded?->format('Y-m-d');
                 })
                 ->help('The date on which the studio was founded. For example: 2015-12-03'),
 
+            Date::make('Defunct At')
+                ->displayUsing(function ($founded) {
+                    return $founded?->format('Y-m-d');
+                })
+                ->help('The date on which the studio went bankrupt. For example: 2015-12-03'),
+
+            BelongsTo::make('TV rating', 'tv_rating')
+                ->sortable()
+                ->help('The TV rating of the studio. For example NR, G, PG-12, etc.')
+                ->required(),
+
+            Boolean::make('Is NSFW')
+                ->sortable()
+                ->help('NSFW: Not Safe For Work (not suitable for watchers under the age of 18).'),
+
+            Code::make('Social URLs')
+                ->json()
+                ->hideFromIndex()
+                ->help('The URLs to the official social media of the studio. Separated by ","')
+                ->nullable(),
+
             Code::make('Website URLs')
                 ->json()
                 ->hideFromIndex()
-                ->help('The URLs to the official website of the studio. Separated by ","')
+                ->help('The URLs to profile websites of the studio, for example Wikipedia. Separated by ","')
                 ->nullable(),
 
             HasMany::make('Media Studios'),
