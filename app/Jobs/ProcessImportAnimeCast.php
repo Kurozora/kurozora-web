@@ -4,10 +4,10 @@ namespace App\Jobs;
 
 use App\Models\KDashboard\AnimeCharacter as KAnimeCast;
 use App\Services\ImportAnimeCastProcessor;
-use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
