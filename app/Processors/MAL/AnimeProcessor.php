@@ -8,6 +8,7 @@ use App\Enums\SongType;
 use App\Enums\StudioType;
 use App\Events\BareBonesAnimeAdded;
 use App\Events\BareBonesMangaAdded;
+use App\Events\BareBonesProducerAdded;
 use App\Models\Anime;
 use App\Models\Genre;
 use App\Models\Manga;
@@ -577,6 +578,10 @@ class AnimeProcessor extends CustomItemProcessor
             $mediaStudio = $anime?->mediaStudios()
                 ->withoutGlobalScopes()
                 ->firstWhere('studio_id', '=', $studio->id);
+
+            if ($studio->wasRecentlyCreated) {
+                event(new BareBonesProducerAdded($studio));
+            }
 
             if (empty($mediaStudio)) {
                 MediaStudio::create([
