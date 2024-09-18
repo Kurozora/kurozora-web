@@ -38,9 +38,11 @@ class StudioResourceBasic extends JsonResource
                 'japaneseName' => $this->resource->japanese_name,
                 'alternativeNames' => $this->resource->alternative_names,
                 'predecessors' => $this->resource->predecessors?->pluck('name')->toArray(),
-                'successors' => $this->resource->successor?->name,
+                'successor' => $this->resource->successor?->name,
                 'about' => $this->resource->about,
                 'address' => $this->resource->address,
+                'tvRating' => $this->resource->tv_rating->only(['name', 'description']),
+                'stats' => MediaStatsResource::make($this->resource->mediaStat),
                 'socialURLs' => $this->resource->social_urls,
                 'websiteURLs' => $this->resource->website_urls,
                 'isProducer' => $this->whenPivotLoaded(MediaStudio::TABLE_NAME, function () {
