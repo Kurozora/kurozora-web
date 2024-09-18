@@ -17,7 +17,11 @@
 
     <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6" wire:init="loadPage">
         <section class="mb-4">
-            <div>
+            <div
+                x-data="{
+                    type: @entangle('typeQuery').live
+                }"
+            >
                 <div class="flex gap-1">
                     <div class="flex flex-wrap items-center w-full">
                         <h1 class="text-2xl font-bold">{{ __('Games') }}</h1>
@@ -34,6 +38,23 @@
                         </x-square-button>
                     </x-slot:rightBarButtonItems>
                 </x-search-bar>
+
+                <x-hr class="mt-4 mb-4" />
+
+                <div class="flex gap-2 whitespace-nowrap overflow-x-scroll no-scrollbar">
+                    @foreach ($this->searchScopes as $key => $value)
+                        @php($type = str($value)->slug())
+                        <template x-if="type === '{{ $type }}'">
+                            <x-button>{{ $value }}</x-button>
+                        </template>
+
+                        <template x-if="type !== '{{ $type }}'">
+                            <x-outlined-button
+                                x-on:click="type = '{{ $type }}'"
+                            >{{ __($value) }}</x-outlined-button>
+                        </template>
+                    @endforeach
+                </div>
             </div>
         </section>
 
