@@ -16,6 +16,16 @@ trait WithStudioSearch
     public static string $searchModel = Studio::class;
 
     /**
+     * The column used for the letter index query.
+     *
+     * @return string
+     */
+    protected function letterIndexColumn(): string
+    {
+        return 'name';
+    }
+
+    /**
      * Redirect the user to a random studio.
      *
      * @return void

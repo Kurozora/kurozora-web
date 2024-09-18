@@ -5,6 +5,7 @@ namespace App\Traits\Livewire;
 use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Illuminate\Support\Collection;
 use Laravel\Scout\Builder as ScoutBuilder;
 
 trait WithSearch
@@ -19,6 +20,13 @@ trait WithSearch
     public string $search = '';
 
     /**
+     * The selected index letter.
+     *
+     * @var string $letter
+     */
+    public string $letter = '';
+
+    /**
      * The component's filter attributes.
      *
      * @var array $filter
@@ -31,6 +39,28 @@ trait WithSearch
      * @var array $order
      */
     public array $order = [];
+
+    /**
+     * The query strings of the component.
+     *
+     * @return string[]
+     */
+    protected function queryString(): array
+    {
+        return [
+            'letter' => ['except' => ''],
+        ];
+    }
+
+    /**
+     * The column used for the letter index query.
+     *
+     * @return string
+     */
+    protected function letterIndexColumn(): string
+    {
+        return 'original_title';
+    }
 
     /**
      * Prepare the component.
@@ -91,7 +121,14 @@ trait WithSearch
         // If no search, filter or order was performed, return the model's index
         if (empty($this->search) && (empty($wheres) && empty($whereIns)) && empty($orders)) {
             $models = static::$searchModel::query();
-            $models = $this->searchIndexQuery($models);
+            $models = $this->searchIndexQuery($models)
+                ->when(!empty($this->letter), function (EloquentBuilder $query) {
+                    if ($this->letter == '.') {
+                        $query->whereRaw($this->letterIndexColumn() . ' REGEXP \'^[^a-zA-Z]*$\'');
+                    } else {
+                        $query->whereLike($this->letterIndexColumn(), $this->letter . '%');
+                    }
+                });
             return $models->paginate($this->perPage);
         }
 
@@ -170,5 +207,20 @@ trait WithSearch
             $filter['selected'] = null;
             return $filter;
         }, $this->filter);
+    }
+
+    /**
+     * The computed collection of letter indexes.
+     *
+     * @return Collection
+     */
+    public function getLetteredIndexProperty(): Collection
+    {
+        $keys = range('A', 'Z');
+        $values = range('a', 'z');
+
+        return collect($keys)
+            ->combine($values)
+            ->prepend('.', '#');
     }
 }

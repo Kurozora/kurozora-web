@@ -16,6 +16,16 @@ trait WithPersonSearch
     public static string $searchModel = Person::class;
 
     /**
+     * The column used for the letter index query.
+     *
+     * @return string
+     */
+    protected function letterIndexColumn(): string
+    {
+        return 'first_name';
+    }
+
+    /**
      * Redirect the user to a random person.
      *
      * @return void

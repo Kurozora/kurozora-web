@@ -16,6 +16,16 @@ trait WithCharacterSearch
     public static string $searchModel = Character::class;
 
     /**
+     * The column used for the letter index query.
+     *
+     * @return string
+     */
+    protected function letterIndexColumn(): string
+    {
+        return 'name';
+    }
+
+    /**
      * Redirect the user to a random character.
      *
      * @return void
