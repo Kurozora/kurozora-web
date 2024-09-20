@@ -275,6 +275,17 @@ class Manga extends KModel implements HasMedia, Sitemapable
                 'type' => 'duration',
                 'selected' => null,
             ],
+            'country_id' => [
+                'title' => __('Country of Origin'),
+                'type' => 'multiselect',
+                'options' => [
+                    'cn' => 'China',
+                    'ja' => 'Japan',
+                    'kr' => 'Korea',
+                    'us' => 'United States',
+                ],
+                'selected' => null,
+            ],
             'tv_rating_id' => [
                 'title' => __('TV Rating'),
                 'type' => 'multiselect',
@@ -543,6 +554,16 @@ class Manga extends KModel implements HasMedia, Sitemapable
     {
         return $this->belongsTo(Status::class)
             ->where('type', 'manga');
+    }
+
+    /**
+     * The manga's country of origin.
+     *
+     * @return BelongsTo
+     */
+    public function country_of_origin(): BelongsTo
+    {
+        return $this->belongsTo(Country::class, 'country_id', 'code');
     }
 
     /**

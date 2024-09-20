@@ -136,7 +136,7 @@ return [
             \App\Models\Anime::TABLE_NAME => [
                 'searchableAttributes' => ['original_title', 'title', 'synonym_titles', 'translations', 'synopsis', 'tagline', 'tags'],
                 'sortableAttributes'=> ['original_title', 'title', 'duration', 'air_time', 'air_day', 'air_season', 'is_nsfw', 'rank_total', 'started_at', 'ended_at', 'created_at', 'update_at'],
-                'filterableAttributes'=> ['id', 'tv_rating_id', 'media_type_id', 'source_id', 'status_id', 'genres.id', 'themes.id', 'duration', 'air_time', 'air_day', 'air_season', 'is_nsfw', 'episode_count', 'season_count', 'started_at', 'ended_at'],
+                'filterableAttributes'=> ['id', 'country_id', 'tv_rating_id', 'media_type_id', 'source_id', 'status_id', 'genres.id', 'themes.id', 'duration', 'air_time', 'air_day', 'air_season', 'is_nsfw', 'episode_count', 'season_count', 'started_at', 'ended_at'],
             ],
             \App\Models\AppTheme::TABLE_NAME => [
                 'searchableAttributes' => ['name'],
@@ -156,12 +156,12 @@ return [
             \App\Models\Game::TABLE_NAME => [
                 'searchableAttributes' => ['original_title', 'title', 'synonym_titles', 'translations', 'synopsis', 'tagline', 'tags'],
                 'sortableAttributes'=> ['original_title', 'title', 'duration', 'publication_day', 'publication_season', 'is_nsfw', 'rank_total', 'edition_count', 'published_at', 'created_at', 'update_at'],
-                'filterableAttributes'=> ['id', 'duration', 'tv_rating_id', 'media_type_id', 'source_id', 'status_id', 'genres.id', 'themes.id', 'publication_day', 'publication_season', 'is_nsfw', 'edition_count', 'published_at'],
+                'filterableAttributes'=> ['id', 'duration', 'country_id', 'tv_rating_id', 'media_type_id', 'source_id', 'status_id', 'genres.id', 'themes.id', 'publication_day', 'publication_season', 'is_nsfw', 'edition_count', 'published_at'],
             ],
             \App\Models\Manga::TABLE_NAME => [
                 'searchableAttributes' => ['original_title', 'title', 'synonym_titles', 'translations', 'synopsis', 'tagline', 'tags'],
                 'sortableAttributes'=> ['original_title', 'title', 'duration', 'publication_time', 'publication_day', 'publication_season', 'is_nsfw', 'rank_total', 'started_at', 'ended_at', 'created_at', 'update_at'],
-                'filterableAttributes'=> ['id', 'duration', 'publication_time', 'publication_day', 'publication_season', 'is_nsfw', 'tv_rating_id', 'media_type_id', 'source_id', 'status_id', 'genres.id', 'themes.id', 'volume_count', 'chapter_count', 'page_count', 'started_at', 'ended_at'],
+                'filterableAttributes'=> ['id', 'duration', 'publication_time', 'publication_day', 'publication_season', 'is_nsfw', 'country_id', 'tv_rating_id', 'media_type_id', 'source_id', 'status_id', 'genres.id', 'themes.id', 'volume_count', 'chapter_count', 'page_count', 'started_at', 'ended_at'],
             ],
             \App\Models\Person::TABLE_NAME => [
                 'searchableAttributes' => ['first_name', 'last_name', 'family_name', 'given_name', 'alternative_names', 'about', 'short_description'],

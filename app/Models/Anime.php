@@ -623,6 +623,16 @@ class Anime extends KModel implements HasMedia, Sitemapable
     }
 
     /**
+     * The anime's country of origin.
+     *
+     * @return BelongsTo
+     */
+    public function country_of_origin(): BelongsTo
+    {
+        return $this->belongsTo(Country::class, 'country_id', 'code');
+    }
+
+    /**
      * The anime's TV rating.
      *
      * @return BelongsTo
@@ -843,6 +853,17 @@ class Anime extends KModel implements HasMedia, Sitemapable
             'duration' => [
                 'title' => __('Duration (seconds)'),
                 'type' => 'duration',
+                'selected' => null,
+            ],
+            'country_id' => [
+                'title' => __('Country of Origin'),
+                'type' => 'multiselect',
+                'options' => [
+                    'cn' => 'China',
+                    'ja' => 'Japan',
+                    'kr' => 'Korea',
+                    'us' => 'United States',
+                ],
                 'selected' => null,
             ],
             'tv_rating_id' => [
