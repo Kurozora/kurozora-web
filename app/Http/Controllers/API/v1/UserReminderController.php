@@ -56,7 +56,7 @@ class UserReminderController extends Controller
                     ->where(UserLibrary::TABLE_NAME . '.user_id', '=', $user->id)
                     ->where(UserLibrary::TABLE_NAME . '.is_hidden', '=', false);
             })
-            ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating', 'mediaRatings' => function ($query) use ($user) {
+            ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating', 'country_of_origin', 'mediaRatings' => function ($query) use ($user) {
                 $query->where([
                     ['user_id', '=', $user->id],
                 ]);
@@ -125,7 +125,7 @@ class UserReminderController extends Controller
                     ->where(UserLibrary::TABLE_NAME . '.user_id', '=', $user->id)
                     ->where(UserLibrary::TABLE_NAME . '.is_hidden', '=', false);
             })
-            ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating', 'mediaRatings' => function ($query) use ($user) {
+            ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating', 'country_of_origin', 'mediaRatings' => function ($query) use ($user) {
                 $query->where([
                     ['user_id', '=', $user->id],
                 ]);

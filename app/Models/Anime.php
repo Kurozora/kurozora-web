@@ -715,7 +715,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
     protected function makeAllSearchableUsing(Builder $query): Builder
     {
         return $query->withoutGlobalScopes()
-            ->with(['genres', 'languages', 'mediaStat', 'media_type', 'source', 'status', 'themes', 'translations', 'tv_rating']);
+            ->with(['genres', 'languages', 'mediaStat', 'media_type', 'source', 'status', 'themes', 'translations', 'tv_rating', 'country_of_origin']);
     }
 
     /**
@@ -734,6 +734,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
         $anime['media_stat'] = $this->mediaStat?->toSearchableArray();
         $anime['translations'] = $this->translations
             ->select(['locale', 'title', 'synopsis', 'tagline']);
+        $anime['country_of_origin'] = $this->country_of_origin?->toSearchableArray();
         $anime['tv_rating'] = $this->tv_rating?->toSearchableArray();
         $anime['media_type'] = $this->media_type?->toSearchableArray();
         $anime['source'] = $this->source?->toSearchableArray();

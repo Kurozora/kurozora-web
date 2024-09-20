@@ -601,7 +601,7 @@ class Game extends KModel implements HasMedia, Sitemapable
     protected function makeAllSearchableUsing(Builder $query): Builder
     {
         return $query->withoutGlobalScopes()
-            ->with(['genres', 'languages', 'mediaStat', 'media_type', 'source', 'status', 'themes', 'translations', 'tv_rating']);
+            ->with(['genres', 'languages', 'mediaStat', 'media_type', 'source', 'status', 'themes', 'translations', 'tv_rating', 'country_of_origin']);
     }
 
     /**
@@ -620,6 +620,7 @@ class Game extends KModel implements HasMedia, Sitemapable
         $game['media_stat'] = $this->mediaStat?->toSearchableArray();
         $game['translations'] = $this->translations
             ->select(['locale', 'title', 'synopsis', 'tagline']);
+        $game['country_of_origin'] = $this->country_of_origin?->toSearchableArray();
         $game['tv_rating'] = $this->tv_rating?->toSearchableArray();
         $game['media_type'] = $this->media_type?->toSearchableArray();
         $game['source'] = $this->source?->toSearchableArray();
