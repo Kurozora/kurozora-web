@@ -34,7 +34,7 @@
             "name": "{{ $anime->title }}",
             "alternateName": "{{ $anime->original_title }}",
             "image": "{{ $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}",
-            "description": "{{ str_replace('"', "'", $anime->synopsis) }}",
+            "description": "{{ json_encode($anime->synopsis) }}",
             "aggregateRating": {
                 "@type":"AggregateRating",
                 "itemReviewed": {
@@ -50,17 +50,24 @@
                 "ratingValue": {{ $anime->mediaStat->rating_average ?? 2.5 }}
             },
             "contentRating": "{{ $anime->tv_rating->name }}",
+            @if (!empty($anime->country_of_origin))
+                "countryOfOrigin": {
+                    "@type": "Country",
+                    "name": "{{ $anime->country_of_origin->name }}",
+                    "alternateName": "{{ $anime->country_of_origin->code }}"
+                },
+            @endif
             "genre": {!! $anime->genres()->pluck('name') !!},
             "datePublished": "{{ $anime->started_at?->format('Y-m-d') }}",
-            "keywords": "anime{{ (',' . $anime->keywords) ?? '' }}"
             @if (!empty($this->studio))
-                ,"creator":[
+                "creator":[
                     {
                         "@type":"Organization",
                         "url":"/studio/{{ $this->studio->id }}/"
                     }
-                ]
+                ],
             @endif
+            "keywords": "anime{{ (',' . $anime->keywords) ?? '' }}"
             @if (!empty($anime->video_url))
                 ,"trailer": {
                     "@type":"VideoObject",
@@ -215,6 +222,18 @@
                                 @svg('building_2_fill', 'fill-current', ['width' => '20'])
                             </p>
                             <p class="text-sm text-gray-500">{{ __('Studio') }}</p>
+                        </a>
+                    </div>
+                @endif
+
+                @if (!empty($anime->country_of_origin))
+                    <div id="countryBadge" class="flex-grow px-12 border-l-2">
+                        <a class="flex flex-col items-center" href="#country">
+                            <p class="font-bold">{{ strtoupper($anime->country_of_origin->code) }}</p>
+                            <p class="text-orange-500">
+                                @svg('globe', 'fill-current', ['width' => '20'])
+                            </p>
+                            <p class="text-sm text-gray-500">{{ __('Country') }}</p>
                         </a>
                     </div>
                 @endif
@@ -421,7 +440,13 @@
                         </x-slot:footer>
                     </x-information-list>
 
-                    <x-information-list id="languages" title="{{ __('Languages') }}" icon="{{ asset('images/symbols/globe.svg') }}">
+                    <x-information-list id="country" title="{{ __('Country') }}" icon="{{ asset('images/symbols/globe.svg') }}">
+                        <x-slot:information>
+                            {{ $anime->country_of_origin?->name ?: '-' }}
+                        </x-slot:information>
+                    </x-information-list>
+
+                    <x-information-list id="languages" title="{{ __('Languages') }}" icon="{{ asset('images/symbols/character_bubble.svg') }}">
                         <x-slot:information>
                             {{ $anime->languages->pluck('name')->join(', ', ' and ') ?: '-' }}
                         </x-slot:information>

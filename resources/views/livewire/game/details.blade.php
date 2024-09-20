@@ -34,7 +34,7 @@
             "name": "{{ $game->title }}",
             "alternateName": "{{ $game->original_title }}",
             "image": "{{ $game->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $game->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}",
-            "description": "{{ str_replace('"', "'", $game->synopsis) }}",
+            "description": "{{ json_encode($game->synopsis) }}",
             "aggregateRating": {
                 "@type":"AggregateRating",
                 "itemReviewed": {
@@ -50,17 +50,24 @@
                 "ratingValue": {{ $game->mediaStat->rating_average ?? 2.5 }}
             },
             "contentRating": "{{ $game->tv_rating->name }}",
+            @if (!empty($game->country_of_origin))
+                "countryOfOrigin": {
+                    "@type": "Country",
+                    "name": "{{ $game->country_of_origin->name }}",
+                    "alternateName": "{{ $game->country_of_origin->code }}"
+                },
+            @endif
             "genre": {!! $game->genres()->pluck('name') !!},
             "datePublished": "{{ $game->published_at?->format('Y-m-d') }}",
-            "keywords": "game{{ (',' . $game->keywords) ?? '' }}"
             @if (!empty($this->studio))
-                ,"creator":[
+                "creator":[
                     {
                         "@type":"Organization",
                         "url":"/studio/{{ $this->studio->id }}/"
                     }
-                ]
+                ],
             @endif
+            "keywords": "game{{ (',' . $game->keywords) ?? '' }}"
             @if (!empty($game->video_url))
                 ,"trailer": {
                     "@type":"VideoObject",
@@ -216,6 +223,18 @@
                                 @svg('building_2_fill', 'fill-current', ['width' => '20'])
                             </p>
                             <p class="text-sm text-gray-500">{{ __('Studio') }}</p>
+                        </a>
+                    </div>
+                @endif
+
+                @if (!empty($game->country_of_origin))
+                    <div id="countryBadge" class="flex-grow px-12 border-l-2">
+                        <a class="flex flex-col items-center" href="#country">
+                            <p class="font-bold">{{ strtoupper($game->country_of_origin->code) }}</p>
+                            <p class="text-orange-500">
+                                @svg('globe', 'fill-current', ['width' => '20'])
+                            </p>
+                            <p class="text-sm text-gray-500">{{ __('Country') }}</p>
                         </a>
                     </div>
                 @endif
@@ -410,6 +429,12 @@
                         <x-slot:footer>
                             <p class="text-sm">{{ $game->tv_rating->description }}.</p>
                         </x-slot:footer>
+                    </x-information-list>
+
+                    <x-information-list id="country" title="{{ __('Country') }}" icon="{{ asset('images/symbols/globe.svg') }}">
+                        <x-slot:information>
+                            {{ $game->country_of_origin?->name ?: '-' }}
+                        </x-slot:information>
                     </x-information-list>
 
                     <x-information-list id="languages" title="{{ __('Languages') }}" icon="{{ asset('images/symbols/globe.svg') }}">

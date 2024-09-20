@@ -103,7 +103,7 @@ class Details extends Component
         // Call the ModelViewed event
         ModelViewed::dispatch($anime, request()->ip());
 
-        $this->anime = $anime->loadMissing(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'themes', 'translations', 'status', 'tv_rating'])
+        $this->anime = $anime->loadMissing(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'themes', 'translations', 'status', 'tv_rating', 'country_of_origin'])
             ->when(auth()->user(), function ($query, $user) use ($anime) {
                 return $anime->loadMissing(['mediaRatings' => function ($query) {
                     $query->where('user_id', '=', auth()->user()->id);

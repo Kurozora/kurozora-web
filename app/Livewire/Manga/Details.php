@@ -96,7 +96,7 @@ class Details extends Component
         // Call the ModelViewed event
         ModelViewed::dispatch($manga, request()->ip());
 
-        $this->manga = $manga->loadMissing(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'themes', 'translations', 'status', 'tv_rating'])
+        $this->manga = $manga->loadMissing(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'themes', 'translations', 'status', 'tv_rating', 'country_of_origin'])
             ->when(auth()->user(), function ($query, $user) use ($manga) {
                 return $manga->loadMissing(['mediaRatings' => function ($query) {
                     $query->where('user_id', '=', auth()->user()->id);
