@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Country;
 use App\Models\Game;
 use App\Models\MediaType;
 use App\Models\Source;
@@ -26,6 +27,7 @@ return new class extends Migration
             $table->string('slug', 280);
             $table->string('original_title', 280);
             $table->json('synonym_titles')->nullable();
+            $table->string('country_id', 2)->default('jp')->nullable();
             $table->unsignedBigInteger('tv_rating_id')->nullable();
             $table->unsignedBigInteger('parent_id')->nullable();
             $table->unsignedBigInteger('media_type_id')->nullable();
@@ -58,6 +60,11 @@ return new class extends Migration
             $table->unique(['slug']);
 
             // Set foreign key constraints
+            $table->foreign('country_id')
+                ->references('code')
+                ->on(Country::TABLE_NAME)
+                ->nullOnDelete()
+                ->cascadeOnUpdate();
             $table->foreign('tv_rating_id')
                 ->references('id')
                 ->on(TvRating::TABLE_NAME)

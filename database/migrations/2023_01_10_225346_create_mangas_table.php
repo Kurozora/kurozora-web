@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Country;
 use App\Models\Manga;
 use App\Models\MediaType;
 use App\Models\Source;
@@ -35,6 +36,7 @@ return new class extends Migration
             $table->unsignedTinyInteger('publication_day')->nullable();
             $table->unsignedTinyInteger('publication_season')->nullable();
             $table->boolean('is_nsfw')->default(false);
+            $table->string('country_id', 2)->default('jp')->nullable();
             $table->unsignedBigInteger('tv_rating_id')->nullable();
             $table->unsignedBigInteger('media_type_id')->nullable();
             $table->unsignedBigInteger('source_id')->nullable();
@@ -64,6 +66,11 @@ return new class extends Migration
             $table->unique(['slug']);
 
             // Set foreign key constraints
+            $table->foreign('country_id')
+                ->references('code')
+                ->on(Country::TABLE_NAME)
+                ->nullOnDelete()
+                ->cascadeOnUpdate();
             $table->foreign('tv_rating_id')
                 ->references('id')
                 ->on(TvRating::TABLE_NAME)
