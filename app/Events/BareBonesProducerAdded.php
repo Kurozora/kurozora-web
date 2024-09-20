@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-use App\Models\Anime;
+use App\Models\Studio;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
@@ -12,7 +12,7 @@ class BareBonesProducerAdded
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
-     * The MAL id of the anime.
+     * The MAL id of the studio.
      *
      * @var string $malID
      */
@@ -21,10 +21,10 @@ class BareBonesProducerAdded
     /**
      * Create a new event instance.
      *
-     * @param Anime $anime
+     * @param Studio $studio
      */
-    public function __construct(Anime $anime)
+    public function __construct(Studio $studio)
     {
-        $this->malID = $anime->mal_id;
+        $this->malID = $studio->mal_id;
     }
 }
