@@ -34,5 +34,13 @@ Route::prefix('/studios')
                 Route::get('/games', [StudioController::class, 'games'])
                     ->middleware('auth.kurozora:optional')
                     ->name('.games');
+
+                Route::post('/rate', [StudioController::class, 'rateStudio'])
+                    ->middleware('auth.kurozora')
+                    ->name('.rate');
+
+                Route::get('/reviews', [StudioController::class, 'reviews'])
+                    ->middleware('auth.kurozora:optional')
+                    ->name('.reviews');
             });
     });
