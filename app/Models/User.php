@@ -406,6 +406,17 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     }
 
     /**
+     * Returns the studio ratings the user has.
+     *
+     * @return HasMany
+     */
+    public function studioRatings(): HasMany
+    {
+        return $this->mediaRatings()
+            ->where('model_type', '=', Studio::class);
+    }
+
+    /**
      * Returns the associated feed messages for the user.
      *
      * @return HasMany
