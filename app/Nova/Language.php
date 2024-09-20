@@ -82,6 +82,12 @@ class Language extends Resource
                 ->help('The code of the language according to ISO 639-1.')
                 ->rules(['string', 'alpha', 'size:2'])
                 ->required(),
+
+            Text::make('ISO 639-3', 'iso_639_3')
+                ->sortable()
+                ->help('The code of the language according to ISO 639-3.')
+                ->rules(['string', 'alpha', 'size:3'])
+                ->required(),
         ];
     }
 
