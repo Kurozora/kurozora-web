@@ -608,10 +608,10 @@ class MangaProcessor extends CustomItemProcessor
         foreach ($malStudios as $malStudioID => $malStudioName) {
             $studio = Studio::withoutGlobalScopes()
                 ->firstOrCreate([
-                    'mal_id' => $malStudioID
+                    'mal_id' => $malStudioID,
+                    'type' => StudioType::Manga,
                 ], [
                     'name' => $malStudioName,
-                    'type' => StudioType::Manga,
                 ]);
             $mediaStudio = $manga?->mediaStudios()
                 ->withoutGlobalScopes()

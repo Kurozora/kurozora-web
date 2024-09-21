@@ -570,10 +570,10 @@ class AnimeProcessor extends CustomItemProcessor
         foreach ($malStudios as $malStudioID => $malStudioName) {
             $studio = Studio::withoutGlobalScopes()
                 ->firstOrCreate([
-                    'mal_id' => $malStudioID
+                    'mal_id' => $malStudioID,
+                    'type' => StudioType::Anime,
                 ], [
                     'name' => $malStudioName,
-                    'type' => StudioType::Anime,
                 ]);
             $mediaStudio = $anime?->mediaStudios()
                 ->withoutGlobalScopes()
