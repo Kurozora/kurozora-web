@@ -129,7 +129,7 @@ class ProducerSpider extends BasicSpider
                 ->value();
             $synonymTitles = collect(explode(', ', $synonymTitles))
                 ->transform(function ($synonymTitle) {
-                    return $this->cleanHTML($synonymTitle);
+                    return strip_html($synonymTitle);
                 })
                 ->filter(function ($synonymTitle) {
                     return !empty($synonymTitle);
@@ -144,7 +144,7 @@ class ProducerSpider extends BasicSpider
             $element = $response->filter('.content-left div[class=\'spaceit_pad\'] span:not([class=\'dark_text\'])');
 
             if ($element->count()) {
-                $about = $this->cleanHTML($element->text());
+                $about = strip_html($element->text());
             }
         } catch (Exception $e) {
             //
@@ -177,7 +177,7 @@ class ProducerSpider extends BasicSpider
             if ($availableAtLinks->count()) {
                 $socialLinks = $availableAtLinks
                     ->each(function (Crawler $item) {
-                        return $this->cleanHTML($item->attr('href'));
+                        return strip_html($item->attr('href'));
                     });
             }
         } catch (Exception $e) {
@@ -191,7 +191,7 @@ class ProducerSpider extends BasicSpider
             if ($resourcesLinks->count()) {
                 $websiteLinks = $resourcesLinks
                     ->each(function (Crawler $item) {
-                        return $this->cleanHTML($item->attr('href'));
+                        return strip_html($item->attr('href'));
                     });
             }
         } catch (Exception $e) {
@@ -260,37 +260,5 @@ class ProducerSpider extends BasicSpider
 
         // Return clean url
         return preg_replace($regex, '', $cleanImageURL);
-    }
-
-    /**
-     * Cleans the given HTML string.
-     *
-     * @param string $string
-     *
-     * @return string
-     */
-    public static function cleanHTML(string $string): string
-    {
-        // Convert breaks to new line
-        $string = str_replace(
-            ['<br>', '<br />', '<br/>', '<br >'],
-            "\\n",
-            $string
-        );
-
-        // Convert nbsp to space
-        $string = str_replace("\xc2\xa0", ' ', $string);
-
-        // Remove control characters
-        $string = preg_replace('~[[:cntrl:]]~', '', $string);
-
-        // Strip any leftover tags
-        $string = strip_tags($string);
-
-        // Remove any newlines at the end
-        $string = str_replace('\\n', "\n", $string);
-
-        // Trim and return
-        return trim($string);
     }
 }

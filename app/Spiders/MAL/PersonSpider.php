@@ -119,7 +119,7 @@ class PersonSpider extends BasicSpider
                 ->filter('.people-informantion-more');
 
             $regex = '/(Twitter|Instagram|Facebook|Blog|Agency):(.*?)\n/';
-            $about = str($this->cleanHTML($element->html()))
+            $about = str(strip_html($element->html()))
                 ->replaceMatches($regex, '')
                 ->trim()
                 ->value();
@@ -162,7 +162,7 @@ class PersonSpider extends BasicSpider
                 $name = $item->filter('td:nth-child(3) a[href*="/character/"]')
                     ->text();
 
-                $role = $this->cleanHTML($item->filter('td:nth-child(3) div:nth-child(2)')
+                $role = strip_html($item->filter('td:nth-child(3) div:nth-child(2)')
                     ->text());
 
                 return [
@@ -184,7 +184,7 @@ dd($animeCharacters);
                     ->text();
 
                 $regex = '/\([^)]*\)/';
-                $roles = str($this->cleanHTML($item->filter('td:nth-child(2) div:nth-child(2) small')
+                $roles = str(strip_html($item->filter('td:nth-child(2) div:nth-child(2) small')
                     ->text()))
                     ->explode(', ')
                     ->transform(function (string $string) use ($regex) {
@@ -213,7 +213,7 @@ dd($animeCharacters);
                 $name = $item->filter('td:nth-child(2) a[href*="/manga/"]')
                     ->text();
 
-                $roles = str($this->cleanHTML($item->filter('td:nth-child(2) div:nth-child(2) small')
+                $roles = str(strip_html($item->filter('td:nth-child(2) div:nth-child(2) small')
                     ->text()))
                     ->explode(', ')
                     ->toArray();
@@ -238,37 +238,5 @@ dd($animeCharacters);
             $animeStaff,
             $mangas
         ));
-    }
-
-    /**
-     * Cleans the given HTML string.
-     *
-     * @param string $string
-     *
-     * @return string
-     */
-    public static function cleanHTML(string $string): string
-    {
-        // Convert breaks to new line
-        $string = str_replace(
-            ['<br>', '<br />', '<br/>', '<br >'],
-            "\\n",
-            $string
-        );
-
-        // Convert nbsp to space
-        $string = str_replace("\xc2\xa0", ' ', $string);
-
-        // Remove control characters
-        $string = preg_replace('~[[:cntrl:]]~', '', $string);
-
-        // Strip any leftover tags
-        $string = strip_tags($string);
-
-        // Remove any newlines at the end
-        $string = str_replace('\\n', "\n", $string);
-
-        // Trim and return
-        return trim($string);
     }
 }

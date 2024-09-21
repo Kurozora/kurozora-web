@@ -89,7 +89,7 @@ class CharacterSpider extends BasicSpider
         $synopsis = str($response->filter('#content > table > tr > td:nth-child(2)')->html())
             ->replace('<br>', '\n')
             ->value();
-        $synopsis = $this->cleanHTML($this->removeChildNodes(
+        $synopsis = strip_html($this->removeChildNodes(
             (new Crawler($synopsis))
                 ->filter('body')
         )->html());
@@ -206,37 +206,5 @@ class CharacterSpider extends BasicSpider
         );
 
         return $crawler;
-    }
-
-    /**
-     * Cleans the given HTML string.
-     *
-     * @param string $string
-     *
-     * @return string
-     */
-    public static function cleanHTML(string $string): string
-    {
-        // Convert breaks to new line
-        $string = str_replace(
-            ['<br>', '<br />', '<br/>', '<br >'],
-            "\\n",
-            $string
-        );
-
-        // Convert nbsp to space
-        $string = str_replace("\xc2\xa0", ' ', $string);
-
-        // Remove control characters
-        $string = preg_replace('~[[:cntrl:]]~', '', $string);
-
-        // Strip any leftover tags
-        $string = strip_tags($string);
-
-        // Remove any newlines at the end
-        $string = str_replace('\\n', "\n", $string);
-
-        // Trim and return
-        return trim($string);
     }
 }
