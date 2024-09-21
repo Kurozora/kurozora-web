@@ -26,7 +26,7 @@ return [
             'character' => 'https://myanimelist.net/character',
             'company' => 'https://myanimelist.net/company',
             'producer' => 'https://myanimelist.net/anime/producer',
-            'magazine' => 'https://myanimelist.net/anime/magazine',
+            'magazine' => 'https://myanimelist.net/manga/magazine',
             'manga' => 'https://myanimelist.net/manga',
             'top_manga' => 'https://myanimelist.net/topmanga.php',
             'upcoming_manga' => 'https://myanimelist.net/manga.php?o=9',
