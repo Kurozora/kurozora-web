@@ -28,7 +28,7 @@ class StudioResourceBasic extends JsonResource
     {
         $resource = StudioResourceIdentity::make($this->resource)->toArray($request);
 
-        return array_merge($resource, [
+        $resource = array_merge($resource, [
             'attributes' => [
                 'slug' => $this->resource->slug,
                 'profile' => ImageResource::make($this->resource->media->firstWhere('collection_name', '=', MediaCollection::Profile)),
@@ -60,5 +60,30 @@ class StudioResourceBasic extends JsonResource
                 'defunctAt' => $this->resource->defunct_at?->timestamp,
             ]
         ]);
+
+        if (auth()->check()) {
+            $resource['attributes'] = array_merge($resource['attributes'], $this->getUserSpecificDetails());
+        }
+
+        return $resource;
+    }
+
+    /**
+     * Returns the user specific details for the resource.
+     *
+     * @return array
+     */
+    protected function getUserSpecificDetails(): array
+    {
+        $givenRating = $this->resource->mediaRatings->first();
+
+        // Return the array
+        return [
+            'library' => [
+                'rating' => (double) $givenRating?->rating,
+                'review' => $givenRating?->description,
+                'isFavorited' => (bool) $this->resource->isFavorited,
+            ]
+        ];
     }
 }
