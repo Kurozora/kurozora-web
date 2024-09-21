@@ -239,3 +239,38 @@ if (! function_exists('generate_random_color')) {
         return sprintf('#%02x%02x%02x', $red, $green, $blue);
     }
 }
+
+if (! function_exists('strip_html')) {
+    /**
+     * Strips the given string from any HTML tags,
+     * and convers breaks to new line among other stuff.
+     *
+     * @param string $string
+     *
+     * @return string
+     */
+    function strip_html(string $string): string
+    {
+        // Convert breaks to new line
+        $string = str_replace(
+            ['<br>', '<br />', '<br/>', '<br >'],
+            "\\n",
+            $string
+        );
+
+        // Convert nbsp to space
+        $string = str_replace("\xc2\xa0", ' ', $string);
+
+        // Remove control characters
+        $string = preg_replace('~[[:cntrl:]]~', '', $string);
+
+        // Strip any leftover tags
+        $string = strip_tags($string);
+
+        // Remove any newlines at the end
+        $string = str_replace('\\n', "\n", $string);
+
+        // Trim and return
+        return trim($string);
+    }
+}
