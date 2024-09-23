@@ -2,7 +2,6 @@
 
 namespace App\Livewire\Game;
 
-use App\Models\MediaType;
 use App\Traits\Livewire\WithGameSearch;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -17,22 +16,7 @@ class Index extends Component
 {
     use WithGameSearch {
         getSearchResultsProperty as protected getParentSearchResultsProperty;
-        queryString as protected parentQueryString;
     }
-
-    /**
-     * The type query parameter.
-     *
-     * @var string $typeQuery
-     */
-    public string $typeQuery = 'all';
-
-    /**
-     * The type of the search.
-     *
-     * @var int $type
-     */
-    public int $type = 0;
 
     /**
      * Whether the component is ready to load.
@@ -40,18 +24,6 @@ class Index extends Component
      * @var bool $readyToLoad
      */
     public bool $readyToLoad = false;
-
-    /**
-     * The query strings of the component.
-     *
-     * @return string[]
-     */
-    protected function queryString(): array
-    {
-        $queryString = $this->parentQueryString();
-        $queryString['typeQuery'] = ['except' => 'all', 'as' => 'type'];
-        return $queryString;
-    }
 
     /**
      * Prepare the component.
@@ -63,21 +35,13 @@ class Index extends Component
     }
 
     /**
-     * @param string $newValue
+     * Sets the property to load the page.
      *
      * @return void
      */
-    public function updatedTypeQuery(string $newValue): void
+    public function loadPage(): void
     {
-        if ($newValue === 'all') {
-            $this->type = 0;
-            return;
-        }
-
-        $this->type = $this->searchScopes
-            ->search(function ($value) use ($newValue) {
-                return str($value)->slug()->value() === $newValue;
-            });
+        $this->readyToLoad = true;
     }
 
     /**
@@ -89,9 +53,6 @@ class Index extends Component
     public function searchIndexQuery(EloquentBuilder $query): EloquentBuilder
     {
         return $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
-            ->when(!empty($this->type), function (EloquentBuilder $query) {
-                $query->whereRelation('media_type', 'id', '=', $this->type);
-            })
             ->when(auth()->user(), function ($query, $user) {
                 $query->with(['library' => function ($query) use ($user) {
                     $query->where('user_id', '=', $user->id);
@@ -109,32 +70,12 @@ class Index extends Component
     {
         return $query->query(function (EloquentBuilder $query) {
             $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
-                ->when(!empty($this->letter), function (EloquentBuilder $query) {
-                    if ($this->letter == '.') {
-                        $query->whereRaw('original_title REGEXP \'^[^a-zA-Z]*$\'');
-                    } else {
-                        $query->whereLike('original_title', $this->letter . '%');
-                    }
-                })
                 ->when(auth()->user(), function ($query, $user) {
                     $query->with(['library' => function ($query) use ($user) {
                         $query->where('user_id', '=', $user->id);
                     }]);
                 });
-        })
-            ->when(!empty($this->type), function (ScoutBuilder $query) {
-                $query->where('media_type_id', $this->type);
-            });
-    }
-
-    /**
-     * Sets the property to load the page.
-     *
-     * @return void
-     */
-    public function loadPage(): void
-    {
-        $this->readyToLoad = true;
+        });
     }
 
     /**
@@ -149,19 +90,6 @@ class Index extends Component
         }
 
         return $this->getParentSearchResultsProperty();
-    }
-
-    /**
-     * The computed collection of manga types.
-     *
-     * @return Collection
-     */
-    public function getSearchScopesProperty(): Collection
-    {
-        return MediaType::where('type', '=', 'game')
-            ->orderBy('name')
-            ->pluck('name', 'id')
-            ->prepend(__('All'), '');
     }
 
     /**
