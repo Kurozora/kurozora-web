@@ -11,19 +11,6 @@
         <div class="flex flex-1 items-center justify-end space-x-1">
             <x-spinner />
 
-            {{-- Lettered Index --}}
-            @if (!empty($this->letteredIndex))
-                <select
-                    class="form-select rounded-md shadow-sm focus:border-orange-500 focus:ring-orange-500"
-                    wire:model.live="letter"
-                >
-                    <option value="">{{ __('All') }}</option>
-                    @foreach ($this->letteredIndex as $optionKey => $option)
-                        <option value="{{ $option }}">{{ __($optionKey) }}</option>
-                    @endforeach
-                </select>
-            @endif
-
             {{-- Order --}}
             @if (!empty($this->order))
                 <x-dropdown align="right" width="48" max-height="350px">
@@ -162,6 +149,19 @@
                         </div>
                     </x-slot:content>
                 </x-dropdown>
+            @endif
+
+            {{-- Lettered Index --}}
+            @if (!empty($this->letteredIndex))
+                <select
+                    class="form-select rounded-md shadow-sm focus:border-orange-500 focus:ring-orange-500"
+                    wire:model.live="letter"
+                >
+                    <option value="">{{ __('All') }}</option>
+                    @foreach ($this->letteredIndex as $optionKey => $option)
+                        <option value="{{ $option }}">{{ __($optionKey) }}</option>
+                    @endforeach
+                </select>
             @endif
 
             @if (!empty($rightBarButtonItems))
