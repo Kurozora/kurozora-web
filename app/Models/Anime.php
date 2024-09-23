@@ -858,7 +858,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
                 'type' => 'duration',
                 'selected' => null,
             ],
-            'country_id' => [
+            'country_of_origin' => [
                 'title' => __('Country of Origin'),
                 'type' => 'multiselect',
                 'options' => [
