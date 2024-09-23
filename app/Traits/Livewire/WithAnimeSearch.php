@@ -3,6 +3,7 @@
 namespace App\Traits\Livewire;
 
 use App\Models\Anime;
+use App\Models\MediaType;
 
 trait WithAnimeSearch
 {
@@ -29,20 +30,34 @@ trait WithAnimeSearch
     /**
      * Set the orderable attributes of the model.
      *
-     * @return void
+     * @return array
      */
-    public function setOrderableAttributes(): void
+    public function setOrderableAttributes(): array
     {
-        $this->order = Anime::webSearchOrders();
+        return Anime::webSearchOrders();
     }
 
     /**
      * Set the filterable attributes of the model.
      *
-     * @return void
+     * @return array
      */
-    public function setFilterableAttributes(): void
+    public function setFilterableAttributes(): array
     {
-        $this->filter = Anime::webSearchFilters();
+        return Anime::webSearchFilters();
+    }
+
+    /**
+     * Set the search types of the model.
+     *
+     * @return array
+     */
+    public function setSearchTypes(): array
+    {
+        return MediaType::where('type', '=', 'anime')
+            ->orderBy('name')
+            ->pluck('name', 'id')
+            ->prepend(__('All'), 'all')
+            ->toArray();
     }
 }

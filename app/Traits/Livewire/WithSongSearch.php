@@ -29,20 +29,20 @@ trait WithSongSearch
     /**
      * Set the orderable attributes of the model.
      *
-     * @return void
+     * @return array
      */
-    public function setOrderableAttributes(): void
+    public function setOrderableAttributes(): array
     {
-        $this->order = Song::webSearchOrders();
+        return Song::webSearchOrders();
     }
 
     /**
      * Set the filterable attributes of the model.
      *
-     * @return void
+     * @return array
      */
-    public function setFilterableAttributes(): void
+    public function setFilterableAttributes(): array
     {
-        $this->filter = Song::webSearchFilters();
+        return Song::webSearchFilters();
     }
 }

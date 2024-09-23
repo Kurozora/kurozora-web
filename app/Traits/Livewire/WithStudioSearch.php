@@ -2,6 +2,7 @@
 
 namespace App\Traits\Livewire;
 
+use App\Enums\StudioType;
 use App\Models\Studio;
 
 trait WithStudioSearch
@@ -26,6 +27,16 @@ trait WithStudioSearch
     }
 
     /**
+     * The column used for the letter index query.
+     *
+     * @return string
+     */
+    protected function typeColumn(): string
+    {
+        return 'type';
+    }
+
+    /**
      * Redirect the user to a random studio.
      *
      * @return void
@@ -39,20 +50,32 @@ trait WithStudioSearch
     /**
      * Set the orderable attributes of the model.
      *
-     * @return void
+     * @return array
      */
-    public function setOrderableAttributes(): void
+    public function setOrderableAttributes(): array
     {
-        $this->order = Studio::webSearchOrders();
+        return Studio::webSearchOrders();
     }
 
     /**
      * Set the filterable attributes of the model.
      *
-     * @return void
+     * @return array
      */
-    public function setFilterableAttributes(): void
+    public function setFilterableAttributes(): array
     {
-        $this->filter = Studio::webSearchFilters();
+        return Studio::webSearchFilters();
+    }
+
+    /**
+     * Set the search types of the model.
+     *
+     * @return array
+     */
+    public function setSearchTypes(): array
+    {
+        return array_merge([
+            'all' => __('All')
+        ], StudioType::asSelectArray());
     }
 }

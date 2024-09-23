@@ -29,11 +29,11 @@ trait WithPlatformSearch
     /**
      * Set the orderable attributes of the model.
      *
-     * @return void
+     * @return array
      */
-    public function setOrderableAttributes(): void
+    public function setOrderableAttributes(): array
     {
-        $this->order = [
+        return [
             'name' => [
                 'title' => __('Name'),
                 'options' => [
@@ -85,10 +85,10 @@ trait WithPlatformSearch
     /**
      * Set the filterable attributes of the model.
      *
-     * @return void
+     * @return array
      */
-    public function setFilterableAttributes(): void
+    public function setFilterableAttributes(): array
     {
-        $this->filter = Platform::webSearchFilters();
+        return Platform::webSearchFilters();
     }
 }

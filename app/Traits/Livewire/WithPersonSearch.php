@@ -39,20 +39,20 @@ trait WithPersonSearch
     /**
      * Set the orderable attributes of the model.
      *
-     * @return void
+     * @return array
      */
-    public function setOrderableAttributes(): void
+    public function setOrderableAttributes(): array
     {
-        $this->order = Person::webSearchOrders();
+        return Person::webSearchOrders();
     }
 
     /**
      * Set the filterable attributes of the model.
      *
-     * @return void
+     * @return array
      */
-    public function setFilterableAttributes(): void
+    public function setFilterableAttributes(): array
     {
-        $this->filter = Person::webSearchFilters();
+        return Person::webSearchFilters();
     }
 }

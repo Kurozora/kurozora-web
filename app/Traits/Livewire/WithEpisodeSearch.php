@@ -18,6 +18,26 @@ trait WithEpisodeSearch
     public static string $searchModel = Episode::class;
 
     /**
+     * The column used for the letter index query.
+     *
+     * @return string
+     */
+    protected function letterIndexColumn(): string
+    {
+        return 'title';
+    }
+
+    /**
+     * The column used for the letter index query.
+     *
+     * @return string
+     */
+    protected function typeColumn(): string
+    {
+        return 'is_filler';
+    }
+
+    /**
      * Redirect the user to a random anime.
      *
      * @return void
@@ -55,20 +75,34 @@ trait WithEpisodeSearch
     /**
      * Set the orderable attributes of the model.
      *
-     * @return void
+     * @return array
      */
-    public function setOrderableAttributes(): void
+    public function setOrderableAttributes(): array
     {
-        $this->order = Episode::webSearchOrders();
+        return Episode::webSearchOrders();
     }
 
     /**
      * Set the filterable attributes of the model.
      *
-     * @return void
+     * @return array
      */
-    public function setFilterableAttributes(): void
+    public function setFilterableAttributes(): array
     {
-        $this->filter = Episode::webSearchFilters();
+        return Episode::webSearchFilters();
+    }
+
+    /**
+     * Set the search types of the model.
+     *
+     * @return array
+     */
+    public function setSearchTypes(): array
+    {
+        return [
+            'all' => __('All'),
+            false => __('Canon'),
+            true => __('Filler'),
+        ];
     }
 }

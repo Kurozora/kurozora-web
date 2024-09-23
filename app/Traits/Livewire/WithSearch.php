@@ -2,6 +2,8 @@
 
 namespace App\Traits\Livewire;
 
+use App\Models\Episode;
+use App\Models\UserLibrary;
 use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
@@ -27,6 +29,20 @@ trait WithSearch
     public string $letter = '';
 
     /**
+     * The selected search type.
+     *
+     * @var string $type
+     */
+    public string $type = 'all';
+
+    /**
+     * The selected search type's value.
+     *
+     * @var $typeValue
+     */
+    public $typeValue = 0;
+
+    /**
      * The component's filter attributes.
      *
      * @var array $filter
@@ -41,6 +57,13 @@ trait WithSearch
     public array $order = [];
 
     /**
+     * The component's search scopes.
+     *
+     * @var array
+     */
+    public array $searchTypes = [];
+
+    /**
      * The query strings of the component.
      *
      * @return string[]
@@ -48,7 +71,25 @@ trait WithSearch
     protected function queryString(): array
     {
         return [
+            'search' => ['as' => 'q', 'except' => ''],
             'letter' => ['except' => ''],
+            'type' => ['except' => 'all'],
+            'perPage' => ['except' => 25],
+        ];
+    }
+
+    /**
+     * The rules of the component.
+     *
+     * @return string[][]
+     */
+    protected function rules(): array
+    {
+        return [
+            'search' => ['string', 'min:1'],
+            'letter' => ['string', 'max:1'],
+            'type' => ['nullable', 'string', 'distinct', 'in:' . implode(',', array_values($this->searchTypes))],
+            'perPage' => ['nullable', 'integer', 'min:1', 'max:25'],
         ];
     }
 
@@ -63,14 +104,44 @@ trait WithSearch
     }
 
     /**
+     * The column used for the letter index query.
+     *
+     * @return string
+     */
+    protected function typeColumn(): string
+    {
+        return 'media_type_id';
+    }
+
+    /**
      * Prepare the component.
      *
      * @return void
      */
     public function mountWithSearch(): void
     {
-        $this->setFilterableAttributes();
-        $this->setOrderableAttributes();
+        $this->filter = $this->setFilterableAttributes();
+        $this->order = $this->setOrderableAttributes();
+        $this->searchTypes = $this->setSearchTypes();
+        $this->updatedType($this->type);
+    }
+
+    /**
+     * @param string $newValue
+     *
+     * @return void
+     */
+    public function updatedType(string $newValue): void
+    {
+        if ($newValue === 'all') {
+            $this->typeValue = 0;
+            return;
+        }
+
+        $this->typeValue = collect($this->searchTypes)
+            ->search(function ($value) use ($newValue) {
+                return str($value)->slug()->value() === $newValue;
+            });
     }
 
     /**
@@ -98,6 +169,10 @@ trait WithSearch
         $wheres = [];
         $whereIns = [];
         foreach ($this->filter as $attribute => $filter) {
+            if ($attribute == 'library_status') {
+                continue;
+            }
+
             $attribute = str_replace(':', '.', $attribute);
             $selected = $filter['selected'];
             $type = $filter['type'];
@@ -118,21 +193,78 @@ trait WithSearch
             }
         }
 
+        // Get library status
+        $userLibraryStatuses = $this->filter['library_status']['selected'] ?? null;
+        $user = auth()->user();
+
         // If no search, filter or order was performed, return the model's index
         if (empty($this->search) && (empty($wheres) && empty($whereIns)) && empty($orders)) {
-            $models = static::$searchModel::query();
-            $models = $this->searchIndexQuery($models)
+            if ($userLibraryStatuses) {
+                $models = $user
+                    ->whereTracked(static::$searchModel)
+                    ->withoutIgnoreList()
+                    ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
+                    ->with(['library' => function ($query) use ($user) {
+                        $query->where('user_id', '=', $user->id);
+                    }])
+                    ->wherePivotIn('status', $userLibraryStatuses);
+            } else {
+                $queryBuilder = static::$searchModel::query();
+                $models = $this->searchIndexQuery($queryBuilder);
+            }
+
+            $models = $models
+                ->when(!empty($this->typeValue), function (EloquentBuilder $query) {
+                    $query->where($this->typeColumn(), '=', $this->typeValue);
+                })
                 ->when(!empty($this->letter), function (EloquentBuilder $query) {
-                    if ($this->letter == '.') {
-                        $query->whereRaw($this->letterIndexColumn() . ' REGEXP \'^[^a-zA-Z]*$\'');
+                    if (static::$searchModel === Episode::class) {
+                        $query->whereRelation('translations', function ($query) {
+                            $query->where('locale', '=', 'en');
+
+                            if ($this->letter == '.') {
+                                $query->whereRaw($this->letterIndexColumn() . ' REGEXP \'^[^a-zA-Z]*$\'');
+                            } else {
+                                $query->whereLike($this->letterIndexColumn(), $this->letter . '%');
+                            }
+                        });
                     } else {
-                        $query->whereLike($this->letterIndexColumn(), $this->letter . '%');
+                        if ($this->letter == '.') {
+                            $query->whereRaw($this->letterIndexColumn() . ' REGEXP \'^[^a-zA-Z]*$\'');
+                        } else {
+                            $query->whereLike($this->letterIndexColumn(), $this->letter . '%');
+                        }
                     }
                 });
+
             return $models->paginate($this->perPage);
         }
 
         // Search
+        if (isset($userLibraryStatuses)) {
+            $modelIDs = collect(UserLibrary::search($this->search)
+                ->when(!empty($this->letter), function (ScoutBuilder $query) {
+                    $query->where('trackable.letter', $this->letter);
+                })
+                ->where('user_id', $user->id)
+                ->where('trackable_type', addslashes(static::$searchModel))
+                ->whereIn('status', $userLibraryStatuses)
+                ->simplePaginateRaw(perPage: 2000, page: 1)
+                ->items()['hits'] ?? [])
+                ->pluck('trackable_id')
+                ->toArray();
+            $whereIns['id'] = $modelIDs;
+        }
+
+        if (!isset($userLibraryStatuses)) {
+            if (!empty($this->letter)) {
+                $wheres['letter'] = $this->letter;
+            }
+            if (!empty($this->typeValue)) {
+                $wheres[$this->typeColumn()] = $this->typeValue;
+            }
+        }
+
         $models = static::$searchModel::search($this->search);
         $models->wheres = $wheres;
         $models->whereIns = $whereIns;
@@ -168,19 +300,31 @@ trait WithSearch
     /**
      * Set the orderable attributes of the model.
      *
-     * @return void
+     * @return array
      */
-    public function setOrderableAttributes(): void
+    public function setOrderableAttributes(): array
     {
+        return [];
     }
 
     /**
      * Set the filterable attributes of the model.
      *
-     * @return void
+     * @return array
      */
-    public function setFilterableAttributes(): void
+    public function setFilterableAttributes(): array
     {
+        return [];
+    }
+
+    /**
+     * Set the search types of the model.
+     *
+     * @return array
+     */
+    public function setSearchTypes(): array
+    {
+        return [];
     }
 
     /**

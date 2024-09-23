@@ -3,6 +3,7 @@
 namespace App\Traits\Livewire;
 
 use App\Models\Manga;
+use App\Models\MediaType;
 
 trait WithMangaSearch
 {
@@ -29,20 +30,34 @@ trait WithMangaSearch
     /**
      * Set the orderable attributes of the model.
      *
-     * @return void
+     * @return array
      */
-    public function setOrderableAttributes(): void
+    public function setOrderableAttributes(): array
     {
-        $this->order = Manga::webSearchOrders();
+        return Manga::webSearchOrders();
     }
 
     /**
      * Set the filterable attributes of the model.
      *
-     * @return void
+     * @return array
      */
-    public function setFilterableAttributes(): void
+    public function setFilterableAttributes(): array
     {
-        $this->filter = Manga::webSearchFilters();
+        return Manga::webSearchFilters();
+    }
+
+    /**
+     * Set the search types of the model.
+     *
+     * @return array
+     */
+    public function setSearchTypes(): array
+    {
+        return MediaType::where('type', '=', 'manga')
+            ->orderBy('name')
+            ->pluck('name', 'id')
+            ->prepend(__('All'), 'all')
+            ->toArray();
     }
 }
