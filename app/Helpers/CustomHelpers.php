@@ -274,3 +274,37 @@ if (! function_exists('strip_html')) {
         return trim($string);
     }
 }
+
+if (! function_exists('str_index')) {
+    /**
+     * Get the index of the string based on the first character.
+     * If the character is an alphabet, then the index is equivalent
+     * to the alphabet letter. Otherwise, the index is equivalent to `.`.
+     *
+     * `.` represents all non-alphabet characters.
+     *
+     * @param string $string
+     *
+     * @return string
+     */
+    function str_index(string $string): string
+    {
+        // Trim and get the first character
+        $character = str($string)
+            ->trim()
+            ->charAt(0);
+
+        // Index under '.' by default.
+        $index = '.';
+
+        if ($character) {
+            $index = match(ctype_alpha($character)) {
+                true => $character,
+                false => '.'
+            };
+        }
+
+        // Trim and return
+        return $index;
+    }
+}
