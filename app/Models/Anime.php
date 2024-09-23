@@ -6,6 +6,7 @@ use App\Casts\AsArrayObject;
 use App\Enums\DayOfWeek;
 use App\Enums\MediaCollection;
 use App\Enums\SeasonOfYear;
+use App\Enums\UserLibraryStatus;
 use App\Scopes\IgnoreListScope;
 use App\Scopes\TvRatingScope;
 use App\Traits\InteractsWithMediaExtension;
@@ -932,6 +933,15 @@ class Anime extends KModel implements HasMedia, Sitemapable
                 'selected' => null,
             ],
         ];
+
+        if (auth()->check()) {
+            $filter['library_status'] = [
+                'title' => __('Library Status'),
+                'type' => 'multiselect',
+                'options' => UserLibraryStatus::asAnimeSelectArray(),
+                'selected' => null,
+            ];
+        }
 
         if (config('app.tv_rating') >= 4) {
             $filter['is_nsfw'] = [

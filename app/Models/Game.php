@@ -6,6 +6,7 @@ use App\Casts\AsArrayObject;
 use App\Enums\DayOfWeek;
 use App\Enums\MediaCollection;
 use App\Enums\SeasonOfYear;
+use App\Enums\UserLibraryStatus;
 use App\Scopes\IgnoreListScope;
 use App\Scopes\TvRatingScope;
 use App\Traits\InteractsWithMediaExtension;
@@ -293,6 +294,12 @@ class Game extends KModel implements HasMedia, Sitemapable
                 'title' => __('Publication Status'),
                 'type' => 'multiselect',
                 'options' => Status::where('type', 'game')->pluck('name', 'id'),
+                'selected' => null,
+            ],
+            'library_status' => [
+                'title' => __('Library Status'),
+                'type' => 'multiselect',
+                'options' => UserLibraryStatus::asGameSelectArray(),
                 'selected' => null,
             ],
             'genres:id' => [
