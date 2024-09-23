@@ -9,6 +9,18 @@
         <meta property="og:image" content="{{ asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="og:type" content="website" />
         <link rel="canonical" href="{{ route('home') }}">
+        <x-misc.schema>
+            "@type": "WebSite",
+            "url": "{{ config('app.url') }}",
+            "potentialAction": {
+                "@type": "SearchAction",
+                "target": {
+                    "@type": "EntryPoint",
+                    "urlTemplate": "{{ route('search.index') }}?q={search_term_string}&src={{ \App\Enums\SearchSource::Google }}",
+                }
+                "query-input": "required name=search_term_string"
+            }
+        </x-misc.schema>
     </x-slot:meta>
 
     <x-slot:appArgument>
