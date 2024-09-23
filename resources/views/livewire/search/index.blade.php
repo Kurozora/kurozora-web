@@ -20,12 +20,16 @@
         <link rel="canonical" href="{{ route('search.index') }}">
         <meta name="robots" content="noindex, nofollow">
         <x-misc.schema>
-            "@type":"WebSite",
-            "url":"{{ config('app.url') }}",
+            "@type": "WebSite",
+            "url": "{{ config('app.url') }}",
             "potentialAction": {
-            "@type":"SearchAction",
-            "target":"{{ route('search.index') }}?q={search_term_string}&src=mc_google",
-            "query-input": "required name=search_term_string"
+                "@type": "SearchAction",
+                "target": {
+                    "@type": "EntryPoint",
+                    "urlTemplate": "{{ route('search.index') }}?q={search_term_string}&src={{ \App\Enums\SearchSource::Google }}",
+                }
+                "query-input": "required name=search_term_string"
+            }
         </x-misc.schema>
     </x-slot:meta>
 
@@ -44,12 +48,7 @@
                 </div>
             </div>
 
-            <div
-                class="mt-4 justify-between"
-                x-data="{
-                    type: @entangle('type').live
-                }"
-            >
+            <div class="mt-4 justify-between">
                 <x-search-bar>
                     <x-slot:rightBarButtonItems>
                         <div>
@@ -61,22 +60,6 @@
                         </div>
                     </x-slot:rightBarButtonItems>
                 </x-search-bar>
-
-                <x-hr class="mt-4 mb-4" />
-
-                <div class="flex gap-2 overflow-x-scroll no-scrollbar">
-                    @foreach (\App\Enums\SearchType::asWebSelectArray($this->scope) as $key => $value)
-                        <template x-if="type === '{{ $key }}'">
-                            <x-button>{{ $value }}</x-button>
-                        </template>
-
-                        <template x-if="type !== '{{ $key }}'">
-                            <x-outlined-button
-                                x-on:click="type = '{{ $key }}'"
-                            >{{ __($value) }}</x-outlined-button>
-                        </template>
-                    @endforeach
-                </div>
             </div>
         </section>
 

@@ -22,18 +22,15 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Laravel\Scout\Builder as ScoutBuilder;
 use Livewire\Component;
 
 class Index extends Component
 {
-    use WithSearch;
-
-    /**
-     * The type of the search.
-     *
-     * @var string $type
-     */
-    public string $type = SearchType::Shows;
+    use WithSearch {
+        queryString as parentQueryString;
+        rules as parentRules;
+    }
 
     /**
      * The scope of the search.
@@ -59,15 +56,16 @@ class Index extends Component
     /**
      * The query strings of the component.
      *
-     * @var string[] $queryString
+     * @return string[]
      */
-    protected $queryString = [
-        'scope' => ['except' => SearchScope::Kurozora],
-        'type' => ['except' => SearchType::Shows],
-        'search' => ['as' => 'q'],
-        'perPage' => ['except' => 25],
-        'src' => ['except' => SearchSource::Kurozora],
-    ];
+    protected function queryString(): array
+    {
+        $queryString = $this->parentQueryString();
+        $queryString['type'] = ['except' => SearchType::Shows];
+        $queryString['scope'] = ['except' => SearchScope::Kurozora];
+        $queryString['src'] = ['except' => SearchSource::Kurozora];
+        return $queryString;
+    }
 
     /**
      * The rules of the component.
@@ -76,13 +74,10 @@ class Index extends Component
      */
     protected function rules(): array
     {
-        return [
-            'scope'     => ['nullable', 'string', 'in:' . implode(',', SearchScope::getValues())],
-            'type'      => ['nullable', 'string', 'distinct', 'in:' . implode(',', SearchType::getWebValues($this->scope))],
-            'search'    => ['string', 'min:1'],
-            'perPage'   => ['nullable', 'integer', 'min:1', 'max:25'],
-            'src'       => ['string', 'in:' . implode(',', SearchSource::getValues())],
-        ];
+        $rules = $this->parentRules();
+        $rules['scope'] = ['nullable', 'string', 'in:' . implode(',', SearchScope::getValues())];
+        $rules['src'] = ['string', 'in:' . implode(',', SearchSource::getKeys())];
+        return $rules;
     }
 
     /**
@@ -90,7 +85,12 @@ class Index extends Component
      *
      * @return void
      */
-    public function mount(): void {}
+    public function mount(): void
+    {
+        if ($this->type === 'all') {
+            $this->type = SearchType::Shows;
+        }
+    }
 
     /**
      * Sets the property to load the page.
@@ -106,17 +106,25 @@ class Index extends Component
      * Called when a property is updated.
      *
      * @param $propertyName
+     *
      * @return void
      */
     public function updated($propertyName): void
     {
-        if ($propertyName == 'scope' && !in_array($this->type, SearchType::getWebValues($this->scope))) {
-            $this->type = SearchType::Shows;
-        }
         if ($propertyName == 'type') {
-            $this->setOrderableAttributes();
-            $this->setFilterableAttributes();
+            if (!in_array($this->type, SearchType::getWebValues($this->scope))) {
+                $this->type = match ($this->type) {
+                    'games' => SearchType::Games,
+                    'manga' => SearchType::Literatures,
+                    default => SearchType::Shows
+                };
+            }
+
+            $this->order = $this->setOrderableAttributes();
+            $this->filter = $this->setFilterableAttributes();
+            $this->searchTypes = $this->setSearchTypes();
         }
+
         $this->validateOnly($propertyName);
     }
 
@@ -132,8 +140,6 @@ class Index extends Component
         }
 
         try {
-            $this->validate();
-
             $searchableModel = match ($this->type) {
                 SearchType::Literatures => Manga::class,
                 SearchType::Games => Game::class,
@@ -164,6 +170,10 @@ class Index extends Component
             $wheres = [];
             $whereIns = [];
             foreach ($this->filter as $attribute => $filter) {
+                if ($attribute == 'library_status') {
+                    continue;
+                }
+
                 $attribute = str_replace(':', '.', $attribute);
                 $selected = $filter['selected'];
                 $type = $filter['type'];
@@ -185,7 +195,7 @@ class Index extends Component
             }
 
             // If no search, filter or order was performed, return nothing
-            if (empty($this->search) && empty($wheres) && empty($whereIns)) {
+            if (empty($this->search) && empty($wheres) && empty($whereIns) && empty($this->letter)) {
                 return null;
             }
 
@@ -235,20 +245,26 @@ class Index extends Component
                     }
                 });
 
-            $models->orders = $orders;
-            $models->wheres = $wheres;
-            $models->whereIns = $whereIns;
-
+            // Search
             if ($this->scope == SearchScope::Library) {
-                $trackableIDs = collect(UserLibrary::search($this->search)
+                $modelIDs = collect(UserLibrary::search($this->search)
+                    ->when(!empty($this->letter), function (ScoutBuilder $query) {
+                        $query->where('trackable.letter', $this->letter);
+                    })
                     ->where('user_id', auth()->user()->id)
                     ->where('trackable_type', addslashes($searchableModel))
                     ->simplePaginateRaw(perPage: 2000, page: 1)
                     ->items()['hits'] ?? [])
                     ->pluck('trackable_id')
                     ->toArray();
-                $models->whereIn('id', $trackableIDs);
+                $whereIns['id'] = $modelIDs;
+            } else if (!empty($this->letter)) {
+                $wheres['letter'] = $this->letter;
             }
+
+            $models->orders = $orders;
+            $models->wheres = $wheres;
+            $models->whereIns = $whereIns;
 
             return $models->paginate($this->perPage);
         } catch (Exception $e) {
@@ -333,11 +349,11 @@ class Index extends Component
     /**
      * Set the orderable attributes of the model.
      *
-     * @return void
+     * @return array
      */
-    public function setOrderableAttributes(): void
+    public function setOrderableAttributes(): array
     {
-        $this->order = match ($this->type) {
+        return match ($this->type) {
             SearchType::Shows => Anime::webSearchOrders(),
             SearchType::Literatures => Manga::webSearchOrders(),
             SearchType::Games => Game::webSearchOrders(),
@@ -354,11 +370,11 @@ class Index extends Component
     /**
      * Set the filterable attributes of the model.
      *
-     * @return void
+     * @return array
      */
-    public function setFilterableAttributes(): void
+    public function setFilterableAttributes(): array
     {
-        $this->filter = match ($this->type) {
+        return match ($this->type) {
             SearchType::Shows => Anime::webSearchFilters(),
             SearchType::Literatures => Manga::webSearchFilters(),
             SearchType::Games => Game::webSearchFilters(),
@@ -370,6 +386,16 @@ class Index extends Component
             SearchType::Users => User::webSearchFilters(),
             default => []
         };
+    }
+
+    /**
+     * Set the search types of the model.
+     *
+     * @return array
+     */
+    public function setSearchTypes(): array
+    {
+        return SearchType::asWebSelectArray($this->scope);
     }
 
     /**
