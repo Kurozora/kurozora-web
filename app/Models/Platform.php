@@ -188,10 +188,11 @@ class Platform extends KModel implements HasMedia, Sitemapable
      */
     public function toSearchableArray(): array
     {
-        $anime = $this->toArray();
-        $anime['created_at'] = $this->created_at?->timestamp;
-        $anime['updated_at'] = $this->updated_at?->timestamp;
-        return $anime;
+        $platform = $this->toArray();
+        $platform['letter'] = str_index($this->original_name);
+        $platform['created_at'] = $this->created_at?->timestamp;
+        $platform['updated_at'] = $this->updated_at?->timestamp;
+        return $platform;
     }
 
     /**

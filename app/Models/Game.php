@@ -613,6 +613,7 @@ class Game extends KModel implements HasMedia, Sitemapable
     {
         $game = $this->toArray();
         unset($game['media']);
+        $game['letter'] = str_index($this->original_title);
         $game['languages'] = $this->languages
             ->map(function ($item) {
                 return $item->toSearchableArray();

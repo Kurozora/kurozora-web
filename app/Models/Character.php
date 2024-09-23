@@ -240,6 +240,7 @@ class Character extends KModel implements HasMedia, Sitemapable
     {
         $character = $this->toArray();
         unset($character['media']);
+        $character['letter'] = str_index($this->name);
         $character['media_stat'] = $this->mediaStat?->toSearchableArray();
         $character['translations'] = $this->translations
             ->select(['locale', 'title', 'synopsis', 'tagline']);

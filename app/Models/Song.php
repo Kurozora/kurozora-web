@@ -160,6 +160,7 @@ class Song extends KModel implements HasMedia, Sitemapable
     public function toSearchableArray(): array
     {
         $song = $this->toArray();
+        $song['letter'] = str_index($this->original_title);
         $song['translations'] = $this->translations
             ->select(['locale', 'title', 'lyrics']);
         $song['media_stat'] = $this->mediaStat?->toSearchableArray();

@@ -727,6 +727,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
     {
         $anime = $this->toArray();
         unset($anime['media']);
+        $anime['letter'] = str_index($this->original_title);
         $anime['languages'] = $this->languages
             ->map(function ($item) {
                 return $item->toSearchableArray();

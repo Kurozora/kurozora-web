@@ -53,6 +53,7 @@ class AppTheme extends KModel implements HasMedia
     public function toSearchableArray(): array
     {
         $appTheme = $this->toArray();
+        $appTheme['letter'] = str_index($this->name);
         $appTheme['created_at'] = $this->created_at?->timestamp;
         $appTheme['updated_at'] = $this->updated_at?->timestamp;
         return $appTheme;

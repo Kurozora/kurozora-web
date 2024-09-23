@@ -671,6 +671,7 @@ class Manga extends KModel implements HasMedia, Sitemapable
     {
         $manga = $this->toArray();
         unset($manga['media']);
+        $manga['letter'] = str_index($this->original_title);
         $manga['languages'] = $this->languages
             ->map(function ($item) {
                 return $item->toSearchableArray();

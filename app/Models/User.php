@@ -257,6 +257,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         return [
             'id' => $this->id,
             'slug' => $this->slug,
+            'letter' => str_index($this->username),
             'username' => $this->username,
             'biography' => $this->biography,
             'is_developer' => $this->is_developer,

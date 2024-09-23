@@ -192,6 +192,7 @@ class Person extends KModel implements HasMedia, Sitemapable
     public function toSearchableArray(): array
     {
         $person = $this->toArray();
+        $person['letter'] = str_index($this->full_name);
         $person['full_name'] = $this->full_name;
         $person['full_given_name'] = $this->full_given_name;
         $person['birthdate'] = $this->birthdate?->timestamp;

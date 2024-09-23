@@ -248,6 +248,7 @@ class Studio extends KModel implements HasMedia, Sitemapable
     {
         $studio = $this->toArray();
         unset($studio['media']);
+        $studio['letter'] = str_index($this->name);
         $studio['successor'] = $this->successor?->toSearchableArray();
         $studio['founded_at'] = $this->founded_at?->timestamp;
         $studio['defunct_at'] = $this->defunct_at?->timestamp;

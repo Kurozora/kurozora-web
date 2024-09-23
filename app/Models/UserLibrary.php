@@ -98,6 +98,7 @@ class UserLibrary extends Pivot
         $library = $this->toArray();
         $library['trackable'] = [
             'slug' => $trackable->slug,
+            'letter' => str_index($trackable->original_title),
             'original_title' => $trackable->original_title,
             'synonym_titles' => $trackable->synonym_titles,
             'title' => $trackable->title,
