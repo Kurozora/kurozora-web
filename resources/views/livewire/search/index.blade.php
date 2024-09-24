@@ -77,7 +77,7 @@
             </section>
         @else
             <section class="mt-4">
-                @switch($this->type)
+                @switch($this->internalType)
                     @case(\App\Enums\SearchType::Shows)
                         <x-rows.small-lockup :animes="$this->searchResults" :is-row="false"/>
                         @break

@@ -151,6 +151,10 @@
                 </x-dropdown>
             @endif
 
+            @if (!empty($rightBarButtonItems))
+                {{ $rightBarButtonItems }}
+            @endif
+
             {{-- Lettered Index --}}
             @if (!empty($this->letteredIndex))
                 <select
@@ -163,10 +167,6 @@
                     @endforeach
                 </select>
             @endif
-
-            @if (!empty($rightBarButtonItems))
-                {{ $rightBarButtonItems }}
-            @endif
         </div>
     </div>
 
@@ -178,7 +178,7 @@
         }"
         class="flex gap-2 whitespace-nowrap overflow-x-scroll no-scrollbar"
     >
-        @foreach ($this->searchTypes as $key => $value)
+        @foreach ($this->searchTypes as $value)
             @php($type = str($value)->slug())
             <template x-if="type === '{{ $type }}'">
                 <x-button>{{ $value }}</x-button>

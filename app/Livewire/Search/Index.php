@@ -33,6 +33,13 @@ class Index extends Component
     }
 
     /**
+     * The internal type of the search.
+     *
+     * @var string $internalType
+     */
+    private string $internalType = SearchType::Shows;
+
+    /**
      * The scope of the search.
      *
      * @var string $scope
@@ -61,7 +68,7 @@ class Index extends Component
     protected function queryString(): array
     {
         $queryString = $this->parentQueryString();
-        $queryString['type'] = ['except' => SearchType::Shows];
+        $queryString['type'] = ['except' => 'anime'];
         $queryString['scope'] = ['except' => SearchScope::Kurozora];
         $queryString['src'] = ['except' => SearchSource::Kurozora];
         return $queryString;
@@ -88,7 +95,7 @@ class Index extends Component
     public function mount(): void
     {
         if ($this->type === 'all') {
-            $this->type = SearchType::Shows;
+            $this->type = 'anime';
         }
     }
 
@@ -103,29 +110,71 @@ class Index extends Component
     }
 
     /**
-     * Called when a property is updated.
+     * Called when the `scope` property is updated.
      *
-     * @param $propertyName
+     * @param string $newValue
      *
      * @return void
      */
-    public function updated($propertyName): void
+    public function updatedScope(string $newValue): void
     {
-        if ($propertyName == 'type') {
-            if (!in_array($this->type, SearchType::getWebValues($this->scope))) {
-                $this->type = match ($this->type) {
-                    'games' => SearchType::Games,
-                    'manga' => SearchType::Literatures,
-                    default => SearchType::Shows
-                };
-            }
-
-            $this->order = $this->setOrderableAttributes();
-            $this->filter = $this->setFilterableAttributes();
-            $this->searchTypes = $this->setSearchTypes();
+        // Can't scope on library if not signed in.
+        if ($newValue == SearchScope::Library && !auth()->check()) {
+            $this->redirectRoute('sign-in');
+            return;
         }
 
-        $this->validateOnly($propertyName);
+        // Update internal type if selected type and scope are compatible.
+        if (
+            $newValue !== SearchScope::Library &&
+            in_array($this->internalType, SearchType::getWebValues($newValue))
+        ) {
+            $this->setInternalType($this->type);
+            return;
+        }
+
+        // Update type to one compatible with the selected scope.
+        $this->type = 'anime';
+        $this->setInternalType($this->type);
+    }
+
+    /**
+     * Called when the `type` property is updated.
+     *
+     * @param string $newValue
+     *
+     * @return void
+     */
+    public function updatedType(string $newValue): void
+    {
+        $this->typeValue = collect($this->searchTypes)
+            ->search(function ($value) use ($newValue) {
+                return str($value)->slug()->value() === $this->type;
+            });
+
+        $this->setInternalType($newValue);
+    }
+
+    /**
+     * Set the internal type property based on the given type.
+     *
+     * @param $type
+     *
+     * @return void
+     */
+    private function setInternalType($type): void
+    {
+        $this->internalType = match ($type) {
+            'anime' => SearchType::Shows,
+            'games' => SearchType::Games,
+            'manga' => SearchType::Literatures,
+            default => $this->type
+        };
+
+        // Update other properties
+        $this->order = $this->setOrderableAttributes();
+        $this->filter = $this->setFilterableAttributes();
+        $this->searchTypes = $this->setSearchTypes();
     }
 
     /**
@@ -140,7 +189,7 @@ class Index extends Component
         }
 
         try {
-            $searchableModel = match ($this->type) {
+            $searchableModel = match ($this->internalType) {
                 SearchType::Literatures => Manga::class,
                 SearchType::Games => Game::class,
                 SearchType::Episodes => Episode::class,
@@ -199,7 +248,26 @@ class Index extends Component
                 return null;
             }
 
+            // Get library status
+            $userLibraryStatuses = $this->filter['library_status']['selected'] ?? null;
+            $user = auth()->user();
+
             // Search
+            if ($userLibraryStatuses) {
+                $modelIDs = collect(UserLibrary::search($this->search)
+                    ->when(!empty($this->letter), function (ScoutBuilder $query) {
+                        $query->where('trackable.letter', $this->letter);
+                    })
+                    ->where('user_id', $user->id)
+                    ->where('trackable_type', addslashes($searchableModel))
+                    ->whereIn('status', $userLibraryStatuses)
+                    ->simplePaginateRaw(perPage: 2000, page: 1)
+                    ->items()['hits'] ?? [])
+                    ->pluck('trackable_id')
+                    ->toArray();
+                $whereIns['id'] = $modelIDs;
+            }
+
             $models = $searchableModel::search($this->search)
                 ->query(function ($query) use ($searchableModel) {
                     switch ($searchableModel) {
@@ -251,7 +319,10 @@ class Index extends Component
                     ->when(!empty($this->letter), function (ScoutBuilder $query) {
                         $query->where('trackable.letter', $this->letter);
                     })
-                    ->where('user_id', auth()->user()->id)
+                    ->when($userLibraryStatuses, function (ScoutBuilder $query) use ($userLibraryStatuses) {
+                        $query->whereIn('status', $userLibraryStatuses);
+                    })
+                    ->where('user_id', $user->id)
                     ->where('trackable_type', addslashes($searchableModel))
                     ->simplePaginateRaw(perPage: 2000, page: 1)
                     ->items()['hits'] ?? [])
@@ -279,7 +350,7 @@ class Index extends Component
      */
     public function getSearchSuggestionsProperty(): array
     {
-        return match ($this->type) {
+        return match ($this->internalType) {
             SearchType::Shows => [
                 'One Piece',
                 'Pokemon',
@@ -353,7 +424,7 @@ class Index extends Component
      */
     public function setOrderableAttributes(): array
     {
-        return match ($this->type) {
+        return match ($this->internalType) {
             SearchType::Shows => Anime::webSearchOrders(),
             SearchType::Literatures => Manga::webSearchOrders(),
             SearchType::Games => Game::webSearchOrders(),
@@ -374,7 +445,7 @@ class Index extends Component
      */
     public function setFilterableAttributes(): array
     {
-        return match ($this->type) {
+        return match ($this->internalType) {
             SearchType::Shows => Anime::webSearchFilters(),
             SearchType::Literatures => Manga::webSearchFilters(),
             SearchType::Games => Game::webSearchFilters(),

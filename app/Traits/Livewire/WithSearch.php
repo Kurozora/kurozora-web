@@ -127,6 +127,8 @@ trait WithSearch
     }
 
     /**
+     * Called when the `type` property is updated.
+     *
      * @param string $newValue
      *
      * @return void
@@ -241,7 +243,7 @@ trait WithSearch
         }
 
         // Search
-        if (isset($userLibraryStatuses)) {
+        if ($userLibraryStatuses) {
             $modelIDs = collect(UserLibrary::search($this->search)
                 ->when(!empty($this->letter), function (ScoutBuilder $query) {
                     $query->where('trackable.letter', $this->letter);
@@ -254,12 +256,11 @@ trait WithSearch
                 ->pluck('trackable_id')
                 ->toArray();
             $whereIns['id'] = $modelIDs;
-        }
-
-        if (!isset($userLibraryStatuses)) {
+        } else {
             if (!empty($this->letter)) {
                 $wheres['letter'] = $this->letter;
             }
+
             if (!empty($this->typeValue)) {
                 $wheres[$this->typeColumn()] = $this->typeValue;
             }
