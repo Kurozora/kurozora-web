@@ -16,7 +16,9 @@ use Livewire\Component;
 class Index extends Component
 {
     use WithMangaSearch {
-        getSearchResultsProperty as protected getParentSearchResultsProperty;
+        getSearchResultsProperty as protected parentGetSearchResultsProperty;
+        searchIndexQuery as protected parentSearchIndexQuery;
+        searchQuery as protected parentSearchQuery;
     }
 
     /**
@@ -59,12 +61,7 @@ class Index extends Component
             ->startDate()
             ->setYear(now()->year);
 
-        return $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
-            ->when(auth()->user(), function ($query, $user) {
-                $query->with(['library' => function ($query) use ($user) {
-                    $query->where('user_id', '=', $user->id);
-                }]);
-            })
+        return $this->parentSearchIndexQuery($query)
             ->where([
                 [static::$searchModel::TABLE_NAME . '.status_id', '=', 3],
                 [static::$searchModel::TABLE_NAME . '.started_at', '<=', $seasonStartDate->toDateString()],
@@ -88,16 +85,9 @@ class Index extends Component
             ->startDate()
             ->setYear(now()->year);
 
-        return $query->where('status_id', 3)
-            ->where('started_at', ['<=', $seasonStartDate->timestamp])
-            ->query(function (EloquentBuilder $query) {
-                $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
-                    ->when(auth()->user(), function ($query, $user) {
-                        $query->with(['library' => function ($query) use ($user) {
-                            $query->where('user_id', '=', $user->id);
-                        }]);
-                    });
-            });
+        return $this->parentSearchQuery($query)
+            ->where('status_id', 3)
+            ->where('started_at', ['<=', $seasonStartDate->timestamp]);
     }
 
     /**
@@ -121,7 +111,7 @@ class Index extends Component
             return collect();
         }
 
-        return $this->getParentSearchResultsProperty();
+        return $this->parentGetSearchResultsProperty();
     }
 
     /**

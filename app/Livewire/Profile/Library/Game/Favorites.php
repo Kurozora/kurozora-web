@@ -14,7 +14,6 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
-use Laravel\Scout\Builder as ScoutBuilder;
 use Livewire\Component;
 
 class Favorites extends Component
@@ -206,41 +205,6 @@ class Favorites extends Component
 
         // Paginate
         return $models->paginate($this->perPage);
-    }
-
-    /**
-     * Build a 'search index' query for the given resource.
-     *
-     * @param EloquentBuilder $query
-     *
-     * @return EloquentBuilder
-     */
-    public function searchIndexQuery(EloquentBuilder $query): EloquentBuilder
-    {
-        return $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
-            ->when(auth()->user(), function ($query, $user) {
-                $query->with(['library' => function ($query) use ($user) {
-                    $query->where('user_id', '=', $user->id);
-                }]);
-            });
-    }
-
-    /**
-     * Build a 'search' query for the given resource.
-     *
-     * @param ScoutBuilder $query
-     *
-     * @return ScoutBuilder
-     */
-    public function searchQuery(ScoutBuilder $query): ScoutBuilder
-    {
-        return $query->query(function (EloquentBuilder $query) {
-            $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])->when(auth()->user(), function ($query, $user) {
-                $query->with(['library' => function ($query) use ($user) {
-                    $query->where('user_id', '=', $user->id);
-                }]);
-            });
-        });
     }
 
     /**

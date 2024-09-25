@@ -3,19 +3,17 @@
 namespace App\Livewire\Game;
 
 use App\Traits\Livewire\WithGameSearch;
-use Illuminate\Contracts\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
-use Laravel\Scout\Builder as ScoutBuilder;
 use Livewire\Component;
 
 class Index extends Component
 {
     use WithGameSearch {
-        getSearchResultsProperty as protected getParentSearchResultsProperty;
+        getSearchResultsProperty as protected parentGetSearchResultsProperty;
     }
 
     /**
@@ -45,40 +43,6 @@ class Index extends Component
     }
 
     /**
-     * Build a 'search index' query for the given resource.
-     *
-     * @param EloquentBuilder $query
-     * @return EloquentBuilder
-     */
-    public function searchIndexQuery(EloquentBuilder $query): EloquentBuilder
-    {
-        return $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
-            ->when(auth()->user(), function ($query, $user) {
-                $query->with(['library' => function ($query) use ($user) {
-                    $query->where('user_id', '=', $user->id);
-                }]);
-            });
-    }
-
-    /**
-     * Build a 'search' query for the given resource.
-     *
-     * @param ScoutBuilder $query
-     * @return ScoutBuilder
-     */
-    public function searchQuery(ScoutBuilder $query): ScoutBuilder
-    {
-        return $query->query(function (EloquentBuilder $query) {
-            $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
-                ->when(auth()->user(), function ($query, $user) {
-                    $query->with(['library' => function ($query) use ($user) {
-                        $query->where('user_id', '=', $user->id);
-                    }]);
-                });
-        });
-    }
-
-    /**
      * The computed search results property.
      *
      * @return Collection|LengthAwarePaginator
@@ -89,7 +53,7 @@ class Index extends Component
             return collect();
         }
 
-        return $this->getParentSearchResultsProperty();
+        return $this->parentGetSearchResultsProperty();
     }
 
     /**

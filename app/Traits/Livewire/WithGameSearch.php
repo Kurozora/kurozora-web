@@ -4,6 +4,8 @@ namespace App\Traits\Livewire;
 
 use App\Models\Game;
 use App\Models\MediaType;
+use Illuminate\Contracts\Database\Eloquent\Builder as EloquentBuilder;
+use Laravel\Scout\Builder as ScoutBuilder;
 
 trait WithGameSearch
 {
@@ -25,6 +27,40 @@ trait WithGameSearch
     {
         $game = Game::inRandomOrder()->first();
         $this->redirectRoute('games.details', $game);
+    }
+
+    /**
+     * Build a 'search index' query for the given resource.
+     *
+     * @param EloquentBuilder $query
+     * @return EloquentBuilder
+     */
+    public function searchIndexQuery(EloquentBuilder $query): EloquentBuilder
+    {
+        return $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
+            ->when(auth()->user(), function ($query, $user) {
+                $query->with(['library' => function ($query) use ($user) {
+                    $query->where('user_id', '=', $user->id);
+                }]);
+            });
+    }
+
+    /**
+     * Build a 'search' query for the given resource.
+     *
+     * @param ScoutBuilder $query
+     * @return ScoutBuilder
+     */
+    public function searchQuery(ScoutBuilder $query): ScoutBuilder
+    {
+        return $query->query(function (EloquentBuilder $query) {
+            $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
+                ->when(auth()->user(), function ($query, $user) {
+                    $query->with(['library' => function ($query) use ($user) {
+                        $query->where('user_id', '=', $user->id);
+                    }]);
+                });
+        });
     }
 
     /**

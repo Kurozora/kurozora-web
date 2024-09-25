@@ -214,7 +214,7 @@ trait WithSearch
                 $models = static::$searchModel::query();
             }
 
-            $models = $this->searchIndexQuery($models)
+            $models = $models
                 ->when(!empty($this->typeValue), function (EloquentBuilder $query) {
                     $query->where($this->typeColumn(), '=', $this->typeValue);
                 })
@@ -238,7 +238,8 @@ trait WithSearch
                     }
                 });
 
-            return $models->paginate($this->perPage);
+            return $this->searchIndexQuery($models)
+                ->paginate($this->perPage);
         }
 
         // Search

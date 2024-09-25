@@ -4,6 +4,8 @@ namespace App\Traits\Livewire;
 
 use App\Enums\VisualEffectViewStyle;
 use App\Models\AppTheme;
+use Illuminate\Contracts\Database\Eloquent\Builder as EloquentBuilder;
+use Laravel\Scout\Builder as ScoutBuilder;
 
 trait WithThemeStoreSearch
 {
@@ -15,6 +17,30 @@ trait WithThemeStoreSearch
      * @var string $searchModel
      */
     public static string $searchModel = AppTheme::class;
+
+    /**
+     * Build a 'search index' query for the given resource.
+     *
+     * @param EloquentBuilder $query
+     * @return EloquentBuilder
+     */
+    public function searchIndexQuery(EloquentBuilder $query): EloquentBuilder
+    {
+        return $query->with(['media']);
+    }
+
+    /**
+     * Build a 'search' query for the given resource.
+     *
+     * @param ScoutBuilder $query
+     * @return ScoutBuilder
+     */
+    public function searchQuery(ScoutBuilder $query): ScoutBuilder
+    {
+        return $query->query(function (EloquentBuilder $query) {
+            $query->with(['media']);
+        });
+    }
 
     /**
      * Set the orderable attributes of the model.

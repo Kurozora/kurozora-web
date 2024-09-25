@@ -3,6 +3,8 @@
 namespace App\Traits\Livewire;
 
 use App\Models\Song;
+use Illuminate\Contracts\Database\Eloquent\Builder as EloquentBuilder;
+use Laravel\Scout\Builder as ScoutBuilder;
 
 trait WithSongSearch
 {
@@ -24,6 +26,30 @@ trait WithSongSearch
     {
         $studio = Song::inRandomOrder()->first();
         $this->redirectRoute('songs.details', $studio);
+    }
+
+    /**
+     * Build a 'search index' query for the given resource.
+     *
+     * @param EloquentBuilder $query
+     * @return EloquentBuilder
+     */
+    public function searchIndexQuery(EloquentBuilder $query): EloquentBuilder
+    {
+        return $query->with(['media']);
+    }
+
+    /**
+     * Build a 'search' query for the given resource.
+     *
+     * @param ScoutBuilder $query
+     * @return ScoutBuilder
+     */
+    public function searchQuery(ScoutBuilder $query): ScoutBuilder
+    {
+        return $query->query(function (EloquentBuilder $query) {
+            $query->with(['media']);
+        });
     }
 
     /**

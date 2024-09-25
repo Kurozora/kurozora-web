@@ -7,21 +7,17 @@ use App\Models\Anime;
 use App\Models\Season;
 use App\Traits\Livewire\WithEpisodeSearch;
 use Artisan;
-use Illuminate\Contracts\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
-use Laravel\Scout\Builder as ScoutBuilder;
 use Livewire\Component;
 
 class Episodes extends Component
 {
     use WithEpisodeSearch {
-        getSearchResultsProperty as protected getParentSearchResultsProperty;
-        searchIndexQuery as protected parentSearchIndexQuery;
-        searchQuery as protected parentSearchQuery;
+        getSearchResultsProperty as protected parentGetSearchResultsProperty;
     }
 
     /**
@@ -88,70 +84,6 @@ class Episodes extends Component
     }
 
     /**
-     * Build a 'search index' query for the given resource.
-     *
-     * @param EloquentBuilder $query
-     * @return EloquentBuilder
-     */
-    public function searchIndexQuery(EloquentBuilder $query): EloquentBuilder
-    {
-        return $this->parentSearchIndexQuery($query)
-            ->withoutGlobalScopes()
-            ->with([
-                'anime' => function ($query) {
-                    $query->withoutGlobalScopes()
-                        ->with(['media', 'translations']);
-                },
-                'media',
-                'season' => function ($query) {
-                    $query->withoutGlobalScopes()
-                        ->with(['translations']);
-                },
-                'translations'
-            ])
-            ->when(auth()->user(), function ($query, $user) {
-                return $query->withExists([
-                    'user_watched_episodes as isWatched' => function ($query) use ($user) {
-                        $query->where('user_id', $user->id);
-                    }
-                ]);
-            });
-    }
-
-    /**
-     * Build a 'search' query for the given resource.
-     *
-     * @param ScoutBuilder $query
-     * @return ScoutBuilder
-     */
-    public function searchQuery(ScoutBuilder $query): ScoutBuilder
-    {
-        return $this->parentSearchQuery($query)
-            ->query(function (EloquentBuilder $query) {
-                $query->withoutGlobalScopes()
-                    ->with([
-                        'anime' => function ($query) {
-                            $query->withoutGlobalScopes()
-                                ->with(['media', 'translations']);
-                        },
-                        'media',
-                        'season' => function ($query) {
-                            $query->withoutGlobalScopes()
-                                ->with(['translations']);
-                        },
-                        'translations'
-                    ])
-                    ->when(auth()->user(), function ($query, $user) {
-                        return $query->withExists([
-                            'user_watched_episodes as isWatched' => function ($query) use ($user) {
-                                $query->where('user_id', $user->id);
-                            }
-                        ]);
-                    });
-            });
-    }
-
-    /**
      * The computed search results property.
      *
      * @return Collection|LengthAwarePaginator
@@ -162,7 +94,7 @@ class Episodes extends Component
             return collect();
         }
 
-        return $this->getParentSearchResultsProperty();
+        return $this->parentGetSearchResultsProperty();
     }
 
     /**

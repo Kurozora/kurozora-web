@@ -54,22 +54,64 @@ trait WithEpisodeSearch
      * Build a 'search index' query for the given resource.
      *
      * @param EloquentBuilder $query
+     *
      * @return EloquentBuilder
      */
     public function searchIndexQuery(EloquentBuilder $query): EloquentBuilder
     {
-        return $query->where('season_id', $this->season->id);
+        return $query->withoutGlobalScopes()
+            ->with([
+                'anime' => function ($query) {
+                    $query->withoutGlobalScopes()
+                        ->with(['media', 'translations']);
+                },
+                'media',
+                'season' => function ($query) {
+                    $query->withoutGlobalScopes()
+                        ->with(['translations']);
+                },
+                'translations'
+            ])
+            ->when(auth()->user(), function ($query, $user) {
+                return $query->withExists([
+                    'user_watched_episodes as isWatched' => function ($query) use ($user) {
+                        $query->where('user_id', $user->id);
+                    }
+                ]);
+            });
     }
 
     /**
      * Build a 'search' query for the given resource.
      *
      * @param ScoutBuilder $query
+     *
      * @return ScoutBuilder
      */
     public function searchQuery(ScoutBuilder $query): ScoutBuilder
     {
-        return $query->where('season_id', $this->season->id);
+        return $query->query(function (EloquentBuilder $query) {
+            $query->withoutGlobalScopes()
+                ->with([
+                    'anime' => function ($query) {
+                        $query->withoutGlobalScopes()
+                            ->with(['media', 'translations']);
+                    },
+                    'media',
+                    'season' => function ($query) {
+                        $query->withoutGlobalScopes()
+                            ->with(['translations']);
+                    },
+                    'translations'
+                ])
+                ->when(auth()->user(), function ($query, $user) {
+                    return $query->withExists([
+                        'user_watched_episodes as isWatched' => function ($query) use ($user) {
+                            $query->where('user_id', $user->id);
+                        }
+                    ]);
+                });
+        });
     }
 
     /**
