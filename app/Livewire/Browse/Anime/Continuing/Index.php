@@ -4,10 +4,10 @@ namespace App\Livewire\Browse\Anime\Continuing;
 
 use App\Models\Anime;
 use App\Traits\Livewire\WithAnimeSearch;
+use Illuminate\Contracts\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Laravel\Scout\Builder as ScoutBuilder;
 use Livewire\Component;
@@ -46,6 +46,7 @@ class Index extends Component
      * Build a 'search index' query for the given resource.
      *
      * @param EloquentBuilder $query
+     *
      * @return EloquentBuilder
      */
     public function searchIndexQuery(EloquentBuilder $query): EloquentBuilder
@@ -64,8 +65,8 @@ class Index extends Component
                 }]);
             })
             ->where([
-                ['status_id', '=', 3],
-                ['started_at', '<=', $seasonStartDate->toDateString()],
+                [static::$searchModel::TABLE_NAME . '.status_id', '=', 3],
+                [static::$searchModel::TABLE_NAME . '.started_at', '<=', $seasonStartDate->toDateString()],
             ])
             ->orderBy('started_at', 'desc');
     }
@@ -74,6 +75,7 @@ class Index extends Component
      * Build a 'search' query for the given resource.
      *
      * @param ScoutBuilder $query
+     *
      * @return ScoutBuilder
      */
     public function searchQuery(ScoutBuilder $query): ScoutBuilder
