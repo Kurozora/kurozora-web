@@ -7,17 +7,21 @@ use App\Models\Anime;
 use App\Models\Season;
 use App\Traits\Livewire\WithEpisodeSearch;
 use Artisan;
+use Illuminate\Contracts\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
+use Laravel\Scout\Builder as ScoutBuilder;
 use Livewire\Component;
 
 class Episodes extends Component
 {
     use WithEpisodeSearch {
         getSearchResultsProperty as protected parentGetSearchResultsProperty;
+        searchIndexQuery as protected parentSearchIndexQuery;
+        searchQuery as protected parentSearchQuery;
     }
 
     /**
@@ -81,6 +85,32 @@ class Episodes extends Component
     public function loadPage(): void
     {
         $this->readyToLoad = true;
+    }
+
+    /**
+     * Build a 'search index' query for the given resource.
+     *
+     * @param EloquentBuilder $query
+     *
+     * @return EloquentBuilder
+     */
+    public function searchIndexQuery(EloquentBuilder $query): EloquentBuilder
+    {
+        return $this->parentSearchIndexQuery($query)
+            ->where('season_id', '=', $this->season->id);
+    }
+
+    /**
+     * Build a 'search' query for the given resource.
+     *
+     * @param ScoutBuilder $query
+     *
+     * @return ScoutBuilder
+     */
+    public function searchQuery(ScoutBuilder $query): ScoutBuilder
+    {
+        return $this->parentSearchQuery($query)
+            ->where('season_id', $this->season->id);
     }
 
     /**
