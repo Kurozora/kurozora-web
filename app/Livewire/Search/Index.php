@@ -28,8 +28,8 @@ use Livewire\Component;
 class Index extends Component
 {
     use WithSearch {
-        queryString as parentQueryString;
-        rules as parentRules;
+        queryString as protected parentQueryString;
+        rules as protected parentRules;
     }
 
     /**

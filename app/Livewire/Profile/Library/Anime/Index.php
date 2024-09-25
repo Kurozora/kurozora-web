@@ -22,8 +22,8 @@ use Livewire\Component;
 class Index extends Component
 {
     use WithAnimeSearch {
-        queryString as parentQueryString;
-        setFilterableAttributes as parentSetFilterableAttributes;
+        queryString as protected parentQueryString;
+        setFilterableAttributes as protected parentSetFilterableAttributes;
     }
 
     /**
