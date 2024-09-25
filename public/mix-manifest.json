@@ -1,15 +1,15 @@
 {
     "/service-worker.js": "/service-worker.js?id=8fafdcda754edcdf92a9f12485122a76",
-    "/js/app.js": "/js/app.js?id=8f0f1363731bdd83cecf3a933520f5cf",
+    "/js/app.js": "/js/app.js?id=bfb318371cc2aa98549d231ff4e92923",
     "/js/debug.js": "/js/debug.js?id=96263e8fd2804cd940eec492686c7166",
     "/js/db.js": "/js/db.js?id=a06bca606acd39f89354a39a40d4a6b5",
     "/js/chat.js": "/js/chat.js?id=dfe6a3706173c6b8e1e2cd02de841b3e",
     "/js/listen.js": "/js/listen.js?id=d0cdb8fa91bda4b58e87c91d66408198",
     "/js/watch.js": "/js/watch.js?id=d160037b0ab7632b2c3fa045413c8c69",
-    "/js/worker.js": "/js/worker.js?id=3af10a761643fde37c918a4628bc059c",
-    "/js/manifest.js": "/js/manifest.js?id=ae72200fc0ec120f34cb920196b90915",
+    "/js/worker.js": "/js/worker.js?id=129bf5353cf8f6f864688554838e342a",
+    "/js/manifest.js": "/js/manifest.js?id=b81b1cc0ce2d1b37420d58d44c9818a4",
     "/css/watch.css": "/css/watch.css?id=37709836971a8cf7bb59c82f2cd857dc",
     "/css/chat.css": "/css/chat.css?id=c94ecda28f343fe6f9a3f7e36744979d",
-    "/css/app.css": "/css/app.css?id=8784484d634eb2328172e498cb5f3ab2",
-    "/js/vendor.js": "/js/vendor.js?id=28660270e865b30eb2e900e1f63557ba"
+    "/css/app.css": "/css/app.css?id=9ba2d04a52c709983a51ee8da56f4648",
+    "/js/vendor.js": "/js/vendor.js?id=742498b1190fdd921262243bf56ff08e"
 }
