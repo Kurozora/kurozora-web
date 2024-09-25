@@ -8,10 +8,10 @@ use App\Models\User;
 use App\Models\UserLibrary;
 use App\Traits\Livewire\WithAnimeSearch;
 use Carbon\Carbon;
+use Illuminate\Contracts\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Laravel\Scout\Builder as ScoutBuilder;
@@ -134,10 +134,10 @@ class Reminders extends Component
                 ->withoutIgnoreList()
                 ->when($userLibraryStatuses, function ($query) use ($userLibraryStatuses) {
                     $query->join(UserLibrary::TABLE_NAME, function ($query) use ($userLibraryStatuses) {
-                        $query->on(UserLibrary::TABLE_NAME.'.trackable_id', '=', static::$searchModel::TABLE_NAME . '.id')
-                            ->where(UserLibrary::TABLE_NAME.'.user_id', '=', $this->user->id)
-                            ->where(UserLibrary::TABLE_NAME.'.trackable_type', '=', static::$searchModel)
-                            ->whereIn(UserLibrary::TABLE_NAME.'.status', $userLibraryStatuses);
+                        $query->on(UserLibrary::TABLE_NAME . '.trackable_id', '=', static::$searchModel::TABLE_NAME . '.id')
+                            ->where(UserLibrary::TABLE_NAME . '.user_id', '=', $this->user->id)
+                            ->where(UserLibrary::TABLE_NAME . '.trackable_type', '=', static::$searchModel)
+                            ->whereIn(UserLibrary::TABLE_NAME . '.status', $userLibraryStatuses);
                     });
                 })
                 ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
@@ -179,10 +179,10 @@ class Reminders extends Component
             ->withoutIgnoreList()
             ->when($userLibraryStatuses, function ($query) use ($userLibraryStatuses) {
                 $query->join(UserLibrary::TABLE_NAME, function ($query) use ($userLibraryStatuses) {
-                    $query->on(UserLibrary::TABLE_NAME.'.trackable_id', '=', static::$searchModel::TABLE_NAME . '.id')
-                        ->where(UserLibrary::TABLE_NAME.'.user_id', '=', $this->user->id)
-                        ->where(UserLibrary::TABLE_NAME.'.trackable_type', '=', static::$searchModel)
-                        ->whereIn(UserLibrary::TABLE_NAME.'.status', $userLibraryStatuses);
+                    $query->on(UserLibrary::TABLE_NAME . '.trackable_id', '=', static::$searchModel::TABLE_NAME . '.id')
+                        ->where(UserLibrary::TABLE_NAME . '.user_id', '=', $this->user->id)
+                        ->where(UserLibrary::TABLE_NAME . '.trackable_type', '=', static::$searchModel)
+                        ->whereIn(UserLibrary::TABLE_NAME . '.status', $userLibraryStatuses);
                 });
             })
             ->limit(2000)
@@ -229,6 +229,7 @@ class Reminders extends Component
      * Build a 'search' query for the given resource.
      *
      * @param ScoutBuilder $query
+     *
      * @return ScoutBuilder
      */
     public function searchQuery(ScoutBuilder $query): ScoutBuilder

@@ -15,15 +15,16 @@ class UsersPerPlan extends Partition
      * Calculate the value of the metric.
      *
      * @param NovaRequest $request
+     *
      * @return mixed
      */
     public function calculate(NovaRequest $request): mixed
     {
-        $counts = User::leftJoin(UserReceipt::TABLE_NAME, User::TABLE_NAME.'.uuid', '=', UserReceipt::TABLE_NAME.'.user_id')
-            ->select([User::TABLE_NAME.'.uuid', UserReceipt::TABLE_NAME.'.product_id'])
+        $counts = User::leftJoin(UserReceipt::TABLE_NAME, User::TABLE_NAME . '.uuid', '=', UserReceipt::TABLE_NAME . '.user_id')
+            ->select([User::TABLE_NAME . '.uuid', UserReceipt::TABLE_NAME . '.product_id'])
             ->get()
             ->groupBy('product_id')
-            ->map(fn ($group) => $group->count())
+            ->map(fn($group) => $group->count())
             ->mapWithKeys(function ($count, $key) {
                 return [$this->formatKeyName($key) => $count];
             })
@@ -57,6 +58,7 @@ class UsersPerPlan extends Partition
      * Returns a human friendly key name.
      *
      * @param string $key
+     *
      * @return string
      */
     private function formatKeyName(string $key): string
