@@ -76,6 +76,7 @@ require 'Web/Theme.php';
 require 'Web/Theme Store.php';
 require 'Web/Trakt.php';
 require 'Web/TVDB.php';
+require 'Web/UpNext.php';
 
 // Knowledge Base
 require 'Web/Knowledge Base.php';
