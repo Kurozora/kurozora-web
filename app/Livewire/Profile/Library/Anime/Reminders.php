@@ -3,15 +3,18 @@
 namespace App\Livewire\Profile\Library\Anime;
 
 use App\Models\Anime;
+use App\Models\Episode;
 use App\Models\User;
+use App\Models\UserLibrary;
 use App\Traits\Livewire\WithAnimeSearch;
 use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
+use Laravel\Scout\Builder as ScoutBuilder;
 use Livewire\Component;
 
 class Reminders extends Component
@@ -95,54 +98,148 @@ class Reminders extends Component
 
         // Filter
         $wheres = [];
+        $whereIns = [];
         foreach ($this->filter as $attribute => $filter) {
+            if ($attribute == 'library_status') {
+                continue;
+            }
+
             $attribute = str_replace(':', '.', $attribute);
             $selected = $filter['selected'];
             $type = $filter['type'];
 
             if ((is_numeric($selected) && $selected >= 0) || !empty($selected)) {
-                $wheres[$attribute] = match ($type) {
-                    'date' => Carbon::createFromFormat('Y-m-d', $selected)
-                        ?->setTime(0, 0)
-                        ->timestamp,
-                    'time' => $selected . ':00',
-                    default => $selected,
-                };
+                if ($type === 'multiselect') {
+                    $whereIns[$attribute] = $selected;
+                } else {
+                    $wheres[$attribute] = match ($type) {
+                        'date' => Carbon::createFromFormat('Y-m-d', $selected)
+                            ?->setTime(0, 0)
+                            ->timestamp,
+                        'time' => $selected . ':00',
+                        'double' => number_format($selected, 2, '.', ''),
+                        default => $selected,
+                    };
+                }
             }
         }
 
+        // Get library status
+        $userLibraryStatuses = $this->filter['library_status']['selected'] ?? null;
+
         // If no search was performed, return all anime
-        if (empty($this->search) && empty($wheres) && empty($orders)) {
-            $animes = $this->user
-                ->whereReminded(Anime::class)
+        if (empty($this->search) && (empty($wheres) && empty($whereIns)) && empty($orders)) {
+            $models = $this->user
+                ->whereReminded(static::$searchModel)
+                ->withoutIgnoreList()
+                ->when($userLibraryStatuses, function ($query) use ($userLibraryStatuses) {
+                    $query->join(UserLibrary::TABLE_NAME, function ($query) use ($userLibraryStatuses) {
+                        $query->on(UserLibrary::TABLE_NAME.'.trackable_id', '=', static::$searchModel::TABLE_NAME . '.id')
+                            ->where(UserLibrary::TABLE_NAME.'.user_id', '=', $this->user->id)
+                            ->where(UserLibrary::TABLE_NAME.'.trackable_type', '=', static::$searchModel)
+                            ->whereIn(UserLibrary::TABLE_NAME.'.status', $userLibraryStatuses);
+                    });
+                })
                 ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
                 ->when(auth()->user(), function ($query, $user) {
                     $query->with(['library' => function ($query) use ($user) {
                         $query->where('user_id', '=', $user->id);
                     }]);
                 });
-            return $animes->paginate($this->perPage);
+
+            $models = $models
+                ->when(!empty($this->typeValue), function (EloquentBuilder $query) {
+                    $query->where($this->typeColumn(), '=', $this->typeValue);
+                })
+                ->when(!empty($this->letter), function (EloquentBuilder $query) {
+                    if (static::$searchModel === Episode::class) {
+                        $query->whereRelation('translations', function ($query) {
+                            $query->where('locale', '=', 'en');
+
+                            if ($this->letter == '.') {
+                                $query->whereRaw($this->letterIndexColumn() . ' REGEXP \'^[^a-zA-Z]*$\'');
+                            } else {
+                                $query->whereLike($this->letterIndexColumn(), $this->letter . '%');
+                            }
+                        });
+                    } else {
+                        if ($this->letter == '.') {
+                            $query->whereRaw($this->letterIndexColumn() . ' REGEXP \'^[^a-zA-Z]*$\'');
+                        } else {
+                            $query->whereLike($this->letterIndexColumn(), $this->letter . '%');
+                        }
+                    }
+                });
+
+            return $models->paginate($this->perPage);
         }
 
-        $animeIDs = $this->user
-            ->whereReminded(Anime::class)
+        $modelIDs = $this->user
+            ->whereReminded(static::$searchModel)
+            ->withoutIgnoreList()
+            ->when($userLibraryStatuses, function ($query) use ($userLibraryStatuses) {
+                $query->join(UserLibrary::TABLE_NAME, function ($query) use ($userLibraryStatuses) {
+                    $query->on(UserLibrary::TABLE_NAME.'.trackable_id', '=', static::$searchModel::TABLE_NAME . '.id')
+                        ->where(UserLibrary::TABLE_NAME.'.user_id', '=', $this->user->id)
+                        ->where(UserLibrary::TABLE_NAME.'.trackable_type', '=', static::$searchModel)
+                        ->whereIn(UserLibrary::TABLE_NAME.'.status', $userLibraryStatuses);
+                });
+            })
             ->limit(2000)
             ->pluck('remindable_id')
             ->toArray();
-        $animes = Anime::search($this->search);
-        $animes->whereIn('id', $animeIDs);
-        $animes->wheres = $wheres;
-        $animes->orders = $orders;
-        $animes->query(function (Builder $query) {
+        $whereIns['id'] = $modelIDs;
+
+        if (!empty($this->letter)) {
+            $wheres['letter'] = $this->letter;
+        }
+
+        if (!empty($this->typeValue)) {
+            $wheres[$this->typeColumn()] = $this->typeValue;
+        }
+
+        $models = static::$searchModel::search($this->search);
+        $models->wheres = $wheres;
+        $models->whereIns = $whereIns;
+        $models->orders = $orders;
+        $models = $this->searchQuery($models);
+
+        // Paginate
+        return $models->paginate($this->perPage);
+    }
+
+    /**
+     * Build a 'search index' query for the given resource.
+     *
+     * @param EloquentBuilder $query
+     *
+     * @return EloquentBuilder
+     */
+    public function searchIndexQuery(EloquentBuilder $query): EloquentBuilder
+    {
+        return $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
+            ->when(auth()->user(), function ($query, $user) {
+                $query->with(['library' => function ($query) use ($user) {
+                    $query->where('user_id', '=', $user->id);
+                }]);
+            });
+    }
+
+    /**
+     * Build a 'search' query for the given resource.
+     *
+     * @param ScoutBuilder $query
+     * @return ScoutBuilder
+     */
+    public function searchQuery(ScoutBuilder $query): ScoutBuilder
+    {
+        return $query->query(function (EloquentBuilder $query) {
             $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])->when(auth()->user(), function ($query, $user) {
                 $query->with(['library' => function ($query) use ($user) {
                     $query->where('user_id', '=', $user->id);
                 }]);
             });
         });
-
-        // Paginate
-        return $animes->paginate($this->perPage);
     }
 
     /**
