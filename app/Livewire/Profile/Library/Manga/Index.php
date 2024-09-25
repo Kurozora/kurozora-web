@@ -3,6 +3,7 @@
 namespace App\Livewire\Profile\Library\Manga;
 
 use App\Enums\UserLibraryStatus;
+use App\Models\Episode;
 use App\Models\Manga;
 use App\Models\User;
 use App\Models\UserLibrary;
@@ -13,13 +14,17 @@ use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Laravel\Scout\Builder as ScoutBuilder;
 use Livewire\Component;
 
 class Index extends Component
 {
-    use WithMangaSearch;
+    use WithMangaSearch {
+        queryString as parentQueryString;
+        setFilterableAttributes as parentSetFilterableAttributes;
+    }
 
     /**
      * The object containing the user data.
@@ -38,11 +43,14 @@ class Index extends Component
     /**
      * The query strings of the component.
      *
-     * @var string[] $queryString
+     * @return string[]
      */
-    protected $queryString = [
-        'status',
-    ];
+    protected function queryString() : array
+    {
+        $queryString = $this->parentQueryString();
+        $queryString[] = 'status';
+        return $queryString;
+    }
 
     /**
      * Whether the component is ready to load.
@@ -132,6 +140,10 @@ class Index extends Component
         $wheres = [];
         $whereIns = [];
         foreach ($this->filter as $attribute => $filter) {
+            if ($attribute == 'library_status') {
+                continue;
+            }
+
             $attribute = str_replace(':', '.', $attribute);
             $selected = $filter['selected'];
             $type = $filter['type'];
@@ -159,36 +171,79 @@ class Index extends Component
 
         // If no search was performed, return all manga
         if (empty($this->search) && empty($wheres) && empty($whereIns)) {
-            $mangas = $this->user
-                ->whereTracked(Manga::class)
-//                ->withoutIgnoreList()
+            $models = $this->user
+                ->whereTracked(static::$searchModel)
+                ->withoutIgnoreList()
                 ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
                 ->when(auth()->user(), function ($query, $user) {
                     $query->with(['library' => function ($query) use ($user) {
                         $query->where('user_id', '=', $user->id);
                     }]);
                 })
+                ->when(!empty($this->typeValue), function (EloquentBuilder $query) {
+                    $query->where($this->typeColumn(), '=', $this->typeValue);
+                })
+                ->when(!empty($this->letter), function (EloquentBuilder $query) {
+                    if (static::$searchModel === Episode::class) {
+                        $query->whereRelation('translations', function ($query) {
+                            $query->where('locale', '=', 'en');
+
+                            if ($this->letter == '.') {
+                                $query->whereRaw($this->letterIndexColumn() . ' REGEXP \'^[^a-zA-Z]*$\'');
+                            } else {
+                                $query->whereLike($this->letterIndexColumn(), $this->letter . '%');
+                            }
+                        });
+                    } else {
+                        if ($this->letter == '.') {
+                            $query->whereRaw($this->letterIndexColumn() . ' REGEXP \'^[^a-zA-Z]*$\'');
+                        } else {
+                            $query->whereLike($this->letterIndexColumn(), $this->letter . '%');
+                        }
+                    }
+                })
                 ->wherePivot('status', $userLibraryStatus->value);
-            return $mangas->paginate($this->perPage);
+            return $models->paginate($this->perPage);
         }
 
         // Search
-        $mangaIDs = collect(UserLibrary::search($this->search)
+        $modelIDs = collect(UserLibrary::search($this->search)
+            ->when(!empty($this->letter), function (ScoutBuilder $query) {
+                $query->where('trackable.letter', $this->letter);
+            })
             ->where('user_id', $this->user->id)
-            ->where('trackable_type', addslashes(Manga::class))
+            ->where('trackable_type', addslashes(static::$searchModel))
             ->where('status', $userLibraryStatus->value)
             ->simplePaginateRaw(perPage: 2000, page: 1)
             ->items()['hits'] ?? [])
             ->pluck('trackable_id')
             ->toArray();
-        $whereIns['id'] = $mangaIDs;
+        $whereIns['id'] = $modelIDs;
 
-        $mangas = Manga::search($this->search);
-        $mangas->orders = $orders;
-        $mangas->wheres = $wheres;
-        $mangas->whereIns = $whereIns;
+        if (!empty($this->typeValue)) {
+            $wheres[$this->typeColumn()] = $this->typeValue;
+        }
 
-        $mangas->query(function (Builder $query) {
+        $models = static::$searchModel::search($this->search);
+        $models->wheres = $wheres;
+        $models->whereIns = $whereIns;
+        $models->orders = $orders;
+        $models = $this->searchQuery($models);
+
+        // Paginate
+        return $models->paginate($this->perPage);
+    }
+
+    /**
+     * Build a 'search' query for the given resource.
+     *
+     * @param ScoutBuilder $query
+     *
+     * @return ScoutBuilder
+     */
+    public function searchQuery(ScoutBuilder $query): ScoutBuilder
+    {
+        return $query->query(function (EloquentBuilder $query) {
             $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
                 ->when(auth()->user(), function ($query, $user) {
                     $query->with(['library' => function ($query) use ($user) {
@@ -196,9 +251,18 @@ class Index extends Component
                     }]);
                 });
         });
+    }
 
-        // Paginate
-        return $mangas->paginate($this->perPage);
+    /**
+     * Set the filterable attributes of the model.
+     *
+     * @return array
+     */
+    public function setFilterableAttributes(): array
+    {
+        $filterableAttributes = $this->parentSetFilterableAttributes();
+        unset($filterableAttributes['library_status']);
+        return $filterableAttributes;
     }
 
     /**

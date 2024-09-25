@@ -3,6 +3,7 @@
 namespace App\Livewire\Profile\Library\Game;
 
 use App\Enums\UserLibraryStatus;
+use App\Models\Episode;
 use App\Models\Game;
 use App\Models\User;
 use App\Models\UserLibrary;
@@ -13,13 +14,17 @@ use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Laravel\Scout\Builder as ScoutBuilder;
 use Livewire\Component;
 
 class Index extends Component
 {
-    use WithGameSearch;
+    use WithGameSearch {
+        queryString as parentQueryString;
+        setFilterableAttributes as parentSetFilterableAttributes;
+    }
 
     /**
      * The object containing the user data.
@@ -38,11 +43,14 @@ class Index extends Component
     /**
      * The query strings of the component.
      *
-     * @var string[] $queryString
+     * @return string[]
      */
-    protected $queryString = [
-        'status',
-    ];
+    protected function queryString() : array
+    {
+        $queryString = $this->parentQueryString();
+        $queryString[] = 'status';
+        return $queryString;
+    }
 
     /**
      * Whether the component is ready to load.
@@ -132,6 +140,10 @@ class Index extends Component
         $wheres = [];
         $whereIns = [];
         foreach ($this->filter as $attribute => $filter) {
+            if ($attribute == 'library_status') {
+                continue;
+            }
+
             $attribute = str_replace(':', '.', $attribute);
             $selected = $filter['selected'];
             $type = $filter['type'];
@@ -157,38 +169,81 @@ class Index extends Component
         $status = str_replace('-', '', $upperCaseStatus);
         $userLibraryStatus = UserLibraryStatus::fromKey($status);
 
-        // If no search was performed, return all game
+        // If no search was performed, return all games
         if (empty($this->search) && empty($wheres) && empty($whereIns)) {
-            $games = $this->user
-                ->whereTracked(Game::class)
-//                ->withoutIgnoreList()
+            $models = $this->user
+                ->whereTracked(static::$searchModel)
+                ->withoutIgnoreList()
                 ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
                 ->when(auth()->user(), function ($query, $user) {
                     $query->with(['library' => function ($query) use ($user) {
                         $query->where('user_id', '=', $user->id);
                     }]);
                 })
+                ->when(!empty($this->typeValue), function (EloquentBuilder $query) {
+                    $query->where($this->typeColumn(), '=', $this->typeValue);
+                })
+                ->when(!empty($this->letter), function (EloquentBuilder $query) {
+                    if (static::$searchModel === Episode::class) {
+                        $query->whereRelation('translations', function ($query) {
+                            $query->where('locale', '=', 'en');
+
+                            if ($this->letter == '.') {
+                                $query->whereRaw($this->letterIndexColumn() . ' REGEXP \'^[^a-zA-Z]*$\'');
+                            } else {
+                                $query->whereLike($this->letterIndexColumn(), $this->letter . '%');
+                            }
+                        });
+                    } else {
+                        if ($this->letter == '.') {
+                            $query->whereRaw($this->letterIndexColumn() . ' REGEXP \'^[^a-zA-Z]*$\'');
+                        } else {
+                            $query->whereLike($this->letterIndexColumn(), $this->letter . '%');
+                        }
+                    }
+                })
                 ->wherePivot('status', $userLibraryStatus->value);
-            return $games->paginate($this->perPage);
+            return $models->paginate($this->perPage);
         }
 
         // Search
-        $gameIDs = collect(UserLibrary::search($this->search)
+        $modelIDs = collect(UserLibrary::search($this->search)
+            ->when(!empty($this->letter), function (ScoutBuilder $query) {
+                $query->where('trackable.letter', $this->letter);
+            })
             ->where('user_id', $this->user->id)
-            ->where('trackable_type', addslashes(Game::class))
+            ->where('trackable_type', addslashes(static::$searchModel))
             ->where('status', $userLibraryStatus->value)
             ->simplePaginateRaw(perPage: 2000, page: 1)
             ->items()['hits'] ?? [])
             ->pluck('trackable_id')
             ->toArray();
-        $whereIns['id'] = $gameIDs;
+        $whereIns['id'] = $modelIDs;
 
-        $games = Game::search($this->search);
-        $games->orders = $orders;
-        $games->wheres = $wheres;
-        $games->whereIns = $whereIns;
+        if (!empty($this->typeValue)) {
+            $wheres[$this->typeColumn()] = $this->typeValue;
+        }
 
-        $games->query(function (Builder $query) {
+        $models = static::$searchModel::search($this->search);
+        $models->wheres = $wheres;
+        $models->whereIns = $whereIns;
+        $models->orders = $orders;
+        $models = $this->searchQuery($models);
+
+        // Paginate
+        return $models->paginate($this->perPage);
+    }
+
+    /**
+     * Build a 'search' query for the given resource.
+     *
+     * @param ScoutBuilder $query
+     *
+     * @return ScoutBuilder
+     */
+    public function searchQuery(ScoutBuilder $query): ScoutBuilder
+    {
+        return $query->query(function (EloquentBuilder $query) {
             $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
                 ->when(auth()->user(), function ($query, $user) {
                     $query->with(['library' => function ($query) use ($user) {
@@ -196,9 +251,18 @@ class Index extends Component
                     }]);
                 });
         });
+    }
 
-        // Paginate
-        return $games->paginate($this->perPage);
+    /**
+     * Set the filterable attributes of the model.
+     *
+     * @return array
+     */
+    public function setFilterableAttributes(): array
+    {
+        $filterableAttributes = $this->parentSetFilterableAttributes();
+        unset($filterableAttributes['library_status']);
+        return $filterableAttributes;
     }
 
     /**
