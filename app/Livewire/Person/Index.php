@@ -3,10 +3,10 @@
 namespace App\Livewire\Person;
 
 use App\Traits\Livewire\WithPersonSearch;
+use Illuminate\Contracts\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Laravel\Scout\Builder as ScoutBuilder;

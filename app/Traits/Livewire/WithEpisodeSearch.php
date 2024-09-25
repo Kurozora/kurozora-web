@@ -3,7 +3,7 @@
 namespace App\Traits\Livewire;
 
 use App\Models\Episode;
-use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Illuminate\Contracts\Database\Eloquent\Builder as EloquentBuilder;
 use Laravel\Scout\Builder as ScoutBuilder;
 
 trait WithEpisodeSearch

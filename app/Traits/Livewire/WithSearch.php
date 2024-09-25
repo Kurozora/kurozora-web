@@ -5,8 +5,8 @@ namespace App\Traits\Livewire;
 use App\Models\Episode;
 use App\Models\UserLibrary;
 use Carbon\Carbon;
+use Illuminate\Contracts\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Support\Collection;
 use Laravel\Scout\Builder as ScoutBuilder;
 
@@ -211,11 +211,10 @@ trait WithSearch
                     }])
                     ->wherePivotIn('status', $userLibraryStatuses);
             } else {
-                $queryBuilder = static::$searchModel::query();
-                $models = $this->searchIndexQuery($queryBuilder);
+                $models = static::$searchModel::query();
             }
 
-            $models = $models
+            $models = $this->searchIndexQuery($models)
                 ->when(!empty($this->typeValue), function (EloquentBuilder $query) {
                     $query->where($this->typeColumn(), '=', $this->typeValue);
                 })
