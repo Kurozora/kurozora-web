@@ -4,10 +4,10 @@ namespace App\Livewire\Browse\Anime\Upcoming;
 
 use App\Models\Anime;
 use App\Traits\Livewire\WithAnimeSearch;
+use Illuminate\Contracts\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Laravel\Scout\Builder as ScoutBuilder;
@@ -62,6 +62,7 @@ class Index extends Component
      * Build a 'search index' query for the given resource.
      *
      * @param EloquentBuilder $query
+     *
      * @return EloquentBuilder
      */
     public function searchIndexQuery(EloquentBuilder $query): EloquentBuilder
@@ -72,7 +73,7 @@ class Index extends Component
                     $query->where('user_id', '=', $user->id);
                 }]);
             })
-            ->where('started_at', '>=', yesterday());
+            ->where(static::$searchModel::TABLE_NAME . '.started_at', '>=', yesterday());
     }
 
     /**
