@@ -381,17 +381,34 @@
                             {{ $manga->publication_string }}
                         </x-slot:information>
 
-                        @if ($manga->status_id === 4)
+                        @if ($manga->status_id === 9)
                             <x-slot:footer>
                                 {{ __('The publishing of this series has ended.') }}
                             </x-slot:footer>
                         @elseif (empty($manga->publication_date))
                             {{ __('No publication data available at the moment.') }}
-                        @elseif ($manga->status_id === 3)
-                            <div class="flex flex-col align-center mt-1">
-                                <p class="font-black text-2xl">
-                                    {{ $manga->time_until_publication }}
-                                </p>
+                        @elseif ($manga->status_id === 8)
+                            <div
+                                class="flex flex-col align-center mt-1"
+                                x-data="{
+                                    publicationTimestamp: {{ $manga->publication_date?->timestamp }},
+                                    publicationDuration: 25,
+                                    publicationString: '',
+                                    startTimer() {
+                                        if (this.publicationTimestamp == null) {
+                                            return;
+                                        }
+
+                                        this.publicationString = Date.broadcastString(this.publicationTimestamp * 1000, this.publicationDuration)
+                                    },
+                                }"
+                                x-init="() => {
+                                    setInterval(() => {
+                                        startTimer()
+                                    }, 1000);
+                                }"
+                            >
+                                <p class="font-black text-2xl" x-text="publicationString"></p>
                             </div>
                         @endif
                     </x-information-list>

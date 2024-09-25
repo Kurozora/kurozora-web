@@ -1,4 +1,8 @@
 /**
+ * Load custom extensions.
+ */
+import './extensions/index'
+/**
  * iro is a modular, design-conscious color picker widget.
  * It works with colors in hex, RGB, HSV and HSL formats.
  */

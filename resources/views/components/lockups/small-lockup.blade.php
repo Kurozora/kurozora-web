@@ -29,9 +29,28 @@
                     @endif
 
                     @if ($showsSchedule)
-                        <p class="text-xs leading-tight font-semibold opacity-75 line-clamp-2">
+                        <p
+                            class="text-xs leading-tight font-semibold opacity-75 line-clamp-2"
+                            x-data="{
+                                broadcastTimestamp: {{ $anime->broadcast_date?->timestamp }},
+                                broadcastDuration: {{ $anime->duration }},
+                                broadcastString: '',
+                                startTimer() {
+                                    if (this.broadcastTimestamp == null) {
+                                        return;
+                                    }
+
+                                    this.broadcastString = '(' + Date.broadcastString(this.broadcastTimestamp * 1000, this.broadcastDuration) + ')'
+                                },
+                            }"
+                            x-init="() => {
+                                setInterval(() => {
+                                    startTimer()
+                                }, 1000);
+                            }"
+                        >
                             {{ $anime->broadcast_date?->format('H:i T') }}
-                            <span class="font-normal">({{ $anime->time_until_broadcast }})</span>
+                            <span class="font-normal" x-text="broadcastString"></span>
                         </p>
                     @endif
 
@@ -80,9 +99,28 @@
                     @endif
 
                     @if ($showsSchedule)
-                        <p class="text-xs leading-tight font-semibold opacity-75 line-clamp-2">
+                        <p
+                            class="text-xs leading-tight font-semibold opacity-75 line-clamp-2"
+                            x-data="{
+                                publicationTimestamp: {{ $game->publication_date?->timestamp }},
+                                publicationDuration: 25,
+                                publicationString: '',
+                                startTimer() {
+                                    if (this.publicationTimestamp == null) {
+                                        return;
+                                    }
+
+                                    this.publicationString = '(' + Date.broadcastString(this.publicationTimestamp * 1000, this.publicationDuration) + ')'
+                                },
+                            }"
+                            x-init="() => {
+                                setInterval(() => {
+                                    startTimer()
+                                }, 1000);
+                            }"
+                        >
                             {{ $game->publication_date?->format('H:i T') }}
-                            <span class="font-normal">({{ $game->time_until_publication }})</span>
+                            <span class="font-normal" x-text="publicationString"></span>
                         </p>
                     @endif
 
@@ -141,9 +179,28 @@
                     @endif
 
                     @if ($showsSchedule)
-                        <p class="text-xs leading-tight font-semibold opacity-75 line-clamp-2">
+                        <p
+                            class="text-xs leading-tight font-semibold opacity-75 line-clamp-2"
+                            x-data="{
+                                publicationTimestamp: {{ $manga->publication_date?->timestamp }},
+                                publicationDuration: 25,
+                                publicationString: '',
+                                startTimer() {
+                                    if (this.publicationTimestamp == null) {
+                                        return;
+                                    }
+
+                                    this.publicationString = '(' + Date.broadcastString(this.publicationTimestamp * 1000, this.publicationDuration) + ')'
+                                },
+                            }"
+                            x-init="() => {
+                                setInterval(() => {
+                                    startTimer()
+                                }, 1000);
+                            }"
+                        >
                             {{ $manga->publication_date?->format('H:i T') }}
-                            <span class="font-normal">({{ $manga->time_until_publication }})</span>
+                            <span class="font-normal" x-text="publicationString"></span>
                         </p>
                     @endif
 

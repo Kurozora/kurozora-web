@@ -393,10 +393,27 @@
                         @elseif (empty($anime->broadcast_string))
                             {{ __('No broadcast data available at the moment.') }}
                         @elseif ($anime->status_id === 3)
-                            <div class="flex flex-col align-center mt-1">
-                                <p class="font-black text-2xl">
-                                    {{ $anime->time_until_broadcast }}
-                                </p>
+                            <div
+                                class="flex flex-col align-center mt-1"
+                                x-data="{
+                                    broadcastTimestamp: {{ $anime->broadcast_date?->timestamp }},
+                                    broadcastDuration: {{ $anime->duration }},
+                                    broadcastString: '',
+                                    startTimer() {
+                                        if (this.broadcastTimestamp == null) {
+                                            return;
+                                        }
+
+                                        this.broadcastString = Date.broadcastString(this.broadcastTimestamp * 1000, this.broadcastDuration)
+                                    },
+                                }"
+                                x-init="() => {
+                                    setInterval(() => {
+                                        startTimer()
+                                    }, 1000);
+                                }"
+                            >
+                                <p class="font-black text-2xl" x-text="broadcastString"></p>
                             </div>
                         @endif
                     </x-information-list>

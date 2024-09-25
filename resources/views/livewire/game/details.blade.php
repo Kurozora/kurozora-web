@@ -394,10 +394,27 @@
                         @elseif (empty($game->publication_date))
                             {{ __('No publication data available at the moment.') }}
                         @elseif ($game->status_id === 14)
-                            <div class="flex flex-col align-center mt-1">
-                                <p class="font-black text-2xl">
-                                    {{ $game->time_until_publication }}
-                                </p>
+                            <div
+                                class="flex flex-col align-center mt-1"
+                                x-data="{
+                                    publicationTimestamp: {{ $game->publication_date?->timestamp }},
+                                    publicationDuration: 25,
+                                    publicationString: '',
+                                    startTimer() {
+                                        if (this.publicationTimestamp == null) {
+                                            return;
+                                        }
+
+                                        this.publicationString = Date.broadcastString(this.publicationTimestamp * 1000, this.publicationDuration)
+                                    },
+                                }"
+                                x-init="() => {
+                                    setInterval(() => {
+                                        startTimer()
+                                    }, 1000);
+                                }"
+                            >
+                                <p class="font-black text-2xl" x-text="publicationString"></p>
                             </div>
                         @endif
                     </x-information-list>
