@@ -166,7 +166,7 @@ return [
             \App\Models\Person::TABLE_NAME => [
                 'searchableAttributes' => ['first_name', 'last_name', 'family_name', 'given_name', 'alternative_names', 'about', 'short_description'],
                 'sortableAttributes'=> ['astrological_sign', 'birthdate', 'deceased_date', 'full_name', 'created_at', 'update_at'],
-                'filterableAttributes'=> ['id', 'letter', 'astrological_sign', 'birthdate', 'deceased_date'],
+                'filterableAttributes'=> ['id', 'letter', 'astrological_sign', 'birth_month', 'birthdate', 'deceased_date'],
             ],
             \App\Models\Platform::TABLE_NAME => [
                 'searchableAttributes' => ['original_name', 'name', 'alternative_names', 'translations', 'about', 'tagline',],
