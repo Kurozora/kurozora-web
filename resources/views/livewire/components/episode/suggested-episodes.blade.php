@@ -1,6 +1,9 @@
 <div wire:init="loadSection">
     @if ($this->episodes->count())
-        <section class="pt-5 pb-8 pl-4 pr-4 {{ empty($nextEpisodeID) ? '' : 'border-t-2' }}">
+        <section
+            id="suggestedEpisodes"
+            class="pt-5 pb-8 pl-4 pr-4 {{ empty($nextEpisodeID) ? '' : 'border-t-2' }}"
+        >
             <x-section-nav>
                 <x-slot:title>
                     {{ __('See Also') }}
