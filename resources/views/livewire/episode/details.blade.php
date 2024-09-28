@@ -97,7 +97,6 @@
             theaterMode: $persist(false),
             showChat: $persist(false)
         }"
-        wire:init="loadPage"
     >
         <div
             class="flex flex-col lg:flex-row"
@@ -211,10 +210,8 @@
                                 </template>
                             </x-circle-button>
 
-                            @if ($readyToLoad)
-                                {{-- Video Source --}}
-                                <livewire:components.episode.video-sources :model="$episode" />
-                            @endif
+                            {{-- Video Source --}}
+                            <livewire:components.episode.video-sources :model="$episode" />
 
                             {{-- Theater Mode --}}
                             <x-circle-button
@@ -431,9 +428,7 @@
                     <livewire:components.episode.up-next :next-episode="$nextEpisode" />
                 @endif
 
-                @if ($readyToLoad)
-                    <livewire:components.episode.suggested-episodes :title="$this->episode->title" :next-episode-id="$this->episode->next_episode_id" />
-                @endif
+                <livewire:components.episode.suggested-episodes :title="$this->episode->title" :next-episode-id="$this->episode->next_episode_id" />
             </div>
         </div>
     </div>
@@ -454,12 +449,14 @@
         </x-slot:footer>
     </x-dialog-modal>
 
-    <x-share-modal
-        model="showSharePopup"
-        :link="route('episodes.details', $this->episode)"
-        :embed-link="route('embed.episodes', $this->episode)"
-        :title="$this->episode->title"
-        :image-url="$this->episode->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner())"
-        :type="'episode'"
-    />
+    @if ($showSharePopup)
+        <x-share-modal
+            model="showSharePopup"
+            :link="route('episodes.details', $this->episode)"
+            :embed-link="route('embed.episodes', $this->episode)"
+            :title="$this->episode->title"
+            :image-url="$this->episode->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner())"
+            :type="'episode'"
+        />
+    @endif
 </main>

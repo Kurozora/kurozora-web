@@ -126,13 +126,6 @@ class Details extends Component
     ];
 
     /**
-     * Whether the component is ready to load.
-     *
-     * @var bool $readyToLoad
-     */
-    public bool $readyToLoad = false;
-
-    /**
      * The query strings of the component.
      *
      * * @var string[] $queryString
@@ -163,46 +156,49 @@ class Details extends Component
         ModelViewed::dispatch($episode, request()->ip());
 
         $this->episode = $episode->loadMissing([
-            'anime' => function (HasOneThrough $hasOneThrough) {
-                $hasOneThrough
-                    ->withoutGlobalScopes()
-                    ->with([
-                        'studios',
-                        'translations',
-                        'orderedVideos',
-                    ]);
-            },
             'previous_episode' => function (BelongsTo $belongsTo) {
                 $belongsTo->withoutGlobalScopes();
             },
             'next_episode' => function (BelongsTo $belongsTo) {
                 $belongsTo->withoutGlobalScopes()
-                ->with([
-                    'media',
-                    'translations',
-                    'anime' => function (HasOneThrough $hasOneThrough) {
-                        $hasOneThrough
-                            ->withoutGlobalScopes()
-                            ->with([
+                    ->with([
+                        'media',
+                        'translations',
+                        'anime' => function (HasOneThrough $hasOneThrough) {
+                            $hasOneThrough
+                                ->withoutGlobalScopes()
+                                ->with([
+                                    'translations',
+                                ]);
+                        },
+                        'season' => function (BelongsTo $query) {
+                            $query->with([
                                 'translations',
                             ]);
-                    },
-                    'season' => function ($query) {
-                        $query->with(['translations']);
-                    }
-                ]);
+                        }
+                    ]);
             },
             'media',
             'mediaStat',
-            'season' => function ($query) {
+            'season' => function (BelongsTo $query) {
                 $query->withoutGlobalScopes()
                     ->with([
                         'media',
                         'translations',
+                        'anime' => function (BelongsTo $belongsTo) {
+                            $belongsTo
+                                ->withoutGlobalScopes()
+                                ->with([
+                                    'studios',
+                                    'translations',
+                                    'orderedVideos',
+                                ]);
+                        },
                     ]);
             },
             'translations',
             'tv_rating',
+            'videos'
         ])
             ->when(auth()->user(), function ($query, $user) use ($episode) {
                 return $episode->loadMissing([
@@ -221,7 +217,7 @@ class Details extends Component
         $this->previousEpisode = $episode->previous_episode;
         $this->nextEpisode = $episode->next_episode;
         $this->season = $episode->season;
-        $this->anime = $episode->anime;
+        $this->anime = $episode->season->anime;
 
         if (!auth()->check()) {
             $this->episode->setRelation('mediaRatings', collect());
@@ -258,16 +254,6 @@ class Details extends Component
             'translations',
             'orderedVideos',
         ]);
-    }
-
-    /**
-     * Sets the property to load the page.
-     *
-     * @return void
-     */
-    public function loadPage(): void
-    {
-        $this->readyToLoad = true;
     }
 
     /**
@@ -313,10 +299,6 @@ class Details extends Component
      */
     public function getVideoProperty(): ?Video
     {
-        if (!$this->readyToLoad) {
-            return null;
-        }
-
         $videoSource = VideoSource::fromKey($this->preferredVideoSource);
 
         if ($video = $this->episode->videos->firstWhere('source', '=', $videoSource->value)) {

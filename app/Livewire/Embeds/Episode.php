@@ -44,7 +44,7 @@ class Episode extends Component
      */
     public function mount(\App\Models\Episode $episode): void
     {
-        $this->episode = $episode->load([
+        $this->episode = $episode->loadMissing([
             'anime' => function (HasOneThrough $hasOneThrough) {
                 $hasOneThrough->with([
                     'genres',
