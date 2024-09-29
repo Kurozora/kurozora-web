@@ -6,7 +6,6 @@ use App\Models\Episode;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Livewire\Attributes\Isolate;
 use Livewire\Component;
 
@@ -29,19 +28,16 @@ class UpNext extends Component
      */
     public function mount(Episode $nextEpisode): void
     {
-        $this->nextEpisode = $nextEpisode->load([
-            'anime' => function (HasOneThrough $hasOneThrough) {
-                $hasOneThrough
-                    ->withoutGlobalScopes()
-                    ->with([
-                        'translations',
-                    ]);
-            },
-            'season' => function ($query) {
-                $query->withoutGlobalScopes()
-                    ->with(['translations']);
-            }
-        ]);
+        $this->nextEpisode = $nextEpisode
+            ->when(auth()->user(), function ($query, $user) use ($nextEpisode) {
+                return $nextEpisode->loadExists([
+                    'user_watched_episodes as isWatched' => function ($query) use ($user) {
+                        $query->where('user_id', $user->id);
+                    },
+                ]);
+            }, function () use ($nextEpisode) {
+                return $nextEpisode;
+            });
     }
 
     /**

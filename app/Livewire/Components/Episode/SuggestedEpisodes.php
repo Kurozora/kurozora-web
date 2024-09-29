@@ -70,22 +70,31 @@ class SuggestedEpisodes extends Component
             return collect();
         }
 
-        return Episode::search(mb_convert_encoding(substr($this->title, 0, 20), 'UTF-8', mb_list_encodings()))
+        $title = mb_convert_encoding(substr($this->title, 0, 20), 'UTF-8', mb_list_encodings());
+
+        return Episode::search($title)
             ->take(10)
             ->query(function ($query) {
                 $query->with([
                     'anime' => function ($query) {
                         $query->with([
                             'media',
-                            'translations'
+                            'translations',
                         ]);
                     },
                     'media',
                     'season' => function ($query) {
                         $query->with(['translations']);
                     },
-                    'translations'
-                ]);
+                    'translations',
+                ])
+                ->when(auth()->user(), function ($query, $user) {
+                    $query->withExists([
+                        'user_watched_episodes as isWatched' => function ($query) use ($user) {
+                            $query->where('user_id', $user->id);
+                        },
+                    ]);
+                });
             })
             ->get();
     }
