@@ -123,6 +123,11 @@ class MediaStat extends Resource
                 ->rules(['required', 'numeric'])
                 ->sortable(),
 
+            Number::make('Interested', 'interested_count')
+                ->default(0)
+                ->rules(['required', 'numeric'])
+                ->sortable(),
+
             Number::make('Ignored', 'ignored_count')
                 ->default(0)
                 ->rules(['required', 'numeric'])

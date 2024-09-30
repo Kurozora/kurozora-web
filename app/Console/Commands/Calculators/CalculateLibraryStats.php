@@ -102,6 +102,9 @@ class CalculateLibraryStats extends Command
                 'library as on_hold_count' => function ($query) {
                     $query->where('status', '=', UserLibraryStatus::OnHold);
                 },
+                'library as interested_count' => function ($query) {
+                    $query->where('status', '=', UserLibraryStatus::Interested);
+                },
                 'library as ignored_count' => function ($query) {
                     $query->where('status', '=', UserLibraryStatus::Ignored);
                 },
@@ -125,12 +128,14 @@ class CalculateLibraryStats extends Command
                         $completedCount = $model->completed_count;
                         $onHoldCount = $model->on_hold_count;
                         $droppedCount = $model->dropped_count;
+                        $interestedCount = $model->interested_count;
                         $ignoredCount = $model->ignored_count;
 
                         // Sum library count of all statuses
                         $modelCount = $planningCount + $inProgressCount
                             + $completedCount + $onHoldCount
-                            + $droppedCount + $ignoredCount;
+                            + $droppedCount + $interestedCount
+                            + $ignoredCount;
 
                         // Update media stat
                         $mediaStat->updateQuietly([
@@ -140,6 +145,7 @@ class CalculateLibraryStats extends Command
                             'completed_count' => $completedCount,
                             'on_hold_count' => $onHoldCount,
                             'dropped_count' => $droppedCount,
+                            'interested_count' => $interestedCount,
                             'ignored_count' => $ignoredCount,
                         ]);
 

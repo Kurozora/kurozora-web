@@ -182,6 +182,7 @@ class GenerateRecaps extends Command
                                 break;
                             case UserLibraryStatus::Planning:
                             case UserLibraryStatus::Dropped:
+                            case UserLibraryStatus::Interested:
                             case UserLibraryStatus::Ignored:
                                 // Explicitly ignore those, as the user either hasn't
                                 // started watching them or doesn't like them.
@@ -245,6 +246,7 @@ class GenerateRecaps extends Command
                         if (
                             $userLibrary->status == UserLibraryStatus::Planning ||
                             $userLibrary->status == UserLibraryStatus::Dropped ||
+                            $userLibrary->status == UserLibraryStatus::Interested ||
                             $userLibrary->status == UserLibraryStatus::Ignored
                         ) {
                             return;
@@ -257,6 +259,8 @@ class GenerateRecaps extends Command
                             $completionScore = 0.5;
                         } elseif ($userLibrary->status === UserLibraryStatus::InProgress) {
                             $completionScore = 0.3;
+                        } elseif ($userLibrary->status === UserLibraryStatus::Interested) {
+                            $completionScore = 0.15;
                         } elseif ($userLibrary->status === UserLibraryStatus::OnHold) {
                             $completionScore = 0.1;
                         }

@@ -23,6 +23,7 @@ return new class extends Migration
             $table->unsignedBigInteger('completed_count')->default(0);
             $table->unsignedBigInteger('on_hold_count')->default(0);
             $table->unsignedBigInteger('dropped_count')->default(0);
+            $table->unsignedBigInteger('interested_count')->default(0);
             $table->unsignedBigInteger('ignored_count')->default(0);
             $table->unsignedBigInteger('rating_1')->default(0);
             $table->unsignedBigInteger('rating_2')->default(0);
