@@ -13,12 +13,15 @@ Route::prefix('/library')
         Route::post('/', [LibraryController::class, 'create'])
             ->name('.create');
 
-        Route::post('/update', [LibraryController::class, 'update'])
-            ->name('.update');
+        Route::delete('/clear', [LibraryController::class, 'clearLibrary'])
+            ->name('.clear');
 
         Route::post('/delete', [LibraryController::class, 'delete'])
             ->name('.delete');
 
         Route::post('/import', [LibraryController::class, 'import'])
             ->name('.import');
+
+        Route::post('/update', [LibraryController::class, 'update'])
+            ->name('.update');
     });

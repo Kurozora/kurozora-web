@@ -9,6 +9,7 @@ use App\Enums\UserLibraryStatus;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AddToLibraryRequest;
+use App\Http\Requests\ClearUserLibraryRequest;
 use App\Http\Requests\DeleteFromLibraryRequest;
 use App\Http\Requests\GetLibraryRequest;
 use App\Http\Requests\LibraryImportRequest;
@@ -31,6 +32,7 @@ use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 
 class LibraryController extends Controller
@@ -362,5 +364,42 @@ class LibraryController extends Controller
         return JSONResult::success([
             'message' => __('Your anime import request has been submitted. You will be notified once it has been processed!')
         ]);
+    }
+
+    /**
+     * Delete the user's library.
+     *
+     * @param ClearUserLibraryRequest $request
+     *
+     * @return JsonResponse
+     * @throws AuthorizationException
+     */
+    public function clearLibrary(ClearUserLibraryRequest $request): JsonResponse
+    {
+        $data = $request->validated();
+
+        // Get the authenticated user
+        $user = auth()->user();
+
+        // Validate the password
+        if (!Hash::check($data['password'], $user->password)) {
+            throw new AuthorizationException(__('This password does not match our records.'));
+        }
+
+        // Get the user
+        $libraryKind = UserLibraryKind::fromValue((int) $data['library']);
+        $type = match ($libraryKind->value) {
+            UserLibraryKind::Anime => Anime::class,
+            UserLibraryKind::Manga => Manga::class,
+            UserLibraryKind::Game => Game::class
+        };
+
+        // Clear the specified library
+        $user->clearLibrary($type);
+        $user->clearFavorites($type);
+        $user->clearReminders($type);
+        $user->clearRatings($type);
+
+        return JSONResult::success();
     }
 }
