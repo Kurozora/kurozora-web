@@ -22,6 +22,15 @@ class Episodes extends Component
     public bool $readyToLoad = false;
 
     /**
+     * The component's listeners.
+     *
+     * @var array
+     */
+    protected $listeners = [
+        'refresh-up-next-episodes' => '$refresh',
+    ];
+
+    /**
      * Prepare the component.
      *
      * @return void
