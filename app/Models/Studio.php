@@ -256,7 +256,8 @@ class Studio extends KModel implements HasMedia, Sitemapable
      */
     protected function makeAllSearchableUsing(Builder $query): Builder
     {
-        return $query->withoutGlobalScopes();
+        return $query->withoutGlobalScopes()
+            ->with(['mediaStat', 'tv_rating', 'predecessors', 'successor']);
     }
 
     /**
@@ -266,15 +267,25 @@ class Studio extends KModel implements HasMedia, Sitemapable
      */
     public function toSearchableArray(): array
     {
-        $studio = $this->toArray();
-        unset($studio['media']);
-        $studio['letter'] = str_index($this->name);
-        $studio['successor'] = $this->successor?->toSearchableArray();
-        $studio['founded_at'] = $this->founded_at?->timestamp;
-        $studio['defunct_at'] = $this->defunct_at?->timestamp;
-        $studio['created_at'] = $this->created_at?->timestamp;
-        $studio['updated_at'] = $this->updated_at?->timestamp;
-        return $studio;
+        return $this->withoutRecursion(
+            function () {
+                $studio = $this->toArray();
+                unset($studio['media']);
+                $studio['letter'] = str_index($this->name);
+                $studio['predecessors'] = $this->predecessors
+                    ->map(function ($item) {
+                        $item->toSearchableArray();
+                    });
+                $studio['successor'] = $this->successor?->toSearchableArray();
+                $studio['media_stat'] = $this->mediaStat?->toSearchableArray();
+                $studio['tv_rating'] = $this->tv_rating?->toSearchableArray();
+                $studio['founded_at'] = $this->founded_at?->timestamp;
+                $studio['defunct_at'] = $this->defunct_at?->timestamp;
+                $studio['created_at'] = $this->created_at?->timestamp;
+                $studio['updated_at'] = $this->updated_at?->timestamp;
+                return $studio;
+            }
+        );
     }
 
     /**
