@@ -42,9 +42,7 @@
         </section>
 
         @if ($this->searchResults->count())
-            <section class="mt-4">
-                <x-rows.studio-lockup :studios="$this->searchResults" :is-row="false" />
-            </section>
+            <x-rows.studio-lockup :studios="$this->searchResults" :is-row="false" />
 
             <section class="mt-4">
                 {{ $this->searchResults->links() }}
