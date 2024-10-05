@@ -141,6 +141,15 @@ class Studio extends KModel implements HasMedia, Sitemapable
     public static function webSearchOrders(): array
     {
         $order = [
+            'rank_total' => [
+                'title' => __('Ranking'),
+                'options' => [
+                    'Default' => null,
+                    'Highest' => 'asc',
+                    'Lowest' => 'desc',
+                ],
+                'selected' => null,
+            ],
             'name' => [
                 'title' => __('Name'),
                 'options' => [
