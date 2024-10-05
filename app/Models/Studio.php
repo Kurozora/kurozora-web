@@ -198,11 +198,22 @@ class Studio extends KModel implements HasMedia, Sitemapable
      */
     public static function webSearchFilters(): array
     {
+        $preferredTvRating = config('app.tv_rating');
+        if ($preferredTvRating <= 0) {
+            $preferredTvRating = 4;
+        }
+
         $filter = [
             'type' => [
                 'title' => __('Type'),
                 'type' => 'select',
                 'options' => StudioType::asSelectArray(),
+                'selected' => null,
+            ],
+            'tv_rating_id' => [
+                'title' => __('TV Rating'),
+                'type' => 'multiselect',
+                'options' => TvRating::where('id', '<=', $preferredTvRating)->pluck('name', 'id'),
                 'selected' => null,
             ],
             'address' => [
