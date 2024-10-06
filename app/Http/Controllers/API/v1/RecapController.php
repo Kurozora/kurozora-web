@@ -37,9 +37,16 @@ class RecapController extends Controller
      */
     public function view(int|string $year): JsonResponse
     {
+        if ($year == now()->year) {
+            $month = now()->subMonth()->month;
+        } else {
+            $month = 12;
+        }
+
         $recaps = auth()->user()->recaps()
             ->with(['recapItems.model'])
             ->where('year', '=', $year)
+            ->where('month', '=', $month)
             ->get();
 
         return JSONResult::success([
