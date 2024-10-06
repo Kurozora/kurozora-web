@@ -24,48 +24,50 @@ class ExploreCategoryController extends Controller
      * Returns the necessary data for the Anime explore page.
      *
      * @param GetExplorePageRequest $request
+     *
      * @return JsonResponse
      */
     function index(GetExplorePageRequest $request): JsonResponse
     {
         // Get explore categories
-        $exploreCategories = ExploreCategory::with([
-            'exploreCategoryItems.model' => function (MorphTo $morphTo) {
-                $morphTo->limit(10)->constrain([
-                    MediaSong::class => function (Builder $query) {
-                        $query->with([
-                            'song' => function ($query) {
-                                $query->with(['media', 'mediaStat', 'translations'])
-                                    ->when(auth()->user(), function ($query, $user) {
-                                        $query->with(['mediaRatings' => function ($query) use ($user) {
-                                            $query->where([
-                                                ['user_id', '=', $user->id]
-                                            ]);
-                                        }]);
-                                    });
-                            },
-                            'model' => function ($query) {
-                                $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating'])
-                                    ->when(auth()->user(), function ($query, $user) {
-                                        $query->with(['mediaRatings' => function ($query) use ($user) {
-                                            $query->where([
-                                                ['user_id', '=', $user->id]
-                                            ]);
-                                        }, 'library' => function ($query) use ($user) {
-                                            $query->where('user_id', '=', $user->id);
-                                        }])
-                                            ->withExists([
-                                                'favoriters as isFavorited' => function ($query) use ($user) {
-                                                    $query->where('user_id', '=', $user->id);
-                                                }
-                                            ]);
-                                    });
-                            }
-                        ]);
-                    }
-                ]);
-            }
-        ])->orderBy('position');
+        $exploreCategories = ExploreCategory::orderBy('position')
+            ->with([
+                'exploreCategoryItems.model' => function (MorphTo $morphTo) {
+                    $morphTo->limit(10)->constrain([
+                        MediaSong::class => function (Builder $query) {
+                            $query->with([
+                                'song' => function ($query) {
+                                    $query->with(['media', 'mediaStat', 'translations'])
+                                        ->when(auth()->user(), function ($query, $user) {
+                                            $query->with(['mediaRatings' => function ($query) use ($user) {
+                                                $query->where([
+                                                    ['user_id', '=', $user->id]
+                                                ]);
+                                            }]);
+                                        });
+                                },
+                                'model' => function ($query) {
+                                    $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating', 'country_of_origin'])
+                                        ->when(auth()->user(), function ($query, $user) {
+                                            $query->with(['mediaRatings' => function ($query) use ($user) {
+                                                $query->where([
+                                                    ['user_id', '=', $user->id]
+                                                ]);
+                                            }, 'library' => function ($query) use ($user) {
+                                                $query->where('user_id', '=', $user->id);
+                                            }])
+                                                ->withExists([
+                                                    'favoriters as isFavorited' => function ($query) use ($user) {
+                                                        $query->where('user_id', '=', $user->id);
+                                                    }
+                                                ]);
+                                        });
+                                }
+                            ]);
+                        }
+                    ]);
+                }
+            ]);
         $genreOrTheme = null;
 
         // Check if categories should be genre or theme specific.
@@ -115,7 +117,7 @@ class ExploreCategoryController extends Controller
                                         $query->with(['media', 'mediaStat']);
                                     },
                                     'model' => function ($query) {
-                                        $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating'])
+                                        $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating', 'country_of_origin'])
                                             ->when(auth()->user(), function ($query, $user) {
                                                 $query->with(['mediaRatings' => function ($query) use ($user) {
                                                     $query->where([
@@ -148,7 +150,8 @@ class ExploreCategoryController extends Controller
      * Returns the details of the specified explore category.
      *
      * @param GetExplorePageRequest $request
-     * @param ExploreCategory $exploreCategory
+     * @param ExploreCategory       $exploreCategory
+     *
      * @return JsonResponse
      */
     function details(GetExplorePageRequest $request, ExploreCategory $exploreCategory): JsonResponse
@@ -207,7 +210,7 @@ class ExploreCategoryController extends Controller
                                     $query->with(['media', 'mediaStat']);
                                 },
                                 'model' => function ($query) {
-                                    $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating'])
+                                    $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating', 'country_of_origin'])
                                         ->when(auth()->user(), function ($query, $user) {
                                             $query->with(['mediaRatings' => function ($query) use ($user) {
                                                 $query->where([
