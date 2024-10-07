@@ -82,22 +82,24 @@ class LibraryController extends Controller
             ])
             ->wherePivot('status', '=', $userLibraryStatus->value)
             ->withExists([
-                'favoriters as isFavorited' => function ($query) use ($user) {
-                    $query->where('user_id', '=', $user->id);
+                'favoriters as isFavorited' => function ($query) use ($morphClass, $user) {
+                    $query->where('favorable_type', '=', $morphClass)
+                        ->where('user_id', '=', $user->id);
                 },
             ])
-            ->when(in_array(Remindable::class, class_uses_recursive($morphClass)), function ($query) use ($user) {
+            ->when(in_array(Remindable::class, class_uses_recursive($morphClass)), function ($query) use ($morphClass, $user) {
                 // Add your logic here if the trait is used
                 $query->withExists([
-                    'reminderers as isReminded' => function ($query) use ($user) {
-                        $query->where('user_id', '=', $user->id);
+                    'reminderers as isReminded' => function ($query) use ($morphClass, $user) {
+                        $query->where('remindable_type', '=', $morphClass)
+                            ->where('user_id', '=', $user->id);
                     },
                 ]);
             })
             ->paginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
-        $nextPageURL = str_replace($request->root(), '', $model->nextPageUrl());
+        $nextPageURL = str_replace($request->root(), '', $model->nextPageUrl() ?? '');
 
         // Get data collection
         $data = match ($library) {
