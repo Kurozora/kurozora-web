@@ -298,7 +298,7 @@ class MeController extends Controller
             ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
-        $nextPageURL = str_replace($request->root(), '', $mediaRatings->nextPageUrl());
+        $nextPageURL = str_replace($request->root(), '', $mediaRatings->nextPageUrl() ?? '');
 
         return JSONResult::success([
             'data' => EpisodeResourceIdentity::collection($mediaRatings),

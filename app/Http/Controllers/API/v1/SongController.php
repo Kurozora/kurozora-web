@@ -120,7 +120,7 @@ class SongController extends Controller
             ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
 
         // Get next page url minus domain
-        $nextPageURL = str_replace($request->root(), '', $animes->nextPageUrl());
+        $nextPageURL = str_replace($request->root(), '', $animes->nextPageUrl() ?? '');
 
         return JSONResult::success([
             'data' => AnimeResource::collection($animes),
@@ -163,7 +163,7 @@ class SongController extends Controller
             ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
 
         // Get next page url minus domain
-        $nextPageURL = str_replace($request->root(), '', $games->nextPageUrl());
+        $nextPageURL = str_replace($request->root(), '', $games->nextPageUrl() ?? '');
 
         return JSONResult::success([
             'data' => GameResource::collection($games),
@@ -265,7 +265,7 @@ class SongController extends Controller
             ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
 
         // Get next page url minus domain
-        $nextPageURL = str_replace($request->root(), '', $reviews->nextPageUrl());
+        $nextPageURL = str_replace($request->root(), '', $reviews->nextPageUrl() ?? '');
 
         return JSONResult::success([
             'data' => MediaRatingResource::collection($reviews),

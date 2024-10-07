@@ -129,7 +129,7 @@ class UserController extends Controller
             ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
-        $nextPageURL = str_replace($request->root(), '', $feedMessages->nextPageUrl());
+        $nextPageURL = str_replace($request->root(), '', $feedMessages->nextPageUrl() ?? '');
 
         return JSONResult::success([
             'data' => FeedMessageResource::collection($feedMessages),
@@ -157,7 +157,7 @@ class UserController extends Controller
             ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
-        $nextPageURL = str_replace($request->root(), '', $mediaRatings->nextPageUrl());
+        $nextPageURL = str_replace($request->root(), '', $mediaRatings->nextPageUrl() ?? '');
 
         return JSONResult::success([
             'data' => MediaRatingResource::collection($mediaRatings),

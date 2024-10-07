@@ -189,7 +189,7 @@ class EpisodeController extends Controller
             ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
 
         // Get next page url minus domain
-        $nextPageURL = str_replace($request->root(), '', $reviews->nextPageUrl());
+        $nextPageURL = str_replace($request->root(), '', $reviews->nextPageUrl() ?? '');
 
         return JSONResult::success([
             'data' => MediaRatingResource::collection($reviews),

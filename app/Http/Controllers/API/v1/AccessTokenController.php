@@ -37,7 +37,7 @@ class AccessTokenController
             ->paginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
-        $nextPageURL = str_replace($request->root(), '', $tokens->nextPageUrl());
+        $nextPageURL = str_replace($request->root(), '', $tokens->nextPageUrl() ?? '');
 
         return JSONResult::success([
             'data' => AccessTokenResource::collection($tokens),

@@ -71,7 +71,7 @@ class SeasonController extends Controller
         $episodes = $episodes->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
 
         // Get next page url minus domain
-        $nextPageURL = str_replace($request->root(), '', $episodes->nextPageUrl());
+        $nextPageURL = str_replace($request->root(), '', $episodes->nextPageUrl() ?? '');
 
         return JSONResult::success([
             'data' => EpisodeResourceIdentity::collection($episodes),

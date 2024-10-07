@@ -34,7 +34,7 @@ class AchievementController extends Controller
             ->paginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
-        $nextPageURL = str_replace($request->root(), '', $badges->nextPageUrl());
+        $nextPageURL = str_replace($request->root(), '', $badges->nextPageUrl() ?? '');
 
         // Show profile response
         return JSONResult::success([

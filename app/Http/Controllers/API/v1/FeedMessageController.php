@@ -151,7 +151,7 @@ class FeedMessageController extends Controller
             ->paginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
-        $nextPageURL = str_replace($request->root(), '', $feedMessageReplies->nextPageUrl());
+        $nextPageURL = str_replace($request->root(), '', $feedMessageReplies->nextPageUrl() ?? '');
 
         return JSONResult::success([
             'data' => FeedMessageResource::collection($feedMessageReplies),

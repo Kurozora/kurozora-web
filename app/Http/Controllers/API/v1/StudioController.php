@@ -125,7 +125,7 @@ class StudioController extends Controller
             ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
 
         // Get next page url minus domain
-        $nextPageURL = str_replace($request->root(), '', $anime->nextPageUrl());
+        $nextPageURL = str_replace($request->root(), '', $anime->nextPageUrl() ?? '');
 
         return JSONResult::success([
             'data' => StudioResourceIdentity::collection($anime),
@@ -149,7 +149,7 @@ class StudioController extends Controller
             ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
 
         // Get next page url minus domain
-        $nextPageURL = str_replace($request->root(), '', $anime->nextPageUrl());
+        $nextPageURL = str_replace($request->root(), '', $anime->nextPageUrl() ?? '');
 
         return JSONResult::success([
             'data' => StudioResourceIdentity::collection($anime),
@@ -174,7 +174,7 @@ class StudioController extends Controller
             ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
 
         // Get next page url minus domain
-        $nextPageURL = str_replace($request->root(), '', $anime->nextPageUrl());
+        $nextPageURL = str_replace($request->root(), '', $anime->nextPageUrl() ?? '');
 
         return JSONResult::success([
             'data' => AnimeResourceIdentity::collection($anime),
@@ -199,7 +199,7 @@ class StudioController extends Controller
             ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
 
         // Get next page url minus domain
-        $nextPageURL = str_replace($request->root(), '', $literatures->nextPageUrl());
+        $nextPageURL = str_replace($request->root(), '', $literatures->nextPageUrl() ?? '');
 
         return JSONResult::success([
             'data' => LiteratureResourceIdentity::collection($literatures),
@@ -224,7 +224,7 @@ class StudioController extends Controller
             ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
 
         // Get next page url minus domain
-        $nextPageURL = str_replace($request->root(), '', $games->nextPageUrl());
+        $nextPageURL = str_replace($request->root(), '', $games->nextPageUrl() ?? '');
 
         return JSONResult::success([
             'data' => GameResourceIdentity::collection($games),
@@ -324,7 +324,7 @@ class StudioController extends Controller
             ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
 
         // Get next page url minus domain
-        $nextPageURL = str_replace($request->root(), '', $reviews->nextPageUrl());
+        $nextPageURL = str_replace($request->root(), '', $reviews->nextPageUrl() ?? '');
 
         return JSONResult::success([
             'data' => MediaRatingResource::collection($reviews),

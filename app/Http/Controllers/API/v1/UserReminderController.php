@@ -79,7 +79,7 @@ class UserReminderController extends Controller
             ->paginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
-        $nextPageURL = str_replace($request->root(), '', $userReminders->nextPageUrl());
+        $nextPageURL = str_replace($request->root(), '', $userReminders->nextPageUrl() ?? '');
 
         // Get data collection
         $data = match ((int) ($data['library'] ?? UserLibraryKind::Anime)) {
@@ -148,7 +148,7 @@ class UserReminderController extends Controller
             ->paginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
-        $nextPageURL = str_replace($request->root(), '', $userReminders->nextPageUrl());
+        $nextPageURL = str_replace($request->root(), '', $userReminders->nextPageUrl() ?? '');
 
         // Get data collection
         $data = match ($library) {

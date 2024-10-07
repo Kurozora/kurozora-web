@@ -201,7 +201,7 @@ class FeedController extends Controller
             ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
-        $nextPageURL = str_replace($request->root(), '', $feed->nextPageUrl());
+        $nextPageURL = str_replace($request->root(), '', $feed->nextPageUrl() ?? '');
 
         return JSONResult::success([
             'data' => FeedMessageResource::collection($feed),
@@ -261,7 +261,7 @@ class FeedController extends Controller
             ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
-        $nextPageURL = str_replace($request->root(), '', $feed->nextPageUrl());
+        $nextPageURL = str_replace($request->root(), '', $feed->nextPageUrl() ?? '');
 
         return JSONResult::success([
             'data' => FeedMessageResource::collection($feed),

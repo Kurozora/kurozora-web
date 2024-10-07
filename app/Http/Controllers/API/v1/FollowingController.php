@@ -62,7 +62,7 @@ class FollowingController extends Controller
             ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
-        $nextPageURL = str_replace($request->root(), '', $followers->nextPageUrl());
+        $nextPageURL = str_replace($request->root(), '', $followers->nextPageUrl() ?? '');
 
         return JSONResult::success([
             'data' => UserResourceIdentity::collection($followers),
@@ -87,7 +87,7 @@ class FollowingController extends Controller
             ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
-        $nextPageURL = str_replace($request->root(), '', $following->nextPageUrl());
+        $nextPageURL = str_replace($request->root(), '', $following->nextPageUrl() ?? '');
 
         return JSONResult::success([
             'data' => UserResourceIdentity::collection($following),

@@ -30,7 +30,7 @@ class SessionController extends Controller
             ->paginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
-        $nextPageURL = str_replace($request->root(), '', $sessions->nextPageUrl());
+        $nextPageURL = str_replace($request->root(), '', $sessions->nextPageUrl() ?? '');
 
         return JSONResult::success([
             'data' => SessionResource::collection($sessions),

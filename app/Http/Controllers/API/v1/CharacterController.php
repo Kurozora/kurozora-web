@@ -130,7 +130,7 @@ class CharacterController extends Controller
             ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
 
         // Get next page url minus domain
-        $nextPageURL = str_replace($request->root(), '', $people->nextPageUrl());
+        $nextPageURL = str_replace($request->root(), '', $people->nextPageUrl() ?? '');
 
         // Return character people
         return JSONResult::success([
@@ -155,7 +155,7 @@ class CharacterController extends Controller
             ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
 
         // Get next page url minus domain
-        $nextPageURL = str_replace($request->root(), '', $anime->nextPageUrl());
+        $nextPageURL = str_replace($request->root(), '', $anime->nextPageUrl() ?? '');
 
         // Return character anime
         return JSONResult::success([
@@ -180,7 +180,7 @@ class CharacterController extends Controller
             ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
 
         // Get next page url minus domain
-        $nextPageURL = str_replace($request->root(), '', $literatures->nextPageUrl());
+        $nextPageURL = str_replace($request->root(), '', $literatures->nextPageUrl() ?? '');
 
         // Return character literatures
         return JSONResult::success([
@@ -205,7 +205,7 @@ class CharacterController extends Controller
             ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
 
         // Get next page url minus domain
-        $nextPageURL = str_replace($request->root(), '', $games->nextPageUrl());
+        $nextPageURL = str_replace($request->root(), '', $games->nextPageUrl() ?? '');
 
         // Return character games
         return JSONResult::success([
