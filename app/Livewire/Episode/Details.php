@@ -172,9 +172,10 @@ class Details extends Component
                                 ]);
                         },
                         'season' => function (BelongsTo $query) {
-                            $query->with([
-                                'translations',
-                            ]);
+                            $query->withoutGlobalScopes()
+                                ->with([
+                                    'translations',
+                                ]);
                         }
                     ]);
             },
