@@ -261,12 +261,12 @@ class Game extends KModel implements HasMedia, Sitemapable
                 'type' => 'duration',
                 'selected' => null,
             ],
-            'country_of_origin' => [
+            'country_id' => [
                 'title' => __('Country of Origin'),
                 'type' => 'multiselect',
                 'options' => [
                     'cn' => 'China',
-                    'ja' => 'Japan',
+                    'jp' => 'Japan',
                     'kr' => 'Korea',
                     'us' => 'United States',
                 ],
