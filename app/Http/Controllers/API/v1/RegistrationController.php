@@ -10,6 +10,7 @@ use App\Models\User;
 use Hash;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\JsonResponse;
+use Random\RandomException;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileCannotBeAdded;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
@@ -25,6 +26,7 @@ class RegistrationController extends Controller
      * @throws FileDoesNotExist
      * @throws FileIsTooBig
      * @throws FileCannotBeAdded
+     * @throws RandomException
      */
     public function signUp(SignUpRequest $request): JsonResponse
     {
@@ -32,11 +34,11 @@ class RegistrationController extends Controller
 
         // Create the user
         $newUser = User::create([
-            'username'              => $data['nickname'] ?? $data['username'],
-            'email'                 => $data['email'],
-            'password'              => Hash::make($data['password']),
-            'can_change_username'   => false,
-            'tv_rating'             => 4
+            'username' => $data['nickname'] ?? $data['username'] ?? bin2hex(random_bytes(20)),
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+            'can_change_username' => false,
+            'tv_rating' => 4
         ]);
 
         if ($request->hasFile('profileImage') &&

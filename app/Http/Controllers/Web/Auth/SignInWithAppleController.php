@@ -13,6 +13,7 @@ use Illuminate\Pipeline\Pipeline;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Contracts\User as SocialiteUser;
 use Laravel\Socialite\Facades\Socialite;
+use Random\RandomException;
 
 class SignInWithAppleController extends Controller
 {
@@ -35,7 +36,9 @@ class SignInWithAppleController extends Controller
      * Handle the providers callback
      *
      * @param Request $request
+     *
      * @return RedirectResponse
+     * @throws RandomException
      */
     public function callback(Request $request): RedirectResponse
     {
@@ -53,9 +56,11 @@ class SignInWithAppleController extends Controller
     /**
      * Get the authentication pipeline instance.
      *
-     * @param Request $request
+     * @param Request       $request
      * @param SocialiteUser $socialiteUser
+     *
      * @return Pipeline
+     * @throws RandomException
      */
     protected function signInPipeline(Request $request, SocialiteUser $socialiteUser): Pipeline
     {
@@ -70,6 +75,8 @@ class SignInWithAppleController extends Controller
      * Find user account if it exists.
      *
      * @param SocialiteUser $socialiteUser
+     *
+     * @throws RandomException
      */
     protected function authenticateUser(SocialiteUser $socialiteUser)
     {
@@ -96,12 +103,14 @@ class SignInWithAppleController extends Controller
      * Creates a new user from the given payload.
      *
      * @param SocialiteUser $socialiteUser
+     *
      * @return User|null
+     * @throws RandomException
      */
     protected function signUpUser(SocialiteUser $socialiteUser): ?User
     {
         return User::create([
-            'username' => $socialiteUser->getName(),
+            'username' => $socialiteUser->getName() ?? bin2hex(random_bytes(20)),
             'email' => $socialiteUser->getEmail(),
             'siwa_id' => $socialiteUser->getId(),
             'email_verified_at' => now(),

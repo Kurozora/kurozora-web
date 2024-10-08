@@ -18,6 +18,7 @@ use Laravel\Nova\Exceptions\AuthenticationException;
 use musa11971\JWTDecoder\Exceptions\ValueNotFoundException;
 use musa11971\JWTDecoder\JWTDecoder;
 use musa11971\JWTDecoder\JWTPayload;
+use Random\RandomException;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 
 class SignInWithAppleController extends Controller
@@ -26,9 +27,11 @@ class SignInWithAppleController extends Controller
      * Sign in with Apple.
      *
      * @param SignInWithAppleRequest $request
+     *
      * @return JsonResponse
      * @throws AuthenticationException
      * @throws ValueNotFoundException
+     * @throws RandomException
      */
     public function signIn(SignInWithAppleRequest $request): JsonResponse
     {
@@ -48,7 +51,7 @@ class SignInWithAppleController extends Controller
                 ->withKeys($keys)
                 ->ignoreExpiry()
                 ->decode();
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             throw new AuthenticationException('The request wasn’t accepted due to an issue with the credentials.');
         }
 
@@ -67,17 +70,17 @@ class SignInWithAppleController extends Controller
 
         // Create a new session attribute
         $user->createSessionAttributes($personalAccessToken, [
-            'platform'          => $data['platform'],
-            'platform_version'  => $data['platform_version'],
-            'device_vendor'     => $data['device_vendor'],
-            'device_model'      => $data['device_model'],
+            'platform' => $data['platform'],
+            'platform_version' => $data['platform_version'],
+            'device_vendor' => $data['device_vendor'],
+            'device_model' => $data['device_model'],
         ], true);
 
         // Prepare response
         $shouldSetupAccount = $user->username == null;
         $response = [
-            'authenticationToken'   => $newToken->plainTextToken,
-            'action'                => $shouldSetupAccount ? 'setupAccount' : 'signIn'
+            'authenticationToken' => $newToken->plainTextToken,
+            'action' => $shouldSetupAccount ? 'setupAccount' : 'signIn'
         ];
 
         if (!$shouldSetupAccount) {
@@ -96,9 +99,11 @@ class SignInWithAppleController extends Controller
      * Update Sign in with Apple preferences.
      *
      * @param SignInWithAppleUpdateRequest $request
+     *
      * @return JsonResponse
      * @throws AuthenticationException
      * @throws ValueNotFoundException
+     * @throws RandomException
      */
     public function update(SignInWithAppleUpdateRequest $request): JsonResponse
     {
@@ -117,7 +122,7 @@ class SignInWithAppleController extends Controller
             $payload = JWTDecoder::token($data['payload'])
                 ->withKeys($keys)
                 ->decode();
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             throw new AuthenticationException('The request wasn’t accepted due to an issue with the credentials.');
         }
 
@@ -157,6 +162,7 @@ class SignInWithAppleController extends Controller
      * Confirms the validity of the given payload.
      *
      * @param JWTPayload $payload
+     *
      * @return bool
      */
     protected function validated(JWTPayload $payload): bool
@@ -167,7 +173,7 @@ class SignInWithAppleController extends Controller
 
             if ($payload->get("aud") != config('app.ios.bundle_id'))
                 return false;
-        } catch(Exception $exception) {
+        } catch (Exception $exception) {
             return false;
         }
 
@@ -177,11 +183,12 @@ class SignInWithAppleController extends Controller
     /**
      * Find user account if it exists.
      *
-     * @param JWTPayload $payload
+     * @param JWTPayload  $payload
      * @param string|null $siwaID
      *
      * @return User|null
      * @throws ValueNotFoundException
+     * @throws RandomException
      */
     protected function getUser(JWTPayload $payload, ?string $siwaID = null): ?User
     {
@@ -268,16 +275,18 @@ class SignInWithAppleController extends Controller
      *
      * @return User|null
      * @throws ValueNotFoundException
+     * @throws RandomException
      */
     protected function signUpUser(JWTPayload $payload): ?User
     {
         return User::create([
-            'email'                 => $payload->get('email'),
-            'siwa_id'               => $payload->get('sub'),
-            'email_verified_at'     => now(),
-            'password'              => Hash::make(Str::random(30)),
-            'can_change_username'   => true,
-            'tv_rating'             => 4
+            'username' => bin2hex(random_bytes(20)),
+            'email' => $payload->get('email'),
+            'siwa_id' => $payload->get('sub'),
+            'email_verified_at' => now(),
+            'password' => Hash::make(Str::random(30)),
+            'can_change_username' => true,
+            'tv_rating' => 4
         ]);
     }
 }
