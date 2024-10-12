@@ -4,7 +4,7 @@
     class="flex flex-col items-center justify-center border-2 border-white rounded-xl shadow-lg overflow-hidden"
     style="min-height: 392px; background: linear-gradient(0deg, #d7d7d7 0%, #fdfdfd 100%);"
 >
-    <div class="w-24 mt-8 mr-4 ml-4 aspect-square">
+    <div class="mt-8">
         <div class="flex items-center justify-center w-28 mt-2 bg-gray-200 aspect-square rounded-full overflow-hidden">
             @if ($achievement->is_achieved)
                 <picture class="relative">
