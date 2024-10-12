@@ -31,10 +31,10 @@ class EpisodeProcessor implements ItemProcessorInterface
     {
         $this->item = $item;
         $tvdbID = $item->get('tvdb_id');
-        $translations = $this->cleanTranslations($item->get('translations'));
-        $seasonNumber = $this->cleanSeasonNumber($item->get('season_number'));
         $episodeNumber = $this->cleanEpisodeNumber($item->get('episode_number'));
         $episodeNumberTotal = $this->cleanEpisodeNumber($item->get('episode_number_total'));
+        $translations = $this->cleanTranslations($item->get('translations'), $episodeNumberTotal);
+        $seasonNumber = $this->cleanSeasonNumber($item->get('season_number'));
         $episodeDuration = $this->getDuration($item->get('episode_duration'));
         $episodeStartedAt = $this->getStartedAt($item->get('episode_started_at'));
         $episodeBannerImageURL = $item->get('episode_banner_image_url');
@@ -122,26 +122,61 @@ class EpisodeProcessor implements ItemProcessorInterface
      * Cleans the translations and returns an array.
      *
      * @param array $translations
+     * @param int   $number
      *
      * @return array
      */
-    protected function cleanTranslations(array $translations): array
+    protected function cleanTranslations(array $translations, int $number): array
     {
         $cleanTranslations = [];
+
+        $enExists = current(array_filter($translations, function ($item) {
+            return isset($item['code']) && $item['code'] == 'eng';
+        }));
+        $jaExists = current(array_filter($translations, function ($item) {
+            return isset($item['code']) && $item['code'] == 'jpn';
+        }));
+
+        if (!$enExists) {
+            $translations[] = [
+                'title' => 'Episode ' . $number,
+                'synopsis' => null,
+                'code' => 'eng'
+            ];
+        }
+
+        if (!$jaExists) {
+            $translations[] = [
+                'title' => '第' . $number . '話',
+                'synopsis' => null,
+                'code' => 'jpn'
+            ];
+        }
+
         foreach ($translations as $translation) {
             $code = match ($translation['code']) {
                 'zhtw' => 'tw',
                 default => $translation['code']
             };
-            $language = Language::where('iso_639_3', '=', $code)
-            ->orWhere('code', '=', $code)
-            ->first();
 
-            $cleanTranslations[$language->code] = [
-                'title' => $translation['title'],
-                'synopsis' => $translation['synopsis'],
-            ];
+            if ($language = Language::where('iso_639_3', '=', $code)
+                ->orWhere('code', '=', $code)
+                ->first()) {
+                $title = empty($translation['title'])
+                    ? ('Episode ' . $number)
+                    : $translation['title'];
+                $synopsis = empty($translation['synopsis'])
+                    ? null
+                    : $translation['synopsis'];
+                logger()->channel('stderr')->info('title: ' . $title . ', number: ' . $number . ', coder:' . $code);
+
+                $cleanTranslations[$language->code] = [
+                    'title' => $title,
+                    'synopsis' => $synopsis,
+                ];
+            }
         }
+
         return $cleanTranslations;
     }
 
@@ -268,11 +303,11 @@ class EpisodeProcessor implements ItemProcessorInterface
      * Update the end datetime of the episode.
      *
      * @param null|Carbon $episodeStartedAt
-     * @param int         $episodeDuration
+     * @param null|int    $episodeDuration
      *
      * @return Carbon|null
      */
-    protected function updateEpisodeEndedAtTime(?Carbon $episodeStartedAt, int $episodeDuration): ?Carbon
+    protected function updateEpisodeEndedAtTime(?Carbon $episodeStartedAt, ?int $episodeDuration): ?Carbon
     {
         if (empty($episodeStartedAt)) {
             return null;
