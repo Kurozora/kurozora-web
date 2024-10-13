@@ -289,6 +289,11 @@ class Anime extends Resource
                 ->required()
                 ->help('The TV rating of the anime. For example NR, G, PG-12, etc.'),
 
+            BelongsTo::make('Country of Origin', 'country_of_origin', Country::class)
+                ->sortable()
+                ->required()
+                ->help('The country the anime originated from. For example Japan, Korea, China and the US.'),
+
             BelongsTo::make('Status')
                 ->sortable()
                 ->required()

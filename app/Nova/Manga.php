@@ -255,6 +255,11 @@ class Manga extends Resource
                 ->help('The TV rating of the manga. For example NR, G, PG-12, etc.')
                 ->required(),
 
+            BelongsTo::make('Country of Origin', 'country_of_origin', Country::class)
+                ->sortable()
+                ->required()
+                ->help('The country the manga originated from. For example Japan, Korea, China and the US.'),
+
             BelongsTo::make('Status')
                 ->sortable()
                 ->help('The publication status of the manga such as.')
