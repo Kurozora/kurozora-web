@@ -16,8 +16,8 @@
                 "@type": "SearchAction",
                 "target": {
                     "@type": "EntryPoint",
-                    "urlTemplate": "{{ route('search.index') }}?q={search_term_string}&src={{ \App\Enums\SearchSource::Google }}",
-                }
+                    "urlTemplate": "{{ route('search.index') }}?q={search_term_string}&src={{ \App\Enums\SearchSource::Google }}"
+                },
                 "query-input": "required name=search_term_string"
             }
         </x-misc.schema>
