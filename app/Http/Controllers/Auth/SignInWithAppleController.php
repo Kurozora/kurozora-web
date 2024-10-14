@@ -77,7 +77,7 @@ class SignInWithAppleController extends Controller
         ], true);
 
         // Prepare response
-        $shouldSetupAccount = $user->username == null;
+        $shouldSetupAccount = $user->wasRecentlyCreated;
         $response = [
             'authenticationToken' => $newToken->plainTextToken,
             'action' => $shouldSetupAccount ? 'setupAccount' : 'signIn'

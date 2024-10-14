@@ -88,7 +88,7 @@ class MeController extends Controller
 
         // Update username
         if ($request->has('username')) {
-            if (empty($user->username) || $user->is_subscribed) {
+            if (empty($user->username) || $user->can_change_username || $user->is_subscribed) {
                 $user->slug = $data['username'];
                 $user->can_change_username = $user->is_subscribed;
                 $changedFields[] = 'username';

@@ -9,7 +9,6 @@ use App\Rules\ValidateBannerImage;
 use App\Rules\ValidateProfileImage;
 use App\Rules\ValidateUserBiography;
 use App\Rules\ValidateUsername;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Support\Facades\Validator;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileCannotBeAdded;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
@@ -57,22 +56,5 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
         }
 
         $user->update($updatedAttributes);
-    }
-
-    /**
-     * Update the given verified user's profile information.
-     *
-     * @param User|MustVerifyEmail $user
-     * @param array $input
-     * @return void
-     */
-    protected function updateVerifiedUser(User|MustVerifyEmail $user, array $input): void
-    {
-        $user->forceFill([
-            'email' => $input['email'],
-            'email_verified_at' => null,
-        ])->save();
-
-        $user->sendEmailVerificationNotification();
     }
 }
