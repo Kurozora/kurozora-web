@@ -182,8 +182,8 @@
     <x-slot:form>
         {{-- Nickname --}}
         <div class="col-span-6">
-            <x-label for="nickname" value="{{ __('Nickname') }}" />
-            <x-input id="nickname" type="text" class="mt-1 block w-full" wire:model="state.nickname" autocomplete="nickname" />
+            <x-label for="nickname" value="{{ __('Display Name') }}" />
+            <x-input id="nickname" type="text" class="mt-1 block w-full" placeholder="{{ $this->user->slug }}" wire:model="state.nickname" autocomplete="nickname" />
             <x-input-error for="nickname" class="mt-2" />
         </div>
 
