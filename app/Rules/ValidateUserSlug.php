@@ -44,6 +44,12 @@ class ValidateUserSlug implements ValidationRule
             return;
         }
 
+        // Check if username is allowed
+        if (collect(explode(',', config('username.banned_list')))->contains(strtolower($value))) {
+            $fail($this->message('blocked-username'));
+            return;
+        }
+
         // Check if username taken
         $user = auth()->user();
 
@@ -74,6 +80,7 @@ class ValidateUserSlug implements ValidationRule
             'length' => __('validation.between.string', ['min' => User::MINIMUM_SLUG_LENGTH, 'max' => User::MAXIMUM_SLUG_LENGTH]),
             'alpha-num' => __('validation.alpha_dash'),
             'exists' => __('validation.unique'),
+            'blocked-username' => __('This username is not allowed. Please choose a different one.'),
             default => __('The :attribute is invalid.'),
         };
     }
