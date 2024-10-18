@@ -313,7 +313,7 @@
                         x-transition:leave-end="-translate-x-full"
                     >
                         <div class="absolute top-0 left-0 bottom-0 right-0">
-                            <img class="h-screen w-full object-cover lazyload" data-sizes="auto" data-src="https://cdn.kurozora.app/149148/7cf55c46-7aba-457e-936d-27340f5d67c4.webp?v=1637190880" alt="One Piece Banner Image" title="One Piece">
+                            <img class="h-screen w-full object-cover lazyload" data-sizes="auto" data-src="https://cdn.kurozora.app/282337/ba723eab-e371-407b-b8c8-32a290a95141.webp?v=1724601483" alt="One Piece Banner Image" title="One Piece">
 
                             <div class="absolute top-0 left-0 right-0 h-screen" style="background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0) 75%);"></div>
                         </div>
