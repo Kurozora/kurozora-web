@@ -23,9 +23,10 @@ return new class extends Migration
             $table->text('content');
             $table->text('content_html');
             $table->text('content_markdown');
+            $table->boolean('is_nsfw')->default(false);
+            $table->boolean('is_pinned')->default(false);
             $table->boolean('is_reply')->default(false);
             $table->boolean('is_reshare')->default(false);
-            $table->boolean('is_nsfw')->default(false);
             $table->boolean('is_spoiler')->default(false);
             $table->timestamps();
         });

@@ -42,10 +42,11 @@ class FeedMessageResourceBasic extends JsonResource
                     'replyCount' => (int) $this->resource->replies_count,
                     'reShareCount' => (int) $this->resource->re_shares_count
                 ],
+                'isNSFW' => $this->resource->is_nsfw,
+                'isPinned' => $this->resource->is_pinned,
                 'isReply' => $this->resource->is_reply,
                 'isReShare' => $this->resource->is_reshare,
                 'isReShared' => (bool) $this->resource->isReShared,
-                'isNSFW' => $this->resource->is_nsfw,
                 'isSpoiler' => $this->resource->is_spoiler,
                 'createdAt' => $this->resource->created_at->timestamp,
             ]
