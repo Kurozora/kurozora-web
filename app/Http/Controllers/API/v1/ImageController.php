@@ -28,8 +28,12 @@ class ImageController extends Controller
         // Get random images
         $images = Media::where('collection_name', '=', $data['collection'])
             ->where('model_type', '=', $modelType)
-            ->whereMorphRelation('model', [$modelType], 'tv_rating_id', '<=', 4)
-            ->whereMorphRelation('model', [$modelType], 'is_nsfw', '=', false)
+            ->whereMorphRelation('model', [$modelType], function ($query) {
+                $query->where([
+                    ['tv_rating_id', '<=', 4],
+                    ['is_nsfw', '=', false],
+                ]);
+            })
             ->limit($data['limit'] ?? 1)
             ->inRandomOrder()
             ->get();
