@@ -29,7 +29,7 @@ class SeasonResource extends JsonResource
         $resource = SeasonResourceIdentity::make($this->resource)->toArray($request);
         $resource = array_merge($resource, [
             'attributes' => [
-                'poster' => ImageResource::make(
+                'poster' => MediaResource::make(
                     $this->resource->media->firstWhere('collection_name', '=', MediaCollection::Poster) ??
                     $this->resource->anime->media->firstWhere('collection_name', '=', MediaCollection::Poster)
                 ),

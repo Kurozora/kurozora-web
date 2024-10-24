@@ -35,7 +35,7 @@ class GenreResource extends JsonResource
                 'backgroundColor2'  => $this->resource->background_color_2,
                 'textColor1'        => $this->resource->text_color_1,
                 'textColor2'        => $this->resource->text_color_2,
-                'symbol'            => ImageResource::make($this->resource->media->firstWhere('collection_name', '=', MediaCollection::Symbol)),
+                'symbol'            => MediaResource::make($this->resource->media->firstWhere('collection_name', '=', MediaCollection::Symbol)),
                 'description'       => $this->resource->description,
                 'isNSFW'            => (bool) $this->resource->is_nsfw
             ]

@@ -31,9 +31,9 @@ class StudioResourceBasic extends JsonResource
         $resource = array_merge($resource, [
             'attributes' => [
                 'slug' => $this->resource->slug,
-                'profile' => ImageResource::make($this->resource->media->firstWhere('collection_name', '=', MediaCollection::Profile)),
-                'banner' => ImageResource::make($this->resource->media->firstWhere('collection_name', '=', MediaCollection::Banner)),
-                'logo' => ImageResource::make($this->resource->media->firstWhere('collection_name', '=', MediaCollection::Logo)),
+                'profile' => MediaResource::make($this->resource->media->firstWhere('collection_name', '=', MediaCollection::Profile)),
+                'banner' => MediaResource::make($this->resource->media->firstWhere('collection_name', '=', MediaCollection::Banner)),
+                'logo' => MediaResource::make($this->resource->media->firstWhere('collection_name', '=', MediaCollection::Logo)),
                 'name' => $this->resource->name,
                 'japaneseName' => $this->resource->japanese_name,
                 'alternativeNames' => $this->resource->alternative_names,

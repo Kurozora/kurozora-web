@@ -6,7 +6,7 @@ use App\Models\Media;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ImageResource extends JsonResource
+class MediaResource extends JsonResource
 {
     /**
      * The resource instance.

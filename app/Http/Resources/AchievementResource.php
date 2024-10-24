@@ -34,7 +34,7 @@ class AchievementResource extends JsonResource
                 'description' => $this->resource->description,
                 'textColor' => $this->resource->text_color,
                 'backgroundColor' => $this->resource->background_color,
-                'symbol' => ImageResource::make($this->resource->media->firstWhere('collection_name', '=', MediaCollection::Symbol)),
+                'symbol' => MediaResource::make($this->resource->media->firstWhere('collection_name', '=', MediaCollection::Symbol)),
                 'achieved_at' => $this->resource->achieved_at?->timestamp,
             ]
         ];

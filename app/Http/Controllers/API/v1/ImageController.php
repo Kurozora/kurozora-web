@@ -6,7 +6,7 @@ use App\Enums\MediaType;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GetRandomImageRequest;
-use App\Http\Resources\ImageResource;
+use App\Http\Resources\MediaResource;
 use App\Models\Media;
 use Illuminate\Http\JsonResponse;
 
@@ -36,7 +36,7 @@ class ImageController extends Controller
 
         // Show images in response
         return JSONResult::success([
-            'data' => ImageResource::collection($images)
+            'data' => MediaResource::collection($images)
         ]);
     }
 }

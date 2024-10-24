@@ -28,7 +28,7 @@ class PersonResourceBasic extends JsonResource
         return array_merge($resource, [
             'attributes'    => [
                 'slug'              => $this->resource->slug,
-                'profile'           => ImageResource::make($this->resource->getFirstMedia(MediaCollection::Profile)),
+                'profile'           => MediaResource::make($this->resource->getFirstMedia(MediaCollection::Profile)),
                 'fullName'          => $this->resource->full_name,
                 'fullGivenName'     => $this->resource->full_given_name,
                 'alternativeNames'  => $this->resource->alternative_names,

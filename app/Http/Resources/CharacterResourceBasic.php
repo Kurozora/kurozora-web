@@ -28,7 +28,7 @@ class CharacterResourceBasic extends JsonResource
         return array_merge($resource, [
             'attributes'    => [
                 'slug'              => $this->resource->slug,
-                'profile'           => ImageResource::make($this->resource->media->firstWhere('collection_name', '=', MediaCollection::Profile)),
+                'profile'           => MediaResource::make($this->resource->media->firstWhere('collection_name', '=', MediaCollection::Profile)),
                 'name'              => $this->resource->name,
                 'nicknames'         => $this->resource->nicknames,
                 'about'             => $this->resource->about,

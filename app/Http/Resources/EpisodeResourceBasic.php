@@ -28,11 +28,11 @@ class EpisodeResourceBasic extends JsonResource
         $resource = EpisodeResourceIdentity::make($this->resource)->toArray($request);
         $resource = array_merge($resource, [
             'attributes'    => [
-                'poster'        => ImageResource::make(
+                'poster'        => MediaResource::make(
                     $this->resource->season->media->firstWhere('collection_name', '=', MediaCollection::Poster) ??
                     $this->resource->anime->media->firstWhere('collection_name', '=', MediaCollection::Poster)
                 ),
-                'banner'        => ImageResource::make(
+                'banner'        => MediaResource::make(
                     $this->resource->media->firstWhere('collection_name', '=', MediaCollection::Banner) ??
                     $this->resource->anime->media->firstWhere('collection_name', '=', MediaCollection::Banner) ??
                     $this->resource->anime->media->firstWhere('collection_name', '=', MediaCollection::Poster)
