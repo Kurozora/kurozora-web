@@ -19,6 +19,18 @@ const defaultCaches = [
     'images/static/icon/app_icon.webp',
 ]
 
+// Don't cache these endpoints
+const noCacheEndpoints = [
+    '/forgot-password',
+    '/merge-library',
+    '/reset-password',
+    '/sign-in',
+    '/sign-out',
+    '/sign-up',
+    '/siwa',
+    '/two-factor-authentication'
+];
+
 self.addEventListener("message", (event) => {
     if (event.data && event.data.type === "SKIP_WAITING") {
         self.skipWaiting()
@@ -51,18 +63,25 @@ self.addEventListener('activate', (event) => {
 
 // Cache pages as the user browses
 self.addEventListener('fetch', (event) => {
-    event.respondWith(
-        caches.match(event.request).then((response) => {
-            return response || fetch(event.request).then((fetchResponse) => {
-                return caches.open(CACHE_NAME).then((cache) => {
-                    cache.put(event.request, fetchResponse.clone())
-                    return fetchResponse
+    const requestUrl = new URL(event.request.url);
+
+    // Check if the request URL matches any endpoint that should not be cached
+    if (noCacheEndpoints.some(endpoint => requestUrl.pathname.includes(endpoint))) {
+        event.respondWith(fetch(event.request));
+    } else {
+        event.respondWith(
+            caches.match(event.request).then((response) => {
+                return response || fetch(event.request).then((fetchResponse) => {
+                    return caches.open(CACHE_NAME).then((cache) => {
+                        cache.put(event.request, fetchResponse.clone())
+                        return fetchResponse
+                    })
                 })
+            }).catch(() => {
+                return caches.match(OFFLINE_URL)
             })
-        }).catch(() => {
-            return caches.match(OFFLINE_URL)
-        })
-    )
+        )
+    }
 })
 
 // Background Sync - periodic sync
