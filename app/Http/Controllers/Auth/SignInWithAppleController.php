@@ -280,7 +280,7 @@ class SignInWithAppleController extends Controller
     protected function signUpUser(JWTPayload $payload): ?User
     {
         return User::create([
-            'username' => bin2hex(random_bytes(20)),
+            'username' => str()->random(8),
             'email' => $payload->get('email'),
             'siwa_id' => $payload->get('sub'),
             'email_verified_at' => now(),

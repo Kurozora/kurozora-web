@@ -110,7 +110,7 @@ class SignInWithAppleController extends Controller
     protected function signUpUser(SocialiteUser $socialiteUser): ?User
     {
         return User::create([
-            'username' => $socialiteUser->getName() ?? bin2hex(random_bytes(20)),
+            'username' => $socialiteUser->getName() ?? str()->random(8),
             'email' => $socialiteUser->getEmail(),
             'siwa_id' => $socialiteUser->getId(),
             'email_verified_at' => now(),
