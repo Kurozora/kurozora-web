@@ -67,7 +67,7 @@ Route::name('verification')
             ->name('.verify');
 
         Route::post('/email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
-            ->middleware(['auth', 'honey', 'honey-recaptcha', 'throttle:6,1'])
+            ->middleware(['auth', 'throttle:6,1'])
             ->name('.send');
     });
 
@@ -79,7 +79,7 @@ Route::name('password')
             ->name('.request');
 
         Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
-            ->middleware(['guest', 'honey', 'honey-recaptcha'])
+            ->middleware(['guest', 'throttle:6,1'])
             ->name('.email');
 
         Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])
@@ -87,7 +87,7 @@ Route::name('password')
             ->name('.reset');
 
         Route::post('/reset-password', [NewPasswordController::class, 'store'])
-            ->middleware(['guest', 'honey', 'honey-recaptcha'])
+            ->middleware(['guest', 'throttle:6,1'])
             ->name('.update');
     });
 
