@@ -37,9 +37,10 @@ class FeedMessage extends KModel implements ReactableContract
     {
         return [
             'is_nsfw' => 'bool',
-            'is_spoiler' => 'bool',
-            'is_reshare' => 'bool',
+            'is_pinned' => 'bool',
             'is_reply' => 'bool',
+            'is_reshare' => 'bool',
+            'is_spoiler' => 'bool',
         ];
     }
 
