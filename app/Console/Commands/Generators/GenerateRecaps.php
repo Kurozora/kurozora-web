@@ -78,17 +78,21 @@ class GenerateRecaps extends Command
             })
             ->with([
                 'library' => function ($query) use ($startedAt, $endedAt, $year) {
-                    $query->where([
-                        ['started_at', '>=', $startedAt],
-                        ['started_at', '<=', $endedAt],
-                    ])
-                        ->orWhere([
+                    $query->where(function ($query) use ($endedAt, $startedAt) {
+                        $query->where([
                             ['started_at', '>=', $startedAt],
-                            ['ended_at', '<=', $endedAt],
+                            ['started_at', '<=', $endedAt],
                         ])
+                            ->orWhere(function ($query) use ($startedAt, $endedAt) {
+                                $query->where([
+                                    ['started_at', '>=', $startedAt],
+                                    ['ended_at', '<=', $endedAt],
+                                ]);
+                            });
+                    })
                         ->with([
                             'trackable.genres',
-                            'trackable.themes'
+                            'trackable.themes',
                         ]);
                 },
                 'user_watched_episodes' => function (HasMany $query) use ($startedAt, $endedAt, $year) {
@@ -102,14 +106,18 @@ class GenerateRecaps extends Command
                         ->whereIn(Anime::TABLE_NAME . '.id', function ($subQuery) use ($startedAt, $endedAt, $year) {
                             $subQuery->select('trackable_id')
                                 ->from(UserLibrary::TABLE_NAME)
-                                ->where([
-                                    [UserLibrary::TABLE_NAME . '.started_at', '>=', $startedAt],
-                                    [UserLibrary::TABLE_NAME . '.started_at', '<=', $endedAt],
-                                ])
-                                ->orWhere([
-                                    [UserLibrary::TABLE_NAME . '.started_at', '>=', $startedAt],
-                                    [UserLibrary::TABLE_NAME . '.ended_at', '<=', $endedAt],
-                                ])
+                                ->where(function ($query) use ($endedAt, $startedAt) {
+                                    $query->where([
+                                        [UserLibrary::TABLE_NAME . '.started_at', '>=', $startedAt],
+                                        [UserLibrary::TABLE_NAME . '.started_at', '<=', $endedAt],
+                                    ])
+                                        ->orWhere(function ($query) use ($endedAt, $startedAt) {
+                                            $query->where([
+                                                [UserLibrary::TABLE_NAME . '.started_at', '>=', $startedAt],
+                                                [UserLibrary::TABLE_NAME . '.ended_at', '<=', $endedAt],
+                                            ]);
+                                        });
+                                })
                                 ->where(UserLibrary::TABLE_NAME . '.trackable_type', '=', Anime::class)
                                 ->whereIn(UserLibrary::TABLE_NAME . '.status', [UserLibraryStatus::InProgress, UserLibraryStatus::Completed, UserLibraryStatus::OnHold]);
                         })
@@ -257,11 +265,11 @@ class GenerateRecaps extends Command
 
                         if ($userLibrary->status === UserLibraryStatus::Completed) {
                             $completionScore = 0.5;
-                        } elseif ($userLibrary->status === UserLibraryStatus::InProgress) {
+                        } else if ($userLibrary->status === UserLibraryStatus::InProgress) {
                             $completionScore = 0.3;
-                        } elseif ($userLibrary->status === UserLibraryStatus::Interested) {
+                        } else if ($userLibrary->status === UserLibraryStatus::Interested) {
                             $completionScore = 0.15;
-                        } elseif ($userLibrary->status === UserLibraryStatus::OnHold) {
+                        } else if ($userLibrary->status === UserLibraryStatus::OnHold) {
                             $completionScore = 0.1;
                         }
 
@@ -303,7 +311,7 @@ class GenerateRecaps extends Command
                         });
 
                     // Save Re:Cap results
-                    $types->each(function($type) use ($topModels, $topGenres, $topThemes, $totalPartsCount, $totalPartsDurations, $endMonth, $year, $user) {
+                    $types->each(function ($type) use ($topModels, $topGenres, $topThemes, $totalPartsCount, $totalPartsDurations, $endMonth, $year, $user) {
                         $this->line('Saving recap for: ' . $type);
                         switch ($type) {
                             case Genre::class:
@@ -315,7 +323,7 @@ class GenerateRecaps extends Command
                                     'user_id' => $user->id,
                                     'year' => $year,
                                     'month' => $endMonth,
-                                    'type' => $type
+                                    'type' => $type,
                                 ]);
 
                                 DB::transaction(function () use ($type, $recap, $topGenres) {
@@ -326,7 +334,7 @@ class GenerateRecaps extends Command
                                         RecapItem::create([
                                             'recap_id' => $recap->id,
                                             'model_type' => $type,
-                                            'model_id' => $favoriteGenre
+                                            'model_id' => $favoriteGenre,
                                         ]);
                                     });
                                 });
@@ -340,7 +348,7 @@ class GenerateRecaps extends Command
                                     'user_id' => $user->id,
                                     'year' => $year,
                                     'month' => $endMonth,
-                                    'type' => $type
+                                    'type' => $type,
                                 ]);
 
                                 DB::transaction(function () use ($type, $recap, $topThemes) {
@@ -351,7 +359,7 @@ class GenerateRecaps extends Command
                                         RecapItem::create([
                                             'recap_id' => $recap->id,
                                             'model_type' => $type,
-                                            'model_id' => $favoriteTheme
+                                            'model_id' => $favoriteTheme,
                                         ]);
                                     });
                                 });
@@ -365,13 +373,13 @@ class GenerateRecaps extends Command
                                     'user_id' => $user->id,
                                     'year' => $year,
                                     'month' => $endMonth,
-                                    'type' => $type
+                                    'type' => $type,
                                 ], [
                                     'total_series_count' => $user->library
                                         ->where('trackable_type', '=', $type)
                                         ->count(),
                                     'total_parts_count' => $totalPartsCount[$type] ?? 0,
-                                    'total_parts_duration' => $totalPartsDurations[$type] ?? 0
+                                    'total_parts_duration' => $totalPartsDurations[$type] ?? 0,
                                 ]);
 
                                 DB::transaction(function () use ($type, $recap, $topModels) {
@@ -383,7 +391,7 @@ class GenerateRecaps extends Command
                                             RecapItem::create([
                                                 'recap_id' => $recap->id,
                                                 'model_type' => $type,
-                                                'model_id' => $topModelItem
+                                                'model_id' => $topModelItem,
                                             ]);
                                         });
                                 });
@@ -402,7 +410,7 @@ class GenerateRecaps extends Command
 
             $chunk = 500;
             $offset = 0;
-            $totalRecaps =  Recap::withoutGlobalScopes()
+            $totalRecaps = Recap::withoutGlobalScopes()
                 ->where('type', '=', $type)
                 ->count();
 
@@ -415,7 +423,7 @@ class GenerateRecaps extends Command
                 ->where([
                     ['type', '=', $type],
                     ['month', '=', $month],
-                    ['year', '=', $year]
+                    ['year', '=', $year],
                 ])
                 ->orderBy('total_series_count', 'desc')
                 ->chunkById($chunk, function (Collection $recaps) use ($totalRecaps, &$offset) {
@@ -425,7 +433,7 @@ class GenerateRecaps extends Command
                             $percentile = ($offset + 1) / $totalRecaps * 100;
 
                             $recap->update([
-                                'top_percentile' => $percentile
+                                'top_percentile' => $percentile,
                             ]);
 
                             $offset++;
