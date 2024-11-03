@@ -55,12 +55,14 @@ class SeasonController extends Controller
      *
      * @return JsonResponse
      */
-    public function episodes(GetSeasonEpisodesRequest $request, Season $season): JsonResponse
+    public function episodes(GetSeasonEpisodesRequest $request, Season $season)
     {
         $data = $request->validated();
 
         // Get the episodes
-        $episodes = $season->episodes();
+        $episodes = $season->episodes()
+            ->select('id', 'number_total')
+            ->orderBy('number_total');
 
         // Fillers
         if ($data['hide_fillers'] ?? false) {
@@ -68,7 +70,7 @@ class SeasonController extends Controller
         }
 
         // Paginate
-        $episodes = $episodes->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+        $episodes = $episodes->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $episodes->nextPageUrl() ?? '');
