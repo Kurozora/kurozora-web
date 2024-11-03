@@ -181,7 +181,7 @@
         @foreach ($this->searchTypes as $value)
             @php($type = str($value)->slug())
             <template x-if="type === '{{ $type }}'">
-                <x-button>{{ $value }}</x-button>
+                <x-button>{{ __($value) }}</x-button>
             </template>
 
             <template x-if="type !== '{{ $type }}'">
