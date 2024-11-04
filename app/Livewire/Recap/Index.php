@@ -5,6 +5,7 @@ namespace App\Livewire\Recap;
 use App\Models\Anime;
 use App\Models\Game;
 use App\Models\Manga;
+use App\Models\Recap;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -24,6 +25,13 @@ class Index extends Component
     public ?int $year = null;
 
     /**
+     * The selected month.
+     *
+     * @var ?int $month
+     */
+    public ?int $month = null;
+
+    /**
      * Determines whether to load the page.
      *
      * @var bool $readyToLoad
@@ -38,41 +46,28 @@ class Index extends Component
     public bool $loadingScreenEnabled = true;
 
     /**
-     * The query strings of the component.
-     *
-     * @return array
-     */
-    protected function queryString(): array
-    {
-        return [
-            'year' => ['except' => now()->year],
-        ];
-    }
-
-    /**
      * Prepare the component.
      *
      * @return void
      */
     public function mount(): void
     {
-        if (empty($this->year)) {
-            $this->year = now()->year;
+        $this->year = now()->year;
+
+        if (now()->month !== 12) {
+            $this->month = now()->subMonth()->month;
         }
     }
 
-    /**
-     * Get the month.
-     *
-     * @return int
-     */
-    public function getMonthProperty(): int
+    public function updatingYear(int $year): void
     {
-        if ($this->year == now()->year) {
-            return now()->subMonth()->month;
+        if ($year === now()->year) {
+            if (now()->month !== 12) {
+                $this->month = now()->subMonth()->month;
+            }
+        } else {
+            $this->month = null;
         }
-
-        return 12;
     }
 
     /**
@@ -139,22 +134,32 @@ class Index extends Component
     /**
      * Get the user's recap years.
      *
-     * @return Collection|LengthAwarePaginator
+     * @return Collection
      */
-    public function getRecapYearsProperty(): Collection|LengthAwarePaginator
+    public function getRecapYearsProperty(): Collection
     {
         if (!$this->readyToLoad) {
             return collect();
         }
 
         $recapYears = auth()->user()->recaps()
+            ->select('year', 'month')
             ->distinct()
             ->orderBy('year', 'desc')
-            ->pluck('year');
+            ->orderBy('month')
+            ->get();
+
+        if (now()->month !== 12) {
+            $recapYears->push(Recap::make([
+                'year' => now()->year,
+                'month' => now()->month,
+            ]));
+        }
 
         $this->loadingScreenEnabled = false;
 
-        return $recapYears;
+        return $recapYears
+            ->groupBy('year');
     }
 
     /**

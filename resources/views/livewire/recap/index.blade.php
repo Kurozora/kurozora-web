@@ -101,24 +101,31 @@
             >
                 <div class="absolute top-0 left-0 bottom-0 right-0 blur backdrop-blur" style="z-index: -1;"></div>
 
-                <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6">
+                <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6 h-screen">
                     <ul class="m-0 mb-4">
                         <li class="pb-10">
                             <p class="text-2xl text-white font-semibold">{{ __('Select a year to see your recap') }}</p>
                         </li>
 
-                        @foreach ($this->recapYears as $recapYear)
+                        @foreach ($this->recapYears as $year => $recap)
                             <li
-                                wire:key="{{ uniqid($recapYear, true) }}"
+                                id="recap{{  $year }}"
+                                wire:key="{{ uniqid($year, true) }}"
                             >
+                                <style>
+                                    #recap{{  $year }} button:hover {
+                                        color: {{ $recap->first()->background_color_2 }};
+                                    }
+                                </style>
+
                                 <button
-                                    class="flex w-full pt-6 text-6xl text-white font-semibold hover:text-orange-500"
+                                    class="flex w-full pt-6 text-6xl text-white font-semibold"
                                     x-bind:class="{
-                                        'opacity-25 hover:opacity-100': year !== {{ $recapYear }}
+                                        'opacity-25 hover:opacity-100': year !== {{ $year }}
                                     }"
-                                    x-on:click="loadingScreenEnabled = true; year = {{ $recapYear }}"
+                                    x-on:click="loadingScreenEnabled = true; year = {{ $year }}"
                                 >
-                                    <p>{{ __('’:x', ['x' => substr($recapYear, -2)]) }}</p>
+                                    <p>{{ __('’:x', ['x' => substr($year, -2)]) }}</p>
                                 </button>
                             </li>
                         @endforeach
@@ -126,6 +133,49 @@
                 </div>
             </div>
         </header>
+
+        <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6">
+            <div
+                x-data="{
+                    month: @entangle('month').live
+                }"
+                class="flex justify-between gap-2 whitespace-nowrap overflow-x-scroll no-scrollbar"
+            >
+                @if ($this->year !== now()->year || now()->month === 12)
+                    <template x-if="month === null">
+                        <x-tinted-pill-button>
+                            <p class="pr-2 pl-2 text-base">{{ $this->year }}</p>
+                        </x-tinted-pill-button>
+                    </template>
+
+                    <template x-if="month !== null">
+                        <x-tinted-pill-button
+                            color="transparent"
+                            x-on:click="month = null"
+                        >
+                            <p class="pr-2 pl-2 text-base text-white">{{ $this->year }}</p>
+                        </x-tinted-pill-button>
+                    </template>
+                @endif
+
+                @foreach ($this->recapYears->get($this->year) as $recap)
+                    <template x-if="month === {{ $recap->month }}">
+                        <x-tinted-pill-button>
+                            <p class="pr-2 pl-2 text-base">{{ substr($recap->month_name, 0, 3) }}</p>
+                        </x-tinted-pill-button>
+                    </template>
+
+                    <template x-if="month !== {{ $recap->month }}">
+                        <x-tinted-pill-button
+                            color="transparent"
+                            x-on:click="month = {{ $recap->month }}"
+                        >
+                            <p class="pr-2 pl-2 text-base text-white">{{ substr($recap->month_name, 0, 3) }}</p>
+                        </x-tinted-pill-button>
+                    </template>
+                @endforeach
+            </div>
+        </div>
     @endif
 
     <div
@@ -145,7 +195,7 @@
                 <div class="flex flex-col items-center mt-12">
                     <h2 class="max-w-sm text-2xl text-center font-semibold md:text-4xl">
                         @if ($this->year == now()->year)
-                            {{ __('Series that defined your arc in :x', ['x' => now()->subMonth()->monthName]) }}
+                            {{ __('Series that defined your arc in :x', ['x' => now()->month($this->month)->monthName]) }}
                         @else
                             {{ __('Series that defined your arc in :x', ['x' => $this->year]) }}
                         @endif
@@ -384,6 +434,18 @@
                     </article>
                 @endif
             </section>
+        @elseif ($this->year === now()->year && $this->month === now()->month)
+            <div class="flex flex-col items-center justify-center" style="height: calc(100vh - 180px);">
+                <h2 class="max-w-sm text-center text-xl font-semibold md:max-w-2xl md:text-4xl">
+                    @if (now()->month === 12)
+                        {{ __(':x Re:CAP is still in progress. Check back in a week.', ['x' => now()->monthName]) }}
+                    @else
+                         {{ __(':x Re:CAP is still in progress. Check back in early :y.', ['x' => now()->monthName, 'y' => now()->addMonth()->monthName]) }}
+                    @endif
+                </h2>
+
+                <x-link-button class="mt-12" href="/">{{ __('Keep Tracking on :x', ['x' => config('app.name')]) }}</x-link-button>
+            </div>
         @endif
     </div>
 

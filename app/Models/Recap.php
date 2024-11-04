@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Month;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -45,6 +46,16 @@ class Recap extends KModel
     public function getBackgroundColor2Attribute(): string
     {
         return generate_random_color($this->year - 3);
+    }
+
+    /**
+     * The recap’s month’s name.
+     *
+     * @return string
+     */
+    public function getMonthNameAttribute(): string
+    {
+        return Month::from($this->month)->name;
     }
 
     /**
