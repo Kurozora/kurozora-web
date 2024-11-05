@@ -142,37 +142,41 @@
                 class="flex justify-between gap-2 whitespace-nowrap overflow-x-scroll no-scrollbar"
             >
                 @if ($this->year !== now()->year || now()->month === 12)
-                    <template x-if="month === null">
-                        <x-tinted-pill-button>
-                            <p class="pr-2 pl-2 text-base">{{ $this->year }}</p>
-                        </x-tinted-pill-button>
-                    </template>
+                    <span wire:key="select-{{ $this->year }}">
+                        <template x-if="month === null">
+                            <x-tinted-pill-button>
+                                <p class="pr-2 pl-2 text-base">{{ $this->year }}</p>
+                            </x-tinted-pill-button>
+                        </template>
 
-                    <template x-if="month !== null">
-                        <x-tinted-pill-button
-                            color="transparent"
-                            x-on:click="month = null"
-                        >
-                            <p class="pr-2 pl-2 text-base text-white">{{ $this->year }}</p>
-                        </x-tinted-pill-button>
-                    </template>
+                        <template x-if="month !== null">
+                            <x-tinted-pill-button
+                                color="transparent"
+                                x-on:click="month = null"
+                            >
+                                <p class="pr-2 pl-2 text-base text-white">{{ $this->year }}</p>
+                            </x-tinted-pill-button>
+                        </template>
+                    </span>
                 @endif
 
                 @foreach ($this->recapYears->get($this->year) as $recap)
-                    <template x-if="month === {{ $recap->month }}">
-                        <x-tinted-pill-button>
-                            <p class="pr-2 pl-2 text-base">{{ substr($recap->month_name, 0, 3) }}</p>
-                        </x-tinted-pill-button>
-                    </template>
+                    <div wire:key="select-{{ $recap->month }}">
+                        <template x-if="month === {{ $recap->month }}">
+                            <x-tinted-pill-button>
+                                <p class="pr-2 pl-2 text-base">{{ substr($recap->month_name, 0, 3) }}</p>
+                            </x-tinted-pill-button>
+                        </template>
 
-                    <template x-if="month !== {{ $recap->month }}">
-                        <x-tinted-pill-button
-                            color="transparent"
-                            x-on:click="month = {{ $recap->month }}"
-                        >
-                            <p class="pr-2 pl-2 text-base text-white">{{ substr($recap->month_name, 0, 3) }}</p>
-                        </x-tinted-pill-button>
-                    </template>
+                        <template x-if="month !== {{ $recap->month }}">
+                            <x-tinted-pill-button
+                                color="transparent"
+                                x-on:click="month = {{ $recap->month }}"
+                            >
+                                <p class="pr-2 pl-2 text-base text-white">{{ substr($recap->month_name, 0, 3) }}</p>
+                            </x-tinted-pill-button>
+                        </template>
+                    </div>
                 @endforeach
             </div>
         </div>
