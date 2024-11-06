@@ -36,7 +36,9 @@ class AnimeDetails extends Command
 
         $this->info('Fixing ' . $animes->count() . ' anime');
 
-        $this->call('scrape:mal_anime', ['malID' => $animes->implode(',')]);
+        if ($animes->count()) {
+            $this->call('scrape:mal_anime', ['malID' => $animes->implode(',')]);
+        }
 
         return Command::SUCCESS;
     }
