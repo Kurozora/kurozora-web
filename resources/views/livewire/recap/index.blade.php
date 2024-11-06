@@ -107,25 +107,25 @@
                             <p class="text-2xl text-white font-semibold">{{ __('Select a year to see your recap') }}</p>
                         </li>
 
-                        @foreach ($this->recapYears as $year => $recap)
+                        @foreach ($this->recapYears as $recap)
                             <li
-                                id="recap{{  $year }}"
-                                wire:key="{{ uniqid($year, true) }}"
+                                id="recap{{ $recap->year }}"
+                                wire:key="{{ uniqid($recap->year, true) }}"
                             >
                                 <style>
-                                    #recap{{  $year }} button:hover {
-                                        color: {{ $recap->first()->background_color_2 }};
+                                    #recap{{ $recap->year }} button:hover {
+                                        color: {{ $recap->background_color_2 }};
                                     }
                                 </style>
 
                                 <button
                                     class="flex w-full pt-6 text-6xl text-white font-semibold"
                                     x-bind:class="{
-                                        'opacity-25 hover:opacity-100': year !== {{ $year }}
+                                        'opacity-25 hover:opacity-100': year !== {{ $recap->year }}
                                     }"
-                                    x-on:click="loadingScreenEnabled = true; year = {{ $year }}"
+                                    x-on:click="loadingScreenEnabled = true; year = {{ $recap->year }}"
                                 >
-                                    <p>{{ __('’:x', ['x' => substr($year, -2)]) }}</p>
+                                    <p>{{ __('’:x', ['x' => substr($recap->year, -2)]) }}</p>
                                 </button>
                             </li>
                         @endforeach
@@ -160,8 +160,8 @@
                     </span>
                 @endif
 
-                @foreach ($this->recapYears->get($this->year) as $recap)
-                    <div wire:key="select-{{ $recap->month }}">
+                @foreach ($this->recapMonths as $recap)
+                    <div wire:key="select-{{ $recap->year }}-{{ $recap->month }}">
                         <template x-if="month === {{ $recap->month }}">
                             <x-tinted-pill-button>
                                 <p class="pr-2 pl-2 text-base">{{ substr($recap->month_name, 0, 3) }}</p>

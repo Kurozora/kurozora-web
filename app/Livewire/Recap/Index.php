@@ -143,23 +143,37 @@ class Index extends Component
         }
 
         $recapYears = auth()->user()->recaps()
-            ->select('year', 'month')
+            ->select('year')
             ->distinct()
             ->orderBy('year', 'desc')
+            ->get();
+
+        $this->loadingScreenEnabled = false;
+
+        return $recapYears;
+    }
+
+    /**
+     * Get the user's recap months.
+     *
+     * @return Collection
+     */
+    public function getRecapMonthsProperty(): Collection
+    {
+        $recapMonths = auth()->user()->recaps()
+            ->select('month', 'year')
+            ->distinct()
+            ->where('year', '=', $this->year)
             ->orderBy('month')
             ->get();
 
-        if (now()->month !== 12) {
-            $recapYears->push(Recap::make([
-                'year' => now()->year,
+        if (now()->year === $this->year && now()->month !== 12) {
+            $recapMonths->push(Recap::make([
                 'month' => now()->month,
             ]));
         }
 
-        $this->loadingScreenEnabled = false;
-
-        return $recapYears
-            ->groupBy('year');
+        return $recapMonths;
     }
 
     /**
