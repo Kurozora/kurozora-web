@@ -27,7 +27,6 @@ class ExploreCategoryResource extends JsonResource
     {
         $resource = [
             'id' => (string) $this->resource->id,
-            'uuid' => (string) $this->resource->id, // TODO: - Remove after 1.9.0
             'type' => 'explore',
             'href' => route('api.explore.details', $this->resource, absolute: false),
             'attributes' => [
@@ -76,6 +75,15 @@ class ExploreCategoryResource extends JsonResource
     private function getTypeSpecificData(Request $request): array
     {
         switch ($this->resource->type) {
+            case ExploreCategoryTypes::UpNextEpisodes:
+                return [
+                    'episodes' => [
+                        'data' => EpisodeResourceIdentity::collection($this->resource
+                            ->exploreCategoryItems
+                            ->pluck('model')
+                        )
+                    ]
+                ];
             case ExploreCategoryTypes::People:
                 return [
                     'people' => [

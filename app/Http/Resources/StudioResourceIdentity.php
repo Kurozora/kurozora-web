@@ -28,7 +28,6 @@ class StudioResourceIdentity extends JsonResource
     {
         return [
             'id' => (string) ($this->resource?->id ?? $this->resource),
-            'uuid' => (string) ($this->resource?->id ?? $this->resource), // TODO: - Remove after 1.9.0
             'type' => 'studios',
             'href' => route('api.studios.details', $this->resource, false),
         ];

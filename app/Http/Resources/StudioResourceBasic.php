@@ -55,7 +55,6 @@ class StudioResourceBasic extends JsonResource
                     return $this->resource->pivot->is_licensor;
                 }),
                 'isNSFW' => (bool) $this->resource->is_nsfw,
-                'founded' => $this->resource->founded_at?->timestamp, // MARK: - Remove after 1.10.0
                 'foundedAt' => $this->resource->founded_at?->timestamp,
                 'defunctAt' => $this->resource->defunct_at?->timestamp,
             ]

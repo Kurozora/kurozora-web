@@ -29,7 +29,6 @@ class FeedMessageResourceBasic extends JsonResource
 
         $resource = [
             'id' => (string) $this->resource->id,
-            'uuid' => (string) $this->resource->id, // TODO: - Remove after 1.9.0
             'type' => 'feed-messages',
             'href' => route('api.feed.messages.details', $this->resource, false),
             'attributes' => [

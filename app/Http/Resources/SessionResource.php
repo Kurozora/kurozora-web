@@ -26,7 +26,6 @@ class SessionResource extends JsonResource
     {
         $resource = [
             'id' => (string) $this->resource->id,
-            'uuid' => (string) $this->resource->id, // TODO: - Remove after 1.9.0
             'type' => 'sessions',
             'href' => route('api.me.sessions.details', $this->resource, false),
             'attributes' => [

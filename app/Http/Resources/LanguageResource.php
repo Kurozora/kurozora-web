@@ -28,17 +28,6 @@ class LanguageResource extends JsonResource
             'name' => $this->resource->name,
             'code' => $this->resource->code,
             'iso6393' => $this->resource->iso_639_3,
-
-            // TODO: - Remove after 1.10.0
-            'id' => (string) $this->resource->id,
-            'uuid' => (string) $this->resource->id, // TODO: - Remove after 1.9.0
-            'type' => 'languages',
-            'href' => route('api.languages.details', $this->resource, false),
-            'attributes' => [
-                'name' => $this->resource->name,
-                'code' => $this->resource->code,
-                'iso6393' => $this->resource->iso_639_3,
-            ],
         ];
     }
 }

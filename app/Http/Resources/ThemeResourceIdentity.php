@@ -26,7 +26,6 @@ class ThemeResourceIdentity extends JsonResource
     {
         return [
             'id' => (string) ($this->resource?->id ?? $this->resource),
-            'uuid' => (string) ($this->resource?->id ?? $this->resource), // TODO: - Remove after 1.9.0
             'type' => 'themes',
             'href' => route('api.themes.details', $this->resource, false),
         ];

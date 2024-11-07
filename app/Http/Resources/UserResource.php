@@ -72,9 +72,6 @@ class UserResource extends JsonResource
     {
         $achievements = AchievementResource::collection($this->resource->badges);
         return [
-            'badges' => [ // TODO: - Remove after 1.10.0
-                'data' => $achievements
-            ],
             'achievements' => [
                 'data' => $achievements
             ]

@@ -26,7 +26,6 @@ class AnimeResourceIdentity extends JsonResource
     {
         return [
             'id' => (string) ($this->resource?->id ?? $this->resource),
-            'uuid' => (string) ($this->resource?->id ?? $this->resource), // TODO: - Remove after 1.9.0
             'type' => 'show',
             'href' => route('api.anime.view', $this->resource, false),
         ];

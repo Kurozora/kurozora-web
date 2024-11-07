@@ -27,7 +27,6 @@ class AppThemeResource extends JsonResource
     {
         return [
             'id' => (string) $this->resource->id,
-            'uuid' => (string) $this->resource->id, // TODO: - Remove after 1.9.0
             'type' => 'themes',
             'href' => route('api.theme-store.details', $this->resource, false),
             'attributes' => [

@@ -26,7 +26,6 @@ class CharacterResourceIdentity extends JsonResource
     {
         return [
             'id' => (string) ($this->resource?->id ?? $this->resource),
-            'uuid' => (string) ($this->resource?->id ?? $this->resource), // TODO: - Remove after 1.9.0
             'type' => 'characters',
             'href' => route('api.characters.details', $this->resource, false),
         ];
