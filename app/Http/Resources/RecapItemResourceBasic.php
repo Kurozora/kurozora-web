@@ -23,6 +23,7 @@ class RecapItemResourceBasic extends JsonResource
      * Transform the resource into an array.
      *
      * @param Request $request
+     *
      * @return array<string, mixed>
      */
     public function toArray(Request $request): array
@@ -30,18 +31,19 @@ class RecapItemResourceBasic extends JsonResource
         $resource = RecapItemResourceIdentity::make($this->resource)->toArray($request);
         $resource = array_merge($resource, [
             'attributes' => [
-                'year'                  => $this->resource->year,
-                'type'                  => match ($this->resource->type) {
+                'year' => $this->resource->year,
+                'month' => $this->resource->month,
+                'type' => match ($this->resource->type) {
                     Game::class => 'games',
                     Manga::class => 'literatures',
                     Genre::class => 'genres',
                     Theme::class => 'themes',
                     default => 'shows'
                 },
-                'totalSeriesCount'      => $this->resource->total_series_count,
-                'totalPartsCount'       => $this->resource->total_parts_count,
-                'totalPartsDuration'    => $this->resource->total_parts_duration,
-                'topPercentile'         => $this->resource->top_percentile,
+                'totalSeriesCount' => $this->resource->total_series_count,
+                'totalPartsCount' => $this->resource->total_parts_count,
+                'totalPartsDuration' => $this->resource->total_parts_duration,
+                'topPercentile' => $this->resource->top_percentile,
             ]
         ]);
         return $resource;

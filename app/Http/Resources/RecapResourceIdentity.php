@@ -19,14 +19,15 @@ class RecapResourceIdentity extends JsonResource
      * Transform the resource into an array.
      *
      * @param Request $request
+     *
      * @return array<string, mixed>
      */
     public function toArray(Request $request): array
     {
         return [
-            'id'    => (string) ($this->resource?->id ?? $this->resource),
-            'type'  => 'recaps',
-            'href'  => route('api.me.recap.view', ($this->resource?->year ?? $this->resource), false),
+            'id' => (string) ($this->resource?->id ?? $this->resource),
+            'type' => 'recaps',
+            'href' => route('api.me.recap.view', [$this->resource?->year, $this->resource?->month], false),
         ];
     }
 }
