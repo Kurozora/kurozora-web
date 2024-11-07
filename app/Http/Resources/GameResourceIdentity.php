@@ -19,14 +19,15 @@ class GameResourceIdentity extends JsonResource
      * Transform the resource into an array.
      *
      * @param Request $request
+     *
      * @return array
      */
     public function toArray(Request $request): array
     {
         return [
-            'id'    => (string) ($this->resource?->id ?? $this->resource),
-            'type'  => 'games',
-            'href'  => route('api.games.view', $this->resource, false),
+            'id' => (string) ($this->resource?->id ?? $this->resource),
+            'type' => 'games',
+            'href' => route('api.games.view', $this->resource, false),
         ];
     }
 }
