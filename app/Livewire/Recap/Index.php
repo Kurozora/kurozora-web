@@ -20,9 +20,9 @@ class Index extends Component
     /**
      * The selected year.
      *
-     * @var ?int $year
+     * @var int|string|null $year
      */
-    public ?int $year = null;
+    public int|string|null $year = null;
 
     /**
      * The selected month.
@@ -46,15 +46,29 @@ class Index extends Component
     public bool $loadingScreenEnabled = true;
 
     /**
+     * The query strings of the component.
+     *
+     * @return array
+     */
+    protected function queryString(): array
+    {
+        return [
+            'year' => ['except' => now()->year],
+        ];
+    }
+
+    /**
      * Prepare the component.
      *
      * @return void
      */
     public function mount(): void
     {
-        $this->year = now()->year;
+        if (empty($this->year) || !ctype_digit($this->year)) {
+            $this->year = now()->year;
+        }
 
-        if (now()->month !== 12) {
+        if ($this->year === now()->year && now()->month !== 12) {
             $this->month = now()->subMonth()->month;
         }
     }
