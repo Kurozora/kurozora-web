@@ -192,6 +192,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
             ->skipGenerateWhen(function () {
                 return !(empty($this->slug) || $this->can_change_username);
             })
+            ->usingSeparator('_')
             ->saveSlugsTo('slug');
     }
 
