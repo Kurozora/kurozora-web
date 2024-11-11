@@ -32,7 +32,7 @@ class ModelViewedListener implements ShouldQueue
             $class = $event->model->getMorphClass();
 
             RateLimiter::attempt($ip . ':view-'. $class . ':' . $modelID , 1, function () use ($class, $modelID, $event) {
-                View::create([
+                View::insert([
                     'viewable_id' => $modelID,
                     'viewable_type' => $class,
                 ]);
