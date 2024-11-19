@@ -41,9 +41,9 @@ class RecapItemResourceBasic extends JsonResource
                     default => 'shows'
                 },
                 'totalSeriesCount' => $this->resource->total_series_count,
-                'totalPartsCount' => $this->resource->total_parts_count,
-                'totalPartsDuration' => $this->resource->total_parts_duration,
-                'topPercentile' => $this->resource->top_percentile,
+                'totalPartsCount' => round_to_nearest_quarter($this->resource->total_parts_count),
+                'totalPartsDuration' => round_to_nearest_quarter($this->resource->total_parts_duration / 60),
+                'topPercentile' => round($this->resource->top_percentile / 0.05) * 0.05,
             ]
         ]);
         return $resource;
