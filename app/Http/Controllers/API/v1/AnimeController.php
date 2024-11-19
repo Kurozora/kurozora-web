@@ -32,6 +32,8 @@ use App\Http\Resources\SeasonResourceIdentity;
 use App\Http\Resources\ShowCastResourceIdentity;
 use App\Http\Resources\StudioResource;
 use App\Models\Anime;
+use App\Models\Game;
+use App\Models\Manga;
 use App\Models\MediaRating;
 use App\Scopes\TvRatingScope;
 use Exception;
@@ -290,7 +292,8 @@ class AnimeController extends Controller
                 },
                 'relation',
             ])
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->orderBy(Anime::TABLE_NAME . '.id')
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $relatedShows->nextPageUrl() ?? '');
@@ -336,7 +339,8 @@ class AnimeController extends Controller
                 },
                 'relation',
             ])
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->orderBy(Manga::TABLE_NAME . '.id')
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $relatedLiterature->nextPageUrl() ?? '');
@@ -382,7 +386,8 @@ class AnimeController extends Controller
                 },
                 'relation',
             ])
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->orderBy(Game::TABLE_NAME . '.id')
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $relatedGame->nextPageUrl() ?? '');
