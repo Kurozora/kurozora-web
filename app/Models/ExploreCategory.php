@@ -604,10 +604,10 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
     public function reCAP(int $limit = 10): ExploreCategory
     {
         $models = auth()->user()?->recaps()
-            ->selectRaw('MIN(id) as id, recaps.year')
-            ->limit($limit)
+            ->selectRaw('MIN(id) as id, year, MAX(month) as month')
             ->orderBy('year', 'desc')
             ->groupBy('year')
+            ->limit($limit)
             ->get();
 
         $this->exploreCategoryItems = $models?->map(function ($model) {
