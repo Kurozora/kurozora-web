@@ -133,7 +133,7 @@
                             <div class="flex gap-2">
                                 <livewire:components.library-button :model="$manga" wire:key="{{ uniqid($manga->id, true) }}" />
 
-                                <x-nova-link :resource="\App\Nova\Manga::class" :model="$manga">
+                                <x-nova-link :href="route('manga.edit', $manga)">
                                     @svg('pencil', 'fill-current', ['width' => '44'])
                                 </x-nova-link>
                             </div>

@@ -139,7 +139,7 @@
                             <div class="flex gap-2">
                                 <livewire:components.library-button :model="$game" wire:key="{{ uniqid($game->id, true) }}" />
 
-                                <x-nova-link :resource="\App\Nova\Game::class" :model="$game">
+                                <x-nova-link :href="route('games.edit', $game)">
                                     @svg('pencil', 'fill-current', ['width' => '44'])
                                 </x-nova-link>
                             </div>

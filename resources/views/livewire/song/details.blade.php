@@ -98,7 +98,7 @@
                         </div>
                     </template>
 
-                    <x-nova-link :resource="\App\Nova\Song::class" :model="$song">
+                    <x-nova-link :href="route('songs.edit', $song)">
                         @svg('pencil', 'fill-current', ['width' => '44'])
                     </x-nova-link>
 

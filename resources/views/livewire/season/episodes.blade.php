@@ -41,7 +41,7 @@
                             </x-circle-button>
                         @endif
 
-                        <x-nova-link :resource="\App\Nova\Season::class" :model="$season">
+                        <x-nova-link :href="route('seasons.edit', $season)">
                             @svg('pencil', 'fill-current', ['width' => '44'])
                         </x-nova-link>
                     </div>

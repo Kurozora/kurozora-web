@@ -228,7 +228,7 @@
                             </x-circle-button>
 
                             {{-- Nova --}}
-                            <x-nova-link :resource="\App\Nova\Episode::class" :model="$episode">
+                            <x-nova-link :href="route('episodes.edit', $episode)">
                                 @svg('pencil', 'fill-current', ['width' => '44'])
                             </x-nova-link>
 

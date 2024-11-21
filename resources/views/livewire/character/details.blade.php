@@ -36,7 +36,7 @@
                     <div class="flex gap-2">
                         <p class="text-3xl font-bold">{{ $character->name }}</p>
 
-                        <x-nova-link :resource="\App\Nova\Character::class" :model="$character">
+                        <x-nova-link :href="route('characters.edit', $character)">
                             @svg('pencil', 'fill-current', ['width' => '44'])
                         </x-nova-link>
                     </div>
