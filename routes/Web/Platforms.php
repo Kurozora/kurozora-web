@@ -2,6 +2,7 @@
 
 use App\Livewire\Platform\Details as PlatformDetails;
 use App\Livewire\Platform\Index as PlatformIndex;
+use App\Models\Platform;
 
 Route::prefix('/platforms')
     ->name('platforms')
@@ -13,7 +14,13 @@ Route::prefix('/platforms')
             ->group(function () {
                 Route::get('/', PlatformDetails::class)
                     ->name('.details');
-//
+
+                Route::get('/edit', function (Platform $platform) {
+                    return redirect(Nova::path() . '/resources/'. \App\Nova\Platform::uriKey() . '/' . $platform->id);
+                })
+                    ->middleware('auth')
+                    ->name('.edit');
+
 //                Route::get('/anime', PlatformAnime::class)
 //                    ->name('.anime');
 //

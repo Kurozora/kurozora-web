@@ -13,6 +13,7 @@ use App\Livewire\Game\Reviews as GameReviews;
 use App\Livewire\Game\Songs as GameSongs;
 use App\Livewire\Game\Staff as GameStaff;
 use App\Livewire\Game\Studios as GameStudios;
+use App\Models\Game;
 
 Route::prefix('/games')
     ->name('games')
@@ -59,25 +60,31 @@ Route::prefix('/games')
                 Route::get('/cast', GameCast::class)
                     ->name('.cast');
 
-                Route::get('/staff', GameStaff::class)
-                    ->name('.staff');
-
-                Route::get('/songs', GameSongs::class)
-                    ->name('.songs');
-
-                Route::get('/studios', GameStudios::class)
-                    ->name('.studios');
+                Route::get('/edit', function (Game $game) {
+                    return redirect(Nova::path() . '/resources/' . \App\Nova\Game::uriKey() . '/' . $game->id);
+                })
+                    ->middleware('auth')
+                    ->name('.edit');
 
                 Route::get('/related-games', RelatedGames::class)
                     ->name('.related-games');
 
-                Route::get('/related-shows', RelatedShows::class)
-                    ->name('.related-shows');
-
                 Route::get('/related-mangas', RelatedMangas::class)
                     ->name('.related-literatures');
 
+                Route::get('/related-shows', RelatedShows::class)
+                    ->name('.related-shows');
+
                 Route::get('/reviews', GameReviews::class)
                     ->name('.reviews');
+
+                Route::get('/songs', GameSongs::class)
+                    ->name('.songs');
+
+                Route::get('/staff', GameStaff::class)
+                    ->name('.staff');
+
+                Route::get('/studios', GameStudios::class)
+                    ->name('.studios');
             });
     });

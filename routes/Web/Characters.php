@@ -7,6 +7,7 @@ use App\Livewire\Character\Index as CharacterIndex;
 use App\Livewire\Character\Manga as CharacterManga;
 use App\Livewire\Character\People as CharacterPeople;
 use App\Livewire\Character\Reviews as CharacterReviews;
+use App\Models\Character;
 
 Route::prefix('/characters')
     ->name('characters')
@@ -21,6 +22,12 @@ Route::prefix('/characters')
 
                 Route::get('/anime', CharacterAnime::class)
                     ->name('.anime');
+
+                Route::get('/edit', function (Character $character) {
+                    return redirect(Nova::path() . '/resources/'. \App\Nova\Character::uriKey() . '/' . $character->id);
+                })
+                    ->middleware('auth')
+                    ->name('.edit');
 
                 Route::get('/games', CharacterGames::class)
                     ->name('.games');

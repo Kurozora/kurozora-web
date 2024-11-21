@@ -13,6 +13,7 @@ use App\Livewire\Manga\RelatedShows;
 use App\Livewire\Manga\Reviews as MangaReviews;
 use App\Livewire\Manga\Staff as MangaStaff;
 use App\Livewire\Manga\Studios as MangaStudios;
+use App\Models\Manga;
 
 Route::prefix('/manga')
     ->name('manga')
@@ -66,22 +67,28 @@ Route::prefix('/manga')
                 Route::get('/cast', MangaCast::class)
                     ->name('.cast');
 
+                Route::get('/edit', function (Manga $manga) {
+                    return redirect(Nova::path() . '/resources/'. \App\Nova\Manga::uriKey() . '/' . $manga->id);
+                })
+                    ->middleware('auth')
+                    ->name('.edit');
+
+                Route::get('/related-games', RelatedGames::class)
+                    ->name('.related-games');
+
+                Route::get('/related-mangas', RelatedMangas::class)
+                    ->name('.related-mangas');
+
+                Route::get('/related-shows', RelatedShows::class)
+                    ->name('.related-shows');
+
+                Route::get('/reviews', MangaReviews::class)
+                    ->name('.reviews');
+
                 Route::get('/staff', MangaStaff::class)
                     ->name('.staff');
 
                 Route::get('/studios', MangaStudios::class)
                     ->name('.studios');
-
-                Route::get('/related-shows', RelatedShows::class)
-                    ->name('.related-shows');
-
-                Route::get('/related-mangas', RelatedMangas::class)
-                    ->name('.related-mangas');
-
-                Route::get('/related-games', RelatedGames::class)
-                    ->name('.related-games');
-
-                Route::get('/reviews', MangaReviews::class)
-                    ->name('.reviews');
             });
     });

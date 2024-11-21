@@ -15,6 +15,7 @@ use App\Livewire\Browse\Anime\Seasons\Archive as BrowseAnimeSeasonsArchive;
 use App\Livewire\Browse\Anime\Seasons\Index as BrowseAnimeSeasons;
 use App\Livewire\Browse\Anime\Upcoming\Index as BrowseAnimeUpcomingIndex;
 use App\Livewire\Season\Details as SeasonDetails;
+use App\Models\Anime;
 
 Route::prefix('/anime')
     ->name('anime')
@@ -68,8 +69,23 @@ Route::prefix('/anime')
                 Route::get('/cast', AnimeCast::class)
                     ->name('.cast');
 
-                Route::get('/staff', AnimeStaff::class)
-                    ->name('.staff');
+                Route::get('/edit', function (Anime $anime) {
+                    return redirect(Nova::path() . '/resources/'. \App\Nova\Anime::uriKey() . '/' . $anime->id);
+                })
+                    ->middleware('auth')
+                    ->name('.edit');
+
+                Route::get('/related-games', RelatedGames::class)
+                    ->name('.related-games');
+
+                Route::get('/related-mangas', RelatedMangas::class)
+                    ->name('.related-mangas');
+
+                Route::get('/related-shows', RelatedShows::class)
+                    ->name('.related-shows');
+
+                Route::get('/reviews', AnimeReviews::class)
+                    ->name('.reviews');
 
                 Route::get('/seasons', SeasonDetails::class)
                     ->name('.seasons');
@@ -77,19 +93,10 @@ Route::prefix('/anime')
                 Route::get('/songs', AnimeSongs::class)
                     ->name('.songs');
 
+                Route::get('/staff', AnimeStaff::class)
+                    ->name('.staff');
+
                 Route::get('/studios', AnimeStudios::class)
                     ->name('.studios');
-
-                Route::get('/related-shows', RelatedShows::class)
-                    ->name('.related-shows');
-
-                Route::get('/related-mangas', RelatedMangas::class)
-                    ->name('.related-mangas');
-
-                Route::get('/related-games', RelatedGames::class)
-                    ->name('.related-games');
-
-                Route::get('/reviews', AnimeReviews::class)
-                    ->name('.reviews');
             });
     });

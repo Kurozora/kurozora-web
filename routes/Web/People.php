@@ -7,6 +7,7 @@ use App\Livewire\Person\Games as PersonGames;
 use App\Livewire\Person\Index as PersonIndex;
 use App\Livewire\Person\Manga as PersonManga;
 use App\Livewire\Person\Reviews as PersonReviews;
+use App\Models\Person;
 
 Route::prefix('/people')
     ->name('people')
@@ -24,6 +25,12 @@ Route::prefix('/people')
 
                 Route::get('/characters', PersonCharacters::class)
                     ->name('.characters');
+
+                Route::get('/edit', function (Person $person) {
+                    return redirect(Nova::path() . '/resources/'. \App\Nova\Person::uriKey() . '/' . $person->id);
+                })
+                    ->middleware('auth')
+                    ->name('.edit');
 
                 Route::get('/games', PersonGames::class)
                     ->name('.games');
