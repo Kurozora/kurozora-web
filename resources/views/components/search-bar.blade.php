@@ -3,7 +3,7 @@
 <div>
     <div class="gap-2 items-center mt-4 mb-4 space-y-2 sm:flex sm:space-y-0">
         <div class="flex flex-1 gap-2 items-center">
-            <x-input id="search" type="text" placeholder="{{ __('I’m searching for…') }}" wire:model.live.debounce.500ms="{{ $searchModel }}" />
+            <x-input id="search" class="w-full" type="text" placeholder="{{ __('I’m searching for…') }}" wire:model.live.debounce.500ms="{{ $searchModel }}" />
 
             <livewire:components.search-hint-button />
         </div>
@@ -71,22 +71,22 @@
                             <div class="block pl-4 pr-4 pt-2 pb-2">
                                 @switch($filter['type'])
                                     @case('string')
-                                        <x-input id="{{ $key }}" type="text" wire:model.live="filter.{{ $key }}.selected" />
+                                        <x-input id="{{ $key }}" class="w-full" type="text" wire:model.live="filter.{{ $key }}.selected" />
                                         @break
                                     @case('number')
-                                        <x-input id="{{ $key }}" type="number" wire:model.live="filter.{{ $key }}.selected" />
+                                        <x-input id="{{ $key }}" class="w-full" type="number" wire:model.live="filter.{{ $key }}.selected" />
                                         @break
                                     @case('double')
-                                        <x-input id="{{ $key }}" type="number" step="0.01" wire:model.live="filter.{{ $key }}.selected" />
+                                        <x-input id="{{ $key }}" class="w-full" type="number" step="0.01" wire:model.live="filter.{{ $key }}.selected" />
                                         @break
                                     @case('date')
-                                        <x-input id="{{ $key }}" type="date" wire:model.live="filter.{{ $key }}.selected" />
+                                        <x-input id="{{ $key }}" class="w-full" type="date" wire:model.live="filter.{{ $key }}.selected" />
                                         @break
                                     @case('duration')
-                                        <x-input id="{{ $key }}" type="number" step="1" wire:model.live="filter.{{ $key }}.selected" />
+                                        <x-input id="{{ $key }}" class="w-full" type="number" step="1" wire:model.live="filter.{{ $key }}.selected" />
                                         @break
                                     @case('time')
-                                        <x-input id="{{ $key }}" type="time" wire:model.live="filter.{{ $key }}.selected" />
+                                        <x-input id="{{ $key }}" class="w-full" type="time" wire:model.live="filter.{{ $key }}.selected" />
                                         @break
                                     @case('day')
                                         <x-select id="{{ $key }}" wire:model.live="filter.{{ $key }}.selected">

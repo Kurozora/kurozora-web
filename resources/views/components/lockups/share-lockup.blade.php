@@ -196,7 +196,7 @@
     </div>
 
     <div class="flex gap-2">
-        <x-input id="link" x-model="shareLink" readonly />
+        <x-input id="link" class="w-ful" x-model="shareLink" readonly />
 
         <x-button
             x-data="{

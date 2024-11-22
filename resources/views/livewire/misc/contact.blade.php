@@ -27,7 +27,7 @@
             <x-slot:form>
                 <div class="col-span-6 sm:col-span-4">
                     <x-label for="subject" value="{{ __('Subject') }}" />
-                    <x-input id="subject" name="subject" type="text" class="mt-1 block w-full" autofocus />
+                    <x-input id="subject" class="mt-1 block w-full" name="subject" type="text" autofocus />
                 </div>
 
                 <div class="col-span-6 sm:col-span-4">

@@ -19,7 +19,7 @@
 
             <br />
 
-            <x-input type="text" value="{{ route('api.me.reminders.download') }}" readonly />
+            <x-input class="w-full" type="text" value="{{ route('api.me.reminders.download') }}" readonly />
         </div>
     </x-slot:form>
 
