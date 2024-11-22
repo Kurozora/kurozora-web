@@ -46,11 +46,11 @@
 
                 @foreach ($this->mediaTypes as $mediaType)
                     <template x-if="selectedMediaType === '{{ $mediaType->name }}'">
-                        <x-button>{{ $mediaType->name }}</x-button>
+                        <x-button class="whitespace-nowrap">{{ $mediaType->name }}</x-button>
                     </template>
 
                     <template x-if="selectedMediaType !== '{{ $mediaType->name }}'">
-                        <x-outlined-button x-on:click="selectedMediaType = '{{ $mediaType->name }}'">{{ $mediaType->name }}</x-outlined-button>
+                        <x-outlined-button class="whitespace-nowrap" x-on:click="selectedMediaType = '{{ $mediaType->name }}'">{{ $mediaType->name }}</x-outlined-button>
                     </template>
                 @endforeach
             </div>

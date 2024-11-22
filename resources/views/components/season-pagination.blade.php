@@ -23,7 +23,7 @@
     };
 @endphp
 
-<div class="flex flex-wrap gap-4 justify-between">
+<div class="flex flex-wrap gap-4 justify-between items-baseline">
     <div class="flex gap-2 overflow-x-scroll no-scrollbar">
         {{-- Previous page --}}
         @php
@@ -41,11 +41,11 @@
         @endphp
 
         @if ($nextYear < 1917 && $nextSeasonOfYear->value === \App\Enums\SeasonOfYear::Fall)
-            <a class="pl-4 pr-4 pb-2 border-b-2 hover:border-orange-500" href="{{ route($seasonIndexRouteName) }}">
+            <a class="pl-4 pr-4 pb-2 whitespace-nowrap border-b-2 hover:border-orange-500" href="{{ route($seasonIndexRouteName) }}">
                 {{ __('Current') }}
             </a>
         @else
-            <a class="pl-4 pr-4 pb-2 border-b-2 hover:border-orange-500" href="{{ route($seasonYearRouteName, [$nextYear, $nextSeasonOfYear->key]) }}">
+            <a class="pl-4 pr-4 pb-2 whitespace-nowrap border-b-2 hover:border-orange-500" href="{{ route($seasonYearRouteName, [$nextYear, $nextSeasonOfYear->key]) }}">
                 {{ $nextSeasonOfYear->key . ' ' . $nextYear }}
             </a>
         @endif
@@ -54,7 +54,7 @@
         @php
             $active = request()->routeIs($seasonYearRouteName, [$year, $seasonOfYear->key]);
         @endphp
-        <a class="pl-4 pr-4 pb-2 border-b-2 {{ $active ? 'border-orange-500' : 'hover:border-orange-500' }}" href="{{ route($seasonYearRouteName, [$year, $seasonOfYear->key]) }}">
+        <a class="pl-4 pr-4 pb-2 whitespace-nowrap border-b-2 {{ $active ? 'border-orange-500' : 'hover:border-orange-500' }}" href="{{ route($seasonYearRouteName, [$year, $seasonOfYear->key]) }}">
             {{ $seasonOfYear->key . ' ' . $year }}
         </a>
 
@@ -75,7 +75,7 @@
                 $previousYear = $nextYear;
                 $previousSeasonOfYear = $nextSeasonOfYear;
             @endphp
-            <a class="pl-4 pr-4 pb-2 border-b-2 hover:border-orange-500" href="{{ route($seasonYearRouteName, [$nextYear, $nextSeasonOfYear->key]) }}">
+            <a class="pl-4 pr-4 pb-2 whitespace-nowrap border-b-2 hover:border-orange-500" href="{{ route($seasonYearRouteName, [$nextYear, $nextSeasonOfYear->key]) }}">
                 {{ $nextSeasonOfYear->key . ' ' . $nextYear }}
             </a>
         @endforeach
@@ -84,7 +84,7 @@
         @php
             $active = request()->routeIs($seasonScheduleRouteName, [$year, $seasonOfYear->key]);
         @endphp
-        <a class="pl-4 pr-4 pb-2 border-b-2 {{ $active ? 'border-orange-500' : 'hover:border-orange-500' }}" href="{{ route($seasonScheduleRouteName) }}">
+        <a class="pl-4 pr-4 pb-2 whitespace-nowrap border-b-2 {{ $active ? 'border-orange-500' : 'hover:border-orange-500' }}" href="{{ route($seasonScheduleRouteName) }}">
             {{ __('Schedule') }}
         </a>
 
@@ -92,7 +92,7 @@
         @php
             $active = request()->routeIs($seasonArchiveRouteName, [$year, $seasonOfYear->key]);
         @endphp
-        <a class="pl-4 pr-4 pb-2 border-b-2 {{ $active ? 'border-orange-500' : 'hover:border-orange-500' }}" href="{{ route($seasonArchiveRouteName) }}">
+        <a class="pl-4 pr-4 pb-2 whitespace-nowrap border-b-2 {{ $active ? 'border-orange-500' : 'hover:border-orange-500' }}" href="{{ route($seasonArchiveRouteName) }}">
             {{ __('Archive') }}
         </a>
     </div>
