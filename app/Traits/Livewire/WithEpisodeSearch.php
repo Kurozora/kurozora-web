@@ -60,17 +60,18 @@ trait WithEpisodeSearch
     public function searchIndexQuery(EloquentBuilder $query): EloquentBuilder
     {
         return $query->withoutGlobalScopes()
+            ->withTranslation()
             ->with([
                 'anime' => function ($query) {
                     $query->withoutGlobalScopes()
-                        ->with(['media', 'translations']);
+                        ->withTranslation()
+                        ->with(['media']);
                 },
                 'media',
                 'season' => function ($query) {
                     $query->withoutGlobalScopes()
-                        ->with(['translations']);
+                        ->withTranslation();
                 },
-                'translations'
             ])
             ->when(auth()->user(), function ($query, $user) {
                 return $query->withExists([
@@ -92,17 +93,18 @@ trait WithEpisodeSearch
     {
         return $query->query(function (EloquentBuilder $query) {
             $query->withoutGlobalScopes()
+                ->withTranslation()
                 ->with([
                     'anime' => function ($query) {
                         $query->withoutGlobalScopes()
-                            ->with(['media', 'translations']);
+                            ->withTranslation()
+                            ->with(['media']);
                     },
                     'media',
                     'season' => function ($query) {
                         $query->withoutGlobalScopes()
-                            ->with(['translations']);
+                            ->withTranslation();
                     },
-                    'translations'
                 ])
                 ->when(auth()->user(), function ($query, $user) {
                     return $query->withExists([

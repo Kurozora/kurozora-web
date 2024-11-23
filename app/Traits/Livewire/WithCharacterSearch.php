@@ -57,7 +57,8 @@ trait WithCharacterSearch
      */
     public function searchIndexQuery(EloquentBuilder $query): EloquentBuilder
     {
-        return $query->with(['media', 'translations']);
+        return $query->withTranslation()
+            ->with(['media']);
     }
 
     /**
@@ -69,7 +70,8 @@ trait WithCharacterSearch
     public function searchQuery(ScoutBuilder $query): ScoutBuilder
     {
         return $query->query(function (EloquentBuilder $query) {
-            $query->with(['media', 'translations']);
+            $query->withTranslation()
+                ->with(['media']);
         });
     }
 
