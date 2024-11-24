@@ -56,7 +56,7 @@ class UserReminderController extends Controller
                     ->where(UserLibrary::TABLE_NAME . '.user_id', '=', $user->id)
                     ->where(UserLibrary::TABLE_NAME . '.is_hidden', '=', false);
             })
-            ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating', 'country_of_origin', 'mediaRatings' => function ($query) use ($user) {
+            ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin', 'mediaRatings' => function ($query) use ($user) {
                 $query->where([
                     ['user_id', '=', $user->id],
                 ]);
@@ -125,7 +125,7 @@ class UserReminderController extends Controller
                     ->where(UserLibrary::TABLE_NAME . '.user_id', '=', $user->id)
                     ->where(UserLibrary::TABLE_NAME . '.is_hidden', '=', false);
             })
-            ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating', 'country_of_origin', 'mediaRatings' => function ($query) use ($user) {
+            ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin', 'mediaRatings' => function ($query) use ($user) {
                 $query->where([
                     ['user_id', '=', $user->id],
                 ]);
@@ -231,9 +231,9 @@ class UserReminderController extends Controller
                     ->with([
                         'remindable' => function ($query) use ($whereBetween) {
                             $query->with([
-                                'translations',
+                                'translation',
                                 'episodes' => function ($query) use ($whereBetween) {
-                                    $query->with(['translations'])
+                                    $query->with(['translation'])
                                         ->whereBetween(Episode::TABLE_NAME . '.started_at', $whereBetween);
                                 }
                             ]);

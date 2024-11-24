@@ -23,7 +23,7 @@ class ShowCastController extends Controller
                 $query->with(['media']);
             },
             'character' => function ($query) {
-                $query->with(['media', 'translations']);
+                $query->with(['media', 'translation']);
             },
             'castRole',
             'language'

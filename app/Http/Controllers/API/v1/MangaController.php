@@ -86,7 +86,7 @@ class MangaController extends Controller
         // Call the ModelViewed event
         ModelViewed::dispatch($manga, $request->ip());
 
-        $manga->load(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating', 'country_of_origin'])
+        $manga->load(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
             ->when(auth()->user(), function ($query, $user) use ($manga) {
                 $manga->load(['mediaRatings' => function ($query) use ($user) {
                     $query->where([
@@ -118,7 +118,7 @@ class MangaController extends Controller
                         break;
                     case 'characters':
                         $includeArray['characters'] = function ($query) {
-                            $query->with(['media', 'translations'])
+                            $query->with(['media', 'translation'])
                                 ->limit(Manga::MAXIMUM_RELATIONSHIPS_LIMIT);
                         };
                         break;
@@ -127,7 +127,7 @@ class MangaController extends Controller
                             $query->with([
                                 'related' => function ($query) {
                                     $query->withoutGlobalScopes([TvRatingScope::class])
-                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating', 'country_of_origin']);
+                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin']);
                                 },
                                 'relation'
                             ])
@@ -139,7 +139,7 @@ class MangaController extends Controller
                             $query->with([
                                 'related' => function ($query) {
                                     $query->withoutGlobalScopes([TvRatingScope::class])
-                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating', 'country_of_origin']);
+                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin']);
                                 },
                                 'relation'
                             ])
@@ -151,7 +151,7 @@ class MangaController extends Controller
                             $query->with([
                                 'related' => function ($query) {
                                     $query->withoutGlobalScopes([TvRatingScope::class])
-                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating', 'country_of_origin']);
+                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin']);
                                 },
                                 'relation'
                             ])
@@ -247,7 +247,7 @@ class MangaController extends Controller
             ->with([
                 'related' => function ($query) {
                     $query->withoutGlobalScopes([TvRatingScope::class])
-                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating', 'country_of_origin'])
+                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
                         ->when(auth()->user(), function ($query, $user) {
                             $query->with(['mediaRatings' => function ($query) use ($user) {
                                 $query->where([
@@ -297,7 +297,7 @@ class MangaController extends Controller
             ->with([
                 'related' => function ($query) {
                     $query->withoutGlobalScopes([TvRatingScope::class])
-                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating', 'country_of_origin'])
+                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
                         ->when(auth()->useR(), function ($query, $user) {
                             $query->with(['mediaRatings' => function ($query) use ($user) {
                                 $query->where([
@@ -344,7 +344,7 @@ class MangaController extends Controller
             ->with([
                 'related' => function ($query) {
                     $query->withoutGlobalScopes([TvRatingScope::class])
-                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating', 'country_of_origin'])
+                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
                         ->when(auth()->user(), function ($query, $user) {
                             $query->with(['mediaRatings' => function ($query) use ($user) {
                                 $query->where([

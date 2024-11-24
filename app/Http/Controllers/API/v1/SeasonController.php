@@ -33,7 +33,7 @@ class SeasonController extends Controller
                 $query->withoutGlobalScopes();
             },
             'media',
-            'translations',
+            'translation',
         ])
             ->loadCount(['episodes'])
             ->loadAvg([

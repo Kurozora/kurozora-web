@@ -34,7 +34,7 @@ class EpisodeController extends Controller
         $includeArray = [
             'media',
             'mediaStat',
-            'translations',
+            'translation',
             'videos',
         ];
 
@@ -60,7 +60,7 @@ class EpisodeController extends Controller
 
         $includeArray['anime'] = function ($query) {
             $query->withoutGlobalScopes()
-                ->with(['media', 'translations']);
+                ->with(['media', 'translation']);
         };
         $includeArray['season'] = function ($query) {
             $query->with(['media']);

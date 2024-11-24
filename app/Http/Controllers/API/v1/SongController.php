@@ -71,7 +71,7 @@ class SongController extends Controller
         // Call the ModelViewed event
         ModelViewed::dispatch($song, $request->ip());
 
-        $song->load(['media', 'mediaStat', 'translations'])
+        $song->load(['media', 'mediaStat', 'translation'])
             ->when(auth()->user(), function ($query, $user) use ($song) {
                 $song->load(['mediaRatings' => function ($query) use ($user) {
                     $query->where([
@@ -99,7 +99,7 @@ class SongController extends Controller
 
         // Get the anime
         $animes = $song->anime()
-            ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating', 'country_of_origin'])
+            ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
             ->when(auth()->user(), function ($query, $user) {
                 $query->with(['mediaRatings' => function ($query) use ($user) {
                     $query->where([
@@ -142,7 +142,7 @@ class SongController extends Controller
 
         // Get the games
         $games = $song->games()
-            ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating', 'country_of_origin'])
+            ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
             ->when(auth()->user(), function ($query, $user) {
                 $query->with(['mediaRatings' => function ($query) use ($user) {
                     $query->where([

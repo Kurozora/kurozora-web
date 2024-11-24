@@ -68,7 +68,7 @@ class CharacterController extends Controller
         // Call the ModelViewed event
         ModelViewed::dispatch($character, $request->ip());
 
-        $character->load(['media', 'translations']);
+        $character->load(['media', 'translation']);
 
         $includeArray = [];
         if ($includeInput = $request->input('include')) {
@@ -87,19 +87,19 @@ class CharacterController extends Controller
                         break;
                     case 'shows':
                         $includeArray['anime'] = function ($query) {
-                            $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating', 'country_of_origin'])
+                            $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
                                 ->limit(Character::MAXIMUM_RELATIONSHIPS_LIMIT);
                         };
                         break;
                     case 'literatures':
                         $includeArray['manga'] = function ($query) {
-                            $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating', 'country_of_origin'])
+                            $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
                                 ->limit(Character::MAXIMUM_RELATIONSHIPS_LIMIT);
                         };
                         break;
                     case 'games':
                         $includeArray['games'] = function ($query) {
-                            $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating', 'country_of_origin'])
+                            $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
                                 ->limit(Character::MAXIMUM_RELATIONSHIPS_LIMIT);
                         };
                         break;

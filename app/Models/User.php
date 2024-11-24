@@ -627,13 +627,13 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
 
         return Episode::with([
             'anime' => function ($query) {
-                $query->with(['media', 'translations']);
+                $query->with(['media', 'translation']);
             },
             'media',
             'season' => function ($query) {
-                $query->with(['translations']);
+                $query->with(['translation']);
             },
-            'translations'
+            'translation'
         ])
             ->joinSub($subquery, 'subquery', function ($join) {
                 $join->on(Episode::TABLE_NAME . '.id', '=', 'subquery.episode_id');

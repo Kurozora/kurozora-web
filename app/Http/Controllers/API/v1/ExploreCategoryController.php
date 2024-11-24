@@ -37,7 +37,7 @@ class ExploreCategoryController extends Controller
                         MediaSong::class => function (Builder $query) {
                             $query->with([
                                 'song' => function ($query) {
-                                    $query->with(['media', 'mediaStat', 'translations'])
+                                    $query->with(['media', 'mediaStat', 'translation'])
                                         ->when(auth()->user(), function ($query, $user) {
                                             $query->with(['mediaRatings' => function ($query) use ($user) {
                                                 $query->where([
@@ -47,7 +47,7 @@ class ExploreCategoryController extends Controller
                                         });
                                 },
                                 'model' => function ($query) {
-                                    $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating', 'country_of_origin'])
+                                    $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
                                         ->when(auth()->user(), function ($query, $user) {
                                             $query->with(['mediaRatings' => function ($query) use ($user) {
                                                 $query->where([
@@ -117,7 +117,7 @@ class ExploreCategoryController extends Controller
                                         $query->with(['media', 'mediaStat']);
                                     },
                                     'model' => function ($query) {
-                                        $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating', 'country_of_origin'])
+                                        $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
                                             ->when(auth()->user(), function ($query, $user) {
                                                 $query->with(['mediaRatings' => function ($query) use ($user) {
                                                     $query->where([
@@ -193,16 +193,16 @@ class ExploreCategoryController extends Controller
                 'exploreCategoryItems.model' => function (MorphTo $morphTo) {
                     $morphTo->constrain([
                         Anime::class => function (Builder $query) {
-                            $query->with(['genres', 'mediaStat', 'media', 'translations', 'tv_rating', 'themes']);
+                            $query->with(['genres', 'mediaStat', 'media', 'translation', 'tv_rating', 'themes']);
                         },
                         Game::class => function (Builder $query) {
-                            $query->with(['genres', 'mediaStat', 'media', 'translations', 'tv_rating', 'themes']);
+                            $query->with(['genres', 'mediaStat', 'media', 'translation', 'tv_rating', 'themes']);
                         },
                         Genre::class => function (Builder $query) {
                             $query->with(['media']);
                         },
                         Manga::class => function (Builder $query) {
-                            $query->with(['genres', 'mediaStat', 'media', 'translations', 'tv_rating', 'themes']);
+                            $query->with(['genres', 'mediaStat', 'media', 'translation', 'tv_rating', 'themes']);
                         },
                         MediaSong::class => function (Builder $query) {
                             $query->with([
@@ -210,7 +210,7 @@ class ExploreCategoryController extends Controller
                                     $query->with(['media', 'mediaStat']);
                                 },
                                 'model' => function ($query) {
-                                    $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translations', 'tv_rating', 'country_of_origin'])
+                                    $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
                                         ->when(auth()->user(), function ($query, $user) {
                                             $query->with(['mediaRatings' => function ($query) use ($user) {
                                                 $query->where([

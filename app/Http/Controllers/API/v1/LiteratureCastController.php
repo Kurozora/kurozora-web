@@ -20,7 +20,7 @@ class LiteratureCastController extends Controller
     {
         $cast->load([
             'character' => function ($query) {
-                $query->with(['media', 'translations']);
+                $query->with(['media', 'translation']);
             },
             'castRole'
         ]);
