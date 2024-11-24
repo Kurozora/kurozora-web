@@ -108,7 +108,7 @@ Schedule::call(function() {
 
 /**********************************************/
 // Delete all activity logs every week
-Schedule::command('activitylog:clean')
+Schedule::command('activitylog:clean', ['--days' => 7, '--force'])
     ->weeklyOn(0, '3:35')
     ->name('Clean activity log')
     ->onOneServer();
