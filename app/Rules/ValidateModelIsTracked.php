@@ -34,13 +34,13 @@ class ValidateModelIsTracked implements DataAwareRule, ValidationRule
         $library = (int) ($this->data['library'] ?? UserLibraryKind::Anime);
         $model = match($library) {
             UserLibraryKind::Game => Game::withoutGlobalScopes()
-                ->with('translations')
+                ->withTranslation()
                 ->firstWhere(Game::TABLE_NAME . '.id', '=', $value),
             UserLibraryKind::Manga => Manga::withoutGlobalScopes()
-                ->with('translations')
+                ->withTranslation()
                 ->firstWhere(Manga::TABLE_NAME . '.id', '=', $value),
             default => Anime::withoutGlobalScopes()
-                ->with('translations')
+                ->withTranslation()
                 ->firstWhere(Anime::TABLE_NAME . '.id', '=', $value)
         };
 
