@@ -84,19 +84,19 @@ class Index extends Component
                 'model' => function (MorphTo $morphTo) {
                     $morphTo->constrain([
                         Anime::class => function (Builder $query) {
-                            $query->with(['media', 'translations']);
+                            $query->with(['media', 'translation']);
                         },
                         Character::class => function (Builder $query) {
                             $query->with(['media']);
                         },
                         Episode::class => function (Builder $query) {
-                            $query->with(['media', 'translations']);
+                            $query->with(['media', 'translation']);
                         },
                         Game::class => function (Builder $query) {
-                            $query->with(['media', 'translations']);
+                            $query->with(['media', 'translation']);
                         },
                         Manga::class => function (Builder $query) {
-                            $query->with(['media', 'translations']);
+                            $query->with(['media', 'translation']);
                         },
                         Person::class => function (Builder $query) {
                             $query->with(['media']);

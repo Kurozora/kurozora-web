@@ -38,7 +38,7 @@ class Details extends Component
      */
     public function mount(Anime $anime): void
     {
-        $this->anime = $anime->load(['media', 'translations']);
+        $this->anime = $anime->load(['media', 'translation']);
     }
 
     /**
@@ -66,7 +66,7 @@ class Details extends Component
             ->with([
                 'anime',
                 'media',
-                'translations'
+                'translation'
             ])
             ->withCount(['episodes'])
             ->withAvg([

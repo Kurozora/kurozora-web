@@ -163,18 +163,18 @@ class Details extends Component
                 $belongsTo->withoutGlobalScopes()
                     ->with([
                         'media',
-                        'translations',
+                        'translation',
                         'anime' => function (HasOneThrough $hasOneThrough) {
                             $hasOneThrough
                                 ->withoutGlobalScopes()
                                 ->with([
-                                    'translations',
+                                    'translation',
                                 ]);
                         },
                         'season' => function (BelongsTo $query) {
                             $query->withoutGlobalScopes()
                                 ->with([
-                                    'translations',
+                                    'translation',
                                 ]);
                         }
                     ]);
@@ -185,19 +185,19 @@ class Details extends Component
                 $query->withoutGlobalScopes()
                     ->with([
                         'media',
-                        'translations',
+                        'translation',
                         'anime' => function (BelongsTo $belongsTo) {
                             $belongsTo
                                 ->withoutGlobalScopes()
                                 ->with([
                                     'studios',
-                                    'translations',
+                                    'translation',
                                     'orderedVideos',
                                 ]);
                         },
                     ]);
             },
-            'translations',
+            'translation',
             'tv_rating',
             'videos'
         ])
@@ -243,7 +243,7 @@ class Details extends Component
     {
         $this->season->loadMissing([
             'media',
-            'translations',
+            'translation',
         ]);
     }
 
@@ -252,7 +252,7 @@ class Details extends Component
         $this->anime->loadMissing([
             'media',
             'studios',
-            'translations',
+            'translation',
             'orderedVideos',
         ]);
     }

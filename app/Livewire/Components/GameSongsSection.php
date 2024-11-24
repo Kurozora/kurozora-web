@@ -36,9 +36,9 @@ class GameSongsSection extends Component
      */
     public function mount(Game $game): void
     {
-        $translations = $game->translations;
+        $translation = $game->translation;
         $this->game = $game->withoutRelations()
-            ->setRelation('translations', $translations);
+            ->setRelation('translation', $translation);
     }
 
     /**

@@ -36,9 +36,9 @@ class MangaCastSection extends Component
      */
     public function mount(Manga $manga): void
     {
-        $translations = $manga->translations;
+        $translation = $manga->translation;
         $this->manga = $manga->withoutRelations()
-            ->setRelation('translations', $translations);
+            ->setRelation('translation', $translation);
     }
 
     /**
@@ -65,7 +65,7 @@ class MangaCastSection extends Component
         return $this->manga->cast()
             ->with([
                 'character' => function ($query) {
-                    $query->with(['media', 'translations']);
+                    $query->with(['media', 'translation']);
                 },
                 'castRole'
             ])

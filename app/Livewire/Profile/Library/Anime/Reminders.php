@@ -139,7 +139,7 @@ class Reminders extends Component
                             ->whereIn(UserLibrary::TABLE_NAME . '.status', $userLibraryStatuses);
                     });
                 })
-                ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
+                ->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating'])
                 ->when(auth()->user(), function ($query, $user) {
                     $query->with(['library' => function ($query) use ($user) {
                         $query->where('user_id', '=', $user->id);
@@ -152,7 +152,7 @@ class Reminders extends Component
                 })
                 ->when(!empty($this->letter), function (EloquentBuilder $query) {
                     if (static::$searchModel === Episode::class) {
-                        $query->whereRelation('translations', function ($query) {
+                        $query->whereRelation('translation', function ($query) {
                             $query->where('locale', '=', 'en');
 
                             if ($this->letter == '.') {

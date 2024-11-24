@@ -98,7 +98,7 @@ class Details extends Component
                 'exploreCategoryItems.model' => function (MorphTo $morphTo) {
                     $morphTo->constrain([
                         Anime::class => function (Builder $query) {
-                            $query->with(['genres', 'mediaStat', 'media', 'translations', 'tv_rating', 'themes'])
+                            $query->with(['genres', 'mediaStat', 'media', 'translation', 'tv_rating', 'themes'])
                                 ->when(auth()->user(), function ($query, $user) {
                                     return $query->with(['library' => function ($query) use ($user) {
                                         $query->where('user_id', '=', $user->id);
@@ -106,7 +106,7 @@ class Details extends Component
                                 });
                         },
                         Game::class => function (Builder $query) {
-                            $query->with(['genres', 'mediaStat', 'media', 'translations', 'tv_rating', 'themes'])
+                            $query->with(['genres', 'mediaStat', 'media', 'translation', 'tv_rating', 'themes'])
                                 ->when(auth()->user(), function ($query, $user) {
                                     return $query->with(['library' => function ($query) use ($user) {
                                         $query->where('user_id', '=', $user->id);
@@ -117,7 +117,7 @@ class Details extends Component
                             $query->with(['media']);
                         },
                         Manga::class => function (Builder $query) {
-                            $query->with(['genres', 'mediaStat', 'media', 'translations', 'tv_rating', 'themes'])
+                            $query->with(['genres', 'mediaStat', 'media', 'translation', 'tv_rating', 'themes'])
                                 ->when(auth()->user(), function ($query, $user) {
                                     return $query->with(['library' => function ($query) use ($user) {
                                         $query->where('user_id', '=', $user->id);
@@ -125,7 +125,7 @@ class Details extends Component
                                 });
                         },
                         MediaSong::class => function (Builder $query) {
-                            $query->with(['song.media', 'model.translations']);
+                            $query->with(['song.media', 'model.translation']);
                         },
                         Theme::class => function (Builder $query) {
                             $query->with(['media']);

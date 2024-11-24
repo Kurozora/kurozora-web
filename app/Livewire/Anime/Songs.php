@@ -37,7 +37,7 @@ class Songs extends Component
      */
     public function mount(Anime $anime): void
     {
-        $this->anime = $anime->load(['media', 'translations']);
+        $this->anime = $anime->load(['media', 'translation']);
     }
 
     /**

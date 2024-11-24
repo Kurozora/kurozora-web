@@ -45,9 +45,9 @@ class MangaMoreByStudioSection extends Component
      */
     public function mount(Manga $manga, Studio $studio): void
     {
-        $translations = $manga->translations;
+        $translation = $manga->translation;
         $this->manga = $manga->withoutRelations()
-            ->setRelation('translations', $translations);
+            ->setRelation('translation', $translation);
         $this->studio = $studio;
     }
 
@@ -73,7 +73,7 @@ class MangaMoreByStudioSection extends Component
         }
 
         return $this->studio->manga()
-            ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
+            ->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating'])
             ->when(auth()->user(), function ($query, $user) {
                 $query->with(['library' => function ($query) use ($user) {
                     $query->where('user_id', '=', $user->id);

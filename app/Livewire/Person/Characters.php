@@ -63,7 +63,7 @@ class Characters extends Component
         }
 
         return $this->person->characters()
-            ->with(['media', 'translations'])
+            ->with(['media', 'translation'])
             ->paginate(25);
     }
 

@@ -38,7 +38,7 @@ class Staff extends Component
      */
     public function mount(Manga $manga): void
     {
-        $this->manga = $manga->load(['media', 'translations']);
+        $this->manga = $manga->load(['media', 'translation']);
     }
 
     /**

@@ -37,9 +37,9 @@ class AnimeSeasonsSection extends Component
      */
     public function mount(Anime $anime): void
     {
-        $translations = $anime->translations;
+        $translation = $anime->translation;
         $this->anime = $anime->withoutRelations()
-            ->setRelation('translations', $translations);
+            ->setRelation('translation', $translation);
     }
 
     /**
@@ -64,7 +64,7 @@ class AnimeSeasonsSection extends Component
         }
 
         return $this->anime->seasons()
-            ->with(['media', 'translations'])
+            ->with(['media', 'translation'])
             ->withCount(['episodes'])
             ->withAvg([
                 'episodesMediaStats as rating_average' => function ($query) {

@@ -68,22 +68,22 @@ class Section extends Component
         }
 
         $model = match ($this->chartKind) {
-            ChartKind::Anime => Anime::with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
+            ChartKind::Anime => Anime::with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating'])
                 ->when(auth()->user(), function ($query, $user) {
                     $query->with(['library' => function ($query) use ($user) {
                         $query->where('user_id', '=', $user->id);
                     }]);
                 }),
-            ChartKind::Characters => Character::with(['media', 'translations']),
+            ChartKind::Characters => Character::with(['media', 'translation']),
             ChartKind::Episodes => Episode::with([
                 'anime' => function ($query) {
-                    $query->with(['media', 'translations']);
+                    $query->with(['media', 'translation']);
                 },
                 'media',
                 'season' => function ($query) {
-                    $query->with(['translations']);
+                    $query->with(['translation']);
                 },
-                'translations'
+                'translation'
             ])->when(auth()->user(), function ($query, $user) {
                 $query->withExists([
                     'user_watched_episodes as isWatched' => function ($query) use ($user) {
@@ -91,13 +91,13 @@ class Section extends Component
                     }
                 ]);
             }),
-            ChartKind::Games => Game::with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
+            ChartKind::Games => Game::with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating'])
                 ->when(auth()->user(), function ($query, $user) {
                     $query->with(['library' => function ($query) use ($user) {
                         $query->where('user_id', '=', $user->id);
                     }]);
                 }),
-            ChartKind::Manga => Manga::with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
+            ChartKind::Manga => Manga::with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating'])
                 ->when(auth()->user(), function ($query, $user) {
                     $query->with(['library' => function ($query) use ($user) {
                         $query->where('user_id', '=', $user->id);

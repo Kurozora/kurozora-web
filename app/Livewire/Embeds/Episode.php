@@ -49,13 +49,13 @@ class Episode extends Component
                 $hasOneThrough->with([
                     'genres',
                     'studios',
-                    'translations',
+                    'translation',
                     'orderedVideos'
                 ]);
             },
             'media',
             'mediaStat',
-            'translations',
+            'translation',
             'tv_rating',
             'videos',
         ]);

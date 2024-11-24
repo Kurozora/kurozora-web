@@ -69,10 +69,10 @@ class Episodes extends Component
         $this->season = $season->loadMissing([
             'anime' => function ($query) {
                 $query->withoutGlobalScopes()
-                    ->with(['media', 'translations']);
+                    ->with(['media', 'translation']);
             },
             'media',
-            'translations'
+            'translation'
         ]);
         $this->anime = $this->season->anime;
     }

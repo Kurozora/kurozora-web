@@ -96,7 +96,7 @@ class Schedule extends Component
                 ])
                     ->orderBy('publication_time');
             })
-            ->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
+            ->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating'])
             ->when($this->class == Game::class, function ($query) {
                 $query->where([
                     ['published_at', '=', $this->date->startOfDay()->toDateString()]

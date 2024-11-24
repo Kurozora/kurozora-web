@@ -43,9 +43,9 @@ class Reviews extends Component
      */
     public function mount(Model $model): void
     {
-        $translations = $model->translations;
+        $translation = $model->translation;
         $this->model = $model->withoutRelations()
-            ->setRelation('translations', $translations);
+            ->setRelation('translation', $translation);
     }
 
     /**

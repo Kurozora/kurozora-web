@@ -274,7 +274,7 @@ class Index extends Component
                         case Anime::class:
                         case Game::class:
                         case Manga::class:
-                            $query->with(['genres', 'media', 'mediaStat', 'themes', 'translations', 'tv_rating'])
+                            $query->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating'])
                                 ->when(auth()->user(), function ($query, $user) {
                                     $query->with(['library' => function ($query) use ($user) {
                                         $query->where('user_id', '=', $user->id);
@@ -283,18 +283,18 @@ class Index extends Component
                             break;
                         case Character::class:
                         case Song::class:
-                            $query->with(['media', 'translations']);
+                            $query->with(['media', 'translation']);
                             break;
                         case Episode::class:
                             $query->with([
                                 'anime' => function ($query) {
-                                    $query->with(['media', 'translations']);
+                                    $query->with(['media', 'translation']);
                                 },
                                 'media',
                                 'season' => function ($query) {
-                                    $query->with(['translations']);
+                                    $query->with(['translation']);
                                 },
-                                'translations'
+                                'translation'
                             ])
                                 ->when(auth()->user(), function ($query, $user) {
                                     $query->withExists([

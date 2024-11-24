@@ -103,7 +103,7 @@ class Details extends Component
         // Call the ModelViewed event
         ModelViewed::dispatch($game, request()->ip());
 
-        $this->game = $game->loadMissing(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'themes', 'translations', 'status', 'tv_rating', 'country_of_origin'])
+        $this->game = $game->loadMissing(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'themes', 'translation', 'status', 'tv_rating', 'country_of_origin'])
             ->when(auth()->user(), function ($query, $user) use ($game) {
                 return $game->loadMissing(['mediaRatings' => function ($query) {
                     $query->where('user_id', '=', auth()->user()->id);

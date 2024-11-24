@@ -79,14 +79,14 @@ class SuggestedEpisodes extends Component
                     'anime' => function ($query) {
                         $query->with([
                             'media',
-                            'translations',
+                            'translation',
                         ]);
                     },
                     'media',
                     'season' => function ($query) {
-                        $query->with(['translations']);
+                        $query->with(['translation']);
                     },
-                    'translations',
+                    'translation',
                 ])
                 ->when(auth()->user(), function ($query, $user) {
                     $query->withExists([

@@ -36,9 +36,9 @@ class AnimeCastSection extends Component
      */
     public function mount(Anime $anime): void
     {
-        $translations = $anime->translations;
+        $translation = $anime->translation;
         $this->anime = $anime->withoutRelations()
-            ->setRelation('translations', $translations);
+            ->setRelation('translation', $translation);
     }
 
     /**
@@ -68,7 +68,7 @@ class AnimeCastSection extends Component
                     $query->with(['media']);
                 },
                 'character' => function ($query) {
-                    $query->with(['media', 'translations']);
+                    $query->with(['media', 'translation']);
                 },
                 'castRole'
             ])

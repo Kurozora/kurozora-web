@@ -36,9 +36,9 @@ class GameCastSection extends Component
      */
     public function mount(Game $game): void
     {
-        $translations = $game->translations;
+        $translation = $game->translation;
         $this->game = $game->withoutRelations()
-            ->setRelation('translations', $translations);
+            ->setRelation('translation', $translation);
     }
 
     /**
@@ -68,7 +68,7 @@ class GameCastSection extends Component
                     $query->with(['media']);
                 },
                 'character' => function ($query) {
-                    $query->with(['media', 'translations']);
+                    $query->with(['media', 'translation']);
                 },
                 'castRole'
             ])

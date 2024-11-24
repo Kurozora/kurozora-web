@@ -38,7 +38,7 @@ class Cast extends Component
      */
     public function mount(Manga $manga): void
     {
-        $this->manga = $manga->load(['media', 'translations']);
+        $this->manga = $manga->load(['media', 'translation']);
     }
 
     /**
@@ -65,7 +65,7 @@ class Cast extends Component
         return $this->manga->cast()
             ->with([
                 'character' => function ($query) {
-                    $query->with(['media', 'translations']);
+                    $query->with(['media', 'translation']);
                 },
                 'castRole'
             ])
