@@ -38,8 +38,7 @@ trait WithMangaSearch
      */
     public function searchIndexQuery(EloquentBuilder $query): EloquentBuilder
     {
-        return $query->withTranslation()
-            ->with(['genres', 'media', 'mediaStat', 'themes', 'tv_rating'])
+        return $query->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating'])
             ->when(auth()->user(), function ($query, $user) {
                 $query->with(['library' => function ($query) use ($user) {
                     $query->where('user_id', '=', $user->id);
@@ -57,8 +56,7 @@ trait WithMangaSearch
     public function searchQuery(ScoutBuilder $query): ScoutBuilder
     {
         return $query->query(function (EloquentBuilder $query) {
-            $query->withTranslation()
-                ->with(['genres', 'media', 'mediaStat', 'themes', 'tv_rating'])
+            $query->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating'])
                 ->when(auth()->user(), function ($query, $user) {
                     $query->with(['library' => function ($query) use ($user) {
                         $query->where('user_id', '=', $user->id);
