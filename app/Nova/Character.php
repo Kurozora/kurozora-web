@@ -249,7 +249,7 @@ class Character extends Resource
                 })
                 ->sortable(),
 
-            HasMany::make('Translations', 'character_translations', CharacterTranslation::class),
+            HasMany::make('Translations', 'translations', CharacterTranslation::class),
 
             HasMany::make('Cast', 'cast', AnimeCast::class),
 

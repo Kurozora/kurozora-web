@@ -301,7 +301,7 @@ class Game extends Resource
                 ->hideFromIndex()
                 ->help('For example: © ' . date('Y') . ' Kurozora'),
 
-            HasMany::make('Translations', 'game_translations', GameTranslation::class),
+            HasMany::make('Translations', 'translations', GameTranslation::class),
 
             MorphMany::make('Genres', 'mediaGenres', MediaGenre::class),
 

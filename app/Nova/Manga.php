@@ -331,7 +331,7 @@ class Manga extends Resource
                 ->hideFromIndex()
                 ->help('For example: © ' . date('Y') . ' Kurozora'),
 
-            HasMany::make('Translations', 'manga_translations', MangaTranslation::class),
+            HasMany::make('Translations', 'translations', MangaTranslation::class),
 
             MorphMany::make('Genres', 'mediaGenres', MediaGenre::class),
 

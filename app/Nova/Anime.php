@@ -368,7 +368,7 @@ class Anime extends Resource
                 ->hideFromIndex()
                 ->help('For example: © ' . date('Y') . ' Kurozora'),
 
-            HasMany::make('Translations', 'anime_translations', AnimeTranslation::class),
+            HasMany::make('Translations', 'translations', AnimeTranslation::class),
 
             MorphMany::make('Videos'),
 

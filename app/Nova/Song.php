@@ -183,7 +183,7 @@ class Song extends Resource
                 ->hideFromIndex()
                 ->help('For example: © ' . date('Y') . ' Kurozora'),
 
-            HasMany::make('Translations', 'song_translations', SongTranslation::class),
+            HasMany::make('Translations', 'translations', SongTranslation::class),
 
             HasMany::make('Media Songs'),
 
