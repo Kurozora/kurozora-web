@@ -2,14 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SeasonTranslation extends KModel
 {
-    use HasFactory,
-        SoftDeletes;
+    use SoftDeletes;
 
     // Table name
     const string TABLE_NAME = 'season_translations';
