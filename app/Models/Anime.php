@@ -43,6 +43,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
@@ -675,13 +676,23 @@ class Anime extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * The anime's translation relationship.
+     * The model's translation relationship.
      *
-     * @return HasMany
+     * @return HasOne
      */
-    public function anime_translations(): HasMany
+    public function translation(): HasOne
     {
-        return $this->hasMany(AnimeTranslation::class);
+        $locale = $this->getLocaleKey();
+        if ($this->useFallback()) {
+            $countryFallbackLocale = $this->getFallbackLocale($locale);
+            $locales = array_unique([$locale, $countryFallbackLocale, $this->getFallbackLocale()]);
+
+            return $this->hasOne(AnimeTranslation::class)
+                ->whereIn($this->getTranslationsTable().'.'.$this->getLocaleKey(), $locales);
+        }
+
+        return $this->hasOne(AnimeTranslation::class)
+            ->where($this->getTranslationsTable().'.'.$this->getLocaleKey(), $locale);
     }
 
     /**

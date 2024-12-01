@@ -11,6 +11,7 @@ use App\Traits\Model\HasViews;
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Scout\Searchable;
 use Spatie\Activitylog\LogOptions;
@@ -96,6 +97,26 @@ class Platform extends KModel implements HasMedia, Sitemapable
             ->singleFile();
         $this->addMediaCollection(MediaCollection::Logo)
             ->singleFile();
+    }
+
+    /**
+     * The model's translation relationship.
+     *
+     * @return HasOne
+     */
+    public function translation(): HasOne
+    {
+        $locale = $this->getLocaleKey();
+        if ($this->useFallback()) {
+            $countryFallbackLocale = $this->getFallbackLocale($locale);
+            $locales = array_unique([$locale, $countryFallbackLocale, $this->getFallbackLocale()]);
+
+            return $this->hasOne(AnimeTranslation::class)
+                ->whereIn($this->getTranslationsTable().'.'.$this->getLocaleKey(), $locales);
+        }
+
+        return $this->hasOne(AnimeTranslation::class)
+            ->where($this->getTranslationsTable().'.'.$this->getLocaleKey(), $locale);
     }
 
     /**

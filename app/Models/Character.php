@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Scout\Searchable;
@@ -436,13 +437,23 @@ class Character extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * The character's translation relationship.
+     * The model's translation relationship.
      *
-     * @return HasMany
+     * @return HasOne
      */
-    public function character_translations(): HasMany
+    public function translation(): HasOne
     {
-        return $this->hasMany(CharacterTranslation::class);
+        $locale = $this->getLocaleKey();
+        if ($this->useFallback()) {
+            $countryFallbackLocale = $this->getFallbackLocale($locale);
+            $locales = array_unique([$locale, $countryFallbackLocale, $this->getFallbackLocale()]);
+
+            return $this->hasOne(AnimeTranslation::class)
+                ->whereIn($this->getTranslationsTable().'.'.$this->getLocaleKey(), $locales);
+        }
+
+        return $this->hasOne(AnimeTranslation::class)
+            ->where($this->getTranslationsTable().'.'.$this->getLocaleKey(), $locale);
     }
 
     /**

@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -129,6 +130,26 @@ class Season extends KModel implements HasMedia, Sitemapable
     public function tv_rating(): BelongsTo
     {
         return $this->belongsTo(TvRating::class);
+    }
+
+    /**
+     * The model's translation relationship.
+     *
+     * @return HasOne
+     */
+    public function translation(): HasOne
+    {
+        $locale = $this->getLocaleKey();
+        if ($this->useFallback()) {
+            $countryFallbackLocale = $this->getFallbackLocale($locale);
+            $locales = array_unique([$locale, $countryFallbackLocale, $this->getFallbackLocale()]);
+
+            return $this->hasOne(AnimeTranslation::class)
+                ->whereIn($this->getTranslationsTable().'.'.$this->getLocaleKey(), $locales);
+        }
+
+        return $this->hasOne(AnimeTranslation::class)
+            ->where($this->getTranslationsTable().'.'.$this->getLocaleKey(), $locale);
     }
 
     /**
