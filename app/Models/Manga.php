@@ -649,11 +649,11 @@ class Manga extends KModel implements HasMedia, Sitemapable
             $countryFallbackLocale = $this->getFallbackLocale($locale);
             $locales = array_unique([$locale, $countryFallbackLocale, $this->getFallbackLocale()]);
 
-            return $this->hasOne(AnimeTranslation::class)
+            return $this->hasOne(MangaTranslation::class)
                 ->whereIn($this->getTranslationsTable().'.'.$this->getLocaleKey(), $locales);
         }
 
-        return $this->hasOne(AnimeTranslation::class)
+        return $this->hasOne(MangaTranslation::class)
             ->where($this->getTranslationsTable().'.'.$this->getLocaleKey(), $locale);
     }
 

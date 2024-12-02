@@ -448,11 +448,11 @@ class Character extends KModel implements HasMedia, Sitemapable
             $countryFallbackLocale = $this->getFallbackLocale($locale);
             $locales = array_unique([$locale, $countryFallbackLocale, $this->getFallbackLocale()]);
 
-            return $this->hasOne(AnimeTranslation::class)
+            return $this->hasOne(CharacterTranslation::class)
                 ->whereIn($this->getTranslationsTable().'.'.$this->getLocaleKey(), $locales);
         }
 
-        return $this->hasOne(AnimeTranslation::class)
+        return $this->hasOne(CharacterTranslation::class)
             ->where($this->getTranslationsTable().'.'.$this->getLocaleKey(), $locale);
     }
 
