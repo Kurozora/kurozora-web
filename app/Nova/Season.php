@@ -48,6 +48,16 @@ class Season extends Resource
     ];
 
     /**
+     * The relationships that should be eager loaded on index queries.
+     *
+     * @var array
+     */
+    public static $with = [
+        'anime',
+        'translation'
+    ];
+
+    /**
      * The logical group associated with the resource.
      *
      * @var string
@@ -161,7 +171,7 @@ class Season extends Resource
     public function title(): string
     {
         $season = $this->resource;
-        $seasonName = $season->title;
+        $seasonName = ''; // $season->title;
 
         if (!is_string($seasonName) || !strlen($seasonName)) {
             $seasonName = 'No season title';

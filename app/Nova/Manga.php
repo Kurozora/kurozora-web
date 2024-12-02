@@ -70,6 +70,21 @@ class Manga extends Resource
     ];
 
     /**
+     * The relationships that should be eager loaded on index queries.
+     *
+     * @var array
+     */
+    public static $with = [
+        'media',
+        'media_type',
+        'tv_rating',
+        'country_of_origin',
+        'status',
+        'source',
+        'translation'
+    ];
+
+    /**
      * The logical group associated with the resource.
      *
      * @var string
