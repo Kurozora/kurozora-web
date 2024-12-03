@@ -42,19 +42,24 @@ class ProfileImageView extends Component
      */
     public function mount(User $user, bool $onProfile = false): void
     {
-        $this->user = $user->load([
-            'tokens' => function ($query) {
-                $query
-                    ->orderBy('last_used_at', 'desc')
-                    ->limit(1);
-            },
-            'sessions' => function ($query) {
-                $query
-                    ->orderBy('last_activity', 'desc')
-                    ->limit(1);
-            },
-        ]);
         $this->onProfile = $onProfile;
+
+        if ($onProfile) {
+            $this->user = $user->load([
+                'tokens' => function ($query) {
+                    $query
+                        ->orderBy('last_used_at', 'desc')
+                        ->limit(1);
+                },
+                'sessions' => function ($query) {
+                    $query
+                        ->orderBy('last_activity', 'desc')
+                        ->limit(1);
+                },
+            ]);
+        } else {
+            $this->user = $user;
+        }
     }
 
     /**
