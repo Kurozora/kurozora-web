@@ -114,7 +114,7 @@ class ExploreCategoryController extends Controller
                             MediaSong::class => function (Builder $query) {
                                 $query->with([
                                     'song' => function ($query) {
-                                        $query->with(['media', 'mediaStat']);
+                                        $query->with(['media', 'mediaStat', 'translation']);
                                     },
                                     'model' => function ($query) {
                                         $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
@@ -207,7 +207,7 @@ class ExploreCategoryController extends Controller
                         MediaSong::class => function (Builder $query) {
                             $query->with([
                                 'song' => function ($query) {
-                                    $query->with(['media', 'mediaStat']);
+                                    $query->with(['media', 'mediaStat', 'translation']);
                                 },
                                 'model' => function ($query) {
                                     $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
