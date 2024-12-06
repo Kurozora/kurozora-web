@@ -26,9 +26,9 @@ class ScheduleResource extends JsonResource
         return [
             'date' => $this->resource['date'],
             $key => match ($this->resource['type']) {
-                Anime::class => AnimeResourceIdentity::collection($this->resource['models']),
-                Game::class => GameResourceIdentity::collection($this->resource['models']),
-                Manga::class => LiteratureResourceIdentity::collection($this->resource['models']),
+                Anime::class => AnimeResource::collection($this->resource['models']),
+                Game::class => GameResource::collection($this->resource['models']),
+                Manga::class => LiteratureResource::collection($this->resource['models']),
             }
         ];
     }
