@@ -8,6 +8,7 @@ use App\Events\ModelViewed;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GetAnimeCharactersRequest;
+use App\Http\Requests\GetAnimeIndexRequest;
 use App\Http\Requests\GetAnimeMoreByStudioRequest;
 use App\Http\Requests\GetAnimeReviewsRequest;
 use App\Http\Requests\GetAnimeSeasonsRequest;
@@ -50,31 +51,37 @@ class AnimeController extends Controller
     /**
      * Returns the anime index.
      *
-     * @param Request $request
+     * @param GetAnimeIndexRequest $request
      *
      * @return JsonResponse
      * @throws AuthenticationException
      * @throws BindingResolutionException
      */
-    public function index(Request $request): JsonResponse
+    public function index(GetAnimeIndexRequest $request): JsonResponse
     {
-        // Override parameters
-        $request->merge([
-            'scope' => SearchScope::Kurozora,
-            'types' => [
-                SearchType::Shows,
-            ],
-        ]);
+        $data = $request->validated();
 
-        // Convert request type
-        $app = app();
-        $searchRequest = SearchRequest::createFrom($request)
-            ->setContainer($app) // Necessary or validation fails (validate on null)
-            ->setRedirector($app->make(Redirector::class)); // Necessary or validation failure fails (422)
-        $searchRequest->validateResolved(); // Necessary for preparing for validation
+        if (isset($data['ids'])) {
+            return $this->views($request);
+        } else {
+            // Override parameters
+            $request->merge([
+                'scope' => SearchScope::Kurozora,
+                'types' => [
+                    SearchType::Shows,
+                ],
+            ]);
 
-        return (new SearchController())
-            ->index($searchRequest);
+            // Convert request type
+            $app = app();
+            $searchRequest = SearchRequest::createFrom($request)
+                ->setContainer($app) // Necessary or validation fails (validate on null)
+                ->setRedirector($app->make(Redirector::class)); // Necessary or validation failure fails (422)
+            $searchRequest->validateResolved(); // Necessary for preparing for validation
+
+            return (new SearchController())
+                ->index($searchRequest);
+        }
     }
 
     /**
@@ -201,6 +208,132 @@ class AnimeController extends Controller
         // Show the Anime details response
         return JSONResult::success([
             'data' => AnimeResource::collection([$anime]),
+        ]);
+    }
+
+    /**
+     * Returns detailed information of requested IDs.
+     *
+     * @param GetAnimeIndexRequest $request
+     *
+     * @return JsonResponse
+     */
+    public function views(GetAnimeIndexRequest $request): JsonResponse
+    {
+        $data = $request->validated();
+
+        $anime = Anime::whereIn('id', $data['ids']);
+        $anime->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
+            ->when(auth()->user(), function ($query, $user) use ($anime) {
+                $anime->with(['mediaRatings' => function ($query) use ($user) {
+                    $query->where([
+                        ['user_id', '=', $user->id],
+                    ]);
+                }, 'library' => function ($query) use ($user) {
+                    $query->where('user_id', '=', $user->id);
+                }])
+                    ->withExists([
+                        'favoriters as isFavorited' => function ($query) use ($user) {
+                            $query->where('user_id', '=', $user->id);
+                        },
+                        'reminderers as isReminded' => function ($query) use ($user) {
+                            $query->where('user_id', '=', $user->id);
+                        },
+                    ]);
+            });
+
+        $includeArray = [];
+        if ($includeInput = $request->input('include')) {
+            if (is_string($includeInput)) {
+                $includeInput = explode(',', $includeInput);
+            }
+            $includes = array_unique($includeInput);
+
+            foreach ($includes as $include) {
+                switch ($include) {
+                    case 'cast':
+                        $includeArray['cast'] = function ($query) {
+                            $query->limit(Anime::MAXIMUM_RELATIONSHIPS_LIMIT);
+                        };
+                        break;
+                    case 'characters':
+                        $includeArray['characters'] = function ($query) {
+                            $query->with(['media', 'translation'])
+                                ->limit(Anime::MAXIMUM_RELATIONSHIPS_LIMIT);
+                        };
+                        break;
+                    case 'related-shows':
+                        $includeArray['animeRelations'] = function ($query) {
+                            $query->with([
+                                'related' => function ($query) {
+                                    $query->withoutGlobalScopes([TvRatingScope::class])
+                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin']);
+                                },
+                                'relation',
+                            ])
+                                ->limit(Anime::MAXIMUM_RELATIONSHIPS_LIMIT);
+                        };
+                        break;
+                    case 'related-literatures':
+                        $includeArray['mangaRelations'] = function ($query) {
+                            $query->with([
+                                'related' => function ($query) {
+                                    $query->withoutGlobalScopes([TvRatingScope::class])
+                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin']);
+                                },
+                                'relation',
+                            ])
+                                ->limit(Anime::MAXIMUM_RELATIONSHIPS_LIMIT);
+                        };
+                        break;
+                    case 'related-games':
+                        $includeArray['gameRelations'] = function ($query) {
+                            $query->with([
+                                'related' => function ($query) {
+                                    $query->withoutGlobalScopes([TvRatingScope::class])
+                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin']);
+                                },
+                                'relation',
+                            ])
+                                ->limit(Anime::MAXIMUM_RELATIONSHIPS_LIMIT);
+                        };
+                        break;
+                    case 'seasons':
+                        $includeArray['seasons'] = function ($query) {
+                            $query->orderBy('number', 'desc')
+                                ->limit(Anime::MAXIMUM_RELATIONSHIPS_LIMIT);
+                        };
+                        break;
+                    case 'songs':
+                        $includeArray['mediaSongs'] = function ($query) {
+                            $query->with([
+                                'song' => function ($query) {
+                                    $query->with(['media', 'mediaStat', 'translation']);
+                                },
+                                'model',
+                            ])
+                                ->limit(Anime::MAXIMUM_RELATIONSHIPS_LIMIT);
+                        };
+                        break;
+                    case 'staff':
+                        $includeArray['mediaStaff'] = function ($query) {
+                            $query->with(['model', 'staff_role', 'person.media'])
+                                ->limit(Anime::MAXIMUM_RELATIONSHIPS_LIMIT);
+                        };
+                        break;
+                    case 'studios':
+                        $includeArray['studios'] = function ($query) {
+                            $query->limit(Anime::MAXIMUM_RELATIONSHIPS_LIMIT);
+                        };
+                        break;
+                }
+            }
+        }
+        $anime->with($includeArray);
+
+        // Show the Anime details response
+        return JSONResult::success([
+            'data' => AnimeResource::collection($anime->get()),
         ]);
     }
 
