@@ -1,0 +1,11 @@
+Contact: mailto:kurozoraapp@gmail.com
+
+# Kurozora Security Acknowledgements
+Acknowledgments: https://github.com/Kurozora/kurozora-web
+
+# Kurozora Security Guidelines
+Policy: https://github.com/Kurozora/kurozora-web/blob/master/SECURITY.md
+
+Preferred-Languages: en
+
+Expires: 2025-02-01T01:00:00.000Z
