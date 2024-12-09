@@ -78,11 +78,15 @@ class ScheduleController extends Controller
             default => throw new InvalidArgumentException('Unsupported model type'),
         };
 
-        return $query->get()->groupBy('grouping_date')->map(fn($models, $groupingDate) => [
-            'date' => $groupingDate,
-            'type' => $model,
-            'models' => $models,
-        ])->values()->toArray();
+        return $query->get()
+            ->groupBy('grouping_date')
+            ->map(fn($models, $groupingDate) => [
+                'date' => $groupingDate,
+                'type' => $model,
+                'models' => $models,
+            ])
+            ->values()
+            ->toArray();
     }
 
     private function queryAnimeSchedules(array $dateRanges)
