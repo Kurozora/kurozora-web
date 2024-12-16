@@ -517,7 +517,7 @@ class Manga extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * Ge the manga's duration as a humanly readable string.
+     * Get the manga's duration as a humanly readable string.
      *
      * @return string
      * @throws Exception
@@ -529,12 +529,26 @@ class Manga extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * Get the total runtime of the manga. (duration * pages)
+     * Get the manga's total runtime. (duration * pages)
+     *
+     * @return int
+     */
+    public function getDurationTotalAttribute(): int
+    {
+        if (empty($this->page_count)) {
+            return $this->duration;
+        }
+
+        return $this->duration * $this->page_count;
+    }
+
+    /**
+     * Get the manga's total runtime as a humanly readable string. (duration * pages)
      *
      * @return string
      * @throws Exception
      */
-    public function getDurationTotalAttribute(): string
+    public function getDurationTotalStringAttribute(): string
     {
         if (empty($this->page_count)) {
             return $this->duration_string;
