@@ -363,18 +363,32 @@ class Anime extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * Get the total runtime of the anime. (duration * episodes)
+     * Get the anime's total runtime as a humanly readable string. (duration * episodes)
      *
      * @return string
      * @throws Exception
      */
-    public function getDurationTotalAttribute(): string
+    public function getDurationTotalStringAttribute(): string
     {
         if (empty($this->episode_count)) {
             return $this->duration_string;
         }
 
         return CarbonInterval::seconds($this->duration * $this->episode_count)->cascade()->forHumans();
+    }
+
+    /**
+     * Get the anime's total runtime. (duration * episodes)
+     *
+     * @return int
+     */
+    public function getDurationTotalAttribute(): int
+    {
+        if (empty($this->episode_count)) {
+            return $this->duration;
+        }
+
+        return $this->duration * $this->episode_count;
     }
 
     /**
