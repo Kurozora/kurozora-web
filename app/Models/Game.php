@@ -463,7 +463,7 @@ class Game extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * Ge the game's duration as a humanly readable string.
+     * Get the game's duration as a humanly readable string.
      *
      * @return string
      * @throws Exception
@@ -475,12 +475,22 @@ class Game extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * Get the total runtime of the game. (duration)
+     * Get the game's total runtime. (duration)
+     *
+     * @return int
+     */
+    public function getDurationTotalAttribute(): int
+    {
+        return $this->duration;
+    }
+
+    /**
+     * Get the game's total runtime as a humanly readable string. (duration)
      *
      * @return string
      * @throws Exception
      */
-    public function getDurationTotalAttribute(): string
+    public function getDurationTotalStringAttribute(): string
     {
         return $this->duration_string;
     }
