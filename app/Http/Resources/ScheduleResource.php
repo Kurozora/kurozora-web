@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use App\Models\Anime;
 use App\Models\Game;
 use App\Models\Manga;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -24,12 +25,19 @@ class ScheduleResource extends JsonResource
         };
 
         return [
-            'date' => $this->resource['date'],
-            $key => match ($this->resource['type']) {
-                Anime::class => AnimeResource::collection($this->resource['models']),
-                Game::class => GameResource::collection($this->resource['models']),
-                Manga::class => LiteratureResource::collection($this->resource['models']),
-            }
+            'type' => $key . '-schedule',
+            'attributes' => [
+                'date' => Carbon::createFromFormat('Y-m-d', $this->resource['date'])->startOfDay()->timestamp,
+            ],
+            'relationships' => [
+                $key => [
+                    'data' => match ($this->resource['type']) {
+                        Anime::class => AnimeResource::collection($this->resource['models']),
+                        Game::class => GameResource::collection($this->resource['models']),
+                        Manga::class => LiteratureResource::collection($this->resource['models']),
+                    }
+                ]
+            ]
         ];
     }
 }
