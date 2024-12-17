@@ -377,7 +377,7 @@
                         </x-slot:information>
 
                         <x-slot:footer>
-                            <p class="text-sm">{{ __('With a total of :count.', ['count' => $anime->duration_total]) }}</p>
+                            <p class="text-sm">{{ __('With a total of :count.', ['count' => $anime->duration_total_string]) }}</p>
                         </x-slot:footer>
                     </x-information-list>
 
