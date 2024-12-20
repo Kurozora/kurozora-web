@@ -36,7 +36,7 @@ class Index extends Component
      *
      * @var bool $readyToLoad
      */
-    public bool $readyToLoad = false;
+    public bool $readyToLoad = true;
 
     /**
      * Determines whether to loading screen is shown.
@@ -70,6 +70,8 @@ class Index extends Component
 
         if ($this->year === now()->year && now()->month !== 12) {
             $this->month = now()->subMonth()->month;
+        } else {
+            $this->month = 12;
         }
     }
 
@@ -78,9 +80,11 @@ class Index extends Component
         if ($year === now()->year) {
             if (now()->month !== 12) {
                 $this->month = now()->subMonth()->month;
+            } else {
+                now()->month = 12;
             }
         } else {
-            $this->month = null;
+            $this->month = 12;
         }
     }
 

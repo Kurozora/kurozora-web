@@ -4,7 +4,6 @@
         loadingScreenEnabled: @entangle('loadingScreenEnabled').live,
         isNavOpen: false
     }"
-    wire:init="loadPage"
 >
     <x-slot:title>
         {{ __('Re:CAP :x', ['x' => $this->year]) }}
@@ -141,24 +140,24 @@
                 }"
                 class="flex justify-between gap-2 whitespace-nowrap overflow-x-scroll no-scrollbar"
             >
-                @if ($this->year !== now()->year || now()->month === 12)
-                    <span wire:key="select-{{ $this->year }}">
-                        <template x-if="month === null">
-                            <x-tinted-pill-button>
-                                <p class="pr-2 pl-2 text-base">{{ $this->year }}</p>
-                            </x-tinted-pill-button>
-                        </template>
+{{--                @if ($this->year !== now()->year || now()->month === 12)--}}
+{{--                    <span wire:key="select-{{ $this->year }}">--}}
+{{--                        <template x-if="month === null">--}}
+{{--                            <x-tinted-pill-button>--}}
+{{--                                <p class="pr-2 pl-2 text-base">{{ $this->year }}</p>--}}
+{{--                            </x-tinted-pill-button>--}}
+{{--                        </template>--}}
 
-                        <template x-if="month !== null">
-                            <x-tinted-pill-button
-                                color="transparent"
-                                x-on:click="month = null"
-                            >
-                                <p class="pr-2 pl-2 text-base text-white">{{ $this->year }}</p>
-                            </x-tinted-pill-button>
-                        </template>
-                    </span>
-                @endif
+{{--                        <template x-if="month !== null">--}}
+{{--                            <x-tinted-pill-button--}}
+{{--                                color="transparent"--}}
+{{--                                x-on:click="month = null"--}}
+{{--                            >--}}
+{{--                                <p class="pr-2 pl-2 text-base text-white">{{ $this->year }}</p>--}}
+{{--                            </x-tinted-pill-button>--}}
+{{--                        </template>--}}
+{{--                    </span>--}}
+{{--                @endif--}}
 
                 @foreach ($this->recapMonths as $recap)
                     <div wire:key="select-{{ $recap->year }}-{{ $recap->month }}">
