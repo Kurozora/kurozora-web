@@ -95,7 +95,7 @@
         "ebess/advanced-nova-media-library": "^4.1.0",
         "stepanenko3/nova-logs-tool": "^2.0",
         "kiritokatklian/nova-astrotranslatable": "^2.0",
-        "kiritokatklian/nova-permission": "^4.0",
+        "kiritokatklian/nova-permission": "^5.0",
         "outl1ne/nova-color-field": "^2.0",
         "outl1ne/nova-sortable": "^3.0",
         "stepanenko3/nova-command-runner": "^4.2",
