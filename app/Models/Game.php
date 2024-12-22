@@ -795,6 +795,23 @@ class Game extends KModel implements HasMedia, Sitemapable
     }
 
     /**
+     * Eloquent builder scope that limits the query to games with scheduled release.
+     *
+     * @param Builder $query
+     * @param array   $dateRanges
+     *
+     * @return Builder
+     */
+    public static function scopeWithSchedule(Builder $query, array $dateRanges)
+    {
+        return $query->select(self::TABLE_NAME . '.*')
+            ->whereIn('published_at', $dateRanges)
+            ->groupBy(self::TABLE_NAME . '.id') // standard grouping to remove duplicates
+            ->orderBy(self::TABLE_NAME . '.original_title')
+            ->limit(25);
+    }
+
+    /**
      * Convert the model to its sitemap representation.
      *
      * @return Url|string|array

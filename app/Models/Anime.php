@@ -646,7 +646,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
                     $query->orWhereBetween(Episode::TABLE_NAME . '.started_at', [$range['start'], $range['end']]);
                 }
             })
-            ->groupBy(self::TABLE_NAME . '.id')
+            ->groupBy(self::TABLE_NAME . '.id') // standard grouping to remove duplicates
             ->orderBy(self::TABLE_NAME . '.air_time');
     }
 
