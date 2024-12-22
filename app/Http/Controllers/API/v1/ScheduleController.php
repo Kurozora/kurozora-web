@@ -84,6 +84,7 @@ class ScheduleController extends Controller
                 'type' => $model,
                 'models' => $models,
             ])
+            ->sortBy('date')
             ->values()
             ->toArray();
     }
