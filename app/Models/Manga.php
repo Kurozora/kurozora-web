@@ -901,6 +901,24 @@ class Manga extends KModel implements HasMedia, Sitemapable
     }
 
     /**
+     * Eloquent builder scope that limits the query to manga with scheduled chapters.
+     *
+     * @param Builder $query
+     * @param int[]   $publicationDays
+     *
+     * @return Builder
+     */
+    public static function scopeWithSchedule(Builder $query, array $publicationDays)
+    {
+        return $query->select(self::TABLE_NAME . '.*')
+            ->where('status_id', 8)
+            ->whereIn('publication_day', $publicationDays)
+            ->groupBy(self::TABLE_NAME . '.id') // standard grouping to remove duplicates
+            ->orderBy('publication_time')
+            ->limit(25);
+    }
+
+    /**
      * Convert the model to its sitemap representation.
      *
      * @return Url|string|array
