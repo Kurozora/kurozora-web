@@ -11,7 +11,6 @@ use App\Models\Anime;
 use App\Models\Episode;
 use App\Models\Game;
 use App\Models\Manga;
-use App\Models\Season;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Http\JsonResponse;
@@ -93,15 +92,9 @@ class ScheduleController extends Controller
     {
         $user = auth()->user();
 
-        return Anime::select(['animes.*', DB::raw('DATE(' . Episode::TABLE_NAME . '.started_at) as grouping_date')])
-            ->join(Season::TABLE_NAME, 'animes.id', '=', Season::TABLE_NAME . '.anime_id')
-            ->join(Episode::TABLE_NAME, 'seasons.id', '=', Episode::TABLE_NAME . '.season_id')
-            ->where(function ($query) use ($dateRanges) {
-                foreach ($dateRanges as $range) {
-                    $query->orWhereBetween(Episode::TABLE_NAME . '.started_at', [$range['start'], $range['end']]);
-                }
-            })
-            ->orderBy('air_time')
+        return Anime::withSchedule($dateRanges)
+            ->select([Anime::TABLE_NAME . '.*', DB::raw('DATE(' . Episode::TABLE_NAME . '.started_at) as grouping_date')])
+            ->groupBy(Anime::TABLE_NAME . '.id', 'grouping_date')
             ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
             ->when($user, function ($query) use ($user) {
                 $query->with([

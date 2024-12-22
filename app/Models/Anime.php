@@ -629,6 +629,28 @@ class Anime extends KModel implements HasMedia, Sitemapable
     }
 
     /**
+     * Eloquent builder scope that limits the query to anime with scheduled episodes.
+     *
+     * @param Builder $query
+     * @param array   $dateRanges
+     *
+     * @return Builder
+     */
+    public static function scopeWithSchedule(Builder $query, array $dateRanges)
+    {
+        return $query->select(self::TABLE_NAME . '.*')
+            ->join(Season::TABLE_NAME, 'animes.id', '=', Season::TABLE_NAME . '.anime_id')
+            ->join(Episode::TABLE_NAME, 'seasons.id', '=', Episode::TABLE_NAME . '.season_id')
+            ->where(function ($query) use ($dateRanges) {
+                foreach ($dateRanges as $range) {
+                    $query->orWhereBetween(Episode::TABLE_NAME . '.started_at', [$range['start'], $range['end']]);
+                }
+            })
+            ->groupBy(self::TABLE_NAME . '.id')
+            ->orderBy(self::TABLE_NAME . '.air_time');
+    }
+
+    /**
      * The anime's adaptation source.
      *
      * @return BelongsTo
@@ -729,7 +751,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
     public function tags(): HasManyThrough
     {
         return $this->hasManyThrough(Tag::class, MediaTag::class, 'taggable_id', 'id', 'id', 'tag_id')
-            ->where('taggable_type', '=', Anime::class);
+            ->where('taggable_type', '=', self::class);
     }
 
     /**
