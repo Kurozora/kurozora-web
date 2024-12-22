@@ -38,10 +38,10 @@ class ScheduleController extends Controller
             default => Anime::class
         };
 
-        $schedules = $this->fetchSchedules($model, $dateRanges);
+        $schedule = $this->fetchSchedule($model, $dateRanges);
 
         return JSONResult::success([
-            'data' => ScheduleResource::collection($schedules),
+            'data' => ScheduleResource::collection($schedule),
         ]);
     }
 
@@ -68,12 +68,12 @@ class ScheduleController extends Controller
         ], $dates);
     }
 
-    private function fetchSchedules(string $model, array $dateRanges): array
+    private function fetchSchedule(string $model, array $dateRanges): array
     {
         $query = match ($model) {
-            Anime::class => $this->queryAnimeSchedules($dateRanges),
-            Manga::class => $this->queryMangaSchedules($dateRanges),
-            Game::class => $this->queryGameSchedules($dateRanges),
+            Anime::class => $this->queryAnimeSchedule($dateRanges),
+            Manga::class => $this->queryMangaSchedule($dateRanges),
+            Game::class => $this->queryGameSchedule($dateRanges),
             default => throw new InvalidArgumentException('Unsupported model type'),
         };
 
@@ -89,15 +89,13 @@ class ScheduleController extends Controller
             ->toArray();
     }
 
-    private function queryAnimeSchedules(array $dateRanges)
+    private function queryAnimeSchedule(array $dateRanges)
     {
-        $user = auth()->user();
-
         return Anime::withSchedule($dateRanges)
             ->select([Anime::TABLE_NAME . '.*', DB::raw('DATE(' . Episode::TABLE_NAME . '.started_at) as grouping_date')])
-            ->groupBy(Anime::TABLE_NAME . '.id', 'grouping_date')
+            ->groupBy('grouping_date') // scope already includes grouping on id
             ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
-            ->when($user, function ($query) use ($user) {
+            ->when(auth()->user(), function ($query, $user) {
                 $query->with([
                     'mediaRatings' => fn($q) => $q->where('user_id', $user->id),
                     'library' => fn($q) => $q->where('user_id', $user->id),
@@ -109,19 +107,39 @@ class ScheduleController extends Controller
             });
     }
 
-    private function queryMangaSchedules(array $dateRanges)
+    private function queryMangaSchedule(array $dateRanges)
     {
-        return Manga::query()
-            ->select(['mangas.*', DB::raw('DAYOFWEEK(publication_day) as grouping_date')])
-            ->where('status_id', 8)
-            ->whereIn('publication_day', array_column($dateRanges, 'dayOfWeek'))
-            ->orderBy('publication_time');
+        return Manga::withSchedule(array_column($dateRanges, 'dayOfWeek'))
+            ->select([Manga::TABLE_NAME . '.*', DB::raw('DAYOFWEEK(started_at) as grouping_date')])
+            ->groupBy('grouping_date') // scope already includes grouping on id
+            ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
+            ->when(auth()->user(), function ($query, $user) {
+                $query->with([
+                    'mediaRatings' => fn($q) => $q->where('user_id', $user->id),
+                    'library' => fn($q) => $q->where('user_id', $user->id),
+                ])
+                    ->withExists([
+                        'favoriters as isFavorited' => fn($q) => $q->where('user_id', $user->id),
+                        'reminderers as isReminded' => fn($q) => $q->where('user_id', $user->id),
+                    ]);
+            });
     }
 
-    private function queryGameSchedules(array $dateRanges)
+    private function queryGameSchedule(array $dateRanges)
     {
-        return Game::query()
-            ->select(['games.*', DB::raw('DATE(published_at) as grouping_date')])
-            ->whereIn('published_at', array_column($dateRanges, 'date'));
+        return Game::withSchedule(array_column($dateRanges, 'date'))
+            ->select([Game::TABLE_NAME . '.*', DB::raw('DATE(published_at) as grouping_date')])
+            ->groupBy('grouping_date') // scope already includes grouping on id
+            ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
+            ->when(auth()->user(), function ($query, $user) {
+                $query->with([
+                    'mediaRatings' => fn($q) => $q->where('user_id', $user->id),
+                    'library' => fn($q) => $q->where('user_id', $user->id),
+                ])
+                    ->withExists([
+                        'favoriters as isFavorited' => fn($q) => $q->where('user_id', $user->id),
+                        'reminderers as isReminded' => fn($q) => $q->where('user_id', $user->id),
+                    ]);
+            });
     }
 }
