@@ -47,8 +47,8 @@ return new class extends Migration
             $table->index('is_premiere');
             $table->index('is_finale');
             $table->index('rank_total');
-            $table->index('started_at');
-            $table->index('ended_at');
+            $table->index(['started_at', 'ended_at']);
+            $table->index(['ended_at', 'started_at']);
             $table->index('created_at');
             $table->index('updated_at');
             $table->index('deleted_at');
