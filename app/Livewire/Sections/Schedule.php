@@ -3,7 +3,6 @@
 namespace App\Livewire\Sections;
 
 use App\Models\Anime;
-use App\Models\Episode;
 use App\Models\Game;
 use App\Models\Manga;
 use Carbon\Carbon;
@@ -73,41 +72,57 @@ class Schedule extends Component
             return collect();
         }
 
-        $where = match ($this->class) {
-            Game::class, Manga::class => [
-                ['publication_day', '=', $this->date->dayOfWeek],
-            ],
-            default => []
+        return match ($this->class) {
+            Anime::class => $this->queryAnimeSchedule()
+                ->get(),
+            Manga::class => $this->queryMangaSchedule()
+                ->get(),
+            Game::class => $this->queryGameSchedule()
+                ->get(),
+            default => collect(),
         };
+    }
 
-        return $this->class::where($where)
-            ->when($this->class == Anime::class, function ($query) {
-                $query->whereHas('episodes', function($query) {
-                    $query->where([
-                        [Episode::TABLE_NAME . '.started_at', '>=', $this->date->startOfDay()->toDateTimeString()],
-                        [Episode::TABLE_NAME . '.started_at', '<=', $this->date->endOfDay()->toDateTimeString()],
-                    ]);
-                })
-                    ->orderBy('air_time');
-            })
-            ->when($this->class == Manga::class, function ($query) {
-                $query->where([
-                    ['status_id', '=', 8],
-                ])
-                    ->orderBy('publication_time');
-            })
+    private function queryAnimeSchedule()
+    {
+        return Anime::withSchedule([
+            [
+                'start' => $this->date->startOfDay()->toDateTimeString(),
+                'end' => $this->date->endOfDay()->toDateTimeString()
+            ]
+        ])
+            ->select(Anime::TABLE_NAME . '.*')
             ->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating'])
-            ->when($this->class == Game::class, function ($query) {
-                $query->where([
-                    ['published_at', '=', $this->date->startOfDay()->toDateString()]
-                ]);
-            })
             ->when(auth()->user(), function ($query, $user) {
                 $query->with(['library' => function ($query) use ($user) {
                     $query->where('user_id', '=', $user->id);
                 }]);
-            })
-            ->get();
+            });
+    }
+
+    private function queryMangaSchedule()
+    {
+        return Manga::withSchedule([$this->date->dayOfWeek])
+            ->select(Manga::TABLE_NAME . '.*')
+            ->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating'])
+            ->when(auth()->user(), function ($query, $user) {
+                $query->with(['library' => function ($query) use ($user) {
+                    $query->where('user_id', '=', $user->id);
+                }]);
+            });
+    }
+
+    private function queryGameSchedule()
+    {
+        return Game::withSchedule([$this->date->startOfDay()->toDateString()])
+            ->select(Game::TABLE_NAME . '.*')
+            ->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating'])
+            ->when(auth()->user(), function ($query, $user) {
+                $query->with(['library' => function ($query) use ($user) {
+                    $query->where('user_id', '=', $user->id);
+                }]);
+            });
+
     }
 
     /**
