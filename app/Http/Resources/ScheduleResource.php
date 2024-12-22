@@ -23,11 +23,15 @@ class ScheduleResource extends JsonResource
             Game::class => 'games',
             Manga::class => 'literatures',
         };
+        $date = match ($this->resource['type']) {
+            Anime::class, Game::class => Carbon::createFromFormat('Y-m-d', $this->resource['date'])->startOfDay()->timestamp,
+            Manga::class => $this->resource['date'],
+        };
 
         return [
             'type' => $key . '-schedule',
             'attributes' => [
-                'date' => Carbon::createFromFormat('Y-m-d', $this->resource['date'])->startOfDay()->timestamp,
+                'date' => $date,
             ],
             'relationships' => [
                 $key => [
