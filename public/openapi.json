@@ -9584,117 +9584,32 @@
                   "shows": {
                     "data": [
                       {
-                        "date": 1704758400,
-                        "shows": [
-                          {
-                            "id": 24540,
-                            "uuid": "24540",
-                            "type": "show",
-                            "href": "/api/v1/anime/24540"
-                          },
-                          {
-                            "id": 25226,
-                            "uuid": "25226",
-                            "type": "show",
-                            "href": "/api/v1/anime/25226"
-                          },
-                          {
-                            "id": 25922,
-                            "uuid": "25922",
-                            "type": "show",
-                            "href": "/api/v1/anime/25922"
-                          }
-                        ]
-                      },
-                      {
-                        "date": 1704844800,
-                        "shows": [
-                          {
-                            "id": 22434,
-                            "uuid": "22434",
-                            "type": "show",
-                            "href": "/api/v1/anime/22434"
-                          },
-                          {
-                            "id": 25075,
-                            "uuid": "25075",
-                            "type": "show",
-                            "href": "/api/v1/anime/25075"
-                          },
-                          {
-                            "id": 25679,
-                            "uuid": "25679",
-                            "type": "show",
-                            "href": "/api/v1/anime/25679"
-                          }
-                        ]
-                      },
-                      {
-                        "date": 1704931200,
-                        "shows": [
-                          {
-                            "id": 24513,
-                            "uuid": "24513",
-                            "type": "show",
-                            "href": "/api/v1/anime/24513"
-                          },
-                          {
-                            "id": 25567,
-                            "uuid": "25567",
-                            "type": "show",
-                            "href": "/api/v1/anime/25567"
-                          },
-                          {
-                            "id": 26209,
-                            "uuid": "26209",
-                            "type": "show",
-                            "href": "/api/v1/anime/26209"
-                          }
-                        ]
-                      },
-                      {
-                        "date": 1705017600,
-                        "shows": [
-                          {
-                            "id": 20399,
-                            "uuid": "20399",
-                            "type": "show",
-                            "href": "/api/v1/anime/20399"
-                          },
-                          {
-                            "id": 28176,
-                            "uuid": "28176",
-                            "type": "show",
-                            "href": "/api/v1/anime/28176"
-                          },
-                          {
-                            "id": 27913,
-                            "uuid": "27913",
-                            "type": "show",
-                            "href": "/api/v1/anime/27913"
-                          }
-                        ]
-                      },
-                      {
-                        "date": 1705104000,
-                        "shows": [
-                          {
-                            "id": 22840,
-                            "uuid": "22840",
-                            "type": "show",
-                            "href": "/api/v1/anime/22840"
-                          },
-                          {
-                            "id": 25323,
-                            "uuid": "25323",
-                            "type": "show",
-                            "href": "/api/v1/anime/25323"
-                          },
-                          {
-                            "id": 25611,
-                            "uuid": "25611",
-                            "type": "show",
-                            "href": "/api/v1/anime/25611"
+                        "type": "shows-schedule",
+                        "attributes": {
+                          "date": 1704758400
+                        },
+                        "relationships": {
+                          "shows": {
+                            "data": [
+                              {
+                                "id": 24540,
+                                "uuid": "24540",
+                                "type": "show",
+                                "href": "/api/v1/anime/24540"
+                              },
+                              {
+                                "id": 25226,
+                                "uuid": "25226",
+                                "type": "show",
+                                "href": "/api/v1/anime/25226"
+                              },
+                              {
+                                "id": 25922,
+                                "uuid": "25922",
+                                "type": "show",
+                                "href": "/api/v1/anime/25922"
+                              }
+                            ]
                           }
                         ]
                       },
