@@ -23,6 +23,7 @@ class FeedController extends Controller
      * Post a new message to the feed.
      *
      * @param PostFeedRequest $request
+     *
      * @return JsonResponse
      * @throws AuthorizationException
      */
@@ -46,14 +47,16 @@ class FeedController extends Controller
         }
 
         // Create the feed message
-        $feedMessage = $user->feed_messages()->create([
-            'parent_feed_message_id'    => $data['parent_id'] ?? null,
-            'content'                   => $request->input('content') ?? $request->input('body'),
-            'is_reply'                  => $data['is_reply'] ?? false,
-            'is_reshare'                => $data['is_reshare'] ?? false,
-            'is_nsfw'                   => $data['is_nsfw'] ?? false,
-            'is_spoiler'                => $data['is_spoiler'] ?? false,
-        ]);
+        $feedMessage = $user->feed_messages()
+            ->create([
+                'parent_feed_message_id' => $data['parent_id'] ?? null,
+                'content' => $request->input('content') ?? $request->input('body'),
+                'is_nsfw' => $data['is_nsfw'] ?? false,
+                'is_pinned' => false, // Always false by default
+                'is_reply' => $data['is_reply'] ?? false,
+                'is_reshare' => $data['is_reshare'] ?? false,
+                'is_spoiler' => $data['is_spoiler'] ?? false,
+            ]);
 
         if ($data['is_reply'] ?? false) {
             // Get parent message
@@ -144,6 +147,7 @@ class FeedController extends Controller
      * Returns the user's personal feed.
      *
      * @param GetFeedMessagesHomeRequest $request
+     *
      * @return JsonResponse
      */
     function home(GetFeedMessagesHomeRequest $request): JsonResponse
@@ -213,6 +217,7 @@ class FeedController extends Controller
      * Returns the global feed.
      *
      * @param GetFeedMessagesExploreRequest $request
+     *
      * @return JsonResponse
      */
     function explore(GetFeedMessagesExploreRequest $request): JsonResponse
