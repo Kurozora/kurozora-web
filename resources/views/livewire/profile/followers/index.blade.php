@@ -59,7 +59,7 @@
 
                 @if ($user->id != auth()->user()?->id)
                     <p class="text-sm text-gray-500">{{ __('Be the first to follow :x!', ['x' => $user->username]) }}</p>
-                    <livewire:components.follow-button :user="$user" :is-followed="$isFollowed" wire:key="{{ uniqid(more_entropy: true) }}" />
+                    <livewire:components.follow-button :user="$user" :is-followed="(bool) $user->isFollowed" wire:key="{{ uniqid(more_entropy: true) }}" />
                 @else
                     <p class="text-sm text-gray-500">{{ __('When someone follows you, they will show up here!') }}</p>
                 @endif
