@@ -136,14 +136,14 @@ class Details extends Component
     /**
      * Updates the user's followers count.
      *
-     * @param int $newCount
-     * @param $userID
+     * @param int $followersCount
+     * @param int $userID
      * @return void
      */
-    public function followersCountUpdated(int $newCount, $userID): void
+    public function followersCountUpdated(int $followersCount, int $userID): void
     {
         if ($this->user->id == $userID) {
-            $this->counts['followers_count'] += $newCount;
+            $this->counts['followers_count'] += $followersCount;
         }
     }
 
