@@ -15,7 +15,6 @@ use App\Http\Middleware\Timezone;
 use App\Http\Middleware\TrustProxies;
 use App\Http\Middleware\TVRating;
 use App\Http\Middleware\UserIsProOrSubscribed;
-use App\Http\Middleware\ValidateCsrfToken;
 use App\Models\APIError;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
@@ -104,7 +103,6 @@ return Application::configure(basePath: dirname(__DIR__))
                 Timezone::class,
                 TVRating::class,
                 ShareErrorsFromSession::class,
-                ValidateCsrfToken::class,
                 SubstituteBindings::class,
             ])
             ->api([

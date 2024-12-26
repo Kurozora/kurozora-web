@@ -8,6 +8,7 @@ use App\Policies\NotificationPolicy;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Events\QueryExecuted;
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Support\Facades\Config;
@@ -35,6 +36,11 @@ class AppServiceProvider extends ServiceProvider
     {
         // Prevent dangerous actions
         DB::prohibitDestructiveCommands(app()->isProduction());
+
+        // CSRF verification exceptions
+        VerifyCsrfToken::except([
+            '/siwa/callback'
+        ]);
 
         // Rate limits
         RateLimiter::for('api', function (Request $request) {
