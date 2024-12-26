@@ -28,7 +28,10 @@ use App\Models\User;
 use App\Models\UserLibrary;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
 use Laravel\Scout\Builder;
+use Uri;
 
 class SearchController extends Controller
 {
@@ -427,21 +430,29 @@ class SearchController extends Controller
     /**
      * Generate the next page url for the given resource.
      *
-     * @param $request
-     * @param $resource
-     * @param $type
+     * @param SearchRequest                  $request
+     * @param LengthAwarePaginator|Paginator $resource
+     * @param string                         $type
+     *
      * @return string|null
      */
-    protected function nextPageUrlFor($request, $resource, $type): ?string
+    protected function nextPageUrlFor(SearchRequest $request, LengthAwarePaginator|Paginator $resource, string $type): ?string
     {
         $nexPageUrl = $resource->nextPageUrl();
 
-        if ($nexPageUrl) {
-            $path = parse_url($resource->nextPageUrl(), PHP_URL_PATH);
-            $query = parse_url($resource->nextPageUrl(), PHP_URL_QUERY);
-            return $path . '?' . $query;
+        if (empty($nexPageUrl)) {
+            return null;
         }
 
-        return null;
+        $uri = Uri::of($nexPageUrl)
+            ->withoutQuery(['types'])
+            ->withQuery([
+                'types' => [
+                    $type
+                ],
+            ]);
+        $path = $uri->path();
+        $query = $uri->query()->value();
+        return '/' . $path . '?' . $query;
     }
 }
