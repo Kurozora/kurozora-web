@@ -29,10 +29,27 @@ abstract class AppStoreListener implements HandlesSubscription
      */
     public function findUserReceipt(?string $userID, string $originalTransactionID): ?UserReceipt
     {
-        return UserReceipt::firstWhere([
-                ['user_id', '=', $userID],
-                ['original_transaction_id', '=', $originalTransactionID],
-            ]);
+        $receipt = UserReceipt::firstWhere('original_transaction_id', '=', $originalTransactionID);
+
+        // Return receipt if no user ID is provided or no receipt is found
+        if (empty($userID) || empty($receipt)) {
+            return $receipt;
+        }
+
+        // Update the user ID if it's not already set
+        // This is a corrective measure for missing user ID in some receipts
+        if (empty($receipt->user_id)) {
+            $receipt->user_id = $userID;
+            $receipt->save();
+        }
+
+        // If the receipt belongs to another user, return null
+        if ($receipt->user_id != $userID) {
+            return null;
+        }
+
+        // Return the receipt
+        return $receipt;
     }
 
     /**

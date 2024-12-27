@@ -44,6 +44,8 @@ class StoreController extends Controller
             throw new ConflictHttpException('The generated receipt is invalid.');
         }
 
+        $user = auth()->user();
+
         if (!$needsRefresh) {
             // We can loop all of them or either get the first one (recently purchased).
             // Currently, we only need to verify recent purchase.
@@ -51,7 +53,7 @@ class StoreController extends Controller
             $receiptInfo = $latestReceiptInfo[0];
 
             // Collect IDs
-            $userID = $receiptInfo->getAppAccountToken();
+            $userID = $receiptInfo->getAppAccountToken() ?? $user->uuid;
             $originalTransactionID = $receiptInfo->getOriginalTransactionId();
             $webOrderLineItemID = $receiptInfo->getWebOrderLineItemId();
             $offerID = $receiptInfo->getPromotionalOfferId();
@@ -72,11 +74,8 @@ class StoreController extends Controller
             $isSubscriptionValid = $expiresDate?->isFuture() || $isInGracePeriod;
             $willAutoRenew = $pendingRenewalInfo->getAutoRenewStatus();
 
-            // Save user receipt
-            $userReceipt = UserReceipt::firstWhere([
-                ['user_id', '=', $userID],
-                ['original_transaction_id', '=', $originalTransactionID]
-            ]);
+            // Save user receipt if it doesn't exist yet
+            $userReceipt = UserReceipt::firstWhere('original_transaction_id', '=', $originalTransactionID);
 
             if (empty($userReceipt)) {
                 $userReceipt = UserReceipt::create([
@@ -93,6 +92,11 @@ class StoreController extends Controller
                     'expired_at' => $expiresDate?->toDateTime(),
                     'revoked_at' => $revokedDate?->toDateTime(),
                 ]);
+            } else if (empty($userReceipt->user_id)) {
+                // Update the user ID if it's not already set
+                // This is a corrective measure for missing user ID in some receipts
+                $userReceipt->user_id = $userID;
+                $userReceipt->save();
             }
 
             // Update user
@@ -116,7 +120,7 @@ class StoreController extends Controller
                     'isValid' => $isSubscriptionValid,
                     'needsRefresh' => $needsRefresh
                 ]
-            ]
+            ],
         ]);
     }
 
