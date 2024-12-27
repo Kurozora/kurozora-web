@@ -376,7 +376,13 @@ class ProcessMALImport implements ShouldQueue
         }
 
         $dateComponents = explode('-', $malDate);
-        return Carbon::createFromDate($dateComponents[0], $dateComponents[1], $dateComponents[2]);
+        $date = Carbon::createFromDate($dateComponents[0], $dateComponents[1], $dateComponents[2]);
+
+        if ($date->year == 0000) {
+            $date->setYear(now()->year);
+        }
+
+        return $date;
     }
 
     /**
