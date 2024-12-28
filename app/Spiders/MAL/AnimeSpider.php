@@ -449,14 +449,16 @@ class AnimeSpider extends BasicSpider
                     });
 
                 // Get title
-                $regex = '/\".+\"/';
+                $regex = '/(\"|\'\').+(\"|\'\')/';
                 preg_match($regex, $item->text(), $title);
                 $title = empty($title) ? '' : trim($title[0]);
                 // Here we `replaceFirst/Last` instead of `remove`, so we don't
                 // accidentally remove quotes that are part of the official title.
                 $title = str($title)
                     ->replaceFirst('"', '')
-                    ->replaceLast('"', '');
+                    ->replaceFirst('\'\'', '')
+                    ->replaceLast('"', '')
+                    ->replaceLast('\'\'', '');
 
                 // Get artist
                 $regex = '/by.+/';
