@@ -213,6 +213,28 @@ class FeedMessageController extends Controller
     }
 
     /**
+     * Pin a feed message to profile.
+     *
+     * @param FeedMessage $feedMessage
+     * @return JsonResponse
+     */
+    function pin(FeedMessage $feedMessage): JsonResponse
+    {
+        // Get the authenticated user
+        $user = auth()->user();
+
+        // Get the vote
+        $pinAction = $user->togglePin($feedMessage);
+
+        // Show successful response
+        return JSONResult::success([
+            'data' => [
+                'isPinned' => $pinAction
+            ]
+        ]);
+    }
+
+    /**
      * Deletes the authenticated user's feed message.
      *
      * @param FeedMessage $feedMessage

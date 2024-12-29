@@ -58,6 +58,7 @@ use Spatie\Permission\Traits\HasRoles;
 use Spatie\Sitemap\Contracts\Sitemapable;
 use Spatie\Sluggable\SlugOptions;
 use Staudenmeir\EloquentJsonRelations\HasJsonRelationships;
+use Throwable;
 use URL;
 use Xetaio\Mentions\Models\Traits\HasMentionsTrait;
 
@@ -426,6 +427,42 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     function feed_messages(): HasMany
     {
         return $this->hasMany(FeedMessage::class);
+    }
+
+    /**
+     * Toggle the pinned state of a feed message.
+     *
+     * @param FeedMessage $feedMessage
+     *
+     * @return bool
+     * @throws Throwable
+     */
+    public function togglePin(FeedMessage $feedMessage): bool
+    {
+        // Database transaction for atomicity
+        return DB::transaction(function () use ($feedMessage) {
+            // Unpin if the same message already pinned
+            if ($feedMessage->is_pinned) {
+                $feedMessage->update([
+                    'is_pinned' => false,
+                ]);
+                return false;
+            }
+
+            // Unpin any currently pinned message
+            $this->feed_messages()
+                ->where('is_pinned', true)
+                ->update([
+                    'is_pinned' => false,
+                ]);
+
+            // Pin the new message
+            $feedMessage->update([
+                'is_pinned' => true,
+            ]);
+
+            return true;
+        });
     }
 
     /**

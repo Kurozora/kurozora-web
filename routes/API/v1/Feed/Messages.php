@@ -21,6 +21,10 @@ Route::prefix('/messages')
             ->middleware('auth.kurozora')
             ->name('.heart');
 
+        Route::post('/{feedMessage}/pin', [FeedMessageController::class, 'pin'])
+            ->middleware('auth.kurozora')
+            ->name('.pin');
+
         Route::post('/{feedMessage}/delete', [FeedMessageController::class, 'delete'])
             ->middleware('auth.kurozora')
             ->name('.delete');
