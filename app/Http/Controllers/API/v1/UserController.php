@@ -125,6 +125,7 @@ class UserController extends Controller
                     $query->where('user_id', '=', $user->id);
                 }]);
             })
+            ->orderBy('is_pinned', 'desc')
             ->orderBy('created_at', 'desc')
             ->cursorPaginate($data['limit'] ?? 25);
 
