@@ -76,6 +76,7 @@ class UsersPerPlan extends Partition
             'demonTip' => '👺 Demon Tip',
             'dragonTip' => '🐲 Dragon Tip',
             'godTip' => '🙏 God Tip',
+            'eternalTip' => '♾️ Eternal Tip',
             'kurozoraOne' => 'Kurozora One',
             default => $key
         };
