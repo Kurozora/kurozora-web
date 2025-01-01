@@ -16,10 +16,10 @@ Route::prefix('/store')
             });
 
         Route::post('/restore-order', [StoreController::class, 'restoreOrder'])
-            ->middleware('auth.kurozora:optional')
+            ->middleware('auth.kurozora')
             ->name('.restore-order');
 
         Route::post('/verify', [StoreController::class, 'verifyReceipt'])
-            ->middleware('auth.kurozora:optional')
+            ->middleware('auth.kurozora')
             ->name('.verify');
     });
