@@ -46,7 +46,7 @@ class StoreController extends Controller
 
         $user = auth()->user();
 
-        if (!$needsRefresh) {
+        if (!$needsRefresh && $user !== null) {
             // We can loop all of them or either get the first one (recently purchased).
             // Currently, we only need to verify recent purchase.
             $latestReceiptInfo = $receiptResponse->getLatestReceiptInfo();
