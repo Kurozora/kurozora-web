@@ -17,6 +17,7 @@ return new class extends Migration
     {
         Schema::create(User::TABLE_NAME, function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('parent_id')->nullable();
             $table->uuid();
             $table->unsignedBigInteger('love_reacter_id')->nullable();
             $table->bigInteger('tv_rating')->default(4);
@@ -51,6 +52,7 @@ return new class extends Migration
 
         Schema::table(User::TABLE_NAME, function (Blueprint $table) {
             // Set index key constraints
+            $table->index('parent_id');
             $table->index('language_id');
             $table->index('is_developer');
             $table->index('is_staff');
@@ -66,6 +68,11 @@ return new class extends Migration
             $table->unique(['slug']);
 
             // Set foreign key constraints
+            $table->foreign('parent_id')
+                ->references('id')
+                ->on(User::TABLE_NAME)
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
             $table->foreign('love_reacter_id')
                 ->references('id')
                 ->on('love_reacters')
