@@ -12,6 +12,13 @@ use Livewire\Component;
 class UpdateAccountInformationForm extends Component
 {
     /**
+     * The user instance.
+     *
+     * @var User
+     */
+    public User $user;
+
+    /**
      * The component's state.
      *
      * @var array
@@ -30,12 +37,14 @@ class UpdateAccountInformationForm extends Component
     /**
      * Prepare the component.
      *
+     * @param User $user
+     *
      * @return void
      */
-    public function mount(): void
+    public function mount(User $user): void
     {
-        $state = auth()->user()
-            ->only(['slug', 'email']);
+        $this->user = $user;
+        $state = $user->only(['slug', 'email']);
 
         $this->state = [
             'username' => $state['slug'],
@@ -55,19 +64,9 @@ class UpdateAccountInformationForm extends Component
 
         $attributes = $this->state;
 
-        $updater->update(auth()->user(), $attributes);
+        $updater->update($this->user, $attributes);
 
         $this->dispatch('saved');
-    }
-
-    /**
-     * Get the current user of the application.
-     *
-     * @return User|null
-     */
-    public function getUserProperty(): User|null
-    {
-        return auth()->user();
     }
 
     /**
