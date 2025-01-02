@@ -73,17 +73,6 @@ class Person extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array
-     */
-    protected $appends = [
-//        'age_string',
-//        'full_name',
-//        'full_given_name',
-    ];
-
-    /**
      * Get the options for generating the slug.
      *
      * @return SlugOptions

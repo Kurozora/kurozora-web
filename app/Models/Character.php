@@ -74,18 +74,6 @@ class Character extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array
-     */
-    protected $appends = [
-//        'age_string',
-//        'birthdate',
-//        'height_string',
-//        'weight_string',
-    ];
-
-    /**
      * Get the options for generating the slug.
      *
      * @return SlugOptions

@@ -122,20 +122,6 @@ class Anime extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array
-     */
-    protected $appends = [
-//        'air_time_utc',
-//        'broadcast',
-//        'duration_string',
-//        'duration_total',
-//        'information_summary',
-//        'time_until_broadcast',
-    ];
-
-    /**
      * Bootstrap the model and its traits.
      *
      * @return void

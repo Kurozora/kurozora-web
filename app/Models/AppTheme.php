@@ -28,16 +28,6 @@ class AppTheme extends KModel implements HasMedia
     protected $table = self::TABLE_NAME;
 
     /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array
-     */
-    protected $appends = [
-//        'status_bar_style',
-//        'visual_effect_view_style',
-    ];
-
-    /**
      * Registers the media collections for the model.
      */
     public function registerMediaCollections(): void
