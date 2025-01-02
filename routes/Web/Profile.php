@@ -25,9 +25,15 @@ Route::prefix('/profile')
             ->middleware(['auth'])
             ->name('.index');
 
-        Route::get('/settings', [UserProfileController::class, 'settings'])
+        Route::prefix('/settings')
             ->middleware(['auth', 'verified'])
-            ->name('.settings');
+            ->group(function () {
+                Route::get('/', [UserProfileController::class, 'settings'])
+                    ->name('.settings');
+
+                Route::get('/{user}', [UserProfileController::class, 'settings'])
+                    ->name('.settings.user');
+            });
 
         Route::prefix('/{user}')
             ->group(function () {
