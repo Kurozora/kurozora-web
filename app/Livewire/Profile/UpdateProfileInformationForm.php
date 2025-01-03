@@ -16,13 +16,6 @@ class UpdateProfileInformationForm extends Component
     use WithFileUploads;
 
     /**
-     * The user instance.
-     *
-     * @var User
-     */
-    public User $user;
-
-    /**
      * The component's state.
      *
      * @var array
@@ -55,14 +48,11 @@ class UpdateProfileInformationForm extends Component
     /**
      * Prepare the component.
      *
-     * @param User $user
-     *
      * @return void
      */
-    public function mount(User $user): void
+    public function mount(): void
     {
-        $this->user = $user;
-        $state = $this->user
+        $state = auth()->user()
             ->only(['username', 'biography']);
 
         $this->state = [
@@ -78,7 +68,8 @@ class UpdateProfileInformationForm extends Component
      */
     public function getUserProperty(): User|null
     {
-        return $this->user->load(['media']);
+        return auth()->user()
+            ->load(['media']);
     }
 
     /**
@@ -101,7 +92,7 @@ class UpdateProfileInformationForm extends Component
             $attributes = array_merge($attributes, ['bannerImage' => $this->bannerImage]);
         }
 
-        $updater->update($this->user, $attributes);
+        $updater->update(auth()->user(), $attributes);
 
         $this->dispatch('saved');
 
@@ -124,7 +115,7 @@ class UpdateProfileInformationForm extends Component
      */
     public function deleteProfileImage(): void
     {
-        $this->user->clearMediaCollection(MediaCollection::Profile);
+        auth()->user()->clearMediaCollection(MediaCollection::Profile);
 
         $this->dispatch('refresh-component')->self();
         $this->dispatch('refresh-profile-image');
@@ -138,7 +129,7 @@ class UpdateProfileInformationForm extends Component
      */
     public function deleteBannerImage(): void
     {
-        $this->user->clearMediaCollection(MediaCollection::Banner);
+        auth()->user()->clearMediaCollection(MediaCollection::Banner);
 
         $this->dispatch('refresh-component')->self();
         $this->dispatch('refresh-banner-image');
