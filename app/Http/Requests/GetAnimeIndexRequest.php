@@ -24,8 +24,8 @@ class GetAnimeIndexRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'ids' => ['nullable', 'array'],
-            'ids.*' => ['integer'],
+            'ids' => ['bail', 'nullable', 'array'],
+            'ids.*' => ['bail', 'integer'],
         ];
     }
 }
