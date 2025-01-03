@@ -3,6 +3,7 @@
 namespace App\Livewire\Profile;
 
 use App\Contracts\Web\Profile\UpdatesUserPreferredTimezone;
+use App\Models\User;
 use DateTimeZone;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -12,6 +13,13 @@ use Livewire\Component;
 
 class SelectPreferredTimezoneForm extends Component
 {
+    /**
+     * The user instance.
+     *
+     * @var User
+     */
+    public User $user;
+
     /**
      * The component's state.
      *
@@ -29,12 +37,14 @@ class SelectPreferredTimezoneForm extends Component
     /**
      * Prepare the component.
      *
+     * @param User $user
+     *
      * @return void
      */
-    public function mount(): void
+    public function mount(User $user): void
     {
         $this->state = [
-            'timezone' => auth()->user()->timezone
+            'timezone' => $user->timezone
         ];
     }
 
@@ -57,7 +67,7 @@ class SelectPreferredTimezoneForm extends Component
     {
         $this->resetErrorBag();
 
-        $updater->update(auth()->user(), $this->state);
+        $updater->update($this->user, $this->state);
 
         $this->dispatch('saved');
     }
