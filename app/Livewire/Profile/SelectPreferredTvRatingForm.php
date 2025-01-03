@@ -4,6 +4,7 @@ namespace App\Livewire\Profile;
 
 use App\Contracts\Web\Profile\UpdatesUserPreferredTvRating;
 use App\Models\TvRating;
+use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Support\Collection;
@@ -12,6 +13,13 @@ use Livewire\Component;
 
 class SelectPreferredTvRatingForm extends Component
 {
+    /**
+     * The user instance.
+     *
+     * @var User
+     */
+    public User $user;
+
     /**
      * The component's state.
      *
@@ -29,12 +37,14 @@ class SelectPreferredTvRatingForm extends Component
     /**
      * Prepare the component.
      *
+     * @param User $user
+     *
      * @return void
      */
-    public function mount(): void
+    public function mount(User $user): void
     {
         $this->state = [
-            'tv_rating' => auth()->user()->tv_rating
+            'tv_rating' => $user->tv_rating
         ];
     }
 
@@ -57,7 +67,7 @@ class SelectPreferredTvRatingForm extends Component
     {
         $this->resetErrorBag();
 
-        $updater->update(auth()->user(), $this->state);
+        $updater->update($this->user, $this->state);
 
         $this->dispatch('saved');
     }
