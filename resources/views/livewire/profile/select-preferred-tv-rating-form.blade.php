@@ -16,7 +16,7 @@
             </div>
 
             <div class="mt-5">
-                <x-select id="tv_rating" wire:model="state.tv_rating">
+                <x-select id="tv_rating" wire:model="state.tv_rating" :disabled="auth()->user()->id !== $user->parent_id && $user->parent_id !== null">
                     <option value="-1">{{ __('Allow All Titles') }}</option>
                     @foreach ($this->tvRatings as $tvRating)
                         <option value="{{ $tvRating->weight }}" {{ $tvRating->weight == $state['tv_rating'] ? 'selected' : '' }}>{{ $tvRating->full_name }}</option>
