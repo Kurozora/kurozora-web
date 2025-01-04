@@ -24,7 +24,7 @@ class UpdateUserPreferredTimezone implements UpdatesUserPreferredTimezone
             'timezone' => ['required', 'timezone:all'],
         ])->validateWithBag('updatePreferredTimezone');
 
-        auth()->user()->update([
+        $user->update([
             'timezone' => (string) $input['timezone']
         ]);
     }
