@@ -92,7 +92,7 @@
         "tightenco/duster": "^2.0"
     },
     "suggest": {
-        "ebess/advanced-nova-media-library": "^4.1.0",
+        "ebess/advanced-nova-media-library": "4.2",
         "stepanenko3/nova-logs-tool": "^2.0",
         "kiritokatklian/nova-astrotranslatable": "^2.0",
         "kiritokatklian/nova-permission": "^5.0",
