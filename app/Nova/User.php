@@ -152,6 +152,9 @@ class User extends Resource
 
             ID::make()->sortable(),
 
+            BelongsTo::make('Parent', 'parent', User::class)
+                ->searchable(),
+
             Heading::make('Media'),
 
             Avatar::make('Profile')
@@ -310,6 +313,8 @@ class User extends Resource
                 ->asHtml()
                 ->readonly()
                 ->onlyOnIndex(),
+
+            HasMany::make('Children', 'children', User::class),
 
             MorphMany::make('Notifications'),
 
