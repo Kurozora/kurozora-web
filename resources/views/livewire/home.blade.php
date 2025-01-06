@@ -50,98 +50,6 @@
 {{--            </a>--}}
 {{--        </section>--}}
 
-{{--        <section class="relative mb-8">--}}
-{{--            <x-section-nav class="flex flex-nowrap justify-between mb-5">--}}
-{{--                <x-slot:title>--}}
-{{--                    {{ __('KAIROS ’22 Winners') }}--}}
-{{--                </x-slot:title>--}}
-
-{{--                <x-slot:description>--}}
-{{--                    {{ __('Congrats to the winners 🎉') }}--}}
-{{--                </x-slot:description>--}}
-
-{{--                <x-slot:action>--}}
-{{--                    <x-section-nav-link class="whitespace-nowrap" href="{{ config('social.discord.url') }}">{{ __('Join KAIROS ’23') }}</x-section-nav-link>--}}
-{{--                </x-slot:action>--}}
-{{--            </x-section-nav>--}}
-
-{{--            <div class="flex flex-nowrap gap-4 snap-mandatory snap-x overflow-x-scroll no-scrollbar">--}}
-{{--                @foreach ($this->users as $user)--}}
-{{--                    @php--}}
-{{--                        switch ($user->id) {--}}
-{{--                        case 363:--}}
-{{--                            $backgroundColor = '#FFE15D';--}}
-{{--                            $textColor = '#EA5C2B';--}}
-{{--                            $imageURL = 'https://cdn.discordapp.com/attachments/1027527900896956416/1061404084860620851/ChrismasThemedWallpaper.png';--}}
-{{--                            $text = '1st Place';--}}
-{{--                            break;--}}
-{{--                        case 765:--}}
-{{--                            $backgroundColor = '#ECECEC';--}}
-{{--                            $textColor = '#FF8B13';--}}
-{{--                            $imageURL = 'https://cdn.discordapp.com/attachments/1027527900896956416/1062558851662102538/Happy_New_Years_.jpg';--}}
-{{--                            $text = '2nd Place';--}}
-{{--                            break;--}}
-{{--                        default:--}}
-{{--                            $backgroundColor = '#FFFFFF';--}}
-{{--                            $textColor = '#000000';--}}
-{{--                            $imageURL = 'https://cdn.discordapp.com/attachments/1027527900896956416/1062558851662102538/Happy_New_Years_.jpg';--}}
-{{--                            $text = '';--}}
-{{--                        }--}}
-{{--                    @endphp--}}
-
-{{--                    <a class="relative pb-2 snap-normal snap-center min-w-[18rem] md:min-w-[30rem]" href="{{ route('profile.details', $user) }}" wire:navigate>--}}
-{{--                        <div class="rounded-lg shadow-sm overflow-hidden" style="background-color: {{ $backgroundColor }};">--}}
-{{--                            <div class="relative flex justify-center bg-gray-800">--}}
-{{--                                <picture class="relative overflow-hidden">--}}
-{{--                                    <img class="w-full h-full object-cover" style="max-height: 16rem;" width="300" height="168" src="{{ $imageURL }}" alt="{{ $user->username }} KAIOS ’22 submission" title="{{ $user->username }} KAIOS ’22 submission">--}}
-
-{{--                                    <div class="absolute top-0 left-0 h-full w-full border-4 border-solid border-black/20 rounded-lg"></div>--}}
-{{--                                </picture>--}}
-{{--                            </div>--}}
-
-{{--                            <div class="flex flex-row px-6 py-6">--}}
-{{--                                <div class="flex justify-center mb-3 mr-2" style="max-height: 6rem;">--}}
-{{--                                    <picture class="relative w-16 h-16 rounded-full shadow-lg overflow-hidden">--}}
-{{--                                        <img class="w-full h-full object-cover" width="160" height="160" src="{{ $user->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) }}" alt="{{ $user->username }} Profile Image" title="{{ $user->username }}">--}}
-
-{{--                                        <div class="absolute top-0 left-0 h-full w-full border-2 border-solid border-black/20 rounded-full"></div>--}}
-{{--                                    </picture>--}}
-{{--                                </div>--}}
-
-{{--                                <div class="flex flex-col">--}}
-{{--                                    <h2 class="text-xl font-medium">{{ $user->username }}</h2>--}}
-
-{{--                                    <span class="block" style="color: {{ $textColor }};">{{ $text }}</span>--}}
-
-{{--                                    @if ($user->id == 363)--}}
-{{--                                        <ul class="list-disc block">--}}
-{{--                                            <li>1 Year Discord Nitro</li>--}}
-{{--                                            <li>1 Year Kurozora+</li>--}}
-{{--                                            <li>1 Year Kurozora Early Access</li>--}}
-{{--                                            <li>Kurozora PRO</li>--}}
-{{--                                            <li>KAIROS ’22 Event Badge</li>--}}
-{{--                                            <li>$75 Gift Card of Choice</li>--}}
-{{--                                            <li>50 Raffle Tickets for Upcoming Events</li>--}}
-{{--                                        </ul>--}}
-{{--                                    @elseif ($user->id == 765)--}}
-{{--                                        <ul class="list-disc block">--}}
-{{--                                            <li>6 Months Discord Nitro</li>--}}
-{{--                                            <li>1 Year Kurozora+</li>--}}
-{{--                                            <li>1 Year Kurozora Early Access</li>--}}
-{{--                                            <li>Kurozora PRO</li>--}}
-{{--                                            <li>KAIROS ’22 Event Badge</li>--}}
-{{--                                            <li>$50 Gift Card of Choice</li>--}}
-{{--                                            <li>25 Raffle Tickets for Upcoming Events</li>--}}
-{{--                                        </ul>--}}
-{{--                                    @endif--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                    </a>--}}
-{{--                @endforeach--}}
-{{--            </div>--}}
-{{--        </section>--}}
-
         <section wire:init="loadPage">
             @foreach ($this->exploreCategories as $index => $exploreCategory)
                 @switch($exploreCategory->type)
@@ -153,6 +61,104 @@
                             @endforeach
                         </div>
                     </section>
+
+{{--                    <section class="mx-auto max-w-7xl relative pt-5 pb-8">--}}
+{{--                        <x-section-nav class="flex flex-nowrap justify-between mb-5 pl-4 pr-4 sm:px-6">--}}
+{{--                            <x-slot:title>--}}
+{{--                                {{ __('Art Contest ’24 Winners') }}--}}
+{{--                            </x-slot:title>--}}
+
+{{--                            <x-slot:description>--}}
+{{--                                {{ __('Congrats to the winners 🎉') }}--}}
+{{--                            </x-slot:description>--}}
+
+{{--                            <x-slot:action>--}}
+{{--                                <x-section-nav-link class="whitespace-nowrap" href="{{ config('social.discord.url') }}">{{ __('Join Art Contest ’25') }}</x-section-nav-link>--}}
+{{--                            </x-slot:action>--}}
+{{--                        </x-section-nav>--}}
+
+{{--                        <div class="flex flex-nowrap gap-4 pl-4 pr-4 sm:px-6 snap-mandatory snap-x overflow-x-scroll no-scrollbar">--}}
+{{--                            @foreach ($this->users as $user)--}}
+{{--                                @php--}}
+{{--                                    switch ($user->id) {--}}
+{{--                                    case 385:--}}
+{{--                                        $backgroundColor = '#FFE15D';--}}
+{{--                                        $textColor = '#915606';--}}
+{{--                                        $imageURL = asset('images/mintdango.webp');--}}
+{{--                                        $text = '1st Place';--}}
+{{--                                        break;--}}
+{{--                                    case 363:--}}
+{{--                                        $backgroundColor = '#ECECEC';--}}
+{{--                                        $textColor = '#8E4D09';--}}
+{{--                                        $imageURL = asset('images/theplazmabeast.webp');--}}
+{{--                                        $text = '2nd Place';--}}
+{{--                                        break;--}}
+{{--                                    case 765:--}}
+{{--                                        $backgroundColor = '#CD7F32';--}}
+{{--                                        $textColor = '#402000';--}}
+{{--                                        $imageURL = asset('images/lat.webp');--}}
+{{--                                        $text = '3rd Place';--}}
+{{--                                        break;--}}
+{{--                                    default:--}}
+{{--                                        $backgroundColor = '#FFFFFF';--}}
+{{--                                        $textColor = '#000000';--}}
+{{--                                        $imageURL = '';--}}
+{{--                                        $text = '';--}}
+{{--                                    }--}}
+{{--                                @endphp--}}
+
+{{--                                <a class="relative pb-2 snap-normal snap-center min-w-[18rem] md:min-w-[30rem]" href="{{ route('profile.details', $user) }}" wire:navigate>--}}
+{{--                                    <div class="h-full rounded-lg shadow-sm overflow-hidden" style="background-color: {{ $backgroundColor }};">--}}
+{{--                                        <div class="relative flex justify-center bg-gray-800">--}}
+{{--                                            <picture class="relative overflow-hidden">--}}
+{{--                                                <img class="w-full h-full object-cover" style="max-height: 16rem;" width="300" height="168" src="{{ $imageURL }}" alt="{{ $user->username }} art contest 2024 submission" title="{{ $user->username }} art contest 2024 submission">--}}
+
+{{--                                                <div class="absolute top-0 left-0 h-full w-full border-4 border-solid border-black/20 rounded-lg"></div>--}}
+{{--                                            </picture>--}}
+{{--                                        </div>--}}
+
+{{--                                        <div class="flex flex-row px-6 py-6">--}}
+{{--                                            <div class="flex justify-center mb-3 mr-2" style="max-height: 6rem;">--}}
+{{--                                                <picture class="relative w-16 h-16 rounded-full shadow-lg overflow-hidden">--}}
+{{--                                                    <img class="w-full h-full object-cover" width="160" height="160" src="{{ $user->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) }}" alt="{{ $user->username }} Profile Image" title="{{ $user->username }}">--}}
+
+{{--                                                    <div class="absolute top-0 left-0 h-full w-full border-2 border-solid border-black/20 rounded-full"></div>--}}
+{{--                                                </picture>--}}
+{{--                                            </div>--}}
+
+{{--                                            <div class="flex flex-col">--}}
+{{--                                                <h2 class="text-xl font-medium">{{ $user->username }}</h2>--}}
+
+{{--                                                <span class="block" style="color: {{ $textColor }};">{{ $text }}</span>--}}
+
+{{--                                                @if ($user->id == 385)--}}
+{{--                                                    <ul class="list-disc block">--}}
+{{--                                                        <li>Kurozora+ (6 month)</li>--}}
+{{--                                                        <li>Kurozora PRO</li>--}}
+{{--                                                        <li>$100 Gift Card</li>--}}
+{{--                                                        <li>Art Contest ’24 Achievement</li>--}}
+{{--                                                    </ul>--}}
+{{--                                                @elseif ($user->id == 363)--}}
+{{--                                                    <ul class="list-disc block">--}}
+{{--                                                        <li>Kurozora+ (1 month)</li>--}}
+{{--                                                        <li>Kurozora PRO</li>--}}
+{{--                                                        <li>$75 Gift Card</li>--}}
+{{--                                                        <li>Art Contest ’24 Achievement</li>--}}
+{{--                                                    </ul>--}}
+{{--                                                @elseif ($user->id == 765)--}}
+{{--                                                    <ul class="list-disc block">--}}
+{{--                                                        <li>Kurozora PRO</li>--}}
+{{--                                                        <li>$50 Gift Card</li>--}}
+{{--                                                        <li>Art Contest ’24 Achievement</li>--}}
+{{--                                                    </ul>--}}
+{{--                                                @endif--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+{{--                                </a>--}}
+{{--                            @endforeach--}}
+{{--                        </div>--}}
+{{--                    </section>--}}
                     @break
                 @default
                     <article class="mx-auto max-w-7xl {{ $index != 1 ? 'border-t-2' : '' }}">
