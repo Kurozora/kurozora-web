@@ -180,7 +180,7 @@ return [
             ],
             \App\Models\Studio::TABLE_NAME => [
                 'searchableAttributes' => ['name', 'japanese_name', 'alternative_names', 'address'],
-                'sortableAttributes'=> ['address', 'name', 'japanese_name', 'founded_at', 'defunct_at', 'created_at', 'update_at'],
+                'sortableAttributes'=> ['address', 'name', 'japanese_name', 'rank_total', 'founded_at', 'defunct_at', 'created_at', 'update_at'],
                 'filterableAttributes'=> ['id', 'letter', 'tv_rating_id', 'type', 'address', 'is_nsfw', 'founded_at', 'defunct_at'],
             ],
             \App\Models\UserLibrary::TABLE_NAME => [
