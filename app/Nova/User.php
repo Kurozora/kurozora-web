@@ -47,7 +47,7 @@ class User extends Resource
      */
     public static function authorizedToViewAny(Request $request): bool
     {
-        return $request->user()?->hasRole('admin') ?? false;
+        return $request->user() !== null && ($request->user()->hasRole('superAdmin') || $request->user()->hasRole('admin'));
     }
 
     /**
@@ -59,7 +59,7 @@ class User extends Resource
      */
     public function authorizedToView(Request $request): bool
     {
-        return $request->user()?->hasRole('admin') ?? false;
+        return $request->user() !== null && ($request->user()->hasRole('superAdmin') || $request->user()->hasRole('admin'));
     }
 
     /**
@@ -71,7 +71,7 @@ class User extends Resource
      */
     public function authorizedToUpdate(Request $request): bool
     {
-        return $request->user()?->hasRole('admin') ?? false;
+        return $request->user() !== null && ($request->user()->hasRole('superAdmin') || $request->user()->hasRole('admin'));
     }
 
     /**
@@ -82,7 +82,7 @@ class User extends Resource
      */
     public function authorizedToDelete(Request $request): bool
     {
-        return $request->user()?->hasRole('admin') ?? false;
+        return $request->user() !== null && ($request->user()->hasRole('superAdmin') || $request->user()->hasRole('admin'));
     }
 
     /**
@@ -104,7 +104,7 @@ class User extends Resource
      */
     public function authorizedToReplicate(Request $request): bool
     {
-        return $request->user()?->hasRole('admin') ?? false;
+        return $request->user() !== null && ($request->user()->hasRole('superAdmin') || $request->user()->hasRole('admin'));
     }
 
     /**
