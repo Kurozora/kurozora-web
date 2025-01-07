@@ -16,11 +16,13 @@ use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\Favoriter;
 use App\Traits\Model\Followable;
 use App\Traits\Model\Follower;
+use App\Traits\Model\HasBlocking;
 use App\Traits\Model\HasSlug;
 use App\Traits\Model\HasViews;
 use App\Traits\Model\Impersonatable;
 use App\Traits\Model\Reminder;
 use App\Traits\Model\Tracker;
+use App\Traits\Model\UserBlockable;
 use App\Traits\SearchFilterable;
 use App\Traits\Web\Auth\TwoFactorAuthenticatable;
 use Carbon\Carbon;
@@ -69,6 +71,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         Follower,
         Followable,
         HasApiTokens,
+        HasBlocking,
         HasFactory,
         HasJsonRelationships,
         HasMentionsTrait,
@@ -89,7 +92,8 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         Searchable,
         SearchFilterable,
         Tracker,
-        TwoFactorAuthenticatable;
+        TwoFactorAuthenticatable,
+        UserBlockable;
 
     // Cache user's calendar
     const int|float CACHE_KEY_CALENDAR_SECONDS = 60 * 60 * 24;
