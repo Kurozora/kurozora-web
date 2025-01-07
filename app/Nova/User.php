@@ -316,6 +316,8 @@ class User extends Resource
 
             HasMany::make('Children', 'children', User::class),
 
+            HasMany::make('Blocked', 'blocked', UserBlock::class),
+
             MorphMany::make('Notifications'),
 
             HasMany::make('Favorites', 'favorites', UserFavorite::class),
