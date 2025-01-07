@@ -24,6 +24,7 @@ trait Favoriter
      * The models favorited by the user.
      *
      * @param string $type
+     *
      * @return MorphToMany
      */
     protected function favoritedModels(string $type): MorphToMany
@@ -36,13 +37,14 @@ trait Favoriter
      * Whether the user has favorited the given model.
      *
      * @param Model $model
+     *
      * @return bool
      */
     public function hasFavorited(Model $model): bool
     {
         return ($this->relationLoaded('favorites') ? $this->favorites : $this->favorites())
-            ->where('favorable_id', $model->getKey())
-            ->where('favorable_type', $model->getMorphClass())
+            ->where('favorable_id', '=', $model->getKey())
+            ->where('favorable_type', '=', $model->getMorphClass())
             ->exists();
     }
 
@@ -50,6 +52,7 @@ trait Favoriter
      * Whether the user has not favorited the given model.
      *
      * @param Model $model
+     *
      * @return bool
      */
     public function hasNotFavorited(Model $model): bool
@@ -61,6 +64,7 @@ trait Favoriter
      * Favorite the given model.
      *
      * @param Model $model
+     *
      * @return UserFavorite
      */
     public function favorite(Model $model): UserFavorite
@@ -88,6 +92,7 @@ trait Favoriter
      * Unfavorite the given model
      *
      * @param Model $model
+     *
      * @return bool
      */
     public function unfavorite(Model $model): bool
@@ -111,6 +116,7 @@ trait Favoriter
      * Clears the favorites of the given type.
      *
      * @param string|null $type
+     *
      * @return bool
      */
     public function clearFavorites(?string $type = null): bool
@@ -126,6 +132,7 @@ trait Favoriter
      * Toggle favorite status of the given model.
      *
      * @param Model $model
+     *
      * @return UserFavorite|bool
      */
     public function toggleFavorite(Model $model): bool|UserFavorite
@@ -139,6 +146,7 @@ trait Favoriter
      * Eloquent builder scope that limits the query to the models of the specified type.
      *
      * @param string $type
+     *
      * @return BelongsToMany
      */
     public function whereFavorited(string $type): BelongsToMany
