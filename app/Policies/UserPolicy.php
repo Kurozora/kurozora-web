@@ -47,20 +47,20 @@ class UserPolicy
 //    {
 //        return true;
 //    }
-//
-//    /**
-//     * Determine whether the user can view the model.
-//     *
-//     * @param User $user
-//     * @param User $model
-//     *
-//     * @return Response|bool
-//     */
-//    public function view(User $user, User $model): Response|bool
-//    {
-//        return true;
-//    }
-//
+
+    /**
+     * Determine whether the user can view the model.
+     *
+     * @param ?User $user
+     * @param User $model
+     *
+     * @return Response|bool
+     */
+    public function view(?User $user, User $model): Response|bool
+    {
+        return $user === null || !$model->hasBlocked($user);
+    }
+
 //    /**
 //     * Determine whether the user can create models.
 //     *
