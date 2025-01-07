@@ -51,7 +51,7 @@ trait InteractsWithMediaExtension {
      * @throws FileDoesNotExist
      * @throws FileIsTooBig
      */
-    function updateImageMedia(MediaCollection $mediaCollection, string|UploadedFile $uploadFile, string $name = null, array $customProperties = [], ?string $extension = null): void
+    function updateImageMedia(MediaCollection $mediaCollection, string|UploadedFile $uploadFile, ?string $name = null, array $customProperties = [], ?string $extension = null): void
     {
         // Determine media adder
         if ($isUrl = str($uploadFile)->startsWith(['http://', 'https://'])) {
