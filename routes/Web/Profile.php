@@ -36,6 +36,7 @@ Route::prefix('/profile')
             });
 
         Route::prefix('/{user}')
+            ->middleware('can:view,user')
             ->group(function () {
                 Route::get('/', Details::class)
                     ->name('.details');
