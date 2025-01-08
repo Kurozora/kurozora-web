@@ -5,6 +5,7 @@ use App\Http\Controllers\API\v1\AchievementController;
 use App\Http\Controllers\API\v1\FollowingController;
 use App\Http\Controllers\API\v1\LibraryController;
 use App\Http\Controllers\API\v1\RegistrationController;
+use App\Http\Controllers\API\v1\UserBlockController;
 use App\Http\Controllers\API\v1\UserController;
 use App\Http\Controllers\API\v1\UserFavoriteController;
 use App\Http\Controllers\Auth\SignInWithAppleController;
@@ -32,13 +33,21 @@ Route::prefix('/users')
 
         Route::prefix('{user}')
             ->group(function () {
-                Route::get('/library', [LibraryController::class, 'index'])
-                    ->middleware('auth.kurozora:optional')
-                    ->name('.library');
-
                 Route::get('/achievements', [AchievementController::class, 'index'])
                     ->middleware('auth.kurozora:optional')
                     ->name('.achievements');
+
+                Route::post('/block', [UserBlockController::class, 'blockUser'])
+                    ->middleware(['auth.kurozora'])
+                    ->name('.block');
+
+                Route::get('/blocked', [UserBlockController::class, 'index'])
+                    ->middleware(['auth.kurozora'])
+                    ->name('.blocked');
+
+                Route::get('/library', [LibraryController::class, 'index'])
+                    ->middleware('auth.kurozora:optional')
+                    ->name('.library');
 
                 Route::get('/favorites', [UserFavoriteController::class, 'index'])
                     ->middleware('auth.kurozora:optional')
