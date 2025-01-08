@@ -22,6 +22,14 @@
             <x-hr class="hidden sm:block" />
         @endif
 
+        @if ($user->parent_id === null)
+{{--            <div class="sm:mt-0">--}}
+{{--                <livewire:profile.select-preferred-child-form :user="$user" />--}}
+{{--            </div>--}}
+
+{{--            <x-hr class="hidden sm:block" />--}}
+        @endif
+
         <div class="sm:mt-0">
             <livewire:profile.select-preferred-language-form :user="$user" />
         </div>
