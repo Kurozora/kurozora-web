@@ -61,6 +61,8 @@ class Details extends Component
      */
     private array $popupTypes = [
         'edit',
+        'share',
+        'block',
     ];
 
     /**
@@ -117,6 +119,23 @@ class Details extends Component
     }
 
     /**
+     * Whether the user is blocked by the auth user.
+     *
+     * @return bool
+     */
+    public function getIsBlockedProperty(): bool
+    {
+        if ($authUser = auth()->user()) {
+            return $this->user
+                ->blockers()
+                ->where('user_id', '=', $authUser->id)
+                ->exists();
+        }
+
+        return false;
+    }
+
+    /**
      * Whether the user is followed by the auth user.
      *
      * @return bool
@@ -145,6 +164,18 @@ class Details extends Component
         if ($this->user->id == $userID) {
             $this->counts['followers_count'] += $followersCount;
         }
+    }
+
+    /**
+     * Toggle block status for the user.
+     *
+     * @return void
+     */
+    public function toggleBlockUser(): void
+    {
+        auth()->user()->toggleBlock($this->user);
+        $this->selectedPopupType = '';
+        $this->showPopup = false;
     }
 
     /**

@@ -49,6 +49,37 @@
                     @if ($user->id != auth()->user()?->id)
                         <livewire:components.follow-button :user="$user" :is-followed="$this->isFollowed" wire:key="{{ uniqid(more_entropy: true) }}" />
                     @endif
+
+                    {{-- More Options --}}
+                    <x-dropdown align="right" width="48">
+                        <x-slot:trigger>
+                            <x-circle-button
+                                title="{{ __('More') }}"
+                            >
+                                @svg('ellipsis', 'fill-current', ['width' => '28'])
+                            </x-circle-button>
+                        </x-slot:trigger>
+
+                        <x-slot:content>
+                            <button
+                                class="block w-full pl-4 pr-4 pt-2 pb-2 bg-white text-gray-400 text-xs text-center font-semibold hover:bg-gray-50 focus:bg-gray-200"
+                                wire:click="togglePopupFor('showSharePopup')"
+                            >
+                                {{ __('Share') }}
+                            </button>
+
+                            @auth
+                                @if ($user->id != auth()->user()?->id)
+                                    <button
+                                        class="block w-full pl-4 pr-4 pt-2 pb-2 bg-white text-red-500 text-xs text-center font-semibold hover:bg-gray-50 focus:bg-gray-200"
+                                        wire:click="togglePopupFor('block')"
+                                    >
+                                        {{ $this->isBlocked ? __ ('Unblock') : __('Block') }}
+                                    </button>
+                                @endif
+                            @endauth
+                        </x-slot:content>
+                    </x-dropdown>
                 </div>
             </div>
 
@@ -104,6 +135,24 @@
 
                 <livewire:profile.update-profile-information-form />
             </x-modal-form-section>
+        @endauth
+    @case('block')
+        @auth
+            <x-dialog-modal model="showPopup" submit="">
+                <x-slot:title>
+                    {{ $this->isBlocked ? __('Unblock :x', ['x' => $this->user->username]) : __('Block :x', ['x' => $this->user->username]) }}
+                </x-slot:title>
+
+                <x-slot:content>
+                    <p>{{ $this->isBlocked ? __('They wil be able to follow you and view your messages.') : __('They won’t be able to see your profile, and public posts. They will also not be able to follow you, and you will not see notifications from them.') }}</p>
+                </x-slot:content>
+
+                <x-slot:footer>
+                    <x-outlined-button wire:click="$toggle('showPopup')">{{ __('Cancel') }}</x-outlined-button>
+
+                    <x-button wire:click="toggleBlockUser">{{ $this->isBlocked ? __('Unblock') : __('Block') }}</x-button>
+                </x-slot:footer>
+            </x-dialog-modal>
         @endauth
         @break
     @endswitch
