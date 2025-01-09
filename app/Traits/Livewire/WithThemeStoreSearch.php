@@ -19,6 +19,16 @@ trait WithThemeStoreSearch
     public static string $searchModel = AppTheme::class;
 
     /**
+     * The column used for the letter index query.
+     *
+     * @return string
+     */
+    protected function letterIndexColumn(): string
+    {
+        return 'name';
+    }
+
+    /**
      * Build a 'search index' query for the given resource.
      *
      * @param EloquentBuilder $query
