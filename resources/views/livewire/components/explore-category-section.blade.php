@@ -1,7 +1,11 @@
+@php
+    $borderIndex = auth()->check() ? 1 : 2;
+@endphp
+
 <div>
     <div wire:init="loadSection">
         @if ($this->exploreCategoryItems->count())
-            <section class="pt-5 pb-8">
+            <section class="pt-5 pb-8 {{ $index != $borderIndex ? 'border-t-2' : '' }}">
                 <x-section-nav class="flex flex-nowrap justify-between mb-5 pl-4 pr-4 sm:px-6">
                     <x-slot:title>
                         @switch($exploreCategory->type)

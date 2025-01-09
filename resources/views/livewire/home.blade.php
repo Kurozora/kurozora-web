@@ -54,7 +54,7 @@
             @foreach ($this->exploreCategories as $index => $exploreCategory)
                 @switch($exploreCategory->type)
                 @case(\App\Enums\ExploreCategoryTypes::MostPopularShows)
-                    <section class="mx-auto max-w-7xl">
+                    <section class="mx-auto max-w-7xl natural-shadow-lg">
                         <div class="no-scrollbar flex snap-mandatory snap-x flex-nowrap overflow-x-scroll xl:rounded-b-2xl">
                             @foreach ($exploreCategory->mostPopular(\App\Models\Anime::class)->exploreCategoryItems as $index => $categoryItem)
                                 <x-lockups.banner-lockup :anime="$categoryItem->model" />
@@ -161,8 +161,8 @@
 {{--                    </section>--}}
                     @break
                 @default
-                    <article class="mx-auto max-w-7xl {{ $index != 1 ? 'border-t-2' : '' }}">
-                        <livewire:components.explore-category-section :exploreCategory="$exploreCategory" />
+                    <article class="mx-auto max-w-7xl">
+                        <livewire:components.explore-category-section :index="$index" :exploreCategory="$exploreCategory" />
                     </article>
                 @endswitch
             @endforeach
