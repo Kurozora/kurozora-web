@@ -94,6 +94,34 @@ picture::before {
   .text-unset {
     text-align: unset;
   }
+
+  .natural-shadow {
+    filter: url('data:image/svg+xml,\
+    <svg xmlns="http://www.w3.org/2000/svg">\
+      <filter id="naturalShadow" x="-5" y="-5" width="10" height="10">\
+        <feOffset in="SourceGraphic" dx="0" dy="4" />\
+        <feGaussianBlur stdDeviation="10" result="blur" />\
+        <feMerge>\
+          <feMergeNode in="blur"/>\
+          <feMergeNode in="SourceGraphic"/>\
+        </feMerge>\
+      </filter>\
+    </svg>#naturalShadow');
+  }
+
+  .natural-shadow-lg {
+    filter: url('data:image/svg+xml,\
+    <svg xmlns="http://www.w3.org/2000/svg">\
+      <filter id="naturalShadow" x="-10" y="-10" width="20" height="20">\
+        <feOffset in="SourceGraphic" dx="0" dy="4" />\
+        <feGaussianBlur stdDeviation="20" result="blur" />\
+        <feMerge>\
+          <feMergeNode in="blur"/>\
+          <feMergeNode in="SourceGraphic"/>\
+        </feMerge>\
+      </filter>\
+    </svg>#naturalShadow');
+  }
 }
 
 /**
