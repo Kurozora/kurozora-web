@@ -52,7 +52,7 @@
         <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6">
             <section class="flex flex-col items-center gap-4 pb-8">
                 <div style="max-width: 320px">
-                    <x-picture class="aspect-square rounded-lg shadow-md overflow-hidden">
+                    <x-picture class="aspect-square rounded-lg natural-shadow overflow-hidden">
                         <img class="w-full h-full object-cover"
                              alt="{{ $song->original_title }} Artwork" title="{{ $song->original_title }}"
                              width="500" height="500"
