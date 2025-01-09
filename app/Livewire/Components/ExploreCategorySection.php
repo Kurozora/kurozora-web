@@ -23,6 +23,13 @@ use Livewire\Component;
 class ExploreCategorySection extends Component
 {
     /**
+     * The index of the section.
+     *
+     * @var int $index
+     */
+    public int $index;
+
+    /**
      * The object containing the explore category data.
      *
      * @var ExploreCategory $exploreCategory
@@ -60,13 +67,16 @@ class ExploreCategorySection extends Component
     /**
      * Prepare the component.
      *
+     * @param int             $index
      * @param ExploreCategory $exploreCategory
-     * @param Genre|null $genre
-     * @param Theme|null $theme
+     * @param Genre|null      $genre
+     * @param Theme|null      $theme
+     *
      * @return void
      */
-    public function mount(ExploreCategory $exploreCategory, ?Genre $genre, ?Theme $theme): void
+    public function mount(int $index, ExploreCategory $exploreCategory, ?Genre $genre, ?Theme $theme): void
     {
+        $this->index = $index;
         $this->exploreCategory = $exploreCategory;
 
         // Cause Livewire inits a new Model when null.
