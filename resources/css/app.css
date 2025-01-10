@@ -122,6 +122,40 @@ picture::before {
       </filter>\
     </svg>#naturalShadow');
   }
+
+  /**
+   * Theme utilities
+   */
+  .bg-primary {
+    background-color: var(--background-color);
+  }
+  .bg-tinted {
+    background-color: var(--tinted-background-color);
+  }
+  .text-primary {
+    color: var(--text-color);
+  }
+  .blur-bg-color {
+    background-color: var(--blur-background-color);
+  }
+  .tint-color {
+    color: var(--tint-color);
+  }
+  .border-color {
+    border-color: var(--border-color);
+  }
+  .tinted-buttonText-color {
+    color: var(--tinted-button-text-color);
+  }
+  .primary-separator-color {
+    color: var(--primary-separator-color);
+  }
+  .secondary-separator-color {
+    color: var(--secondary-separator-color);
+  }
+  .sub-text-color {
+    color: var(--sub-text-color);
+  }
 }
 
 /**
@@ -136,6 +170,18 @@ picture::before {
 
 img:not([src]):not([srcset]) {
   visibility: hidden;
+}
+
+.app-theme {
+  --background-color: #FFFFFF;
+  --text-color: #333333;
+  --tint-color: #FF9300;
+  --tinted-background-color: #FF9300;
+  --blur-background-color: #8b5cf6;
+  --tinted-button-text-color: #FFFFFF;
+  --primary-separator-color: #5b5b5b;
+  --secondary-separator-color: #919191;
+  --sub-text-color: #5b5b5b;
 }
 
 [x-cloak] {
