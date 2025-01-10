@@ -116,7 +116,7 @@
                 >
                     <div
                         class="relative w-full h-full overflow-hidden z-0"
-                        :class="{'lg:rounded-3xl lg:shadow-xl': !theaterMode, '': theaterMode}"
+                        :class="{'lg:rounded-3xl lg:natural-shadow': !theaterMode, '': theaterMode}"
                         style="background-color: {{ $episode->getFirstMedia(\App\Enums\MediaCollection::Banner)?->custom_properties['background_color'] ?? '#000000' }};"
                     >
                         <div class="relative w-full h-full overflow-hidden z-10">
