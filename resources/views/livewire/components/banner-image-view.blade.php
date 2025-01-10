@@ -19,6 +19,6 @@
             <div class="absolute top-0 left-0 h-full w-full"></div>
         </picture>
     @else
-        <div class="inline-block w-full h-40 bg-orange-500 sm:h-80"></div>
+        <div class="inline-block w-full h-40 bg-tinted sm:h-80"></div>
     @endif
 </div>
