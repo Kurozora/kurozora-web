@@ -54,7 +54,14 @@ class UserController extends Controller
                     ->limit(1);
             },
         ])
-            ->loadCount(['followers', 'followedModels as following_count', 'mediaRatings']);
+            ->loadCount(['followers', 'followedModels as following_count', 'mediaRatings'])
+            ->when(auth()->check(), function ($query) use ($user) {
+                $user->loadExists(['followers as isFollowed' => function ($query) {
+                    $query->where('user_id', '=', auth()->user()->id);
+                }]);
+            }, function () use ($user) {
+                return $user;
+            });
 
         // Show profile response
         return JSONResult::success([
