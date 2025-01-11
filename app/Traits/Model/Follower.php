@@ -41,7 +41,7 @@ trait Follower
     public function hasFollowed(Model $model): bool
     {
         return ($this->relationLoaded('follower_follows') ? $this->follower_follows : $this->follower_follows())
-            ->where('user_id', $model->getKey())
+            ->where('following_user_id', $model->getKey())
             ->exists();
     }
 
@@ -65,7 +65,7 @@ trait Follower
     public function follow(Model $model): UserFollow
     {
         $attributes = [
-            'user_id' => $model->getKey(),
+            'following_user_id' => $model->getKey(),
         ];
 
         return $this->follower_follows()
@@ -137,7 +137,7 @@ trait Follower
      */
     public function whereFollowed(string $type): BelongsToMany
     {
-        return $this->belongsToMany($type, UserFollow::class, 'id', 'user_id')
+        return $this->belongsToMany($type, UserFollow::class, 'id', 'following_user_id')
             ->withTimestamps();
     }
 }
