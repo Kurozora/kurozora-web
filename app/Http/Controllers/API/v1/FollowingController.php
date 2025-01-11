@@ -24,15 +24,9 @@ class FollowingController extends Controller
     {
         $authUser = auth()->user();
 
-        $isAlreadyFollowing = $authUser->hasFollowed($user);
+        $isFollowed = !is_bool($authUser->toggleFollow($user));
 
-        if ($isAlreadyFollowing) {
-            // Delete follow
-            $authUser->follow($user);
-        } else {
-            // Follow the user
-            $authUser->unfollow($user);
-
+        if ($isFollowed) {
             // Send notification
             $user->notify(new NewFollower($authUser));
         }
@@ -40,7 +34,7 @@ class FollowingController extends Controller
         // Successful response
         return JSONResult::success([
             'data' => [
-                'isFollowed' => !$isAlreadyFollowing
+                'isFollowed' => $isFollowed
             ]
         ]);
     }
