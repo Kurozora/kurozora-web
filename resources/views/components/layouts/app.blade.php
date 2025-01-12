@@ -24,7 +24,7 @@
     </x-slot:styles>
 
     <!-- Page Heading -->
-    <header class="bg-gray-100 shadow">
+    <header class="bg-secondary shadow">
         <div class="flex max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6">
             {{ $header }}
         </div>

@@ -63,7 +63,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}" />
     </head>
 
-    <body class="bg-white dark:bg-black">
+    <body class="app-theme bg-primary text-primary">
         <svg viewBox="0 0 1 1" style="position: absolute; pointer-events: none; top: -1px; left: -1px; width: 1px; height: 1px;">
             <defs>
                 <linearGradient x1="100%" y1="48.0409738%" x2="0.362473127%" y2="48.0409741%" id="svg-linearGradient-book-cover-1">
@@ -141,7 +141,7 @@
         {{ $scripts ?? '' }}
     </body>
 
-{{--    <body class="flex flex-row bg-white dark:bg-black">--}}
+{{--    <body class="flex flex-row bg-primary text-primary">--}}
 {{--        <livewire:navigation-sidebar />--}}
 
 {{--        <div class="flex flex-col w-full">--}}
