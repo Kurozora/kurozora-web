@@ -25,66 +25,66 @@
             @svg('star_fill', 'fill-current', ['width' => 10])
         </div>
 
-        <div class="w-full h-1 bg-gray-100 rounded-full sm:w-64">
-            <div class="h-1 bg-neutral-750 rounded-full" style="width: {{ $rating1Percentage }}%;"></div>
+        <div class="w-full h-1 bg-secondary rounded-full sm:w-64">
+            <div class="h-1 bg-inverse-primary rounded-full" style="width: {{ $rating1Percentage }}%;"></div>
         </div>
     </div>
 
     <div class="flex gap-2 items-center w-full sm:w-auto" title="{{ __(':x% rated 4 stars', ['x' => $rating2Percentage]) }}">
         <div class="flex gap-1">
 
-            @svg('star_fill', 'fill-current text-white', ['width' => 10])
+            @svg('star_fill', 'fill-current text-transparent', ['width' => 10])
             @svg('star_fill', 'fill-current', ['width' => 10])
             @svg('star_fill', 'fill-current', ['width' => 10])
             @svg('star_fill', 'fill-current', ['width' => 10])
             @svg('star_fill', 'fill-current', ['width' => 10])
         </div>
 
-        <div class="w-full h-1 bg-gray-100 rounded-full sm:w-64">
-            <div class="h-1 bg-neutral-750 rounded-full" style="width: {{ $rating2Percentage }}%;"></div>
+        <div class="w-full h-1 bg-secondary rounded-full sm:w-64">
+            <div class="h-1 bg-inverse-primary rounded-full" style="width: {{ $rating2Percentage }}%;"></div>
         </div>
     </div>
 
     <div class="flex gap-2 items-center w-full sm:w-auto" title="{{ __(':x% rated 3 stars', ['x' => $rating3Percentage]) }}">
         <div class="flex gap-1">
 
-            @svg('star_fill', 'fill-current text-white', ['width' => 10])
-            @svg('star_fill', 'fill-current text-white', ['width' => 10])
+            @svg('star_fill', 'fill-current text-transparent', ['width' => 10])
+            @svg('star_fill', 'fill-current text-transparent', ['width' => 10])
             @svg('star_fill', 'fill-current', ['width' => 10])
             @svg('star_fill', 'fill-current', ['width' => 10])
             @svg('star_fill', 'fill-current', ['width' => 10])
         </div>
 
-        <div class="w-full h-1 bg-gray-100 rounded-full sm:w-64">
-            <div class="h-1 bg-neutral-750 rounded-full" style="width: {{ $rating3Percentage }}%;"></div>
+        <div class="w-full h-1 bg-secondary rounded-full sm:w-64">
+            <div class="h-1 bg-inverse-primary rounded-full" style="width: {{ $rating3Percentage }}%;"></div>
         </div>
     </div>
 
     <div class="flex gap-2 items-center w-full sm:w-auto" title="{{ __(':x% rated 2 stars', ['x' => $rating4Percentage]) }}">
         <div class="flex gap-1">
-            @svg('star_fill', 'fill-current text-white', ['width' => 10])
-            @svg('star_fill', 'fill-current text-white', ['width' => 10])
-            @svg('star_fill', 'fill-current text-white', ['width' => 10])
+            @svg('star_fill', 'fill-current text-transparent', ['width' => 10])
+            @svg('star_fill', 'fill-current text-transparent', ['width' => 10])
+            @svg('star_fill', 'fill-current text-transparent', ['width' => 10])
             @svg('star_fill', 'fill-current', ['width' => 10])
             @svg('star_fill', 'fill-current', ['width' => 10])
         </div>
 
-        <div class="w-full h-1 bg-gray-100 rounded-full sm:w-64">
-            <div class="h-1 bg-neutral-750 rounded-full" style="width: {{ $rating4Percentage }}%;"></div>
+        <div class="w-full h-1 bg-secondary rounded-full sm:w-64">
+            <div class="h-1 bg-inverse-primary rounded-full" style="width: {{ $rating4Percentage }}%;"></div>
         </div>
     </div>
 
     <div class="flex gap-2 items-center w-full sm:w-auto" title="{{ __(':x% rated 1 star', ['x' => $rating5Percentage]) }}">
         <div class="flex gap-1">
-            @svg('star_fill', 'fill-current text-white', ['width' => 10])
-            @svg('star_fill', 'fill-current text-white', ['width' => 10])
-            @svg('star_fill', 'fill-current text-white', ['width' => 10])
-            @svg('star_fill', 'fill-current text-white', ['width' => 10])
+            @svg('star_fill', 'fill-current text-transparent', ['width' => 10])
+            @svg('star_fill', 'fill-current text-transparent', ['width' => 10])
+            @svg('star_fill', 'fill-current text-transparent', ['width' => 10])
+            @svg('star_fill', 'fill-current text-transparent', ['width' => 10])
             @svg('star_fill', 'fill-current', ['width' => 10])
         </div>
 
-        <div class="w-full h-1 bg-gray-100 rounded-full sm:w-64">
-            <div class="h-1 bg-neutral-750 rounded-full" style="width: {{ $rating5Percentage }}%;"></div>
+        <div class="w-full h-1 bg-secondary rounded-full sm:w-64">
+            <div class="h-1 bg-inverse-primary rounded-full" style="width: {{ $rating5Percentage }}%;"></div>
         </div>
     </div>
 </figure>
