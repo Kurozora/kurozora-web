@@ -6,7 +6,7 @@
     @if ($bannerImage)
         <picture
             class="relative w-full overflow-hidden"
-            style="background-color: {{ $bannerImage->custom_properties['background_color'] ?? '#FF9300' }}"
+            style="background-color: {{ $bannerImage->custom_properties['background_color'] ?? 'var(--tint-color)' }}"
         >
             <img
                 class="inline-block w-full h-40 object-cover sm:h-80"
@@ -19,6 +19,6 @@
             <div class="absolute top-0 left-0 h-full w-full"></div>
         </picture>
     @else
-        <div class="inline-block w-full h-40 bg-tinted sm:h-80"></div>
+        <div class="inline-block w-full h-40 bg-tint sm:h-80"></div>
     @endif
 </div>
