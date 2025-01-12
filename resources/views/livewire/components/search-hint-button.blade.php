@@ -18,11 +18,11 @@
                     <p class="font-bold uppercase">{{ __('Quick Search') }}</p>
                     <p class="text-sm">{{ __('Invoke global search without leaving your keyboard.') }}</p>
                     <div class="flex gap-2 pt-1 pb-1">
-                        <p class="pr-1 pl-1 bg-gray-100 font-semibold rounded">{{ __('⌘+K') }}</p>
+                        <p class="pr-1 pl-1 bg-secondary font-semibold rounded">{{ __('⌘+K') }}</p>
                         <p>{{ __('or') }}</p>
-                        <p class="pr-1 pl-1 bg-gray-100 font-semibold rounded">{{ __('ctrl+K') }}</p>
+                        <p class="pr-1 pl-1 bg-secondary font-semibold rounded">{{ __('ctrl+K') }}</p>
                         <p>{{ __('or') }}</p>
-                        <p class="pr-1 pl-1 bg-gray-100 font-semibold rounded">{{ __('/') }}</p>
+                        <p class="pr-1 pl-1 bg-secondary font-semibold rounded">{{ __('/') }}</p>
                     </div>
                 </li>
 
@@ -32,7 +32,7 @@
                     </span>
                     <p class="text-sm">{{ __('Enclose one or more words in double quotes.') }}</p>
                     <div class="flex gap-2 pt-1 pb-1">
-                        <p class="pr-1 pl-1 bg-gray-100 font-semibold rounded">{{ __('"Hunter x Hunter"') }}</p>
+                        <p class="pr-1 pl-1 bg-secondary font-semibold rounded">{{ __('"Hunter x Hunter"') }}</p>
                     </div>
                 </li>
 
@@ -43,7 +43,7 @@
                     </span>
                     <p class="text-sm">{{ __('Append a minus in front of a word you want to leave out.') }}</p>
                     <div class="flex gap-2 pt-1 pb-1">
-                        <p class="pr-1 pl-1 bg-gray-100 font-semibold rounded">{{ __('-death note') }}</p>
+                        <p class="pr-1 pl-1 bg-secondary font-semibold rounded">{{ __('-death note') }}</p>
                     </div>
                 </li>
             </ul>
