@@ -39,7 +39,7 @@
         </section>
 
         <section wire:init="loadPage">
-            @foreach ($this->exploreCategories as $key => $exploreCategory)
+            @foreach ($this->exploreCategories as $index => $exploreCategory)
                 @switch($exploreCategory->type)
                 @case(\App\Enums\ExploreCategoryTypes::MostPopularShows)
                     <section class="pb-8">
@@ -51,7 +51,7 @@
                     </section>
                     @break
                 @default
-                    <livewire:components.explore-category-section :exploreCategory="$exploreCategory" :genre="$genre" />
+                    <livewire:components.explore-category-section :index="$index" :exploreCategory="$exploreCategory" :genre="$genre" />
                 @endswitch
             @endforeach
         </section>
