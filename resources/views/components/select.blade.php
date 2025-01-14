@@ -1,5 +1,5 @@
-@props(['disabled' => false])
+@props(['disabled' => false, 'width' => 'w-full'])
 
-<select {{ $disabled ? 'disabled' : '' }} {!! $attributes->merge(['class' => 'form-select w-full rounded-md shadow-sm focus:border-orange-500 focus:ring-orange-500']) !!}>
+<select {{ $disabled ? 'disabled' : '' }} {!! $attributes->merge(['class' => 'form-select ' . $width . ' bg-secondary text-primary rounded-md shadow-sm focus:border-tint focus:ring-tint']) !!}>
     {{ $slot }}
 </select>
