@@ -16,7 +16,7 @@
             @csrf
 
             <div class="shadow overflow-hidden sm:rounded-md">
-                <div class="pt-4 pr-4 pb-4 pl-4 bg-white sm:p-6">
+                <div class="pt-4 pr-4 pb-4 pl-4 bg-primary sm:p-6">
                     <div class="grid grid-cols-6 gap-6">
                         {{ $form }}
                     </div>
