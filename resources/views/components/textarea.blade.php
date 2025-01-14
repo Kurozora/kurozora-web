@@ -7,8 +7,8 @@
     };
 
     $class = $readonly
-            ? 'form-text w-full max-h-40 border-none outline-none resize-none shadow-none overflow-hidden focus:ring-0'
-            : 'form-text w-full max-h-40 ' . $rounded . ' shadow-sm focus:border-orange-500 focus:ring-orange-500';
+            ? 'form-text w-full max-h-40 bg-secondary border-none outline-none resize-none shadow-none overflow-hidden focus:ring-0'
+            : 'form-text w-full max-h-40 bg-secondary ' . $rounded . ' shadow-sm focus:border-tint focus:ring-tint';
 @endphp
 
 <textarea
