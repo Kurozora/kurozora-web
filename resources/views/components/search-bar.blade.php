@@ -23,13 +23,13 @@
                     <x-slot:content>
                         @if (collect($this->order)->contains('selected', '!=', null))
                             {{-- Reset Order --}}
-                            <button class="block w-full pl-4 pr-4 pt-2 pb-2 bg-gray-100 text-xs text-center text-gray-400 font-semibold hover:bg-gray-50 focus:bg-gray-200" wire:click="resetOrder">
+                            <button class="block w-full pl-4 pr-4 pt-2 pb-2 bg-secondary text-xs text-center text-secondary font-semibold hover:bg-tertiary focus:bg-secondary" wire:click="resetOrder">
                                 {{ __('Reset Order') }}
                             </button>
                         @endif
 
                         @foreach ($this->order as $key => $order)
-                            <div class="block pl-4 pr-4 pt-2 pb-2 bg-gray-100 text-xs text-gray-400 font-semibold">
+                            <div class="block pl-4 pr-4 pt-2 pb-2 bg-secondary text-xs text-secondary font-semibold">
                                 {{ $order['title'] }}
                             </div>
 
@@ -57,14 +57,14 @@
                     <x-slot:content>
                         @if (collect($this->filter)->contains('selected', '!=', null))
                             {{-- Reset Order --}}
-                            <button class="block w-full pl-4 pr-4 pt-2 pb-2 bg-gray-100 text-xs text-center text-gray-400 font-semibold hover:bg-gray-50 focus:bg-gray-200" wire:click="resetFilter">
+                            <button class="block w-full pl-4 pr-4 pt-2 pb-2 bg-secondary text-xs text-center text-secondary font-semibold hover:bg-tertiary focus:bg-secondary" wire:click="resetFilter">
                                 {{ __('Reset Filters') }}
                             </button>
                         @endif
 
                         @foreach ($this->filter as $key => $filter)
                             {{-- Per Page --}}
-                            <div class="block pl-4 pr-4 pt-2 pb-2 bg-gray-100 text-xs text-gray-400 font-semibold">
+                            <div class="block pl-4 pr-4 pt-2 pb-2 bg-secondary text-xs text-secondary font-semibold">
                                 {{ $filter['title'] }}
                             </div>
 
@@ -136,7 +136,7 @@
                         @endforeach
 
                         {{-- Per Page --}}
-                        <div class="block pl-4 pr-4 pt-2 pb-2 bg-gray-100 text-xs text-gray-400 font-semibold">
+                        <div class="block pl-4 pr-4 pt-2 pb-2 bg-secondary text-xs text-secondary font-semibold">
                             {{ __('Per Page') }}
                         </div>
 
@@ -157,15 +157,12 @@
 
             {{-- Lettered Index --}}
             @if (!empty($this->letteredIndex))
-                <select
-                    class="form-select rounded-md shadow-sm focus:border-orange-500 focus:ring-orange-500"
-                    wire:model.live="letter"
-                >
+                <x-select width="" wire:model.live="letter">
                     <option value="">{{ __('All') }}</option>
                     @foreach ($this->letteredIndex as $optionKey => $option)
                         <option value="{{ $option }}">{{ __($optionKey) }}</option>
                     @endforeach
-                </select>
+                </x-select>
             @endif
         </div>
     </div>
