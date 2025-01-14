@@ -1,4 +1,4 @@
-<footer class="bg-gray-100">
+<footer>
     <div class="max-w-7xl mx-auto pl-4 pr-4 pt-10 pb-6 sm:px-6">
         <div class="flex flex-wrap">
             <div class="w-1/2 sm:w-1/3 text-center md:w-1/4 md:text-left lg:w-1/6">
@@ -254,7 +254,7 @@
             <x-hr class="mb-2" />
 
             <div class="w-full text-center md:text-left">
-                <p class="text-sm text-gray-500">Copyright © 2018-{{ now()->year }} {{ config('app.name') }}. {{ __('All rights reserved') }}</p>
+                <p class="text-sm text-secondary">Copyright © 2018-{{ now()->year }} {{ config('app.name') }}. {{ __('All rights reserved') }}</p>
             </div>
         </div>
     </div>
