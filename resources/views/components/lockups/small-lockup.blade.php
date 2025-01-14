@@ -9,7 +9,7 @@
         <div class="flex flex-nowrap gap-2">
             <picture
                 class="relative shrink-0 w-28 h-40 rounded-lg overflow-hidden"
-                style="background-color: {{ $anime->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? '#000000' }};"
+                style="background-color: {{ $anime->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
             >
                 <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $anime->title }} Poster" title="{{ $anime->title }}">
 
@@ -63,7 +63,7 @@
 
                     @if (!empty($anime->mediaStat?->rating_count) && $trackingEnabled)
                         <div class="inline-flex items-center gap-1 my-auto">
-                            <p class="text-sm font-bold text-orange-500">{{ number_format($anime->mediaStat?->rating_average ?? 0, 1) }}</p>
+                            <p class="text-sm font-bold text-tint">{{ number_format($anime->mediaStat?->rating_average ?? 0, 1) }}</p>
 
                             <livewire:components.star-rating :rating="$anime->mediaStat?->rating_average" :star-size="'sm'" :disabled="true" wire:key="{{ uniqid(more_entropy: true) }}" />
                         </div>
@@ -79,7 +79,7 @@
         <div class="flex flex-nowrap gap-2">
             <picture
                 class="relative shrink-0 w-28 h-28 rounded-3xl overflow-hidden"
-                style="background-color: {{ $game->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? '#000000' }};"
+                style="background-color: {{ $game->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
             >
                 <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $game->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $game->title }} Poster" title="{{ $game->title }}">
 
@@ -133,7 +133,7 @@
 
                     @if (!empty($game->mediaStat?->rating_count) && $trackingEnabled)
                         <div class="inline-flex items-center gap-1 my-auto">
-                            <p class="text-sm font-bold text-orange-500">{{ number_format($game->mediaStat?->rating_average ?? 0, 1) }}</p>
+                            <p class="text-sm font-bold text-tint">{{ number_format($game->mediaStat?->rating_average ?? 0, 1) }}</p>
 
                             <livewire:components.star-rating :rating="$game->mediaStat?->rating_average" :star-size="'sm'" :disabled="true" wire:key="{{ uniqid(more_entropy: true) }}" />
                         </div>
@@ -151,7 +151,7 @@
                 <foreignObject width="112" height="160" mask="url(#svg-mask-book-cover)">
                     <img
                         class="h-full w-full object-cover lazyload"
-                        style="background-color: {{ $manga->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? '#000000' }};"
+                        style="background-color: {{ $manga->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
                         data-sizes="auto"
                         data-src="{{ $manga->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp') }}"
                         alt="{{ $manga->title }} Poster"
@@ -213,7 +213,7 @@
 
                     @if (!empty($manga->mediaStat?->rating_count) && $trackingEnabled)
                         <div class="inline-flex items-center gap-1 my-auto">
-                            <p class="text-sm font-bold text-orange-500">{{ number_format($manga->mediaStat?->rating_average ?? 0, 1) }}</p>
+                            <p class="text-sm font-bold text-tint">{{ number_format($manga->mediaStat?->rating_average ?? 0, 1) }}</p>
 
                             <livewire:components.star-rating :rating="$manga->mediaStat?->rating_average" :star-size="'sm'" :disabled="true" wire:key="{{ uniqid(more_entropy: true) }}" />
                         </div>

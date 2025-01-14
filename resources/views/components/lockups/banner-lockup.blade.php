@@ -4,7 +4,7 @@
     <div class="flex flex-nowrap">
         <picture
             class="relative w-screen max-w-7xl aspect-video overflow-hidden"
-            style="background-color: {{ $anime->getFirstMedia(\App\Enums\MediaCollection::Banner)?->custom_properties['background_color'] ?? '#000000' }};"
+            style="background-color: {{ $anime->getFirstMedia(\App\Enums\MediaCollection::Banner)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
         >
             <img
                 class="w-full h-full object-cover lazyload"

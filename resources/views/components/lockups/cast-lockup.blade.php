@@ -11,7 +11,7 @@
         <section class="relative flex">
             <picture
                 class="relative shrink-0 w-28 h-40 mr-2 rounded-lg overflow-hidden"
-                style="background-color: {{ $cast->person?->getFirstMedia(\App\Enums\MediaCollection::Profile)?->custom_properties['background_color'] ?? '#000000' }};"
+                style="background-color: {{ $cast->person?->getFirstMedia(\App\Enums\MediaCollection::Profile)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
             >
                 <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $cast->person?->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/person_poster.webp') }}" alt="{{ $cast->person?->full_name ?? __('Unknown') }} Profile Image" title="{{ $cast->person?->full_name ?? __('Unknown') }}">
 
@@ -26,9 +26,9 @@
         <section class="flex flex-col gap-2 mr-2 {{ $castNamesContainerWidth }}">
             <div class="flex flex-col gap-1">
                 @if (!empty($cast->person))
-                    <a class="text-orange-500 leading-tight line-clamp-2" href="{{ route('people.details', $cast->person) }}">{{ $cast->person->full_name }}</a>
+                    <a class="text-tint leading-tight line-clamp-2" href="{{ route('people.details', $cast->person) }}">{{ $cast->person->full_name }}</a>
                 @else
-                    <p class="text-orange-500 leading-tight line-clamp-2">{{ __('Unknown') }}</p>
+                    <p class="text-tint leading-tight line-clamp-2">{{ __('Unknown') }}</p>
                 @endif
                 <p class="text-xs leading-tight opacity-75 line-clamp-2">{{ __('Voice actor') }}</p>
             </div>
@@ -42,7 +42,7 @@
         <section class="relative flex">
             <picture
                 class="relative shrink-0 w-28 h-40 rounded-lg overflow-hidden"
-                style="background-color: {{ $cast->character->getFirstMedia(\App\Enums\MediaCollection::Profile)?->custom_properties['background_color'] ?? '#000000' }};"
+                style="background-color: {{ $cast->character->getFirstMedia(\App\Enums\MediaCollection::Profile)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
             >
                 <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $cast->character->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/person_poster.webp') }}" alt="{{ $cast->character->name }} Profile Image" title="{{ $cast->character->name }}">
 

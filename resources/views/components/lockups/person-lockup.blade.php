@@ -10,7 +10,7 @@
     <div class="flex flex-col">
         <picture
             class="relative aspect-square rounded-full shadow-md overflow-hidden"
-            style="background-color: {{ $person->getFirstMedia(\App\Enums\MediaCollection::Profile)?->custom_properties['background_color'] ?? '#000000' }};"
+            style="background-color: {{ $person->getFirstMedia(\App\Enums\MediaCollection::Profile)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
         >
             <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $person->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/person_poster.webp') }}" alt="{{ $person->full_name }} Profile Image" title="{{ $person->full_name }}">
 
@@ -31,7 +31,7 @@
             </div>
 
             @if (!empty($staffRole))
-                <p class="text-sm text-gray-500 text-center leading-tight line-clamp-2">{{ $staffRole }}</p>
+                <p class="text-sm text-secondary text-center leading-tight line-clamp-2">{{ $staffRole }}</p>
             @endif
         </div>
     </div>

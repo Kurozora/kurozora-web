@@ -8,7 +8,7 @@
     <div class="flex flex-nowrap">
         <picture
             class="relative w-full aspect-video rounded-lg overflow-hidden"
-            style="background-color: {{ $platform->getFirstMedia(\App\Enums\MediaCollection::Banner)?->custom_properties['background_color'] ?? '#000000' }};"
+            style="background-color: {{ $platform->getFirstMedia(\App\Enums\MediaCollection::Banner)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
         >
             <img class="w-full h-full object-cover lazyload"
                  data-sizes="auto"

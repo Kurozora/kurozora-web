@@ -8,7 +8,7 @@
     <div class="flex flex-nowrap">
         <picture
             class="relative w-full aspect-video rounded-lg overflow-hidden"
-            style="background-color: {{ $episode->getFirstMedia(\App\Enums\MediaCollection::Banner)?->custom_properties['background_color'] ?? '#000000' }};"
+            style="background-color: {{ $episode->getFirstMedia(\App\Enums\MediaCollection::Banner)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
         >
             <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $episode->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? asset('images/static/placeholders/episode_banner.webp') }}" alt="{{ $episode->title }} Banner" title="{{ $episode->title }}">
 
@@ -36,7 +36,7 @@
                 </a>
 
                 <div class="mt-1">
-                    <a class="text-xs text-orange-500 font-semibold line-clamp-2" href="{{ route('anime.details', $episode->anime) }}">{{ $episode->anime->title }}</a>
+                    <a class="text-xs text-tint font-semibold line-clamp-2" href="{{ route('anime.details', $episode->anime) }}">{{ $episode->anime->title }}</a>
 
                     <p class="text-xs line-clamp-2" title="{{ $episode->started_at?->format('F d, Y H:i:s') }}">{{ __(':x views', ['x' => number_format($episode->view_count)]) . ' · ' . $episode->started_at?->toFormattedDateString() }}</p>
                 </div>

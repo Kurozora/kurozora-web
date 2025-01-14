@@ -11,7 +11,7 @@
         <div class="flex items-center">
             <picture
                 class="relative shrink-0 w-16 aspect-square rounded-full overflow-hidden"
-                style="background-color: {{ $user->getFirstMedia(\App\Enums\MediaCollection::Profile)?->custom_properties['background_color'] ?? '#000000' }};"
+                style="background-color: {{ $user->getFirstMedia(\App\Enums\MediaCollection::Profile)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
             >
                 <img
                     class="w-full h-full object-cover lazyload"

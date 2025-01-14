@@ -10,7 +10,7 @@
             <div class="flex flex-nowrap gap-2">
                 <picture
                     class="relative shrink-0 w-28 h-40 rounded-lg overflow-hidden"
-                    style="background-color: {{ $mediaRating->model->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? '#000000' }};"
+                    style="background-color: {{ $mediaRating->model->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
                 >
                     <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $mediaRating->model->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $mediaRating->model->title }} Poster" title="{{ $mediaRating->model->title }}">
 
@@ -23,7 +23,7 @@
                     <div class="flex justify-between gap-2 w-full">
                         <p class="inline-flex items-center text-sm font-semibold break-all overflow-hidden">{{ $mediaRating->model->title }}</p>
 
-                        <p class="text-sm text-gray-500 whitespace-nowrap" title="{{ $mediaRating->created_at->toFormattedDateString() }}">{{ $mediaRating->created_at->toFormattedDateString() }}</p>
+                        <p class="text-sm text-secondary whitespace-nowrap" title="{{ $mediaRating->created_at->toFormattedDateString() }}">{{ $mediaRating->created_at->toFormattedDateString() }}</p>
                     </div>
 
                     <div>
@@ -44,7 +44,7 @@
             <div class="flex flex-nowrap gap-2">
                 <picture
                     class="relative shrink-0 w-28 aspect-square rounded-full overflow-hidden"
-                    style="background-color: {{ $mediaRating->model->getFirstMedia(\App\Enums\MediaCollection::Profile)?->custom_properties['background_color'] ?? '#000000' }};"
+                    style="background-color: {{ $mediaRating->model->getFirstMedia(\App\Enums\MediaCollection::Profile)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
                 >
                     <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $mediaRating->model->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/person_poster.webp') }}" alt="{{ $mediaRating->model->name }} Profile Image" title="{{ $mediaRating->model->name }}">
 
@@ -57,7 +57,7 @@
                     <div class="flex justify-between gap-2 w-full">
                         <p class="inline-flex items-center text-sm font-semibold break-all overflow-hidden">{{ $mediaRating->model->name }}</p>
 
-                        <p class="text-sm text-gray-500 whitespace-nowrap" title="{{ $mediaRating->created_at->toFormattedDateString() }}">{{ $mediaRating->created_at->toFormattedDateString() }}</p>
+                        <p class="text-sm text-secondary whitespace-nowrap" title="{{ $mediaRating->created_at->toFormattedDateString() }}">{{ $mediaRating->created_at->toFormattedDateString() }}</p>
                     </div>
 
                     <div>
@@ -78,7 +78,7 @@
             <div class="flex flex-nowrap gap-2">
                 <picture
                     class="relative shrink-0 w-28 aspect-video rounded-lg overflow-hidden"
-                    style="background-color: {{ $mediaRating->model->getFirstMedia(\App\Enums\MediaCollection::Banner)?->custom_properties['background_color'] ?? '#000000' }};"
+                    style="background-color: {{ $mediaRating->model->getFirstMedia(\App\Enums\MediaCollection::Banner)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
                 >
                     <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $mediaRating->model->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? asset('images/static/placeholders/episode_banner.webp') }}" alt="{{ $mediaRating->model->title }} Banner" title="{{ $mediaRating->model->title }}">
 
@@ -91,7 +91,7 @@
                     <div class="flex justify-between gap-2 w-full">
                         <p class="inline-flex items-center text-sm font-semibold break-all overflow-hidden">{{ $mediaRating->model->title }}</p>
 
-                        <p class="text-sm text-gray-500 whitespace-nowrap" title="{{ $mediaRating->created_at->toFormattedDateString() }}">{{ $mediaRating->created_at->toFormattedDateString() }}</p>
+                        <p class="text-sm text-secondary whitespace-nowrap" title="{{ $mediaRating->created_at->toFormattedDateString() }}">{{ $mediaRating->created_at->toFormattedDateString() }}</p>
                     </div>
 
                     <div>
@@ -112,7 +112,7 @@
             <div class="flex flex-nowrap gap-2">
                 <picture
                     class="relative shrink-0 w-28 h-28 rounded-3xl overflow-hidden"
-                    style="background-color: {{ $mediaRating->model->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? '#000000' }};"
+                    style="background-color: {{ $mediaRating->model->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
                 >
                     <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $mediaRating->model->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $mediaRating->model->title }} Poster" title="{{ $mediaRating->model->title }}">
 
@@ -125,7 +125,7 @@
                     <div class="flex justify-between gap-2 w-full">
                         <p class="inline-flex items-center text-sm font-semibold break-all overflow-hidden">{{ $mediaRating->model->title }}</p>
 
-                        <p class="text-sm text-gray-500 whitespace-nowrap" title="{{ $mediaRating->created_at->toFormattedDateString() }}">{{ $mediaRating->created_at->toFormattedDateString() }}</p>
+                        <p class="text-sm text-secondary whitespace-nowrap" title="{{ $mediaRating->created_at->toFormattedDateString() }}">{{ $mediaRating->created_at->toFormattedDateString() }}</p>
                     </div>
 
                     <div>
@@ -146,7 +146,7 @@
             <div class="flex flex-nowrap gap-2">
                 <svg
                     class="relative shrink-0 w-28 h-40 overflow-hidden"
-                    style="background-color: {{ $mediaRating->model->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? '#000000' }};"
+                    style="background-color: {{ $mediaRating->model->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
                 >
                     <foreignObject width="112" height="160" mask="url(#svg-mask-book-cover)">
                         <img class="h-full w-full object-cover lazyload" data-sizes="auto" data-src="{{ $mediaRating->model->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $mediaRating->model->title }} Poster" title="{{ $mediaRating->model->title }}" />
@@ -165,7 +165,7 @@
                     <div class="flex justify-between gap-2 w-full">
                         <p class="inline-flex items-center text-sm font-semibold break-all overflow-hidden">{{ $mediaRating->model->title }}</p>
 
-                        <p class="text-sm text-gray-500 whitespace-nowrap" title="{{ $mediaRating->created_at->toFormattedDateString() }}">{{ $mediaRating->created_at->toFormattedDateString() }}</p>
+                        <p class="text-sm text-secondary whitespace-nowrap" title="{{ $mediaRating->created_at->toFormattedDateString() }}">{{ $mediaRating->created_at->toFormattedDateString() }}</p>
                     </div>
 
                     <div>
@@ -186,7 +186,7 @@
             <div class="flex flex-nowrap gap-2">
                 <picture
                     class="relative shrink-0 w-28 aspect-square rounded-full overflow-hidden"
-                    style="background-color: {{ $mediaRating->model->getFirstMedia(\App\Enums\MediaCollection::Profile)?->custom_properties['background_color'] ?? '#000000' }};"
+                    style="background-color: {{ $mediaRating->model->getFirstMedia(\App\Enums\MediaCollection::Profile)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
                 >
                     <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $mediaRating->model->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/person_poster.webp') }}" alt="{{ $mediaRating->model->full_name }} Profile Image" title="{{ $mediaRating->model->full_name }}">
 
@@ -199,7 +199,7 @@
                     <div class="flex justify-between gap-2 w-full">
                         <p class="inline-flex items-center text-sm font-semibold break-all overflow-hidden">{{ $mediaRating->model->full_name }}</p>
 
-                        <p class="text-sm text-gray-500 whitespace-nowrap" title="{{ $mediaRating->created_at->toFormattedDateString() }}">{{ $mediaRating->created_at->toFormattedDateString() }}</p>
+                        <p class="text-sm text-secondary whitespace-nowrap" title="{{ $mediaRating->created_at->toFormattedDateString() }}">{{ $mediaRating->created_at->toFormattedDateString() }}</p>
                     </div>
 
                     <div>
@@ -256,7 +256,7 @@
                         <div class="flex flex-col justify-center items-center h-full">
                             @if (!empty($mediaRating->model->am_id))
                                 <button
-                                    class="inline-flex items-center pt-3 pr-3 pb-3 pl-3 bg-white/60 backdrop-blur border border-transparent rounded-full font-semibold text-xs text-gray-500 uppercase tracking-widest shadow-md hover:opacity-75 active:opacity-50 focus:outline-none disabled:bg-gray-100 disabled:text-gray-300 disabled:cursor-default disabled:opacity-100 transition ease-in-out duration-150"
+                                    class="inline-flex items-center pt-3 pr-3 pb-3 pl-3 bg-white/60 backdrop-blur border border-transparent rounded-full font-semibold text-xs text-secondary uppercase tracking-widest shadow-md hover:opacity-75 active:opacity-50 focus:outline-none disabled:bg-gray-100 disabled:text-gray-300 disabled:cursor-default disabled:opacity-100 transition ease-in-out duration-150"
                                     x-on:click="await musicManager?.playSong(song)"
                                 >
                                     <template x-if="musicManager?.isPlaying && musicManager?.currentMusicID === '{{ $mediaRating->model->am_id }}'">
@@ -278,7 +278,7 @@
                     <div class="flex justify-between gap-2 w-full">
                         <p class="inline-flex items-center text-sm font-semibold break-all overflow-hidden" x-text="songTitle">{{ $mediaRating->model->title }}</p>
 
-                        <p class="text-sm text-gray-500 whitespace-nowrap" title="{{ $mediaRating->created_at->toFormattedDateString() }}">{{ $mediaRating->created_at->toFormattedDateString() }}</p>
+                        <p class="text-sm text-secondary whitespace-nowrap" title="{{ $mediaRating->created_at->toFormattedDateString() }}">{{ $mediaRating->created_at->toFormattedDateString() }}</p>
                     </div>
 
                     <div>
@@ -299,7 +299,7 @@
             <div class="flex flex-nowrap gap-2">
                 <picture
                     class="relative shrink-0 w-28 rounded-full overflow-hidden"
-                    style="background-color: {{ $mediaRating->model->getFirstMedia(\App\Enums\MediaCollection::Profile)?->custom_properties['background_color'] ?? '#000000' }};"
+                    style="background-color: {{ $mediaRating->model->getFirstMedia(\App\Enums\MediaCollection::Profile)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
                 >
                     <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $mediaRating->model->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/studio_profile.webp') }}" alt="{{ $mediaRating->model->name }} Logo" title="{{ $mediaRating->model->name }}">
 
@@ -312,7 +312,7 @@
                     <div class="flex justify-between gap-2 w-full">
                         <p class="inline-flex items-center text-sm font-semibold break-all overflow-hidden">{{ $mediaRating->model->name }}</p>
 
-                        <p class="text-sm text-gray-500 whitespace-nowrap" title="{{ $mediaRating->created_at->toFormattedDateString() }}">{{ $mediaRating->created_at->toFormattedDateString() }}</p>
+                        <p class="text-sm text-secondary whitespace-nowrap" title="{{ $mediaRating->created_at->toFormattedDateString() }}">{{ $mediaRating->created_at->toFormattedDateString() }}</p>
                     </div>
 
                     <div>

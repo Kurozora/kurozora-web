@@ -15,23 +15,23 @@
                 <path id="path4096"
                       d="M864.462 430.852c0 237.953-193.517 430.852-432.231 430.852C193.516 861.704 0 668.805 0 430.852 0 192.899 193.516 0 432.231 0c238.714 0 432.231 192.899 432.231 430.852Zm-803.9497 0c0 204.64 166.4237 370.533 371.7187 370.533 205.294 0 371.718-165.893 371.718-370.533 0-204.64-166.424-370.5327-371.718-370.5327-205.295 0-371.7187 165.8927-371.7187 370.5327Z" />
             </mask>
-            <path id="path4099" stroke="#ff9300" stroke-linejoin="round" stroke-width="119.589"
+            <path id="path4099" stroke="var(--tint-color)" stroke-linejoin="round" stroke-width="119.589"
                   d="M864.462 430.852c0 237.953-193.517 430.852-432.231 430.852C193.516 861.704 0 668.805 0 430.852 0 192.899 193.516 0 432.231 0c238.714 0 432.231 192.899 432.231 430.852Zm-803.9497 0c0 204.64 166.4237 370.533 371.7187 370.533 205.294 0 371.718-165.893 371.718-370.533 0-204.64-166.424-370.5327-371.718-370.5327-205.295 0-371.7187 165.8927-371.7187 370.5327z"
                   mask="url(#path-1-inside-1_1454_36805)"
-                  style="display: inline; stroke: #ff9300; stroke-opacity: 1;" />
+                  style="display: inline; stroke: var(--tint-color); stroke-opacity: 1;" />
             <mask id="mask0_1454_36805" width="865" height="862" x="0" y="0" maskUnits="userSpaceOnUse"
                   style="mask-type: alpha;">
-                <mask id="path-2-inside-2_1454_36805" fill="#ff9300">
+                <mask id="path-2-inside-2_1454_36805" fill="var(--tint-color)">
                     <path id="path4101"
                           d="M864.462 430.852c0 237.953-193.517 430.852-432.231 430.852C193.516 861.704 0 668.805 0 430.852 0 192.899 193.516 0 432.231 0c238.714 0 432.231 192.899 432.231 430.852Zm-803.9497 0c0 204.64 166.4237 370.533 371.7187 370.533 205.294 0 371.718-165.893 371.718-370.533 0-204.64-166.424-370.5327-371.718-370.5327-205.295 0-371.7187 165.8927-371.7187 370.5327Z" />
                 </mask>
-                <path id="path4104" stroke="#ff9300" stroke-linejoin="round" stroke-width="119.589"
+                <path id="path4104" stroke="var(--tint-color)" stroke-linejoin="round" stroke-width="119.589"
                       d="M864.462 430.852c0 237.953-193.517 430.852-432.231 430.852C193.516 861.704 0 668.805 0 430.852 0 192.899 193.516 0 432.231 0c238.714 0 432.231 192.899 432.231 430.852Zm-803.9497 0c0 204.64 166.4237 370.533 371.7187 370.533 205.294 0 371.718-165.893 371.718-370.533 0-204.64-166.424-370.5327-371.718-370.5327-205.295 0-371.7187 165.8927-371.7187 370.5327Z"
-                      mask="url(#path-2-inside-2_1454_36805)" style="stroke: #ff9300; stroke-opacity: 1;" />
+                      mask="url(#path-2-inside-2_1454_36805)" style="stroke: var(--tint-color); stroke-opacity: 1;" />
             </mask>
             <g id="g4114" mask="url(#mask0_1454_36805)">
                 <g id="g4112" filter="url(#filter0_d_1454_36805)">
-                    <mask id="path-3-inside-3_1454_36805" fill="#ff9300">
+                    <mask id="path-3-inside-3_1454_36805" fill="var(--tint-color)">
                         <path id="path4107"
                               d="M633.222 83.8497c8.355-14.4251 26.911-19.4647 40.741-10.1644C752.516 126.507 811.734 203.797 842.038 293.875c33.515 99.625 29.351 208.024-11.707 304.802-41.059 96.778-116.182 175.264-211.235 220.691-95.053 45.426-203.483 54.662-304.89 25.969C212.8 816.644 125.407 752 68.4726 663.568 11.5377 575.137-11.0149 469.013 5.05795 365.165 21.1308 261.317 74.7212 166.904 155.746 99.6883 229.012 38.9098 320.142 4.15851 414.826.356495 431.494-.312791 444.612 13.6683 444.118 30.302c-.494 16.6651-14.469 29.6592-31.159 30.5227-79.883 4.1328-156.607 33.8797-218.505 85.2273-69.681 57.805-115.7686 139.001-129.5913 228.31-13.8227 89.31 5.5726 180.576 54.5363 256.627C168.363 707.04 243.52 762.634 330.73 787.31c87.21 24.676 180.46 16.734 262.206-22.333 81.745-39.067 146.351-106.565 181.661-189.794 35.31-83.23 38.891-176.453 10.068-262.13-25.609-76.126-75.232-141.632-141.05-186.985-13.724-9.457-18.748-27.7932-10.393-42.2183Z" />
                     </mask>
@@ -45,8 +45,8 @@
             <defs id="defs4138">
                 <linearGradient id="paint0_linear_1454_36805" x1="648.07965" x2="490.547" y1=".32203391" y2="132.622"
                                 gradientUnits="userSpaceOnUse">
-                    <stop id="stop4133" offset="0" stop-color="#ff9300" stop-opacity="0"></stop>
-                    <stop id="stop4135" offset="1" stop-color="#ff9300" stop-opacity="1"></stop>
+                    <stop id="stop4133" offset="0" stop-color="var(--tint-color)" stop-opacity="0"></stop>
+                    <stop id="stop4135" offset="1" stop-color="var(--tint-color)" stop-opacity="1"></stop>
                 </linearGradient>
                 <filter id="filter0_d_1454_36805" width="922.344" height="919.26" x="-7.85433" y="-28.6087"
                         color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
@@ -82,7 +82,7 @@
                                 <a class="flex w-1/3 mt-auto" href="{{ route('anime.details', $recapItem->model) }}" wire:navigate style="min-height: 108px; aspect-ratio: 3/4.23;">
                                     <picture
                                         class="relative w-full rounded-lg overflow-hidden"
-                                        style="background-color: {{ $recapItem->model->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? '#000000' }};"
+                                        style="background-color: {{ $recapItem->model->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
                                     >
                                         <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $recapItem->model->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $recapItem->model->title }} Poster" title="{{ $recapItem->model->title }}">
 
@@ -98,7 +98,7 @@
                                 <a class="flex w-1/3 mt-auto aspect-video" href="{{ route('anime.details', $recapItem->model) }}" wire:navigate style="min-height: 108px;">
                                     <picture
                                         class="relative w-full rounded-lg overflow-hidden"
-                                        style="background-color: {{ $recapItem->model->getFirstMedia(\App\Enums\MediaCollection::Banner)?->custom_properties['background_color'] ?? '#000000' }};"
+                                        style="background-color: {{ $recapItem->model->getFirstMedia(\App\Enums\MediaCollection::Banner)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
                                     >
                                         <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $recapItem->model->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $recapItem->model->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $recapItem->model->title }} Banner" title="{{ $recapItem->model->title }}">
                                         <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-lg"></div>
@@ -116,7 +116,7 @@
                         <a class="flex w-1/3 mt-auto aspect-square" href="{{ route('games.details', $recapItem->model) }}" wire:navigate style="min-height: 108px;">
                             <picture
                                 class="relative aspect-square rounded-3xl overflow-hidden"
-                                style="background-color: {{ $recapItem->model->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? '#000000' }};"
+                                style="background-color: {{ $recapItem->model->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
                             >
                                 <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $recapItem->model->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $recapItem->model->title }} Poster" title="{{ $recapItem->model->title }}">
 
@@ -149,7 +149,7 @@
                             <a class="flex w-1/3 mt-auto" href="{{ route('anime.details', $recapItem->model) }}" wire:navigate style="min-height: 108px; aspect-ratio: 3/4.23;">
                                 <picture
                                     class="relative w-full rounded-lg overflow-hidden"
-                                    style="background-color: {{ $recapItem->model->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? '#000000' }};"
+                                    style="background-color: {{ $recapItem->model->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
                                 >
                                     <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $recapItem->model->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $recapItem->model->title }} Poster" title="{{ $recapItem->model->title }}">
 
