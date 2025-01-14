@@ -1,4 +1,4 @@
-<section class="pt-5 pb-8 border-t-2">
+<section class="pt-5 pb-8 border-t-2 border-primary">
     <div class="flex gap-2 justify-between mb-5">
         <div>
             <p class="bg-secondary rounded-md" style="width: 168px; height: 28px"></p>
