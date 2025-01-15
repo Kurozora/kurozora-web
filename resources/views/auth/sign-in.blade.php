@@ -11,7 +11,7 @@
     </x-slot:meta>
 
     <x-slot:header>
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-xl text-primary leading-tight">
             {{ __('Kurozora Account') }}
         </h2>
     </x-slot:header>
@@ -97,8 +97,8 @@
 
                 <section class="flex flex-wrap justify-between gap-2 mt-4">
                     <label for="remember_me" class="flex items-center">
-                        <input id="remember_me" type="checkbox" class="h-4 w-4 rounded focus:ring-0 focus:ring-offset-0 text-orange-500 focus:border-orange-300" name="remember">
-                        <span class="ml-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
+                        <input id="remember_me" type="checkbox" class="h-4 w-4 rounded focus:ring-0 focus:ring-offset-0 text-tint focus:border-tint" name="remember">
+                        <span class="ml-2 text-sm text-secondary">{{ __('Remember me') }}</span>
                     </label>
 
                     @if (Route::has('password.request'))
@@ -141,7 +141,7 @@
 
         {{-- Legal --}}
         <section class="space-y-1 mt-16 text-center text-sm">
-            <p class="text-gray-500">{{ __('Your Kurozora Account information is used to enable Kurozora services when you sign in. Kurozora services includes the library where you can keep track of the shows you are interested in.') }}</p>
+            <p class="text-secondary">{{ __('Your Kurozora Account information is used to enable Kurozora services when you sign in. Kurozora services includes the library where you can keep track of the shows you are interested in.') }}</p>
             <x-link href="{{ route('legal.privacy-policy') }}" wire:navigate>{{ __('See how your data is managed...') }}</x-link>
         </section>
     </div>

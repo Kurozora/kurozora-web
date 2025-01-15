@@ -4,7 +4,7 @@
     </x-slot:title>
 
     <x-slot:header>
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-xl text-primary leading-tight">
             {{ __('Kurozora Account') }}
         </h2>
     </x-slot:header>
@@ -106,7 +106,7 @@
 
         {{-- Legal --}}
         <section class="space-y-1 mt-16 text-center text-sm">
-            <p class="text-gray-500">{{ __('Your Kurozora Account information is used to enable Kurozora services when you sign in. Kurozora services includes the library where you can keep track of the shows you are interested in.') }}</p>
+            <p class="text-secondary">{{ __('Your Kurozora Account information is used to enable Kurozora services when you sign in. Kurozora services includes the library where you can keep track of the shows you are interested in.') }}</p>
             <x-link href="{{ route('legal.privacy-policy') }}" wire:navigate>{{ __('See how your data is managed...') }}</x-link>
         </section>
     </div>

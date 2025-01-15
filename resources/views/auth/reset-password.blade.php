@@ -4,7 +4,7 @@
     </x-slot:title>
 
     <x-slot:header>
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-xl text-primary leading-tight">
             {{ __('Kurozora Account') }}
         </h2>
     </x-slot:header>

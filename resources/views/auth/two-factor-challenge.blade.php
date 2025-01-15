@@ -4,7 +4,7 @@
     </x-slot:title>
 
     <x-slot:header>
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-xl text-primary leading-tight">
             {{ __('Kurozora Account') }}
         </h2>
     </x-slot:header>
@@ -12,12 +12,12 @@
     <div x-data="{ recovery: false }"
          class="flex flex-col justify-center max-w-prose w-screen h-full mx-auto pl-4 pr-4 py-6 sm:px-6"
     >
-        <div class="mb-5 text-center text-gray-600" x-show="!recovery" x-cloak="">
+        <div class="mb-5 text-center text-secondary" x-show="!recovery" x-cloak="">
             <h1 class="text-2xl font-bold">{{ __('Enter Authorization Code') }}</h1>
             <p>{{ __('Please confirm access to your account by entering the authentication code provided by your authenticator application.') }}</p>
         </div>
 
-        <div class="mb-5 text-center text-gray-600" x-show="recovery" x-cloak="">
+        <div class="mb-5 text-center text-secondary" x-show="recovery" x-cloak="">
             <h1 class="text-2xl font-bold">{{ __('Enter Recovery Code') }}</h1>
             <p>{{ __('Please confirm access to your account by entering one of your emergency recovery codes.') }}</p>
         </div>
