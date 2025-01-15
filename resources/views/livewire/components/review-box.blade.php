@@ -16,7 +16,7 @@
             </div>
 
             <div class="flex flex-col gap-2">
-                <p class="text-gray-500 text-sm font-semibold">{{ __('Private Notes') }}</p>
+                <p class="text-secondary text-sm font-semibold">{{ __('Private Notes') }}</p>
 
                 <x-textarea class="block w-full h-48 mt-1 resize-none" placeholder="{{ __('What’s on your mind?') }}" wire:model="noteText"></x-textarea>
             </div>

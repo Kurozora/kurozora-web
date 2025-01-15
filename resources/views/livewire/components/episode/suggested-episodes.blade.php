@@ -21,15 +21,15 @@
     @elseif (!$readyToLoad)
         <section>
             <div class="flex gap-4 justify-between flex-wrap">
-                <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
-                <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
-                <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
-                <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
-                <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
-                <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
-                <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
-                <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
-                <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
+                <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
+                <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
+                <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
+                <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
+                <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
+                <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
+                <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
+                <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
                 <div class="w-64 md:w-80 flex-grow"></div>
                 <div class="w-64 md:w-80 flex-grow"></div>
             </div>

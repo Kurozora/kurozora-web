@@ -5,7 +5,7 @@
     }"
 >
     {{-- Header --}}
-    <div class="w-full bg-gray-50">
+    <div class="w-full">
         <div class="flex justify-between gap-4 pt-2 pr-2 pb-2 pl-2">
             <div class="flex gap-2" style="width: 44px;">
                 @hasrole('superAdmin')
@@ -36,7 +36,7 @@
                     </x-slot:trigger>
 
                     <x-slot:content>
-                        <div class="block pl-4 pr-4 pt-2 pb-2 bg-gray-100 text-xs text-gray-400 font-semibold">
+                        <div class="block pl-4 pr-4 pt-2 pb-2 text-xs text-secondary font-semibold">
                             {{ __('Display') }}
                         </div>
 
@@ -48,7 +48,7 @@
                             @endforeach
                         </div>
 
-                        <div class="block pl-4 pr-4 pt-2 pb-2 bg-gray-100 text-xs text-gray-400 font-semibold">
+                        <div class="block pl-4 pr-4 pt-2 pb-2 text-xs text-secondary font-semibold">
                             {{ __('Time') }}
                         </div>
 
@@ -82,7 +82,7 @@
     </div>
 
     {{-- Footer --}}
-    <div class="bg-gray-50 z-10">
+    <div class="z-10">
         <x-hr />
 
         <form
@@ -113,7 +113,7 @@
                 <x-emoji id="{{ $this->getID() }}" />
 
                 <button
-                    class="flex justify-center text-orange-500"
+                    class="flex justify-center text-tint"
                     style="width: 44px; height: 44px;"
                     wire:click="postComment"
                     x-bind:disabled="!comment"
