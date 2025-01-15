@@ -117,7 +117,7 @@
                     <div
                         class="relative w-full h-full overflow-hidden z-0"
                         :class="{'lg:rounded-3xl lg:natural-shadow': !theaterMode, '': theaterMode}"
-                        style="background-color: {{ $episode->getFirstMedia(\App\Enums\MediaCollection::Banner)?->custom_properties['background_color'] ?? '#000000' }};"
+                        style="background-color: {{ $episode->getFirstMedia(\App\Enums\MediaCollection::Banner)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
                     >
                         <div class="relative w-full h-full overflow-hidden z-10">
                             @if ($this->video)
@@ -125,7 +125,7 @@
                             @else
                                 <x-picture
                                     class="h-full"
-                                    style="background-color: {{ $episode->getFirstMedia(\App\Enums\MediaCollection::Banner)?->custom_properties['background_color'] ?? '#000000' }};"
+                                    style="background-color: {{ $episode->getFirstMedia(\App\Enums\MediaCollection::Banner)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
                                 >
                                     <img class="w-full h-full aspect-video object-cover lazyload" data-sizes="auto" data-src="{{ $episode->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $episode->title }} Banner" title="{{ $episode->title }}">
                                 </x-picture>
@@ -163,7 +163,7 @@
                         <div class="flex flex-nowrap">
                             <picture
                                 class="relative min-w-[100px] max-w-[100px] min-h-[150px] max-h-[150px] mr-2 rounded-lg overflow-hidden"
-                                style="background-color: {{ $season->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? '#000000' }};"
+                                style="background-color: {{ $season->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
                             >
                                 <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $season->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $season->title }} Poster" title="{{ $season->title }}">
                                 <div class="absolute top-0 left-0 h-full w-full ring-1 ring-gray-100 ring-opacity-25 ring-inset rounded-lg"></div>
@@ -244,13 +244,13 @@
 
                                 <x-slot:content>
                                     <button
-                                        class="block w-full pl-4 pr-4 pt-2 pb-2 bg-white text-gray-400 text-xs text-center font-semibold hover:bg-gray-50 focus:bg-gray-200"
+                                        class="block w-full pl-4 pr-4 pt-2 pb-2 bg-secondary text-primary text-xs text-center font-semibold hover:bg-tertiary focus:bg-secondary"
                                         wire:click="$toggle('showSharePopup')"
                                     >
                                         {{ __('Share') }}
                                     </button>
 
-{{--                                    <button class="block w-full pl-4 pr-4 pt-2 pb-2 bg-white text-red-500 text-xs text-center font-semibold hover:bg-gray-50 focus:bg-gray-200">--}}
+{{--                                    <button class="block w-full pl-4 pr-4 pt-2 pb-2 bg-secondary text-red-500 text-xs text-center font-semibold hover:bg-tertiary focus:bg-secondary">--}}
 {{--                                        {{ __('Report') }}--}}
 {{--                                    </button>--}}
                                 </x-slot:content>
@@ -262,18 +262,18 @@
                 <section id="badges" class="flex flex-row flex-nowrap whitespace-nowrap justify-between text-center pl-4 pr-4 overflow-x-scroll no-scrollbar">
                     <div id="ratingBadge" class="flex-grow pr-12">
                         <a href="#ratingsAndReviews">
-                            <p class="inline-flex font-bold text-orange-500">
+                            <p class="inline-flex font-bold text-tint">
                                 {{ number_format($episode->mediaStat->rating_average ?? 0, 1) }}
                                 <livewire:components.star-rating :rating="$episode->mediaStat->rating_average" :star-size="'sm'" :disabled="true" />
                             </p>
-                            <p class="text-sm text-gray-500">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x reviews', (int) $episode->mediaStat->rating_count, ['x' => number_shorten((int) $episode->mediaStat->rating_count, 0, true)]) }}</p>
+                            <p class="text-sm text-secondary">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x reviews', (int) $episode->mediaStat->rating_count, ['x' => number_shorten((int) $episode->mediaStat->rating_count, 0, true)]) }}</p>
                         </a>
                     </div>
 
                     <div id="seasonBadge" class="flex-grow px-12 border-l-2">
                         <a href="{{ route('anime.seasons', $anime) }}" wire:navigate>
                             <p class="font-bold">#{{ $season->number }}</p>
-                            <p class="text-sm text-gray-500">{{ __('Season') }}</p>
+                            <p class="text-sm text-secondary">{{ __('Season') }}</p>
                         </a>
                     </div>
 
@@ -281,7 +281,7 @@
                         <div id="previousEpisodeBadge" class="flex-grow px-12 border-l-2">
                             <a href="{{ route('episodes.details', $previousEpisode) }}" wire:navigate>
                                 <p class="font-bold">{{ __('Episode :x', ['x' => $previousEpisode->number_total]) }}</p>
-                                <p class="text-sm text-gray-500">{{ __('Previous') }}</p>
+                                <p class="text-sm text-secondary">{{ __('Previous') }}</p>
                             </a>
                         </div>
                     @endif
@@ -290,7 +290,7 @@
                         <div id="nextEpisodeBadge" class="flex-grow px-12 border-l-2">
                             <a href="{{ route('episodes.details', $nextEpisode) }}" wire:navigate>
                                 <p class="font-bold">{{ __('Episode :x', ['x' => $nextEpisode->number_total]) }}</p>
-                                <p class="text-sm text-gray-500">{{ __('Next') }}</p>
+                                <p class="text-sm text-secondary">{{ __('Next') }}</p>
                             </a>
                         </div>
                     @endif
@@ -298,7 +298,7 @@
                     <div id="animeBadge" class="flex-grow px-12 border-l-2">
                         <a href="{{ route('anime.details', $anime) }}" wire:navigate>
                             <p class="font-bold line-clamp-1">{{ substr($anime->title, 0, 25) }}</p>
-                            <p class="text-sm text-gray-500">{{ __('Anime') }}</p>
+                            <p class="text-sm text-secondary">{{ __('Anime') }}</p>
                         </a>
                     </div>
                 </section>
@@ -333,19 +333,19 @@
                     <div class="flex flex-row flex-wrap justify-between gap-4">
                         <div class="flex flex-col justify-end text-center">
                             <p class="font-bold text-6xl">{{ number_format($episode->mediaStat->rating_average, 1) }}</p>
-                            <p class="font-bold text-sm text-gray-500">{{ __('out of') }} 5</p>
+                            <p class="font-bold text-sm text-secondary">{{ __('out of') }} 5</p>
                         </div>
 
                         <div class="flex flex-col justify-end items-center text-center">
                             @svg('star_fill', 'fill-current', ['width' => 32])
                             <p class="font-bold text-2xl">{{ number_format($episode->mediaStat->highestRatingPercentage) }}%</p>
-                            <p class="text-sm text-gray-500">{{ $episode->mediaStat->sentiment }}</p>
+                            <p class="text-sm text-secondary">{{ $episode->mediaStat->sentiment }}</p>
                         </div>
 
                         <div class="flex flex-col w-full justify-end text-right sm:w-auto">
                             <x-star-rating-bar :media-stat="$episode->mediaStat" />
 
-                            <p class="text-sm text-gray-500">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x Ratings', $episode->mediaStat->rating_count, ['x' => number_format($episode->mediaStat->rating_count)]) }}</p>
+                            <p class="text-sm text-secondary">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x Ratings', $episode->mediaStat->rating_count, ['x' => number_format($episode->mediaStat->rating_count)]) }}</p>
                         </div>
                     </div>
                 </section>
