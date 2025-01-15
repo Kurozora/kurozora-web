@@ -53,7 +53,7 @@
             <section class="mt-4">
                 <div class="flex gap-4 justify-between flex-wrap">
                     @foreach (range(1,25) as $range)
-                        <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                        <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
                     @endforeach
                     <div class="w-64 md:w-80 flex-grow"></div>
                     <div class="w-64 md:w-80 flex-grow"></div>
@@ -67,7 +67,7 @@
 
                 <p class="font-bold">{{ __('Characters Not Found') }}</p>
 
-                <p class="text-sm text-gray-500">{{ __('No characters found with the selected criteria.') }}</p>
+                <p class="text-sm text-secondary">{{ __('No characters found with the selected criteria.') }}</p>
             </section>
         @endif
     </div>

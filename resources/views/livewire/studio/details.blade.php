@@ -26,7 +26,7 @@
                 <div class="flex flex-col flex-wrap text-center items-center">
                     <picture
                         class="relative aspect-square rounded-full overflow-hidden"
-                        style="height: 128px; background-color: {{ $studio->getFirstMedia(\App\Enums\MediaCollection::Profile)?->custom_properties['background_color'] ?? '#000000' }};"
+                        style="height: 128px; background-color: {{ $studio->getFirstMedia(\App\Enums\MediaCollection::Profile)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
                     >
                         <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $studio->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/studio_profile.webp') }}" alt="{{ $studio->name }} Profile" title="{{ $studio->name }}">
 
@@ -50,33 +50,33 @@
         <section id="badges" class="flex flex-row flex-nowrap whitespace-nowrap justify-between items-center text-center pb-5 pl-4 pr-4 overflow-x-scroll no-scrollbar">
             <div id="ratingBadge" class="flex-grow pr-12">
                 <a href="#ratingsAndReviews">
-                    <p class="font-bold text-orange-500">
+                    <p class="font-bold text-tint">
                         {{ number_format($studio->mediaStat->rating_average, 1) }}
                     </p>
 
                     <livewire:components.star-rating :rating="$studio->mediaStat->rating_average" :star-size="'sm'" :disabled="true" />
 
-                    <p class="text-sm text-gray-500">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x reviews', (int) $studio->mediaStat->rating_count, ['x' => number_shorten((int) $studio->mediaStat->rating_count, 0, true)]) }}</p>
+                    <p class="text-sm text-secondary">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x reviews', (int) $studio->mediaStat->rating_count, ['x' => number_shorten((int) $studio->mediaStat->rating_count, 0, true)]) }}</p>
                 </a>
             </div>
 
             <div id="rankingBadge" class="flex-grow px-12 border-l-2">
                 <a class="flex flex-col items-center" href="{{ route('charts.top', App\Enums\ChartKind::Studios) }}" wire:navigate>
                     <p class="font-bold">{{ trans_choice('{0} -|[1,*] #:x', $studio->mediaStat->rank_total ?? 0, ['x' => $studio->mediaStat->rank_total]) }}</p>
-                    <p class="text-orange-500">
+                    <p class="text-tint">
                         @svg('chart_bar_fill', 'fill-current', ['width' => '20'])
                     </p>
-                    <p class="text-sm text-gray-500">{{ __('Chart') }}</p>
+                    <p class="text-sm text-secondary">{{ __('Chart') }}</p>
                 </a>
             </div>
 
             <div id="tvRatingBadge" class="flex-grow px-12 border-l-2">
                 <a class="flex flex-col items-center" href="#tvRating">
                     <p class="font-bold">{{ $studio->tv_rating->name }}</p>
-                    <p class="text-orange-500">
+                    <p class="text-tint">
                         @svg('tv_fill', 'fill-current', ['width' => '20'])
                     </p>
-                    <p class="text-sm text-gray-500">{{ __('Rated') }}</p>
+                    <p class="text-sm text-secondary">{{ __('Rated') }}</p>
                 </a>
             </div>
 
@@ -84,17 +84,17 @@
                 <div id="studioBadge" class="flex-grow px-12 border-l-2">
                     <a class="flex flex-col items-center" href="{{ route('studios.details', $this->studio->successor) }}" wire:navigate>
                         <p class="font-bold">{{ $this->studio->successor->name }}</p>
-                        <p class="text-orange-500">
+                        <p class="text-tint">
                             @svg('building_2_fill', 'fill-current', ['width' => '20'])
                         </p>
-                        <p class="text-sm text-gray-500">{{ __('Successor') }}</p>
+                        <p class="text-sm text-secondary">{{ __('Successor') }}</p>
                     </a>
                 </div>
             @endif
         </section>
 
         @if ($studio->about)
-            <section class="pt-5 pb-8 border-t-2">
+            <section class="pt-5 pb-8 border-t-2 border-primary">
                 <x-section-nav>
                     <x-slot:title>
                         {{ __('About') }}
@@ -123,19 +123,19 @@
             <div class="flex flex-row flex-wrap justify-between gap-4">
                 <div class="flex flex-col justify-end text-center">
                     <p class="font-bold text-6xl">{{ number_format($studio->mediaStat->rating_average, 1) }}</p>
-                    <p class="font-bold text-sm text-gray-500">{{ __('out of') }} 5</p>
+                    <p class="font-bold text-sm text-secondary">{{ __('out of') }} 5</p>
                 </div>
 
                 <div class="flex flex-col justify-end items-center text-center">
                     @svg('star_fill', 'fill-current', ['width' => 32])
                     <p class="font-bold text-2xl">{{ number_format($studio->mediaStat->highestRatingPercentage) }}%</p>
-                    <p class="text-sm text-gray-500">{{ $studio->mediaStat->sentiment }}</p>
+                    <p class="text-sm text-secondary">{{ $studio->mediaStat->sentiment }}</p>
                 </div>
 
                 <div class="flex flex-col w-full justify-end text-right sm:w-auto">
                     <x-star-rating-bar :media-stat="$studio->mediaStat" />
 
-                    <p class="text-sm text-gray-500">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x Ratings', $studio->mediaStat->rating_count, ['x' => number_format($studio->mediaStat->rating_count)]) }}</p>
+                    <p class="text-sm text-secondary">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x Ratings', $studio->mediaStat->rating_count, ['x' => number_format($studio->mediaStat->rating_count)]) }}</p>
                 </div>
             </div>
         </section>
@@ -163,7 +163,7 @@
             </div>
         </section>
 
-        <section class="pt-5 pb-8 border-t-2">
+        <section class="pt-5 pb-8 border-t-2 border-primary">
             <x-section-nav>
                 <x-slot:title>
                     {{ __('Information') }}

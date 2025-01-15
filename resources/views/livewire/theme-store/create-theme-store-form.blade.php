@@ -16,10 +16,10 @@
     </x-slot:meta>
 
     {{-- Header --}}
-    <section class="bg-gray-100 shadow">
+    <section class="bg-secondary shadow">
         <article>
             <header class="flex max-w-7xl mx-auto py-6 pl-4 pr-4 sm:px-6">
-                <h1 class="font-semibold text-xl text-gray-800 leading-tight">{{ __('Create Theme') }}</h1>
+                <h1 class="font-semibold text-xl text-primary leading-tight">{{ __('Create Theme') }}</h1>
             </header>
         </article>
     </section>

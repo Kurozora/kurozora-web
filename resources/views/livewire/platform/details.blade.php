@@ -26,7 +26,7 @@
                 <div class="flex flex-col flex-wrap text-center items-center">
                     <picture
                         class="relative aspect-square rounded-full overflow-hidden"
-                        style="height: 128px; background-color: {{ $platform->getFirstMedia(\App\Enums\MediaCollection::Profile)?->custom_properties['background_color'] ?? '#000000' }};"
+                        style="height: 128px; background-color: {{ $platform->getFirstMedia(\App\Enums\MediaCollection::Profile)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
                     >
                         <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $platform->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/platform_profile.webp') }}" alt="{{ $platform->name }} Profile" title="{{ $platform->name }}">
 
@@ -48,7 +48,7 @@
         </section>
 
         @if ($platform->about)
-            <section class="pt-5 pb-8 border-t-2">
+            <section class="pt-5 pb-8 border-t-2 border-primary">
                 <x-section-nav>
                     <x-slot:title>
                         {{ __('About') }}
@@ -63,7 +63,7 @@
             </section>
         @endif
 
-        <section class="pt-5 pb-8 border-t-2">
+        <section class="pt-5 pb-8 border-t-2 border-primary">
             <x-section-nav>
                 <x-slot:title>
                     {{ __('Information') }}

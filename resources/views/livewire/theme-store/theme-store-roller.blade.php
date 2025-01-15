@@ -324,7 +324,7 @@
         <div class="absolute inset-0"></div>
     </div>
 
-    <div x-show="show" class="absolute top-10 right-auto transform-none my-auto bg-white rounded-lg overflow-hidden shadow-xl transform transition-all sm:w-full sm:top-1/2 sm:right-10 sm:transform sm:-translate-y-1/2 sm:max-w-sm">
+    <div x-show="show" class="absolute top-10 right-auto transform-none my-auto bg-secondary rounded-lg overflow-hidden shadow-xl transform transition-all sm:w-full sm:top-1/2 sm:right-10 sm:transform sm:-translate-y-1/2 sm:max-w-sm">
         <div class="px-6 pt-4 pb-4">
             <div class="text-lg text-center">
                 {{ __('Select color') }}

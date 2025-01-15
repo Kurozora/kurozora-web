@@ -216,7 +216,7 @@
                                     </div>
 
                                     <div class="flex flex-nowrap gap-4 mt-12">
-                                        <div class="flex flex-col justify-between gap-2 w-full pt-5 pl-5 pb-5 pr-5 bg-gray-200/20 rounded-xl">
+                                        <div class="flex flex-col justify-between gap-2 w-full pt-5 pl-5 pb-5 pr-5 bg-blur rounded-xl">
                                             <div class="block mb-4 md:hidden">
                                                 <h2 class="font-semibold md:text-2xl">{{ __('Top Anime') }}</h2>
                                                 <p class="opacity-75 font-semibold md:text-2xl">{{ __(':x total series', ['x' => $recap->total_series_count]) }}</p>
@@ -235,7 +235,7 @@
                                     </div>
 
                                     <div class="flex flex-nowrap gap-4 mt-12">
-                                        <div class="flex flex-col justify-between gap-2 w-full pt-5 pl-5 pb-5 pr-5 bg-gray-200/20 rounded-xl">
+                                        <div class="flex flex-col justify-between gap-2 w-full pt-5 pl-5 pb-5 pr-5 bg-blur rounded-xl">
                                             <div class="block mb-4 md:hidden">
                                                 <h2 class="font-semibold md:text-2xl">{{ __('Top Manga') }}</h2>
                                                 <p class="opacity-75 font-semibold md:text-2xl">{{ __(':x total series', ['x' => $recap->total_series_count]) }}</p>
@@ -254,7 +254,7 @@
                                     </div>
 
                                     <div class="flex flex-nowrap gap-4 mt-12">
-                                        <div class="flex flex-col justify-between gap-2 w-full pt-5 pl-5 pb-5 pr-5 bg-gray-200/20 rounded-xl">
+                                        <div class="flex flex-col justify-between gap-2 w-full pt-5 pl-5 pb-5 pr-5 bg-blur rounded-xl">
                                             <div class="block mb-4 md:hidden">
                                                 <h2 class="font-semibold md:text-2xl">{{ __('Top Games') }}</h2>
                                                 <p class="opacity-75 font-semibold md:text-2xl">{{ __(':x total series', ['x' => $recap->total_series_count]) }}</p>
@@ -272,7 +272,7 @@
                                     </div>
 
                                     <div class="flex flex-nowrap gap-4 mt-12">
-                                        <div class="flex flex-col justify-between gap-2 w-full pt-5 pl-5 pb-5 pr-5 bg-gray-200/20 rounded-xl">
+                                        <div class="flex flex-col justify-between gap-2 w-full pt-5 pl-5 pb-5 pr-5 bg-blur rounded-xl">
                                             <div class="block mb-4 md:hidden">
                                                 <h2 class="font-semibold md:text-2xl">{{ __('Top Genres') }}</h2>
                                             </div>
@@ -295,7 +295,7 @@
                                     </div>
 
                                     <div class="flex flex-nowrap gap-4 mt-12">
-                                        <div class="flex flex-col justify-between gap-2 w-full pt-5 pl-5 pb-5 pr-5 bg-gray-200/20 rounded-xl">
+                                        <div class="flex flex-col justify-between gap-2 w-full pt-5 pl-5 pb-5 pr-5 bg-blur rounded-xl">
                                             <div class="block mb-4 md:hidden">
                                                 <h2 class="font-semibold md:text-2xl">{{ __('Top Themes') }}</h2>
                                             </div>

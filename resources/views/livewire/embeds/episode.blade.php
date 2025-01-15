@@ -88,14 +88,14 @@
     </x-slot:scripts>
 
     <div style="height: 100vh; max-height: calc(100vh)">
-        <div class="relative w-full h-full overflow-hidden z-0" style="background-color: {{ $episode->getFirstMedia(\App\Enums\MediaCollection::Banner)?->custom_properties['background_color'] ?? '#000000' }};">
+        <div class="relative w-full h-full overflow-hidden z-0" style="background-color: {{ $episode->getFirstMedia(\App\Enums\MediaCollection::Banner)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};">
             <div class="relative w-full h-full overflow-hidden z-10">
                 @if (!empty($this->video))
                     {!! $this->video->getEmbed(['currentTime' => $t]) !!}
                 @else
                     <x-picture
                         class="h-full"
-                        style="background-color: {{ $episode->getFirstMedia(\App\Enums\MediaCollection::Banner)?->custom_properties['background_color'] ?? '#000000' }};"
+                        style="background-color: {{ $episode->getFirstMedia(\App\Enums\MediaCollection::Banner)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
                     >
                         <img class="w-full h-full aspect-video object-cover lazyload" data-sizes="auto" data-src="{{ $episode->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $episode->title }} Banner" title="{{ $episode->title }}">
                     </x-picture>

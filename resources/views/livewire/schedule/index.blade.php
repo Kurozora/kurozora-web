@@ -30,7 +30,7 @@
             </div>
         </section>
 
-        <section id="dateHeader" class="bg-white pt-4 pb-4 z-10">
+        <section id="dateHeader" class="bg-primary pt-4 pb-4 z-10">
             <x-season-pagination :type="$class" />
 
             <x-hr class="mt-4 mb-4" />
@@ -61,7 +61,7 @@
                 <div
                     x-show="selectedDate === '{{ $date->toDateString() }}' || selectedDate === null"
                     class="pb-10"
-                    x-bind:class="{'bg-orange-50': '{{ $date->toDateString() }}' === '{{ today()->toDateString() }}' }"
+                    x-bind:class="{'bg-tinted': '{{ $date->toDateString() }}' === '{{ today()->toDateString() }}' }"
                 >
                     <livewire:sections.schedule :class="$class" :date="$date" />
                 </div>

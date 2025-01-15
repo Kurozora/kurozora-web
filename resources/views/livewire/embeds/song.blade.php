@@ -159,7 +159,7 @@
         </template>
 
         <template x-if="!song">
-            <div class="flex justify-center items-center w-screen h-screen bg-gray-100">
+            <div class="flex justify-center items-center w-screen h-screen bg-secondary">
                 @svg('music_note_fill', 'current-fill opacity-25', ['width' => '128'])
             </div>
         </template>

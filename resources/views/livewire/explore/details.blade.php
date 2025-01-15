@@ -58,7 +58,7 @@
     <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6" wire:init="loadPage">
         <section class="mb-4">
             <h1 class="text-2xl font-bold">{{ $exploreCategory->title }}</h1>
-            <p class="text-gray-500">{{ $exploreCategory->description }}</p>
+            <p class="text-secondary">{{ $exploreCategory->description }}</p>
         </section>
 
         @if ($this->exploreCategoryItems->count())
@@ -129,7 +129,7 @@
             <section class="mt-4">
                 <div class="flex gap-4 justify-between flex-wrap">
                     @foreach (range(1,25) as $range)
-                        <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                        <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
                     @endforeach
                     <div class="w-64 md:w-80 flex-grow"></div>
                     <div class="w-64 md:w-80 flex-grow"></div>
