@@ -22,7 +22,7 @@
                 class="absolute top-0 left-0 w-full h-full"
                 style="background: url('{{ asset('images/static/backgrounds/background_blur.gif') }}') no-repeat center; background-size: cover; filter: blur(100px); transform: scale(3);"
             >
-                <div class="w-full h-full bg-white/60"></div>
+                <div class="w-full h-full bg-black/60"></div>
             </div>
 
             <div class="relative max-w-2xl mx-auto text-center drop-shadow">
@@ -41,7 +41,7 @@
         </section>
 
         {{-- Logo --}}
-        <section class="pl-4 pr-4 pt-36 pb-10 bg-gray-100 sm:px-6">
+        <section class="pl-4 pr-4 pt-36 pb-10 bg-primary sm:px-6">
             <div class="flex flex-col items-center mx-auto max-w-7xl text-center">
                 <p class="mt-2 text-4xl font-bold leading-tight tracking-tight">{{ __('Logo') }}</p>
 
@@ -52,7 +52,7 @@
 
             <div class="flex flex-wrap gap-4 m-auto mt-16 max-w-7xl">
                 <div
-                    class="relative flex items-center justify-center flex-grow w-64 md:w-80 bg-white pl-4 pr-4 pt-4 pb-4 border-2 rounded-3xl"
+                    class="relative flex items-center justify-center flex-grow w-64 md:w-80 bg-secondary pl-4 pr-4 pt-4 pb-4 border-2 rounded-3xl"
                     style="background: url('{{ asset('images/static/patterns/checkerboard_dark.svg') }}'); background-size: 24px;"
                 >
                     <img class="mt-8 mb-8 pr-5 pl-5" src="https://raw.githubusercontent.com/Kurozora/kurozora-press-kit/master/Logos/4_Full_Logo_Lockup_Monochrome/full_logo_orange_RGB_monochrome.png" alt="Kurozora full logo orange RGB monochrome">
@@ -64,7 +64,7 @@
                 </div>
 
                 <div
-                    class="relative flex items-center justify-center flex-grow w-64 md:w-80 bg-white pl-4 pr-4 pt-4 pb-4 border-2 rounded-3xl"
+                    class="relative flex items-center justify-center flex-grow w-64 md:w-80 bg-secondary pl-4 pr-4 pt-4 pb-4 border-2 rounded-3xl"
                     style="background: url('{{ asset('images/static/patterns/checkerboard_light.svg') }}'); background-size: 24px;"
                 >
                     <img class="mt-8 mb-8 pr-5 pl-5" src="https://raw.githubusercontent.com/Kurozora/kurozora-press-kit/master/Logos/4_Full_Logo_Lockup_Monochrome/full_logo_blueberry_RGB_monochrome.png" alt="Kurozora full logo blueberry RGB monochrome">
@@ -76,7 +76,7 @@
                 </div>
 
                 <div
-                    class="relative flex items-center justify-center flex-grow w-64 md:w-80 bg-white pl-4 pr-4 pt-4 pb-4 border-2 rounded-3xl"
+                    class="relative flex items-center justify-center flex-grow w-64 md:w-80 bg-secondary pl-4 pr-4 pt-4 pb-4 border-2 rounded-3xl"
                     style="background: url('{{ asset('images/static/patterns/checkerboard_light.svg') }}'); background-size: 24px;"
                 >
                     <img class="mt-8 mb-8 pr-5 pl-5" src="https://raw.githubusercontent.com/Kurozora/kurozora-press-kit/master/Logos/4_Full_Logo_Lockup_Monochrome/full_logo_black_RGB_monochrome.png" alt="Kurozora full logo black RGB monochrome">
@@ -105,7 +105,7 @@
         </section>
 
         {{-- Spacing --}}
-        <section class="pl-4 pr-4 pt-36 pb-10 sm:px-6">
+        <section class="pl-4 pr-4 pt-36 pb-10 bg-secondary sm:px-6">
             <div class="flex flex-col items-center mx-auto max-w-7xl text-center">
                 <p class="mt-2 text-4xl font-bold leading-tight tracking-tight">{{ __('Spacing') }}</p>
 
@@ -122,7 +122,7 @@
         </section>
 
         {{-- Colors --}}
-        <section class="pl-4 pr-4 pt-36 pb-10 bg-gray-100 sm:px-6">
+        <section class="pl-4 pr-4 pt-36 pb-10 bg-primary sm:px-6">
             <div class="flex flex-col items-center mx-auto max-w-7xl text-center">
                 <p class="mt-2 text-4xl font-bold leading-tight tracking-tight">{{ __('Colors') }}</p>
 
@@ -132,7 +132,7 @@
             </div>
 
             <div class="flex flex-wrap gap-4 m-auto mt-16 max-w-7xl">
-                <div class="flex flex-col justify-between flex-grow w-64 md:w-80 bg-grayBlue-500 text-white pl-4 pr-4 pt-4 pb-4 rounded-3xl">
+                <div class="flex flex-col justify-between flex-grow w-64 md:w-80 pl-4 pr-4 pt-4 pb-4 bg-primary text-white border border-primary rounded-3xl shadow-lg">
                     <p class="text-lg font-bold">{{ __('Blueberry') }}</p>
                     <div class="mt-12 font-semibold opacity-75">
                         <p>#353A50</p>
@@ -143,7 +143,7 @@
                     </div>
                 </div>
 
-                <div class="flex flex-col justify-between flex-grow w-64 md:w-80 bg-orange-500 text-white pl-4 pr-4 pt-4 pb-4 rounded-3xl">
+                <div class="flex flex-col justify-between flex-grow w-64 md:w-80 pl-4 pr-4 pt-4 pb-4 bg-orange-500 text-white border border-primary rounded-3xl shadow-lg">
                     <p class="text-lg font-bold">{{ __('Orange') }}</p>
                     <div class="mt-12 font-semibold opacity-75">
                         <p>#FF9300</p>
@@ -154,7 +154,7 @@
                     </div>
                 </div>
 
-                <div class="flex flex-col justify-between flex-grow w-64 md:w-80 bg-yellow-500 text-white pl-4 pr-4 pt-4 pb-4 rounded-3xl">
+                <div class="flex flex-col justify-between flex-grow w-64 md:w-80 pl-4 pr-4 pt-4 pb-4 bg-yellow-500 text-white border border-primary rounded-3xl shadow-lg">
                     <p class="text-lg font-bold">{{ __('Lemon') }}</p>
                     <div class="mt-12 font-semibold opacity-75">
                         <p>#EAB308</p>
@@ -165,7 +165,7 @@
                     </div>
                 </div>
 
-                <div class="flex flex-col justify-between flex-grow w-64 md:w-80 bg-lime-500 text-white pl-4 pr-4 pt-4 pb-4 rounded-3xl">
+                <div class="flex flex-col justify-between flex-grow w-64 md:w-80 pl-4 pr-4 pt-4 pb-4 bg-lime-500 text-white border border-primary rounded-3xl shadow-lg">
                     <p class="text-lg font-bold">{{ __('Lime') }}</p>
                     <div class="mt-12 font-semibold opacity-75">
                         <p>#84CC16</p>
@@ -176,7 +176,7 @@
                     </div>
                 </div>
 
-                <div class="flex flex-col justify-between flex-grow w-64 md:w-80 bg-sky-500 text-white pl-4 pr-4 pt-4 pb-4 rounded-3xl">
+                <div class="flex flex-col justify-between flex-grow w-64 md:w-80 pl-4 pr-4 pt-4 pb-4 bg-sky-500 text-white border border-primary rounded-3xl shadow-lg">
                     <p class="text-lg font-bold">{{ __('Cerulean') }}</p>
                     <div class="mt-12 font-semibold opacity-75">
                         <p>#0EA5E9</p>
@@ -187,7 +187,7 @@
                     </div>
                 </div>
 
-                <div class="flex flex-col justify-between flex-grow w-64 md:w-80 bg-pink-500 text-white pl-4 pr-4 pt-4 pb-4 rounded-3xl">
+                <div class="flex flex-col justify-between flex-grow w-64 md:w-80 pl-4 pr-4 pt-4 pb-4 bg-pink-500 text-white border border-primary rounded-3xl shadow-lg">
                     <p class="text-lg font-bold">{{ __('Raspberry') }}</p>
                     <div class="mt-12 font-semibold opacity-75">
                         <p>#EC4899</p>
@@ -198,7 +198,7 @@
                     </div>
                 </div>
 
-                <div class="flex flex-col justify-between flex-grow w-64 md:w-80 bg-red-500 text-white pl-4 pr-4 pt-4 pb-4 rounded-3xl">
+                <div class="flex flex-col justify-between flex-grow w-64 md:w-80 pl-4 pr-4 pt-4 pb-4 bg-red-500 text-white border border-primary rounded-3xl shadow-lg">
                     <p class="text-lg font-bold">{{ __('Strawberry') }}</p>
                     <div class="mt-12 font-semibold opacity-75">
                         <p>#EF4444</p>
@@ -209,7 +209,7 @@
                     </div>
                 </div>
 
-                <div class="flex flex-col justify-between flex-grow w-64 md:w-80 bg-white pl-4 pr-4 pt-4 pb-4 rounded-3xl">
+                <div class="flex flex-col justify-between flex-grow w-64 md:w-80 pl-4 pr-4 pt-4 pb-4 bg-white text-black border border-primary rounded-3xl shadow-lg">
                     <p class="text-lg font-bold">{{ __('White') }}</p>
                     <div class="mt-12 font-semibold opacity-75">
                         <p>#FFFFFF</p>
@@ -220,7 +220,7 @@
                     </div>
                 </div>
 
-                <div class="flex flex-col justify-between flex-grow w-64 md:w-80 bg-black text-white pl-4 pr-4 pt-4 pb-4 rounded-3xl">
+                <div class="flex flex-col justify-between flex-grow w-64 md:w-80 pl-4 pr-4 pt-4 pb-4 bg-black text-white border border-primary rounded-3xl shadow-lg">
                     <p class="text-lg font-bold">{{ __('Black') }}</p>
                     <div class="mt-12 font-semibold opacity-75">
                         <p>#000000</p>
@@ -235,7 +235,7 @@
         </section>
 
         {{-- Download Press-Kit --}}
-        <section class="pl-4 pr-4 pt-36 pb-10 sm:px-6">
+        <section class="pl-4 pr-4 pt-36 pb-10 bg-secondary sm:px-6">
             <div class="flex flex-col items-center mx-auto max-w-7xl text-center">
                 <img class="m-10 mb-0" width="82" height="82" src="{{ asset('images/static/icon/app_icon.webp') }}" alt="Kurozora">
 
@@ -247,7 +247,7 @@
             </div>
 
             <div class="flex flex-wrap gap-4 justify-center mt-12 pr-5 pl-5">
-                <x-link-button class="text-lg" href="https://github.com/Kurozora/kurozora-press-kit/archive/refs/heads/master.zip" aria-label="Visit the Kurozora website">{{ __('Download Press-Kit') }}</x-link-button>
+                <x-link-button class="text-lg" href="https://github.com/Kurozora/kurozora-press-kit/archive/refs/heads/master.zip" aria-label="Download the press-kit">{{ __('Download Press-Kit') }}</x-link-button>
             </div>
         </section>
     </div>

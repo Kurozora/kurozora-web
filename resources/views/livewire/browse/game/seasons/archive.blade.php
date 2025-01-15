@@ -19,34 +19,34 @@
         <h1 class="text-2xl font-bold">{{ __('Seasonal Games Archive') }}</h1>
 
         <section>
-            <div id="mediaTypeHeader" class="pt-4 pb-5 bg-white z-10">
+            <div id="mediaTypeHeader" class="pt-4 pb-5 bg-primary z-10">
                 <x-season-pagination :type="App\Models\Game::class" />
             </div>
 
-            <table class="table-fixed w-full text-xs text-center border-2 sm:text-base">
-                <thead id="tableHeader" class="bg-gray-100 font-bold border-2">
+            <table class="table-fixed w-full text-xs text-center border-2 border-primary sm:text-base">
+                <thead id="tableHeader" class="bg-secondary font-bold border-2 border-primary">
                 <tr>
-                    <th class="pt-2 pr-2 pb-2 pl-2 sm:p-4 border-b-2">
+                    <th class="pt-2 pr-2 pb-2 pl-2 sm:p-4 border-b-2 border-primary">
                         <p>
                             {{ __('Year') }}
                         </p>
                     </th>
-                    <th class="pt-2 pr-2 pb-2 pl-2 sm:p-4 border-b-2">
+                    <th class="pt-2 pr-2 pb-2 pl-2 sm:p-4 border-b-2 border-primary">
                         <div class="flex justify-center h-4 sm:h-full">
                             {{ \App\Enums\SeasonOfYear::Winter()->symbol() }}
                         </div>
                     </th>
-                    <th class="pt-2 pr-2 pb-2 pl-2 sm:p-4 border-b-2">
+                    <th class="pt-2 pr-2 pb-2 pl-2 sm:p-4 border-b-2 border-primary">
                         <div class="flex justify-center h-4 sm:h-full">
                             {{ \App\Enums\SeasonOfYear::Spring()->symbol() }}
                         </div>
                     </th>
-                    <th class="pt-2 pr-2 pb-2 pl-2 sm:p-4 border-b-2">
+                    <th class="pt-2 pr-2 pb-2 pl-2 sm:p-4 border-b-2 border-primary">
                         <div class="flex justify-center h-4 sm:h-full">
                             {{ \App\Enums\SeasonOfYear::Summer()->symbol() }}
                         </div>
                     </th>
-                    <th class="pt-2 pr-2 pb-2 pl-2 sm:p-4 border-b-2">
+                    <th class="pt-2 pr-2 pb-2 pl-2 sm:p-4 border-b-2 border-primary">
                         <div class="flex justify-center h-4 sm:h-full">
                             {{ \App\Enums\SeasonOfYear::Fall()->symbol() }}
                         </div>
@@ -55,7 +55,7 @@
                 </thead>
                 <tbody>
                 @foreach (range(now()->year + 2, 1917) as $year)
-                    <tr class="{{ $year === now()->year ? 'bg-orange-50' : '' }}">
+                    <tr class="{{ $year === now()->year ? 'bg-tinted' : '' }}">
                         <td>{{ $year }}</td>
 
                         @foreach (\App\Enums\SeasonOfYear::asSelectArray() as $seasonOfYear)

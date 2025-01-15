@@ -20,10 +20,10 @@
     </x-slot:appArgument>
 
     {{-- Header --}}
-    <section class="bg-gray-100 shadow">
+    <section class="bg-secondary shadow">
         <article>
             <header class="flex max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6">
-                <h1 class="font-semibold text-xl text-gray-800 leading-tight">{{ __('Legal') }}</h1>
+                <h1 class="font-semibold text-xl text-primary leading-tight">{{ __('Legal') }}</h1>
             </header>
         </article>
     </section>

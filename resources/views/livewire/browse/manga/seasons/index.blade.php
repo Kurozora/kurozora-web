@@ -30,7 +30,7 @@
             </div>
         </section>
 
-        <section id="mediaTypeHeader" class="bg-white pt-4 pb-4 z-10">
+        <section id="mediaTypeHeader" class="bg-primary pt-4 pb-4 z-10">
             <x-season-pagination :type="App\Models\Manga::class" :season-of-year="$this->seasonOfYear" :year="$year" />
 
             <x-hr class="mt-4 mb-4" />

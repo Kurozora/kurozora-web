@@ -32,7 +32,7 @@
         </section>
 
         {{-- Projects --}}
-        <section class="pl-4 pr-4 pt-36 pb-10 bg-gray-100 sm:px-6">
+        <section class="pl-4 pr-4 pt-36 pb-10 bg-secondary sm:px-6">
             <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6">
                 <div class="flex flex-wrap justify-between gap-4">
                     <div class="flex flex-col w-full gap-2 md:w-3/4">
@@ -42,13 +42,13 @@
                     </div>
 
                     <div>
-                        <x-link-button href="{{ config('social.github.url') }}" target="_blank">{{ __('View on GitHub') }}</x-link-button>
+                        <x-link-button class="whitespace-nowrap" href="{{ config('social.github.url') }}" target="_blank">{{ __('View on GitHub') }}</x-link-button>
                     </div>
                 </div>
 
                 <div class="flex flex-wrap justify-between gap-4 mt-10">
                     @foreach ($projects as $project)
-                        <div class="relative flex-grow w-64 bg-white overflow-hidden rounded-lg md:w-80">
+                        <div class="relative flex-grow w-64 bg-primary overflow-hidden rounded-lg md:w-80">
                             <x-picture>
                                 <img
                                     class="w-full h-full object-cover lazyload"
@@ -64,7 +64,7 @@
                                 <div class="flex flex-col gap-2 mt-1">
                                     <p class="text-lg leading-tight line-clamp-2">{{ $project->name }}</p>
 
-                                    <p class="text-sm text-gray-500 leading-tight line-clamp-2">{{ $project->stack }}</p>
+                                    <p class="text-sm text-secondary leading-tight line-clamp-2">{{ $project->stack }}</p>
 
                                     <p class="text-sm leading-tight">{{ $project->description }}</p>
                                 </div>
