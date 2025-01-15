@@ -8,7 +8,7 @@
     </x-slot:description>
 
     <x-slot:content>
-        <div class="max-w-xl text-sm text-gray-600">
+        <div class="max-w-xl text-sm text-primary">
             {{ __('Instead of sharing an account with your child, which can give them unwanted access to your personal data, create a Kurozora Account for them. Then you can easily set age-based parental controls, and they can use Family Sharing, and other Kurozora services.') }}
         </div>
 
@@ -31,7 +31,7 @@
                         <div class="flex items-center">
                             <picture
                                 class="relative shrink-0 w-12 aspect-square rounded-full overflow-hidden"
-                                style="background-color: {{ $user->getFirstMedia(\App\Enums\MediaCollection::Profile)?->custom_properties['background_color'] ?? '#000000' }};"
+                                style="background-color: {{ $user->getFirstMedia(\App\Enums\MediaCollection::Profile)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
                             >
                                 <img
                                     class="w-full h-full object-cover lazyload"
@@ -63,7 +63,7 @@
                         </div>
                     </li>
                 @empty
-                    <li class="text-gray-500">{{ __('Invite or create a child account to see it here.') }}</li>
+                    <li class="text-secondary">{{ __('Invite or create a child account to see it here.') }}</li>
                 @endforelse
             </ul>
         </div>

@@ -18,8 +18,8 @@
         <div class="flex flex-nowrap gap-4 justify-between text-center whitespace-nowrap overflow-x-scroll no-scrollbar">
             @foreach (\App\Enums\UserLibraryStatus::asGameSelectArray() as $key => $value)
                 <button
-                    class="pl-4 pr-4 pb-2 border-b-2 hover:border-orange-500"
-                    :class="{'border-orange-500': '{{ strtolower($status) }}' === '{{ strtolower($value) }}', 'border-gray-300': '{{ strtolower($status) }}' !== '{{ strtolower($value) }}'}"
+                    class="pl-4 pr-4 pb-2 border-b-2 hover:border-tint"
+                    :class="{'border-tint': '{{ strtolower($status) }}' === '{{ strtolower($value) }}', 'border-gray-300': '{{ strtolower($status) }}' !== '{{ strtolower($value) }}'}"
                     wire:click="$set('status', '{{ strtolower($value) }}')"
                     data-toggle="tab"
                 >{{ __($value) }}</button>
@@ -52,23 +52,23 @@
                             <img class="w-full max-w-sm" src="{{ asset('images/static/placeholders/empty_game_library.webp') }}" alt="Empty Library" title="Empty Library">
                         </x-picture>
 
-                        <p class="font-bold">{{ __('No Shows') }}</p>
+                        <p class="font-bold">{{ __('No Games') }}</p>
 
-                        <p class="text-sm text-gray-500">{{ __('Add a show to your :x list and it will show up here.', ['x' => strtolower($status)]) }}</p>
+                        <p class="text-sm text-secondary">{{ __('Add a game to your :x list and it will show up here.', ['x' => strtolower($status)]) }}</p>
                     </section>
                 @endif
             @elseif (!$readyToLoad)
-                <section class="mt-4 pt-5 pb-8 border-t-2">
+                <section class="mt-4 pt-5 pb-8 border-t-2 border-primary">
                     <div class="flex gap-4 justify-between flex-wrap">
-                        <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
-                        <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
-                        <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
-                        <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
-                        <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
-                        <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
-                        <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
-                        <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
-                        <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                        <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
+                        <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
+                        <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
+                        <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
+                        <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
+                        <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
+                        <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
+                        <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
+                        <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
                         <div class="w-64 md:w-80 flex-grow"></div>
                         <div class="w-64 md:w-80 flex-grow"></div>
                     </div>

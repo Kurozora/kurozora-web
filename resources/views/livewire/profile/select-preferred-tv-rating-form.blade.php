@@ -9,7 +9,7 @@
 
     <x-slot:form>
         <div class="col-span-12">
-            <div class="max-w-xl text-sm text-gray-600">
+            <div class="max-w-xl text-sm text-primary">
                 <p>{{ __('TV ratings are tiered. Depending on the chosen TV rating some shows might be hidden.') }}</p>
                 <br/>
                 <p>{{ __('For example, selecting R15+ will show you all anime up to a TV rating of R15+.') }}</p>

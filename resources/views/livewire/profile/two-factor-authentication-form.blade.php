@@ -8,7 +8,7 @@
     </x-slot:description>
 
     <x-slot:content>
-        <h3 class="text-lg font-medium text-gray-900">
+        <h3 class="text-lg font-medium text-primary">
             @if ($this->enabled)
                 @if ($showingConfirmation)
                     {{ __('Finish enabling two-factor authentication.') }}
@@ -20,7 +20,7 @@
             @endif
         </h3>
 
-        <div class="mt-3 max-w-xl text-sm text-gray-600">
+        <div class="mt-3 max-w-xl text-sm text-primary">
             <p>
                 {{ __('When two-factor authentication is enabled, you will be prompted for a secure, random token during authentication. You may retrieve this token from your phone’s Google Authenticator application.') }}
             </p>
@@ -28,7 +28,7 @@
 
         @if ($this->enabled)
             @if ($showingQrCode)
-                <div class="mt-4 max-w-xl text-sm text-gray-600">
+                <div class="mt-4 max-w-xl text-sm text-primary">
                     <p class="font-semibold">
                         @if ($showingConfirmation)
                             {{ __('To finish enabling two-factor authentication, scan the following QR code using your phone’s authenticator application or enter the setup key and provide the generated OTP code.') }}
@@ -42,20 +42,20 @@
                     {!! $this->user->twoFactorQrCodeSvg() !!}
                 </div>
 
-                <div class="mt-4 max-w-xl text-sm text-gray-600">
+                <div class="mt-4 max-w-xl text-sm text-primary">
                     <p class="font-semibold">
                         {{ __('Setup Key') }}: {{ decrypt($this->user->two_factor_secret) }}
                     </p>
                 </div>
 
                 @browser('isMac')
-                    <div class="mt-4 max-w-xl text-sm text-gray-600">
+                    <div class="mt-4 max-w-xl text-sm text-primary">
                         <p class="font-semibold">
                             {{ __('Or click on the button below to setup using iCloud Keychain.') }}
                         </p>
                     </div>
 
-                    <div class="mt-4 max-w-xl text-sm text-gray-600">
+                    <div class="mt-4 max-w-xl text-sm text-primary">
                         <x-link-button href="apple-{!! $this->user->twoFactorQrCodeUrl() !!}">{{ __('Setup in iCloud Keychain') }}</x-link-button>
                     </div>
                 @endbrowser
@@ -72,13 +72,13 @@
             @endif
 
             @if ($showingRecoveryCodes)
-                <div class="mt-4 max-w-xl text-sm text-gray-600">
+                <div class="mt-4 max-w-xl text-sm text-primary">
                     <p class="font-semibold">
                         {{ __('Store these recovery codes in a secure password manager. They can be used to recover access to your account if your two-factor authentication device is lost.') }}
                     </p>
                 </div>
 
-                <div class="grid gap-1 max-w-xl mt-4 pl-4 pr-4 pt-4 pb-4 font-mono text-sm bg-gray-100 rounded-lg">
+                <div class="grid gap-1 max-w-xl mt-4 pl-4 pr-4 pt-4 pb-4 font-mono text-sm bg-secondary rounded-lg">
                     @foreach (json_decode(decrypt($this->user->two_factor_recovery_codes), true) as $code)
                         <div>{{ $code }}</div>
                     @endforeach

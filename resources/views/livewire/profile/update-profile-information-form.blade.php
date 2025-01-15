@@ -148,7 +148,7 @@
                 x-show="profileImagePreview"
                 x-cloak=""
             >
-                <img class="w-16 h-16 bg-white border-2 border-black/5 rounded-full sm:w-24 sm:h-24"
+                <img class="w-16 h-16 border-2 border-black/5 rounded-full sm:w-24 sm:h-24"
                      src=""
                      x-bind:src="profileImagePreview"
                      alt="{{ $this->user->username }} Profile Image"

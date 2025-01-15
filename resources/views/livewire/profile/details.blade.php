@@ -62,7 +62,7 @@
 
                         <x-slot:content>
                             <button
-                                class="block w-full pl-4 pr-4 pt-2 pb-2 bg-white text-gray-400 text-xs text-center font-semibold hover:bg-gray-50 focus:bg-gray-200"
+                                class="block w-full pl-4 pr-4 pt-2 pb-2 text-primary text-xs text-center font-semibold hover:bg-tertiary focus:bg-secondary"
                                 wire:click="togglePopupFor('showSharePopup')"
                             >
                                 {{ __('Share') }}
@@ -71,7 +71,7 @@
                             @auth
                                 @if ($user->id != auth()->user()?->id)
                                     <button
-                                        class="block w-full pl-4 pr-4 pt-2 pb-2 bg-white text-red-500 text-xs text-center font-semibold hover:bg-gray-50 focus:bg-gray-200"
+                                        class="block w-full pl-4 pr-4 pt-2 pb-2 text-red-500 text-xs text-center font-semibold hover:bg-tertiary focus:bg-secondary"
                                         wire:click="togglePopupFor('block')"
                                     >
                                         {{ $this->isBlocked ? __ ('Unblock') : __('Block') }}
@@ -157,3 +157,23 @@
         @break
     @endswitch
 </main>
+
+{{--<style data-client-themes="true" data-rh="true">--}}
+{{--    .custom-theme-background {--}}
+{{--        --custom-theme-background: linear-gradient(162.27deg, var(--bg-gradient-forest-1) 11.2%, var(--bg-gradient-forest-2) 29.93%, var(--bg-gradient-forest-3) 48.64%, var(--bg-gradient-forest-4) 67.85%, var(--bg-gradient-forest-5) 83.54%);--}}
+{{--        --custom-theme-primary-color: #142215;--}}
+{{--        --custom-theme-secondary-color: #a98e4b;--}}
+
+{{--        --theme-base-color-light-hsl: 42.35294117647058 100% 90%;--}}
+{{--        --theme-base-color-light: rgb(255,240,204);--}}
+{{--        --theme-text-color-light: rgb(0,77,6);--}}
+{{--        --theme-base-color-dark-hsl: 124.61538461538463 100% 5.098039215686274%;--}}
+{{--        --theme-base-color-dark: rgb(0,26,2);--}}
+{{--        --theme-text-color-dark: rgb(255,248,229);--}}
+{{--        --theme-base-color-amount: 50%;--}}
+{{--        --theme-text-color-amount: 38%;--}}
+{{--        --bg-overlay-selected: unset;--}}
+{{--        --bg-overlay-hover: unset;--}}
+{{--        --bg-overlay-active: unset;--}}
+{{--    }--}}
+{{--</style>--}}

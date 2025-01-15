@@ -9,7 +9,7 @@
 
     <x-slot:form>
         <div class="col-span-12">
-            <div class="max-w-xl text-sm text-gray-600">
+            <div class="max-w-xl text-sm text-primary">
                 <p>{{ __('Changing the language will update the language of the user interface as well as the language of the information shown throughout the website.') }}</p>
                 <p>{{ __('These changes will also take effect in the app, and anywhere you are signed in with your Kurozora Account.') }}</p>
                 <br />

@@ -48,7 +48,7 @@
             <section>
                 <div class="flex gap-4 justify-between flex-wrap">
                     @foreach (range(1,25) as $range)
-                        <div class="bg-gray-200 w-64 md:w-80 flex-grow" style="height: 168px;"></div>
+                        <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
                     @endforeach
                     <div class="w-64 md:w-80 flex-grow"></div>
                     <div class="w-64 md:w-80 flex-grow"></div>
@@ -60,9 +60,9 @@
                     <img class="w-full max-w-sm" src="{{ asset('images/static/placeholders/empty_anime_library.webp') }}" alt="Empty Favorite Anime" title="Empty Favorite Anime">
                 </x-picture>
 
-                <p class="font-bold">{{ __('No Favorite Anime') }}</p>
+                <p class="font-bold">{{ __('No Reminded Anime') }}</p>
 
-                <p class="text-sm text-gray-500">{{ __('Favorite an anime and it will show up here.') }}</p>
+                <p class="text-sm text-secondary">{{ __('Add an anime to reminders and it will show up here.') }}</p>
             </section>
         @endif
     </div>

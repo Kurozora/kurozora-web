@@ -8,7 +8,7 @@
     </x-slot:description>
 
     <x-slot:content>
-        <div class="max-w-xl text-sm text-gray-600">
+        <div class="max-w-xl text-sm text-primary">
             {{ __('Once your library is deleted, all of its resources and data will be permanently deleted. This includes ratings, favorites, reminders, watched episodes, and You will be asked for your password to confirm the deletion.') }}
         </div>
 
