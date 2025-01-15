@@ -100,7 +100,7 @@
                     <div class="absolute top-0 bottom-0 left-0 right-0">
                         <div class="flex flex-col justify-center items-center h-full md:pb-40 lg:pb-0">
                             <button
-                                class="inline-flex items-center pt-5 pr-5 pb-5 pl-5 bg-white/60 backdrop-blur border border-transparent rounded-full font-semibold text-xs text-gray-500 uppercase tracking-widest shadow-md hover:opacity-75 active:opacity-50 focus:outline-none disabled:bg-gray-100 disabled:text-gray-300 disabled:cursor-default disabled:opacity-100 transition ease-in-out duration-150"
+                                class="inline-flex items-center pt-5 pr-5 pb-5 pl-5 bg-blur backdrop-blur border border-transparent rounded-full font-semibold text-xs uppercase tracking-widest shadow-md hover:opacity-75 active:opacity-50 focus:outline-none disabled:bg-gray-100 disabled:text-gray-300 disabled:cursor-default disabled:opacity-100 transition ease-in-out duration-150"
                                 wire:click="showTrailerVideo"
                             >
                                 @svg('play_fill', 'fill-current', ['width' => '34'])
@@ -111,7 +111,7 @@
             </div>
 
             <div class="md:absolute md:bottom-0 md:left-0 md:right-0 lg:px-4">
-                <div class="flex flex-nowrap pt-5 pb-8 pl-4 pr-4 md:mx-auto md:mb-8 md:p-2 md:max-w-lg md:bg-white md:bg-opacity-50 md:backdrop-filter md:backdrop-blur md:rounded-lg">
+                <div class="flex flex-nowrap pt-5 pb-8 pl-4 pr-4 md:mx-auto md:mb-8 md:p-2 md:max-w-lg md:bg-blur md:backdrop-filter md:backdrop-blur md:rounded-lg">
                     <x-picture
                         :border="true"
                         class="w-28 h-40 mr-2 rounded-lg overflow-hidden"
@@ -130,7 +130,7 @@
                             <div class="flex w-full justify-between mt-2 gap-1 sm:gap-4">
                                 <p class="flex-grow pt-1 pr-1 pb-1 pl-1 text-white text-center text-xs font-semibold whitespace-nowrap rounded-md" style="background-color: {{ $anime->status->color }};">{{ $anime->status->name }}</p>
 
-                                <p class="flex-grow pt-1 pr-1 pb-1 pl-1 bg-gray-100 text-center text-xs font-semibold whitespace-nowrap rounded-md"> {{ trans_choice('{0} Rank -|[1,*] Rank #:x', $anime->mediaStat->rank_total ?? 0, ['x' => $anime->mediaStat->rank_total]) }}</p>
+                                <p class="flex-grow pt-1 pr-1 pb-1 pl-1 bg-secondary text-black text-center text-xs font-semibold whitespace-nowrap rounded-md"> {{ trans_choice('{0} Rank -|[1,*] Rank #:x', $anime->mediaStat->rank_total ?? 0, ['x' => $anime->mediaStat->rank_total]) }}</p>
                             </div>
                         </div>
 
@@ -172,13 +172,13 @@
             <section id="badges" class="flex flex-row flex-nowrap whitespace-nowrap justify-between items-center text-center pb-5 pl-4 pr-4 overflow-x-scroll no-scrollbar">
                 <div id="ratingBadge" class="flex-grow pr-12">
                     <a href="#ratingsAndReviews">
-                        <p class="font-bold text-orange-500">
+                        <p class="font-bold text-tint">
                             {{ number_format($anime->mediaStat->rating_average, 1) }}
                         </p>
 
                         <livewire:components.star-rating :rating="$anime->mediaStat->rating_average" :star-size="'sm'" :disabled="true" />
 
-                        <p class="text-sm text-gray-500">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x reviews', (int) $anime->mediaStat->rating_count, ['x' => number_shorten((int) $anime->mediaStat->rating_count, 0, true)]) }}</p>
+                        <p class="text-sm text-secondary">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x reviews', (int) $anime->mediaStat->rating_count, ['x' => number_shorten((int) $anime->mediaStat->rating_count, 0, true)]) }}</p>
                     </a>
                 </div>
 
@@ -186,10 +186,10 @@
                     <div id="seasonBadge" class="flex-grow px-12 border-l-2">
                         <a class="flex flex-col items-center" href="#aired">
                             <p class="font-bold">{{ $anime->air_season->description }}</p>
-                            <p class="text-orange-500">
+                            <p class="text-tint">
                                 {{ $anime->air_season->symbol() }}
                             </p>
-                            <p class="text-sm text-gray-500">{{ __('Season') }}</p>
+                            <p class="text-sm text-secondary">{{ __('Season') }}</p>
                         </a>
                     </div>
                 @endif
@@ -197,20 +197,20 @@
                 <div id="rankingBadge" class="flex-grow px-12 border-l-2">
                     <a class="flex flex-col items-center" href="{{ route('charts.top', App\Enums\ChartKind::Anime) }}" wire:navigate>
                         <p class="font-bold">{{ trans_choice('{0} -|[1,*] #:x', $anime->mediaStat->rank_total ?? 0, ['x' => $anime->mediaStat->rank_total]) }}</p>
-                        <p class="text-orange-500">
+                        <p class="text-tint">
                             @svg('chart_bar_fill', 'fill-current', ['width' => '20'])
                         </p>
-                        <p class="text-sm text-gray-500">{{ __('Chart') }}</p>
+                        <p class="text-sm text-secondary">{{ __('Chart') }}</p>
                     </a>
                 </div>
 
                 <div id="tvRatingBadge" class="flex-grow px-12 border-l-2">
                     <a class="flex flex-col items-center" href="#tvRating">
                         <p class="font-bold">{{ $anime->tv_rating->name }}</p>
-                        <p class="text-orange-500">
+                        <p class="text-tint">
                             @svg('tv_fill', 'fill-current', ['width' => '20'])
                         </p>
-                        <p class="text-sm text-gray-500">{{ __('Rated') }}</p>
+                        <p class="text-sm text-secondary">{{ __('Rated') }}</p>
                     </a>
                 </div>
 
@@ -218,10 +218,10 @@
                     <div id="studioBadge" class="flex-grow px-12 border-l-2">
                         <a class="flex flex-col items-center" href="{{ route('studios.details', $this->studio) }}" wire:navigate>
                             <p class="font-bold">{{ $this->studio->name }}</p>
-                            <p class="text-orange-500">
+                            <p class="text-tint">
                                 @svg('building_2_fill', 'fill-current', ['width' => '20'])
                             </p>
-                            <p class="text-sm text-gray-500">{{ __('Studio') }}</p>
+                            <p class="text-sm text-secondary">{{ __('Studio') }}</p>
                         </a>
                     </div>
                 @endif
@@ -230,10 +230,10 @@
                     <div id="countryBadge" class="flex-grow px-12 border-l-2">
                         <a class="flex flex-col items-center" href="#country">
                             <p class="font-bold">{{ strtoupper($anime->country_of_origin->code) }}</p>
-                            <p class="text-orange-500">
+                            <p class="text-tint">
                                 @svg('globe', 'fill-current', ['width' => '20'])
                             </p>
-                            <p class="text-sm text-gray-500">{{ __('Country') }}</p>
+                            <p class="text-sm text-secondary">{{ __('Country') }}</p>
                         </a>
                     </div>
                 @endif
@@ -241,10 +241,10 @@
                 <div id="languageBadge" class="flex-grow px-12 border-l-2">
                     <a class="flex flex-col items-center" href="#languages">
                         <p class="font-bold">{{ strtoupper($anime->languages->first()->code) }}</p>
-                        <p class="text-orange-500">
+                        <p class="text-tint">
                             @svg('character_bubble_fill', 'fill-current', ['width' => '20'])
                         </p>
-                        <p class="text-sm text-gray-500">{{ trans_choice('{0} Language|{1} +:x More Language|[2,*] +:x More Languages', $anime->languages->count() - 1, ['x' => $anime->languages->count() - 1]) }}</p>
+                        <p class="text-sm text-secondary">{{ trans_choice('{0} Language|{1} +:x More Language|[2,*] +:x More Languages', $anime->languages->count() - 1, ['x' => $anime->languages->count() - 1]) }}</p>
                     </a>
                 </div>
             </section>
@@ -279,19 +279,19 @@
                 <div class="flex flex-row flex-wrap justify-between gap-4">
                     <div class="flex flex-col justify-end text-center">
                         <p class="font-bold text-6xl">{{ number_format($anime->mediaStat->rating_average, 1) }}</p>
-                        <p class="font-bold text-sm text-gray-500">{{ __('out of') }} 5</p>
+                        <p class="font-bold text-sm text-secondary">{{ __('out of') }} 5</p>
                     </div>
 
                     <div class="flex flex-col justify-end items-center text-center">
                         @svg('star_fill', 'fill-current', ['width' => 32])
                         <p class="font-bold text-2xl">{{ number_format($anime->mediaStat->highestRatingPercentage) }}%</p>
-                        <p class="text-sm text-gray-500">{{ $anime->mediaStat->sentiment }}</p>
+                        <p class="text-sm text-secondary">{{ $anime->mediaStat->sentiment }}</p>
                     </div>
 
                     <div class="flex flex-col w-full justify-end text-right sm:w-auto">
                         <x-star-rating-bar :media-stat="$anime->mediaStat" />
 
-                        <p class="text-sm text-gray-500">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x Ratings', $anime->mediaStat->rating_count, ['x' => number_format($anime->mediaStat->rating_count)]) }}</p>
+                        <p class="text-sm text-secondary">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x Ratings', $anime->mediaStat->rating_count, ['x' => number_format($anime->mediaStat->rating_count)]) }}</p>
                     </div>
                 </div>
             </section>
@@ -494,7 +494,7 @@
 
                 <livewire:components.anime-studios-section :anime="$anime" />
 
-                <div class="bg-orange-50">
+                <div class="bg-tinted">
                     @if (!empty($this->studio))
                         <livewire:components.anime-more-by-studio-section :anime="$anime" :studio="$this->studio" />
                     @endif
@@ -507,7 +507,7 @@
 
                     @if (!empty($anime->copyright))
                         <section class="pt-4 pr-4 pb-4 pl-4 border-t">
-                            <p class="text-sm text-gray-400">{!! nl2br(e($anime->copyright)) !!}</p>
+                            <p class="text-sm text-secondary">{!! nl2br(e($anime->copyright)) !!}</p>
                         </section>
                     @endif
                 </div>
