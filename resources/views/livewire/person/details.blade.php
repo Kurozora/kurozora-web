@@ -26,7 +26,7 @@
                 <div class="flex flex-col flex-wrap text-center items-center">
                     <picture
                         class="relative aspect-square rounded-full overflow-hidden"
-                        style="height: 128px; background-color: {{ $person->getFirstMedia(\App\Enums\MediaCollection::Profile)?->custom_properties['background_color'] ?? '#000000' }};"
+                        style="height: 128px; background-color: {{ $person->getFirstMedia(\App\Enums\MediaCollection::Profile)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
                     >
                         <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $person->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/person_poster.webp') }}" alt="{{ $person->full_name }} Profile Image" title="{{ $person->full_name }}">
 
@@ -45,7 +45,7 @@
         </section>
 
         @if ($person->about)
-            <section class="pt-5 pb-8 border-t-2">
+            <section class="pt-5 pb-8 border-t-2 border-primary">
                 <x-section-nav>
                     <x-slot:title>
                         {{ __('About') }}
@@ -74,19 +74,19 @@
             <div class="flex flex-row flex-wrap justify-between gap-4">
                 <div class="flex flex-col justify-end text-center">
                     <p class="font-bold text-6xl">{{ number_format($person->mediaStat->rating_average, 1) }}</p>
-                    <p class="font-bold text-sm text-gray-500">{{ __('out of') }} 5</p>
+                    <p class="font-bold text-sm text-secondary">{{ __('out of') }} 5</p>
                 </div>
 
                 <div class="flex flex-col justify-end items-center text-center">
                     @svg('star_fill', 'fill-current', ['width' => 32])
                     <p class="font-bold text-2xl">{{ number_format($person->mediaStat->highestRatingPercentage) }}%</p>
-                    <p class="text-sm text-gray-500">{{ $person->mediaStat->sentiment }}</p>
+                    <p class="text-sm text-secondary">{{ $person->mediaStat->sentiment }}</p>
                 </div>
 
                 <div class="flex flex-col w-full justify-end text-right sm:w-auto">
                     <x-star-rating-bar :media-stat="$person->mediaStat" />
 
-                    <p class="text-sm text-gray-500">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x Ratings', $person->mediaStat->rating_count, ['x' => number_format($person->mediaStat->rating_count)]) }}</p>
+                    <p class="text-sm text-secondary">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x Ratings', $person->mediaStat->rating_count, ['x' => number_format($person->mediaStat->rating_count)]) }}</p>
                 </div>
             </div>
         </section>
@@ -114,7 +114,7 @@
             </div>
         </section>
 
-        <section class="pt-5 pb-8 border-t-2">
+        <section class="pt-5 pb-8 border-t-2 border-primary">
             <x-section-nav>
                 <x-slot:title>
                     {{ __('Information') }}
