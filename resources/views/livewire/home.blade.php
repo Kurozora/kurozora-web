@@ -195,7 +195,7 @@
             </x-section-nav>
 
             <div class="grid gap-4 md:grid-cols-3">
-                <x-simple-link href="{{ route('anime.seasons.index') }}" wire:navigate class="w-full justify-between rounded-lg bg-gray-100 pb-4 pl-4 pr-4 pt-4 text-sm" :hover-underline-enabled="false">
+                <x-simple-link href="{{ route('anime.seasons.index') }}" wire:navigate class="w-full justify-between rounded-lg bg-secondary pb-4 pl-4 pr-4 pt-4 text-sm hover:bg-tertiary active:bg-secondary" :hover-underline-enabled="false">
                     <span>
                         {{ __('Browse by Season') }}
                     </span>
@@ -203,7 +203,7 @@
                     @svg('chevron_forward', 'fill-current', ['width' => 12])
                 </x-simple-link>
 
-                <x-simple-link href="{{ route('genres.index') }}" wire:navigate class="w-full justify-between rounded-lg bg-gray-100 pb-4 pl-4 pr-4 pt-4 text-sm" :hover-underline-enabled="false">
+                <x-simple-link href="{{ route('genres.index') }}" wire:navigate class="w-full justify-between rounded-lg bg-secondary pb-4 pl-4 pr-4 pt-4 text-sm hover:bg-tertiary active:bg-secondary" :hover-underline-enabled="false">
                     <span>
                         {{ __('Browse by Genre') }}
                     </span>
@@ -211,7 +211,7 @@
                     @svg('chevron_forward', 'fill-current', ['width' => 12])
                 </x-simple-link>
 
-                <x-simple-link href="{{ route('themes.index') }}" wire:navigate class="w-full justify-between rounded-lg bg-gray-100 pb-4 pl-4 pr-4 pt-4 text-sm" :hover-underline-enabled="false">
+                <x-simple-link href="{{ route('themes.index') }}" wire:navigate class="w-full justify-between rounded-lg bg-secondary pb-4 pl-4 pr-4 pt-4 text-sm hover:bg-tertiary active:bg-secondary" :hover-underline-enabled="false">
                     <span>
                         {{ __('Browse by Theme') }}
                     </span>
@@ -219,7 +219,7 @@
                     @svg('chevron_forward', 'fill-current', ['width' => 12])
                 </x-simple-link>
 
-                <x-simple-link href="{{ route('schedule') }}" wire:navigate class="w-full justify-between rounded-lg bg-gray-100 pb-4 pl-4 pr-4 pt-4 text-sm" :hover-underline-enabled="false">
+                <x-simple-link href="{{ route('schedule') }}" wire:navigate class="w-full justify-between rounded-lg bg-secondary pb-4 pl-4 pr-4 pt-4 text-sm hover:bg-tertiary active:bg-secondary" :hover-underline-enabled="false">
                     <span>
                         {{ __('Broadcast Schedule') }}
                     </span>
@@ -227,7 +227,7 @@
                     @svg('chevron_forward', 'fill-current', ['width' => 12])
                 </x-simple-link>
 
-                <x-simple-link href="{{ route('charts.index') }}" wire:navigate class="w-full justify-between rounded-lg bg-gray-100 pb-4 pl-4 pr-4 pt-4 text-sm" :hover-underline-enabled="false">
+                <x-simple-link href="{{ route('charts.index') }}" wire:navigate class="w-full justify-between rounded-lg bg-secondary pb-4 pl-4 pr-4 pt-4 text-sm hover:bg-tertiary active:bg-secondary" :hover-underline-enabled="false">
                     <span>
                         {{ __('Charts') }}
                     </span>

@@ -60,13 +60,13 @@
                 x-transition:leave-end="opacity-0"
             >
                 {{-- Search icon --}}
-                <button class="absolute left-0 pl-4 h-full text-gray-500 sm:pl-3">
+                <button class="absolute left-0 pl-4 h-full text-secondary sm:pl-3">
                     @svg('magnifyingglass', 'fill-current', ['width' => '16'])
                 </button>
 
                 {{-- Search field --}}
                 <input
-                    class="absolute top-0 left-0 px-10 h-full w-full border-0 bg-transparent text-black focus:ring-0"
+                    class="absolute top-0 left-0 px-10 h-full w-full border-0 bg-transparent text-primary focus:ring-0"
                     type="text"
                     name="q"
                     placeholder="{{ [__('I’m searching for…'), __('Search faster with ⌘+K, ctrl+K or /')][array_rand([0,1])] }}"
@@ -76,7 +76,7 @@
 
             {{-- Close button --}}
             <button
-                class="absolute right-0 pr-4 h-full text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 sm:pr-2"
+                class="absolute right-0 pr-4 h-full text-secondary transition duration-150 ease-in-out hover:text-primary sm:pr-2"
                 x-show="isSearchEnabled"
                 x-on:click="resetAndClose()"
                 x-transition:enter="ease duration-[400ms] delay-[325ms] transform"
@@ -92,7 +92,7 @@
 
         {{-- Quick Links --}}
         <div
-            class="absolute right-0 left-0 mx-auto pt-4 pr-4 pb-4 pl-4 max-w-7xl bg-white rounded-b-2xl overflow-y-scroll sm:px-10"
+            class="absolute right-0 left-0 mx-auto pt-4 pr-4 pb-4 pl-4 max-w-7xl bg-primary rounded-b-2xl overflow-y-scroll sm:px-10"
             style="max-height: 85vh;"
         >
             <div class="flex justify-center">
@@ -148,7 +148,7 @@
             @endif
 
             @if (empty($searchResults) && !empty($searchQuery))
-                <p class="text-sm text-gray-500 text-center font-bold" wire:key="no-results-found">{{ __('No search results found :(') }}</p>
+                <p class="text-sm text-secondary text-center font-bold" wire:key="no-results-found">{{ __('No search results found :(') }}</p>
             @endif
 
             @if (!empty($quickLinks) && empty($searchResults))

@@ -4,7 +4,7 @@
         isNavOpen: false
     }"
 >
-    <nav class="relative bg-white border-b border-gray-100 z-[300]">
+    <nav class="relative bg-primary text-primary border-b border-primary z-[300]">
         {{-- Primary Navigation Menu --}}
         <div class="max-w-7xl mx-auto pl-4 pr-4 sm:px-6">
             <div class="flex justify-between gap-2 h-12">
@@ -20,7 +20,7 @@
                     x-transition:leave-end="opacity-0 scale-75"
                 >
                     <button
-                        class="inline-flex items-center justify-center pt-2 pr-2 pb-2 pl-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out"
+                        class="inline-flex items-center justify-center pt-2 pr-2 pb-2 pl-2 rounded-md text-secondary hover:text-primary hover:bg-tertiary focus:bg-secondary focus:text-primary transition duration-150 ease-in-out"
                         x-on:click="isNavOpen = ! isNavOpen"
                     >
                         <svg stroke="currentColor" fill="none" viewBox="0 0 24 24" width="24">
@@ -59,7 +59,7 @@
 
                 <div class="flex gap-2 w-full">
                     {{-- Logo --}}
-                    <a class="inline-flex items-center h-full m-auto text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none focus:text-gray-700 md:hidden"
+                    <a class="inline-flex items-center h-full m-auto text-secondary transition duration-150 ease-in-out hover:text-primary focus:text-primary md:hidden"
                        href="/"
                        wire:navigate
                        x-show="! isSearchEnabled"
@@ -76,7 +76,7 @@
                     {{-- Navigation Links --}}
                     <div class="flex items-center justify-between md:-my-px md:w-full">
                         {{-- Logo --}}
-                        <a class="hidden md:inline-flex items-center h-full text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none focus:text-gray-700 md:pt-1"
+                        <a class="hidden md:inline-flex items-center h-full text-secondary transition duration-150 ease-in-out hover:text-primary focus:text-primary md:pt-1"
                            href="/"
                            wire:navigate
                            x-show="! isSearchEnabled"
@@ -235,7 +235,7 @@
 {{--                        </x-nav-link>--}}
 
                         {{-- Search --}}
-                        <button class="inline-flex h-full w-8 items-center justify-center text-gray-500 cursor-pointer transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none focus:text-gray-700"
+                        <button class="inline-flex h-full w-8 items-center justify-center text-secondary cursor-pointer transition duration-150 ease-in-out hover:text-primary focus:text-primary"
                                 x-show="! isSearchEnabled"
                                 x-on:click="isNavOpen = false; isSearchEnabled = ! isSearchEnabled;"
                                 x-transition:enter="ease-out duration-150 delay-150 transform sm:delay-300"
@@ -251,7 +251,7 @@
                         <x-dropdown id="nav-notification" align="right" width="64">
                             <x-slot:trigger>
                                 <button
-                                    class="inline-flex h-8 w-8 items-center justify-center text-gray-500 cursor-pointer transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none focus:text-gray-700"
+                                    class="inline-flex h-8 w-8 items-center justify-center text-secondary cursor-pointer transition duration-150 ease-in-out hover:text-primary focus:text-primary"
                                     x-show="! isSearchEnabled"
                                     wire:click="$dispatch('is-notifications-open', { 'isOpen': true })"
                                     x-transition:enter="ease-out duration-150 delay-[350ms] transform"
@@ -271,10 +271,10 @@
                         </x-dropdown>
 
                         {{-- Settings Dropdown --}}
-                        <x-dropdown id="more-settings" align="right" width="48" content-classes="hidden bg-white md:block">
+                        <x-dropdown id="more-settings" align="right" width="48" content-classes="hidden bg-secondary md:block">
                             <x-slot:trigger>
                                 <button
-                                    class="hidden md:flex text-sm border-2 border-transparent rounded-full transition duration-150 ease-in-out focus:outline-none focus:border-gray-300"
+                                    class="hidden md:flex text-sm border-2 border-transparent rounded-full transition duration-150 ease-in-out focus:border-primary"
                                     x-show="! isSearchEnabled"
                                     x-transition:enter="ease-out duration-150 delay-[350ms] transform"
                                     x-transition:enter-start="opacity-0 scale-75"
@@ -299,10 +299,10 @@
                                 </x-dropdown-link>
 
                                 @auth
-                                    <div class="border-t border-gray-100"></div>
+                                    <div class="border-t border-primary"></div>
 
                                     {{-- Library --}}
-                                    <div class="block pl-4 pr-4 pt-2 pb-2 text-xs text-gray-400">
+                                    <div class="block pl-4 pr-4 pt-2 pb-2 text-xs text-secondary">
                                         {{ __('Library') }}
                                     </div>
 
@@ -324,11 +324,11 @@
                                     </x-dropdown-link>
                                 @endauth
 
-                                <div class="border-t border-gray-100"></div>
+                                <div class="border-t border-primary"></div>
 
                                 @auth
                                     {{-- Favorite Pages --}}
-                                    <div class="block pl-4 pr-4 pt-2 pb-2 text-xs text-gray-400">
+                                    <div class="block pl-4 pr-4 pt-2 pb-2 text-xs text-secondary">
                                         {{ __('Favorite') }}
                                     </div>
 
@@ -344,12 +344,12 @@
                                         {{ __('Favorite Game') }}
                                     </x-dropdown-link>
 
-                                    <div class="border-t border-gray-100"></div>
+                                    <div class="border-t border-primary"></div>
                                 @endauth
 
                                 @auth
                                     {{-- Reminder Pages --}}
-                                    <div class="block pl-4 pr-4 pt-2 pb-2 text-xs text-gray-400">
+                                    <div class="block pl-4 pr-4 pt-2 pb-2 text-xs text-secondary">
                                         {{ __('Reminder') }}
                                     </div>
 
@@ -365,11 +365,11 @@
 {{--                                        {{ __('Reminder Game') }}--}}
 {{--                                    </x-dropdown-link>--}}
 
-                                    <div class="border-t border-gray-100"></div>
+                                    <div class="border-t border-primary"></div>
                                 @endauth
 
                                 {{-- More Pages --}}
-                                <div class="block pl-4 pr-4 pt-2 pb-2 text-xs text-gray-400">
+                                <div class="block pl-4 pr-4 pt-2 pb-2 text-xs text-secondary">
                                     {{ __('More') }}
                                 </div>
 
@@ -377,11 +377,11 @@
                                     {{ __('Theme Store') }}
                                 </x-dropdown-link>
 
-                                <div class="border-t border-gray-100"></div>
+                                <div class="border-t border-primary"></div>
 
                                 @auth
                                     {{-- Account Management --}}
-                                    <div class="block pl-4 pr-4 pt-2 pb-2 text-xs text-gray-400">
+                                    <div class="block pl-4 pr-4 pt-2 pb-2 text-xs text-secondary">
                                         {{ __('Manage Account') }}
                                     </div>
 
@@ -389,7 +389,7 @@
                                         {{ __('Settings') }}
                                     </x-dropdown-link>
 
-                                    <div class="border-t border-gray-100"></div>
+                                    <div class="border-t border-primary"></div>
                                 @endauth
 
                                 {{-- Authentication --}}
@@ -434,7 +434,7 @@
 
         {{-- Responsive Navigation Menu --}}
         <div
-            class="block absolute pl-4 pr-4 w-full bg-white rounded-b-2xl z-[300] md:hidden"
+            class="block absolute pl-4 pr-4 w-full bg-primary rounded-b-2xl z-[300] md:hidden"
             x-show="isNavOpen"
             x-collapse.duration.400ms=""
         >
@@ -485,7 +485,7 @@
             </div>
 
             {{-- Responsive Settings Options --}}
-            <div class="pt-4 pb-1 border-t border-gray-200">
+            <div class="pt-4 pb-1 border-t border-primary">
                 @auth
                     <div class="flex items-center pl-4 pr-4 pb-4">
                         <div class="shrink-0">
@@ -493,8 +493,8 @@
                         </div>
 
                         <div class="ml-3">
-                            <div class="font-medium text-base text-gray-800">{{ $user->username }}</div>
-                            <div class="font-medium text-sm text-gray-500">{{ $user->email }}</div>
+                            <div class="font-medium text-base text-primary">{{ $user->username }}</div>
+                            <div class="font-medium text-sm text-secondary">{{ $user->email }}</div>
                         </div>
                     </div>
 
@@ -504,7 +504,7 @@
                             {{ __('Profile') }}
                         </x-responsive-nav-link>
 
-                        <div class="border-t border-gray-100"></div>
+                        <div class="border-t border-primary"></div>
                     </div>
 
                     {{-- Library --}}
@@ -527,7 +527,7 @@
                             {{ __('Games Library') }}
                         </x-responsive-nav-link>
 
-                        <div class="border-t border-gray-100"></div>
+                        <div class="border-t border-primary"></div>
                     </div>
                 @else
                     <div class="space-y-1 pt-1">
@@ -542,7 +542,7 @@
                             {{ __('Library') }}
                         </x-responsive-nav-link>
 
-                        <div class="border-t border-gray-100"></div>
+                        <div class="border-t border-primary"></div>
                     </div>
                 @endauth
 
@@ -567,7 +567,7 @@
                             {{ __('Favorite Game') }}
                         </x-responsive-nav-link>
 
-                        <div class="border-t border-gray-100"></div>
+                        <div class="border-t border-primary"></div>
                     </div>
                 @endauth
 
@@ -592,7 +592,7 @@
 {{--                            {{ __('Game Reminders') }}--}}
 {{--                        </x-responsive-nav-link>--}}
 
-                        <div class="border-t border-gray-100"></div>
+                        <div class="border-t border-primary"></div>
                     </div>
                 @endauth
 
@@ -604,7 +604,7 @@
                         {{ __('Theme Store') }}
                     </x-responsive-nav-link>
 
-                    <div class="border-t border-gray-100"></div>
+                    <div class="border-t border-primary"></div>
                 </div>
 
                 {{-- Account Management --}}
@@ -616,7 +616,7 @@
                             {{ __('Settings') }}
                         </x-responsive-nav-link>
 
-                        <div class="border-t border-gray-100"></div>
+                        <div class="border-t border-primary"></div>
                     </div>
                 @endauth
 

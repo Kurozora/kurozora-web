@@ -17,7 +17,7 @@
 
     <div>
         {{-- Hero Video --}}
-        <section class="h-screen bg-gray-200 overflow-hidden" style="max-height: calc(100vh - 48px);">
+        <section class="h-screen overflow-hidden" style="max-height: calc(100vh - 48px);">
             <div class="absolute left-0 h-screen w-full">
                 <div class="absolute top-1/2 left-0 w-full text-white text-center z-10" style="transform: translateY(-50%); transition: opacity .6s,transform .6s;">
                     <h1 class="flex items-center justify-center space-x-1" style="text-shadow: 0 0 20px rgba(0,0,0,.6);">
@@ -120,7 +120,7 @@
 
                 <div class="absolute bottom-4 right-4">
                     <button
-                        class="inline-flex items-center pt-3 pr-3 pb-3 pl-3 bg-white/60 backdrop-blur border border-transparent rounded-full font-semibold text-xs text-gray-500 uppercase tracking-widest shadow-md hover:opacity-75 active:opacity-50 focus:outline-none disabled:bg-gray-100 disabled:text-gray-300 disabled:cursor-default disabled:opacity-100 transition ease-in-out duration-150"
+                        class="inline-flex items-center pt-3 pr-3 pb-3 pl-3 bg-blur backdrop-blur border border-transparent rounded-full font-semibold text-xs uppercase tracking-widest shadow-md hover:opacity-75 active:opacity-50 focus:outline-none disabled:bg-secondary disabled:text-gray-300 disabled:cursor-default disabled:opacity-100 transition ease-in-out duration-150"
                         x-on:click="$refs.hero_video.paused ? $refs.hero_video.play() : $refs.hero_video.pause(); isPlaying = !$refs.hero_video.paused"
                     >
                         <template x-if="isPlaying">
@@ -155,7 +155,7 @@
         </section>
 
         {{-- Feature Showcase --}}
-        <section class="pl-4 pr-4 pt-36 pb-10 bg-gray-100 sm:px-6">
+        <section class="pl-4 pr-4 pt-36 pb-10 bg-secondary sm:px-6">
             <div class="max-w-sm md:max-w-2xl m-auto">
                 <ul class="m-auto text-center">
                     <span
@@ -169,7 +169,7 @@
                             x-transition:enter-start="opacity-0 translate-y-full"
                             x-transition:enter-end="opacity-100 translate-y-0"
                         >
-                            <span class="text-orange-500">{{ __('Biggest collection') }}</span> {{ __('of Japanese media — Anime, Manga, Music and Games.') }}
+                            <span class="text-tint">{{ __('Biggest collection') }}</span> {{ __('of Japanese media — Anime, Manga, Music and Games.') }}
                         </li>
                     </span>
                     <span
@@ -230,7 +230,7 @@
                     >
                         <p class="font-semibold">{{ __('Free 7-days trial') }}</p>
                         <p class="text-lg font-bold">{{ __('$3.99 / mo.') }}</p>
-                        <p class="mt-4 text-gray-400">{{ __('A monthly subscription is just $3.99 per month after a free 7-day trial.') }}</p>
+                        <p class="mt-4 text-secondary">{{ __('A monthly subscription is just $3.99 per month after a free 7-day trial.') }}</p>
 
                         <x-link-button href="{{ config('app.ios.store_url') }}" class="mt-4">{{ __('Try it free') }}</x-link-button>
                     </div>
@@ -244,7 +244,7 @@
                     >
                         <p class="font-semibold">{{ __('Free 14-days trial') }}</p>
                         <p class="text-lg font-bold">{{ __('$11.99 / 6 mo.') }}</p>
-                        <p class="mt-4 text-gray-400">{{ __('A half yearly subscription is just $11.99 per 6 months after a free 14-days trial.') }}</p>
+                        <p class="mt-4 text-secondary">{{ __('A half yearly subscription is just $11.99 per 6 months after a free 14-days trial.') }}</p>
 
                         <x-link-button href="{{ config('app.ios.store_url') }}" class="mt-4">{{ __('Try it free') }}</x-link-button>
                     </div>
@@ -258,7 +258,7 @@
                     >
                         <p class="font-semibold">{{ __('Free 1-month trial') }}</p>
                         <p class="text-lg font-bold">{{ __('$18.99 / 12 mo.') }}</p>
-                        <p class="mt-4 text-gray-400">{{ __('A yearly subscription is just $18.99 per 12 months after a free 1-month trial.') }}</p>
+                        <p class="mt-4 text-secondary">{{ __('A yearly subscription is just $18.99 per 12 months after a free 1-month trial.') }}</p>
 
                         <x-link-button href="{{ config('app.ios.store_url') }}" class="mt-4">{{ __('Try it free') }}</x-link-button>
                     </div>
@@ -420,7 +420,7 @@
 
                 <div class="absolute bottom-4 right-4">
                         <button
-                            class="inline-flex items-center pt-3 pr-3 pb-3 pl-3 bg-white/60 backdrop-blur border border-transparent rounded-full font-semibold text-xs text-gray-500 uppercase tracking-widest shadow-md hover:opacity-75 active:opacity-50 focus:outline-none disabled:bg-gray-100 disabled:text-gray-300 disabled:cursor-default disabled:opacity-100 transition ease-in-out duration-150"
+                            class="inline-flex items-center pt-3 pr-3 pb-3 pl-3 bg-blur backdrop-blur border border-transparent rounded-full font-semibold text-xs uppercase tracking-widest shadow-md hover:opacity-75 active:opacity-50 focus:outline-none disabled:bg-secondary disabled:text-gray-300 disabled:cursor-default disabled:opacity-100 transition ease-in-out duration-150"
                             x-on:click="isPlaying = !isPlaying"
                         >
                             <template x-if="isPlaying">
@@ -436,7 +436,7 @@
         </section>
 
         {{-- Call to Action --}}
-        <section class="pl-4 pr-4 pt-36 pb-10 bg-gray-100 sm:px-6">
+        <section class="pl-4 pr-4 pt-36 pb-10 bg-secondary sm:px-6">
             <div class="flex flex-col items-center m-auto max-w-2xl text-center">
                 <img class="m-10 mb-0" width="82" height="82" src="{{ asset('images/static/icon/app_icon.webp') }}" alt="Kurozora">
 
@@ -541,7 +541,7 @@
                         </p>
                     </div>
                 </li>
-                <li class="border-t">
+                <li class="border-t border-primary">
                     <div x-data="{ expanded: false }">
                         <button
                             class="flex mb-2 py-6 w-full text-xl text-unset font-semibold"
@@ -585,7 +585,7 @@
                         </div>
                     </div>
                 </li>
-                <li class="border-t">
+                <li class="border-t border-primary">
                     <div x-data="{ expanded: false }">
                         <button
                             class="flex mb-2 py-6 w-full text-xl text-unset font-semibold"
@@ -601,7 +601,7 @@
                         </div>
                     </div>
                 </li>
-                <li class="border-t">
+                <li class="border-t border-primary">
                     <div x-data="{ expanded: false }">
                         <button
                             class="flex mb-2 py-6 w-full text-xl text-unset font-semibold"
@@ -620,7 +620,7 @@
                         </div>
                     </div>
                 </li>
-                <li class="border-t">
+                <li class="border-t border-primary">
                     <div x-data="{ expanded: false }">
                         <button
                             class="flex mb-2 py-6 w-full text-xl text-unset font-semibold"
@@ -641,7 +641,7 @@
                         </div>
                     </div>
                 </li>
-                <li class="border-t">
+                <li class="border-t border-primary">
                     <div x-data="{ expanded: false }">
                         <button
                             class="flex mb-2 py-6 w-full text-xl text-unset font-semibold"
@@ -657,7 +657,7 @@
                         </div>
                     </div>
                 </li>
-                <li class="border-t">
+                <li class="border-t border-primary">
                     <div x-data="{ expanded: false }">
                         <button
                             class="flex mb-2 py-6 w-full text-xl text-unset font-semibold"

@@ -16,9 +16,9 @@
         <link rel="canonical" href="{{ route('merge-library') }}">
     </x-slot:meta>
 
-    <header class="bg-gray-100 shadow">
+    <header class="bg-secondary shadow">
         <div class="flex max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            <h2 class="font-semibold text-xl leading-tight">
                 {{ __('Merge Library') }}
             </h2>
         </div>
@@ -234,7 +234,7 @@
                             <!-- Iterate over library status -->
                             <li>
                                 <!-- You can customize this part based on the modelType -->
-                                <p x-text="modelType" class="text-gray-400 text-sm font-semibold"></p>
+                                <p x-text="modelType" class="text-secondary text-sm font-semibold"></p>
 
                                 <ul>
                                     <template x-for="(count, libraryStatus) in (typeData.toJSON ? typeData.toJSON() : typeData)" :key="libraryStatus">
@@ -248,7 +248,7 @@
 
                 <div class="flex flex-col items-center space-y-4">
                     <div class="flex flex-col w-full">
-                        <p class="text-gray-400 text-sm font-semibold">{{ __('Last updated on:') }}</p>
+                        <p class="text-secondary text-sm font-semibold">{{ __('Last updated on:') }}</p>
                         <p x-text="formatUnixTimestamp(latestCreationDate)"></p>
                     </div>
 
@@ -260,11 +260,11 @@
                 x-show="Object.keys(groupedItems).length === 0"
                 x-cloak
                 style="height: 512px"
-                class="flex flex-col justify-between w-full h-full pt-4 pr-4 pb-4 pl-4 bg-gray-200 border-2 rounded-lg"
+                class="flex flex-col justify-between w-full h-full pt-4 pr-4 pb-4 pl-4 bg-secondary border-2 border-primary rounded-lg"
             >
             </article>
 
-            <div class="flex items-center justify-center text-gray-400 font-bold">
+            <div class="flex items-center justify-center text-secondary font-bold">
                 <p>{{ __('OR') }}</p>
             </div>
 
@@ -272,7 +272,7 @@
                 x-show="Object.keys(groupedItems).length === 0"
                 x-cloak
                 style="height: 512px"
-                class="flex flex-col justify-between w-full h-full pt-4 pr-4 pb-4 pl-4 bg-gray-200 border-2 rounded-lg"
+                class="flex flex-col justify-between w-full h-full pt-4 pr-4 pb-4 pl-4 bg-secondary border-2 rounded-lg"
             >
             </article>
 
@@ -288,7 +288,7 @@
                             <li>
                                 @switch($type)
                                     @case(App\Models\Anime::class)
-                                        <p class="text-gray-400 text-sm font-semibold">{{ __('Anime') }}</p>
+                                        <p class="text-secondary text-sm font-semibold">{{ __('Anime') }}</p>
                                         <ul>
                                             @foreach ($userLibrary as $key => $item)
                                                 <li>
@@ -299,7 +299,7 @@
 
                                         @break
                                     @case(App\Models\Game::class)
-                                        <p class="text-gray-400 text-sm font-semibold">{{ __('Game') }}</p>
+                                        <p class="text-secondary text-sm font-semibold">{{ __('Game') }}</p>
                                         <ul>
                                             @foreach ($userLibrary as $key => $item)
                                                 <li>
@@ -310,7 +310,7 @@
 
                                         @break
                                     @case(App\Models\Manga::class)
-                                        <p class="text-gray-400 text-sm font-semibold">{{ __('Manga') }}</p>
+                                        <p class="text-secondary text-sm font-semibold">{{ __('Manga') }}</p>
                                         <ul>
                                             @foreach ($userLibrary as $key => $item)
                                                 <li>
@@ -330,7 +330,7 @@
 
                 <div class="flex flex-col items-center space-y-4">
                     <div class="flex flex-col w-full">
-                        <p class="text-gray-400 text-sm font-semibold">{{ __('Last updated on:') }}</p>
+                        <p class="text-secondary text-sm font-semibold">{{ __('Last updated on:') }}</p>
                         <p>{{ $this->userLibrary->flatten(1)->pluck('updated_at')->max() }}</p>
                     </div>
 
@@ -338,7 +338,7 @@
                 </div>
             </article>
 
-            <div class="flex items-center justify-center text-gray-400 font-bold sm:hidden">
+            <div class="flex items-center justify-center text-secondary font-bold sm:hidden">
                 {{ __('OR') }}
             </div>
         </section>

@@ -1,7 +1,7 @@
-<nav class="hidden md:flex flex-col bg-white border-e border-black"
+<nav class="hidden md:flex flex-col border-e border-primary"
      style="min-width: 18rem;">
     <div class="flex flex-col gap-6 mt-4 mr-4 ml-4">
-        <a class="inline-flex items-center w-full space-x-2 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none focus:text-gray-700"
+        <a class="inline-flex items-center w-full space-x-2 text-secondary transition duration-150 ease-in-out hover:text-primary focus:text-primary"
            href="/"
            wire:navigate
            x-transition:enter="ease-out duration-150 delay-100 transform sm:delay-[0ms]"
@@ -29,13 +29,13 @@
                 x-transition:leave-end="opacity-0"
             >
                 {{-- Search icon --}}
-                <div class="absolute left-0 flex pl-4 h-full text-gray-500 sm:pl-3">
+                <div class="absolute left-0 flex pl-4 h-full text-secondary sm:pl-3">
                     @svg('magnifyingglass', 'fill-current', ['width' => '14'])
                 </div>
 
                 {{-- Search field --}}
                 <input
-                    class="pr-8 pl-8 h-8 w-full text-sm rounded-md focus:border-orange-500 focus:ring-orange-500"
+                    class="pr-8 pl-8 h-8 w-full text-sm rounded-md focus:border-tint focus:ring-tint"
                     type="text"
                     name="q"
                     placeholder="{{ [__('Search'), '⌘+K, ctrl+K or /'][array_rand([0,1])] }}"
@@ -96,7 +96,7 @@
             </x-sidebar-nav-link>
         </div>
 
-        <a href="{{ empty($user) ? route('sign-in') : route('me') }}" class="flex items-center pl-4 pt-4 pr-4 pb-4 border-t" wire:navigate>
+        <a href="{{ empty($user) ? route('sign-in') : route('me') }}" class="flex items-center pl-4 pt-4 pr-4 pb-4 border-t border-primary" wire:navigate>
         <div class="shrink-0">
             <div
                 class="h-10 w-10 bg-cover rounded-full"
@@ -108,7 +108,7 @@
         </div>
 
         <div class="ml-3">
-            <div class="font-medium text-base text-gray-800">{{ $user?->username ?? __('Sign In') }}</div>
+            <div class="font-medium text-base text-primary">{{ $user?->username ?? __('Sign In') }}</div>
         </div>
     </a>
     </div>
