@@ -2,7 +2,7 @@
 
 @php
     $colorCSS = match ($color) {
-        'orange' => 'text-orange-500 hover:text-orange-400 active:text-orange-500',
+        'orange' => 'text-tint hover:text-orange-400 active:text-tint',
         default => '',
     }
 @endphp

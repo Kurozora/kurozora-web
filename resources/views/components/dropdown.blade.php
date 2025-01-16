@@ -1,4 +1,4 @@
-@props(['id', 'align' => 'right', 'width' => '48', 'maxHeight' => null, 'contentClasses' => 'bg-white'])
+@props(['id', 'align' => 'right', 'width' => '48', 'maxHeight' => null, 'contentClasses' => 'bg-secondary'])
 
 @php
     $id = $id ?? md5($attributes->wire('model'));

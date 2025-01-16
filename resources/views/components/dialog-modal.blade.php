@@ -19,7 +19,7 @@
         </div>
     </div>
 
-    <div class="px-6 pt-4 pb-4 bg-gray-100 text-right">
+    <div class="px-6 pt-4 pb-4 bg-secondary text-right">
         {{ $footer }}
     </div>
 </x-modal>

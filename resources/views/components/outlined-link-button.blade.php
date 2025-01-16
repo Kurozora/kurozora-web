@@ -7,7 +7,7 @@
         'green' => 'text-green-500 border-green-500 hover:bg-green-400 hover:border-green-400 focus:border-green-600 focus:ring-green active:bg-green-600',
         'pink' => 'text-pink-500 border-pink-500 hover:bg-pink-400 hover:border-pink-400 focus:border-pink-600 focus:ring-pink active:bg-pink-600',
         'violet' => 'text-violet-500 border-violet-500 hover:bg-violet-400 hover:border-violet-400 focus:border-violet-600 focus:ring-violet active:bg-violet-600',
-        default => 'text-orange-500 border-orange-500 hover:bg-orange-400 hover:border-orange-400 focus:border-orange-600 focus:ring-orange active:bg-orange-600'
+        default => 'text-tint border-tint hover:bg-orange-400 hover:border-orange-400 focus:border-orange-600 focus:ring-orange active:bg-orange-600'
     };
 @endphp
 

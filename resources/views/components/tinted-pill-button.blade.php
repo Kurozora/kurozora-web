@@ -2,9 +2,9 @@
 
 @php
     $colorCSS = match ($color) {
-        'orange' => 'bg-tinted text-white hover:bg-orange-400 active:bg-tinted active:border-orange-600 active:ring-orange',
+        'orange' => 'bg-tint text-white active:bg-tint active:border-tint active:ring-tint',
         'transparent' => '',
-        default => 'bg-white hover:bg-gray-100 active:bg-white active:border-orange-600 active:ring-orange',
+        default => 'bg-secondary hover:bg-tertiary active:bg-secondary active:border-tint active:ring-tint',
     };
 @endphp
 
