@@ -6,7 +6,7 @@
 
 <div {{ $attributes->merge(['class' => 'relative flex-grow w-64 sm:w-96 ' . $class]) }}>
     <div
-        class="relative flex flex-row gap-2 pr-2 pl-2 pt-2 pb-2 h-full bg-gray-100 rounded-xl"
+        class="relative flex flex-row gap-2 pr-2 pl-2 pt-2 pb-2 h-full bg-secondary rounded-xl"
         x-data="{}"
         wire:key="{{ uniqid($review->id, true) }}"
     >
@@ -20,7 +20,7 @@
                     <livewire:components.user.badge-shelf :user="$review->user" wire:key="{{ uniqid('badges-', true) }}" />
                 </div>
 
-                <p class="text-sm text-gray-500 whitespace-nowrap" title="{{ $review->created_at->toFormattedDateString() }}">{{ $review->created_at->toFormattedDateString() }}</p>
+                <p class="text-sm text-secondary whitespace-nowrap" title="{{ $review->created_at->toFormattedDateString() }}">{{ $review->created_at->toFormattedDateString() }}</p>
             </div>
 
             <div>
@@ -67,7 +67,7 @@
 {{--                                        open = !open--}}
 {{--                                    }--}}
 {{--                                }"--}}
-{{--                                class="block w-full pl-4 pr-4 pt-2 pb-2 bg-white text-gray-400 text-xs text-center font-semibold hover:bg-gray-50 focus:bg-gray-200"--}}
+{{--                                class="block w-full pl-4 pr-4 pt-2 pb-2 text-xs text-center font-semibold hover:bg-tertiary focus:bg-secondary"--}}
 {{--                                x-on:click="copyTextToClipboard()"--}}
 {{--                            >--}}
 {{--                                {{ __('Copy Link') }}--}}

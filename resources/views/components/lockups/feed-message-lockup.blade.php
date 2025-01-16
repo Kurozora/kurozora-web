@@ -7,7 +7,7 @@
 @endphp
 
 <div
-    class="relative flex flex-row gap-2 pr-2 pl-2 pt-2 bg-gray-100 rounded-xl"
+    class="relative flex flex-row gap-2 pr-2 pl-2 pt-2 bg-secondary rounded-xl"
     x-data="{}"
     wire:key="{{ uniqid(more_entropy: true) }}"
 >
@@ -21,7 +21,7 @@
                 <livewire:components.user.badge-shelf :user="$feedMessage->user" wire:key="{{ uniqid('badges-', true) }}" />
             </div>
 
-            <p class="text-sm text-gray-500 whitespace-nowrap" title="{{ $feedMessage->created_at }}">{{ $feedMessage->created_at->shortAbsoluteDiffForHumans() }}</p>
+            <p class="text-sm text-secondary whitespace-nowrap" title="{{ $feedMessage->created_at }}">{{ $feedMessage->created_at->shortAbsoluteDiffForHumans() }}</p>
         </div>
 
         <div class="w-full" style="word-break: break-word;">{!! $feedMessage->content_html !!}</div>

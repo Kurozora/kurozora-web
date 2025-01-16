@@ -1,7 +1,7 @@
 @props(['recap', 'title', 'progressAriaLabel', 'progressCount', 'progressUnit', 'mediaCollection' => \App\Enums\MediaCollection::Poster])
 
 <div
-    {{ $attributes->merge(['class' => 'flex flex-col items-center justify-between gap-6 w-full pt-5 pl-5 pb-5 pr-5 bg-gray-200/20 rounded-xl overflow-hidden', 'style' => 'min-width: 256px; max-width: 384px;']) }}
+    {{ $attributes->merge(['class' => 'flex flex-col items-center justify-between gap-6 w-full pt-5 pl-5 pb-5 pr-5 bg-blur rounded-xl overflow-hidden', 'style' => 'min-width: 256px; max-width: 384px;']) }}
     wire:key="{{ uniqid($recap?->id, true) }}"
 >
     <div class="w-full">
