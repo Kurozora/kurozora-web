@@ -40,8 +40,8 @@
         <section class="flex space-x-2">
             <div
                 id="kuroChat1"
-                class="relative flex flex-col"
-                style="width: 675px; height: 900px; background: linear-gradient(#353A50, #23273A);"
+                class="relative flex flex-col border border-primary rounded-lg overflow-hidden"
+                style="width: 675px; height: 900px; background: linear-gradient(var(--bg-secondary-color), var(--bg-primary-color));"
                 x-data="{
                     chatOwner: 'Kuro #1',
                     newMessageText: '',
@@ -83,10 +83,10 @@
                 >
                 </div>
 
-                <section id="header" class="flex justify-between bg-grayBlue-800 pl-4 pr-4 py-3 z-10">
+                <section id="header" class="flex justify-between bg-primary pl-4 pr-4 py-3 z-10">
                     <div>
                         <button
-                            class="flex justify-center text-orange-500"
+                            class="flex justify-center text-tint"
                             style="width: 44px; height: 44px;"
                         >
                             @svg('chevron_backward', 'fill-current', ['width' => 20])
@@ -97,7 +97,7 @@
                         <div>
                             <div class="flex">
                                 <picture class="relative w-full overflow-hidden">
-                                    <img class="bg-white border-2 border-black/5 rounded-full" src="https://via.placeholder.com/44" alt="Profile Image" width="44" height="44">
+                                    <img class="bg-primary border-2 border-black/5 rounded-full" src="https://via.placeholder.com/44" alt="Profile Image" width="44" height="44">
 
                                     <div class="absolute top-0 left-0 h-full w-full"></div>
                                 </picture>
@@ -105,14 +105,14 @@
                         </div>
 
                         <div>
-                            <p class="font-semibold text-xl text-gray-200" x-text="chatOwner"></p>
-                            <p class="font-medium text-sm text-gray-400">Kurozora Chat v1.0.0</p>
+                            <p class="font-semibold text-xl text-primary" x-text="chatOwner"></p>
+                            <p class="font-medium text-sm text-secondary">Kurozora Chat v1.0.0</p>
                         </div>
                     </div>
 
                     <div>
                         <button
-                            class="flex justify-center text-orange-500"
+                            class="flex justify-center text-tint"
                             style="width: 44px; height: 44px;"
                         >
                         </button>
@@ -137,11 +137,11 @@
                                 <template x-for="message in messageGroup.messages">
                                     <div
                                         class="max-w-[50%] rounded-3xl"
-                                        :class="isImage(message.content) ? 'flex' : (messageGroup.owner === chatOwner ? 'pl-4 pr-4 py-3 bg-indigo-700' : 'pl-4 pr-4 py-3 bg-grayBlue-800')"
+                                        :class="isImage(message.content) ? 'flex' : (messageGroup.owner === chatOwner ? 'pl-4 pr-4 py-3 bg-tertiary' : 'pl-4 pr-4 py-3 bg-primary')"
                                         :key="message.id"
                                     >
                                         <template x-if="!isImage(message.content)">
-                                            <p class="text-white leading-tight" x-text="message.content"></p>
+                                            <p class="text-primary leading-tight" x-text="message.content"></p>
                                         </template>
 
                                         <template x-if="isImage(message.content)">
@@ -156,29 +156,29 @@
                             </div>
 
                             <template x-if="nextMessageGroup?.owner === chatOwner && nextMessageGroup?.owner !== chatOwner && nextMessageGroup?.owner !== undefined">
-                                <p class="pl-4 pr-4 font-semibold text-grayBlue-400 text-xs">
+                                <p class="pl-4 pr-4 font-semibold text-secondary text-xs">
                                     @svg('double_check_mark', 'fill-current', ['width' => '14'])
                                 </p>
                             </template>
 
                             <template x-if="messageGroup.owner === chatOwner && nextMessageGroup?.owner === undefined">
-                                <p class="pl-4 pr-4 font-semibold text-grayBlue-400 text-xs">
+                                <p class="pl-4 pr-4 font-semibold text-secondary text-xs">
                                     {{ __('Delivered') }}
                                 </p>
                             </template>
 
                             <template x-if="nextMessageGroup?.owner !== chatOwner && nextMessageGroup?.owner !== undefined">
-                                <p class="pl-4 pr-4 font-semibold text-grayBlue-400 text-xs" x-text="toAMPM(messageGroup.updated_at)"></p>
+                                <p class="pl-4 pr-4 font-semibold text-secondary text-xs" x-text="toAMPM(messageGroup.updated_at)"></p>
                             </template>
                         </div>
                     </template>
                 </section>
 
-                <section id="footer" class="bg-grayBlue-800 pl-4 pr-4 py-3 z-10">
+                <section id="footer" class="bg-primary pl-4 pr-4 py-3 z-10">
                     <form class="flex space-x-2" @submit.stop.prevent="sendMessage()">
                         <textarea
                             id="messageBox"
-                            class="form-text w-full bg-grayBlue-600 text-white rounded-3xl border-none outline-none shadow-sm resize-none placeholder:text-grayBlue-400 hover:resize-y focus:ring-0"
+                            class="form-text w-full bg-secondary text-primary rounded-3xl border-none outline-none shadow-sm resize-none placeholder:text-secondary hover:resize-y focus:ring-0"
                             style="min-height: 44px;"
                             placeholder="{{ __('Write a message') }}"
                             rows="1"
@@ -189,7 +189,7 @@
                             <x-emoji />
 
                             <button
-                                class="flex justify-center text-orange-500"
+                                class="flex justify-center text-tint"
                                 style="width: 44px; height: 44px;"
                                 type="submit"
                             >
@@ -201,8 +201,9 @@
             </div>
 
             <div
-                class="relative flex flex-col"
-                style="width: 675px; height: 900px; background: linear-gradient(#353A50, #23273A);"
+                id="kuroChat2"
+                class="relative flex flex-col border border-primary rounded-lg overflow-hidden"
+                style="width: 675px; height: 900px; background: linear-gradient(var(--bg-secondary-color), var(--bg-primary-color));"
                 x-data="{
                     chatOwner: 'Kuro #2',
                     newMessageText: '',
@@ -244,10 +245,10 @@
                 >
                 </div>
 
-                <section id="header" class="flex justify-between bg-grayBlue-800 pl-4 pr-4 py-3 z-10">
+                <section id="header" class="flex justify-between bg-primary pl-4 pr-4 py-3 z-10">
                     <div>
                         <button
-                            class="flex justify-center text-orange-500"
+                            class="flex justify-center text-tint"
                             style="width: 44px; height: 44px;"
                         >
                             @svg('chevron_backward', 'fill-current', ['width' => 20])
@@ -258,7 +259,7 @@
                         <div>
                             <div class="flex">
                                 <picture class="relative w-full overflow-hidden">
-                                    <img class="bg-white border-2 border-black/5 rounded-full" src="https://via.placeholder.com/44" alt="Profile Image" width="44" height="44">
+                                    <img class="bg-primary border-2 border-black/5 rounded-full" src="https://via.placeholder.com/44" alt="Profile Image" width="44" height="44">
 
                                     <div class="absolute top-0 left-0 h-full w-full"></div>
                                 </picture>
@@ -266,14 +267,14 @@
                         </div>
 
                         <div>
-                            <p class="font-semibold text-xl text-gray-200" x-text="chatOwner"></p>
-                            <p class="font-medium text-sm text-gray-400">Kurozora Chat v1.0.0</p>
+                            <p class="font-semibold text-xl text-primary" x-text="chatOwner"></p>
+                            <p class="font-medium text-sm text-secondary">Kurozora Chat v1.0.0</p>
                         </div>
                     </div>
 
                     <div>
                         <button
-                            class="flex justify-center text-orange-500"
+                            class="flex justify-center text-tint"
                             style="width: 44px; height: 44px;"
                         >
                         </button>
@@ -298,11 +299,11 @@
                                 <template x-for="message in messageGroup.messages">
                                     <div
                                         class="max-w-[50%] rounded-3xl"
-                                        :class="{ 'flex': isImage(message.content), 'pl-4 pr-4 py-3 bg-indigo-700': !isImage(message.content) && messageGroup.owner === chatOwner, 'pl-4 pr-4 py-3 bg-grayBlue-800': !isImage(message.content) && messageGroup.owner !== chatOwner}"
+                                        :class="{ 'flex': isImage(message.content), 'pl-4 pr-4 py-3 bg-tertiary': !isImage(message.content) && messageGroup.owner === chatOwner, 'pl-4 pr-4 py-3 bg-primary': !isImage(message.content) && messageGroup.owner !== chatOwner}"
                                         :key="message.id"
                                     >
                                         <template x-if="!isImage(message.content)">
-                                            <p class="text-white leading-tight" x-text="message.content"></p>
+                                            <p class="text-primary leading-tight" x-text="message.content"></p>
                                         </template>
 
                                         <template x-if="isImage(message.content)">
@@ -317,29 +318,29 @@
                             </div>
 
                             <template x-if="nextMessageGroup?.owner === chatOwner && nextMessageGroup?.owner !== chatOwner && nextMessageGroup?.owner !== undefined">
-                                <p class="pl-4 pr-4 font-semibold text-grayBlue-400 text-xs">
+                                <p class="pl-4 pr-4 font-semibold text-secondary text-xs">
                                     @svg('double_check_mark', 'fill-current', ['width' => '14'])
                                 </p>
                             </template>
 
                             <template x-if="messageGroup.owner === chatOwner && nextMessageGroup?.owner === undefined">
-                                <p class="pl-4 pr-4 font-semibold text-grayBlue-400 text-xs">
+                                <p class="pl-4 pr-4 font-semibold text-secondary text-xs">
                                     {{ __('Delivered') }}
                                 </p>
                             </template>
 
                             <template x-if="nextMessageGroup?.owner !== chatOwner && nextMessageGroup?.owner !== undefined">
-                                <p class="pl-4 pr-4 font-semibold text-grayBlue-400 text-xs" x-text="toAMPM(messageGroup.updated_at)"></p>
+                                <p class="pl-4 pr-4 font-semibold text-secondary text-xs" x-text="toAMPM(messageGroup.updated_at)"></p>
                             </template>
                         </div>
                     </template>
                 </section>
 
-                <section id="footer" class="bg-grayBlue-800 pl-4 pr-4 py-3 z-10">
+                <section id="footer" class="bg-primary pl-4 pr-4 py-3 z-10">
                     <form class="flex space-x-2" @submit.stop.prevent="sendMessage()">
                         <textarea
                             id="messageBox"
-                            class="form-text w-full bg-grayBlue-600 text-white rounded-3xl border-none outline-none shadow-sm resize-none placeholder:text-grayBlue-400 hover:resize-y focus:ring-0"
+                            class="form-text w-full bg-secondary text-primary rounded-3xl border-none outline-none shadow-sm resize-none placeholder:text-secondary hover:resize-y focus:ring-0"
                             style="min-height: 44px;"
                             placeholder="{{ __('Write a message') }}"
                             rows="1"
@@ -350,7 +351,7 @@
                             <x-emoji />
 
                             <button
-                                class="flex justify-center text-orange-500"
+                                class="flex justify-center text-tint"
                                 style="width: 44px; height: 44px;"
                                 type="submit"
                             >
