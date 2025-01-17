@@ -131,7 +131,7 @@ return [
 
     'navigate' => [
         'show_progress_bar' => true,
-        'progress_bar_color' => '#FF9300',
+        'progress_bar_color' => 'var(--tint-color)',
     ],
 
     /*
