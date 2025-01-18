@@ -11,8 +11,8 @@ html, body {
 }
 
 ::selection {
-  @apply text-white
-  bg-orange-500;
+  @apply btn-text-tinted
+  bg-tint;
 }
 
 /**
@@ -48,10 +48,8 @@ ul, ol {
 body {
   @apply flex
   flex-col
-  text-neutral-750
   leading-snug
-  tracking-tight
-  dark:text-white;
+  tracking-tight;
 
   quotes: "“" "”";
 }
@@ -127,35 +125,77 @@ picture::before {
    * Theme utilities
    */
   .bg-primary {
-    background-color: var(--background-color);
+    background-color: var(--bg-primary-color);
+  }
+  .bg-secondary {
+    background-color: var(--bg-secondary-color);
+  }
+  .bg-tertiary {
+    background-color: var(--bg-tertiary-color);
+  }
+  .bg-inverse-primary {
+    background-color: var(--primary-text-color);
+  }
+  .bg-inverse-secondary {
+    background-color: var(--secondary-text-color);
   }
   .bg-tinted {
-    background-color: var(--tinted-background-color);
+    background-color: var(--bg-tint-color);
   }
-  .text-primary {
-    color: var(--text-color);
+  .bg-blur {
+    background-color: var(--bg-blur-color);
   }
-  .blur-bg-color {
-    background-color: var(--blur-background-color);
+  .bg-tint {
+    background-color: var(--tint-color);
   }
-  .tint-color {
-    color: var(--tint-color);
+
+  .border-tint {
+    border-color: var(--tint-color);
   }
-  .border-color {
+  .border-primary {
     border-color: var(--border-color);
   }
-  .tinted-buttonText-color {
-    color: var(--tinted-button-text-color);
+  .ring-tint {
+    --tw-ring-color: var(--tint-color);
   }
-  .primary-separator-color {
-    color: var(--primary-separator-color);
+  .outline-tint {
+    outline-color: var(--tint-color);
+  }
+
+  .text-primary {
+    color: var(--primary-text-color);
+  }
+  .text-secondary {
+    color: var(--secondary-text-color);
+  }
+  .text-tint {
+    color: var(--tint-color);
+  }
+  .btn-text-tinted {
+    color: var(--btn-tinted-text-color);
+  }
+
+  .primary-separator {
+    background-color: var(--primary-separator-color);
   }
   .secondary-separator-color {
-    color: var(--secondary-separator-color);
+    background-color: var(--secondary-separator-color);
   }
-  .sub-text-color {
-    color: var(--sub-text-color);
-  }
+}
+
+:focus:not(:focus-visible) {
+  @apply appearance-none
+  focus:ring-0
+  focus:ring-offset-0;
+}
+
+:focus-visible {
+  @apply appearance-none
+  border-tint
+  ring-2
+  ring-offset-2
+  ring-tint
+  outline-tint;
 }
 
 /**
@@ -172,16 +212,34 @@ img:not([src]):not([srcset]) {
   visibility: hidden;
 }
 
+/*:root, .app-theme {*/
+/*  --bg-primary-color: #353A50;*/
+/*  --bg-secondary-color: #454F63;*/
+/*  --bg-tertiary-color: #667286;*/
+/*  --border-color: #AFAFAF;*/
+/*  --bg-blur-color: #353A50BF;*/
+/*  --bg-tint-color: #50577D;*/
+/*  --btn-tinted-text-color: #EEEEEE;*/
+/*  --primary-text-color: #EEEEEE;*/
+/*  --secondary-text-color: #AFAFAF;*/
+/*  --tint-color: #FF9300;*/
+/*  --primary-separator-color: #C6C5C5;*/
+/*  --secondary-separator-color: #5A5D6D;*/
+/*}*/
+
 .app-theme {
-  --background-color: #FFFFFF;
-  --text-color: #333333;
+  --bg-primary-color: #FFFFFF;
+  --bg-secondary-color: #F6F6F6;
+  --bg-tertiary-color: #DFEDFD;
+  --border-color: #AFAFAF;
+  --bg-blur-color: #F7F7F780;
+  --bg-tint-color: #FFF3E3;
+  --btn-tinted-text-color: #FFFFFF;
+  --primary-text-color: #000000;
+  --secondary-text-color: #979797;
   --tint-color: #FF9300;
-  --tinted-background-color: #FF9300;
-  --blur-background-color: #8b5cf6;
-  --tinted-button-text-color: #FFFFFF;
-  --primary-separator-color: #5b5b5b;
-  --secondary-separator-color: #919191;
-  --sub-text-color: #5b5b5b;
+  --primary-separator-color: #C6C5C5;
+  --secondary-separator-color: #5A5D6D;
 }
 
 [x-cloak] {
