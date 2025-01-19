@@ -1,4 +1,4 @@
-@props(['disabled' => false, 'chevronClass' => 'text-white', 'chevronStrokeWidth' => '2', 'rounded' => 'md'])
+@props(['disabled' => false, 'chevronClass' => 'btn-text-tinted', 'chevronStrokeWidth' => '2', 'rounded' => 'md'])
 
 @php
     $rounded = match ($rounded) {

@@ -2,7 +2,7 @@
 
 @php
     $colorCSS = match ($color) {
-        'orange' => 'bg-tint text-white active:bg-tint active:border-tint active:ring-tint',
+        'orange' => 'bg-tint btn-text-tinted active:bg-tint active:border-tint active:ring-tint',
         'transparent' => '',
         default => 'bg-secondary hover:bg-tertiary active:bg-secondary active:border-tint active:ring-tint',
     };
