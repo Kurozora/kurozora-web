@@ -1,5 +1,5 @@
 <div wire:init="loadSection">
-    <section id="#{{ $date->toDateString() }}" class="pt-5 pb-8 pl-4 pr-4 border-t-2">
+    <section id="#{{ $date->toDateString() }}" class="pt-5 pb-8 pl-4 pr-4 border-t border-primary">
         @if ($this->models->count())
             <x-section-nav>
                 <x-slot:title>

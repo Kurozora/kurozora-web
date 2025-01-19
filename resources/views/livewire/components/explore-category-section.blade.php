@@ -5,7 +5,7 @@
 <div>
     <div wire:init="loadSection">
         @if ($this->exploreCategoryItems->count())
-            <section class="pt-5 pb-8 {{ $index != $borderIndex ? 'border-t-2' : '' }}">
+            <section class="pt-5 pb-8 {{ $index != $borderIndex ? 'border-t' : '' }}">
                 <x-section-nav class="flex flex-nowrap justify-between mb-5 pl-4 pr-4 sm:px-6">
                     <x-slot:title>
                         @switch($exploreCategory->type)
@@ -151,7 +151,7 @@
     </div>
 
     @if (!$readyToLoad)
-        <section  class="pt-5 pb-8 border-t-2 border-primary">
+        <section  class="pt-5 pb-8 border-t border-primary">
             <div style="height: 314px">
                 <div class="flex gap-2 justify-between mb-5">
                     <div>

@@ -58,7 +58,7 @@
                     </section>
                 @endif
             @elseif (!$readyToLoad)
-                <section class="mt-4 pt-5 pb-8 border-t-2 border-primary">
+                <section class="mt-4 pt-5 pb-8 border-t border-primary">
                     <div class="flex gap-4 justify-between flex-wrap">
                         <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
                         <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>

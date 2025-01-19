@@ -41,7 +41,7 @@
                 {{ $this->games->links() }}
             </div>
         @else
-            <section class="mt-4 pt-5 pb-8 border-t-2 border-primary">
+            <section class="mt-4 pt-5 pb-8 border-t border-primary">
                 <div class="flex gap-4 justify-between flex-wrap">
                     @foreach (range(1,25) as $range)
                         <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>

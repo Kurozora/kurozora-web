@@ -1,4 +1,4 @@
-<section class="pt-5 pb-8 border-t-2 border-primary">
+<section class="pt-5 pb-8 border-t border-primary">
     <x-section-nav class="flex flex-nowrap justify-between mb-5">
         <x-slot:title>
             {{ __(':x Top Charts', ['x' => ucfirst($chartKind)]) }}

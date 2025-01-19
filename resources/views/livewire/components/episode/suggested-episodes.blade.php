@@ -2,7 +2,7 @@
     @if ($this->episodes->count())
         <section
             id="suggestedEpisodes"
-            class="pt-5 pb-8 pl-4 pr-4 {{ empty($nextEpisodeID) ? '' : 'border-t-2' }}"
+            class="pt-5 pb-8 pl-4 pr-4 {{ empty($nextEpisodeID) ? '' : 'border-t' }}"
         >
             <x-section-nav>
                 <x-slot:title>

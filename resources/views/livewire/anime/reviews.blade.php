@@ -56,7 +56,7 @@
             </div>
         </section>
 
-        <section id="writeAReview" class="mb-5 pt-5 border-t-2">
+        <section id="writeAReview" class="mb-5 pt-5 border-t border-primary">
             <div class="flex flex-row flex-wrap gap-4">
                 <div class="flex justify-between items-center">
                     <p class="">{{ __('Click to Rate:') }}</p>

@@ -57,7 +57,7 @@
         </section>
 
         @if (!$readyToLoad)
-            <section  class="pt-5 pb-8 border-t-2 border-primary">
+            <section  class="pt-5 pb-8 border-t border-primary">
                 <div style="height: 314px">
                     <div class="flex gap-2 justify-between mb-5">
                         <div>
@@ -77,7 +77,7 @@
                     </div>
                 </div>
             </section>
-            <section  class="pt-5 pb-8 border-t-2 border-primary">
+            <section  class="pt-5 pb-8 border-t border-primary">
                 <div style="height: 314px">
                     <div class="flex gap-2 justify-between mb-5">
                         <div>
@@ -97,7 +97,7 @@
                     </div>
                 </div>
             </section>
-            <section  class="pt-5 pb-8 border-t-2 border-primary">
+            <section  class="pt-5 pb-8 border-t border-primary">
                 <div style="height: 314px">
                     <div class="flex gap-2 justify-between mb-5">
                         <div>
@@ -117,7 +117,7 @@
                     </div>
                 </div>
             </section>
-            <section  class="pt-5 pb-8 border-t-2 border-primary">
+            <section  class="pt-5 pb-8 border-t border-primary">
                 <div style="height: 314px">
                     <div class="flex gap-2 justify-between mb-5">
                         <div>

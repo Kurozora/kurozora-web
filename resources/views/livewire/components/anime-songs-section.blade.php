@@ -1,6 +1,6 @@
 <div wire:init="loadSection">
     @if ($this->mediaSongs->count())
-        <section class="pt-5 pb-8 pl-4 pr-4 border-t-2">
+        <section class="pt-5 pb-8 pl-4 pr-4 border-t border-primary">
             <x-section-nav>
                 <x-slot:title>
                     {{ __('Songs') }}
@@ -17,7 +17,7 @@
             <x-rows.music-lockup :media-songs="$this->mediaSongs" />
         </section>
     @elseif (!$readyToLoad)
-        <section class="pt-5 pb-8 pl-4 pr-4 border-t-2">
+        <section class="pt-5 pb-8 pl-4 pr-4 border-t border-primary">
             <div class="flex gap-2 justify-between mb-5">
                 <div>
                     <p class="bg-secondary rounded-md" style="width: 168px; height: 28px"></p>

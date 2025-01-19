@@ -1,6 +1,6 @@
 <div wire:init="loadSection">
     @if ($this->models->count())
-        <section class="pt-5 pb-8 border-t-2 border-primary">
+        <section class="pt-5 pb-8 border-t border-primary">
             <x-section-nav>
                 <x-slot:title>
                     {{ $this->title }}
@@ -23,7 +23,7 @@
             @endswitch
         </section>
     @elseif (!$readyToLoad)
-        <section  class="pt-5 pb-8 border-t-2 border-primary">
+        <section  class="pt-5 pb-8 border-t border-primary">
             <div>
                 <div class="flex gap-2 justify-between mb-5">
                     <div>

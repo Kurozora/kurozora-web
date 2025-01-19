@@ -245,7 +245,7 @@
             </section>
 
             @if (!empty($manga->synopsis))
-                <section class="pt-5 pb-8 pl-4 pr-4 border-t-2">
+                <section class="pt-5 pb-8 pl-4 pr-4 border-t border-primary">
                     <x-section-nav class="flex flex-nowrap justify-between mb-5">
                         <x-slot:title>
                             {{ __('Synopsis') }}
@@ -260,7 +260,7 @@
                 </section>
             @endif
 
-            <section id="ratingsAndReviews" class="pt-5 pb-8 pl-4 pr-4 border-t-2">
+            <section id="ratingsAndReviews" class="pt-5 pb-8 pl-4 pr-4 border-t border-primary">
                 <x-section-nav>
                     <x-slot:title>
                         {{ __('Ratings & Reviews') }}
@@ -291,7 +291,7 @@
                 </div>
             </section>
 
-            <section id="writeAReview" class="pt-5 pb-8 pl-4 pr-4 border-t-2">
+            <section id="writeAReview" class="pt-5 pb-8 pl-4 pr-4 border-t border-primary">
                 <div class="flex flex-row flex-wrap gap-4">
                     <div class="flex justify-between items-center">
                         <p class="">{{ __('Click to Rate:') }}</p>
@@ -314,7 +314,7 @@
                 </div>
             </section>
 
-            <section class="pt-5 pb-8 pl-4 pr-4 border-t-2">
+            <section class="pt-5 pb-8 pl-4 pr-4 border-t border-primary">
                 <x-section-nav>
                     <x-slot:title>
                         {{ __('Information') }}
@@ -497,7 +497,7 @@
                     <livewire:components.manga.game-relations-section :manga="$manga" />
 
                     @if (!empty($manga->copyright))
-                        <section class="pt-4 pr-4 pb-4 pl-4 border-t">
+                        <section class="pt-4 pr-4 pb-4 pl-4 border-t border-primary">
                             <p class="text-sm text-secondary">{!! nl2br(e($manga->copyright)) !!}</p>
                         </section>
                     @endif

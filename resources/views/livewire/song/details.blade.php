@@ -170,7 +170,7 @@
             </section>
 
             @if (!empty($song->original_lyrics))
-                <section class="pt-5 pb-8 border-t-2 border-primary">
+                <section class="pt-5 pb-8 border-t border-primary">
                     <x-section-nav class="flex flex-nowrap justify-between mb-5">
                         <x-slot:title>
                             {{ __('Lyrics') }}
@@ -185,7 +185,7 @@
                 </section>
             @endif
 
-            <section id="ratingsAndReviews" class="pt-5 pb-8 border-t-2 border-primary">
+            <section id="ratingsAndReviews" class="pt-5 pb-8 border-t border-primary">
                 <x-section-nav>
                     <x-slot:title>
                         {{ __('Ratings & Reviews') }}
@@ -216,7 +216,7 @@
                 </div>
             </section>
 
-            <section id="writeAReview" class="pt-5 pb-8 border-t-2 border-primary">
+            <section id="writeAReview" class="pt-5 pb-8 border-t border-primary">
                 <div class="flex flex-row flex-wrap gap-4">
                     <div class="flex justify-between items-center">
                         <p class="">{{ __('Click to Rate:') }}</p>
@@ -247,7 +247,7 @@
         <div class="bg-tinted">
             <div class="max-w-7xl mx-auto pl-4 pr-4 sm:px-6">
                 @if (!empty($song->copyright))
-                    <section class="pt-4 pb-4 border-t">
+                    <section class="pt-4 pb-4 border-t border-primary">
                         <p class="text-sm text-secondary">{!! nl2br(e($song->copyright)) !!}</p>
                     </section>
                 @endif

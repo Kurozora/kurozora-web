@@ -1,6 +1,6 @@
 <section wire:init="loadSection">
     @if ($this->animeRelations->count())
-        <div class="pt-5 pb-8 pl-4 pr-4 border-t-2">
+        <div class="pt-5 pb-8 pl-4 pr-4 border-t border-primary">
             <x-section-nav>
                 <x-slot:title>
                     {{ __('Adaptations') }}
@@ -17,7 +17,7 @@
             <x-rows.small-lockup :related-animes="$this->animeRelations" />
         </div>
     @elseif (!$readyToLoad)
-        <div class="pt-5 pb-8 pl-4 pr-4 border-t-2">
+        <div class="pt-5 pb-8 pl-4 pr-4 border-t border-primary">
             <div class="flex gap-2 justify-between mb-5">
                 <div>
                     <p class="bg-secondary rounded-md" style="width: 168px; height: 28px"></p>
