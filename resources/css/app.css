@@ -58,6 +58,10 @@ main {
   @apply flex-grow;
 }
 
+img {
+  @apply select-none;
+}
+
 picture::before {
   @apply absolute
   block
@@ -148,6 +152,9 @@ picture::before {
   .bg-tint {
     background-color: var(--tint-color);
   }
+  .bg-tint-800 {
+    background-color: color-mix(in srgb, var(--tint-color), #444 20%);
+  }
 
   .border-tint {
     border-color: var(--tint-color);
@@ -170,6 +177,9 @@ picture::before {
   }
   .text-tint {
     color: var(--tint-color);
+  }
+  .text-tint-800 {
+    color: color-mix(in srgb, var(--tint-color), #444 20%);
   }
   .btn-text-tinted {
     color: var(--btn-tinted-text-color);
