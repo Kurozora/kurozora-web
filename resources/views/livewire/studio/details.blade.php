@@ -60,7 +60,7 @@
                 </a>
             </div>
 
-            <div id="rankingBadge" class="flex-grow px-12 border-l-2">
+            <div id="rankingBadge" class="flex-grow px-12 border-l border-primary">
                 <a class="flex flex-col items-center" href="{{ route('charts.top', App\Enums\ChartKind::Studios) }}" wire:navigate>
                     <p class="font-bold">{{ trans_choice('{0} -|[1,*] #:x', $studio->mediaStat->rank_total ?? 0, ['x' => $studio->mediaStat->rank_total]) }}</p>
                     <p class="text-tint">
@@ -70,7 +70,7 @@
                 </a>
             </div>
 
-            <div id="tvRatingBadge" class="flex-grow px-12 border-l-2">
+            <div id="tvRatingBadge" class="flex-grow px-12 border-l border-primary">
                 <a class="flex flex-col items-center" href="#tvRating">
                     <p class="font-bold">{{ $studio->tv_rating->name }}</p>
                     <p class="text-tint">
@@ -81,7 +81,7 @@
             </div>
 
             @if (!empty($this->studio->successor))
-                <div id="studioBadge" class="flex-grow px-12 border-l-2">
+                <div id="studioBadge" class="flex-grow px-12 border-l border-primary">
                     <a class="flex flex-col items-center" href="{{ route('studios.details', $this->studio->successor) }}" wire:navigate>
                         <p class="font-bold">{{ $this->studio->successor->name }}</p>
                         <p class="text-tint">

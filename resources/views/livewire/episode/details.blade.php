@@ -270,7 +270,7 @@
                         </a>
                     </div>
 
-                    <div id="seasonBadge" class="flex-grow px-12 border-l-2">
+                    <div id="seasonBadge" class="flex-grow px-12 border-l border-primary">
                         <a href="{{ route('anime.seasons', $anime) }}" wire:navigate>
                             <p class="font-bold">#{{ $season->number }}</p>
                             <p class="text-sm text-secondary">{{ __('Season') }}</p>
@@ -278,7 +278,7 @@
                     </div>
 
                     @if ($previousEpisode)
-                        <div id="previousEpisodeBadge" class="flex-grow px-12 border-l-2">
+                        <div id="previousEpisodeBadge" class="flex-grow px-12 border-l border-primary">
                             <a href="{{ route('episodes.details', $previousEpisode) }}" wire:navigate>
                                 <p class="font-bold">{{ __('Episode :x', ['x' => $previousEpisode->number_total]) }}</p>
                                 <p class="text-sm text-secondary">{{ __('Previous') }}</p>
@@ -287,7 +287,7 @@
                     @endif
 
                     @if ($nextEpisode)
-                        <div id="nextEpisodeBadge" class="flex-grow px-12 border-l-2">
+                        <div id="nextEpisodeBadge" class="flex-grow px-12 border-l border-primary">
                             <a href="{{ route('episodes.details', $nextEpisode) }}" wire:navigate>
                                 <p class="font-bold">{{ __('Episode :x', ['x' => $nextEpisode->number_total]) }}</p>
                                 <p class="text-sm text-secondary">{{ __('Next') }}</p>
@@ -295,7 +295,7 @@
                         </div>
                     @endif
 
-                    <div id="animeBadge" class="flex-grow px-12 border-l-2">
+                    <div id="animeBadge" class="flex-grow px-12 border-l border-primary">
                         <a href="{{ route('anime.details', $anime) }}" wire:navigate>
                             <p class="font-bold line-clamp-1">{{ substr($anime->title, 0, 25) }}</p>
                             <p class="text-sm text-secondary">{{ __('Anime') }}</p>

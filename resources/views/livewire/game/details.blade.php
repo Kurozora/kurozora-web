@@ -184,7 +184,7 @@
                 </div>
 
                 @if ($game->publish_season)
-                    <div id="seasonBadge" class="flex-grow px-12 border-l-2">
+                    <div id="seasonBadge" class="flex-grow px-12 border-l border-primary">
                         <a class="flex flex-col items-center" href="#published">
                             <p class="font-bold">{{ $game->publish_season->description }}</p>
                             <p class="text-tint">
@@ -195,7 +195,7 @@
                     </div>
                 @endif
 
-                <div id="rankingBadge" class="flex-grow px-12 border-l-2">
+                <div id="rankingBadge" class="flex-grow px-12 border-l border-primary">
                     <a class="flex flex-col items-center" href="{{ route('charts.top', App\Enums\ChartKind::Games) }}">
                         <p class="font-bold">{{ trans_choice('{0} -|[1,*] #:x', $game->mediaStat->rank_total ?? 0, ['x' => $game->mediaStat->rank_total]) }}</p>
                         <p class="text-tint">
@@ -205,7 +205,7 @@
                     </a>
                 </div>
 
-                <div id="tvRatingBadge" class="flex-grow px-12 border-l-2">
+                <div id="tvRatingBadge" class="flex-grow px-12 border-l border-primary">
                     <a class="flex flex-col items-center" href="#tvRating">
                         <p class="font-bold">{{ $game->tv_rating->name }}</p>
                         <p class="text-tint">
@@ -216,7 +216,7 @@
                 </div>
 
                 @if (!empty($this->studio))
-                    <div id="studioBadge" class="flex-grow px-12 border-l-2">
+                    <div id="studioBadge" class="flex-grow px-12 border-l border-primary">
                         <a class="flex flex-col items-center" href="{{ route('studios.details', $this->studio) }}">
                             <p class="font-bold">{{ $this->studio->name }}</p>
                             <p class="text-tint">
@@ -228,7 +228,7 @@
                 @endif
 
                 @if (!empty($game->country_of_origin))
-                    <div id="countryBadge" class="flex-grow px-12 border-l-2">
+                    <div id="countryBadge" class="flex-grow px-12 border-l border-primary">
                         <a class="flex flex-col items-center" href="#country">
                             <p class="font-bold">{{ strtoupper($game->country_of_origin->code) }}</p>
                             <p class="text-tint">
@@ -239,7 +239,7 @@
                     </div>
                 @endif
 
-                <div id="languageBadge" class="flex-grow px-12 border-l-2">
+                <div id="languageBadge" class="flex-grow px-12 border-l border-primary">
                     <a class="flex flex-col items-center" href="#languages">
                         <p class="font-bold">{{ strtoupper($game->languages->first()->code) }}</p>
                         <p class="text-tint">
