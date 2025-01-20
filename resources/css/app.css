@@ -15,6 +15,19 @@ html, body {
   bg-tint;
 }
 
+:focus:not(:focus-visible) {
+  @apply outline-none
+  ring-0
+  ring-offset-0;
+}
+
+:focus-visible {
+  @apply outline-none
+  ring-2
+  ring-offset-2
+  ring-tint;
+}
+
 /**
  * Remove the default box-shadow for invalid elements to prevent
  * inputs in Livewire components showing with a
@@ -191,21 +204,6 @@ picture::before {
   .secondary-separator-color {
     background-color: var(--secondary-separator-color);
   }
-}
-
-:focus:not(:focus-visible) {
-  @apply appearance-none
-  focus:ring-0
-  focus:ring-offset-0;
-}
-
-:focus-visible {
-  @apply appearance-none
-  border-tint
-  ring-2
-  ring-offset-2
-  ring-tint
-  outline-tint;
 }
 
 /**
