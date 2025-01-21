@@ -14,7 +14,7 @@
     <div class="flex flex-col items-baseline w-full">
         <div class="flex gap-2 justify-between w-full">
             <div class="flex gap-2">
-                <x-simple-link class="text-sm font-semibold text-secondary whitespace-nowrap" href="{{ route('profile.details', $comment->user) }}">{{ $comment->user->username }}</x-simple-link>
+                <x-simple-link class="text-sm font-semibold text-secondary whitespace-nowrap" href="{{ route('profile.details', $comment->user) }}" wire:navigate>{{ $comment->user->username }}</x-simple-link>
 
                 @if ($showTime)
                     <p class="text-sm text-secondary whitespace-nowrap" title="{{ $comment->created_at }}">{{ $comment->created_at->format('g:i A') }}</p>

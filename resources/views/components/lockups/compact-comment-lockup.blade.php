@@ -14,7 +14,7 @@
             <p class="text-sm text-secondary whitespace-nowrap" title="{{ $comment->created_at }}">{{ $comment->created_at->format('g:i A') }}</p>
         @endif
 
-        <x-simple-link class="text-sm font-semibold text-secondary whitespace-nowrap" href="{{ route('profile.details', $comment->user) }}">{{ $comment->user->username }}</x-simple-link>
+        <x-simple-link class="text-sm font-semibold text-secondary whitespace-nowrap" href="{{ route('profile.details', $comment->user) }}" wire:navigate>{{ $comment->user->username }}</x-simple-link>
         <p style="word-break: break-word;">{!! nl2br(e($comment->content)) !!}</p>
     </div>
 
