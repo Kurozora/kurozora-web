@@ -136,6 +136,7 @@
                 <livewire:profile.update-profile-information-form />
             </x-modal-form-section>
         @endauth
+        @break
     @case('block')
         @auth
             <x-dialog-modal model="showPopup" submit="">
