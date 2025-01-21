@@ -130,7 +130,7 @@
                             <div class="flex w-full justify-between mt-2 gap-1 sm:gap-4">
                                 <p class="flex-grow pt-1 pr-1 pb-1 pl-1 text-white text-center text-xs font-semibold whitespace-nowrap rounded-md" style="background-color: {{ $anime->status->color }};">{{ $anime->status->name }}</p>
 
-                                <p class="flex-grow pt-1 pr-1 pb-1 pl-1 bg-secondary text-black text-center text-xs font-semibold whitespace-nowrap rounded-md"> {{ trans_choice('{0} Rank -|[1,*] Rank #:x', $anime->mediaStat->rank_total ?? 0, ['x' => $anime->mediaStat->rank_total]) }}</p>
+                                <p class="flex-grow pt-1 pr-1 pb-1 pl-1 bg-white text-black text-center text-xs font-semibold whitespace-nowrap rounded-md"> {{ trans_choice('{0} Rank -|[1,*] Rank #:x', $anime->mediaStat->rank_total ?? 0, ['x' => $anime->mediaStat->rank_total]) }}</p>
                             </div>
                         </div>
 
@@ -145,7 +145,7 @@
 
                             <div class="flex gap-2">
                                 @if ($isTracking)
-                                    <x-circle-button color="yellow" wire:click="remindAnime">
+                                    <x-circle-button wire:click="remindAnime">
                                         @if ($isReminded)
                                             @svg('bell_fill', 'fill-current', ['width' => '44'])
                                         @else
@@ -153,7 +153,7 @@
                                         @endif
                                     </x-circle-button>
 
-                                    <x-circle-button color="red" wire:click="favoriteAnime">
+                                    <x-circle-button wire:click="favoriteAnime">
                                         @if ($isFavorited)
                                             @svg('heart_fill', 'fill-current', ['width' => '44'])
                                         @else

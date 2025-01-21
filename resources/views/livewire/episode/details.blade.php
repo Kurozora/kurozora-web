@@ -182,7 +182,7 @@
 
                             @if ($isTracking)
                                 {{-- Reminders --}}
-                                <x-circle-button color="yellow" wire:click="remindAnime">
+                                <x-circle-button wire:click="remindAnime">
                                     @if ($isReminded)
                                         @svg('bell_fill', 'fill-current', ['width' => '44'])
                                     @else
