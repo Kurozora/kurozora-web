@@ -23,30 +23,30 @@
                 <x-season-pagination :type="App\Models\Game::class" />
             </div>
 
-            <table class="table-fixed w-full text-xs text-center border-2 border-primary sm:text-base">
-                <thead id="tableHeader" class="bg-secondary font-bold border-2 border-primary">
+            <table class="table-fixed w-full text-xs text-center border border-primary sm:text-base">
+                <thead id="tableHeader" class="bg-secondary font-bold border border-primary">
                 <tr>
-                    <th class="pt-2 pr-2 pb-2 pl-2 sm:p-4 border-b-2 border-primary">
+                    <th class="pt-2 pr-2 pb-2 pl-2 sm:p-4 border-b border-primary">
                         <p>
                             {{ __('Year') }}
                         </p>
                     </th>
-                    <th class="pt-2 pr-2 pb-2 pl-2 sm:p-4 border-b-2 border-primary">
+                    <th class="pt-2 pr-2 pb-2 pl-2 sm:p-4 border-b border-primary">
                         <div class="flex justify-center h-4 sm:h-full">
                             {{ \App\Enums\SeasonOfYear::Winter()->symbol() }}
                         </div>
                     </th>
-                    <th class="pt-2 pr-2 pb-2 pl-2 sm:p-4 border-b-2 border-primary">
+                    <th class="pt-2 pr-2 pb-2 pl-2 sm:p-4 border-b border-primary">
                         <div class="flex justify-center h-4 sm:h-full">
                             {{ \App\Enums\SeasonOfYear::Spring()->symbol() }}
                         </div>
                     </th>
-                    <th class="pt-2 pr-2 pb-2 pl-2 sm:p-4 border-b-2 border-primary">
+                    <th class="pt-2 pr-2 pb-2 pl-2 sm:p-4 border-b border-primary">
                         <div class="flex justify-center h-4 sm:h-full">
                             {{ \App\Enums\SeasonOfYear::Summer()->symbol() }}
                         </div>
                     </th>
-                    <th class="pt-2 pr-2 pb-2 pl-2 sm:p-4 border-b-2 border-primary">
+                    <th class="pt-2 pr-2 pb-2 pl-2 sm:p-4 border-b border-primary">
                         <div class="flex justify-center h-4 sm:h-full">
                             {{ \App\Enums\SeasonOfYear::Fall()->symbol() }}
                         </div>
@@ -60,7 +60,7 @@
 
                         @foreach (\App\Enums\SeasonOfYear::asSelectArray() as $seasonOfYear)
                             <td class="pt-2 pr-2 pb-2 pl-2 sm:p-4 {{ $year === now()->year && $seasonOfYear === season_of_year()->key ? 'font-semibold' : '' }}">
-                                <x-simple-link href="{{ route('games.seasons.year.season', [$year, $seasonOfYear]) }}">{{ $seasonOfYear }}</x-simple-link>
+                                <x-simple-link href="{{ route('games.seasons.year.season', [$year, $seasonOfYear]) }}" wire:navigate>{{ $seasonOfYear }}</x-simple-link>
                             </td>
                         @endforeach
                     </tr>
@@ -84,11 +84,11 @@
         // Add the sticky class to the headers when you reach its scroll position. Remove "sticky" when you leave the scroll position
         function stickyHeader() {
             if (window.scrollY > sticky) {
-                mediaTypeHeader.classList.add('sticky', 'top-0', 'border-b-2')
+                mediaTypeHeader.classList.add('sticky', 'top-0', 'border-b', 'border-primary')
                 tableHeader.classList.add('sticky')
                 tableHeader.setAttribute('style', 'top:' + mediaTypeHeader.offsetHeight + 'px;')
             } else {
-                mediaTypeHeader.classList.remove('sticky', 'top-0', 'border-b-2')
+                mediaTypeHeader.classList.remove('sticky', 'top-0', 'border-b', 'border-primary')
                 tableHeader.classList.remove('sticky')
                 tableHeader.removeAttribute('style')
             }

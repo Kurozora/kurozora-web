@@ -18,7 +18,7 @@
         <div class="flex flex-nowrap gap-4 justify-between text-center whitespace-nowrap overflow-x-scroll no-scrollbar">
             @foreach (\App\Enums\UserLibraryStatus::asAnimeSelectArray() as $key => $value)
                 <button
-                    class="pl-4 pr-4 pb-2 border-b-2 hover:border-tint"
+                    class="pl-4 pr-4 pb-2 border-b border-primary hover:border-tint"
                     :class="{'border-tint': '{{ strtolower($status) }}' === '{{ strtolower($value) }}', 'border-gray-300': '{{ strtolower($status) }}' !== '{{ strtolower($value) }}'}"
                     wire:click="$set('status', '{{ strtolower($value) }}')"
                     data-toggle="tab"
