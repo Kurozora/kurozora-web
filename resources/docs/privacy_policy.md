@@ -1,4 +1,4 @@
-<section class="m-auto max-w-4xl prose prose-orange lg:prose-lg" style="padding-bottom: 22px;">
+<section class="m-auto max-w-4xl prose prose-theme lg:prose-lg">
 
 <div style="text-align: center;">
 
@@ -15,7 +15,7 @@ Please take a moment to familiarize yourself with our privacy practices.
 
 </section>
 
-<section style="text-align: center;">
+<section class="m-auto max-w-4xl prose prose-theme lg:prose-lg" style="text-align: center;">
 <div></div>
 <span>
 
@@ -27,9 +27,9 @@ Please take a moment to familiarize yourself with our privacy practices.
 
 </section>
 
-<section class="m-auto max-w-4xl prose prose-orange lg:prose-lg">
+<section class="m-auto max-w-4xl prose prose-theme lg:prose-lg">
 
-<div style="padding: 2em 0;">
+<div style="padding: 0;">
 
 ## Our Commitment to Your Privacy
 Kurozora respects your privacy, It is _your_ data after all. Your privacy comes first for Kurozora, as such Kurozora will always:

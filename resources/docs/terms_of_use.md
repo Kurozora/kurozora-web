@@ -1,4 +1,4 @@
-<section class="m-auto max-w-4xl prose prose-orange lg:prose-lg" style="padding-bottom: 22px;">
+<section class="m-auto max-w-4xl prose prose-theme lg:prose-lg">
 
 <div style="text-align: center;">
 
@@ -10,7 +10,7 @@ Please take a moment to familiarize yourself with our terms of use.
 
 </section>
 
-<section style="text-align: center;">
+<section class="m-auto max-w-4xl prose prose-theme lg:prose-lg" style="text-align: center;">
 <div></div>
 <span>
 
@@ -21,9 +21,9 @@ Please take a moment to familiarize yourself with our terms of use.
 <div></div>
 </section>
 
-<section class="m-auto max-w-4xl prose prose-orange lg:prose-lg">
+<section class="m-auto max-w-4xl prose prose-theme lg:prose-lg">
 
-<div style="padding: 2em 0;">
+<div style="padding: 0;">
 
 ### Agreement to Terms of Use
 These Terms and Conditions of Use (the "Terms of Use") apply to the Kurozora web site located at www.kurozora.app, and all associated sites linked to www.kurozora.app by Kurozora, its subsidiaries and affiliates, including Kurozora sites around the world, any other media form, media channel, mobile website or mobile application related, linked, or otherwise connected (collectively, the "Site"). The Site is the property of Kurozora and its licensors. BY USING THE SITE, YOU AGREE TO THESE TERMS OF USE; IF YOU DO NOT AGREE, DO NOT USE THE SITE.
