@@ -16,9 +16,32 @@ module.exports = {
             colors: {
                 orange: {
                     DEFAULT: '#FF9300',
-                    '400': '#FFA933',
-                    '500': '#FF9300',
-                    '600': '#E68400',
+                    '500': '#FF9300'
+                },
+            },
+
+            typography: {
+                theme: {
+                    css: {
+                        '--tw-prose-body': 'var(--primary-text-color)',
+                        '--tw-prose-headings': 'var(--primary-text-color)',
+                        '--tw-prose-lead': 'var(--primary-text-color)',
+                        '--tw-prose-links': 'var(--tint-color)',
+                        '--tw-prose-bold': 'var(--primary-text-color)',
+                        '--tw-prose-counters': 'var(--secondary-text-color)',
+                        '--tw-prose-bullets': 'var(--primary-text-color)',
+                        '--tw-prose-hr': 'var(--border-color)',
+                        '--tw-prose-quotes': 'var(--primary-text-color)',
+                        '--tw-prose-quote-borders': 'var(--border-color)',
+                        '--tw-prose-captions': 'var(--secondary-text-color)',
+                        '--tw-prose-kbd': 'var(--primary-text-color)',
+                        '--tw-prose-kbd-shadows': '17 24 39',
+                        '--tw-prose-code': 'var(--primary-text-color)',
+                        '--tw-prose-pre-code': 'var(--primary-text-color)',
+                        '--tw-prose-pre-bg': 'var(--bg-secondary-color)',
+                        '--tw-prose-th-borders': 'var(--border-color)',
+                        '--tw-prose-td-borders': 'var(--border-color)'
+                    },
                 },
             },
 
