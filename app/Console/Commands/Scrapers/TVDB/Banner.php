@@ -14,7 +14,7 @@ class Banner extends Command
      *
      * @var string
      */
-    protected $signature = 'scrape:tvdb_banners {tvdbID? : The id of the anime. Accepts an array of comma seperated IDs}';
+    protected $signature = 'scrape:tvdb_banner {tvdbID? : The id of the anime. Accepts an array of comma seperated IDs}';
 
     /**
      * The console command description.

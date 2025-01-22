@@ -39,7 +39,7 @@ class AnimeBanner extends Command
 
                 /** @var Anime $anime */
                 foreach ($animes as $anime) {
-                    $this->call('scrape:tvdb_banners', ['tvdbID' => $anime->tvdb_id]);
+                    $this->call('scrape:tvdb_banner', ['tvdbID' => $anime->tvdb_id]);
                 }
             });
 

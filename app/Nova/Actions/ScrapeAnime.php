@@ -41,7 +41,7 @@ class ScrapeAnime extends Action implements ShouldQueue
 
                     if ($model->tvdb_id) {
                         if (empty($model->getFirstMedia(MediaCollection::Banner))) {
-                            Artisan::call('scrape:tvdb_banners', ['tvdbID' => $model->tvdb_id]);
+                            Artisan::call('scrape:tvdb_banner', ['tvdbID' => $model->tvdb_id]);
                         }
                         Artisan::call('scrape:tvdb_episode', ['tvdbID' => $model->tvdb_id]);
                     }

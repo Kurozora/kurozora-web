@@ -36,7 +36,7 @@ class ScrapeAnimeBanner extends Action implements ShouldQueue
                 $nonScrapeCount++;
             } else {
                 try {
-                    Artisan::call('scrape:tvdb_banners', ['tvdbID' => $model->tvdb_id]);
+                    Artisan::call('scrape:tvdb_banner', ['tvdbID' => $model->tvdb_id]);
 
                     $this->markAsFinished($model);
                     $scrapeCount++;
