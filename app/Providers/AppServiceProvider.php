@@ -47,7 +47,7 @@ class AppServiceProvider extends ServiceProvider
             $method = $request->method();
 
             return match ($method) {
-                'GET' => Limit::perMinutes(1, 4000)->by($method . ':' . $request->user()?->id ?: $request->ip()),
+                'GET' => Limit::perMinutes(1, 3600)->by($method . ':' . $request->user()?->id ?: $request->ip()),
                 default => Limit::perMinute(60)->by($method . ':' . ($request->user()?->id ?: $request->ip())),
             };
         });
