@@ -78,7 +78,7 @@
             <div class="relative flex flex-nowrap aspect-video md:relative md:h-full xl:aspect-auto">
                 <x-picture
                     class="w-full overflow-hidden"
-                    style="background-color: {{ ($manga->getFirstMedia(\App\Enums\MediaCollection::Banner) ?? $manga->getFirstMedia(\App\Enums\MediaCollection::Poster))?->custom_properties['background_color'] ?? '#FFFFFF' }};"
+                    style="background-color: {{ ($manga->getFirstMedia(\App\Enums\MediaCollection::Banner) ?? $manga->getFirstMedia(\App\Enums\MediaCollection::Poster))?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
                     wire:ignore
                 >
                     <img class="w-full h-full aspect-video object-cover lazyload" data-sizes="auto" data-src="{{ $manga->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $manga->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $manga->title }} Banner" title="{{ $manga->title }}">
@@ -102,7 +102,7 @@
                 <div class="flex flex-nowrap pt-5 pb-8 pl-4 pr-4 md:mx-auto md:mb-8 md:p-2 md:max-w-lg md:bg-white md:bg-opacity-50 md:backdrop-filter md:backdrop-blur md:rounded-lg">
                     <svg
                         class="relative shrink-0 w-28 h-40 mr-2 overflow-hidden"
-                        style="min-width: 7rem; max-height: 10rem; background-color: {{ $manga->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? '#FFFFFF' }};"
+                        style="min-width: 7rem; max-height: 10rem; background-color: {{ $manga->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
                         wire:ignore
                     >
                         <foreignObject width="112" height="160" mask="url(#svg-mask-book-cover)">

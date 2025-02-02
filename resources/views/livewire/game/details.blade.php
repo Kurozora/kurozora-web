@@ -90,7 +90,7 @@
             <div class="relative flex flex-nowrap aspect-video md:relative md:h-full xl:aspect-auto">
                 <x-picture
                     class="w-full overflow-hidden"
-                    style="background-color: {{ ($game->getFirstMedia(\App\Enums\MediaCollection::Banner) ?? $game->getFirstMedia(\App\Enums\MediaCollection::Poster))?->custom_properties['background_color'] ?? '#FFFFFF' }};"
+                    style="background-color: {{ ($game->getFirstMedia(\App\Enums\MediaCollection::Banner) ?? $game->getFirstMedia(\App\Enums\MediaCollection::Poster))?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
                     wire:ignore
                 >
                     <img class="w-full h-full aspect-video object-cover lazyload" data-sizes="auto" data-src="{{ $game->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $game->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/game_banner.webp') }}" alt="{{ $game->title }} Banner" title="{{ $game->title }}">
@@ -116,7 +116,7 @@
                         :border="true"
                         border-roundness="rounded-3xl"
                         class="w-28 h-28 mr-2 rounded-3xl overflow-hidden"
-                        style="min-width: 7rem; max-height: 10rem; background-color: {{ $game->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? '#FFFFFF' }};"
+                        style="min-width: 7rem; max-height: 10rem; background-color: {{ $game->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
                         wire:ignore
                     >
                         <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $game->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/game_poster.webp') }}" alt="{{ $game->title }} Poster" title="{{ $game->title }}">

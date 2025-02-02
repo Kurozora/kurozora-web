@@ -74,7 +74,7 @@
                                         class="block w-full pl-4 pr-4 pt-2 pb-2 text-red-500 text-xs text-center font-semibold hover:bg-tertiary focus:bg-secondary"
                                         wire:click="togglePopupFor('block')"
                                     >
-                                        {{ $this->isBlocked ? __ ('Unblock') : __('Block') }}
+                                        {{ $this->isBlocked ? __('Unblock') : __('Block') }}
                                     </button>
                                 @endif
                             @endauth

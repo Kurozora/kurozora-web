@@ -9,7 +9,7 @@
                 <foreignObject height="96" width="96" mask="url(#svg-mask-avatar-status-round-80)">
                     <x-picture
                         class="w-full h-full"
-                        style="background-color: {{ $profileImage?->custom_properties['background_color'] ?? '#FFFFFF' }}"
+                        style="background-color: {{ $profileImage?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }}"
                     >
                         <img
                             class="w-full h-full object-cover"
@@ -38,7 +38,7 @@
     @else
         <x-picture
             class="w-full h-full rounded-full"
-            style="background-color: {{ $profileImage?->custom_properties['background_color'] ?? '#FFFFFF' }}"
+            style="background-color: {{ $profileImage?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }}"
         >
             <img
                 class="w-16 h-16 object-cover rounded-full sm:w-24 sm:h-24"
