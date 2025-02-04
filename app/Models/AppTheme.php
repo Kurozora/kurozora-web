@@ -56,7 +56,7 @@ class AppTheme extends KModel implements HasMedia
      */
     public function toPlist(): string
     {
-        $view = View::make('themes.plist.ios-theme', [
+        $view = View::make('themes.ios', [
             'theme' => $this
         ]);
 
@@ -70,7 +70,7 @@ class AppTheme extends KModel implements HasMedia
      */
     public function toCSS(): string
     {
-        $view = View::make('themes.css.ios-theme', [
+        $view = View::make('themes.css', [
             'theme' => $this
         ]);
 
