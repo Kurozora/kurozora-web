@@ -220,32 +220,20 @@ img:not([src]):not([srcset]) {
   visibility: hidden;
 }
 
-/*:root, .app-theme {*/
-/*  --bg-primary-color: #353A50;*/
-/*  --bg-secondary-color: #454F63;*/
-/*  --bg-tertiary-color: #667286;*/
-/*  --border-color: #AFAFAF;*/
-/*  --bg-blur-color: #353A50BF;*/
-/*  --bg-tint-color: #50577D;*/
-/*  --btn-tinted-text-color: #EEEEEE;*/
-/*  --primary-text-color: #EEEEEE;*/
-/*  --secondary-text-color: #AFAFAF;*/
-/*  --tint-color: #FF9300;*/
-/*  --primary-separator-color: #C6C5C5;*/
-/*  --secondary-separator-color: #5A5D6D;*/
-/*}*/
+:root {
+  --tint-color: #FF9300;
+}
 
 .app-theme {
-  --bg-primary-color: #FFFFFF;
-  --bg-secondary-color: #F6F6F6;
-  --bg-tertiary-color: #DFEDFD;
+  --bg-primary-color: #353A50;
+  --bg-secondary-color: #454F63;
+  --bg-tertiary-color: #667286;
   --border-color: #AFAFAF;
-  --bg-blur-color: #F7F7F780;
-  --bg-tint-color: #FFF3E3;
-  --btn-tinted-text-color: #FFFFFF;
-  --primary-text-color: #000000;
-  --secondary-text-color: #979797;
-  --tint-color: #FF9300;
+  --bg-blur-color: #353A50BF;
+  --bg-tint-color: #50577D;
+  --btn-tinted-text-color: #EEEEEE;
+  --primary-text-color: #EEEEEE;
+  --secondary-text-color: #AFAFAF;
   --primary-separator-color: #C6C5C5;
   --secondary-separator-color: #5A5D6D;
 }
