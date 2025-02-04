@@ -30,6 +30,7 @@ class WatchButton extends Component
      * Prepare the component.
      *
      * @param Episode $episode
+     *
      * @return void
      */
     public function mount(Episode $episode): void
