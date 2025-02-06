@@ -96,8 +96,13 @@ class Index extends Component
      */
     public function randomManga(): void
     {
+        if ($this->searchResults?->isEmpty() ?? true) {
+            return;
+        }
+
         // Get library status
-        $status = str_replace('-', '', $this->status);
+        $upperCaseStatus = implode('-', array_map('ucfirst', explode('-', $this->status)));
+        $status = str_replace('-', '', $upperCaseStatus);
         $userLibraryStatus = UserLibraryStatus::fromKey($status);
 
         $manga = $this->user

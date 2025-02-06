@@ -53,6 +53,10 @@ class Favorites extends Component
      */
     public function randomManga(): void
     {
+        if ($this->searchResults?->isEmpty() ?? true) {
+            return;
+        }
+
         $manga = $this->user
             ->whereFavorited(Manga::class)
             ->inRandomOrder()

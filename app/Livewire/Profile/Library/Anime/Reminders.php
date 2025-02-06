@@ -53,6 +53,10 @@ class Reminders extends Component
      */
     public function randomAnime(): void
     {
+        if ($this->searchResults?->isEmpty() ?? true) {
+            return;
+        }
+
         $anime = $this->user
             ->whereReminded(Anime::class)
             ->inRandomOrder()

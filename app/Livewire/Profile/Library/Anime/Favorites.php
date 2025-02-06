@@ -53,6 +53,11 @@ class Favorites extends Component
      */
     public function randomAnime(): void
     {
+        if ($this->searchResults?->isEmpty() ?? true) {
+            return;
+        }
+
+        // Get library status
         $anime = $this->user
             ->whereFavorited(Anime::class)
             ->inRandomOrder()

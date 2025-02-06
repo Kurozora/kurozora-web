@@ -53,6 +53,10 @@ class Favorites extends Component
      */
     public function randomGame(): void
     {
+        if ($this->searchResults?->isEmpty() ?? true) {
+            return;
+        }
+
         $game = $this->user
             ->whereFavorited(Game::class)
             ->inRandomOrder()
