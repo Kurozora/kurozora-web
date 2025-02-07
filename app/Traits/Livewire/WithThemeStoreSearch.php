@@ -36,7 +36,9 @@ trait WithThemeStoreSearch
      */
     public function searchIndexQuery(EloquentBuilder $query): EloquentBuilder
     {
-        return $query->with(['media']);
+        return $query->with(['media' => function ($query) {
+            $query->orderBy('order_column');
+        }]);
     }
 
     /**
@@ -48,7 +50,9 @@ trait WithThemeStoreSearch
     public function searchQuery(ScoutBuilder $query): ScoutBuilder
     {
         return $query->query(function (EloquentBuilder $query) {
-            $query->with(['media']);
+            $query->with(['media' => function ($query) {
+                $query->orderBy('order_column');
+            }]);
         });
     }
 
