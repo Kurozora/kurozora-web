@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Anime;
 
+use App\Enums\SongType;
 use App\Models\Anime;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -61,6 +62,8 @@ class Songs extends Component
             return collect();
         }
 
+        $sort = SongType::asSelectArray();
+
         return $this->anime->mediaSongs()
             ->with([
                 'song' => function ($query) {
@@ -69,7 +72,13 @@ class Songs extends Component
             ])
             ->get()
             ->sortBy(['position'])
-            ->groupBy('type.description');
+            ->groupBy('type.description')
+            ->sortKeysUsing(function ($key1, $key2) use ($sort) {
+                $key1 = array_search($key1, $sort);
+                $key2 = array_search($key2, $sort);
+
+                return $key1 < $key2 ? -1 : 1;
+            });
     }
 
     /**
