@@ -99,7 +99,9 @@
             </div>
 
             <div class="md:absolute md:bottom-0 md:left-0 md:right-0 lg:px-4">
-                <div class="flex flex-nowrap pt-5 pb-8 pl-4 pr-4 md:mx-auto md:mb-8 md:p-2 md:max-w-lg md:bg-white md:bg-opacity-50 md:backdrop-filter md:backdrop-blur md:rounded-lg">
+                <div class="flex flex-nowrap pt-5 pb-8 pl-4 pr-4 md:mx-auto md:mb-8 md:p-2 md:max-w-lg md:bg-blur md:backdrop-filter md:backdrop-blur md:rounded-lg">
+                    <div class="absolute top-0 right-0 left-0 h-full rounded-lg md:bg-blur md:backdrop-filter md:backdrop-blur"></div>
+
                     <svg
                         class="relative shrink-0 w-28 h-40 mr-2 overflow-hidden"
                         style="min-width: 7rem; max-height: 10rem; background-color: {{ $manga->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
@@ -116,7 +118,7 @@
                         </g>
                     </svg>
 
-                    <div class="flex flex-col gap-2 justify-between w-full">
+                    <div class="relative flex flex-col gap-2 justify-between w-full">
                         <div>
                             <p class="font-semibold text-lg leading-tight break-all">{{ $manga->title }}</p>
 

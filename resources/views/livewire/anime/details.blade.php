@@ -112,6 +112,8 @@
 
             <div class="md:absolute md:bottom-0 md:left-0 md:right-0 lg:px-4">
                 <div class="flex flex-nowrap pt-5 pb-8 pl-4 pr-4 md:mx-auto md:mb-8 md:p-2 md:max-w-lg md:bg-blur md:backdrop-filter md:backdrop-blur md:rounded-lg">
+                    <div class="absolute top-0 right-0 left-0 h-full rounded-lg md:bg-blur md:backdrop-filter md:backdrop-blur"></div>
+
                     <x-picture
                         :border="true"
                         class="w-28 h-40 mr-2 rounded-lg overflow-hidden"
@@ -121,7 +123,7 @@
                         <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $anime->title }} Poster" title="{{ $anime->title }}">
                     </x-picture>
 
-                    <div class="flex flex-col gap-2 justify-between w-full">
+                    <div class="relative flex flex-col gap-2 justify-between w-full">
                         <div>
                             <p class="font-semibold text-lg leading-tight break-all">{{ $anime->title }}</p>
 
