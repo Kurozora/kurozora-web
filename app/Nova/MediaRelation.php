@@ -8,12 +8,9 @@ use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\MorphTo;
 use Laravel\Nova\Fields\Text;
-use Titasgailius\SearchRelations\SearchesRelations;
 
 class MediaRelation extends Resource
 {
-    use SearchesRelations;
-
     /**
      * The model the resource corresponds to.
      *
@@ -41,18 +38,7 @@ class MediaRelation extends Resource
      * @var array
      */
     public static $search = [
-        'id',
-    ];
-
-    /**
-     * The relationship columns that should be searched.
-     *
-     * @var array
-     */
-    public static array $searchRelations = [
-        'model' => ['original_title'],
-        'related' => ['original_title'],
-        'relation' => ['name'],
+        'id', 'model.original_title', 'related.original_title', 'relation.name'
     ];
 
     /**

@@ -11,13 +11,10 @@ use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\MorphTo;
 use Laravel\Nova\Http\Requests\NovaRequest;
-use Titasgailius\SearchRelations\SearchesRelations;
 use Validator;
 
 class MediaStudio extends Resource
 {
-    use SearchesRelations;
-
     /**
      * The model the resource corresponds to.
      *
@@ -45,17 +42,7 @@ class MediaStudio extends Resource
      * @var array
      */
     public static $search = [
-        'id',
-    ];
-
-    /**
-     * The relationship columns that should be searched.
-     *
-     * @var array
-     */
-    public static array $searchRelations = [
-        'studio' => ['id', 'name'],
-        'model' => ['id', 'original_title'],
+        'id', 'studio.id', 'studio.name', 'model.id', 'model.original_title'
     ];
 
     /**

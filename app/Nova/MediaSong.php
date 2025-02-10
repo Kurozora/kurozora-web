@@ -14,12 +14,10 @@ use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Outl1ne\NovaSortable\Traits\HasSortableRows;
-use Titasgailius\SearchRelations\SearchesRelations;
 
 class MediaSong extends Resource
 {
-    use SearchesRelations,
-        HasSortableRows {
+    use HasSortableRows {
         indexQuery as indexSortableQuery;
     }
 
@@ -81,18 +79,7 @@ class MediaSong extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'type'
-    ];
-
-    /**
-     * The relationship columns that should be searched.
-     *
-     * @var array
-     */
-    public static array $searchRelations = [
-        'song' => ['id', 'original_title', 'artist'],
-        'song.translations' => ['title'],
-        'model' => ['id', 'original_title'],
+        'id', 'type', 'song.id', 'song.original_title', 'song.artist', 'song.translations.title', 'model.id', 'model.original_title'
     ];
 
     /**

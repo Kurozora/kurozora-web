@@ -18,12 +18,9 @@ use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 use Outl1ne\NovaColorField\Color;
 use Ramsey\Uuid\Uuid;
-use Titasgailius\SearchRelations\SearchesRelations;
 
 class Episode extends Resource
 {
-    use SearchesRelations;
-
     /**
      * The model the resource corresponds to.
      *

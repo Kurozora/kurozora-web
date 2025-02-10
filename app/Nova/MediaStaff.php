@@ -10,13 +10,10 @@ use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\MorphTo;
 use Laravel\Nova\Http\Requests\NovaRequest;
-use Titasgailius\SearchRelations\SearchesRelations;
 use Validator;
 
 class MediaStaff extends Resource
 {
-    use SearchesRelations;
-
     /**
      * The model the resource corresponds to.
      *
@@ -44,17 +41,7 @@ class MediaStaff extends Resource
      * @var array
      */
     public static $search = [
-        'id',
-    ];
-
-    /**
-     * The relationship columns that should be searched.
-     *
-     * @var array
-     */
-    public static array $searchRelations = [
-        'person' => ['id', 'first_name', 'last_name', 'family_name', 'given_name'],
-        'model' => ['id', 'original_title'],
+        'id', 'person.id', 'person.first_name', 'person.last_name', 'person.family_name', 'person.given_name', 'model.id', 'model.original_title'
     ];
 
     /**

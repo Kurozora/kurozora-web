@@ -43,7 +43,7 @@ class MediaTheme extends Resource
      * @var array
      */
     public static $search = [
-        'id',
+        'id', 'model.original_title'
     ];
 
     /**
