@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
@@ -15,6 +16,17 @@ class UserBlock extends Resource
      * @var class-string<\App\Models\UserBlock>
      */
     public static string $model = \App\Models\UserBlock::class;
+
+    /**
+     * Determine if the resource should be available for the given request.
+     *
+     * @param Request $request
+     * @return bool
+     */
+    public static function authorizedToViewAny(Request $request): bool
+    {
+        return $request->user()?->can('viewUserBlock') ?? false;
+    }
 
     /**
      * The single value that should be used to represent the resource when being displayed.

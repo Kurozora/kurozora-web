@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
@@ -16,6 +17,17 @@ class UserFavorite extends Resource
      * @var string
      */
     public static string $model = \App\Models\UserFavorite::class;
+
+    /**
+     * Determine if the resource should be available for the given request.
+     *
+     * @param Request $request
+     * @return bool
+     */
+    public static function authorizedToViewAny(Request $request): bool
+    {
+        return $request->user()?->can('viewUserFavorite') ?? false;
+    }
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -50,7 +62,8 @@ class UserFavorite extends Resource
     public function fields(NovaRequest $request): array
     {
         return [
-            Heading::make('Identification'),
+            Heading::make('Identification')
+                ->onlyOnDetail(),
 
             ID::make()->sortable(),
 
