@@ -342,6 +342,24 @@ if (class_exists('Laravel\Nova\NovaApplicationServiceProvider')) {
         }
 
         /**
+         * Register the Nova routes.
+         *
+         * @return void
+         */
+        protected function routes(): void
+        {
+            Nova::routes()
+                ->register();
+
+            // Override routes with our own, since Nova 5 doesn't support
+            // the 'nova.routes' config anymore.
+            Nova::routes()->loginPath = config('nova.routes.login');
+            Nova::routes()->logoutPath = config('nova.routes.logout');
+            Nova::routes()->forgotPasswordPath = config('nova.routes.forgot_password');
+            Nova::routes()->resetPasswordPath = config('nova.routes.reset_password');
+        }
+
+        /**
          * Configure the Nova authorization services.
          *
          * @return void
@@ -409,6 +427,8 @@ if (class_exists('Laravel\Nova\NovaApplicationServiceProvider')) {
          */
         public function register(): void
         {
+            parent::register();
+
             // Disable action events
             ActionEvent::saving(function ($actionEvent) {
                 return false;
