@@ -43,20 +43,17 @@ class FetchSessionLocation implements ShouldQueue
      *
      * @throws Exception
      */
-    public function handle()
+    public function handle(): void
     {
         // Get the IP info
         $data = $this->getDataFromAPI();
 
         // Add IP info to the session
         $this->sessionAttribute->city = $data->city ?? null;
-        $this->sessionAttribute->region = $data->region ?? null;
-        $this->sessionAttribute->country = $data->country ?? null;
-
-        if ($coordinates = $this->getCoordinates($data)) {
-            $this->sessionAttribute->latitude = $coordinates['lat'];
-            $this->sessionAttribute->longitude = $coordinates['lon'];
-        }
+        $this->sessionAttribute->region = $data->region ?? $data->state ?? $data->subdivision	?? null;
+        $this->sessionAttribute->country =  $data->country ?? $data->country_name ?? null;
+        $this->sessionAttribute->latitude = $data->latitude ?? null;
+        $this->sessionAttribute->longitude = $date->longitude ?? null;
 
         // Save changes
         $this->sessionAttribute->save();
@@ -72,7 +69,7 @@ class FetchSessionLocation implements ShouldQueue
     {
         // Get the IP in question and query the API
         $ip = $this->sessionAttribute->ip_address;
-        $rawContent = file_get_contents('https://ipinfo.io/' . $ip . '/json');
+        $rawContent = file_get_contents('https://www.iplocate.io/api/lookup/' . $ip);
 
         // Attempt to decode the content
         $decodedResponse = json_decode($rawContent);
@@ -83,31 +80,5 @@ class FetchSessionLocation implements ShouldQueue
         }
 
         return $decodedResponse;
-    }
-
-    /**
-     * Gets the latitude and longitude from a delimited string.
-     *
-     * @param $data
-     * @return array|null
-     */
-    private function getCoordinates($data): ?array
-    {
-        if (!isset($data->loc) || !is_string($data->loc)) {
-            return null;
-        }
-
-        // Explode the string
-        $coords = explode(',', $data->loc);
-
-        // Return null if the string wasn't properly split
-        if (!count($coords)) {
-            return null;
-        }
-
-        return [
-            'lat' => $coords[0],
-            'lon' => $coords[1],
-        ];
     }
 }
