@@ -50,8 +50,8 @@ class FetchSessionLocation implements ShouldQueue
 
         // Add IP info to the session
         $this->sessionAttribute->city = $data->city ?? null;
-        $this->sessionAttribute->region = $data->region ?? $data->state ?? $data->subdivision	?? null;
-        $this->sessionAttribute->country =  $data->country ?? $data->country_name ?? null;
+        $this->sessionAttribute->region = $data->region ?? $data->state ?? $data->subdivision ?? null;
+        $this->sessionAttribute->country = $data->country ?? $data->country_name ?? null;
         $this->sessionAttribute->latitude = $data->latitude ?? null;
         $this->sessionAttribute->longitude = $date->longitude ?? null;
 
