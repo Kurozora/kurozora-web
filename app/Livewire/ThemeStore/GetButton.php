@@ -2,21 +2,23 @@
 
 namespace App\Livewire\ThemeStore;
 
+use App\Enums\KTheme;
 use App\Models\AppTheme;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
+use Throwable;
 
 class GetButton extends Component
 {
     /**
      * The id of the theme.
      *
-     * @var int $themeID
+     * @var int|string $themeID
      */
-    public int $themeID;
+    public int|string $themeID;
 
     /**
      * The id of the current theme.
@@ -35,19 +37,35 @@ class GetButton extends Component
     /**
      * Prepare the component.
      *
-     * @param int    $themeId
-     * @param string $name
+     * @param int|string $themeId
+     * @param string     $name
      *
      * @return void
      */
-    public function mount(int $themeId, string $name): void
+    public function mount(int|string $themeId, string $name): void
     {
         $this->themeID = $themeId;
         $this->name = $name;
     }
 
+    /**
+     * Download the theme if user is allowed to have it.
+     *
+     * @return void
+     * @throws Throwable
+     */
     public function getTheme(): void
     {
+        if (!is_numeric($this->themeID)) {
+            $theme = KTheme::fromValue(strtolower($this->themeID));
+            $this->currentThemeID = $theme->value;
+            $this->dispatch('theme-download', theme: [
+                'id' => $theme->value,
+                'css' => $theme->toCSS(),
+            ]);
+            return;
+        }
+
         // Get the auth user
         $user = auth()?->user();
 
