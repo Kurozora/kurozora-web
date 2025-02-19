@@ -15,6 +15,7 @@ const defaultCaches = [
     'js/db.js',
     'js/chat.js',
     'js/listen.js',
+    'js/theme.js',
     'js/watch.js',
     'images/static/icon/app_icon.webp',
 ]
