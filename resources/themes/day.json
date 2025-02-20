@@ -1,0 +1,14 @@
+{
+    "global_tint_color": "#FF9300",
+    "global_background_color": "#FFFFFF",
+    "table_view_cell_background_color": "#F6F6F6",
+    "table_view_cell_selected_background_color": "#DFEDFD",
+    "global_border_color": "#9B9B9B",
+    "global_blur_background_color": "#F7F7F780",
+    "global_tinted_background_color": "#FFF3E3",
+    "global_tinted_button_text_color": "#FFFFFF",
+    "global_text_color": "#000000",
+    "global_sub_text_color": "#979797",
+    "global_separator_color": "#979797",
+    "global_separator_color_light": "#BBBBBB"
+}
