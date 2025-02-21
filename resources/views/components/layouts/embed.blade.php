@@ -45,6 +45,7 @@
         <!-- Scripts -->
         <script src="{{ url(mix('js/manifest.js')) }}" defer></script>
         <script src="{{ url(mix('js/vendor.js')) }}" defer></script>
+        <script src="{{ url(mix('js/theme.js')) }}" defer></script>
         <script src="{{ url(mix('js/app.js')) }}" defer></script>
         @if (app()->isLocal())
             <script src="{{ url(mix('js/debug.js')) }}" defer></script>
