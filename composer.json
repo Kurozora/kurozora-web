@@ -31,7 +31,7 @@
         "ext-simplexml": "*",
         "astrotomic/laravel-translatable": "^11.10",
         "aws/aws-sdk-php": "^3.198",
-        "bacon/bacon-qr-code": "^2.0",
+        "bacon/bacon-qr-code": "^3.0",
         "bensampo/laravel-enum": "^6.0",
         "blade-ui-kit/blade-icons": "^1.0",
         "codercat/jwk-to-pem": "^1.0",
@@ -78,7 +78,7 @@
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.6",
         "barryvdh/laravel-ide-helper": "^3.0",
-        "beyondcode/laravel-query-detector": "dev-l11-compatibility",
+        "beyondcode/laravel-query-detector": "^2.0",
         "brianium/paratest": "^7.0",
         "fakerphp/faker": "^1.19",
         "laravel/sail": "^1.22",
@@ -86,19 +86,19 @@
         "nunomaduro/collision": "^8.0",
         "larastan/larastan": "^2.0",
         "phpunit/phpunit": "^11.0",
-        "spatie/browsershot": "^4.0",
+        "spatie/browsershot": "^5.0",
         "spatie/laravel-ignition": "^2.0",
         "spatie/phpunit-snapshot-assertions": "^5.0",
-        "tightenco/duster": "^2.0"
+        "tightenco/duster": "^3.0"
     },
     "suggest": {
-        "ebess/advanced-nova-media-library": "^4.4",
-        "stepanenko3/nova-logs-tool": "^2.0",
-        "kiritokatklian/nova-astrotranslatable": "^2.0",
+        "ebess/advanced-nova-media-library": "^5.0",
+        "stepanenko3/nova-logs-tool": "^2.3",
+        "kiritokatklian/nova-astrotranslatable": "^5.0",
         "kiritokatklian/nova-permission": "^5.0",
-        "outl1ne/nova-color-field": "^2.0",
-        "outl1ne/nova-sortable": "^3.0",
-        "stepanenko3/nova-command-runner": "^4.2",
+        "outl1ne/nova-color-field": "dev-master",
+        "outl1ne/nova-sortable": "^4.0",
+        "stepanenko3/nova-command-runner": "^4.5",
         "timothyasp/nova-color-field": "^2.0"
     },
     "repositories": [
@@ -111,8 +111,8 @@
             "url": "https://github.com/kiritokatklian/php-jwt-decoder"
         },
         {
-            "type": "vcs",
-            "url": "https://github.com/laravel-shift/laravel-query-detector.git"
+            "type": "git",
+            "url": "https://github.com/W2nn3ss/nova-color-field"
         }
     ],
     "autoload": {
@@ -170,6 +170,9 @@
     },
     "config": {
         "optimize-autoloader": true,
+        "platform": {
+            "php": "8.3"
+        },
         "preferred-install": "dist",
         "sort-packages": true,
         "allow-plugins": {
