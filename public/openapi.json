@@ -3209,6 +3209,44 @@
         }
       }
     },
+    "/feed/messages/{messageID}/pin": {
+      "post": {
+        "security": [
+          {
+            "bearerAuth": [
+            ]
+          }
+        ],
+        "tags": [
+          "feed"
+        ],
+        "operationId": "postFeedMessagesPin",
+        "summary": "Pin or un-pin a feed message.",
+        "description": "This endpoint will pin or un-pin a feed message.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "messageID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the message."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthenticationError"
+          }
+        }
+      }
+    },
     "/feed/messages/{messageID}/delete": {
       "post": {
         "security": [
@@ -9611,41 +9649,7 @@
                               }
                             ]
                           }
-                        ]
-                      },
-                      {
-                        "date": 1705190400,
-                        "shows": [
-                          {
-                            "id": 17013,
-                            "uuid": "17013",
-                            "type": "show",
-                            "href": "/api/v1/anime/17013"
-                          },
-                          {
-                            "id": 18116,
-                            "uuid": "18116",
-                            "type": "show",
-                            "href": "/api/v1/anime/18116"
-                          },
-                          {
-                            "id": 19262,
-                            "uuid": "19262",
-                            "type": "show",
-                            "href": "/api/v1/anime/19262"
-                          }
-                        ]
-                      },
-                      {
-                        "date": 1705276800,
-                        "shows": [
-                          {
-                            "id": 25724,
-                            "uuid": "25724",
-                            "type": "show",
-                            "href": "/api/v1/anime/25724"
-                          }
-                        ]
+                        }
                       }
                     ]
                   }
