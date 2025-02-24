@@ -14,6 +14,7 @@ class JSONResult
      * Returns an error response to the client.
      *
      * @param APIError[] $apiError
+     *
      * @return JsonResponse
      */
     static function error(array $apiError): JsonResponse
@@ -34,10 +35,16 @@ class JSONResult
      * Returns a successful response to the client.
      *
      * @param array $data
+     * @param bool  $includeMetaData
+     *
      * @return JsonResponse
      */
-    static function success(array $data = []): JsonResponse
+    static function success(array $data = [], bool $includeMetaData = true): JsonResponse
     {
+        if (!$includeMetaData) {
+            return Response::json($data);
+        }
+
         $endResponse = array_merge(self::getDefaultResponseArray(), $data);
 
         return Response::json($endResponse);
@@ -51,11 +58,9 @@ class JSONResult
     private static function getDefaultResponseArray(): array
     {
         $meta = [
-            'version'                   => config('app.version'),
-            'minimumAppVersion'         => config('app.ios.version'),
-            'isMaintenanceModeEnabled'  => app()->isDownForMaintenance(),
-            'isUserAuthenticated'       => auth()->check(),
-            'authenticatedUserID'       => "0"
+            'version' => config('app.version'),
+            'minimumAppVersion' => config('app.ios.version'),
+            'isMaintenanceModeEnabled' => app()->isDownForMaintenance()
         ];
 
         if (app()->isLocal()) {
