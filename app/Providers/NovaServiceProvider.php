@@ -7,6 +7,7 @@ use App\Nova\Activity;
 use App\Nova\Anime;
 use App\Nova\AnimeCast;
 use App\Nova\AnimeTranslation;
+use App\Nova\APIClientToken;
 use App\Nova\AppTheme;
 use App\Nova\CastRole;
 use App\Nova\Character;
@@ -280,6 +281,7 @@ if (class_exists('Laravel\Nova\NovaApplicationServiceProvider')) {
                         __('Users & Permissions'),
                         collect([
                             User::class,
+                            APIClientToken::class,
                             UserBlock::class,
                             UserFavorite::class,
                             UserLibrary::class,
