@@ -30,6 +30,18 @@ class APIController extends Controller
      *
      * @return JsonResponse
      */
+    function test(): JsonResponse
+    {
+        return JSONResult::success([
+            'success' => true,
+        ], includeMetaData: false);
+    }
+
+    /**
+     * Returns a plain JSON response for the API.
+     *
+     * @return JsonResponse
+     */
     function info(): JsonResponse
     {
         return JSONResult::success();
