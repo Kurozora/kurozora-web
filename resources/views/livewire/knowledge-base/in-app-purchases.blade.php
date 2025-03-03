@@ -14,25 +14,26 @@
         <meta property="og:type" content="website" />
     </x-slot:meta>
 
-    <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6">
+    <div class="max-w-7xl m-auto prose prose-theme pl-4 pr-4 sm:px-6 lg:prose-lg">
         <x-picture>
             <img class="h-32 w-full object-cover object-center rounded-lg shadow-lg sm:h-44" src="{{ asset('images/static/banners/in-app_purchases.webp') }}"  alt="About Personalisation" />
         </x-picture>
 
-        <section class="mt-4 mb-4">
-            <h1 class="text-2xl font-bold">{{ __('About In-App Purchases') }}</h1>
-        </section>
-
         {{-- Header --}}
         <section>
+            <h1 class="text-2xl font-bold">{{ __('About In-App Purchases') }}</h1>
+
             <p>{{ __('Kurozora is free to download and use. However, some supplemental features can be unlocked using in-app purchases. The cost depends on which offer you choose. You can find in-app purchases in the settings of the Kurozora app.') }}</p>
 
-            <x-hr class="mt-4 mb-4" />
+            <x-hr />
         </section>
 
         {{-- Types of IAP --}}
-        <section>
-            <p class="text-xl font-bold">{{ __('What types of in-app purchases can you make?') }}</p>
+        <section id="what-types-of-in-app-purchases-can-you-make">
+            <h2 class="text-xl font-bold">
+                <a href="#what-types-of-in-app-purchases-can-you-make">{{ __('What types of in-app purchases can you make?') }}</a>
+            </h2>
+
             <p>{{ __('There are three types of in-app purchases:') }}</p>
 
             <ul class="list-disc">
@@ -51,31 +52,34 @@
                 </li>
             </ul>
 
-            <x-hr class="mt-4 mb-4" />
+            <x-hr />
         </section>
 
         {{-- Manage your subscriptions --}}
-        <section>
-            <p class="text-xl font-bold">{{ __('Manage your subscriptions') }}</p>
+        <section id="manage-your-subscriptions">
+            <h2 class="text-xl font-bold">
+                <a href="#manage-your-subscriptions">{{ __('Manage your subscriptions') }}</a>
+            </h2>
+
             <p>{{ __('Unlike donations and Kurozora One, Kurozora+ renews until you choose to end it. If you wish to cancel your subscription, you can easily change renewal settings from the Kurozora app. On the Kurozora app, go to settings and scroll down to the Support Us section. Next, tap Manage Subscriptions.') }}</p>
-            <br />
 
             <x-picture style="max-width: 320px;">
                 <img class="rounded-lg shadow-lg" src="{{ asset('images/static/screenshots/manage_subscriptions.webp') }}" alt="Manage Kurozora Subscriptions">
             </x-picture>
-            <br />
 
             <p>{{ __('Use the presented options to manage your subscription. You can choose a different subscription offering or tap Cancel Subscription to cancel your subscription. After you cancel, your subscription will stop at the end of the current billing cycle.') }}</p>
-            <br />
 
-            <p>{{ __('You can also manage subscriptions through your Apple ID. Please refer to') }} <x-link target="_blank" href="https://support.apple.com/en-us/HT202039">{{ __('this') }}</x-link> {{ __('Apple support page for more information.') }}</p>
+            <p>{{ __('You can also manage subscriptions through your Apple ID. Please refer to') }} <a target="_blank" href="https://support.apple.com/en-us/HT202039">{{ __('this') }}</a> {{ __('Apple support page for more information.') }}</p>
 
-            <x-hr class="mt-4 mb-4" />
+            <x-hr />
         </section>
 
         {{-- Subscriptions and privacy --}}
-        <section>
-            <p class="text-xl font-bold">{{ __('About subscriptions and privacy') }}</p>
+        <section id="subscriptions-and-privacy">
+            <h2 class="text-xl font-bold">
+                <a href="#subscriptions-and-privacy">{{ __('About subscriptions and privacy') }}</a>
+            </h2>
+
             <p>{{ __('When you purchase Kurozora+, Apple manages the payment process according to their privacy policy. The only thing we do is create a randomly generated Subscriber ID that is unique to you. We use this Subscriber ID to provide you with the features you paid for across all platforms where Kurozora can be accessed.') }}</p>
         </section>
     </div>
