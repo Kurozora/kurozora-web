@@ -22,7 +22,7 @@ return new class extends Migration
             $table->unsignedBigInteger('language_id');
             $table->string('source');
             $table->string('code');
-            $table->boolean('type')->default(VideoType::Default);
+            $table->tinyInteger('type')->default(VideoType::Default);
             $table->boolean('is_sub');
             $table->boolean('is_dub');
             $table->integer('order');
