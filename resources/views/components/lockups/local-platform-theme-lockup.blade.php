@@ -15,7 +15,7 @@
     <div class="flex gap-2 justify-between">
         @foreach($images as $key => $image)
             <picture
-                class="relative rounded-lg overflow-hidden"
+                class="relative w-1/3 rounded-lg overflow-hidden"
                 style="background-color: {{ $color ?? 'var(--bg-secondary-color)' }};"
                 wire:key="{{ uniqid($key, true) }}"
             >
