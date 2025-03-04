@@ -35,6 +35,15 @@ class GetButton extends Component
     public string $name;
 
     /**
+     * The component's listeners.
+     *
+     * @var array
+     */
+    protected $listeners = [
+        'theme-changed' => 'handleThemeChanged',
+    ];
+
+    /**
      * Prepare the component.
      *
      * @param int|string $themeId
@@ -46,6 +55,18 @@ class GetButton extends Component
     {
         $this->themeID = $themeId;
         $this->name = $name;
+    }
+
+    /**
+     * Handles the incoming `theme-changed` event.
+     *
+     * @param int|string $currentThemeID
+     *
+     * @return void
+     */
+    public function handleThemeChanged(int|string $currentThemeID): void
+    {
+        $this->currentThemeID = $currentThemeID;
     }
 
     /**
@@ -63,6 +84,7 @@ class GetButton extends Component
                 'id' => $theme->value,
                 'css' => $theme->toCSS(),
             ]);
+            $this->dispatch('theme-changed', currentThemeID: $this->currentThemeID)->to('theme-store.get-button');
             return;
         }
 
@@ -80,15 +102,16 @@ class GetButton extends Component
 
         $appTheme = AppTheme::find($this->themeID);
         // Increment the download count of the theme
-//        $appTheme->update([
-//            'download_count' => $appTheme->download_count + 1
-//        ]);
+        $appTheme->update([
+            'download_count' => $appTheme->download_count + 1
+        ]);
 
         $this->currentThemeID = $appTheme->id;
         $this->dispatch('theme-download', theme: [
             'id' => $appTheme->id,
             'css' => $appTheme->toCSS(),
         ]);
+        $this->dispatch('theme-changed', currentThemeID: $this->currentThemeID)->to('theme-store.get-button');
     }
 
     /**
