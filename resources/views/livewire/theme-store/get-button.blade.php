@@ -1,7 +1,7 @@
 <div
     class="inline-block relative"
     x-data="{
-        currentThemeID: $persist(@entangle('currentThemeID')).as('currentThemeID')
+        currentThemeID: $persist(@entangle('currentThemeID').live).as('currentThemeID')
     }"
 >
     <x-tinted-pill-button
