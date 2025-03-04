@@ -8,4 +8,4 @@ Policy: https://github.com/Kurozora/kurozora-web/blob/master/SECURITY.md
 
 Preferred-Languages: en
 
-Expires: 2025-02-01T01:00:00.000Z
+Expires: 2025-08-01T01:00:00.000Z
