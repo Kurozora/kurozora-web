@@ -1,6 +1,7 @@
 <?php
 
 use App\Helpers\JSONResult;
+use App\Http\Middleware\AuthenticateAPIClient;
 use App\Http\Middleware\AuthenticateSession;
 use App\Http\Middleware\CheckKurozoraUserAuthentication;
 use App\Http\Middleware\EnsureAPIRequestsAreStateful;
@@ -106,6 +107,7 @@ return Application::configure(basePath: dirname(__DIR__))
                 SubstituteBindings::class,
             ])
             ->api([
+                AuthenticateAPIClient::class,
                 EnsureAPIRequestsAreStateful::class,
                 ThrottleRequests::class . ':api',
                 Localization::class,
