@@ -16,12 +16,16 @@
                 <x-dropdown align="right" width="48" max-height="350px">
                     <x-slot:trigger>
                         <x-square-button>
-                            @svg('arrow_up_arrow_down_circle', 'fill-current', ['aria-labelledby' => 'order', 'width' => '28'])
+                            @if ($this->isOrdering())
+                                @svg('arrow_up_arrow_down_circle_fill', 'fill-current', ['aria-labelledby' => 'order', 'width' => '28'])
+                            @else
+                                @svg('arrow_up_arrow_down_circle', 'fill-current', ['aria-labelledby' => 'order', 'width' => '28'])
+                            @endif
                         </x-square-button>
                     </x-slot:trigger>
 
                     <x-slot:content>
-                        @if (collect($this->order)->contains('selected', '!=', null))
+                        @if ($this->isOrdering())
                             {{-- Reset Order --}}
                             <button class="block w-full pl-4 pr-4 pt-2 pb-2 bg-secondary text-xs text-center text-secondary font-semibold hover:bg-tertiary focus:bg-secondary" wire:click="resetOrder">
                                 {{ __('Reset Order') }}
@@ -50,13 +54,17 @@
                 <x-dropdown align="right" width="48" max-height="350px">
                     <x-slot:trigger>
                         <x-square-button>
-                            @svg('line_3_horizontal_decrease_circle', 'fill-current', ['aria-labelledby' => 'filter', 'width' => '28'])
+                            @if ($this->isFiltering())
+                                @svg('line_3_horizontal_decrease_circle_fill', 'fill-current', ['aria-labelledby' => 'filter', 'width' => '28'])
+                            @else
+                                @svg('line_3_horizontal_decrease_circle', 'fill-current', ['aria-labelledby' => 'filter', 'width' => '28'])
+                            @endif
                         </x-square-button>
                     </x-slot:trigger>
 
                     <x-slot:content>
-                        @if (collect($this->filter)->contains('selected', '!=', null))
-                            {{-- Reset Order --}}
+                        @if ($this->isFiltering())
+                            {{-- Reset Filter --}}
                             <button class="block w-full pl-4 pr-4 pt-2 pb-2 bg-secondary text-xs text-center text-secondary font-semibold hover:bg-tertiary focus:bg-secondary" wire:click="resetFilter">
                                 {{ __('Reset Filters') }}
                             </button>

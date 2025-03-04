@@ -114,6 +114,43 @@ trait WithSearch
     }
 
     /**
+     * Determines whether the user is performing a search.
+     *
+     * @return bool
+     */
+    public function isSearching(): bool
+    {
+        $isOrdering = $this->isOrdering();
+        $isFiltering = $this->isFiltering();
+
+        return !empty($this->search)
+            || $isOrdering
+            || $isFiltering
+            || !empty($this->typeValue)
+            || !empty($this->letter);
+    }
+
+    /**
+     * Determines whether an ordering is applied.
+     *
+     * @return bool
+     */
+    public function isOrdering(): bool
+    {
+        return collect($this->order)->contains('selected', '!=', null);
+    }
+
+    /**
+     * Determines whether a filter is applied.
+     *
+     * @return bool
+     */
+    public function isFiltering(): bool
+    {
+        return collect($this->filter)->contains('selected', '!=', null);
+    }
+
+    /**
      * Prepare the component.
      *
      * @return void
@@ -146,14 +183,8 @@ trait WithSearch
             });
     }
 
-    /**
-     * The computed search results property.
-     *
-     * @return ?LengthAwarePaginator
-     */
-    public function getSearchResultsProperty(): ?LengthAwarePaginator
+    private function getOrders(): array
     {
-        // Order
         $orders = [];
         foreach ($this->order as $attribute => $order) {
             $attribute = str_replace(':', '.', $attribute);
@@ -166,8 +197,11 @@ trait WithSearch
                 ];
             }
         }
+        return $orders;
+    }
 
-        // Filter
+    private function getWheres(): array
+    {
         $wheres = [];
         $whereIns = [];
         foreach ($this->filter as $attribute => $filter) {
@@ -194,6 +228,21 @@ trait WithSearch
                 }
             }
         }
+        return [$wheres, $whereIns];
+    }
+
+    /**
+     * The computed search results property.
+     *
+     * @return ?LengthAwarePaginator
+     */
+    public function getSearchResultsProperty(): ?LengthAwarePaginator
+    {
+        // Order
+        $orders = $this->getOrders();
+
+        // Filter
+        [$wheres, $whereIns] = $this->getWheres();
 
         // Get library status
         $userLibraryStatuses = $this->filter['library_status']['selected'] ?? null;
