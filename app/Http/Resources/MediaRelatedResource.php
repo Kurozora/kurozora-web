@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Anime;
 use App\Models\Game;
 use App\Models\Manga;
 use App\Models\MediaRelation;
@@ -21,29 +22,31 @@ class MediaRelatedResource extends JsonResource
      * Transform the resource into an array.
      *
      * @param Request $request
+     *
      * @return array
      */
     public function toArray(Request $request): array
     {
-        return match ($this->resource->related->getMorphClass()) {
+        return match ($this->resource->related?->getMorphClass()) {
+            Anime::class => [
+                'show' => AnimeResourceBasic::make($this->resource->related),
+                'attributes' => [
+                    'relation' => $this->resource->relation->only(['name', 'description']),
+                ],
+            ],
             Manga::class => [
-                'literature'    => LiteratureResourceBasic::make($this->resource->related),
-                'attributes'    => [
-                    'relation'  => $this->resource->relation->only(['name', 'description'])
+                'literature' => LiteratureResourceBasic::make($this->resource->related),
+                'attributes' => [
+                    'relation' => $this->resource->relation->only(['name', 'description'])
                 ]
             ],
             Game::class => [
-                'game'          => GameResourceBasic::make($this->resource->related),
-                'attributes'    => [
-                    'relation'  => $this->resource->relation->only(['name', 'description'])
+                'game' => GameResourceBasic::make($this->resource->related),
+                'attributes' => [
+                    'relation' => $this->resource->relation->only(['name', 'description'])
                 ]
             ],
-            default => [
-                'show'          => AnimeResourceBasic::make($this->resource->related),
-                'attributes'    => [
-                    'relation'  => $this->resource->relation->only(['name', 'description']),
-                ],
-            ],
+            default => []
         };
     }
 }
