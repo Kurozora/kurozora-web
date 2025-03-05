@@ -18,7 +18,6 @@ use Laravel\Nova\Exceptions\AuthenticationException;
 use musa11971\JWTDecoder\Exceptions\ValueNotFoundException;
 use musa11971\JWTDecoder\JWTDecoder;
 use musa11971\JWTDecoder\JWTPayload;
-use Random\RandomException;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 
 class SignInWithAppleController extends Controller
@@ -30,8 +29,6 @@ class SignInWithAppleController extends Controller
      *
      * @return JsonResponse
      * @throws AuthenticationException
-     * @throws ValueNotFoundException
-     * @throws RandomException
      */
     public function signIn(SignInWithAppleRequest $request): JsonResponse
     {
@@ -103,7 +100,6 @@ class SignInWithAppleController extends Controller
      * @return JsonResponse
      * @throws AuthenticationException
      * @throws ValueNotFoundException
-     * @throws RandomException
      */
     public function update(SignInWithAppleUpdateRequest $request): JsonResponse
     {
@@ -184,11 +180,9 @@ class SignInWithAppleController extends Controller
      * Find user account if it exists.
      *
      * @param JWTPayload  $payload
-     * @param string|null $siwaID
+     * @param null|string $siwaID
      *
-     * @return User|null
-     * @throws ValueNotFoundException
-     * @throws RandomException
+     * @return null|User
      */
     protected function getUser(JWTPayload $payload, ?string $siwaID = null): ?User
     {
@@ -257,12 +251,19 @@ class SignInWithAppleController extends Controller
         }
 
         if (empty($user)) {
-            $user = $this->signUpUser($payload)
-                ->setRelation('badges', collect())
-                ->setRelation('tokens', collect())
-                ->setRelation('sessions', collect())
-                ->setAttribute('followers_count', 0)
-                ->setAttribute('following_count', 0);
+            try {
+                $email = $payload->get('email');
+                $siwaID = $payload->get('sub');
+
+                $user = $this->signUpUser($email, $siwaID)
+                    ->setRelation('badges', collect())
+                    ->setRelation('tokens', collect())
+                    ->setRelation('sessions', collect())
+                    ->setAttribute('followers_count', 0)
+                    ->setAttribute('following_count', 0);
+            } catch (ValueNotFoundException $e) {
+                return null;
+            }
         }
 
         return $user;
@@ -271,18 +272,17 @@ class SignInWithAppleController extends Controller
     /**
      * Creates a new user from the given payload.
      *
-     * @param JWTPayload $payload
+     * @param string $email
+     * @param string $siwaID
      *
      * @return User|null
-     * @throws ValueNotFoundException
-     * @throws RandomException
      */
-    protected function signUpUser(JWTPayload $payload): ?User
+    protected function signUpUser(string $email, string $siwaID): ?User
     {
         return User::create([
             'username' => str()->random(8),
-            'email' => $payload->get('email'),
-            'siwa_id' => $payload->get('sub'),
+            'email' => $email,
+            'siwa_id' => $siwaID,
             'email_verified_at' => now(),
             'password' => Hash::make(Str::random(30)),
             'can_change_username' => true,
