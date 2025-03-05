@@ -45,6 +45,7 @@ trait WithEpisodeSearch
     public function randomEpisode(): void
     {
         $episode = Episode::where('season_id', $this->season->id)
+            ->withoutGlobalScopes()
             ->inRandomOrder()
             ->first();
         $this->redirectRoute('episodes.details', $episode);
