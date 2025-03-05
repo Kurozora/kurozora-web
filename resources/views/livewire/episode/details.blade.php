@@ -137,7 +137,7 @@
 
             {{-- Chat Box --}}
             <section
-                class="border overflow-hidden aspect-video"
+                class="border border-primary overflow-hidden aspect-video"
                 x-bind:class="{
                     'lg:w-1/2 lg:rounded-3xl lg:shadow-md': !theaterMode,
                     'lg:w-1/4': theaterMode

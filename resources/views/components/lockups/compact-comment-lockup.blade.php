@@ -19,7 +19,7 @@
     </div>
 
     <div
-        class="absolute flex right-0 bg-tertiary rounded-md border mr-2"
+        class="absolute flex right-0 bg-tertiary rounded-md border border-primary mr-2"
         x-show="showOptions"
         x-cloak=""
         x-on:mouseover="showOptions = true"
