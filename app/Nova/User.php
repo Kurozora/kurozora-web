@@ -8,6 +8,7 @@ use App\Nova\Filters\UserRole;
 use App\Nova\Lenses\UnconfirmedUsers;
 use App\Rules\ValidateEmail;
 use App\Rules\ValidatePassword;
+use DateTimeZone;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Exception;
 use Illuminate\Http\Request;
@@ -22,6 +23,7 @@ use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\MorphMany;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Password;
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -153,7 +155,17 @@ class User extends Resource
             ID::make()->sortable(),
 
             BelongsTo::make('Parent', 'parent', User::class)
+                ->nullable()
                 ->searchable(),
+
+            Text::make('UUID', 'uuid')
+                ->readonly()
+                ->hideFromIndex(),
+
+            Text::make('SIWA ID', 'siwa_id')
+                ->nullable()
+                ->readonly()
+                ->hideFromIndex(),
 
             Heading::make('Media'),
 
@@ -269,6 +281,34 @@ class User extends Resource
                 ->updateRules(['nullable', new ValidatePassword]),
 
             Textarea::make('Biography'),
+
+            Select::make('TV Rating', 'tv_rating')
+                ->options([
+                    '-1' => __('Allow All Titles'),
+                    '1' => __('NR — Not Rated'),
+                    '2' => __('G — All Ages'),
+                    '3' => __('PG-12 — Parental Guidance Suggested'),
+                    '4' => __('R15+ — Violence & Profanity'),
+                    '5' => __('R18+ — Adults Only'),
+                ])
+                ->sortable()
+                ->required()
+                ->help('The TV rating of the user. For example NR, G, PG-12, etc.'),
+
+            Select::make('Timezone')
+                ->options(function () {
+                    $timestamp = time();
+                    $timezone = [];
+
+                    foreach (timezone_identifiers_list(DateTimeZone::ALL) as $key => $value) {
+                        date_default_timezone_set($value);
+                        $timezone[$value] = $value . ' (UTC ' . date('P', $timestamp) . ')';
+                    }
+
+                    return collect($timezone)->sortKeys();
+                })
+                ->required()
+                ->hideFromIndex(),
 
             BelongsTo::make('Language'),
 
