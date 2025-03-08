@@ -17,7 +17,7 @@
 
     <div>
         {{-- Brand --}}
-        <section class="relative pl-4 pr-4 pt-36 pb-10 overflow-hidden sm:px-6">
+        <section class="relative pl-4 pr-4 pt-36 pb-10 overflow-hidden">
             <div
                 class="absolute top-0 left-0 w-full h-full"
                 style="background: url('{{ asset('images/static/backgrounds/background_blur.gif') }}') no-repeat center; background-size: cover; filter: blur(100px); transform: scale(3);"
@@ -27,7 +27,7 @@
 
             <div class="relative max-w-2xl mx-auto text-center drop-shadow">
                 <div class="flex flex-col items-center">
-                    <img class="m-10 mb-0" width="82" height="82" src="{{ asset('images/static/icon/app_icon.gif') }}" alt="Kurozora">
+                    <img class="mt-10 mb-4" width="82" height="82" src="{{ asset('images/static/icon/app_icon.gif') }}" alt="Kurozora">
 
                     <p class="text-xl font-semibold">{{ __('Kurozora') }}</p>
 
@@ -41,7 +41,7 @@
         </section>
 
         {{-- Logo --}}
-        <section class="pl-4 pr-4 pt-36 pb-10 bg-primary sm:px-6">
+        <section class="pl-4 pr-4 pt-36 pb-10 bg-primary">
             <div class="flex flex-col items-center mx-auto max-w-7xl text-center">
                 <p class="mt-2 text-4xl font-bold leading-tight tracking-tight">{{ __('Logo') }}</p>
 
@@ -105,7 +105,7 @@
         </section>
 
         {{-- Spacing --}}
-        <section class="pl-4 pr-4 pt-36 pb-10 bg-secondary sm:px-6">
+        <section class="pl-4 pr-4 pt-36 pb-10 bg-secondary">
             <div class="flex flex-col items-center mx-auto max-w-7xl text-center">
                 <p class="mt-2 text-4xl font-bold leading-tight tracking-tight">{{ __('Spacing') }}</p>
 
@@ -122,7 +122,7 @@
         </section>
 
         {{-- Colors --}}
-        <section class="pl-4 pr-4 pt-36 pb-10 bg-primary sm:px-6">
+        <section class="pl-4 pr-4 pt-36 pb-10 bg-primary">
             <div class="flex flex-col items-center mx-auto max-w-7xl text-center">
                 <p class="mt-2 text-4xl font-bold leading-tight tracking-tight">{{ __('Colors') }}</p>
 
@@ -132,7 +132,7 @@
             </div>
 
             <div class="flex flex-wrap gap-4 m-auto mt-16 max-w-7xl">
-                <div class="flex flex-col justify-between flex-grow w-64 md:w-80 pl-4 pr-4 pt-4 pb-4 bg-primary text-white border border-primary rounded-3xl shadow-lg">
+                <div class="flex flex-col justify-between flex-grow w-64 md:w-80 pl-4 pr-4 pt-4 pb-4 text-white border border-primary rounded-3xl shadow-lg" style="background-color: #353A50">
                     <p class="text-lg font-bold">{{ __('Blueberry') }}</p>
                     <div class="mt-12 font-semibold opacity-75">
                         <p>#353A50</p>
@@ -235,9 +235,9 @@
         </section>
 
         {{-- Download Press-Kit --}}
-        <section class="pl-4 pr-4 pt-36 pb-10 bg-secondary sm:px-6">
+        <section class="pl-4 pr-4 pt-36 pb-10 bg-secondary">
             <div class="flex flex-col items-center mx-auto max-w-7xl text-center">
-                <img class="m-10 mb-0" width="82" height="82" src="{{ asset('images/static/icon/app_icon.webp') }}" alt="Kurozora">
+                <img class="mt-10 mb-4" width="82" height="82" src="{{ asset('images/static/icon/app_icon.webp') }}" alt="Kurozora">
 
                 <p class="mt-2 text-4xl font-bold leading-tight tracking-tight">{{ __('Get Started') }}</p>
             </div>

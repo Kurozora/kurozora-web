@@ -17,12 +17,12 @@
 
     <div>
         {{-- Open-Source --}}
-        <section class="relative pl-4 pr-4 pt-36 pb-10 overflow-hidden sm:px-6">
+        <section class="relative pl-4 pr-4 pt-36 pb-10 overflow-hidden">
             <div class="relative max-w-2xl mx-auto text-center">
                 <div class="flex flex-col items-center">
-                    <img class="m-10 mb-0" width="82" height="82" src="{{ asset('images/static/icon/app_icon.webp') }}" alt="Kurozora">
+                    <img class="mt-10 mb-4" width="82" height="82" src="{{ asset('images/static/icon/app_icon.webp') }}" alt="Kurozora">
 
-                    <p class="text-4xl font-bold leading-tight tracking-tight">{{ __('Open-Source at Kurozora') }}</p>
+                    <h1 class="text-4xl font-bold leading-tight tracking-tight">{{ __('Open-Source at Kurozora') }}</h1>
                 </div>
 
                 <div class="mt-10">
@@ -32,11 +32,11 @@
         </section>
 
         {{-- Projects --}}
-        <section class="pl-4 pr-4 pt-36 pb-10 bg-secondary sm:px-6">
-            <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6">
+        <section class="pt-36 pb-10 bg-secondary">
+            <div class="max-w-7xl mx-auto pl-4 pr-4 py-6">
                 <div class="flex flex-wrap justify-between gap-4">
                     <div class="flex flex-col w-full gap-2 md:w-3/4">
-                        <p class="text-4xl font-semibold">{{ __('Open-source projects') }}</p>
+                        <h2 class="text-4xl font-semibold">{{ __('Open-source projects') }}</h2>
 
                         <p class="text-lg font-light md:text-2xl">{{ __('Every Kurozora product and service is crafted with and embraces open-source. We manage the following projects and encourages your contribution.') }}</p>
                     </div>
