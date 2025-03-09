@@ -30,6 +30,7 @@ use App\Nova\MangaCast;
 use App\Nova\MangaTranslation;
 use App\Nova\Media;
 use App\Nova\MediaGenre;
+use App\Nova\MediaRating;
 use App\Nova\MediaRelation;
 use App\Nova\MediaSong;
 use App\Nova\MediaStaff;
@@ -216,6 +217,7 @@ if (class_exists('Laravel\Nova\NovaApplicationServiceProvider')) {
                         collect([
                             Media::class,
                             MediaGenre::class,
+                            MediaRating::class,
                             MediaRelation::class,
                             MediaSong::class,
                             MediaStaff::class,
