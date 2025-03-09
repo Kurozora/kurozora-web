@@ -187,6 +187,7 @@ class Index extends Component
 
         if (now()->year === $this->year && now()->month !== 12) {
             $recapMonths->push(Recap::make([
+                'year' => now()->year,
                 'month' => now()->month,
             ]));
         }
