@@ -14,19 +14,19 @@
         <meta property="og:type" content="website" />
     </x-slot:meta>
 
-    <div class="max-w-7xl m-auto prose prose-theme pl-4 pr-4 sm:px-6 lg:prose-lg">
-        <x-picture>
-            <img class="h-32 w-full object-cover object-center rounded-lg shadow-lg sm:h-44" src="{{ asset('images/static/banners/personalisation.webp') }}"  alt="About Personalisation" />
+    <div class="py-6 max-w-full prose prose-theme lg:prose-lg">
+        <x-picture class="mb-8 ml-4 mr-4 not-prose">
+            <img class="h-32 w-full object-cover object-center rounded-lg shadow-lg sm:h-60" src="{{ asset('images/static/banners/personalisation.webp') }}"  alt="About Personalisation" />
         </x-picture>
 
-        <section>
+        <section class="pr-4 pl-4">
             <h1 class="text-2xl font-bold">{{ __('About Personalisation') }}</h1>
 
             <p>{{ __('We use your interactions with the app and website—such as the anime you track, purchases you make, downloads and what you’ve previously searched for and viewed—to help you discover anime and manga that are most relevant to you through personalised recommendations.') }}</p>
 
             <x-hr />
 
-            <p>{{ __('Personalised information are never sold or made accessible to any third party services. We use personalised information only on our platform to provide you with the best experience ever.') }}</p>
+            <p>{{ __('Personalised information are never sold nor made accessible to any third party services. We use personalised information only on our platform to provide you with the best experience ever.') }}</p>
         </section>
     </div>
 </main>

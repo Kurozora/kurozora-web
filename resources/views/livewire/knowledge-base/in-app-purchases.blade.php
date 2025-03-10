@@ -14,13 +14,13 @@
         <meta property="og:type" content="website" />
     </x-slot:meta>
 
-    <div class="max-w-7xl m-auto prose prose-theme pl-4 pr-4 sm:px-6 lg:prose-lg">
-        <x-picture>
-            <img class="h-32 w-full object-cover object-center rounded-lg shadow-lg sm:h-44" src="{{ asset('images/static/banners/in-app_purchases.webp') }}"  alt="About Personalisation" />
+    <div class="py-6 max-w-full prose prose-theme lg:prose-lg">
+        <x-picture class="mb-8 ml-4 mr-4 not-prose">
+            <img class="h-32 w-full object-cover object-center rounded-lg shadow-lg sm:h-60" src="{{ asset('images/static/banners/in-app_purchases.webp') }}"  alt="About Personalisation" />
         </x-picture>
 
         {{-- Header --}}
-        <section>
+        <section class="pr-4 pl-4">
             <h1 class="text-2xl font-bold">{{ __('About In-App Purchases') }}</h1>
 
             <p>{{ __('Kurozora is free to download and use. However, some supplemental features can be unlocked using in-app purchases. The cost depends on which offer you choose. You can find in-app purchases in the settings of the Kurozora app.') }}</p>
@@ -29,7 +29,7 @@
         </section>
 
         {{-- Types of IAP --}}
-        <section id="what-types-of-in-app-purchases-can-you-make">
+        <section id="what-types-of-in-app-purchases-can-you-make" class="pr-4 pl-4">
             <h2 class="text-xl font-bold">
                 <a href="#what-types-of-in-app-purchases-can-you-make">{{ __('What types of in-app purchases can you make?') }}</a>
             </h2>
@@ -56,7 +56,7 @@
         </section>
 
         {{-- Manage your subscriptions --}}
-        <section id="manage-your-subscriptions">
+        <section id="manage-your-subscriptions" class="pr-4 pl-4">
             <h2 class="text-xl font-bold">
                 <a href="#manage-your-subscriptions">{{ __('Manage your subscriptions') }}</a>
             </h2>
@@ -75,7 +75,7 @@
         </section>
 
         {{-- Subscriptions and privacy --}}
-        <section id="subscriptions-and-privacy">
+        <section id="subscriptions-and-privacy" class="pr-4 pl-4">
             <h2 class="text-xl font-bold">
                 <a href="#subscriptions-and-privacy">{{ __('About subscriptions and privacy') }}</a>
             </h2>

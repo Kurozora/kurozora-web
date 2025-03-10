@@ -14,7 +14,7 @@
         <meta property="og:type" content="website" />
     </x-slot:meta>
 
-    <div class="max-w-7xl m-auto prose prose-theme pl-4 pr-4 sm:px-6 lg:prose-lg">
+    <div class="max-w-7xl m-auto prose prose-theme pl-4 pr-4 lg:prose-lg">
         <x-picture>
             <img class="h-32 w-full object-cover object-center rounded-lg shadow-lg sm:h-44" src="{{ asset('images/static/banners/in-app_purchases.webp') }}"  alt="About Personalisation" />
         </x-picture>
