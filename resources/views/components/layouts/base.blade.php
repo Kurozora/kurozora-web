@@ -115,53 +115,36 @@
             </defs>
         </svg>
 
-        <livewire:navigation-dropdown />
+        <div class="flex flex-col w-full">
+            <livewire:navigation-sidebar />
 
-        @if (!(auth()->user()?->hasVerifiedEmail() ?? true))
-            <x-alert
-                :message="__('You have not confirmed your email address yet. Please check your email inbox or spam folder.')"
-                :is-ephemeral="false"
-                type="warning"
-            ></x-alert>
-        @endif
+            <livewire:navigation-dropdown />
 
-        @if (Session::has('success'))
-            <x-alert :message="Session::get('success')" type="success"></x-alert>
-        @endif
+            <div class="overflow-y-scroll xl:ml-64">
+                @if (!(auth()->user()?->hasVerifiedEmail() ?? true))
+                    <x-alert
+                        :message="__('You have not confirmed your email address yet. Please check your email inbox or spam folder.')"
+                        :is-ephemeral="false"
+                        type="warning"
+                    ></x-alert>
+                @endif
 
-        @if (Session::has('error'))
-            <x-alert :message="Session::get('error')" type="error"></x-alert>
-        @endif
+                @if (Session::has('success'))
+                    <x-alert :message="Session::get('success')" type="success"></x-alert>
+                @endif
 
-        {{ $slot }}
+                @if (Session::has('error'))
+                    <x-alert :message="Session::get('error')" type="error"></x-alert>
+                @endif
 
-        <x-footer />
+                {{ $slot }}
+
+                <x-footer />
+            </div>
+        </div>
 
         <script src="{{ url(mix('js/listen.js')) }}"></script>
         <script src="https://js-cdn.music.apple.com/musickit/v1/musickit.js"></script>
         {{ $scripts ?? '' }}
     </body>
-
-{{--    <body class="flex flex-row bg-primary text-primary">--}}
-{{--        <livewire:navigation-sidebar />--}}
-
-{{--        <div class="flex flex-col w-full">--}}
-{{--            <livewire:navigation-dropdown />--}}
-
-{{--            <div class="overflow-y-scroll">--}}
-{{--                @if (Session::has('success'))--}}
-{{--                    <x-alert :message="Session::get('success')"></x-alert>--}}
-{{--                @endif--}}
-
-{{--                {{ $slot }}--}}
-
-{{--                <x-footer />--}}
-{{--            </div>--}}
-{{--        </div>--}}
-
-{{--        @livewireScripts--}}
-{{--        <script src="{{ url(mix('js/listen.js')) }}"></script>--}}
-{{--        <script src="https://js-cdn.music.apple.com/musickit/v1/musickit.js"></script>--}}
-{{--        {{ $scripts ?? '' }}--}}
-{{--    </body>--}}
 </html>
