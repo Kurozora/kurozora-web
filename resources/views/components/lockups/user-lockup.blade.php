@@ -38,7 +38,7 @@
                             @endif
                         @elseif ($followersCount === 1)
                             @if ($user->id == auth()->user()->id)
-                                {{ __('Followed by you... and one fan!') }}
+                                {{ __('Followed by you… and one fan!') }}
                             @else
                                 {{ $isFollowed ? __('Followed by you.') : __('Followed by one fan.') }}
                             @endif

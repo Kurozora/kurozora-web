@@ -10,7 +10,7 @@
 
                 <div class="w-16 h-1 bg-tint my-3 md:my-6"></div>
 
-                <p class="text-secondary text-2xl md:text-3xl font-light mb-8 leading-normal">{{ __('You seem to be lost on the path of life...') }}</p>
+                <p class="text-secondary text-2xl md:text-3xl font-light mb-8 leading-normal">{{ __('You seem to be lost on the path of life…') }}</p>
 
                 <x-outlined-link-button href="{{ url('/') }}" class="text-base font-bold py-3 px-6 border-2">
                     {{ __('Go Home?') }}

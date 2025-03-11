@@ -21,7 +21,7 @@
                         <p class="text-secondary text-2xl md:text-3xl font-light mb-8 leading-normal max-w-prose">{{ implode(' ', $exception->errorInfo ?? []) }}</p>
                     @endif
 
-                    <p class="text-secondary text-2xl md:text-3xl font-light mb-8 leading-normal max-w-prose">{{ __('Our crack team is on the ca... couch. O-oh dear...') }}</p>
+                    <p class="text-secondary text-2xl md:text-3xl font-light mb-8 leading-normal max-w-prose">{{ __('Our crack team is on the ca… couch. O-oh dear…') }}</p>
 
                     <x-outlined-link-button href="{{ url('/') }}" class="text-base font-bold py-3 px-6 border-2" color="violet">
                         {{ __('Go Home') }}

@@ -2,7 +2,7 @@
 
 <x-textarea
     {{ $attributes->merge(['class' => 'bg-transparent resize-none', 'rows' => 1]) }}
-    placeholder="{{ __('Add a comment...') }}"
+    placeholder="{{ __('Add a comment…') }}"
     :autoresize="$autoresize"
     :rounded="$rounded"
     :disabled="$disabled"
