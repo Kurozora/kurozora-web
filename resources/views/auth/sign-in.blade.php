@@ -16,7 +16,7 @@
         </h2>
     </x-slot:header>
 
-    <div class="flex flex-col justify-center w-screen h-full max-w-prose mx-auto pl-4 pr-4 py-6 sm:px-6">
+    <div class="flex flex-col justify-center w-screen h-full max-w-prose mx-auto pl-4 pr-4 py-6">
         {{-- Header --}}
         <section>
             <div class="text-center mb-5">
@@ -142,7 +142,7 @@
         {{-- Legal --}}
         <section class="space-y-1 mt-16 text-center text-sm">
             <p class="text-secondary">{{ __('Your Kurozora Account information is used to enable Kurozora services when you sign in. Kurozora services includes the library where you can keep track of the shows you are interested in.') }}</p>
-            <x-link href="{{ route('legal.privacy-policy') }}" wire:navigate>{{ __('See how your data is managed...') }}</x-link>
+            <x-link href="{{ route('legal.privacy-policy') }}" wire:navigate>{{ __('See how your data is managed…') }}</x-link>
         </section>
     </div>
 </x-app-layout>

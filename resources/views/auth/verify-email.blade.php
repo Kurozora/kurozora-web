@@ -9,7 +9,7 @@
         </h2>
     </x-slot:header>
 
-    <div class="flex flex-col justify-center w-screen h-full max-w-prose mx-auto pl-4 pr-4 py-6 sm:px-6">
+    <div class="flex flex-col justify-center w-screen h-full max-w-prose mx-auto pl-4 pr-4 py-6">
         <div class="text-center mb-5">
             <h1 class="text-2xl font-bold">{{ __('Thanks for signing up!') }}</h1>
             <p>{{ __('Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn’t receive the email, we will gladly send you another.') }}</p>

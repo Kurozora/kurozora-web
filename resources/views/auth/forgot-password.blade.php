@@ -9,7 +9,7 @@
         </h2>
     </x-slot:header>
 
-    <div class="flex flex-col justify-center w-screen h-full max-w-prose mx-auto pl-4 pr-4 py-6 sm:px-6">
+    <div class="flex flex-col justify-center w-screen h-full max-w-prose mx-auto pl-4 pr-4 py-6">
         <div class="text-center mb-5">
             <h1 class="text-2xl font-bold">{{ __('Forgot your password?') }}</h1>
             <p>{{ __('Enter your Kurozora Account to continue.') }}</p>
