@@ -21,7 +21,7 @@
 
             @if (!empty($studio->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile())))
                 <div class="absolute top-0 bottom-0 left-0 right-0 bg-black/20">
-                    <div class="flex flex-col flex-wrap h-full text-center items-center justify-center">
+                    <div class="flex flex-col flex-wrap h-full pt-4 pb-4 text-center items-center justify-center">
                         <picture class="relative h-32 rounded-full shadow-lg overflow-hidden">
                             <img class="w-full h-full object-cover lazyload"
                                  data-sizes="auto"

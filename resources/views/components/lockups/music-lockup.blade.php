@@ -45,7 +45,7 @@
                 <div class="flex flex-col justify-center items-center h-full">
                     @if (!empty($song->am_id))
                         <button
-                            class="inline-flex items-center pt-5 pr-5 pb-5 pl-5 bg-blur backdrop-blur border border-transparent rounded-full font-semibold text-xs uppercase tracking-widest shadow-md hover:opacity-75 active:opacity-50 focus:outline-none disabled:bg-gray-100 disabled:text-gray-300 disabled:cursor-default disabled:opacity-100 transition ease-in-out duration-150"
+                            class="inline-flex items-center pt-4 pr-5 pb-5 pl-5 bg-blur backdrop-blur border border-transparent rounded-full font-semibold text-xs uppercase tracking-widest shadow-md hover:opacity-75 active:opacity-50 focus:outline-none disabled:bg-gray-100 disabled:text-gray-300 disabled:cursor-default disabled:opacity-100 transition ease-in-out duration-150"
                             x-on:click="await musicManager?.playSong(song)"
                         >
                             <template x-if="musicManager?.isPlaying && musicManager?.currentMusicID === '{{ $song->am_id }}'">
