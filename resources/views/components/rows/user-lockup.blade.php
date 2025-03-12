@@ -4,7 +4,7 @@
     $class = $isRow ? 'overflow-x-scroll no-scrollbar' : 'flex-wrap';
 @endphp
 
-<div {{ $attributes->merge(['class' => 'flex gap-4 justify-between ' . $class]) }}>
+<div {{ $attributes->merge(['class' => 'flex gap-4 justify-between pl-4 pr-4 ' . $class]) }}>
     @foreach ($users as $user)
         <x-lockups.user-lockup :user="$user" :is-row="$isRow" />
     @endforeach

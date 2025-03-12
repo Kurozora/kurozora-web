@@ -4,7 +4,7 @@
     $class = $isRow ? 'snap-mandatory snap-x overflow-x-scroll no-scrollbar' : 'flex-wrap';
 @endphp
 
-<div {{ $attributes->merge(['class' => 'flex gap-4 justify-between ' . $class]) }}>
+<div {{ $attributes->merge(['class' => 'flex gap-4 justify-between pl-4 pr-4 ' . $class]) }}>
     @foreach ($characters as $index => $character)
         <x-lockups.character-lockup :character="$character" :rank="($page - 1) * $perPage + $index + 1" :is-ranked="$isRanked" :is-row="$isRow" />
     @endforeach
