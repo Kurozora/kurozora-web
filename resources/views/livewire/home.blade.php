@@ -31,14 +31,14 @@
 {{--        <section>--}}
 {{--            <a href="{{ route('recap.index') }}" wire:navigate>--}}
 {{--                <x-picture>--}}
-{{--                    <img class="w-full object-cover h-40 rounded-lg shadow md:h-80" src="{{ asset('images/static/banners/kurozora_recap_2023.webp') }}" alt="Kurozora Recap 2023">--}}
+{{--                    <img class="w-full object-cover h-40 rounded-lg md:h-80" src="{{ asset('images/static/banners/kurozora_recap_2023.webp') }}" alt="Kurozora Recap 2023">--}}
 {{--                </x-picture>--}}
 {{--            </a>--}}
 {{--        </section>--}}
 
 {{--        <section>--}}
 {{--            <x-picture>--}}
-{{--                <img class="w-full object-cover h-32 rounded-lg shadow sm:h-40 md:h-80" src="{{ asset('images/static/banners/games_now_on_kurozora.webp') }}" alt="Games and Manga tracking now available on Kurozora">--}}
+{{--                <img class="w-full object-cover h-32 rounded-lg sm:h-40 md:h-80" src="{{ asset('images/static/banners/games_now_on_kurozora.webp') }}" alt="Games and Manga tracking now available on Kurozora">--}}
 {{--            </x-picture>--}}
 {{--        </section>--}}
 
@@ -54,16 +54,42 @@
             @foreach ($this->exploreCategories as $index => $exploreCategory)
                 @switch($exploreCategory->type)
                 @case(\App\Enums\ExploreCategoryTypes::MostPopularShows)
-                    <section class="mx-auto max-w-7xl natural-shadow-lg">
-                        <div class="no-scrollbar flex snap-mandatory snap-x flex-nowrap overflow-x-scroll xl:rounded-b-2xl">
+                    <section
+                        class="relative"
+                        x-data="carousel()"
+                        x-init="startAutoScroll()"
+                    >
+                        <div
+                            class="flex flex-nowrap snap-mandatory snap-x aspect-video overflow-x-scroll no-scrollbar natural-shadow-lg xl:rounded-b-2xl xl:ml-40 xl:mr-40"
+                            x-ref="scrollContainer"
+                            @mouseenter="pauseAutoScroll()"
+                            @mouseleave="resumeAutoScroll()"
+                            @scroll.passive="trackScrollPosition()"
+                        >
                             @foreach ($exploreCategory->mostPopular(\App\Models\Anime::class)->exploreCategoryItems as $index => $categoryItem)
                                 <x-lockups.banner-lockup :anime="$categoryItem->model" />
                             @endforeach
                         </div>
+
+                        {{-- Play/Pause Button --}}
+                        <div class="absolute top-4 right-4 xl:mr-40">
+                            <button
+                                class="inline-flex items-center pt-3 pr-3 pb-3 pl-3 bg-blur backdrop-blur border border-transparent rounded-full font-semibold text-xs uppercase tracking-widest shadow-md hover:opacity-75 active:opacity-50 focus:outline-none disabled:bg-secondary disabled:text-gray-300 disabled:cursor-default disabled:opacity-100 transition ease-in-out duration-150"
+                                x-on:click="toggleAutoScroll()"
+                            >
+                                <template x-if="isPlaying">
+                                    @svg('pause_fill', 'fill-current', ['width' => '24'])
+                                </template>
+
+                                <template x-if="!isPlaying">
+                                    @svg('play_fill', 'fill-current', ['width' => '24'])
+                                </template>
+                            </button>
+                        </div>
                     </section>
 
-{{--                    <section class="mx-auto max-w-7xl relative pt-5 pb-8">--}}
-{{--                        <x-section-nav class="flex flex-nowrap justify-between mb-5 pl-4 pr-4 sm:px-6">--}}
+{{--                    <section class="relative pt-4 pb-8">--}}
+{{--                        <x-section-nav class="flex flex-nowrap justify-between mb-5 pl-4 pr-4">--}}
 {{--                            <x-slot:title>--}}
 {{--                                {{ __('Art Contest ’24 Winners') }}--}}
 {{--                            </x-slot:title>--}}
@@ -73,11 +99,11 @@
 {{--                            </x-slot:description>--}}
 
 {{--                            <x-slot:action>--}}
-{{--                                <x-section-nav-link class="whitespace-nowrap" href="{{ config('social.discord.url') }}">{{ __('Join Art Contest ’25') }}</x-section-nav-link>--}}
+{{--                                <x-section-nav-link href="{{ config('social.discord.url') }}">{{ __('Join Art Contest ’25') }}</x-section-nav-link>--}}
 {{--                            </x-slot:action>--}}
 {{--                        </x-section-nav>--}}
 
-{{--                        <div class="flex flex-nowrap gap-4 pl-4 pr-4 sm:px-6 snap-mandatory snap-x overflow-x-scroll no-scrollbar">--}}
+{{--                        <div class="flex flex-nowrap gap-4 pl-4 pr-4 snap-mandatory snap-x overflow-x-scroll no-scrollbar">--}}
 {{--                            @foreach ($this->users as $user)--}}
 {{--                                @php--}}
 {{--                                    switch ($user->id) {--}}
@@ -161,15 +187,15 @@
 {{--                    </section>--}}
                     @break
                 @default
-                    <article class="mx-auto max-w-7xl">
+                    <section>
                         <livewire:components.explore-category-section :index="$index" :exploreCategory="$exploreCategory" />
-                    </article>
+                    </section>
                 @endswitch
             @endforeach
         </section>
 
         @if (!$readyToLoad)
-            <section class="mx-auto max-w-7xl pb-6 pl-4 pr-4 sm:px-6">
+            <section class="pb-6">
                 <x-skeletons.small-lockup />
                 <x-skeletons.small-lockup />
                 <x-skeletons.small-lockup />
@@ -178,23 +204,23 @@
         @endif
 
         @guest
-            <section class="mx-auto max-w-7xl">
+            <section>
                 <a href="{{ route('recap.index') }}" wire:navigate>
                     <x-picture>
-                        <img class="h-40 w-full object-cover shadow md:h-80 xl:rounded-3xl" src="{{ asset('images/static/banners/kurozora_recap.webp') }}" alt="Kurozora Recap 2023">
+                        <img class="h-40 w-full object-cover md:h-80" src="{{ asset('images/static/banners/kurozora_recap.webp') }}" alt="Kurozora Recap {{ now()->year }}">
                     </x-picture>
                 </a>
             </section>
         @endguest
 
-        <section class="mx-auto max-w-7xl pb-8 pl-4 pr-4 pt-5 sm:px-6">
+        <section class="pt-4 pb-8">
             <x-section-nav class="mb-5 flex flex-nowrap justify-between">
                 <x-slot:title>
                     {{ __('More to Explore') }}
                 </x-slot>
             </x-section-nav>
 
-            <div class="grid gap-4 md:grid-cols-3">
+            <div class="grid gap-4 pl-4 pr-4 md:grid-cols-3">
                 <x-simple-link href="{{ route('anime.seasons.index') }}" wire:navigate class="w-full justify-between rounded-lg bg-secondary pb-4 pl-4 pr-4 pt-4 text-sm hover:bg-tertiary active:bg-secondary" :hover-underline-enabled="false">
                     <span>
                         {{ __('Browse by Season') }}
@@ -237,4 +263,74 @@
             </div>
         </section>
     </div>
+
+    <script>
+        function carousel() {
+            return {
+                isPlaying: true,
+                activeSlide: 0,
+                scrollContainer: null,
+                interval: null,
+                totalSlides: 0,
+                itemWidth: 0,
+
+                startAutoScroll() {
+                    this.scrollContainer = this.$refs.scrollContainer
+                    let items = this.scrollContainer.children
+                    this.totalSlides = items.length
+                    this.itemWidth = items[0].offsetWidth
+
+                    this.interval = setInterval(() => this.goToNextSlide(), 5000)
+                },
+
+                goToNextSlide() {
+                    if (!this.isPlaying) return
+
+                    this.activeSlide++
+
+                    // If we reach the last item, smoothly scroll back to the first
+                    if (this.activeSlide >= this.totalSlides) {
+                        this.activeSlide = 0
+                        this.scrollContainer.scrollTo({ left: 0, behavior: 'smooth' })
+                    } else {
+                        let nextItem = this.scrollContainer.children[this.activeSlide]
+                        this.scrollContainer.scrollTo({
+                            left: nextItem.offsetLeft,
+                            behavior: 'smooth'
+                        })
+                    }
+                },
+
+                pauseAutoScroll() {
+                    clearInterval(this.interval)
+                },
+
+                resumeAutoScroll() {
+                    if (this.isPlaying) {
+                        this.interval = setInterval(() => this.goToNextSlide(), 5000)
+                    }
+                },
+
+                toggleAutoScroll() {
+                    this.isPlaying = !this.isPlaying
+                    if (this.isPlaying) {
+                        this.resumeAutoScroll()
+                    } else {
+                        this.pauseAutoScroll()
+                    }
+                },
+
+                trackScrollPosition() {
+                    let items = this.scrollContainer.children
+                    let closestIndex = Array.from(items).findIndex(item =>
+                        Math.abs(item.offsetLeft - this.scrollContainer.scrollLeft) < item.offsetWidth / 2
+                    )
+
+                    if (closestIndex !== -1) {
+                        this.activeSlide = closestIndex
+                    }
+                }
+            };
+        }
+    </script>
 </main>
