@@ -31,7 +31,7 @@
                     </div>
 
                     <div class="mt-1 w-full">
-                        <x-truncated-text>
+                        <x-truncated-text class="ml-4 mr-4">
                             <x-slot:text>
                                 {!! nl2br(e($mediaRating->description)) !!}
                             </x-slot:text>
@@ -65,7 +65,7 @@
                     </div>
 
                     <div class="mt-1 w-full">
-                        <x-truncated-text>
+                        <x-truncated-text class="ml-4 mr-4">
                             <x-slot:text>
                                 {!! nl2br(e($mediaRating->description)) !!}
                             </x-slot:text>
@@ -99,7 +99,7 @@
                     </div>
 
                     <div class="mt-1 w-full">
-                        <x-truncated-text>
+                        <x-truncated-text class="ml-4 mr-4">
                             <x-slot:text>
                                 {!! nl2br(e($mediaRating->description)) !!}
                             </x-slot:text>
@@ -133,7 +133,7 @@
                     </div>
 
                     <div class="mt-1 w-full">
-                        <x-truncated-text>
+                        <x-truncated-text class="ml-4 mr-4">
                             <x-slot:text>
                                 {!! nl2br(e($mediaRating->description)) !!}
                             </x-slot:text>
@@ -173,7 +173,7 @@
                     </div>
 
                     <div class="mt-1 w-full">
-                        <x-truncated-text>
+                        <x-truncated-text class="ml-4 mr-4">
                             <x-slot:text>
                                 {!! nl2br(e($mediaRating->description)) !!}
                             </x-slot:text>
@@ -207,7 +207,7 @@
                     </div>
 
                     <div class="mt-1 w-full">
-                        <x-truncated-text>
+                        <x-truncated-text class="ml-4 mr-4">
                             <x-slot:text>
                                 {!! nl2br(e($mediaRating->description)) !!}
                             </x-slot:text>
@@ -286,7 +286,7 @@
                     </div>
 
                     <div class="mt-1 w-full">
-                        <x-truncated-text>
+                        <x-truncated-text class="ml-4 mr-4">
                             <x-slot:text>
                                 {!! nl2br(e($mediaRating->description)) !!}
                             </x-slot:text>
@@ -320,7 +320,7 @@
                     </div>
 
                     <div class="mt-1 w-full">
-                        <x-truncated-text>
+                        <x-truncated-text class="ml-4 mr-4">
                             <x-slot:text>
                                 {!! nl2br(e($mediaRating->description)) !!}
                             </x-slot:text>

@@ -254,7 +254,7 @@
                         </x-slot:title>
                     </x-section-nav>
 
-                    <x-truncated-text>
+                    <x-truncated-text class="ml-4 mr-4">
                         <x-slot:text>
                             {!! nl2br(e($manga->synopsis)) !!}
                         </x-slot:text>

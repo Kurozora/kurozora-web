@@ -28,7 +28,7 @@
             </div>
 
             <div class="mt-2 w-full">
-                <x-truncated-text>
+                <x-truncated-text class="ml-4 mr-4">
                     <x-slot:text>
                         {!! nl2br(e($review->description)) !!}
                     </x-slot:text>
