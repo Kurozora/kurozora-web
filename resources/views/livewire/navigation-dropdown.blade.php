@@ -1,4 +1,5 @@
 <div
+    class="xl:ml-64"
     x-data="{
         isSearchEnabled: @entangle('isSearchEnabled').live,
         isNavOpen: false
@@ -6,7 +7,7 @@
 >
     <nav class="relative bg-primary text-primary border-b border-primary z-[300]">
         {{-- Primary Navigation Menu --}}
-        <div class="max-w-7xl mx-auto pl-4 pr-4 sm:px-6">
+        <div class="pl-4 pr-4">
             <div class="flex justify-between gap-2 h-12">
                 {{-- Hamburger --}}
                 <div
