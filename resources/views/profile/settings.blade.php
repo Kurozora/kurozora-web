@@ -9,7 +9,7 @@
         </h2>
     </x-slot:header>
 
-    <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 space-y-10 sm:px-6">
+    <div class="pl-4 pr-4 py-6 space-y-10">
         @if ($user === auth()->user())
             <livewire:profile.update-account-information-form />
 
