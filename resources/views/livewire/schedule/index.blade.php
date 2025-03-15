@@ -16,12 +16,12 @@
     </x-slot:meta>
 
     <div
-        class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6"
+        class="py-6"
         x-data="{
             selectedDate: null
         }"
     >
-        <section class="flex gap-1">
+        <section class="flex gap-1 pl-4 pr-4">
             <div class="flex flex-wrap items-center w-full">
                 <h1 class="text-2xl font-bold">{{ __(':x Schedule', ['x' => class_basename($class)]) }}</h1>
             </div>
@@ -33,9 +33,9 @@
         <section id="dateHeader" class="bg-primary pt-4 pb-4 z-10">
             <x-season-pagination :type="$class" />
 
-            <x-hr class="mt-4 mb-4" />
+            <x-hr class="mt-4 mb-4 ml-4 mr-4" />
 
-            <div class="flex gap-2 overflow-x-scroll no-scrollbar">
+            <div class="flex gap-2 pl-4 pr-4 overflow-x-scroll no-scrollbar">
                 <template x-if="selectedDate === null">
                     <x-button>{{ __('All') }}</x-button>
                 </template>

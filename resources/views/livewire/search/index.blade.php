@@ -37,9 +37,9 @@
         search
     </x-slot:appArgument>
 
-    <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6" wire:init="loadPage">
+    <div class="py-6" wire:init="loadPage">
         <section class="mb-4">
-            <div class="flex gap-1">
+            <div class="flex gap-1 pl-4 pr-4">
                 <div class="flex flex-wrap items-center w-full">
                     <h1 class="text-2xl font-bold">{{ __('Search') }}</h1>
                 </div>
@@ -48,7 +48,7 @@
                 </div>
             </div>
 
-            <div class="mt-4 justify-between">
+            <div class="justify-between mt-4">
                 <x-search-bar>
                     <x-slot:rightBarButtonItems>
                         <div>
@@ -65,7 +65,7 @@
 
         @if (empty($this->searchResults) || empty($this->searchResults->total()))
             <section class="mt-4">
-                <ul class="flex flex-col gap-4 items-center mt-8">
+                <ul class="flex flex-col gap-4 items-center">
                     @foreach ($this->searchSuggestions as $searchSuggestion)
                         <li>
                             <button class="pl-4 pr-4 pb-2 text-tint" wire:click="$set('search', '{{ $searchSuggestion }}')">
@@ -108,7 +108,7 @@
                 @endswitch
             </section>
 
-            <section class="mt-4">
+            <section class="mt-4 pl-4 pr-4">
                 {{ $this->searchResults->links() }}
             </section>
         @endif
