@@ -30,10 +30,10 @@
             id="header"
             class="sticky top-0 bg-black/30 backdrop-blur backdrop-saturate-200 z-10"
         >
-            <div class="relative flex flex-row items-center justify-between max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6">
+            <div class="relative flex flex-row items-center justify-between max-w-7xl mx-auto py-6">
                 <div class="absolute top-0 left-0 bottom-0 right-0 blur backdrop-blur" style="z-index: -1;"></div>
 
-                <div class="flex items-center justify-between gap-2">
+                <div class="flex items-center justify-between gap-2 pl-4">
                     {{-- Hamburger --}}
                     <div
                         class="-mr-2 flex items-center"
@@ -46,7 +46,7 @@
                         x-on:click="isNavOpen = ! isNavOpen"
                     >
                         <button
-                            class="inline-flex items-center justify-center pt-2 pr-2 pb-2 pl-2 rounded-md text-white focus:outline-none transition duration-150 ease-in-out"
+                            class="inline-flex items-center justify-center pt-2 pr-2 pb-2 rounded-md text-white focus:outline-none transition duration-150 ease-in-out"
                         >
                             <svg stroke="currentColor" fill="none" viewBox="0 0 24 24" width="24">
                                 <path
@@ -85,7 +85,7 @@
                     <h1 class="text-white text-xl font-bold">{{ __('Re:CAP’:x', ['x' => substr($this->year, -2)]) }}</h1>
                 </div>
 
-                <div class="flex flex-row items-center gap-1.5">
+                <div class="flex flex-row items-center gap-1.5 pr-4">
                     <x-logo class="h-5 w-auto text-white" />
                     <p class="text-white text-xl">{{ config('app.name') }}</p>
                 </div>
@@ -93,14 +93,14 @@
 
             {{-- Responsive Navigation Menu --}}
             <div
-                class="absolute pl-4 pr-4 w-full bg-black/30 backdrop-blur backdrop-saturate-200 rounded-b-2xl"
+                class="absolute w-full bg-black/30 backdrop-blur backdrop-saturate-200 rounded-b-2xl"
                 x-show="isNavOpen"
                 x-collapse.duration.400ms=""
                 x-on:click="isNavOpen = !isNavOpen"
             >
                 <div class="absolute top-0 left-0 bottom-0 right-0 blur backdrop-blur" style="z-index: -1;"></div>
 
-                <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6 h-screen">
+                <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 h-screen">
                     <ul class="m-0 mb-4">
                         <li class="pb-10">
                             <p class="text-2xl text-white font-semibold">{{ __('Select a year to see your recap') }}</p>
@@ -133,12 +133,13 @@
             </div>
         </header>
 
-        <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6">
+        <div class="max-w-7xl mx-auto py-6">
             <div
                 x-data="{
                     month: @entangle('month').live
                 }"
-                class="flex justify-between gap-2 whitespace-nowrap overflow-x-scroll no-scrollbar"
+                class="flex gap-6 pl-4 pr-4 whitespace-nowrap overflow-x-scroll no-scrollbar md:gap-20"
+                style="mask: linear-gradient(90deg, transparent, #000 2%, #000 98%, transparent 100%);"
             >
 {{--                @if ($this->year !== now()->year || now()->month === 12)--}}
 {{--                    <span wire:key="select-{{ $this->year }}">--}}
@@ -182,7 +183,7 @@
     @endif
 
     <div
-        class="max-w-7xl mx-auto mb-8 pl-5 pr-5 pb-6 text-white sm:px-6"
+        class="max-w-7xl mx-auto mb-8 pb-6 text-white"
         x-show="!loadingScreenEnabled"
     >
         <div class="fixed top-0 left-0 bottom-0 right-0 blur" style="background: url('{{ asset('images/static/star_bg_lg.jpg') }}') no-repeat center center; background-size: cover; transform: scale(1.1); z-index: -1;"></div>
@@ -209,15 +210,15 @@
                     @if ($recap->recapItems->count())
                         @switch($recap->type)
                             @case(\App\Models\Anime::class)
-                                <article class="mt-5 md:mt-36">
+                                <section class="mt-5 pl-4 pr-4 md:mt-36">
                                     <div class="hidden md:block">
                                         <h2 class="font-semibold md:text-2xl">{{ __('Top Anime') }}</h2>
                                         <p class="opacity-75 font-semibold md:text-2xl">{{ __(':x total series', ['x' => $recap->total_series_count]) }}</p>
                                     </div>
 
                                     <div class="flex flex-nowrap gap-4 mt-12">
-                                        <div class="flex flex-col justify-between gap-2 w-full pt-5 pl-5 pb-5 pr-5 bg-blur rounded-xl">
-                                            <div class="block mb-4 md:hidden">
+                                        <div class="flex flex-col justify-between gap-2 w-full pt-4 pb-4 bg-blur rounded-xl">
+                                            <div class="block mb-4 pl-4 pr-4 md:hidden">
                                                 <h2 class="font-semibold md:text-2xl">{{ __('Top Anime') }}</h2>
                                                 <p class="opacity-75 font-semibold md:text-2xl">{{ __(':x total series', ['x' => $recap->total_series_count]) }}</p>
                                             </div>
@@ -225,18 +226,18 @@
                                             <x-rows.small-lockup :animes="$recap->recapItems->pluck('model')" :tracking-enabled="false" :is-ranked="true" />
                                         </div>
                                     </div>
-                                </article>
+                                </section>
                                 @break
                             @case(\App\Models\Manga::class)
-                                <article class="mt-5 md:mt-36">
+                                <section class="mt-5 pl-4 pr-4 md:mt-36">
                                     <div class="hidden md:block">
                                         <h2 class="font-semibold md:text-2xl">{{ __('Top Manga') }}</h2>
                                         <p class="opacity-75 font-semibold md:text-2xl">{{ __(':x total series', ['x' => $recap->total_series_count]) }}</p>
                                     </div>
 
                                     <div class="flex flex-nowrap gap-4 mt-12">
-                                        <div class="flex flex-col justify-between gap-2 w-full pt-5 pl-5 pb-5 pr-5 bg-blur rounded-xl">
-                                            <div class="block mb-4 md:hidden">
+                                        <div class="flex flex-col justify-between gap-2 w-full pt-4 pb-4 bg-blur rounded-xl">
+                                            <div class="block mb-4 pl-4 pr-4 md:hidden">
                                                 <h2 class="font-semibold md:text-2xl">{{ __('Top Manga') }}</h2>
                                                 <p class="opacity-75 font-semibold md:text-2xl">{{ __(':x total series', ['x' => $recap->total_series_count]) }}</p>
                                             </div>
@@ -244,18 +245,18 @@
                                             <x-rows.small-lockup :mangas="$recap->recapItems->pluck('model')" :tracking-enabled="false" :is-ranked="true" />
                                         </div>
                                     </div>
-                                </article>
+                                </section>
                                 @break
                             @case(\App\Models\Game::class)
-                                <article class="mt-5 md:mt-36">
+                                <section class="mt-5 pl-4 pr-4 md:mt-36">
                                     <div class="hidden md:block">
                                         <h2 class="font-semibold md:text-2xl">{{ __('Top Games') }}</h2>
                                         <p class="opacity-75 font-semibold md:text-2xl">{{ __(':x total series', ['x' => $recap->total_series_count]) }}</p>
                                     </div>
 
                                     <div class="flex flex-nowrap gap-4 mt-12">
-                                        <div class="flex flex-col justify-between gap-2 w-full pt-5 pl-5 pb-5 pr-5 bg-blur rounded-xl">
-                                            <div class="block mb-4 md:hidden">
+                                        <div class="flex flex-col justify-between gap-2 w-full pt-4 pb-4 bg-blur rounded-xl">
+                                            <div class="block mb-4 pl-4 pr-4 md:hidden">
                                                 <h2 class="font-semibold md:text-2xl">{{ __('Top Games') }}</h2>
                                                 <p class="opacity-75 font-semibold md:text-2xl">{{ __(':x total series', ['x' => $recap->total_series_count]) }}</p>
                                             </div>
@@ -263,53 +264,57 @@
                                             <x-rows.small-lockup :games="$recap->recapItems->pluck('model')" :tracking-enabled="false" :is-ranked="true" />
                                         </div>
                                     </div>
-                                </article>
+                                </section>
                                 @break
                             @case(\App\Models\Genre::class)
-                                <article class="mt-5 md:mt-36">
+                                <section class="mt-5 pl-4 pr-4 md:mt-36">
                                     <div class="hidden md:block">
                                         <h2 class="font-semibold md:text-2xl">{{ __('Top Genres') }}</h2>
                                     </div>
 
                                     <div class="flex flex-nowrap gap-4 mt-12">
-                                        <div class="flex flex-col justify-between gap-2 w-full pt-5 pl-5 pb-5 pr-5 bg-blur rounded-xl">
-                                            <div class="block mb-4 md:hidden">
+                                        <div class="flex flex-col justify-between gap-2 w-full pt-4 pb-4 bg-blur rounded-xl">
+                                            <div class="block mb-4 pl-4 pr-4 md:hidden">
                                                 <h2 class="font-semibold md:text-2xl">{{ __('Top Genres') }}</h2>
                                             </div>
 
-                                            @foreach ($recap->recapItems->take(5) as $key => $recapItem)
-                                                <a class="flex flex-row items-center gap-2" href="{{ route('genres.details', $recapItem->model) }}">
-                                                    <p class="leading-tight font-semibold break-all md:text-2xl">{{ $key + 1 }}</p>
+                                            <div class="pl-4 pr-4">
+                                                @foreach ($recap->recapItems->take(5) as $key => $recapItem)
+                                                    <a class="flex flex-row items-center gap-2" href="{{ route('genres.details', $recapItem->model) }}">
+                                                        <p class="leading-tight font-semibold break-all md:text-2xl">{{ $key + 1 }}</p>
 
-                                                    <p class="font-bold text-2xl md:text-8xl">{{ $recapItem->model->name }}</p>
-                                                </a>
-                                            @endforeach
+                                                        <p class="font-bold text-2xl md:text-8xl">{{ $recapItem->model->name }}</p>
+                                                    </a>
+                                                @endforeach
+                                            </div>
                                         </div>
                                     </div>
-                                </article>
+                                </section>
                                 @break
                             @case(\App\Models\Theme::class)
-                                <article class="mt-5 md:mt-36">
+                                <section class="mt-5 pl-4 pr-4 md:mt-36">
                                     <div class="hidden md:block">
                                         <h2 class="font-semibold md:text-2xl">{{ __('Top Themes') }}</h2>
                                     </div>
 
                                     <div class="flex flex-nowrap gap-4 mt-12">
-                                        <div class="flex flex-col justify-between gap-2 w-full pt-5 pl-5 pb-5 pr-5 bg-blur rounded-xl">
-                                            <div class="block mb-4 md:hidden">
+                                        <div class="flex flex-col justify-between gap-2 w-full pt-4 pb-4 bg-blur rounded-xl">
+                                            <div class="block mb-4 pl-4 pr-4 md:hidden">
                                                 <h2 class="font-semibold md:text-2xl">{{ __('Top Themes') }}</h2>
                                             </div>
 
-                                            @foreach ($recap->recapItems->take(5) as $key => $recapItem)
-                                                <a class="flex flex-row items-center gap-2" href="{{ route('themes.details', $recapItem->model) }}">
-                                                    <p class="leading-tight font-semibold md:text-2xl">{{ $key + 1 }}</p>
+                                            <div class="pl-4 pr-4">
+                                                @foreach ($recap->recapItems->take(5) as $key => $recapItem)
+                                                    <a class="flex flex-row items-center gap-2" href="{{ route('themes.details', $recapItem->model) }}">
+                                                        <p class="leading-tight font-semibold md:text-2xl">{{ $key + 1 }}</p>
 
-                                                    <p class="font-bold text-2xl break-all md:text-8xl">{{ $recapItem->model->name }}</p>
-                                                </a>
-                                            @endforeach
+                                                        <p class="font-bold text-2xl break-all md:text-8xl">{{ $recapItem->model->name }}</p>
+                                                    </a>
+                                                @endforeach
+                                            </div>
                                         </div>
                                     </div>
-                                </article>
+                                </section>
                                 @break
                             @default
                                 @if (app()->isLocal())
@@ -325,7 +330,7 @@
                     <h2 class="max-w-sm text-2xl text-center font-semibold md:text-4xl">{{ __('These milestones marked your season finale') }}</h2>
                 </div>
 
-                <article class="flex flex-nowrap gap-4 mt-4 snap-mandatory snap-x overflow-x-scroll no-scrollbar md:mt-12">
+                <section class="flex flex-nowrap gap-4 mt-4 pl-4 pr-4 snap-mandatory snap-x overflow-x-scroll no-scrollbar md:mt-12">
                     @foreach ($this->recaps as $recap)
                         @switch($recap->type)
                             @case(\App\Models\Anime::class)
@@ -394,11 +399,11 @@
                             @default
                         @endswitch
                     @endforeach
-                </article>
+                </section>
 
                 @php($recap = $this->recaps->where('top_percentile', '!=', 0.00)->sortBy('top_percentile')->first())
                 @if (!empty($recap))
-                    <article class="flex flex-col gap-4 mt-12">
+                    <section class="flex flex-col gap-4 mt-12 pl-4 pr-4">
                         @switch($recap->type)
                             @case(\App\Models\Anime::class)
                                 <x-lockups.milestone-lockup
@@ -434,7 +439,7 @@
                                 @break
                             @default
                         @endswitch
-                    </article>
+                    </section>
                 @endif
             </section>
         @elseif ($this->year === now()->year && $this->month === now()->month)
@@ -453,7 +458,7 @@
     </div>
 
     <div
-        class="absolute top-0 bottom-0 left-0 right-0 max-w-7xl mx-auto mb-8 pl-5 pr-5 pb-6 text-white z-10 sm:px-6"
+        class="absolute top-0 bottom-0 left-0 right-0 max-w-7xl mx-auto mb-8 pl-5 pr-5 pb-6 text-white z-10"
         x-show="loadingScreenEnabled"
     >
         <div class="fixed top-0 left-0 bottom-0 right-0 blur" style="background: url('{{ asset('images/static/star_bg_lg.jpg') }}') no-repeat center center; background-size: cover; transform: scale(1.1); z-index: -1;"></div>
