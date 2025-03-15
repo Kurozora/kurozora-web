@@ -20,9 +20,9 @@
         people/{{ $person->id }}
     </x-slot:appArgument>
 
-    <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6" wire:init="loadPage">
-        <section class="pt-5 pb-8">
-            <div class="relative pb-2">
+    <div class="py-6" wire:init="loadPage">
+        <section class="pt-4 pb-8 pl-4 pr-4">
+            <div class="relative">
                 <div class="flex flex-col flex-wrap text-center items-center">
                     <picture
                         class="relative aspect-square rounded-full overflow-hidden"
@@ -45,7 +45,9 @@
         </section>
 
         @if ($person->about)
-            <section class="pt-5 pb-8 border-t border-primary">
+            <section class="pb-8">
+                <x-hr class="ml-4 mr-4 pb-5" />
+
                 <x-section-nav>
                     <x-slot:title>
                         {{ __('About') }}
@@ -60,18 +62,20 @@
             </section>
         @endif
 
-        <section id="ratingsAndReviews" class="pt-5 pb-8 pl-4 pr-4 border-t border-primary">
+        <section id="ratingsAndReviews" class="pb-8">
+            <x-hr class="ml-4 mr-4 pb-5" />
+
             <x-section-nav>
                 <x-slot:title>
                     {{ __('Ratings & Reviews') }}
                 </x-slot:title>
 
                 <x-slot:action>
-                    <x-section-nav-link class="whitespace-nowrap" href="{{ route('people.reviews', $person) }}">{{ __('See All') }}</x-section-nav-link>
+                    <x-section-nav-link href="{{ route('people.reviews', $person) }}">{{ __('See All') }}</x-section-nav-link>
                 </x-slot:action>
             </x-section-nav>
 
-            <div class="flex flex-row flex-wrap justify-between gap-4">
+            <div class="flex flex-row flex-wrap justify-between gap-4 pl-4 pr-4">
                 <div class="flex flex-col justify-end text-center">
                     <p class="font-bold text-6xl">{{ number_format($person->mediaStat->rating_average, 1) }}</p>
                     <p class="font-bold text-sm text-secondary">{{ __('out of') }} 5</p>
@@ -91,8 +95,10 @@
             </div>
         </section>
 
-        <section id="writeAReview" class="pt-5 pb-8 pl-4 pr-4 border-t border-primary">
-            <div class="flex flex-row flex-wrap gap-4">
+        <section id="writeAReview" class="pb-8">
+            <x-hr class="ml-4 mr-4 pb-5" />
+
+            <div class="flex flex-row flex-wrap gap-4 pl-4 pr-4">
                 <div class="flex justify-between items-center">
                     <p class="">{{ __('Click to Rate:') }}</p>
 
@@ -114,14 +120,16 @@
             </div>
         </section>
 
-        <section class="pt-5 pb-8 border-t border-primary">
+        <section class="pb-8">
+                <x-hr class="ml-4 mr-4 pb-5" />
+
             <x-section-nav>
                 <x-slot:title>
                     {{ __('Information') }}
                 </x-slot:title>
             </x-section-nav>
 
-            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
+            <div class="grid grid-cols-2 gap-4 pl-4 pr-4 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
                 <x-information-list id="aliases" title="{{ __('Aliases') }}" icon="{{ asset('images/symbols/person.svg') }}">
                     <x-slot:information>
                         @if (!empty($person->full_name))
