@@ -118,10 +118,10 @@
       "get": {
         "security": [
           {
+            "apiKey": []
           },
           {
-            "bearerAuth": [
-            ]
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -158,10 +158,10 @@
       "get": {
         "security": [
           {
+            "apiKey": []
           },
           {
-            "bearerAuth": [
-            ]
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -198,10 +198,10 @@
       "get": {
         "security": [
           {
+            "apiKey": []
           },
           {
-            "bearerAuth": [
-            ]
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -245,6 +245,11 @@
     },
     "/anime/{animeID}/cast": {
       "get": {
+        "security":  [
+          {
+            "apiKey": []
+          }
+        ],
         "tags": [
           "anime"
         ],
@@ -296,6 +301,11 @@
     },
     "/anime/{animeID}/characters": {
       "get": {
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
         "tags": [
           "anime"
         ],
@@ -349,10 +359,10 @@
       "get": {
         "security": [
           {
+            "apiKey": []
           },
           {
-            "bearerAuth": [
-            ]
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -411,10 +421,10 @@
       "get": {
         "security": [
           {
+            "apiKey": []
           },
           {
-            "bearerAuth": [
-            ]
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -473,10 +483,10 @@
       "get": {
         "security": [
           {
+            "apiKey": []
           },
           {
-            "bearerAuth": [
-            ]
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -535,8 +545,10 @@
       "post": {
         "security": [
           {
-            "bearerAuth": [
-            ]
+            "apiKey": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -597,6 +609,11 @@
     },
     "/anime/{animeID}/seasons": {
       "get": {
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
         "tags": [
           "anime"
         ],
@@ -648,6 +665,11 @@
     },
     "/anime/{animeID}/staff": {
       "get": {
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
         "tags": [
           "anime"
         ],
@@ -699,6 +721,11 @@
     },
     "/anime/{animeID}/studios": {
       "get": {
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
         "tags": [
           "anime"
         ],
@@ -752,10 +779,10 @@
       "get": {
         "security": [
           {
+            "apiKey": []
           },
           {
-            "bearerAuth": [
-            ]
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -805,10 +832,10 @@
       "get": {
         "security": [
           {
+            "apiKey": []
           },
           {
-            "bearerAuth": [
-            ]
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -852,6 +879,11 @@
     },
     "/games/{gameID}/cast": {
       "get": {
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
         "tags": [
           "games"
         ],
@@ -903,6 +935,11 @@
     },
     "/games/{gameID}/characters": {
       "get": {
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
         "tags": [
           "games"
         ],
@@ -956,10 +993,10 @@
       "get": {
         "security": [
           {
+            "apiKey": []
           },
           {
-            "bearerAuth": [
-            ]
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -1018,10 +1055,10 @@
       "get": {
         "security": [
           {
+            "apiKey": []
           },
           {
-            "bearerAuth": [
-            ]
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -1080,10 +1117,10 @@
       "get": {
         "security": [
           {
+            "apiKey": []
           },
           {
-            "bearerAuth": [
-            ]
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -1142,8 +1179,10 @@
       "post": {
         "security": [
           {
-            "bearerAuth": [
-            ]
+            "apiKey": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -1204,6 +1243,11 @@
     },
     "/games/{gameID}/staff": {
       "get": {
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
         "tags": [
           "games"
         ],
@@ -1255,6 +1299,11 @@
     },
     "/games/{gameID}/studios": {
       "get": {
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
         "tags": [
           "games"
         ],
@@ -1308,10 +1357,10 @@
       "get": {
         "security": [
           {
+            "apiKey": []
           },
           {
-            "bearerAuth": [
-            ]
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -1361,10 +1410,10 @@
       "get": {
         "security": [
           {
+            "apiKey": []
           },
           {
-            "bearerAuth": [
-            ]
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -1408,6 +1457,11 @@
     },
     "/manga/{mangaID}/cast": {
       "get": {
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
         "tags": [
           "manga"
         ],
@@ -1459,6 +1513,11 @@
     },
     "/manga/{mangaID}/characters": {
       "get": {
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
         "tags": [
           "manga"
         ],
@@ -1512,10 +1571,10 @@
       "get": {
         "security": [
           {
+            "apiKey": []
           },
           {
-            "bearerAuth": [
-            ]
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -1574,10 +1633,10 @@
       "get": {
         "security": [
           {
+            "apiKey": []
           },
           {
-            "bearerAuth": [
-            ]
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -1636,10 +1695,10 @@
       "get": {
         "security": [
           {
+            "apiKey": []
           },
           {
-            "bearerAuth": [
-            ]
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -1698,8 +1757,10 @@
       "post": {
         "security": [
           {
-            "bearerAuth": [
-            ]
+            "apiKey": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -1760,6 +1821,11 @@
     },
     "/manga/{mangaID}/staff": {
       "get": {
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
         "tags": [
           "manga"
         ],
@@ -1811,6 +1877,11 @@
     },
     "/manga/{mangaID}/studios": {
       "get": {
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
         "tags": [
           "manga"
         ],
@@ -1864,10 +1935,10 @@
       "get": {
         "security": [
           {
+            "apiKey": []
           },
           {
-            "bearerAuth": [
-            ]
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -1917,10 +1988,10 @@
       "get": {
         "security": [
           {
+            "apiKey": []
           },
           {
-            "bearerAuth": [
-            ]
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -1966,10 +2037,10 @@
       "get": {
         "security": [
           {
+            "apiKey": []
           },
           {
-            "bearerAuth": [
-            ]
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -2046,6 +2117,11 @@
     },
     "/seasons/{seasonID}": {
       "get": {
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
         "tags": [
           "seasons"
         ],
@@ -2077,10 +2153,10 @@
       "get": {
         "security": [
           {
+            "apiKey": []
           },
           {
-            "bearerAuth": [
-            ]
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -2155,8 +2231,10 @@
       "post": {
         "security": [
           {
-            "bearerAuth": [
-            ]
+            "apiKey": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -2193,10 +2271,10 @@
       "get": {
         "security": [
           {
+            "apiKey": []
           },
           {
-            "bearerAuth": [
-            ]
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -2242,8 +2320,10 @@
       "post": {
         "security": [
           {
-            "bearerAuth": [
-            ]
+            "apiKey": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -2280,8 +2360,10 @@
       "post": {
         "security": [
           {
-            "bearerAuth": [
-            ]
+            "apiKey": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -2344,10 +2426,10 @@
       "get": {
         "security": [
           {
+            "apiKey": []
           },
           {
-            "bearerAuth": [
-            ]
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -2391,6 +2473,11 @@
     },
     "/characters/{characterID}/people": {
       "get": {
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
         "tags": [
           "characters"
         ],
@@ -2444,10 +2531,10 @@
       "get": {
         "security": [
           {
+            "apiKey": []
           },
           {
-            "bearerAuth": [
-            ]
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -2504,6 +2591,11 @@
     },
     "/genres": {
       "get": {
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
         "tags": [
           "genres"
         ],
@@ -2522,6 +2614,11 @@
     },
     "/genres/{genreID}": {
       "get": {
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
         "tags": [
           "genres"
         ],
@@ -2551,6 +2648,11 @@
     },
     "/images/random": {
       "get": {
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
         "tags": [
           "images"
         ],
@@ -2601,6 +2703,11 @@
     },
     "/cast/{castID}": {
       "get": {
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
         "tags": [
           "cast"
         ],
@@ -2632,10 +2739,10 @@
       "get": {
         "security": [
           {
+            "apiKey": []
           },
           {
-            "bearerAuth": [
-            ]
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -2681,10 +2788,10 @@
       "get": {
         "security": [
           {
+            "apiKey": []
           },
           {
-            "bearerAuth": [
-            ]
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -2741,6 +2848,11 @@
     },
     "/people/{personID}/characters": {
       "get": {
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
         "tags": [
           "people"
         ],
@@ -2792,6 +2904,11 @@
     },
     "/themes": {
       "get": {
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
         "tags": [
           "themes"
         ],
@@ -2810,6 +2927,11 @@
     },
     "/themes/{themeID}": {
       "get": {
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
         "tags": [
           "themes"
         ],
@@ -2841,8 +2963,10 @@
       "post": {
         "security": [
           {
-            "bearerAuth": [
-            ]
+            "apiKey": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "tags":[
@@ -2905,10 +3029,10 @@
       "get": {
         "security": [
           {
+            "apiKey": []
           },
           {
-            "bearerAuth": [
-            ]
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -2958,8 +3082,10 @@
       "get": {
         "security": [
           {
-            "bearerAuth": [
-            ]
+            "apiKey": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -3009,10 +3135,10 @@
       "get": {
         "security": [
           {
+            "apiKey": []
           },
           {
-            "bearerAuth": [
-            ]
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -3049,8 +3175,10 @@
       "post": {
         "security": [
           {
-            "bearerAuth": [
-            ]
+            "apiKey": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -3113,10 +3241,10 @@
       "get": {
         "security": [
           {
+            "apiKey": []
           },
           {
-            "bearerAuth": [
-            ]
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -3175,8 +3303,10 @@
       "post": {
         "security": [
           {
-            "bearerAuth": [
-            ]
+            "apiKey": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -3213,8 +3343,10 @@
       "post": {
         "security": [
           {
-            "bearerAuth": [
-            ]
+            "apiKey": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -3251,8 +3383,10 @@
       "post": {
         "security": [
           {
-            "bearerAuth": [
-            ]
+            "apiKey": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -3289,8 +3423,10 @@
       "get": {
         "security": [
           {
-            "bearerAuth": [
-            ]
+            "apiKey": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -3316,8 +3452,10 @@
       "post": {
         "security": [
           {
-            "bearerAuth": [
-            ]
+            "apiKey": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -3372,8 +3510,10 @@
       "get": {
         "security": [
           {
-            "bearerAuth": [
-            ]
+            "apiKey": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -3423,8 +3563,10 @@
       "get": {
         "security": [
           {
-            "bearerAuth": [
-            ]
+            "apiKey": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -3461,8 +3603,10 @@
       "post": {
         "security": [
           {
-            "bearerAuth": [
-            ]
+            "apiKey": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -3517,8 +3661,10 @@
       "post": {
         "security": [
           {
-            "bearerAuth": [
-            ]
+            "apiKey": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -3555,8 +3701,10 @@
       "get": {
         "security": [
           {
-            "bearerAuth": [
-            ]
+            "apiKey": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -3613,8 +3761,10 @@
       "post": {
         "security": [
           {
-            "bearerAuth": [
-            ]
+            "apiKey": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -3658,8 +3808,10 @@
       "get": {
         "security": [
           {
-            "bearerAuth": [
-            ]
+            "apiKey": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -3709,8 +3861,10 @@
       "get": {
         "security": [
           {
-            "bearerAuth": [
-            ]
+            "apiKey": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -3760,8 +3914,10 @@
       "get": {
         "security": [
           {
-            "bearerAuth": [
-            ]
+            "apiKey": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -3811,8 +3967,10 @@
       "get": {
         "security": [
           {
-            "bearerAuth": [
-            ]
+            "apiKey": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -3887,8 +4045,10 @@
       "post": {
         "security": [
           {
-            "bearerAuth": [
-            ]
+            "apiKey": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -3940,8 +4100,10 @@
       "post": {
         "security": [
           {
-            "bearerAuth": [
-            ]
+            "apiKey": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -3998,8 +4160,10 @@
       "post": {
         "security": [
           {
-            "bearerAuth": [
-            ]
+            "apiKey": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -4047,8 +4211,10 @@
       "get": {
         "security": [
           {
-            "bearerAuth": [
-            ]
+            "apiKey": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -4074,8 +4240,10 @@
       "get": {
         "security": [
           {
-            "bearerAuth": [
-            ]
+            "apiKey": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -4112,8 +4280,10 @@
       "post": {
         "security": [
           {
-            "bearerAuth": [
-            ]
+            "apiKey": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -4150,8 +4320,10 @@
       "post": {
         "security": [
           {
-            "bearerAuth": [
-            ]
+            "apiKey": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -4204,8 +4376,10 @@
       "get": {
         "security": [
           {
-            "bearerAuth": [
-            ]
+            "apiKey": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -4231,8 +4405,10 @@
       "get": {
         "security": [
           {
-            "bearerAuth": [
-            ]
+            "apiKey": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -4268,8 +4444,10 @@
       "get": {
         "security": [
           {
-            "bearerAuth": [
-            ]
+            "apiKey": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -4316,8 +4494,10 @@
       "post": {
         "security": [
           {
-            "bearerAuth": [
-            ]
+            "apiKey": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -4360,8 +4540,10 @@
       "get": {
         "security": [
           {
-            "bearerAuth": [
-            ]
+            "apiKey": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -4386,8 +4568,10 @@
       "get": {
         "security": [
           {
-            "bearerAuth": [
-            ]
+            "apiKey": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -4437,8 +4621,10 @@
       "get": {
         "security": [
           {
-            "bearerAuth": [
-            ]
+            "apiKey": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -4475,8 +4661,10 @@
       "post": {
         "security": [
           {
-            "bearerAuth": [
-            ]
+            "apiKey": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -4513,10 +4701,10 @@
       "get": {
         "security": [
           {
+            "apiKey": []
           },
           {
-            "bearerAuth": [
-            ]
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -4562,10 +4750,10 @@
       "get": {
         "security": [
           {
+            "apiKey": []
           },
           {
-            "bearerAuth": [
-            ]
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -4624,10 +4812,10 @@
       "get": {
         "security": [
           {
+            "apiKey": []
           },
           {
-            "bearerAuth": [
-            ]
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -4653,10 +4841,10 @@
       "get": {
         "security": [
           {
+            "apiKey": []
           },
           {
-            "bearerAuth": [
-            ]
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -4906,10 +5094,10 @@
       "get": {
         "security": [
           {
+            "apiKey": []
           },
           {
-            "bearerAuth": [
-            ]
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -4977,10 +5165,10 @@
       "get": {
         "security": [
           {
+            "apiKey": []
           },
           {
-            "bearerAuth": [
-            ]
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -5039,10 +5227,10 @@
       "get": {
         "security": [
           {
+            "apiKey": []
           },
           {
-            "bearerAuth": [
-            ]
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -5079,8 +5267,10 @@
       "post": {
         "security": [
           {
-            "bearerAuth": [
-            ]
+            "apiKey": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -5117,10 +5307,10 @@
       "get": {
         "security": [
           {
+            "apiKey": []
           },
           {
-            "bearerAuth": [
-            ]
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -5179,10 +5369,10 @@
       "get": {
         "security": [
           {
+            "apiKey": []
           },
           {
-            "bearerAuth": [
-            ]
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -5241,8 +5431,10 @@
       "delete": {
         "security": [
           {
-            "bearerAuth": [
-            ]
+            "apiKey": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -5284,6 +5476,11 @@
     },
     "/store": {
       "get": {
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
         "tags": [
           "store"
         ],
@@ -5315,8 +5512,10 @@
       "post": {
         "security": [
           {
-            "bearerAuth": [
-            ]
+            "apiKey": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -5358,6 +5557,11 @@
     },
     "/legal/privacy-policy": {
       "get": {
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
         "tags": [
           "legal"
         ],
@@ -5376,6 +5580,11 @@
     },
     "/legal/terms-of-use": {
       "get": {
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
         "tags": [
           "legal"
         ],
@@ -5396,10 +5605,10 @@
       "get": {
         "security": [
           {
+            "apiKey": []
           },
           {
-            "bearerAuth": [
-            ]
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -5445,10 +5654,10 @@
       "get": {
         "security": [
           {
+            "apiKey": []
           },
           {
-            "bearerAuth": [
-            ]
+            "bearerAuth": []
           }
         ],
         "tags": [
@@ -5492,6 +5701,11 @@
     },
     "/info": {
       "get": {
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
         "tags": [
           "misc"
         ],
@@ -5781,6 +5995,11 @@
       }
     },
     "securitySchemes": {
+      "apiKey": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-API-Key"
+      },
       "bearerAuth": {
         "type": "http",
         "scheme": "bearer",
