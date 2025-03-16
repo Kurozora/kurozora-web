@@ -5721,6 +5721,29 @@
           }
         }
       }
+    },
+    "/test": {
+      "get": {
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "tags": [
+          "misc"
+        ],
+        "operationId": "getTest",
+        "summary": "Test API token.",
+        "description": "Plain API JSON response.",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
     }
   },
   "components": {
