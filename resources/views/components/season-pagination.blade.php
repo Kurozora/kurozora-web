@@ -24,7 +24,7 @@
 @endphp
 
 <div class="flex flex-wrap gap-4 justify-between items-baseline">
-    <div class="flex gap-2 overflow-x-scroll no-scrollbar">
+    <div class="flex gap-2 pl-4 pr-4 overflow-x-scroll no-scrollbar">
         {{-- Previous page --}}
         @php
             // Capture current values
@@ -41,11 +41,11 @@
         @endphp
 
         @if ($nextYear < 1917 && $nextSeasonOfYear->value === \App\Enums\SeasonOfYear::Fall)
-            <a class="pl-4 pr-4 pb-2 whitespace-nowrap border-b border-primary hover:border-tint" href="{{ route($seasonIndexRouteName) }}">
+            <a class="pl-4 pr-4 pb-2 whitespace-nowrap border-b border-primary hover:border-tint" href="{{ route($seasonIndexRouteName) }}" wire:navigate>
                 {{ __('Current') }}
             </a>
         @else
-            <a class="pl-4 pr-4 pb-2 whitespace-nowrap border-b border-primary hover:border-tint" href="{{ route($seasonYearRouteName, [$nextYear, $nextSeasonOfYear->key]) }}">
+            <a class="pl-4 pr-4 pb-2 whitespace-nowrap border-b border-primary hover:border-tint" href="{{ route($seasonYearRouteName, [$nextYear, $nextSeasonOfYear->key]) }}" wire:navigate>
                 {{ $nextSeasonOfYear->key . ' ' . $nextYear }}
             </a>
         @endif
@@ -54,7 +54,7 @@
         @php
             $active = request()->routeIs($seasonYearRouteName, [$year, $seasonOfYear->key]);
         @endphp
-        <a class="pl-4 pr-4 pb-2 whitespace-nowrap border-b {{ $active ? 'border-tint' : 'border-primary hover:border-tint' }}" href="{{ route($seasonYearRouteName, [$year, $seasonOfYear->key]) }}">
+        <a class="pl-4 pr-4 pb-2 whitespace-nowrap border-b {{ $active ? 'border-tint' : 'border-primary hover:border-tint' }}" href="{{ route($seasonYearRouteName, [$year, $seasonOfYear->key]) }}" wire:navigate>
             {{ $seasonOfYear->key . ' ' . $year }}
         </a>
 
@@ -75,7 +75,7 @@
                 $previousYear = $nextYear;
                 $previousSeasonOfYear = $nextSeasonOfYear;
             @endphp
-            <a class="pl-4 pr-4 pb-2 whitespace-nowrap border-b border-primary hover:border-tint" href="{{ route($seasonYearRouteName, [$nextYear, $nextSeasonOfYear->key]) }}">
+            <a class="pl-4 pr-4 pb-2 whitespace-nowrap border-b border-primary hover:border-tint" href="{{ route($seasonYearRouteName, [$nextYear, $nextSeasonOfYear->key]) }}" wire:navigate>
                 {{ $nextSeasonOfYear->key . ' ' . $nextYear }}
             </a>
         @endforeach
@@ -84,7 +84,7 @@
         @php
             $active = request()->routeIs($seasonScheduleRouteName, [$year, $seasonOfYear->key]);
         @endphp
-        <a class="pl-4 pr-4 pb-2 whitespace-nowrap border-b {{ $active ? 'border-tint' : 'border-primary hover:border-tint' }}" href="{{ route($seasonScheduleRouteName) }}">
+        <a class="pl-4 pr-4 pb-2 whitespace-nowrap border-b {{ $active ? 'border-tint' : 'border-primary hover:border-tint' }}" href="{{ route($seasonScheduleRouteName) }}" wire:navigate>
             {{ __('Schedule') }}
         </a>
 
@@ -92,25 +92,25 @@
         @php
             $active = request()->routeIs($seasonArchiveRouteName, [$year, $seasonOfYear->key]);
         @endphp
-        <a class="pl-4 pr-4 pb-2 whitespace-nowrap border-b {{ $active ? 'border-tint' : 'border-primary hover:border-tint' }}" href="{{ route($seasonArchiveRouteName) }}">
+        <a class="pl-4 pr-4 pb-2 whitespace-nowrap border-b {{ $active ? 'border-tint' : 'border-primary hover:border-tint' }}" href="{{ route($seasonArchiveRouteName) }}" wire:navigate>
             {{ __('Archive') }}
         </a>
     </div>
 
     <div
-        class="flex flex-wrap gap-1"
+        class="flex flex-wrap gap-1 pl-4 pr-4"
         x-data="{
-                    year: null,
-                    season: '{{ $seasonOfYear->key }}',
-                    goToSeason() {
-                        let year = this.year;
-                        let season = this.season;
+            year: null,
+            season: '{{ $seasonOfYear->key }}',
+            goToSeason() {
+                let year = this.year;
+                let season = this.season;
 
-                        if (year && typeof parseInt(year) === 'number' && typeof season === 'string') {
-                            window.location = '{{ route($seasonIndexRouteName) }}/' + year  + '/' + season
-                        }
-                    }
-                }"
+                if (year && typeof parseInt(year) === 'number' && typeof season === 'string') {
+                    window.location = '{{ route($seasonIndexRouteName) }}/' + year  + '/' + season
+                }
+            }
+        }"
     >
         <p class="m-auto">{{ __('Jump to') }}</p>
 

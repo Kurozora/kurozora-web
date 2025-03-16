@@ -1,7 +1,7 @@
 @props(['searchModel' => 'search'])
 
 <div>
-    <div class="gap-2 items-center mt-4 mb-4 space-y-2 sm:flex sm:space-y-0">
+    <div class="gap-2 items-center mt-4 mb-4 pl-4 pr-4 space-y-2 sm:flex sm:space-y-0">
         <div class="flex flex-1 gap-2 items-center">
             <x-input id="search" class="w-full" type="text" placeholder="{{ __('I’m searching for…') }}" wire:model.live.debounce.500ms="{{ $searchModel }}" />
 
@@ -175,13 +175,13 @@
         </div>
     </div>
 
-    <x-hr class="mt-4 mb-4" />
+    <x-hr class="mt-4 ml-4 mr-4" />
 
     <div
         x-data="{
             type: @entangle('type').live
         }"
-        class="flex gap-2 whitespace-nowrap overflow-x-scroll no-scrollbar"
+        class="flex gap-2 pt-4 pb-4 pl-4 pr-4 whitespace-nowrap overflow-x-scroll no-scrollbar"
     >
         @foreach ($this->searchTypes as $value)
             @php($type = str($value)->slug())

@@ -15,7 +15,7 @@
         <form wire:submit="{{ $submit }}">
             @csrf
 
-            <div class="bg-primary shadow overflow-hidden sm:rounded-md">
+            <div class="bg-primary shadow shadow-primary overflow-hidden sm:rounded-md">
                 @if (isset($header))
                     <div>
                         {{ $header }}
@@ -29,7 +29,7 @@
                 </div>
 
                 @if (isset($actions))
-                    <div class="flex items-center justify-end pl-4 pr-4 py-3 bg-secondary text-right sm:px-6">
+                    <div class="flex items-center justify-end pl-4 pr-4 py-3 bg-secondary text-right">
                         {{ $actions }}
                     </div>
                 @endif

@@ -11,6 +11,6 @@
     };
 @endphp
 
-<a {{ $attributes->merge(['class' => 'inline-flex items-center pl-4 pr-4 pt-2 pb-2 bg-white border rounded-md font-semibold text-xs uppercase tracking-widest shadow-sm hover:text-white focus:outline-none active:text-white disabled:bg-gray-200 disabled:border-gray-200 disabled:text-gray-300 disabled:cursor-default transition ease-in-out duration-150 ' . $colorCSS]) }} {{ $disabled ? 'disabled' : '' }}>
+<a {{ $attributes->merge(['class' => 'inline-flex items-center pl-4 pr-4 pt-2 pb-2 bg-white border rounded-md font-semibold text-xs uppercase tracking-widest shadow-sm hover:btn-text-tinted focus:outline-none active:btn-text-tinted disabled:bg-gray-200 disabled:border-gray-200 disabled:text-gray-300 disabled:cursor-default transition ease-in-out duration-150 ' . $colorCSS]) }} {{ $disabled ? 'disabled' : '' }}>
     {{ $slot }}
 </a>

@@ -1,1 +1,1 @@
-<hr {{ $attributes->merge(['class' => 'w-full border-primary']) }} />
+<hr {{ $attributes->merge(['class' => 'border-primary']) }} />
