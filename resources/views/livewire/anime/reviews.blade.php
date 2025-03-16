@@ -21,10 +21,10 @@
         anime/{{ $anime->id }}/reviews
     </x-slot:appArgument>
 
-    <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6" wire:init="loadPage">
+    <div class="py-6" wire:init="loadPage">
         <section class="mb-4">
             <div>
-                <div class="flex gap-1">
+                <div class="flex gap-1 pl-4 pr-4">
                     <div class="flex flex-wrap items-center w-full">
                         <h1 class="text-2xl font-bold">{{ __(':x’s Ratings & Reviews', ['x' => $anime->title]) }}</h1>
                     </div>
@@ -36,7 +36,7 @@
         </section>
 
         <section id="ratingsAndReviews" class="pb-8">
-            <div class="flex flex-row flex-wrap justify-between gap-4">
+            <div class="flex flex-row flex-wrap justify-between gap-4 pl-4 pr-4">
                 <div class="flex flex-col justify-end text-center">
                     <p class="font-bold text-6xl">{{ number_format($this->mediaStat->rating_average, 1) }}</p>
                     <p class="font-bold text-sm text-secondary">{{ __('out of') }} 5</p>
@@ -56,8 +56,10 @@
             </div>
         </section>
 
-        <section id="writeAReview" class="mb-5 pt-5 border-t border-primary">
-            <div class="flex flex-row flex-wrap gap-4">
+        <section id="writeAReview" class="pb-8">
+            <x-hr class="ml-4 mr-4 pb-5" />
+
+            <div class="flex flex-row flex-wrap gap-4 pl-4 pr-4">
                 <div class="flex justify-between items-center">
                     <p class="">{{ __('Click to Rate:') }}</p>
 
@@ -78,12 +80,12 @@
         @if ($this->mediaRatings->count())
             <x-rows.review-lockup :reviews="$this->mediaRatings" :is-row="false" />
 
-            <section class="mt-4">
+            <div class="mt-4 pl-4 pr-4">
                 {{ $this->mediaRatings->links() }}
-            </section>
+            </div>
         @elseif (!$readyToLoad)
             <section>
-                <div class="flex gap-4 justify-between flex-wrap">
+                <div class="flex flex-wrap gap-4 justify-between pl-4 pr-4">
                     @foreach (range(1,25) as $range)
                         <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
                     @endforeach
