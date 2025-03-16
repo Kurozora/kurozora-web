@@ -17,7 +17,7 @@
     <span
         x-ref="description"
         x-bind:class="isCollapsed ? 'line-clamp-5' : ''"
-        x-bind:style="isCollapsed ? 'mask: linear-gradient(0deg, rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 0) 22px, rgb(0, 0, 0) 22px), linear-gradient(270deg, rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 0) 40px, rgb(0, 0, 0) 70px); -webkit-mask: linear-gradient(0deg, rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 0) 22px, rgb(0, 0, 0) 22px), linear-gradient(270deg, rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 0) 40px, rgb(0, 0, 0) 70px);' : 'mask: none; -webkit-mask: none;'"
+        x-bind:style="isCollapsed ? 'mask: linear-gradient(0deg, rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 0) 22px, rgb(0, 0, 0) 22px), linear-gradient(270deg, rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 0) 40px, rgb(0, 0, 0) 70px);' : 'mask: none;'"
     >
         {{ $text }}
     </span>

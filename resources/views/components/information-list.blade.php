@@ -6,7 +6,7 @@
             @if (!empty($icon))
                 <div
                     class="aspect-square bg-inverse-secondary mr-1"
-                    style="width: 22px; -webkit-mask: url('{{ $icon }}'); mask: url('{{ $icon }}');"
+                    style="width: 22px; mask: url('{{ $icon }}');"
                 ></div>
             @endif
             <p class="text-secondary">{{ $title }}</p>
