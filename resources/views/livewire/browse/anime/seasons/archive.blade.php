@@ -15,58 +15,60 @@
         <link rel="canonical" href="{{ route('anime.seasons.archive') }}">
     </x-slot:meta>
 
-    <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6">
-        <h1 class="text-2xl font-bold">{{ __('Seasonal Anime Archive') }}</h1>
+    <div class="py-6">
+        <h1 class="pl-4 pr-4 text-2xl font-bold">{{ __('Seasonal Anime Archive') }}</h1>
 
         <section>
             <div id="mediaTypeHeader" class="pt-4 pb-5 bg-primary z-10">
                 <x-season-pagination :type="\App\Models\Anime::class" />
             </div>
 
-            <table class="table-fixed w-full text-xs text-center border border-primary sm:text-base">
-                <thead id="tableHeader" class="bg-secondary font-bold border border-primary">
-                    <tr>
-                        <th class="pt-2 pr-2 pb-2 pl-2 sm:p-4 border-b border-primary">
-                            <p>
-                                {{ __('Year') }}
-                            </p>
-                        </th>
-                        <th class="pt-2 pr-2 pb-2 pl-2 sm:p-4 border-b border-primary">
-                            <div class="flex justify-center h-4 sm:h-full">
-                                {{ \App\Enums\SeasonOfYear::Winter()->symbol() }}
-                            </div>
-                        </th>
-                        <th class="pt-2 pr-2 pb-2 pl-2 sm:p-4 border-b border-primary">
-                            <div class="flex justify-center h-4 sm:h-full">
-                                {{ \App\Enums\SeasonOfYear::Spring()->symbol() }}
-                            </div>
-                        </th>
-                        <th class="pt-2 pr-2 pb-2 pl-2 sm:p-4 border-b border-primary">
-                            <div class="flex justify-center h-4 sm:h-full">
-                                {{ \App\Enums\SeasonOfYear::Summer()->symbol() }}
-                            </div>
-                        </th>
-                        <th class="pt-2 pr-2 pb-2 pl-2 sm:p-4 border-b border-primary">
-                            <div class="flex justify-center h-4 sm:h-full">
-                                {{ \App\Enums\SeasonOfYear::Fall()->symbol() }}
-                            </div>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (range(now()->year + 2, 1917) as $year)
-                        <tr class="{{ $year === now()->year ? 'bg-tinted' : '' }}">
-                            <td>{{ $year }}</td>
-
-                            @foreach (\App\Enums\SeasonOfYear::asSelectArray() as $seasonOfYear)
-                                <td class="pt-2 pr-2 pb-2 pl-2 sm:p-4 {{ $year === now()->year && $seasonOfYear === season_of_year()->key ? 'font-semibold' : '' }}">
-                                    <x-simple-link href="{{ route('anime.seasons.year.season', [$year, $seasonOfYear]) }}" wire:navigate>{{ $seasonOfYear }}</x-simple-link>
-                                </td>
-                            @endforeach
+            <div class="pl-4 pr-4">
+                <table class="table-fixed w-full text-xs text-center border border-primary sm:text-base">
+                    <thead id="tableHeader" class="bg-secondary font-bold border border-primary">
+                        <tr>
+                            <th class="pt-2 pr-2 pb-2 pl-2 sm:p-4 border-b border-primary">
+                                <p>
+                                    {{ __('Year') }}
+                                </p>
+                            </th>
+                            <th class="pt-2 pr-2 pb-2 pl-2 sm:p-4 border-b border-primary">
+                                <div class="flex justify-center h-4 sm:h-full">
+                                    {{ \App\Enums\SeasonOfYear::Winter()->symbol() }}
+                                </div>
+                            </th>
+                            <th class="pt-2 pr-2 pb-2 pl-2 sm:p-4 border-b border-primary">
+                                <div class="flex justify-center h-4 sm:h-full">
+                                    {{ \App\Enums\SeasonOfYear::Spring()->symbol() }}
+                                </div>
+                            </th>
+                            <th class="pt-2 pr-2 pb-2 pl-2 sm:p-4 border-b border-primary">
+                                <div class="flex justify-center h-4 sm:h-full">
+                                    {{ \App\Enums\SeasonOfYear::Summer()->symbol() }}
+                                </div>
+                            </th>
+                            <th class="pt-2 pr-2 pb-2 pl-2 sm:p-4 border-b border-primary">
+                                <div class="flex justify-center h-4 sm:h-full">
+                                    {{ \App\Enums\SeasonOfYear::Fall()->symbol() }}
+                                </div>
+                            </th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach (range(now()->year + 2, 1917) as $year)
+                            <tr class="{{ $year === now()->year ? 'bg-tinted' : '' }}">
+                                <td>{{ $year }}</td>
+
+                                @foreach (\App\Enums\SeasonOfYear::asSelectArray() as $seasonOfYear)
+                                    <td class="pt-2 pr-2 pb-2 pl-2 sm:p-4 {{ $year === now()->year && $seasonOfYear === season_of_year()->key ? 'font-semibold' : '' }}">
+                                        <x-simple-link href="{{ route('anime.seasons.year.season', [$year, $seasonOfYear]) }}" wire:navigate>{{ $seasonOfYear }}</x-simple-link>
+                                    </td>
+                                @endforeach
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </section>
     </div>
 
