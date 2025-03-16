@@ -88,7 +88,7 @@
                     <div class="absolute top-0 bottom-0 left-0 right-0">
                         <div class="flex flex-col justify-center items-center h-full md:pb-40 lg:pb-0">
                             <button
-                                class="inline-flex items-center pt-5 pr-5 pb-5 pl-5 bg-blur backdrop-blur border border-transparent rounded-full font-semibold text-xs uppercase tracking-widest shadow-md hover:opacity-75 active:opacity-50 focus:outline-none disabled:bg-gray-100 disabled:text-gray-300 disabled:cursor-default disabled:opacity-100 transition ease-in-out duration-150"
+                                class="inline-flex items-center pt-4 pr-5 pb-5 pl-5 bg-blur backdrop-blur border border-transparent rounded-full font-semibold text-xs uppercase tracking-widest shadow-md hover:opacity-75 active:opacity-50 focus:outline-none disabled:bg-gray-100 disabled:text-gray-300 disabled:cursor-default disabled:opacity-100 transition ease-in-out duration-150"
                                 wire:click="showTrailerVideo"
                             >
                                 @svg('play_fill', 'fill-current', ['width' => '34'])
@@ -99,7 +99,7 @@
             </div>
 
             <div class="md:absolute md:bottom-0 md:left-0 md:right-0 lg:px-4">
-                <div class="flex flex-nowrap pt-5 pb-8 pl-4 pr-4 md:mx-auto md:mb-8 md:p-2 md:max-w-lg md:bg-blur md:backdrop-filter md:backdrop-blur md:rounded-lg">
+                <div class="flex flex-nowrap pt-4 pb-8 pl-4 pr-4 md:mx-auto md:mb-8 md:p-2 md:max-w-lg md:bg-blur md:backdrop-filter md:backdrop-blur md:rounded-lg">
                     <div class="absolute top-0 right-0 left-0 h-full rounded-lg md:bg-blur md:backdrop-filter md:backdrop-blur"></div>
 
                     <svg
@@ -247,7 +247,9 @@
             </section>
 
             @if (!empty($manga->synopsis))
-                <section class="pt-5 pb-8 pl-4 pr-4 border-t border-primary">
+                <section class="pb-8">
+                <x-hr class="ml-4 mr-4 pb-5" />
+
                     <x-section-nav class="flex flex-nowrap justify-between mb-5">
                         <x-slot:title>
                             {{ __('Synopsis') }}
@@ -262,18 +264,20 @@
                 </section>
             @endif
 
-            <section id="ratingsAndReviews" class="pt-5 pb-8 pl-4 pr-4 border-t border-primary">
+            <section id="ratingsAndReviews" class="pb-8">
+                <x-hr class="ml-4 mr-4 pb-5" />
+
                 <x-section-nav>
                     <x-slot:title>
                         {{ __('Ratings & Reviews') }}
                     </x-slot:title>
 
                     <x-slot:action>
-                        <x-section-nav-link class="whitespace-nowrap" href="{{ route('manga.reviews', $manga) }}">{{ __('See All') }}</x-section-nav-link>
+                        <x-section-nav-link href="{{ route('manga.reviews', $manga) }}">{{ __('See All') }}</x-section-nav-link>
                     </x-slot:action>
                 </x-section-nav>
 
-                <div class="flex flex-row flex-wrap justify-between gap-4">
+                <div class="flex flex-row flex-wrap justify-between gap-4 pl-4 pr-4">
                     <div class="flex flex-col justify-end text-center">
                         <p class="font-bold text-6xl">{{ number_format($manga->mediaStat->rating_average, 1) }}</p>
                         <p class="font-bold text-sm text-secondary">{{ __('out of') }} 5</p>
@@ -293,8 +297,10 @@
                 </div>
             </section>
 
-            <section id="writeAReview" class="pt-5 pb-8 pl-4 pr-4 border-t border-primary">
-                <div class="flex flex-row flex-wrap gap-4">
+            <section id="writeAReview" class="pb-8">
+                <x-hr class="ml-4 mr-4 pb-5" />
+
+                <div class="flex flex-row flex-wrap gap-4 pl-4 pr-4">
                     <div class="flex justify-between items-center">
                         <p class="">{{ __('Click to Rate:') }}</p>
 
@@ -316,14 +322,16 @@
                 </div>
             </section>
 
-            <section class="pt-5 pb-8 pl-4 pr-4 border-t border-primary">
+            <section class="pb-8">
+                <x-hr class="ml-4 mr-4 pb-5" />
+
                 <x-section-nav>
                     <x-slot:title>
                         {{ __('Information') }}
                     </x-slot:title>
                 </x-section-nav>
 
-                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
+                <div class="grid grid-cols-2 gap-4 pl-4 pr-4 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
                     <x-information-list id="type" title="{{ __('Type') }}" icon="{{ asset('images/symbols/tv_and_mediabox.svg') }}">
                         <x-slot:information>
                             {{ $manga->media_type->name }}
