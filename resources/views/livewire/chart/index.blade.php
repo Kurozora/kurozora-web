@@ -15,16 +15,14 @@
         <link rel="canonical" href="{{ route('charts.index') }}">
     </x-slot:meta>
 
-    <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6">
+    <div class="py-6">
         <section class="mb-4">
-            <div>
-                <div class="flex gap-1">
-                    <div class="flex flex-wrap items-center w-full">
-                        <h1 class="text-2xl font-bold">{{ __('Top Charts') }}</h1>
-                    </div>
+            <div class="flex gap-1 pl-4 pr-4">
+                <div class="flex flex-wrap items-center w-full">
+                    <h1 class="text-2xl font-bold">{{ __('Top Charts') }}</h1>
+                </div>
 
-                    <div class="flex flex-wrap flex-1 justify-end items-center w-full">
-                    </div>
+                <div class="flex flex-wrap flex-1 justify-end items-center w-full">
                 </div>
             </div>
         </section>
