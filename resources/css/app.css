@@ -209,6 +209,11 @@ picture::before {
   .secondary-separator-color {
     background-color: var(--secondary-separator-color);
   }
+
+  .shadow-primary {
+    --tw-shadow-color: var(--primary-separator-color);
+    --tw-shadow: var(--tw-shadow-colored);
+  }
 }
 
 /**

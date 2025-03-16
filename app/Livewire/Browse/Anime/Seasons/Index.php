@@ -71,7 +71,7 @@ class Index extends Component
     /**
      * Get the available Media Types.
      *
-     * @return Collection
+     * @return Collection<int, MediaType>
      */
     public function getMediaTypesProperty(): Collection
     {
