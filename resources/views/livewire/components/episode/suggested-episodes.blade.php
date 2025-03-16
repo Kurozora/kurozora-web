@@ -2,7 +2,7 @@
     @if ($this->episodes->count())
         <section
             id="suggestedEpisodes"
-            class="pt-5 pb-8 pl-4 pr-4 {{ empty($nextEpisodeID) ? '' : 'border-t' }}"
+            class="pt-4 pb-8 pl-4 pr-4 {{ empty($nextEpisodeID) ? '' : 'border-t border-primary' }}"
         >
             <x-section-nav>
                 <x-slot:title>
@@ -20,7 +20,7 @@
         </section>
     @elseif (!$readyToLoad)
         <section>
-            <div class="flex gap-4 justify-between flex-wrap">
+            <div class="flex flex-wrap gap-4 justify-between pl-4 pr-4">
                 <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
                 <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
                 <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>

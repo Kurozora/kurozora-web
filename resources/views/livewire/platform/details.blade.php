@@ -20,9 +20,9 @@
         platforms/{{ $platform->id }}
     </x-slot:appArgument>
 
-    <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6" wire:init="loadPage">
-        <section class="pt-5 pb-8">
-            <div class="relative pb-2">
+    <div class="py-6" wire:init="loadPage">
+        <section class="pt-4 pb-8 pl-4 pr-4">
+            <div class="relative">
                 <div class="flex flex-col flex-wrap text-center items-center">
                     <picture
                         class="relative aspect-square rounded-full overflow-hidden"
@@ -48,7 +48,9 @@
         </section>
 
         @if ($platform->about)
-            <section class="pt-5 pb-8 border-t border-primary">
+            <section class="pb-8">
+                <x-hr class="ml-4 mr-4 pb-5" />
+
                 <x-section-nav>
                     <x-slot:title>
                         {{ __('About') }}
@@ -63,14 +65,16 @@
             </section>
         @endif
 
-        <section class="pt-5 pb-8 border-t border-primary">
+        <section class="pb-8">
+                <x-hr class="ml-4 mr-4 pb-5" />
+
             <x-section-nav>
                 <x-slot:title>
                     {{ __('Information') }}
                 </x-slot:title>
             </x-section-nav>
 
-            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
+            <div class="grid grid-cols-2 gap-4 pl-4 pr-4 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
                 <x-information-list id="released_on" title="{{ __('Released On') }}" icon="{{ asset('images/symbols/calendar.svg') }}">
                     <x-slot:information>
                         {{ $platform->started_at?->toFormattedDateString() ?? '-' }}

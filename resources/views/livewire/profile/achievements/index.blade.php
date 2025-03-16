@@ -19,10 +19,10 @@
         users/{{ $user->id }}/achievements
     </x-slot:appArgument>
 
-    <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6" wire:init="loadPage">
+    <div class="py-6" wire:init="loadPage">
         <section class="mb-4">
             <div>
-                <div class="flex gap-1">
+                <div class="flex gap-1 pl-4 pr-4">
                     <div class="flex flex-wrap items-center w-full">
                         <h1 class="text-2xl font-bold">{{ __(':x’s Achievements', ['x' => $user->username]) }}</h1>
                     </div>
@@ -40,12 +40,12 @@
                 @endforeach
             </section>
 
-            <div class="mt-4">
+            <div class="mt-4 pl-4 pr-4">
                 {{ $this->achievements->links() }}
             </div>
         @elseif (!$readyToLoad)
             <section class="mt-4">
-                <div class="flex gap-4 justify-between flex-wrap">
+                <div class="flex flex-wrap gap-4 justify-between pl-4 pr-4">
                     @foreach (range(1,25) as $range)
                         <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
                     @endforeach

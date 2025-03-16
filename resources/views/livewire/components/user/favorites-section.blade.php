@@ -1,6 +1,6 @@
 <div wire:init="loadSection">
     @if ($this->favorites->count())
-        <section class="relative max-w-7xl mx-auto pl-4 pr-4 pb-6 mb-8 z-10 sm:px-6">
+        <section class="relative pb-6 mb-8 z-10">
             <x-section-nav class="flex flex-nowrap justify-between mb-5">
                 <x-slot:title>
                     {{ $title }}
@@ -11,7 +11,7 @@
                         <x-button wire:click="$refresh">{{ __('Refresh') }}</x-button>
                     @endhasrole
 
-                    <x-section-nav-link class="whitespace-nowrap" href="{{ $seeAllURL }}">{{ __('See All') }}</x-section-nav-link>
+                    <x-section-nav-link href="{{ $seeAllURL }}">{{ __('See All') }}</x-section-nav-link>
                 </x-slot:action>
             </x-section-nav>
 

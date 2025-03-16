@@ -17,7 +17,7 @@
     </x-slot:meta>
 
     <header class="bg-secondary shadow">
-        <div class="flex max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6">
+        <div class="flex pl-4 pr-4 py-6">
             <h2 class="font-semibold text-xl leading-tight">
                 {{ __('Merge Library') }}
             </h2>
@@ -209,7 +209,7 @@
                 });
             }
         }"
-        class="flex flex-col justify-center w-screen max-w-prose mx-auto pl-4 pr-4 py-6 sm:px-6"
+        class="flex flex-col justify-center w-screen max-w-prose mx-auto pl-4 pr-4 py-6"
         x-on:clear-local-library.window="clearLocalLibrary(true)"
     >
         <section>

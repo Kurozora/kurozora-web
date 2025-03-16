@@ -1,5 +1,7 @@
 <div wire:init="loadSection">
-    <section id="#{{ $mediaType->name }}" class="pt-5 pb-8 pl-4 pr-4 border-t border-primary">
+    <section id="#{{ $mediaType->name }}" class="pb-8">
+        <x-hr class="ml-4 mr-4 pb-5" />
+
         @if ($this->models->count())
             <x-section-nav>
                 <x-slot:title>
@@ -41,7 +43,7 @@
                 </x-slot:action>
             </x-section-nav>
 
-            <div class="flex gap-4 justify-between flex-wrap">
+            <div class="flex flex-wrap gap-4 justify-between pl-4 pr-4">
                 <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
                 <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
                 <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>

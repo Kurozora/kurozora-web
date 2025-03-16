@@ -48,7 +48,7 @@
     >
         <template x-if="song">
             <div
-                class="flex gap-4 pt-5 pr-5 pb-5 pl-5 rounded-lg"
+                class="flex gap-4 pt-4 pr-5 pb-5 pl-5 rounded-lg"
                 x-bind:style="{'background-color': '#' + song.attributes.artwork.bgColor}"
             >
                 <div>

@@ -18,23 +18,23 @@
     {{-- Header --}}
     <section class="bg-secondary shadow">
         <article>
-            <header class="flex max-w-7xl mx-auto py-6 pl-4 pr-4 sm:px-6">
+            <header class="flex py-6 pl-4 pr-4">
                 <h1 class="font-semibold text-xl text-primary leading-tight">{{ __('Create Theme') }}</h1>
             </header>
         </article>
     </section>
 
     {{-- Content --}}
-    <section class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6">
+    <section class="pl-4 pr-4 py-6">
         <div class="text-center mt-6">
             <h1 class="text-2xl font-black">{{ __('Create your own theme') }}</h1>
-            <p class="">{{ __('Take your time and make something great, we\'ll leave you to it.') }}</p>
+            <p>{{ __('Take your time and make something great, we\'ll leave you to it.') }}</p>
         </div>
 
         <livewire:theme-store.theme-store-roller />
     </section>
 
-    <section class="max-w-7xl mx-auto pl-4 pr-4 py-6 text-center sm:px-6">
+    <section class="max-w-7xl mx-auto pl-4 pr-4 py-6 text-center">
         <h1 class="text-xl font-bold">{{ __('Finished designing your theme?') }}</h1>
         <p>{{ __ ('Use the button below to submit your theme to the Kurozora team for approval.') }}</p>
 

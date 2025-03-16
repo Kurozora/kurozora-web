@@ -19,10 +19,10 @@
         theme-store
     </x-slot:appArgument>
 
-    <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6" wire:init="loadPage">
+    <div class="py-6" wire:init="loadPage">
         <section class="mb-4">
             <div>
-                <div class="flex gap-1">
+                <div class="flex gap-1 pl-4 pr-4">
                     <div class="flex flex-wrap items-center w-full">
                         <h1 class="text-2xl font-bold">{{ __('Theme Store') }}</h1>
                     </div>
@@ -38,11 +38,11 @@
 
         @if (!$this->isSearching())
             <section id="default" class="mb-4">
-                <div>
+                <div class="pl-4 pr-4">
                     <h2 class="text-lg font-bold">{{ __('Default') }}</h2>
                 </div>
 
-                <div class="flex gap-4 justify-between flex-wrap">
+                <div class="flex flex-wrap gap-4 justify-between pl-4 pr-4">
                     @foreach(\App\Enums\KTheme::defaultCases() as $theme)
                         <x-lockups.local-platform-theme-lockup
                             :title="$theme->stringValue()"
@@ -54,31 +54,37 @@
 
                     <div class="w-64 md:w-80 flex-grow"></div>
                     <div class="w-64 md:w-80 flex-grow"></div>
+                    <div class="w-64 md:w-80 flex-grow"></div>
+                    <div class="w-64 md:w-80 flex-grow"></div>
                 </div>
             </section>
         @endif
 
-        <section id="premium" class="{{ !$this->isSearching() ? 'pt-4 border-t border-primary' : '' }}">
-            <div>
+        <section id="premium" class="{{ !$this->isSearching() ? 'pt-4' : '' }}">
+            <x-hr class="ml-4 mr-4 pb-5" />
+
+            <div class="pl-4 pr-4">
                 <h2 class="text-lg font-bold">{{ __('Premium') }}</h2>
             </div>
 
             @if ($this->searchResults->count())
-                <div class="flex gap-4 justify-between flex-wrap">
+                <div class="flex flex-wrap gap-4 justify-between pl-4 pr-4">
                     @foreach ($this->searchResults as $platformTheme)
                         <x-lockups.platform-theme-lockup :theme="$platformTheme" />
                     @endforeach
 
                     <div class="w-64 md:w-80 flex-grow"></div>
                     <div class="w-64 md:w-80 flex-grow"></div>
+                    <div class="w-64 md:w-80 flex-grow"></div>
+                    <div class="w-64 md:w-80 flex-grow"></div>
                 </div>
 
-                <div class="mt-4">
+                <div class="mt-4 pl-4 pr-4">
                     {{ $this->searchResults->links() }}
                 </div>
             @elseif (!$readyToLoad)
                 <section id="skeleton" class="mt-4">
-                    <div class="flex gap-4 justify-between flex-wrap">
+                    <div class="flex flex-wrap gap-4 justify-between pl-4 pr-4">
                         @foreach (range(1,25) as $range)
                             <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
                         @endforeach

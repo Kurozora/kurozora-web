@@ -14,19 +14,19 @@
         <meta property="og:type" content="website" />
     </x-slot:meta>
 
-    <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6">
-        <div class="flex flex-nowrap gap-4 justify-between text-center whitespace-nowrap overflow-x-scroll no-scrollbar">
+    <div class="py-6">
+        <div class="flex flex-nowrap gap-4 justify-between pl-4 pr-4 text-center whitespace-nowrap overflow-x-scroll no-scrollbar">
             @foreach (\App\Enums\UserLibraryStatus::asMangaSelectArray() as $key => $value)
                 <button
-                    class="pl-4 pr-4 pb-2 border-b border-primary hover:border-tint"
-                    :class="{'border-tint': '{{ strtolower($status) }}' === '{{ strtolower($value) }}', 'border-gray-300': '{{ strtolower($status) }}' !== '{{ strtolower($value) }}'}"
+                    class="pl-4 pr-4 pb-2 border-b hover:border-tint"
+                    :class="{'border-tint': '{{ strtolower($status) }}' === '{{ strtolower($value) }}', 'border-primary': '{{ strtolower($status) }}' !== '{{ strtolower($value) }}'}"
                     wire:click="$set('status', '{{ strtolower($value) }}')"
                     data-toggle="tab"
                 >{{ __($value) }}</button>
             @endforeach
         </div>
 
-        <section class="mt-8" wire:init="loadPage">
+        <div class="mt-8" wire:init="loadPage">
             <section>
                 <x-search-bar>
                     <x-slot:rightBarButtonItems>
@@ -42,7 +42,7 @@
                     <section class="mt-4" wire:key="not-empty-{{ strtolower($status) }}">
                         <x-rows.small-lockup :mangas="$this->searchResults" :is-row="false" />
 
-                        <div class="mt-4">
+                        <div class="mt-4 pl-4 pr-4">
                             {{ $this->searchResults->links() }}
                         </div>
                     </section>
@@ -58,8 +58,10 @@
                     </section>
                 @endif
             @elseif (!$readyToLoad)
-                <section class="mt-4 pt-5 pb-8 border-t border-primary">
-                    <div class="flex gap-4 justify-between flex-wrap">
+                <section class="mt-4 pb-8">
+                    <x-hr class="ml-4 mr-4 pb-5" />
+
+                    <div class="flex flex-wrap gap-4 justify-between pl-4 pr-4">
                         <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
                         <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
                         <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
@@ -74,6 +76,6 @@
                     </div>
                 </section>
             @endif
-        </section>
+        </div>
     </div>
 </main>

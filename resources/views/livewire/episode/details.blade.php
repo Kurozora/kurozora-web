@@ -158,15 +158,16 @@
                 x-bind:class="{'max-w-7xl': !theaterMode, '': theaterMode}"
             >
                 {{-- Bio lockup --}}
-                <section class="flex flex-row flex-wrap justify-between gap-1 pl-4 pr-4 sm:flex-nowrap lg:pl-0 lg:pr-0">
+                <section class="flex flex-row flex-wrap justify-between gap-1 pl-4 pr-4 sm:flex-nowrap lg:pr-0">
                     <div class="flex justify-between gap-1 w-full">
                         <div class="flex flex-nowrap">
                             <picture
-                                class="relative min-w-[100px] max-w-[100px] min-h-[150px] max-h-[150px] mr-2 rounded-lg overflow-hidden"
+                                class="relative shrink-0 w-28 h-40 mr-2 rounded-lg overflow-hidden"
                                 style="background-color: {{ $season->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
                             >
                                 <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $season->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $season->title }} Poster" title="{{ $season->title }}">
-                                <div class="absolute top-0 left-0 h-full w-full ring-1 ring-gray-100 ring-opacity-25 ring-inset rounded-lg"></div>
+
+                                <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-lg"></div>
                             </picture>
 
                             <div class="flex flex-col gap-1">
@@ -304,7 +305,9 @@
                 </section>
 
                 @if (!empty($episode->synopsis))
-                    <section class="pt-5 pb-8 pl-4 pr-4 border-t border-primary">
+                    <section class="pb-8">
+                        <x-hr class="ml-4 mr-4 pb-5" />
+
                         <x-section-nav class="flex flex-nowrap justify-between mb-5">
                             <x-slot:title>
                                 {{ __('Synopsis') }}
@@ -319,18 +322,20 @@
                     </section>
                 @endif
 
-                <section id="ratingsAndReviews" class="pt-5 pb-8 pl-4 pr-4 border-t border-primary">
+                <section id="ratingsAndReviews" class="pb-8">
+                    <x-hr class="ml-4 mr-4 pb-5" />
+
                     <x-section-nav>
                         <x-slot:title>
                             {{ __('Ratings & Reviews') }}
                         </x-slot:title>
 
                         <x-slot:action>
-                            <x-section-nav-link class="whitespace-nowrap" href="{{ route('episodes.reviews', $episode) }}" wire:navigate>{{ __('See All') }}</x-section-nav-link>
+                            <x-section-nav-link href="{{ route('episodes.reviews', $episode) }}">{{ __('See All') }}</x-section-nav-link>
                         </x-slot:action>
                     </x-section-nav>
 
-                    <div class="flex flex-row flex-wrap justify-between gap-4">
+                    <div class="flex flex-row flex-wrap justify-between gap-4 pl-4 pr-4">
                         <div class="flex flex-col justify-end text-center">
                             <p class="font-bold text-6xl">{{ number_format($episode->mediaStat->rating_average, 1) }}</p>
                             <p class="font-bold text-sm text-secondary">{{ __('out of') }} 5</p>
@@ -350,8 +355,10 @@
                     </div>
                 </section>
 
-                <section id="writeAReview" class="pt-5 pb-8 pl-4 pr-4 border-t border-primary">
-                    <div class="flex flex-row flex-wrap gap-4">
+                <section id="writeAReview" class="pb-8">
+                    <x-hr class="ml-4 mr-4 pb-5" />
+
+                    <div class="flex flex-row flex-wrap gap-4 pl-4 pr-4">
                         <div class="flex justify-between items-center">
                             <p class="">{{ __('Click to Rate:') }}</p>
 
@@ -373,14 +380,16 @@
                     </div>
                 </section>
 
-                <section class="pt-5 pb-8 pl-4 pr-4 border-t border-primary">
+                <section class="pb-8">
+                    <x-hr class="ml-4 mr-4 pb-5" />
+
                     <x-section-nav>
                         <x-slot:title>
                             {{ __('Information') }}
                         </x-slot:title>
                     </x-section-nav>
 
-                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
+                    <div class="grid grid-cols-2 gap-4 pl-4 pr-4 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
                         <x-information-list id="number" title="{{ __('Number') }}" icon="{{ asset('images/symbols/number.svg') }}">
                             <x-slot:information>
                                 {{ $episode->number_total }}
