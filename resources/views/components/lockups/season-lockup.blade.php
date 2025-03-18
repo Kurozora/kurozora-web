@@ -28,13 +28,15 @@
                     <p class="text-sm opacity-75">{{ __('Premiere') }}</p>
                     <p class="text-sm">{{ $season->started_at?->toFormattedDateString() }}</p>
                 </div>
-                <x-hr />
+
+                <x-hr class="w-full" />
 
                 <div class="flex flex-wrap w-full justify-between">
                     <p class="text-sm opacity-75">{{ __('Episodes') }}</p>
                     <p class="text-sm">{{ $season->episodes_count }}</p>
                 </div>
-                <x-hr />
+
+                <x-hr class="w-full" />
 
                 <div class="flex flex-wrap w-full justify-between">
                     <p class="text-sm opacity-75">{{ __('Score') }}</p>
