@@ -80,7 +80,7 @@
                                     title="{{ __('Pause :x by :y', ['x' => $song->original_title, 'y' => $song->artist]) }}"
                                     x-on:click="await musicManager.playSong(song)"
                                 >
-                                    @svg('pause_fill', 'fill-current', ['width' => 14])
+                                    @svg('pause_fill', 'fill-current', ['width' => '14'])
                                     {{ __('Stop') }}
                                 </x-tinted-pill-button>
                             </template>
@@ -91,7 +91,7 @@
                                     title="{{ __('Preview :x by :y', ['x' => $song->original_title, 'y' => $song->artist]) }}"
                                     x-on:click="await musicManager.playSong(song)"
                                 >
-                                    @svg('play_fill', 'fill-current', ['width' => 14])
+                                    @svg('play_fill', 'fill-current', ['width' => '14'])
                                     {{ __('Preview') }}
                                 </x-tinted-pill-button>
                             </template>
