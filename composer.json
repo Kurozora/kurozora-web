@@ -29,7 +29,7 @@
         "ext-json": "*",
         "ext-pdo": "*",
         "ext-simplexml": "*",
-        "astrotomic/laravel-translatable": "^11.10",
+        "astrotomic/laravel-translatable": "dev-l12-compatibility",
         "aws/aws-sdk-php": "^3.198",
         "bacon/bacon-qr-code": "^3.0",
         "bensampo/laravel-enum": "^6.0",
@@ -47,22 +47,22 @@
         "kiritokatklian/laravel-color-palette": "^4.0",
         "kiritokatklian/laravel-sort-request": "^2.0",
         "laravel-notification-channels/apn": "^v5.0",
-        "laravel/framework": "^11.0",
+        "laravel/framework": "^12.0",
         "laravel/nova": "*",
         "laravel/sanctum": "^4.0",
         "laravel/scout": "^10.0",
         "laravel/socialite": "^5.2",
         "laravel/telescope": "^5.0",
-        "laravel/tinker": "^2.7",
+        "laravel/tinker": "^2.10",
         "league/flysystem-aws-s3-v3": "^3.0",
         "livewire/livewire": "^3.0",
-        "lukeraymonddowning/honey": "^1.0",
+        "lukeraymonddowning/honey": "dev-l12-compatibility",
         "marvinlabs/laravel-discord-logger": "^1.0.0",
         "meilisearch/meilisearch-php": "^1.0",
         "musa11971/php-jwt-decoder": "dev-php-7.4-and-8.0-support",
         "pragmarx/google2fa": "^8.0",
         "pusher/pusher-php-server": "^7.0",
-        "roach-php/laravel": "^3.0",
+        "roach-php/laravel": "dev-main",
         "socialiteproviders/apple": "^5.0",
         "spatie/eloquent-sortable": "^4.0",
         "spatie/icalendar-generator": "^2.3",
@@ -113,6 +113,22 @@
         {
             "type": "git",
             "url": "https://github.com/W2nn3ss/nova-color-field"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/karlmonson/roach-php-laravel"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/laravel-shift/advanced-nova-media-library"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/laravel-shift/honey"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/laravel-shift/laravel-translatable"
         }
     ],
     "autoload": {
