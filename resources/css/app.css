@@ -248,23 +248,23 @@ img:not([src]):not([srcset]) {
   --secondary-separator-color: #5A5D6D;
 }
 
-[x-cloak] {
-  display: none !important;
-}
-
-[target^="_blank"]::after {
-  content: "\0020\2197";
-  white-space: nowrap;
-}
-
-[href^="#"] {
+.prose a[href*="#"]:not([href="#"]) {
   color: inherit;
   text-decoration: none;
 }
 
-[href^="#"]:hover::after,
-[href^="#"]:focus::after {
+.prose a[href*="#"]:not([href="#"]):hover::after,
+.prose a[href*="#"]:not([href="#"]):focus::after {
   content: "\0020\1F517";
+  white-space: nowrap;
+}
+
+[x-cloak] {
+  display: none !important;
+}
+
+[target="_blank"]::after {
+  content: "\0020\2197";
   white-space: nowrap;
 }
 

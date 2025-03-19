@@ -14,13 +14,13 @@
         <meta property="og:type" content="website" />
     </x-slot:meta>
 
-    <div class="max-w-7xl m-auto prose prose-theme pl-4 pr-4 lg:prose-lg">
-        <x-picture>
-            <img class="h-32 w-full object-cover object-center rounded-lg shadow-lg sm:h-44" src="{{ asset('images/static/banners/in-app_purchases.webp') }}"  alt="About Personalisation" />
+    <div class="py-6 max-w-full prose prose-theme lg:prose-lg">
+        <x-picture class="mb-8 ml-4 mr-4 not-prose">
+            <img class="h-32 w-full object-cover object-center rounded-lg shadow-lg sm:h-60" src="{{ asset('images/static/banners/in-app_purchases.webp') }}"  alt="About Personalisation" />
         </x-picture>
 
         {{-- Header --}}
-        <section>
+        <section class="pr-4 pl-4">
             <h1 class="text-2xl font-bold">Generating Developer Tokens</h1>
 
             <p>Generate a developer token needed to make requests to Kurozora API.</p>
@@ -29,7 +29,7 @@
         </section>
 
         {{-- Overview --}}
-        <section id="overview">
+        <section id="overview" class="pr-4 pl-4">
             <h2 class="text-xl font-bold">
                 <a href="#overview">Overview</a>
             </h2>
@@ -50,7 +50,7 @@
         </section>
 
         {{-- Create a Developer Token --}}
-        <section id="create-a-developer-token">
+        <section id="create-a-developer-token" class="pr-4 pl-4">
             <h2 class="text-xl font-bold">
                 <a href="#create-a-developer-token">Create a Developer Token</a>
             </h2>
@@ -104,7 +104,7 @@
         </section>
 
         {{-- Authorize Requests --}}
-        <section id="authorize-requests">
+        <section id="authorize-requests" class="pr-4 pl-4">
             <h2 class="text-xl font-bold">
                 <a href="#authorize-requests">Authorize Requests</a>
             </h2>
@@ -119,7 +119,7 @@
         </section>
 
         {{-- Request Rate Limiting --}}
-        <section id="request-rate-limiting">
+        <section id="request-rate-limiting" class="pr-4 pl-4">
             <h2 class="text-xl font-bold">
                 <a href="#request-rate-limiting">Request Rate Limiting</a>
             </h2>
