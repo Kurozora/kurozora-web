@@ -36,7 +36,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
     </head>
 
-    <body class="bg-primary text-primary">
+    <body class="app-theme bg-primary text-primary">
         {{ $slot }}
 
         @livewireScripts

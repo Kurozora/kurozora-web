@@ -8,14 +8,14 @@
             <div class="max-w-md m-8">
                 <div class="text-5xl md:text-9xl font-black">503</div>
 
-                <div class="w-16 h-1 bg-violet-300 my-3 md:my-6"></div>
+                <div class="w-16 h-1 bg-tint my-3 md:my-6"></div>
 
                 @if (app()->isDownForMaintenance())
                     <p class="text-secondary text-2xl md:text-3xl font-light mb-8 leading-normal max-w-prose">{{ __('Kurozora is currently under maintenance. All services will be available shortly. If this continues for more than an hour, you can follow the status on Twitter.') }}</p>
 
-                    <x-outlined-link-button href="{{ config('social.twitter.url') }}" class="text-base font-bold py-3 px-6 border-2" color="violet">
+                    <x-link-button href="{{ config('social.twitter.url') }}">
                         {{ __('Go to Twitter') }}
-                    </x-outlined-link-button>
+                    </x-link-button>
                 @else
                     @if (isset($exception) && $exception instanceof \Illuminate\Database\QueryException)
                         <p class="text-secondary text-2xl md:text-3xl font-light mb-8 leading-normal max-w-prose">{{ implode(' ', $exception->errorInfo ?? []) }}</p>
@@ -23,9 +23,9 @@
 
                     <p class="text-secondary text-2xl md:text-3xl font-light mb-8 leading-normal max-w-prose">{{ __('Our crack team is on the ca… couch. O-oh dear…') }}</p>
 
-                    <x-outlined-link-button href="{{ url('/') }}" class="text-base font-bold py-3 px-6 border-2" color="violet">
-                        {{ __('Go Home') }}
-                    </x-outlined-link-button>
+                    <x-link-button href="{{ url('/') }}">
+                        {{ __('Go Home?') }}
+                    </x-link-button>
                 @endif
             </div>
         </div>

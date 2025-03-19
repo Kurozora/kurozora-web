@@ -8,13 +8,13 @@
             <div class="max-w-md m-8">
                 <div class="text-5xl md:text-9xl font-black">500</div>
 
-                <div class="w-16 h-1 bg-green-300 my-3 md:my-6"></div>
+                <div class="w-16 h-1 bg-tint my-3 md:my-6"></div>
 
                 <p class="text-secondary text-2xl md:text-3xl font-light mb-8 leading-normal max-w-prose">{{ __('No worries, it’s just the server dying. The crack team has been dispatched to bring it back to health.') }}</p>
 
-                <x-outlined-link-button href="{{ url('/') }}" class="text-base font-bold py-3 px-6 border-2" color="green">
-                    {{ __('Go Home') }}
-                </x-outlined-link-button>
+                <x-link-button href="{{ url('/') }}">
+                    {{ __('Go Home?') }}
+                </x-link-button>
             </div>
         </div>
 
