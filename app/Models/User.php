@@ -674,12 +674,12 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
                     ->when($anime, function($query) use ($anime) {
                         $query->where(UserLibrary::TABLE_NAME . '.trackable_id', '=', $anime->id);
                     })
-                    ->where(UserLibrary::TABLE_NAME . '.user_id', '=', 2)
+                    ->where(UserLibrary::TABLE_NAME . '.user_id', '=', $this->id)
                     ->where(UserLibrary::TABLE_NAME . '.status', '=', UserLibraryStatus::InProgress);
             })
             ->leftJoin(UserWatchedEpisode::TABLE_NAME, function ($join) {
                 $join->on(UserWatchedEpisode::TABLE_NAME . '.episode_id', '=', Episode::TABLE_NAME . '.id')
-                    ->where(UserWatchedEpisode::TABLE_NAME . '.user_id', '=', 2);
+                    ->where(UserWatchedEpisode::TABLE_NAME . '.user_id', '=', $this->id);
             })
             ->whereNull(UserWatchedEpisode::TABLE_NAME . '.id') // Episode is not watched
             ->where(Episode::TABLE_NAME . '.started_at', '<=', now()) // Episode has already aired
