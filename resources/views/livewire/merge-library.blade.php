@@ -4,13 +4,13 @@
     </x-slot:title>
 
     <x-slot:description>
-        {{ __('Connect your local library with your Kurozora Account — the largest, free online anime, manga, game & music database.') }}
+        {{ __('Connect your local library with your :x Account — the largest, free online anime, manga, game & music database.', ['x' => config('app.name')]) }}
     </x-slot:description>
 
     <x-slot:meta>
         <meta property="og:title" content="{{ __('Merge Library') }} — {{ config('app.name') }}" />
         <meta property="og:description"
-              content="{{ __('Connect your local library with your Kurozora Account — the largest, free online anime, manga, game & music database.') }}" />
+              content="{{ __('Connect your local library with your :x Account — the largest, free online anime, manga, game & music database.', ['x' => config('app.name')]) }}" />
         <meta property="og:image" content="{{ asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="og:type" content="website" />
         <link rel="canonical" href="{{ route('merge-library') }}">
@@ -281,7 +281,7 @@
                 class="flex flex-col justify-between w-full pt-4 pr-4 pb-4 pl-4 border-2 rounded-lg"
             >
                 <div class="space-y-4">
-                    <h1 class="text-lg font-semibold">{{ __('Kurozora Library') }}</h1>
+                    <h1 class="text-lg font-semibold">{{ __(':x Library', ['x' => config('app.name')]) }}</h1>
 
                     <ul class="m-0 mb-4 list-none">
                         @foreach ($this->userLibrary as $type => $userLibrary)

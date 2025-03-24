@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Kurozora API</title>
+    <title>{{ __(':x API', ['x' => config('app.name')]) }}</title>
 
     <meta charset="UTF-8">
     <link rel="icon" href="{{ asset('images/static/favicon.ico') }}">
@@ -47,7 +47,7 @@
         }
 
         .topbar-wrapper .link:after {
-            content: 'Kurozora';
+            content: '{{ config('app.name') }}';
         }
     </style>
 </head>

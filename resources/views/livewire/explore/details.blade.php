@@ -17,30 +17,30 @@
             @case(\App\Enums\ExploreCategoryTypes::NewShows)
             @case(\App\Enums\ExploreCategoryTypes::RecentlyUpdateShows)
             @case(\App\Enums\ExploreCategoryTypes::Shows)
-                {{ __('Explore the latest :x anime only on Kurozora, the largest, free online anime, manga, game & music database in the world.', ['x' => $exploreCategory->title]) }} {{ $exploreCategory->description }}
+                {{ __('Explore the latest :x anime only on :y, the largest, free online anime, manga, game & music database in the world.', ['x' => $exploreCategory->title, 'y' => config('app.name')]) }} {{ $exploreCategory->description }}
                 @break
             @case(\App\Enums\ExploreCategoryTypes::MostPopularLiteratures)
             @case(\App\Enums\ExploreCategoryTypes::UpcomingLiteratures)
             @case(\App\Enums\ExploreCategoryTypes::NewLiteratures)
             @case(\App\Enums\ExploreCategoryTypes::RecentlyUpdateLiteratures)
             @case(\App\Enums\ExploreCategoryTypes::Literatures)
-                {{ __('Explore the latest :x manga only on Kurozora, the largest, free online anime, manga, game & music database in the world.', ['x' => $exploreCategory->title]) }} {{ $exploreCategory->description }}
+                {{ __('Explore the latest :x manga only on :y, the largest, free online anime, manga, game & music database in the world.', ['x' => $exploreCategory->title, 'y' => config('app.name')]) }} {{ $exploreCategory->description }}
                 @break
             @case(\App\Enums\ExploreCategoryTypes::MostPopularGames)
             @case(\App\Enums\ExploreCategoryTypes::UpcomingGames)
             @case(\App\Enums\ExploreCategoryTypes::NewGames)
             @case(\App\Enums\ExploreCategoryTypes::RecentlyUpdateGames)
             @case(\App\Enums\ExploreCategoryTypes::Games)
-                {{ __('Explore the latest :x games only on Kurozora, the largest, free online anime, manga, game & music database in the world.', ['x' => $exploreCategory->title]) }} {{ $exploreCategory->description }}
+                {{ __('Explore the latest :x games only on :y, the largest, free online anime, manga, game & music database in the world.', ['x' => $exploreCategory->title, 'y' => config('app.name')]) }} {{ $exploreCategory->description }}
                 @break
             @default
-                {{ __('Explore the latest :x only on Kurozora, the largest, free online anime, manga, game & music database in the world.', ['x' => $exploreCategory->title]) }} {{ $exploreCategory->description }}
+                {{ __('Explore the latest :x only on :y, the largest, free online anime, manga, game & music database in the world.', ['x' => $exploreCategory->title, 'y' => config('app.name')]) }} {{ $exploreCategory->description }}
         @endswitch
     </x-slot:description>
 
     <x-slot:meta>
         <meta property="og:title" content="{{ __('Explore') . ' ' . $exploreCategory->title }} — {{ config('app.name') }}" />
-        <meta property="og:description" content="{{ __('Explore the latest :x category only on Kurozora, the largest, free online anime, manga, game & music database in the world.', ['x' => $exploreCategory->title]) }} {{ $exploreCategory->description }}" />
+        <meta property="og:description" content="{{ __('Explore the latest :x category only on :y, the largest, free online anime, manga, game & music database in the world.', ['x' => $exploreCategory->title, 'y' => config('app.name')]) }} {{ $exploreCategory->description }}" />
         <meta property="og:image" content="{{ asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="og:type" content="website" />
         <meta property="twitter:title" content="{{ $exploreCategory->title }} — {{ config('app.name') }}" />

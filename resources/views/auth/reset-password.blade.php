@@ -5,13 +5,13 @@
 
     <x-slot:header>
         <h2 class="font-semibold text-xl text-primary leading-tight">
-            {{ __('Kurozora Account') }}
+            {{ __(':x Account', ['x' => config('app.name')]) }}
         </h2>
     </x-slot:header>
 
     <div class="flex flex-col justify-center h-full max-w-prose mx-auto pl-4 pr-4 py-6">
         <div class="text-center mb-5">
-            <h1 class="text-2xl font-bold">{{ __('New Kurozora Account Password') }}</h1>
+            <h1 class="text-2xl font-bold">{{ __('New :x Account Password', ['x' => config('app.name')]) }}</h1>
             <p>
                 {{ __('Enter a new password for') }} <span class="font-bold">{{ $email }}</span>
             </p>

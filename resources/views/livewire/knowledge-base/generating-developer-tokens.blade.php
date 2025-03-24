@@ -4,12 +4,12 @@
     </x-slot:title>
 
     <x-slot:description>
-        {{ __('Generate a developer token needed to make requests to Kurozora API.') }}
+        {{ __('Generate a developer token needed to make requests to :x API.', ['x' => config('app.name')]) }}
     </x-slot:description>
 
     <x-slot:meta>
         <meta property="og:title" content="'Generating Developer Tokens — {{ config('app.name') }}" />
-        <meta property="og:description" content="{{ __('Generate a developer token needed to make requests to Kurozora API.') }}" />
+        <meta property="og:description" content="{{ __('Generate a developer token needed to make requests to :x API.', ['x' => config('app.name')]) }}" />
         <meta property="og:image" content="{{ asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="og:type" content="website" />
     </x-slot:meta>
@@ -23,7 +23,7 @@
         <section class="pr-4 pl-4">
             <h1 class="text-2xl font-bold">Generating Developer Tokens</h1>
 
-            <p>Generate a developer token needed to make requests to Kurozora API.</p>
+            <p>Generate a developer token needed to make requests to {{ config('app.name') }} API.</p>
 
             <x-hr />
         </section>
@@ -34,8 +34,8 @@
                 <a href="#overview">Overview</a>
             </h2>
 
-            <p>To make requests to the Kurozora API, you need to authorize yourself as a trusted developer and
-                member of the Kurozora community. The header of every Kurozora API request requires a signed developer
+            <p>To make requests to the {{ config('app.name') }} API, you need to authorize yourself as a trusted developer and
+                member of the {{ config('app.name') }} community. The header of every {{ config('app.name') }} API request requires a signed developer
                 token.</p>
 
             <p>Follow the directions below to create and manage developer tokens for all platforms.</p>
@@ -43,7 +43,8 @@
             <aside class="pr-4 pl-4 bg-tinted border border-primary rounded-lg overflow-hidden">
                 <p class="font-semibold">Tip</p>
 
-                <p>If you’re developing an app for Apple platforms (iOS, tvOS, watchOS or macOS), the recommended way to integrate with Kurozora is to use <a href="{{ config('social.github.url')  }}/KurozoraKit" target="_blank">KurozoraKit</a> for Swift.</p>
+                <p>If you’re developing an app for Apple platforms (iOS, tvOS, watchOS or macOS), the recommended way to integrate with
+                    {{ config('app.name') }} is to use <a href="{{ config('social.github.url')  }}/KurozoraKit" target="_blank">KurozoraKit</a> for Swift.</p>
             </aside>
 
             <x-hr />
@@ -55,9 +56,10 @@
                 <a href="#create-a-developer-token">Create a Developer Token</a>
             </h2>
 
-            <p>A developer token is a signed token used to authenticate a developer in Kurozora API requests. Creating a KurozoraKit identifier and private key allows you to use a developer token to authenticate yourself as a trusted developer and member of the Kurozora community.</p>
+            <p>A developer token is a signed token used to authenticate a developer in {{ config('app.name') }} API requests. Creating a KurozoraKit identifier and private key allows you to use a developer token to authenticate yourself as a trusted developer and member of the
+                {{ config('app.name') }} community.</p>
 
-            <p>The Kurozora API supports the JSON Web Token (JWT) specification, so you can pass statements and metadata called claims. For more information, see the <a href="https://datatracker.ietf.org/doc/html/rfc7519" target="_blank">JWT specification</a> and the available libraries for generating signed JWTs.</p>
+            <p>The {{ config('app.name') }} API supports the JSON Web Token (JWT) specification, so you can pass statements and metadata called claims. For more information, see the <a href="https://datatracker.ietf.org/doc/html/rfc7519" target="_blank">JWT specification</a> and the available libraries for generating signed JWTs.</p>
 
             <p>Construct a developer token as a JSON object whose header contains:</p>
 
@@ -109,11 +111,11 @@
                 <a href="#authorize-requests">Authorize Requests</a>
             </h2>
 
-            <p>A developer token is used to authorize all Kurozora API requests. If you manage this directly, in all requests, pass the <code class="not-prose">X-API-Token</code> header set to the developer token.</p>
+            <p>A developer token is used to authorize all {{ config('app.name') }} API requests. If you manage this directly, in all requests, pass the <code class="not-prose">X-API-Token</code> header set to the developer token.</p>
 
             <pre><code class="not-prose">curl -v -H 'X-API-Token: [developer token]' "https://api.kurozora.app/v1/test"</code></pre>
 
-            <p>To sign in and authenticate requests for a Kurozora user, see User <a target="_blank">Authentication for KurozoraKit</a>. For more information about requests, responses, and error handling, see <a target="_blank">Handling Requests and Responses</a>.</p>
+            <p>To sign in and authenticate requests for a {{ config('app.name') }} user, see User <a target="_blank">Authentication for KurozoraKit</a>. For more information about requests, responses, and error handling, see <a target="_blank">Handling Requests and Responses</a>.</p>
 
             <x-hr />
         </section>
@@ -124,7 +126,7 @@
                 <a href="#request-rate-limiting">Request Rate Limiting</a>
             </h2>
 
-            <p>Kurozora API limits the number of requests your app can make using a developer token within a specific period of time. If this limit is exceeded, you’ll temporarily receive <code>429 Too Many Requests</code> error responses for requests that use the token. This error resolves itself shortly after the request rate has reduced.</p>
+            <p>{{ config('app.name') }} API limits the number of requests your app can make using a developer token within a specific period of time. If this limit is exceeded, you’ll temporarily receive <code>429 Too Many Requests</code> error responses for requests that use the token. This error resolves itself shortly after the request rate has reduced.</p>
         </section>
     </div>
 </main>

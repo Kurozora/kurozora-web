@@ -10,12 +10,12 @@
     </x-slot:title>
 
     <x-slot:description>
-        {{ __('Look back at the top anime, manga, games and songs that defined your year. Discover your personalized :x Kurozora Re:CAP.', ['x' => $this->year]) }}
+        {{ __('Look back at the top anime, manga, games and songs that defined your year. Discover your personalized :x :y Re:CAP.', ['x' => $this->year, 'y' => config('app.name')]) }}
     </x-slot:description>
 
     <x-slot:meta>
         <meta property="og:title" content="{{ __('Re:CAP :x', ['x' => $this->year]) }} — {{ config('app.name') }}" />
-        <meta property="og:description" content="{{ __('Look back at the top anime, manga, games and songs that defined your year. Discover your personalized :x Kurozora Re:CAP.', ['x' => $this->year]) }}" />
+        <meta property="og:description" content="{{ __('Look back at the top anime, manga, games and songs that defined your year. Discover your personalized :x :y Re:CAP.', ['x' => $this->year, 'y' => config('app.name')]) }}" />
         <meta property="og:image" content="{{ asset('images/static/banners/kurozora_recap_23.webp') }}" />
         <meta property="og:type" content="website" />
         <link rel="canonical" href="{{ route('recap.index') }}">

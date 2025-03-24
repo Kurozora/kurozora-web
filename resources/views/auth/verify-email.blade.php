@@ -5,7 +5,7 @@
 
     <x-slot:header>
         <h2 class="font-semibold text-xl text-primary leading-tight">
-            {{ __('Kurozora Account') }}
+            {{ __(':x Account', ['x' => config('app.name')]) }}
         </h2>
     </x-slot:header>
 

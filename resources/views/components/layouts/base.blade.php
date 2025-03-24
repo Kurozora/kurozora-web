@@ -2,7 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         <meta charset="utf-8" />
-        <meta content="Kurozora" name="Author">
+        <meta content="{{ config('app.name') }}" name="Author">
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="apple-itunes-app" content="app-id={{ config('app.ios.id') }}, app-argument={{ config('app.ios.protocol') }}{{ $appArgument ?? request()->path() }}" />
         <meta property="al:ios:url" content="{{ config('app.ios.protocol') }}{{ $appArgument ?? request()->path() }}" />

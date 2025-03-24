@@ -104,7 +104,7 @@
                 <span
                     class="block cursor-pointer"
                     style="min-width: 18px; max-width: 18px;"
-                    title="{{ __('This account is an early supporter of Kurozora.') }}"
+                    title="{{ __('This account is an early supporter of :x.', ['x' => config('app.name')]) }}"
                     x-on:click="updateTooltip($el)"
                 >
                     @svg('badges-bird_triangle_variable', 'text-sky-500 fill-current', ['width' => '100%'])
@@ -126,30 +126,30 @@
                 <span
                     class="block cursor-pointer"
                     style="min-width: 18px; max-width: 18px;"
-                    title="{{ __('This account is a Kurozora+ subscriber since :x.', ['x' => $user->subscribed_at?->format('d F, Y')]) }}"
+                    title="{{ __('This account is a :x+ subscriber since :y.', ['x' => config('app.name'), 'y' => $user->subscribed_at?->format('d F, Y')]) }}"
                     x-on:click="updateTooltip($el)"
                 >
                     <x-picture>
                         @php ($subscribedMonths = (int) $user->created_at?->diffInMonths(now()))
 
                         @if ($subscribedMonths >= 24)
-                            <img src="{{ asset('images/static/badges/24_months.webp') }}" alt="{{ __('Kurozora+ 24 months') }}">
+                            <img src="{{ asset('images/static/badges/24_months.webp') }}" alt="{{ __(':x+ 24 months', ['x' => config('app.name')]) }}">
                         @elseif ($subscribedMonths >= 18)
-                            <img src="{{ asset('images/static/badges/18_months.webp') }}" alt="{{ __('Kurozora+ 18 months') }}">
+                            <img src="{{ asset('images/static/badges/18_months.webp') }}" alt="{{ __(':x+ 18 months', ['x' => config('app.name')]) }}">
                         @elseif ($subscribedMonths >= 15)
-                            <img src="{{ asset('images/static/badges/15_months.webp') }}" alt="{{ __('Kurozora+ 15 months') }}">
+                            <img src="{{ asset('images/static/badges/15_months.webp') }}" alt="{{ __(':x+ 15 months', ['x' => config('app.name')]) }}">
                         @elseif ($subscribedMonths >= 12)
-                            <img src="{{ asset('images/static/badges/12_months.webp') }}" alt="{{ __('Kurozora+ 12 months') }}">
+                            <img src="{{ asset('images/static/badges/12_months.webp') }}" alt="{{ __(':x+ 12 months', ['x' => config('app.name')]) }}">
                         @elseif ($subscribedMonths >= 9)
-                            <img src="{{ asset('images/static/badges/9_months.webp') }}" alt="{{ __('Kurozora+ 9 months') }}">
+                            <img src="{{ asset('images/static/badges/9_months.webp') }}" alt="{{ __(':x+ 9 months', ['x' => config('app.name')]) }}">
                         @elseif ($subscribedMonths >= 6)
-                            <img src="{{ asset('images/static/badges/6_months.webp') }}" alt="{{ __('Kurozora+ 6 months') }}">
+                            <img src="{{ asset('images/static/badges/6_months.webp') }}" alt="{{ __(':x+ 6 months', ['x' => config('app.name')]) }}">
                         @elseif ($subscribedMonths >= 3)
-                            <img src="{{ asset('images/static/badges/3_months.webp') }}" alt="{{ __('Kurozora+ 3 months') }}">
+                            <img src="{{ asset('images/static/badges/3_months.webp') }}" alt="{{ __(':x+ 3 months', ['x' => config('app.name')]) }}">
                         @elseif ($subscribedMonths >= 2)
-                            <img src="{{ asset('images/static/badges/2_months.webp') }}" alt="{{ __('Kurozora+ 2 months') }}">
+                            <img src="{{ asset('images/static/badges/2_months.webp') }}" alt="{{ __(':x+ 2 months', ['x' => config('app.name')]) }}">
                         @else
-                            <img src="{{ asset('images/static/badges/1_month.webp') }}" alt="{{ __('Kurozora+ 1 month') }}">
+                            <img src="{{ asset('images/static/badges/1_month.webp') }}" alt="{{ __(':x+ 1 month', ['x' => config('app.name')]) }}">
                         @endif
                     </x-picture>
                 </span>

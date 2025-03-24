@@ -5,13 +5,13 @@
 
     <x-slot:header>
         <h2 class="font-semibold text-xl text-primary leading-tight">
-            {{ __('Kurozora Account') }}
+            {{ __(':x Account', ['x' => config('app.name')]) }}
         </h2>
     </x-slot:header>
 
     <div class="flex flex-col justify-center w-screen h-full max-w-prose mx-auto pl-4 pr-4 py-6">
         <div class="mb-5 text-center">
-            <h1 class="text-2xl font-bold">{{ __('New to Kurozora?') }}</h1>
+            <h1 class="text-2xl font-bold">{{ __('New to :x?', ['x' => config('app.name')]) }}</h1>
             <p>{{ __('Create an account and join the community.') }}</p>
         </div>
 
@@ -98,15 +98,15 @@
         {{-- Services --}}
         <section class="flex flex-col items-center space-y-4 mt-16 text-center">
             <x-picture class="max-w-sm">
-                <img src="{{ asset('images/static/promotional/kurozora_services.webp') }}" alt="Kurozora services" title="Kurozora services">
+                <img src="{{ asset('images/static/promotional/kurozora_services.webp') }}" alt="{{ __(':x services', ['x' => __(config('app.name'))]) }}" title="{{ __(':x services', ['x' => __(config('app.name'))]) }}">
             </x-picture>
 
-            <p class="text-sm">{{ __('Your Kurozora Account lets you access your library, favorites, reminders, reviews, and more on your devices, automatically.') }}</p>
+            <p class="text-sm">{{ __('Your :x Account lets you access your library, favorites, reminders, reviews, and more on your devices, automatically.', ['x' => __(config('app.name'))]) }}</p>
         </section>
 
         {{-- Legal --}}
         <section class="space-y-1 mt-16 text-center text-sm">
-            <p class="text-secondary">{{ __('Your Kurozora Account information is used to enable Kurozora services when you sign in. Kurozora services includes the library where you can keep track of the shows you are interested in.') }}</p>
+            <p class="text-secondary">{{ __('Your :x Account information is used to enable :x services when you sign in. :x services includes the library where you can keep track of the shows you are interested in.', ['x' => __(config('app.name'))]) }}</p>
             <x-link href="{{ route('legal.privacy-policy') }}" wire:navigate>{{ __('See how your data is managed…') }}</x-link>
         </section>
     </div>

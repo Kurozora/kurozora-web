@@ -4,12 +4,12 @@
     </x-slot:title>
 
     <x-slot:description>
-        {{ __('Get Started! Download the full Kurozora press-kit which includes logos and banners. Download Press-Kit.') }}
+        {{ __('Get Started! Download the full :x press-kit which includes logos and banners. Download Press-Kit.', ['x' => config('app.name')]) }}
     </x-slot:description>
 
     <x-slot:meta>
         <meta property="og:title" content="{{ __('Press-Kit') }} — {{ config('app.name') }}" />
-        <meta property="og:description" content="{{ __('Get Started! Download the full Kurozora press-kit which includes logos and banners. Download Press-Kit.') }}" />
+        <meta property="og:description" content="{{ __('Get Started! Download the full :x press-kit which includes logos and banners. Download Press-Kit.', ['x' => config('app.name')]) }}" />
         <meta property="og:image" content="{{ asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="og:type" content="website" />
         <link rel="canonical" href="{{ route('misc.press-kit') }}">
@@ -27,15 +27,15 @@
 
             <div class="relative max-w-2xl mx-auto text-center drop-shadow">
                 <div class="flex flex-col items-center">
-                    <img class="mt-10 mb-4" width="82" height="82" src="{{ asset('images/static/icon/app_icon.gif') }}" alt="Kurozora">
+                    <img class="mt-10 mb-4" width="82" height="82" src="{{ asset('images/static/icon/app_icon.gif') }}" alt="{{ config('app.name') }}">
 
-                    <p class="text-xl font-semibold">{{ __('Kurozora') }}</p>
+                    <p class="text-xl font-semibold">{{ config('app.name') }}</p>
 
                     <p class="mt-2 text-4xl font-bold leading-tight tracking-tight">{{ __('Brand') }}</p>
                 </div>
 
                 <div class="mt-10">
-                    <p class="text-lg font-light md:text-2xl">{{ __('Change is in the DNA of Kurozora. This is reflected through the use of different color schemes in the logo artwork. That said, please keep it tasteful.') }}</p>
+                    <p class="text-lg font-light md:text-2xl">{{ __('Change is in the DNA of :x. This is reflected through the use of different color schemes in the logo artwork. That said, please keep it tasteful.', ['x' => config('app.name')]) }}</p>
                 </div>
             </div>
         </section>
@@ -46,7 +46,7 @@
                 <p class="mt-2 text-4xl font-bold leading-tight tracking-tight">{{ __('Logo') }}</p>
 
                 <div class="max-w-2xl mt-10">
-                    <p class="text-lg font-light md:text-2xl">{{ __('Please do not distort the Kurozora logo. You are free to edit, change, recolor, and reconfigure the Kurozora logo as you see fit.') }}</p>
+                    <p class="text-lg font-light md:text-2xl">{{ __('Please do not distort the :x logo. You are free to edit, change, recolor, and reconfigure the :x logo as you see fit.', ['x' => config('app.name')]) }}</p>
                 </div>
             </div>
 
@@ -55,7 +55,7 @@
                     class="relative flex items-center justify-center flex-grow w-64 md:w-80 bg-secondary pl-4 pr-4 pt-4 pb-4 border-2 rounded-3xl"
                     style="background: url('{{ asset('images/static/patterns/checkerboard_dark.svg') }}'); background-size: 24px;"
                 >
-                    <img class="mt-8 mb-8 pr-5 pl-5" src="https://raw.githubusercontent.com/Kurozora/kurozora-press-kit/master/Logos/4_Full_Logo_Lockup_Monochrome/full_logo_orange_RGB_monochrome.png" alt="Kurozora full logo orange RGB monochrome">
+                    <img class="mt-8 mb-8 pr-5 pl-5" src="https://raw.githubusercontent.com/Kurozora/kurozora-press-kit/master/Logos/4_Full_Logo_Lockup_Monochrome/full_logo_orange_RGB_monochrome.png" alt="{{ __(':x full logo orange RGB monochrome', ['x' => config('app.name')]) }}">
 
                     <div class="absolute right-0 bottom-0 pr-2 pb-2 pl-2">
                         <x-link href="https://github.com/Kurozora/kurozora-press-kit/raw/master/Logos/4_Full_Logo_Lockup_Monochrome/full_logo_orange_RGB_monochrome.svg" target="_blank" class="relative after:absolute after:inset-0">.svg</x-link>
@@ -67,7 +67,7 @@
                     class="relative flex items-center justify-center flex-grow w-64 md:w-80 bg-secondary pl-4 pr-4 pt-4 pb-4 border-2 rounded-3xl"
                     style="background: url('{{ asset('images/static/patterns/checkerboard_light.svg') }}'); background-size: 24px;"
                 >
-                    <img class="mt-8 mb-8 pr-5 pl-5" src="https://raw.githubusercontent.com/Kurozora/kurozora-press-kit/master/Logos/4_Full_Logo_Lockup_Monochrome/full_logo_blueberry_RGB_monochrome.png" alt="Kurozora full logo blueberry RGB monochrome">
+                    <img class="mt-8 mb-8 pr-5 pl-5" src="https://raw.githubusercontent.com/Kurozora/kurozora-press-kit/master/Logos/4_Full_Logo_Lockup_Monochrome/full_logo_blueberry_RGB_monochrome.png" alt="{{ __(':x full logo blueberry RGB monochrome', ['x' => config('app.name')]) }}">
 
                     <div class="absolute right-0 bottom-0 pr-2 pb-2 pl-2">
                         <x-link href="https://github.com/Kurozora/kurozora-press-kit/raw/master/Logos/4_Full_Logo_Lockup_Monochrome/full_logo_blueberry_RGB_monochrome.svg" target="_blank" class="relative after:absolute after:inset-0">.svg</x-link>
@@ -79,7 +79,7 @@
                     class="relative flex items-center justify-center flex-grow w-64 md:w-80 bg-secondary pl-4 pr-4 pt-4 pb-4 border-2 rounded-3xl"
                     style="background: url('{{ asset('images/static/patterns/checkerboard_light.svg') }}'); background-size: 24px;"
                 >
-                    <img class="mt-8 mb-8 pr-5 pl-5" src="https://raw.githubusercontent.com/Kurozora/kurozora-press-kit/master/Logos/4_Full_Logo_Lockup_Monochrome/full_logo_black_RGB_monochrome.png" alt="Kurozora full logo black RGB monochrome">
+                    <img class="mt-8 mb-8 pr-5 pl-5" src="https://raw.githubusercontent.com/Kurozora/kurozora-press-kit/master/Logos/4_Full_Logo_Lockup_Monochrome/full_logo_black_RGB_monochrome.png" alt="{{ __(':x full logo black RGB monochrome', ['x' => config('app.name')]) }}">
 
                     <div class="absolute right-0 bottom-0 pr-2 pb-2 pl-2">
                         <x-link href="https://github.com/Kurozora/kurozora-press-kit/raw/master/Logos/4_Full_Logo_Lockup_Monochrome/full_logo_black_RGB_monochrome.svg" target="_blank" class="relative after:absolute after:inset-0">.svg</x-link>
@@ -110,13 +110,13 @@
                 <p class="mt-2 text-4xl font-bold leading-tight tracking-tight">{{ __('Spacing') }}</p>
 
                 <div class="max-w-2xl mt-10">
-                    <p class="text-lg font-light md:text-2xl">{{ __('The spacing around the Kurozora logo is based on the letter "O". For a cleaner look, keep this rule of thumb in mind.') }}</p>
+                    <p class="text-lg font-light md:text-2xl">{{ __('The spacing around the :x logo is based on the letter "O". For a cleaner look, keep this rule of thumb in mind.', ['x' => config('app.name')]) }}</p>
                 </div>
             </div>
 
             <div class="flex flex-wrap gap-4 m-auto mt-16 max-w-7xl">
                 <div class="relative flex items-center justify-center flex-grow w-64 md:w-80 pl-4 pr-4 pt-4 pb-4">
-                    <img src="{{ asset('images/static/spacing_guids.webp') }}" alt="Kurozora spacing guide">
+                    <img src="{{ asset('images/static/spacing_guids.webp') }}" alt="{{ __(':x spacing guide', ['x' => config('app.name')]) }}">
                 </div>
             </div>
         </section>
@@ -127,7 +127,7 @@
                 <p class="mt-2 text-4xl font-bold leading-tight tracking-tight">{{ __('Colors') }}</p>
 
                 <div class="max-w-2xl mt-10">
-                    <p class="text-lg font-light md:text-2xl">{{ __('The official Kurozora colors are blueberry, orange and white. You are free to mix and combine, and use colors outside of the ones specified below.') }}</p>
+                    <p class="text-lg font-light md:text-2xl">{{ __('The official :x colors are blueberry, orange and white. You are free to mix and combine, and use colors outside of the ones specified below.', ['x' => config('app.name')]) }}</p>
                 </div>
             </div>
 
@@ -237,13 +237,13 @@
         {{-- Download Press-Kit --}}
         <section class="pl-4 pr-4 pt-36 pb-10 bg-secondary">
             <div class="flex flex-col items-center mx-auto max-w-7xl text-center">
-                <img class="mt-10 mb-4" width="82" height="82" src="{{ asset('images/static/icon/app_icon.webp') }}" alt="Kurozora">
+                <img class="mt-10 mb-4" width="82" height="82" src="{{ asset('images/static/icon/app_icon.webp') }}" alt="{{ config('app.name') }}">
 
                 <p class="mt-2 text-4xl font-bold leading-tight tracking-tight">{{ __('Get Started') }}</p>
             </div>
 
             <div class="max-w-7xl mx-auto mt-10 text-center">
-                <p class="text-lg font-light md:text-2xl">{{ __('Download the full Kurozora press-kit which includes logos and banners.') }}</p>
+                <p class="text-lg font-light md:text-2xl">{{ __('Download the full :x press-kit which includes logos and banners.', ['x' => config('app.name')]) }}</p>
             </div>
 
             <div class="flex flex-wrap gap-4 justify-center mt-12 pr-5 pl-5">

@@ -4,12 +4,12 @@
     </x-slot:title>
 
     <x-slot:description>
-        {{ __('An extensive list of sequel, prequel, side story, spin off, and adaptations of :x only on Kurozora, the largest, free online anime, manga, game & music database in the world.', ['x' => $manga->title]) }}
+        {{ __('An extensive list of sequel, prequel, side story, spin off, and adaptations of :x only on :y, the largest, free online anime, manga, game & music database in the world.', ['x' => $manga->title, 'y' => config('app.name')]) }}
     </x-slot:description>
 
     <x-slot:meta>
         <meta property="og:title" content="{{ __('Relations') }} | {{ $manga->title }} — {{ config('app.name') }}" />
-        <meta property="og:description" content="{{ __('An extensive list of sequel, prequel, side story, spin off, and adaptations of :x only on Kurozora, the largest, free online anime, manga, game & music database in the world.', ['x' => $manga->title]) }}" />
+        <meta property="og:description" content="{{ __('An extensive list of sequel, prequel, side story, spin off, and adaptations of :x only on :y, the largest, free online anime, manga, game & music database in the world.', ['x' => $manga->title, 'y' => config('app.name')]) }}" />
         <meta property="og:image" content="{{ $manga->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp') }}" />
         <meta property="og:type" content="book" />
         <meta property="book:release_date" content="{{ $manga->started_at?->toIso8601String() }}" />

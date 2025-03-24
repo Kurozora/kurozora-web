@@ -4,12 +4,12 @@
     </x-slot:title>
 
     <x-slot:description>
-        {{ __('Discover the extensive list of manga that :x appears in only on Kurozora, the largest, free online anime, manga, game & music database in the world.', ['x', $character->name]) }}
+        {{ __('Discover the extensive list of manga that :x appears in only on :y, the largest, free online anime, manga, game & music database in the world.', ['x', $character->name, 'y' => config('app.name')]) }}
     </x-slot:description>
 
     <x-slot:meta>
         <meta property="og:title" content="Manga | {{ $character->name }} — {{ config('app.name') }}" />
-        <meta property="og:description" content="{{ __('Discover the extensive list of manga that :x appears in only on Kurozora, the largest, free online anime, manga, game & music database in the world.', ['x', $character->name]) }}" />
+        <meta property="og:description" content="{{ __('Discover the extensive list of manga that :x appears in only on :y, the largest, free online anime, manga, game & music database in the world.', ['x', $character->name, 'y' => config('app.name')]) }}" />
         <meta property="og:image" content="{{ $character->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/character_poster.webp') }}" />
         <meta property="og:type" content="profile" />
         <meta property="og:profile:username" content="{{ $character->name }}" />

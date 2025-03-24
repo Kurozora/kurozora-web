@@ -4,12 +4,12 @@
     </x-slot:title>
 
     <x-slot:description>
-        {{ __('Discover the extensive list of people, voice actors, cast, and staff only on Kurozora, the largest, free online anime, manga, game & music database in the world.') }}
+        {{ __('Discover the extensive list of people, voice actors, cast, and staff only on :x, the largest, free online anime, manga, game & music database in the world.', ['x' => config('app.name')]) }}
     </x-slot:description>
 
     <x-slot:meta>
         <meta property="og:title" content="{{ __('People') }} — {{ config('app.name') }}" />
-        <meta property="og:description" content="{{ __('Discover an extensive list of people, voice actors, cast, and staff on Kurozora, the largest, free online anime, manga, game & music database in the world.') }}" />
+        <meta property="og:description" content="{{ __('Discover an extensive list of people, voice actors, cast, and staff on :x, the largest, free online anime, manga, game & music database in the world.', ['x' => config('app.name')]) }}" />
         <meta property="og:image" content="{{ asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="og:type" content="website" />
         <link rel="canonical" href="{{ route('people.index') }}">

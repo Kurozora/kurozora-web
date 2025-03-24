@@ -4,18 +4,18 @@
     </x-slot:title>
 
     <x-slot:description>
-        {{ __('Export your library from other services, so you can import it to your Kurozora library.') }}
+        {{ __('Export your library from other services, so you can import it to your :x library.', ['x' => config('app.name')]) }}
     </x-slot:description>
 
     <x-slot:form>
         <div class="col-span-12">
             <div class="max-w-xl text-sm text-primary">
-                <p>{{ __('Kurozora does not guarantee all shows and mangas will be imported to your library. Once the request has been processed a notification which contains the status of the import request will be sent. Furthermore, the uploaded file is deleted as soon as the import request has been processed.') }}</p>
+                <p>{{ __(':x does not guarantee all shows and mangas will be imported to your library. Once the request has been processed a notification which contains the status of the import request will be sent. Furthermore, the uploaded file is deleted as soon as the import request has been processed.', ['x' => config('app.name')]) }}</p>
 
                 <br/>
 
-                <p>{{ __('Selecting "overwrite" will replace your Kurozora library with the imported one from the file.') }}</p>
-                <p>{{ __('Selecting "merge" will add missing items to your Kurozora library. If an item exists then the tracking information in your Kurozora library will be updated with the imported one from the file.') }}</p>
+                <p>{{ __('Selecting "overwrite" will replace your :x library with the imported one from the file.', ['x' => config('app.name')]) }}</p>
+                <p>{{ __('Selecting "merge" will add missing items to your :x library. If an item exists then the tracking information in your :x library will be updated with the imported one from the file.', ['x' => config('app.name')]) }}</p>
             </div>
 
             <div class="mt-5">

@@ -1,15 +1,15 @@
 <main>
     <x-slot:title>
-        {{ __(':x Top Charts on Kurozora', ['x' => ucfirst($chartKind)]) }}
+        {{ __(':x Top Charts on :y', ['x' => ucfirst($chartKind), 'y' => config('app.name')]) }}
     </x-slot:title>
 
     <x-slot:description>
-        {{ __('Browse the top free anime on Kurozora, like One Piece, Attack on Titan, Demon Slayer, My Hero Academia, Bleach and more!') }}
+        {{ __('Browse the top free anime on :x, like One Piece, Attack on Titan, Demon Slayer, My Hero Academia, Bleach and more!', ['x' => config('app.name')]) }}
     </x-slot:description>
 
     <x-slot:meta>
-        <meta property="og:title" content="{{ __(':x Top Charts on Kurozora', ['x' => ucfirst($chartKind)]) }} — {{ config('app.name') }}" />
-        <meta property="og:description" content="{{ __('Browse the top free anime on Kurozora, like One Piece, Attack on Titan, Demon Slayer, My Hero Academia, Bleach and more!') }}" />
+        <meta property="og:title" content="{{ __(':x Top Charts on :y', ['x' => ucfirst($chartKind), 'y' => config('app.name')]) }} — {{ config('app.name') }}" />
+        <meta property="og:description" content="{{ __('Browse the top free anime on :x, like One Piece, Attack on Titan, Demon Slayer, My Hero Academia, Bleach and more!', ['x' => config('app.name')]) }}" />
         <meta property="og:image" content="{{ asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="og:type" content="website" />
         <link rel="canonical" href="{{ route('charts.details', ['chart' => $chartKind]) }}">

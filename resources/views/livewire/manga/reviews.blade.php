@@ -4,12 +4,12 @@
     </x-slot:title>
 
     <x-slot:description>
-        {{ __('Discover all :x reviews & ratings only on Kurozora, the largest, free online anime, manga, game & music database in the world.', ['x' => $manga->title]) }}
+        {{ __('Discover all :x reviews & ratings only on :y, the largest, free online anime, manga, game & music database in the world.', ['x' => $manga->title, 'y' => config('app.name')]) }}
     </x-slot:description>
 
     <x-slot:meta>
         <meta property="og:title" content="{{ __('Ratings & Reviews') }} | {{ $manga->title }} — {{ config('app.name') }}" />
-        <meta property="og:description" content="{{ __('Discover all :x reviews & ratings on Kurozora, the largest, free online anime, manga, game & music database in the world.', ['x' => $manga->title]) }}" />
+        <meta property="og:description" content="{{ __('Discover all :x reviews & ratings on :y, the largest, free online anime, manga, game & music database in the world.', ['x' => $manga->title, 'y' => config('app.name')]) }}" />
         <meta property="og:image" content="{{ $manga->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/manga_poster.webp') }}" />
         <meta property="og:type" content="video.tv_show" />
         <meta property="video:duration" content="{{ $manga->duration }}" />

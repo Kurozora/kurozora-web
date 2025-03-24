@@ -4,12 +4,12 @@
     </x-slot:title>
 
     <x-slot:description>
-        {{ __('Find what episodes to watch next on Kurozora, the largest, free online anime, manga, game & music database in the world.') }}
+        {{ __('Find what episodes to watch next on :x, the largest, free online anime, manga, game & music database in the world.', ['x' => config('app.name')]) }}
     </x-slot:description>
 
     <x-slot:meta>
         <meta property="og:title" content="{{ __('Up-Next Episodes') }} — {{ config('app.name') }}" />
-        <meta property="og:description" content="{{ __('Find what episodes to watch next on Kurozora, the largest, free online anime, manga, game & music database in the world.') }}" />
+        <meta property="og:description" content="{{ __('Find what episodes to watch next on :x, the largest, free online anime, manga, game & music database in the world.', ['x' => config('app.name')]) }}" />
         <meta property="og:image" content="{{ asset('images/static/placeholders/anime_poster.webp') }}" />
         <meta property="og:type" content="website" />
         <link rel="canonical" href="{{ route('up-next.episodes') }}">

@@ -117,7 +117,7 @@
                 <h5 class="uppercase text-sm mb-2 font-semibold">{{ __('Account') }}</h5>
                 <ul class="m-0 mb-4 list-none">
                     <li class="mt-2">
-                        <x-footer-link href="{{ route('me') }}" wire:navigate>{{ __('Kurozora Profile') }}</x-footer-link>
+                        <x-footer-link href="{{ route('me') }}" wire:navigate>{{ __(':x Profile', ['x' => config('app.name')]) }}</x-footer-link>
                     </li>
 
                     <li class="mt-2">
@@ -142,32 +142,32 @@
                 <h5 class="uppercase text-sm mb-2 font-semibold">{{ __('Services') }}</h5>
                 <ul class="m-0 mb-4 list-none">
                     <li class="mt-2">
-                        <x-footer-link href="#">{{ __('Kurozora+') }}</x-footer-link>
+                        <x-footer-link href="#">{{ __(':x+', ['x' => config('app.name')]) }}</x-footer-link>
                     </li>
 
                     <li class="mt-2">
-                        <x-footer-link href="{{ config('app.ios.store_url') }}" target="_blank">{{ __('Kurozora App') }}</x-footer-link>
+                        <x-footer-link href="{{ config('app.ios.store_url') }}" target="_blank">{{ __(':x App', ['x' => config('app.name')]) }}</x-footer-link>
                     </li>
 
                     <li class="mt-2">
-                        <x-footer-link href="{{ config('app.developer_url') }}" target="_blank">{{ __('Kurozora Developer') }}</x-footer-link>
+                        <x-footer-link href="{{ config('app.developer_url') }}" target="_blank">{{ __(':x Developer', ['x' => config('app.name')]) }}</x-footer-link>
                     </li>
 
                     <li class="mt-2">
-                        <x-footer-link href="{{ route('api') }}" target="_blank">{{ __('Kurozora API') }}</x-footer-link>
+                        <x-footer-link href="{{ route('api') }}" target="_blank">{{ __(':x API', ['x' => config('app.name')]) }}</x-footer-link>
                     </li>
 
                     <li class="mt-2">
-                        <x-footer-link href="{{ config('app.status_url') }}" target="_blank">{{ __('Kurozora Status') }}</x-footer-link>
+                        <x-footer-link href="{{ config('app.status_url') }}" target="_blank">{{ __(':x Status', ['x' => config('app.name')]) }}</x-footer-link>
                     </li>
                 </ul>
             </div>
 
             <div class="w-1/2 sm:w-1/3 text-center md:w-1/4 md:text-left lg:w-1/6">
-                <h5 class="uppercase text-sm mb-2 font-semibold">{{ __('About Kurozora') }}</h5>
+                <h5 class="uppercase text-sm mb-2 font-semibold">{{ __('About :x', ['x' => config('app.name')]) }}</h5>
                 <ul class="m-0 mb-4 list-none">
                     <li class="mt-2">
-                        <x-footer-link href="{{ route('misc.team') }}" wire:navigate>{{ __('Kurozora Team') }}</x-footer-link>
+                        <x-footer-link href="{{ route('misc.team') }}" wire:navigate>{{ __(':x Team', ['x' => config('app.name')]) }}</x-footer-link>
                     </li>
 
                     <li class="mt-2">
@@ -175,7 +175,7 @@
                     </li>
 
                     <li class="mt-2">
-                        <x-footer-link href="{{ route('misc.contact') }}" wire:navigate>{{ __('Contact Kurozora') }}</x-footer-link>
+                        <x-footer-link href="{{ route('misc.contact') }}" wire:navigate>{{ __('Contact :x', ['x' => config('app.name')]) }}</x-footer-link>
                     </li>
 
                     <li class="mt-2">

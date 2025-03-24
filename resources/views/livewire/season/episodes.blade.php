@@ -4,12 +4,12 @@
     </x-slot:title>
 
     <x-slot:description>
-        {{ $season->synopsis ?? __('Discover the extensive list of :x episodes only on Kurozora, the largest, free online anime, manga, game & music database in the world.', ['x' => $anime->title]) }}
+        {{ $season->synopsis ?? __('Discover the extensive list of :x episodes only on :y, the largest, free online anime, manga, game & music database in the world.', ['x' => $anime->title, 'y' => config('app.name')]) }}
     </x-slot:description>
 
     <x-slot:meta>
         <meta property="og:title" content="{{ __(':x Episodes', ['x' => $season->title]) }} | {{ $anime->title }} — {{ config('app.name') }}" />
-        <meta property="og:description" content="{{ $season->synopsis ?? __('Discover the extensive list of :x episodes on Kurozora, the largest, free online anime, manga, game & music database in the world.', ['x' => $anime->title]) }}" />
+        <meta property="og:description" content="{{ $season->synopsis ?? __('Discover the extensive list of :x episodes on :y, the largest, free online anime, manga, game & music database in the world.', ['x' => $anime->title, 'y' => config('app.name')]) }}" />
         <meta property="og:image" content="{{ $season->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp') }}" />
         <meta property="og:type" content="video.tv_show" />
         <meta property="video:duration" content="{{ $season->duration }}" />

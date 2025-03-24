@@ -4,12 +4,12 @@
     </x-slot:title>
 
     <x-slot:description>
-        {{ __('Browse :x’s ratings and reviews on Kurozora. Join the Kurozora community and create your anime, manga and game list. Discover songs, episodes and read reviews and news!', ['x' => $user->username]) }}
+        {{ __('Browse :x’s ratings and reviews on :y. Join the :y community and create your anime, manga and game list. Discover songs, episodes and read reviews and news!', ['x' => $user->username, 'y' => config('app.name')]) }}
     </x-slot:description>
 
     <x-slot:meta>
         <meta property="og:title" content="{{ __(':x’s Ratings & Reviews', ['x' => $user->username]) }} — {{ config('app.name') }}" />
-        <meta property="og:description" content="{{ __('Browse :x’s ratings and reviews on Kurozora. Join the Kurozora community and create your anime, manga and game list. Discover songs, episodes and read reviews and news!', ['x' => $user->username]) }}" />
+        <meta property="og:description" content="{{ __('Browse :x’s ratings and reviews on :y. Join the :y community and create your anime, manga and game list. Discover songs, episodes and read reviews and news!', ['x' => $user->username, 'y' => config('app.name')]) }}" />
         <meta property="og:image" content="{{ $user->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) }}" />
         <meta property="og:type" content="website" />
         <link rel="canonical" href="{{ route('profile.ratings', $user) }}">

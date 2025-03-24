@@ -4,12 +4,12 @@
     </x-slot:title>
 
     <x-slot:description>
-        {{ __('Discover all :x reviews & ratings only on Kurozora, the largest, free online anime, manga, game & music database in the world.', ['x' => $studio->name]) }}
+        {{ __('Discover all :x reviews & ratings only on :y, the largest, free online anime, manga, game & music database in the world.', ['x' => $studio->name, 'y' => config('app.name')]) }}
     </x-slot:description>
 
     <x-slot:meta>
         <meta property="og:title" content="{{ __('Ratings & Reviews') }} | {{ $studio->name }} — {{ config('app.name') }}" />
-        <meta property="og:description" content="{{ __('Discover all :x reviews & ratings on Kurozora, the largest, free online anime, manga, game & music database in the world.', ['x' => $studio->name]) }}" />
+        <meta property="og:description" content="{{ __('Discover all :x reviews & ratings on :y, the largest, free online anime, manga, game & music database in the world.', ['x' => $studio->name, 'y' => config('app.name')]) }}" />
         <meta property="og:image" content="{{ $studio->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/person_poster.webp') }}" />
         <meta property="og:type" content="profile" />
         <meta property="og:profile:username" content="{{ $studio->name }}" />

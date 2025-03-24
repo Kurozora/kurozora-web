@@ -4,12 +4,12 @@
     </x-slot:title>
 
     <x-slot:description>
-        {{ __('An extensive list of sequel, prequel, mods, and dlc to :x only on Kurozora, the largest, free online anime, manga, game & music database in the world.', ['x' => $game->title]) }}
+        {{ __('An extensive list of sequel, prequel, mods, and dlc to :x only on :y, the largest, free online anime, manga, game & music database in the world.', ['x' => $game->title, 'y' => config('app.name')]) }}
     </x-slot:description>
 
     <x-slot:meta>
         <meta property="og:title" content="{{ __('Relations') }} | {{ $game->title }} — {{ config('app.name') }}" />
-        <meta property="og:description" content="{{ __('An extensive list of sequel, prequel, mods, and dlc to :x only on Kurozora, the largest, free online anime, manga, game & music database in the world.', ['x' => $game->title]) }}" />
+        <meta property="og:description" content="{{ __('An extensive list of sequel, prequel, mods, and dlc to :x only on :y, the largest, free online anime, manga, game & music database in the world.', ['x' => $game->title, 'y' => config('app.name')]) }}" />
         <meta property="og:image" content="{{ $game->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/game_poster.webp') }}" />
         <meta property="og:type" content="video.tv_show" />
         <meta property="video:duration" content="{{ $game->duration }}" />

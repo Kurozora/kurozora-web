@@ -106,7 +106,7 @@
 
                         <div>
                             <p class="font-semibold text-xl text-primary" x-text="chatOwner"></p>
-                            <p class="font-medium text-sm text-secondary">Kurozora Chat v1.0.0</p>
+                            <p class="font-medium text-sm text-secondary">{{ config('app.name') }} Chat v1.0.0</p>
                         </div>
                     </div>
 
@@ -268,7 +268,7 @@
 
                         <div>
                             <p class="font-semibold text-xl text-primary" x-text="chatOwner"></p>
-                            <p class="font-medium text-sm text-secondary">Kurozora Chat v1.0.0</p>
+                            <p class="font-medium text-sm text-secondary">{{ config('app.name') }} Chat v1.0.0</p>
                         </div>
                     </div>
 

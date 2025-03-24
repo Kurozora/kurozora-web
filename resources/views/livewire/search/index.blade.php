@@ -1,6 +1,6 @@
 <main>
     <x-slot:title>
-        {{ __('Kurozora Search') }}
+        {{ __(':x Search', ['x' => config('app.name')]) }}
     </x-slot:title>
 
     <x-slot:description>
@@ -8,11 +8,11 @@
     </x-slot:description>
 
     <x-slot:meta>
-        <meta property="og:title" content="{{ __('Kurozora Search') }} — {{ config('app.name') }}" />
+        <meta property="og:title" content="{{ __(':x Search', ['x' => config('app.name')]) }} — {{ config('app.name') }}" />
         <meta property="og:description" content="{{ __('Search for anime, manga, games, characters, light novels, music, people, studios, and more…') }}" />
         <meta property="og:image" content="{{ asset('images/static/placeholders/episode_banner.webp') }}" />
         <meta property="og:type" content="website" />
-        <meta property="twitter:title" content="{{ __('Kurozora Search') }} — {{ config('app.name') }}" />
+        <meta property="twitter:title" content="{{ __(':x Search', ['x' => config('app.name')]) }} — {{ config('app.name') }}" />
         <meta property="twitter:description" content="{{ __('Search for anime, manga, games, characters, light novels, music, people, studios, and more…') }}" />
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:image" content="{{ asset('images/static/promotional/social_preview_icon_only.webp') }}" />

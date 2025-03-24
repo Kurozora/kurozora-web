@@ -1,15 +1,15 @@
 <main>
     <x-slot:title>
-        {{ __('Contact Kurozora') }}
+        {{ __('Contact :x', ['x' => config('app.name')]) }}
     </x-slot:title>
 
     <x-slot:description>
-        {{ __('Contact Kurozora support by email regarding the app, website, or other services. Kurozora support is here to help.') }}
+        {{ __('Contact :x support by email regarding the app, website, or other services. :x support is here to help.', ['x' => config('app.name')]) }}
     </x-slot:description>
 
     <x-slot:meta>
         <meta property="og:title" content="{{ __('Contact') }} — {{ config('app.name') }}" />
-        <meta property="og:description" content="{{ __('Contact Kurozora support by email regarding the app, website, or other services. Kurozora support is here to help.') }}" />
+        <meta property="og:description" content="{{ __('Contact :x support by email regarding the app, website, or other services. :x support is here to help.', ['x' => config('app.name')]) }}" />
         <meta property="og:image" content="{{ asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="og:type" content="website" />
     </x-slot:meta>
@@ -19,7 +19,7 @@
         <section class="relative pl-4 pr-4 pt-36 pb-10 overflow-hidden">
             <div class="relative max-w-2xl mx-auto text-center">
                 <div class="flex flex-col items-center">
-                    <img class="mt-10 mb-4" width="82" height="82" src="{{ asset('images/static/icon/app_icon.webp') }}" alt="Kurozora">
+                    <img class="mt-10 mb-4" width="82" height="82" src="{{ asset('images/static/icon/app_icon.webp') }}" alt="{{ config('app.name') }}">
 
                     <h1 class="text-4xl font-bold leading-tight tracking-tight">{{ __('Contact :x', ['x' => config('app.name')]) }}</h1>
                 </div>
@@ -37,7 +37,7 @@
                     <div class="flex flex-col w-full gap-2 md:w-3/4">
                         <h2 class="text-4xl font-semibold">{{ __('Quick Help') }}</h2>
 
-                        <p class="text-lg font-light md:text-2xl">{{ __('Get the information you need without the wait. Browse our knowledge base for answers to common questions and important details about Kurozora.') }}</p>
+                        <p class="text-lg font-light md:text-2xl">{{ __('Get the information you need without the wait. Browse our knowledge base for answers to common questions and important details about :x.', ['x' => config('app.name')]) }}</p>
                     </div>
                 </div>
 

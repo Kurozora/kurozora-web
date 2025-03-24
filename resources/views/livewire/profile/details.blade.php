@@ -8,7 +8,7 @@
     </x-slot:description>
 
     <x-slot:meta>
-        <meta property="og:title" content="{{ __(':x on Kurozora', ['x' => $user->username]) }}" />
+        <meta property="og:title" content="{{ __(':x on :y', ['x' => $user->username, 'y' => config('app.name')]) }}" />
         <meta property="og:description" content="{{ $user->biography ?? __('app.description') }}" />
         <meta property="og:image" content="{{ $user->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) }}" />
         <meta property="og:type" content="profile" />

@@ -9,7 +9,7 @@
 
     <x-slot:content>
         <div class="max-w-xl text-sm text-primary">
-            {{ __('Instead of sharing an account with your child, which can give them unwanted access to your personal data, create a Kurozora Account for them. Then you can easily set age-based parental controls, and they can use Family Sharing, and other Kurozora services.') }}
+            {{ __('Instead of sharing an account with your child, which can give them unwanted access to your personal data, create a :x Account for them. Then you can easily set age-based parental controls, and they can use Family Sharing, and other :x services.', ['x' => config('app.name')]) }}
         </div>
 
         <!-- Invitation Form -->

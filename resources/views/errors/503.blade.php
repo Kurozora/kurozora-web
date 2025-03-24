@@ -11,7 +11,7 @@
                 <div class="w-16 h-1 bg-tint my-3 md:my-6"></div>
 
                 @if (app()->isDownForMaintenance())
-                    <p class="text-secondary text-2xl md:text-3xl font-light mb-8 leading-normal max-w-prose">{{ __('Kurozora is currently under maintenance. All services will be available shortly. If this continues for more than an hour, you can follow the status on Twitter.') }}</p>
+                    <p class="text-secondary text-2xl md:text-3xl font-light mb-8 leading-normal max-w-prose">{{ __(':x is currently under maintenance. All services will be available shortly. If this continues for more than an hour, you can follow the status on Twitter.', ['x' => config('app.name')]) }}</p>
 
                     <x-link-button href="{{ config('social.twitter.url') }}">
                         {{ __('Go to Twitter') }}

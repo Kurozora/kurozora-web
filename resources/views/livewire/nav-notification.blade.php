@@ -83,7 +83,7 @@
                 @auth
                     <p class="text-sm text-center">{{ __('When you have notifications, you will see them here!') }}</p>
                 @else
-                    <p class="text-sm text-center">{{ __('Notifications are only available to registered Kurozora users.') }}</p>
+                    <p class="text-sm text-center">{{ __('Notifications are only available to registered :x users.', ['x' => config('app.name')]) }}</p>
 
                     <x-link class="text-sm" href="{{ route('sign-in') }}">{{ __('Sign in') }}</x-link>
                 @endauth

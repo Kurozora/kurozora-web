@@ -4,12 +4,12 @@
     </x-slot:title>
 
     <x-slot:description>
-        {{ __('The amazing people behind Kurozora — the largest, free online anime, manga, game & music database.') }}
+        {{ __('The amazing people behind :x — the largest, free online anime, manga, game & music database.', ['x' => config('app.name')]) }}
     </x-slot:description>
 
     <x-slot:meta>
         <meta property="og:title" content="{{ __('Team') }} — {{ config('app.name') }}" />
-        <meta property="og:description" content="{{ __('The amazing people behind Kurozora — the largest, free online anime, manga, game & music database.') }}" />
+        <meta property="og:description" content="{{ __('The amazing people behind :x — the largest, free online anime, manga, game & music database.', ['x' => config('app.name')]) }}" />
         <meta property="og:image" content="{{ asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="og:type" content="website" />
         <link rel="canonical" href="{{ route('misc.team') }}">
@@ -22,7 +22,7 @@
 
         {{-- Staff --}}
         <section class="flex flex-col mt-36">
-            <h2 class="mx-auto pl-4 pr-4 max-w-2xl text-4xl text-center font-semibold">{{ __('Kurozora is built by a passionate team…') }}</h2>
+            <h2 class="mx-auto pl-4 pr-4 max-w-2xl text-4xl text-center font-semibold">{{ __(':x is built by a passionate team…', ['x' => config('app.name')]) }}</h2>
 
             <div class="flex flex-row flex-wrap justify-between gap-4 mt-36 pl-4 pr-4">
                 @foreach ($this->staff as $user)

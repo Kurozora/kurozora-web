@@ -159,21 +159,21 @@
 
 {{--                                                @if ($user->id == 385)--}}
 {{--                                                    <ul class="list-disc block">--}}
-{{--                                                        <li>Kurozora+ (6 month)</li>--}}
-{{--                                                        <li>Kurozora PRO</li>--}}
+{{--                                                        <li>{{ config('app.name') }}+ (6 month)</li>--}}
+{{--                                                        <li>{{ config('app.name') }} PRO</li>--}}
 {{--                                                        <li>$100 Gift Card</li>--}}
 {{--                                                        <li>Art Contest ’24 Achievement</li>--}}
 {{--                                                    </ul>--}}
 {{--                                                @elseif ($user->id == 363)--}}
 {{--                                                    <ul class="list-disc block">--}}
-{{--                                                        <li>Kurozora+ (1 month)</li>--}}
-{{--                                                        <li>Kurozora PRO</li>--}}
+{{--                                                        <li>{{ config('app.name') }}+ (1 month)</li>--}}
+{{--                                                        <li>{{ config('app.name') }} PRO</li>--}}
 {{--                                                        <li>$75 Gift Card</li>--}}
 {{--                                                        <li>Art Contest ’24 Achievement</li>--}}
 {{--                                                    </ul>--}}
 {{--                                                @elseif ($user->id == 765)--}}
 {{--                                                    <ul class="list-disc block">--}}
-{{--                                                        <li>Kurozora PRO</li>--}}
+{{--                                                        <li>{{ config('app.name') }} PRO</li>--}}
 {{--                                                        <li>$50 Gift Card</li>--}}
 {{--                                                        <li>Art Contest ’24 Achievement</li>--}}
 {{--                                                    </ul>--}}

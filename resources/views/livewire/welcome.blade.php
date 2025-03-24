@@ -23,7 +23,7 @@
                     <h1 class="flex items-center justify-center space-x-1" style="text-shadow: 0 0 20px rgba(0,0,0,.6);">
                         {{-- Logo --}}
                         <x-logo class="relative h-6 md:h-8 w-auto" />
-                        <span class="text-xl md:text-2xl lg:text-3xl font-semibold">Kurozora</span>
+                        <span class="text-xl md:text-2xl lg:text-3xl font-semibold">{{ config('app.name') }}</span>
                     </h1>
 
                     <h2 class="mt-2 pb-2 px-5 text-5xl md:text-7xl lg:text-8xl font-bold md:px-0" style="text-shadow: 0 0 20px rgba(0,0,0,.6);">
@@ -92,11 +92,11 @@
                     </h2>
 
                     <div class="flex flex-wrap gap-4 justify-center mt-12 pr-5 pl-5">
-                        <x-link-button class="text-lg" href="{{ route('home') }}" aria-label="Visit the Kurozora website">
+                        <x-link-button class="text-lg" href="{{ route('home') }}">
                             <span>{{ __('Visit the Website') }}</span>
                         </x-link-button>
 
-                        <x-link-button class="text-lg" href="{{ config('app.ios.store_url') }}" aria-label="Download the Kurozora app">
+                        <x-link-button class="text-lg" href="{{ config('app.ios.store_url') }}">
                             <span>{{ __('Download the App') }}</span>
                         </x-link-button>
                     </div>
@@ -138,19 +138,19 @@
         {{-- App Showcase --}}
         <section class="pl-4 pr-4 pt-36">
             <div class="flex flex-col items-center mx-auto max-w-2xl text-center">
-                <img class="mt-10 mb-4" width="82" height="82" src="{{ asset('images/static/icon/app_icon.webp') }}" alt="Kurozora">
+                <img class="mt-10 mb-4" width="82" height="82" src="{{ asset('images/static/icon/app_icon.webp') }}" alt="{{ config('app.name') }}">
 
-                <p class="my-2 text-xl font-semibold">{{ __('Kurozora') }}</p>
+                <p class="my-2 text-xl font-semibold">{{ config('app.name') }}</p>
 
                 <p class="text-4xl font-bold leading-tight tracking-tight md:text-6xl">{{ __('Discover, track, share. All in one place.') }}</p>
             </div>
 
             <div class="flex flex-col space-y-20 mt-10 overflow-hidden">
                 <div class="max-w-2xl mx-auto text-center">
-                    <p class="text-lg font-light md:text-2xl">{{ __('Kurozora is the single destination for all the Japanese media you love — and all the ones you’ll love next. Discover new and classical anime, manga, music and games. Track what you’re watching and want to watch, and set your own watching goals — all in one app and across all your devices.') }}</p>
+                    <p class="text-lg font-light md:text-2xl">{{ __(':x is the single destination for all the Japanese media you love — and all the ones you’ll love next. Discover new and classical anime, manga, music and games. Track what you’re watching and want to watch, and set your own watching goals — all in one app and across all your devices.', ['x' => config('app.name')]) }}</p>
                 </div>
 
-                <img src="{{ asset('images/static/promotional/kurozora_on_device.webp') }}" alt="Kurozora on device">
+                <img src="{{ asset('images/static/promotional/kurozora_on_device.webp') }}" alt="{{ __(':x on device', ['x' => config('app.name')]) }}">
             </div>
         </section>
 
@@ -211,7 +211,7 @@
                             x-transition:enter-start="opacity-0 translate-y-full"
                             x-transition:enter-end="opacity-100 translate-y-0"
                         >
-                            <span class="text-pink-500">{{ __('Share Kurozora') }}</span>  {{ __('with your family.') }}
+                            <span class="text-pink-500">{{ __('Share :x', ['x' => config('app.name')]) }}</span>  {{ __('with your family.') }}
                         </li>
                     </span>
                 </ul>
@@ -438,11 +438,11 @@
         {{-- Call to Action --}}
         <section class="pl-4 pr-4 pt-36 pb-10 bg-secondary">
             <div class="flex flex-col items-center m-auto max-w-2xl text-center">
-                <img class="mt-10 mb-4" width="82" height="82" src="{{ asset('images/static/icon/app_icon.webp') }}" alt="Kurozora">
+                <img class="mt-10 mb-4" width="82" height="82" src="{{ asset('images/static/icon/app_icon.webp') }}" alt="{{ config('app.name') }}">
 
-                <p class="my-2 text-4xl font-bold leading-tight md:text-6xl">{{ __('Use Kurozora anywhere you go.') }}</p>
+                <p class="my-2 text-4xl font-bold leading-tight md:text-6xl">{{ __('Use :x anywhere you go.', ['x' => config('app.name')]) }}</p>
 
-                <p class="font-semibold md:text-xl">{{ __('Explore on iPhone. Track on Mac. Share on iPad. Find the Kurozora app on your favorite devices. Or use Kurozora online at') }} <x-link href="{{ route('home') }}">
+                <p class="font-semibold md:text-xl">{{ __('Explore on iPhone. Track on Mac. Share on iPad. Find the :x app on your favorite devices. Or use :x online at', ['x' => config('app.name')]) }} <x-link href="{{ route('home') }}">
                 {{ config('app.domain') }}</x-link></p>
             </div>
 
@@ -508,11 +508,11 @@
             </div>
 
             <div class="flex flex-wrap gap-4 justify-center mt-12 pr-5 pl-5">
-                <x-link-button class="text-lg" href="{{ route('home') }}" aria-label="Visit the Kurozora website">
+                <x-link-button class="text-lg" href="{{ route('home') }}">
                     <span>{{ __('Visit the Website') }}</span>
                 </x-link-button>
 
-                <x-link-button class="text-lg" href="{{ config('app.ios.store_url') }}" aria-label="Download the Kurozora app">
+                <x-link-button class="text-lg" href="{{ config('app.ios.store_url') }}">
                     <span>{{ __('Download The App') }}</span>
                 </x-link-button>
             </div>
@@ -530,14 +530,14 @@
                         <button
                             class="flex mb-2 py-6 w-full text-xl text-unset font-semibold"
                             @click="expanded = ! expanded"
-                        >{{ __('What is Kurozora?') }}</button>
+                        >{{ __('What is :x?', ['x' => config('app.name')]) }}</button>
 
                         <p
                             class="pb-8"
                             x-show="expanded"
                             x-collapse
                         >
-                            {{ __('Kurozora is an open-source anime, manga, game and music discovery service that offers unlimited access to a growing collection of over 90,000 Japanese media combined — featuring new releases, award winners, and beloved favorites. Kurozora also includes episodes, characters, voice actors, staff, studios, and much more — all without ads. You can track what you’re watching, reading, playing, and listening to on iPhone, iPad, iPod touch, Mac, and through any web browser.') }}
+                            {{ __(':x is an open-source anime, manga, game and music discovery service that offers unlimited access to a growing collection of over 90,000 Japanese media combined — featuring new releases, award winners, and beloved favorites. :x also includes episodes, characters, voice actors, staff, studios, and much more — all without ads. You can track what you’re watching, reading, playing, and listening to on iPhone, iPad, iPod touch, Mac, and through any web browser.', ['x' => config('app.name')]) }}
                         </p>
                     </div>
                 </li>
@@ -546,16 +546,16 @@
                         <button
                             class="flex mb-2 py-6 w-full text-xl text-unset font-semibold"
                             @click="expanded = ! expanded"
-                        >{{ __('What’s included in Kurozora?') }}</button>
+                        >{{ __('What’s included in :x?', ['x' => config('app.name')]) }}</button>
 
                         <div
                             class="pb-8"
                             x-show="expanded"
                             x-collapse
                         >
-                            <p>{{ __('In addition to anime, Kurozora includes the biggest catalogue of manga, music and games.') }}</p>
+                            <p>{{ __('In addition to anime, :x includes the biggest catalogue of manga, music and games.', ['x' => config('app.name')]) }}</p>
                             <br />
-                            <p>{{ __('Here are some of the anime on Kurozora. To see all 20,000+ anime, you can browse the Explore tab on the Kurozora app or website.') }}</p>
+                            <p>{{ __('Here are some of the anime on :x. To see all 20,000+ anime, you can browse the Explore tab on the :x app or website.', ['x' => config('app.name')]) }}</p>
 
                             <div>
                                 <ul class="list-disc">
@@ -597,7 +597,7 @@
                             x-show="expanded"
                             x-collapse
                         >
-                            <p>{{ __('New anime, manga, games, music and other content updates are added to Kurozora every day. To preview upcoming releases, look for the Upcoming section in the Explore tab on Kurozora.') }}</p>
+                            <p>{{ __('New anime, manga, games, music and other content updates are added to :x every day. To preview upcoming releases, look for the Upcoming section in the Explore tab on :x.', ['x' => config('app.name')]) }}</p>
                         </div>
                     </div>
                 </li>
@@ -606,17 +606,17 @@
                         <button
                             class="flex mb-2 py-6 w-full text-xl text-unset font-semibold"
                             @click="expanded = ! expanded"
-                        >{{ __('Where do I find Kurozora?') }}</button>
+                        >{{ __('Where do I find :x?', ['x' => config('app.name')]) }}</button>
 
                         <div
                             class="pb-8"
                             x-show="expanded"
                             x-collapse
                         >
-                            <p>{{ __('You can download the app on the') }} <x-link target="_blank" href="{{ config('app.ios.store_url') }}">App Store</x-link> {{ __('on your favorite device. Kurozora works on iPhone, iPad, iPod Touch, Mac, and Apple Vision Pro.') }}</p>
+                            <p>{{ __('You can download the app on the') }} <x-link target="_blank" href="{{ config('app.ios.store_url') }}">App Store</x-link> {{ __('on your favorite device. :x works on iPhone, iPad, iPod Touch, Mac, and Apple Vision Pro.', ['x' => config('app.name')]) }}</p>
                             <br />
                             <br />
-                            <p>{{ __('Kurozora can also be used on Android, Windows, Linux and all other devices through the website, or as a Progressive Web App (PWA), at') }} <x-link href="{{ route('home') }}">kurozora.app</x-link>.</p>
+                            <p>{{ __(':x can also be used on Android, Windows, Linux and all other devices through the website, or as a Progressive Web App (PWA), at', ['x' => config('app.name')]) }} <x-link href="{{ route('home') }}">{{ config('app.domain') }}</x-link>.</p>
                         </div>
                     </div>
                 </li>
@@ -632,7 +632,7 @@
                             x-show="expanded"
                             x-collapse
                         >
-                            <p>{{ __('Kurozora is free to download and use. However, some supplemental features can be unlocked using in-app purchases. The cost depends on which offer you choose. All offers unlock the same features.') }}</p>
+                            <p>{{ __(':x is free to download and use. However, some supplemental features can be unlocked using in-app purchases. The cost depends on which offer you choose. All offers unlock the same features.', ['x' => config('app.name')]) }}</p>
                             <br>
                             <br>
                             <p>{{ __('(1) Free to try for 1 week and $3.99 per month after that.') }}</p><br>
@@ -646,14 +646,14 @@
                         <button
                             class="flex mb-2 py-6 w-full text-xl text-unset font-semibold"
                             @click="expanded = ! expanded"
-                        >{{ __('What do I need to join Kurozora?') }}</button>
+                        >{{ __('What do I need to join :x?', ['x' => config('app.name')]) }}</button>
 
                         <div
                             class="pb-8"
                             x-show="expanded"
                             x-collapse
                         >
-                            <p>{{ __('You will need an iPhone, iPad, iPod Touch or a Mac with the latest operating system for the app. You can use any browser you prefer for the website. You can explore Kurozora without an account, however some features might require an account to work.') }}</p>
+                            <p>{{ __('You will need an iPhone, iPad, iPod Touch or a Mac with the latest operating system for the app. You can use any browser you prefer for the website. You can explore :x without an account, however some features might require an account to work.', ['x' => config('app.name')]) }}</p>
                         </div>
                     </div>
                 </li>
@@ -662,14 +662,14 @@
                         <button
                             class="flex mb-2 py-6 w-full text-xl text-unset font-semibold"
                             @click="expanded = ! expanded"
-                        >{{ __('Where can I find more about Kurozora?') }}</button>
+                        >{{ __('Where can I find more about :x?', ['x' => config('app.name')]) }}</button>
 
                         <div
                             class="pb-8"
                             x-show="expanded"
                             x-collapse
                         >
-                            <p>{{ __('You can join the Kurozora community on') }} <x-link target="_blank" href="https://discord.gg/f3QFzGqsah">Discord</x-link> {{ __('as well as follow us on') }} <x-link target="_blank" href="https://twitter.com/KurozoraApp">Twitter</x-link> {{ __('and') }} <x-link target="_blank" href="https://instagram.com/kurozora_app">Instagram</x-link></p>
+                            <p>{{ __('You can join the :x community on', ['x' => config('app.name')]) }} <x-link target="_blank" href="{{ config('social.discord.url') }}">Discord</x-link> {{ __('as well as follow us on') }} <x-link target="_blank" href="{{ config('social.twitter.url') }}">Twitter</x-link> {{ __('and') }} <x-link target="_blank" href="{{ config('social.instagram.url') }}">Instagram</x-link></p>
                         </div>
                     </div>
                 </li>

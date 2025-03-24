@@ -1,5 +1,5 @@
 <head>
-    <title>{{ $title ?? 'Home' }} | Kurozora</title>
+    <title>{{ $title ?? 'Home' }} | {{ config('app.name') }}</title>
 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
@@ -74,8 +74,8 @@
                                         <tbody>
                                         <tr>
                                             <td style="width:172px;">
-                                                <a href="{{ url('/') }}" target="_blank" style="color: #F3D5A9; font-weight: normal; text-decoration: none !important;">
-                                                    <img src="{{ asset('images/static/email_header_logo.png') }}" alt="Kurozora logo" style="width: 100%; max-width: 180px;" />
+                                                <a href="{{ url('/') }}" target="_blank" style="color: #FF9300; font-weight: normal; text-decoration: none !important;">
+                                                    <img src="{{ asset('images/static/email_header_logo.png') }}" alt="{{ config('app.name') }} logo" style="width: 100%; max-width: 180px;" />
                                                 </a>
                                             </td>
                                         </tr>
@@ -157,14 +157,14 @@
                         <tr>
                             <td style="word-break:break-word;font-size:0px;padding:0px;" align="center">
                                 <div style="cursor:auto;color:#99AAB5;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:12px;line-height:24px;text-align:center;">
-                                    Kurozora • <a href="{{ config('social.twitter.url') }}" style="color:#1EB0F4;text-decoration:none;" target="_blank">{{ '@' . config('social.twitter') }}</a>
+                                    {{ config('app.name') }} • <a href="{{ config('social.twitter.url') }}" style="color:#1EB0F4;text-decoration:none;" target="_blank">{{ '@' . config('social.twitter') }}</a>
                                 </div>
                             </td>
                         </tr>
                         <tr>
                             <td style="word-break:break-word;font-size:0px;padding:0px;" align="center">
                                 <div style="cursor:auto;color:#99AAB5;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:12px;line-height:24px;text-align:center;">
-                                    Hoogeveen, The Netherlands
+                                    The Netherlands
                                 </div>
                             </td>
                         </tr>

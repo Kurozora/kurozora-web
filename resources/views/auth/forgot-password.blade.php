@@ -5,14 +5,14 @@
 
     <x-slot:header>
         <h2 class="font-semibold text-xl text-primary leading-tight">
-            {{ __('Kurozora Account') }}
+            {{ __(':x Account', ['x' => config('app.name')]) }}
         </h2>
     </x-slot:header>
 
     <div class="flex flex-col justify-center w-screen h-full max-w-prose mx-auto pl-4 pr-4 py-6">
         <div class="text-center mb-5">
             <h1 class="text-2xl font-bold">{{ __('Forgot your password?') }}</h1>
-            <p>{{ __('Enter your Kurozora Account to continue.') }}</p>
+            <p>{{ __('Enter your :x Account to continue.', ['x' => __(config('app.name'))]) }}</p>
         </div>
 
         @if (session('status'))

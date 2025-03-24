@@ -4,12 +4,12 @@
     </x-slot:title>
 
     <x-slot:description>
-        {{ __('Kurozora iOS, Android, Linux, Windows, and more!') }}
+        {{ __(':x iOS, Android, Linux, Windows, and more!', ['x' => config('app.name')]) }}
     </x-slot:description>
 
     <x-slot:meta>
         <meta property="og:title" content="{{ __('Projects') }} — {{ config('app.name') }}" />
-        <meta property="og:description" content="{{ __('Kurozora iOS, Android, Linux, Windows, and more!') }}" />
+        <meta property="og:description" content="{{ __(':x iOS, Android, Linux, Windows, and more!', ['x' => config('app.name')]) }}" />
         <meta property="og:image" content="{{ asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="og:type" content="website" />
         <link rel="canonical" href="{{ route('misc.projects') }}">
@@ -20,13 +20,13 @@
         <section class="relative pl-4 pr-4 pt-36 pb-10 overflow-hidden">
             <div class="relative max-w-2xl mx-auto text-center">
                 <div class="flex flex-col items-center">
-                    <img class="mt-10 mb-4" width="82" height="82" src="{{ asset('images/static/icon/app_icon.webp') }}" alt="Kurozora">
+                    <img class="mt-10 mb-4" width="82" height="82" src="{{ asset('images/static/icon/app_icon.webp') }}" alt="{{ config('app.name') }}">
 
-                    <h1 class="text-4xl font-bold leading-tight tracking-tight">{{ __('Open-Source at Kurozora') }}</h1>
+                    <h1 class="text-4xl font-bold leading-tight tracking-tight">{{ __('Open-Source at :x', ['x' => config('app.name')]) }}</h1>
                 </div>
 
                 <div class="mt-10">
-                    <p class="text-lg font-light md:text-2xl">{{ __('Open-source software serves as the core of Kurozora’s platforms and developer tools, fostering collaboration with developers worldwide to generate and distribute open-source code.') }}</p>
+                    <p class="text-lg font-light md:text-2xl">{{ __('Open-source software serves as the core of :x’s platforms and developer tools, fostering collaboration with developers worldwide to generate and distribute open-source code.', ['x' => config('app.name')]) }}</p>
                 </div>
             </div>
         </section>
@@ -38,7 +38,7 @@
                     <div class="flex flex-col w-full gap-2 md:w-3/4">
                         <h2 class="text-4xl font-semibold">{{ __('Open-source projects') }}</h2>
 
-                        <p class="text-lg font-light md:text-2xl">{{ __('Every Kurozora product and service is crafted with and embraces open-source. We manage the following projects and encourages your contribution.') }}</p>
+                        <p class="text-lg font-light md:text-2xl">{{ __('Every :x product and service is crafted with and embraces open-source. We manage the following projects and encourages your contribution.', ['x' => config('app.name')]) }}</p>
                     </div>
 
                     <div>
