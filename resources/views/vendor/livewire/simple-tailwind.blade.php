@@ -16,7 +16,7 @@ $scrollIntoViewJsSnippet = ($scrollTo !== false)
             <span>
                 {{-- Previous Page Link --}}
                 @if ($paginator->onFirstPage())
-                    <span class="relative inline-flex items-center pl-4 pr-4 pt-2 pb-2 text-sm font-medium text-primary bg-primary border border-primary cursor-default leading-5 rounded-md select-none">
+                    <span class="relative inline-flex items-center pl-4 pr-4 pt-2 pb-2 text-sm font-medium text-primary bg-primary border border-primary cursor-default leading-5 rounded-md select-none" disabled>
                         {!! __('pagination.previous') !!}
                     </span>
                 @else
@@ -46,7 +46,7 @@ $scrollIntoViewJsSnippet = ($scrollTo !== false)
                         </button>
                     @endif
                 @else
-                    <span class="relative inline-flex items-center pl-4 pr-4 pt-2 pb-2 text-sm font-medium text-primary bg-primary border border-primary cursor-default leading-5 rounded-md select-none">
+                    <span class="relative inline-flex items-center pl-4 pr-4 pt-2 pb-2 text-sm font-medium text-primary bg-primary border border-primary cursor-default leading-5 rounded-md select-none" disabled>
                         {!! __('pagination.next') !!}
                     </span>
                 @endif
