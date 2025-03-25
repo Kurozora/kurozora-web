@@ -21,7 +21,7 @@
         }
 
         .info a.link {
-            color: #FF9300 !important;
+            color: var(--tint-color) !important;
         }
 
         .swagger-ui .scheme-container {
@@ -29,7 +29,7 @@
             box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.05);
         }
 
-        .topbar-wrapper img[alt="Swagger UI"], .topbar-wrapper span {
+        .topbar-wrapper a svg {
             visibility: collapse;
         }
 

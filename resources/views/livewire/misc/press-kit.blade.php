@@ -76,6 +76,18 @@
                 </div>
 
                 <div
+                    class="relative flex items-center justify-center flex-grow w-64 md:w-80 pl-4 pr-4 pt-4 pb-4 border-2 rounded-3xl"
+                    style="background: url('{{ asset('images/static/patterns/checkerboard_dark.svg') }}'); background-size: 24px;"
+                >
+                    <img class="mt-8 mb-8 pr-5 pl-5" src="https://raw.githubusercontent.com/Kurozora/kurozora-press-kit/master/Logos/4_Full_Logo_Lockup_Monochrome/full_logo_white_RGB_monochrome.png" alt="{{ __(':x full logo white RGB monochrome', ['x' => config('app.name')]) }}">
+
+                    <div class="absolute right-0 bottom-0 pr-2 pb-2 pl-2">
+                        <x-link href="https://github.com/Kurozora/kurozora-press-kit/raw/master/Logos/4_Full_Logo_Lockup_Monochrome/full_logo_white_RGB_monochrome.svg" target="_blank" class="relative after:absolute after:inset-0">.svg</x-link>
+                        <x-link href="https://github.com/Kurozora/kurozora-press-kit/raw/master/Logos/4_Full_Logo_Lockup_Monochrome/full_logo_white_RGB_monochrome.png" target="_blank" class="relative after:absolute after:inset-0">.png</x-link>
+                    </div>
+                </div>
+
+                <div
                     class="relative flex items-center justify-center flex-grow w-64 md:w-80 bg-secondary pl-4 pr-4 pt-4 pb-4 border-2 rounded-3xl"
                     style="background: url('{{ asset('images/static/patterns/checkerboard_light.svg') }}'); background-size: 24px;"
                 >
@@ -84,18 +96,6 @@
                     <div class="absolute right-0 bottom-0 pr-2 pb-2 pl-2">
                         <x-link href="https://github.com/Kurozora/kurozora-press-kit/raw/master/Logos/4_Full_Logo_Lockup_Monochrome/full_logo_black_RGB_monochrome.svg" target="_blank" class="relative after:absolute after:inset-0">.svg</x-link>
                         <x-link href="https://github.com/Kurozora/kurozora-press-kit/raw/master/Logos/4_Full_Logo_Lockup_Monochrome/full_logo_black_RGB_monochrome.png" target="_blank" class="relative after:absolute after:inset-0">.png</x-link>
-                    </div>
-                </div>
-
-                <div
-                    class="relative flex items-center justify-center flex-grow w-64 md:w-80 pl-4 pr-4 pt-4 pb-4 border-2 rounded-3xl"
-                    style="background: url('{{ asset('images/static/patterns/checkerboard_dark.svg') }}'); background-size: 24px;"
-                >
-                    <img class="mt-8 mb-8 pr-5 pl-5" src="https://raw.githubusercontent.com/Kurozora/kurozora-press-kit/master/Logos/4_Full_Logo_Lockup_Monochrome/full_logo_white_RGB_monochrome.png" alt="Kurozora full logo white RGB monochrome">
-
-                    <div class="absolute right-0 bottom-0 pr-2 pb-2 pl-2">
-                        <x-link href="https://github.com/Kurozora/kurozora-press-kit/raw/master/Logos/4_Full_Logo_Lockup_Monochrome/full_logo_white_RGB_monochrome.svg" target="_blank" class="relative after:absolute after:inset-0">.svg</x-link>
-                        <x-link href="https://github.com/Kurozora/kurozora-press-kit/raw/master/Logos/4_Full_Logo_Lockup_Monochrome/full_logo_white_RGB_monochrome.png" target="_blank" class="relative after:absolute after:inset-0">.png</x-link>
                     </div>
                 </div>
 

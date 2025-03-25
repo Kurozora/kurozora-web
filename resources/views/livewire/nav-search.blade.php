@@ -92,7 +92,7 @@
 
         {{-- Quick Links --}}
         <div
-            class="absolute right-0 left-0 mx-auto pt-4 pr-4 pb-4 pl-4 max-w-7xl bg-primary rounded-b-2xl overflow-y-scroll sm:px-10"
+            class="absolute right-0 left-0 pt-4 pb-4 bg-primary rounded-b-2xl overflow-y-scroll"
             style="max-height: 85vh;"
         >
             <div class="flex justify-center">
@@ -107,7 +107,7 @@
                         </x-slot:title>
 
                         <x-slot:action>
-                            <x-section-nav-link href="{{ route('search.index', ['q' => $this->searchQuery, 'type' => $searchResult['search_type']]) }}" wire:navigate>{{ __('See All') }}</x-section-nav-link>
+                            <x-section-nav-link href="{{ route('search.index', ['q' => $this->searchQuery, 'type' => $searchResult['search_type']]) }}">{{ __('See All') }}</x-section-nav-link>
                         </x-slot:action>
                     </x-search-header>
 
@@ -142,7 +142,7 @@
                             @break
                         @endswitch
 
-                        <x-hr class="mt-4 mb-4" />
+                        <x-hr class="mt-4 mb-4 ml-4 mr-4" />
                     </div>
                 @endforeach
             @endif

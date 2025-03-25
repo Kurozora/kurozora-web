@@ -1,4 +1,4 @@
-<div {{ $attributes->merge(['class' => 'flex gap-2 justify-between items-baseline mb-5']) }}>
+<div {{ $attributes->merge(['class' => 'flex gap-2 justify-between items-baseline mb-5 pl-4 pr-4']) }}>
     <div>
         <p class="mt-2 text-sm text-primary font-semibold uppercase">{{ $title }}</p>
     </div>

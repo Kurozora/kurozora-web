@@ -1,5 +1,5 @@
 <div
-    class="xl:ml-64"
+    class="xl:hidden"
     x-data="{
         isSearchEnabled: @entangle('isSearchEnabled').live,
         isNavOpen: false
@@ -42,6 +42,7 @@
 
                             <path
                                 class="inline-flex transform origin-center"
+                                x-cloak
                                 x-show="isNavOpen"
                                 x-transition:enter="ease-out duration-200"
                                 x-transition:enter-start="opacity-0 scale-75 rotate-180"
