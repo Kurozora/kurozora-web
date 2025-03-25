@@ -42,7 +42,7 @@
     x-on:keydown.escape.window="show = false"
     x-on:keydown.tab.prevent="$event.shiftKey || nextFocusable().focus()"
     x-on:keydown.shift.tab.prevent="prevFocusable().focus()"
-    x-cloak=""
+    x-cloak
     x-show="show"
     id="{{ $id }}"
     {{ $attributes->merge(['class' => 'fixed top-0 inset-x-0 pl-4 pr-4 pt-6 z-[999] sm:px-0 sm:flex sm:items-top sm:justify-center']) }}

@@ -119,7 +119,7 @@
                 <p class="tracking-wide font-black">{{ __('———— or ————') }}</p>
 
                 <x-link class="text-sm" href="{{ route('sign-up') }}" wire:navigate>
-                    {{ __('New to Kurozora? Join us 🔥') }}
+                    {{ __('New to :x? Join us 🔥', ['x' => config('app.name')]) }}
                 </x-link>
 
                 <p class="tracking-wide font-black">{{ __('———— or ————') }}</p>

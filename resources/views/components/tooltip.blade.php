@@ -7,7 +7,7 @@
 <div
     {{ $attributes->merge(['class' => 'absolute z-50']) }}
     id="{{ $id }}"
-    x-cloak=""
+    x-cloak
     x-transition:enter="ease-out duration-300"
     x-transition:enter-start="opacity-0"
     x-transition:enter-end="opacity-100"

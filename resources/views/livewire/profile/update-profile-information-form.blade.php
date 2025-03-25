@@ -57,7 +57,7 @@
             <div
                 class="relative"
                 x-show="bannerImagePreview"
-                x-cloak=""
+                x-cloak
             >
                 <div class="flex">
                     <picture class="relative w-full overflow-hidden">
@@ -146,7 +146,7 @@
             <div
                 class="relative w-16 h-16 rounded-full overflow-hidden sm:w-24 sm:h-24"
                 x-show="profileImagePreview"
-                x-cloak=""
+                x-cloak
             >
                 <img class="w-16 h-16 border-2 border-black/5 rounded-full sm:w-24 sm:h-24"
                      src=""

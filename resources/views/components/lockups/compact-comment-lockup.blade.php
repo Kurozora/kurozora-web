@@ -20,8 +20,8 @@
 
     <div
         class="absolute flex right-0 bg-tertiary rounded-md border border-primary mr-2"
+        x-cloak
         x-show="showOptions"
-        x-cloak=""
         x-on:mouseover="showOptions = true"
         x-on:mouseleave="showOptions = false"
     >

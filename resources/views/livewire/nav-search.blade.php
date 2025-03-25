@@ -36,7 +36,7 @@
 >
     <div class="absolute top-0 right-0 left-0 mx-auto max-w-full sm:max-w-2xl"
          style="z-index: 300; max-height: 85vh"
-         x-cloak=""
+         x-cloak
          x-show="isSearchEnabled"
          x-transition:enter="ease-out duration-300"
          x-transition:enter-start="opacity-0"
@@ -194,7 +194,7 @@
     <div
         class="fixed inset-0 transform transition-all backdrop-blur"
         style="z-index: 299;"
-        x-cloak=""
+        x-cloak
         x-show="isSearchEnabled"
         x-on:click="resetAndClose()"
         x-transition:enter="ease-out duration-300"
