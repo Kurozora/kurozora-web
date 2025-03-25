@@ -1,4 +1,4 @@
-@props(['link', 'embedLink', 'title', 'imageUrl', 'type'])
+@props(['link', 'embedLink' => null, 'title', 'imageUrl', 'type'])
 
 <div
     {{ $attributes->merge(['class' => 'flex flex-col gap-4']) }}
@@ -196,7 +196,7 @@
     </div>
 
     <div class="flex gap-2">
-        <x-input id="link" class="w-ful" x-model="shareLink" readonly />
+        <x-input id="link" class="w-full" x-model="shareLink" readonly />
 
         <x-button
             x-data="{
@@ -231,9 +231,11 @@
         </div>
     @endif
 
-    <div class="flex gap-2">
-        <x-checkbox x-model="shouldEmbed">
-            {{ __('Embed') }}
-        </x-checkbox>
-    </div>
+    @if (!empty($embedLink))
+        <div class="flex gap-2">
+            <x-checkbox x-model="shouldEmbed">
+                {{ __('Embed') }}
+            </x-checkbox>
+        </div>
+    @endif
 </div>

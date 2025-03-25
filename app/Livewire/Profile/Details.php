@@ -66,6 +66,13 @@ class Details extends Component
     ];
 
     /**
+     * Whether to show the share popup to the user.
+     *
+     * @var bool $showSharePopup
+     */
+    public bool $showSharePopup = false;
+
+    /**
      * The component's listeners.
      *
      * @var array

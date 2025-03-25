@@ -63,7 +63,7 @@
                         <x-slot:content>
                             <button
                                 class="block w-full pl-4 pr-4 pt-2 pb-2 text-primary text-xs text-center font-semibold hover:bg-tertiary focus:bg-secondary"
-                                wire:click="togglePopupFor('showSharePopup')"
+                                wire:click="$toggle('showSharePopup')"
                             >
                                 {{ __('Share') }}
                             </button>
@@ -124,6 +124,16 @@
 
         <livewire:components.user.feed-messages-section :user="$user" />
     </div>
+
+    @if ($showSharePopup)
+        <x-share-modal
+            model="showSharePopup"
+            :link="route('profile.details', $this->user)"
+            :title="$this->user->username"
+            :image-url="$this->user->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile())"
+            :type="'user'"
+        />
+    @endif
 
     @switch($selectedPopupType)
     @case('edit')
