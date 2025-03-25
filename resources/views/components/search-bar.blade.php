@@ -3,7 +3,7 @@
 <div>
     <div class="gap-2 items-center mt-4 mb-4 pl-4 pr-4 space-y-2 sm:flex sm:space-y-0">
         <div class="flex flex-1 gap-2 items-center">
-            <x-input id="search" class="w-full" type="text" placeholder="{{ __('I’m searching for…') }}" wire:model.live.debounce.500ms="{{ $searchModel }}" />
+            <x-input id="search" class="w-full" type="search" placeholder="{{ __('I’m searching for…') }}" wire:model.live.debounce.500ms="{{ $searchModel }}" />
 
             <livewire:components.search-hint-button />
         </div>

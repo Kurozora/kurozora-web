@@ -67,7 +67,7 @@
                 {{-- Search field --}}
                 <input
                     class="absolute top-0 left-0 px-10 h-full w-full border-0 bg-transparent text-primary focus:ring-0"
-                    type="text"
+                    type="search"
                     name="q"
                     placeholder="{{ [__('I’m searching for…'), __('Search faster with ⌘+K, ctrl+K or /')][array_rand([0,1])] }}"
                     x-ref="search" wire:model.live.debounce.500ms="searchQuery"

@@ -36,7 +36,7 @@
                     {{-- Search field --}}
                     <x-input
                         class="pr-8 pl-8 h-8 w-full text-sm"
-                        type="text"
+                        type="search"
                         name="q"
                         placeholder="{{ [__('Search'), '⌘+K, ctrl+K or /'][array_rand([0,1])] }}"
                         x-ref="search" wire:model.live.debounce.500ms="searchQuery"
