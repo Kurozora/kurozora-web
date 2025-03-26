@@ -62,7 +62,7 @@
         "musa11971/php-jwt-decoder": "dev-php-7.4-and-8.0-support",
         "pragmarx/google2fa": "^8.0",
         "pusher/pusher-php-server": "^7.0",
-        "roach-php/laravel": "dev-main",
+        "roach-php/laravel": "^3.2",
         "socialiteproviders/apple": "^5.0",
         "spatie/eloquent-sortable": "^4.0",
         "spatie/icalendar-generator": "^2.3",
@@ -113,10 +113,6 @@
         {
             "type": "git",
             "url": "https://github.com/W2nn3ss/nova-color-field"
-        },
-        {
-            "type": "git",
-            "url": "https://github.com/karlmonson/roach-php-laravel"
         },
         {
             "type": "git",
