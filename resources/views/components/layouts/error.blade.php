@@ -29,8 +29,8 @@
         <link rel="search" type="application/opensearchdescription+xml" title="{{ config('app.name') }}" href="{{ asset('opensearch.xml') }}">
 
         <!-- Scripts -->
-        <script src="{{ url(mix('js/theme.js')) }}" defer></script>
-        <script src="{{ url(mix('js/app.js')) }}" defer></script>
+        <script src="{{ url(mix('js/settings.js')) }}" defer data-navigate-track></script>
+        <script src="{{ url(mix('js/app.js')) }}" defer data-navigate-track></script>
 
         <!-- CSRF Token -->
         <meta name="csrf-token" content="{{ csrf_token() }}">

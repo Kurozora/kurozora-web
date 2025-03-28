@@ -43,12 +43,12 @@
         <link rel="search" type="application/opensearchdescription+xml" title="{{ config('app.name') }}" href="{{ asset('opensearch.xml') }}">
 
         <!-- Scripts -->
-        <script src="{{ url(mix('js/manifest.js')) }}" defer></script>
-        <script src="{{ url(mix('js/vendor.js')) }}" defer></script>
-        <script src="{{ url(mix('js/theme.js')) }}" defer></script>
-        <script src="{{ url(mix('js/app.js')) }}" defer></script>
+        <script src="{{ url(mix('js/manifest.js')) }}" defer data-navigate-track></script>
+        <script src="{{ url(mix('js/vendor.js')) }}" defer data-navigate-track></script>
+        <script src="{{ url(mix('js/settings.js')) }}" defer data-navigate-track></script>
+        <script src="{{ url(mix('js/app.js')) }}" defer data-navigate-track></script>
         @if (app()->isLocal())
-            <script src="{{ url(mix('js/debug.js')) }}" defer></script>
+            <script src="{{ url(mix('js/debug.js')) }}" defer data-navigate-track></script>
         @endif
 
         <!-- CSRF Token -->
