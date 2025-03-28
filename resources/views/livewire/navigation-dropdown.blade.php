@@ -72,7 +72,7 @@
                        x-transition:leave-start="opacity-100 scale-100"
                        x-transition:leave-end="opacity-0 scale-75"
                     >
-                        <x-logo class="block h-6 w-auto" />
+                        <x-app-icon />
                     </a>
 
                     {{-- Navigation Links --}}
@@ -89,7 +89,7 @@
                            x-transition:leave-start="opacity-100 scale-100"
                            x-transition:leave-end="opacity-0 scale-75"
                         >
-                            <x-logo class="block h-6 w-auto" />
+                            <x-app-icon />
                         </a>
 
                         <x-nav-link class="hidden md:inline-flex" href="{{ route('home') }}" wire:navigate :active="request()->routeIs('home')"

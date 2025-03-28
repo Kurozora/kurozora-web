@@ -1,18 +1,20 @@
 <aside class="hidden flex-col w-64 h-screen bg-primary z-[999] overflow-hidden xl:fixed xl:flex">
     <nav class="flex flex-col h-full border-e border-primary">
         <div class="flex flex-col gap-6 mt-4 mr-4 ml-4">
-            <a class="inline-flex items-center w-full space-x-2 text-secondary transition duration-150 ease-in-out hover:text-primary focus:text-primary"
-               href="/"
-               wire:navigate
-               x-transition:enter="ease-out duration-150 delay-100 transform sm:delay-[0ms]"
-               x-transition:enter-start="opacity-0 scale-75"
-               x-transition:enter-end="opacity-100 scale-100"
-               x-transition:leave="ease-in duration-200 delay-[50ms] transform sm:delay-[400ms]"
-               x-transition:leave-start="opacity-100 scale-100"
-               x-transition:leave-end="opacity-0 scale-75"
+            <a
+                class="inline-flex items-center w-full space-x-2 text-secondary transition duration-150 ease-in-out hover:text-primary focus:text-primary"
+                href="/"
+                wire:navigate
+                x-transition:enter="ease-out duration-150 delay-100 transform sm:delay-[0ms]"
+                x-transition:enter-start="opacity-0 scale-75"
+                x-transition:enter-end="opacity-100 scale-100"
+                x-transition:leave="ease-in duration-200 delay-[50ms] transform sm:delay-[400ms]"
+                x-transition:leave-start="opacity-100 scale-100"
+                x-transition:leave-end="opacity-0 scale-75"
             >
-                <x-logo class="block h-6 w-auto" />
-                <p class="font-bold">{{ __(config('app.name')) }}</p>
+                <x-app-icon />
+
+                <p class="text-2xl font-bold">{{ config('app.name') }}</p>
             </a>
 
             <div class="w-full">

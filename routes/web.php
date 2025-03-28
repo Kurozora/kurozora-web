@@ -48,6 +48,7 @@ require 'Web/AniDB.php';
 require 'Web/AniList.php';
 require 'Web/AnimePlanet.php';
 require 'Web/AniSearch.php';
+require 'Web/App Icon.php';
 require 'Web/Charts.php';
 require 'Web/Characters.php';
 require 'Web/Embed.php';
