@@ -4,7 +4,7 @@ namespace App\Livewire\ThemeStore;
 
 use App\Enums\KTheme;
 use App\Models\AppTheme;
-use Illuminate\Auth\Access\AuthorizationException;
+use App\Traits\Livewire\PresentsAlert;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -13,6 +13,8 @@ use Throwable;
 
 class GetButton extends Component
 {
+    use PresentsAlert;
+
     /**
      * The id of the theme.
      *
@@ -97,7 +99,11 @@ class GetButton extends Component
         }
 
         if (!($user->is_subscribed || $user->is_pro)) {
-            throw new AuthorizationException(__('Premium platform themes are only available to pro and subscribed users.'));
+            $this->presentAlert(
+                title: __('That’s Unfortunate'),
+                message: __('Premium themes are only available to pro and subscribed users 🧐')
+            );
+            return;
         }
 
         $appTheme = AppTheme::find($this->themeID);

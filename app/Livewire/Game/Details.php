@@ -7,6 +7,7 @@ use App\Models\Game;
 use App\Models\MediaRating;
 use App\Models\Studio;
 use App\Models\UserLibrary;
+use App\Traits\Livewire\PresentsAlert;
 use App\Traits\Livewire\WithReviewBox;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -16,7 +17,8 @@ use Livewire\Component;
 
 class Details extends Component
 {
-    use WithReviewBox;
+    use PresentsAlert,
+        WithReviewBox;
 
     /**
      * The object containing the game data.
@@ -66,23 +68,6 @@ class Details extends Component
      * @var bool $showVideo
      */
     public bool $showVideo = false;
-
-    /**
-     * Whether to show the popup to the user.
-     *
-     * @var bool $showPopup
-     */
-    public bool $showPopup = false;
-
-    /**
-     * The data used to populate the popup.
-     *
-     * @var array|string[]
-     */
-    public array $popupData = [
-        'title' => '',
-        'message' => '',
-    ];
 
     /**
      * Whether the component is ready to load.
@@ -171,7 +156,6 @@ class Details extends Component
     public function showTrailerVideo(): void
     {
         $this->showVideo = true;
-        $this->showPopup = true;
     }
 
     /**
@@ -209,18 +193,16 @@ class Details extends Component
 
                 $this->isReminded = !$this->isReminded;
             } else {
-                $this->popupData = [
-                    'title' => __('Are you tracking?'),
-                    'message' => __('Make sure to add the game to your library first.'),
-                ];
-                $this->showPopup = true;
+                $this->presentAlert(
+                    title: __('Are you tracking?'),
+                    message: __('Make sure to add the game to your library first.')
+                );
             }
         } else {
-            $this->popupData = [
-                'title' => __('That’s Unfortunate'),
-                'message' => __('This feature is only accessible to pro users 🧐'),
-            ];
-            $this->showPopup = true;
+            $this->presentAlert(
+                title: __('That’s Unfortunate'),
+                message: __('Reminders are only available to pro and subscribed users 🧐'),
+            );
         }
     }
 

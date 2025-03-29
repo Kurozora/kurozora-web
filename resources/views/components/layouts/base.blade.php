@@ -141,6 +141,8 @@
 
                 <x-footer />
             </div>
+
+            <livewire:components.alert />
         </div>
 
         <script src="{{ url(mix('js/listen.js')) }}"></script>

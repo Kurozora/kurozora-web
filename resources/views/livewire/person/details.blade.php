@@ -193,18 +193,4 @@
     </div>
 
     <livewire:components.review-box :review-box-id="$reviewBoxID" :model-id="$person->id" :model-type="$person->getMorphClass()" :user-rating="$userRating?->first()" />
-
-    <x-dialog-modal maxWidth="md" model="showPopup">
-        <x-slot:title>
-            {{ $popupData['title'] }}
-        </x-slot:title>
-
-        <x-slot:content>
-            <p>{{ $popupData['message'] }}</p>
-        </x-slot:content>
-
-        <x-slot:footer>
-            <x-button wire:click="$toggle('showPopup')">{{ __('Ok') }}</x-button>
-        </x-slot:footer>
-    </x-dialog-modal>
 </main>

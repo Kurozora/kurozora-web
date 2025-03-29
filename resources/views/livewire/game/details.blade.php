@@ -526,21 +526,8 @@
                 </iframe>
             </x-slot:content>
 
-            <x-slot:footer>
-                <x-button wire:click="$toggle('showPopup')">{{ __('Close') }}</x-button>
-            </x-slot:footer>
-        @else
-            <x-slot:title>
-                {{ $popupData['title'] }}
-            </x-slot:title>
-
-            <x-slot:content>
-                <p>{{ $popupData['message'] }}</p>
-            </x-slot:content>
-
-            <x-slot:footer>
-                <x-button wire:click="$toggle('showPopup')">{{ __('Ok') }}</x-button>
-            </x-slot:footer>
-        @endif
+        <x-slot:footer>
+            <x-button wire:click="$toggle('showVideo')">{{ __('Close') }}</x-button>
+        </x-slot:footer>
     </x-dialog-modal>
 </main>

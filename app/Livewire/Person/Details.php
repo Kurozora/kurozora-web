@@ -31,24 +31,6 @@ class Details extends Component
     public Collection|array $userRating;
 
     /**
-     * Whether to show the popup to the user.
-     *
-     * @var bool $showPopup
-     */
-    public bool $showPopup = false;
-
-    /**
-     * The data used to populate the popup.
-     *
-     * @var array|string[]
-     */
-    public array $popupData = [
-        'title' => '',
-        'message' => '',
-        'type' => 'default'
-    ];
-
-    /**
      * Whether the component is ready to load.
      *
      * @var bool $readyToLoad

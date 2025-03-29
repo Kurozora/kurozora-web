@@ -94,36 +94,11 @@ class Details extends Component
     public $timestamp = 0;
 
     /**
-     * Whether to show the video to the user.
-     *
-     * @var bool $showVideo
-     */
-    public bool $showVideo = false;
-
-    /**
-     * Whether to show the popup to the user.
-     *
-     * @var bool $showPopup
-     */
-    public bool $showPopup = false;
-
-    /**
      * Whether to show the share popup to the user.
      *
      * @var bool $showSharePopup
      */
     public bool $showSharePopup = false;
-
-    /**
-     * The data used to populate the popup.
-     *
-     * @var array|string[]
-     */
-    public array $popupData = [
-        'title' => '',
-        'message' => '',
-        'type' => 'default',
-    ];
 
     /**
      * The query strings of the component.
@@ -271,16 +246,6 @@ class Details extends Component
     }
 
     /**
-     * Shows the trailer video to the user.
-     *
-     * @return void
-     */
-    public function showTrailerVideo(): void
-    {
-        $this->showVideo = true;
-    }
-
-    /**
      * Select the preferred video source.
      *
      * @param string $source
@@ -341,20 +306,16 @@ class Details extends Component
 
                 $this->isReminded = !$this->isReminded;
             } else {
-                $this->popupData = [
-                    'title' => __('Are you tracking?'),
-                    'message' => __('Make sure to add the anime to your library first.'),
-                    'type' => 'default',
-                ];
-                $this->showPopup = true;
+                $this->presentAlert(
+                    title: __('Are you tracking?'),
+                    message: __('Make sure to add the anime to your library first.')
+                );
             }
         } else {
-            $this->popupData = [
-                'title' => __('That’s Unfortunate'),
-                'message' => __('This feature is only accessible to pro users 🧐'),
-                'type' => 'default',
-            ];
-            $this->showPopup = true;
+            $this->presentAlert(
+                title: __('That’s Unfortunate'),
+                message: __('Reminders are only available to pro and subscribed users 🧐'),
+            );
         }
     }
 
