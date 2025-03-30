@@ -6,14 +6,10 @@
 >
     <x-tinted-pill-button
         :color="'orange'"
-        title="{{ $currentThemeID ? __('Using ‘:x’ theme', ['x' => $name]) : __('Get ‘:x’ theme', ['x' => $name]) }}"
+        title="{{ $currentThemeID === $themeID ? __('Using ‘:x’ theme', ['x' => $name]) : __('Get ‘:x’ theme', ['x' => $name]) }}"
         wire:click="getTheme"
         wire:loading.attr="disabled"
     >
-        @if ($currentThemeID === $themeID)
-            <span>{{ __('USING') }}</span>
-        @else
-            <span>{{ __('GET') }}</span>
-        @endif
+        <span x-text="currentThemeID === '{{ $themeID }}' ? '{{ __('USING') }}' : '{{ __('GET') }}'"></span>
     </x-tinted-pill-button>
 </div>
