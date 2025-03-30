@@ -437,6 +437,7 @@
         {{-- Responsive Navigation Menu --}}
         <div
             class="block absolute pl-4 pr-4 w-full bg-primary rounded-b-2xl z-[300] md:hidden"
+            x-cloak
             x-show="isNavOpen"
             x-collapse.duration.400ms=""
         >
@@ -664,6 +665,7 @@
     {{-- Responsive Overlay --}}
     <div
         class="fixed inset-0 transform transition-all z-[299] md:hidden"
+        x-cloak
         x-show="isNavOpen"
         x-on:click="isNavOpen = false;"
         x-transition:enter="ease-out duration-300"
