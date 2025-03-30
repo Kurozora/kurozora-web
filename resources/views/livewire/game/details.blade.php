@@ -85,9 +85,9 @@
         games/{{ $game->id }}
     </x-slot:appArgument>
 
-    <div class="grid grid-rows-[repeat(2,minmax(0,min-content))] h-full xl:grid-rows-none xl:grid-cols-2 2xl:grid-cols-3 xl:mb-0" wire:init="loadPage">
+    <div class="pb-6" wire:init="loadPage">
         <div class="relative">
-            <div class="relative flex flex-nowrap aspect-video md:relative md:h-full xl:aspect-auto">
+            <div class="relative flex flex-nowrap aspect-video md:relative md:h-full">
                 <x-picture
                     class="w-full overflow-hidden"
                     style="background-color: {{ ($game->getFirstMedia(\App\Enums\MediaCollection::Banner) ?? $game->getFirstMedia(\App\Enums\MediaCollection::Poster))?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
@@ -171,7 +171,7 @@
             </div>
         </div>
 
-        <div class="pt-4 2xl:col-span-2 xl:max-h-[calc(100vh-48px)] overflow-x-hidden overflow-y-scroll no-scrollbar">
+        <div class="pt-4">
             <section id="badges" class="flex flex-row flex-nowrap whitespace-nowrap justify-between items-center text-center pb-5 pl-4 pr-4 overflow-x-scroll no-scrollbar">
                 <div id="ratingBadge" class="flex-grow pr-12">
                     <a href="#ratingsAndReviews">
@@ -504,27 +504,26 @@
 
     <livewire:components.review-box :review-box-id="$reviewBoxID" :model-id="$game->id" :model-type="$game->getMorphClass()" :user-rating="$userRating?->first()" />
 
-    <x-dialog-modal maxWidth="md" model="showPopup">
-        @if ($showVideo)
-            <x-slot:title>
-                {{ $game->title . ' Official Trailer' }}
-            </x-slot:title>
+    <x-dialog-modal maxWidth="md" model="showVideo">
+        <x-slot:title>
+            {{ $game->title . ' Official Trailer' }}
+        </x-slot:title>
 
-            <x-slot:content>
-                <iframe
-                    class="w-full aspect-video lazyload"
-                    type="text/html"
-                    allowfullscreen="allowfullscreen"
-                    mozallowfullscreen="mozallowfullscreen"
-                    msallowfullscreen="msallowfullscreen"
-                    oallowfullscreen="oallowfullscreen"
-                    webkitallowfullscreen="webkitallowfullscreen"
-                    allow="fullscreen;"
-                    data-size="auto"
-                    data-src="https://www.youtube-nocookie.com/embed/{{ str($game->video_url)->after('?v=') }}?autoplay=0&iv_load_policy=3&disablekb=1&color=red&rel=0&cc_load_policy=0&start=0&end=0&origin={{ config('app.url') }}&modestbranding=1&playsinline=1&loop=1&playlist={{ str($game->video_url)->after('?v=') }}"
-                >
-                </iframe>
-            </x-slot:content>
+        <x-slot:content>
+            <iframe
+                class="w-full aspect-video lazyload"
+                type="text/html"
+                allowfullscreen="allowfullscreen"
+                mozallowfullscreen="mozallowfullscreen"
+                msallowfullscreen="msallowfullscreen"
+                oallowfullscreen="oallowfullscreen"
+                webkitallowfullscreen="webkitallowfullscreen"
+                allow="fullscreen;"
+                data-size="auto"
+                data-src="https://www.youtube-nocookie.com/embed/{{ str($game->video_url)->after('?v=') }}?autoplay=0&iv_load_policy=3&disablekb=1&color=red&rel=0&cc_load_policy=0&start=0&end=0&origin={{ config('app.url') }}&modestbranding=1&playsinline=1&loop=1&playlist={{ str($game->video_url)->after('?v=') }}"
+            >
+            </iframe>
+        </x-slot:content>
 
         <x-slot:footer>
             <x-button wire:click="$toggle('showVideo')">{{ __('Close') }}</x-button>

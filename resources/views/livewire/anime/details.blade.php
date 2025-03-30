@@ -532,21 +532,21 @@
             {{ $anime->title . ' Official Trailer' }}
         </x-slot:title>
 
-            <x-slot:content>
-                <iframe
-                    class="w-full aspect-video lazyload"
-                    type="text/html"
-                    allowfullscreen="allowfullscreen"
-                    mozallowfullscreen="mozallowfullscreen"
-                    msallowfullscreen="msallowfullscreen"
-                    oallowfullscreen="oallowfullscreen"
-                    webkitallowfullscreen="webkitallowfullscreen"
-                    allow="fullscreen;"
-                    data-size="auto"
-                    data-src="https://www.youtube-nocookie.com/embed/{{ str($anime->video_url)->after('?v=') }}?autoplay=0&iv_load_policy=3&disablekb=1&color=red&rel=0&cc_load_policy=0&start=0&end=0&origin={{ config('app.url') }}&modestbranding=1&playsinline=1&loop=1&playlist={{ str($anime->video_url)->after('?v=') }}"
-                >
-                </iframe>
-            </x-slot:content>
+        <x-slot:content>
+            <iframe
+                class="w-full aspect-video lazyload"
+                type="text/html"
+                allowfullscreen="allowfullscreen"
+                mozallowfullscreen="mozallowfullscreen"
+                msallowfullscreen="msallowfullscreen"
+                oallowfullscreen="oallowfullscreen"
+                webkitallowfullscreen="webkitallowfullscreen"
+                allow="fullscreen;"
+                data-size="auto"
+                data-src="https://www.youtube-nocookie.com/embed/{{ str($anime->video_url)->after('?v=') }}?autoplay=0&iv_load_policy=3&disablekb=1&color=red&rel=0&cc_load_policy=0&start=0&end=0&origin={{ config('app.url') }}&modestbranding=1&playsinline=1&loop=1&playlist={{ str($anime->video_url)->after('?v=') }}"
+            >
+            </iframe>
+        </x-slot:content>
 
         <x-slot:footer>
             <x-button wire:click="$toggle('showVideo')">{{ __('Close') }}</x-button>
