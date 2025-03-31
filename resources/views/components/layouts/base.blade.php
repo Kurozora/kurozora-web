@@ -129,12 +129,12 @@
                     ></x-alert>
                 @endif
 
-                @if (Session::has('success'))
-                    <x-alert :message="Session::get('success')" type="success"></x-alert>
+                @if (session()->has('success'))
+                    <x-alert :message="session('success')" type="success"></x-alert>
                 @endif
 
-                @if (Session::has('error'))
-                    <x-alert :message="Session::get('error')" type="error"></x-alert>
+                @if (session()->has('error'))
+                    <x-alert :message="session('error')" type="error"></x-alert>
                 @endif
 
                 {{ $slot }}

@@ -44,6 +44,7 @@ use Illuminate\Routing\Middleware\ThrottleRequests;
 use Illuminate\Routing\Middleware\ThrottleRequestsWithRedis;
 use Illuminate\Routing\Middleware\ValidateSignature;
 use Illuminate\Session\Middleware\StartSession;
+use Illuminate\Session\TokenMismatchException;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
@@ -169,6 +170,11 @@ return Application::configure(basePath: dirname(__DIR__))
                 'password_confirmation',
             ])
             ->render(function (Throwable $e, $request) {
+                if ($e->getPrevious() instanceof TokenMismatchException) {
+                    session()->flash('error', __('Session expired, please try again.'));
+                    return null;
+                }
+
                 $renderAPIException = app()->isLocal() ?
                     str($request->url())->contains('api') :
                     str($request->root())->startsWith($request->getScheme() . '://api.');
