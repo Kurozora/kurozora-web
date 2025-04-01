@@ -4,13 +4,13 @@
     </x-slot:title>
 
     <x-slot:header>
-        <h2 class="font-semibold text-xl text-primary leading-tight">
+        <h2 class="text-2xl font-bold">
             {{ __(':x Account', ['x' => config('app.name')]) }}
         </h2>
     </x-slot:header>
 
     <div x-data="{ recovery: false }"
-         class="flex flex-col justify-center max-w-prose w-screen h-full mx-auto pl-4 pr-4 py-6"
+         class="flex flex-col justify-center max-w-prose w-screen h-full mx-auto pt-4 pb-6 pl-4 pr-4"
     >
         <div class="mb-5 text-center text-secondary" x-show="!recovery" x-cloak>
             <h1 class="text-2xl font-bold">{{ __('Enter Authorization Code') }}</h1>

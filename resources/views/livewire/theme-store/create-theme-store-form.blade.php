@@ -18,14 +18,14 @@
     {{-- Header --}}
     <section class="bg-secondary shadow">
         <article>
-            <header class="flex py-6 pl-4 pr-4">
-                <h1 class="font-semibold text-xl text-primary leading-tight">{{ __('Create Theme') }}</h1>
+            <header class="flex pt-4 pb-6 pl-4 pr-4">
+                <h2 class="text-2xl font-bold">{{ __('Create Theme') }}</h2>
             </header>
         </article>
     </section>
 
     {{-- Content --}}
-    <section class="pl-4 pr-4 py-6">
+    <section class="pt-4 pb-6 pl-4 pr-4">
         <div class="text-center mt-6">
             <h1 class="text-2xl font-black">{{ __('Create your own theme') }}</h1>
             <p>{{ __('Take your time and make something great, we\'ll leave you to it.') }}</p>
@@ -34,7 +34,7 @@
         <livewire:theme-store.theme-store-roller />
     </section>
 
-    <section class="max-w-7xl mx-auto pl-4 pr-4 py-6 text-center">
+    <section class="max-w-7xl mx-auto pt-4 pb-6 pl-4 pr-4 text-center">
         <h1 class="text-xl font-bold">{{ __('Finished designing your theme?') }}</h1>
         <p>{{ __ ('Use the button below to submit your theme to the :x team for approval.', ['x' => config('app.name')]) }}</p>
 

@@ -4,7 +4,7 @@
     </x-slot:title>
 
     <x-slot:header>
-        <h2 class="font-semibold text-xl text-primary leading-tight">
+        <h2 class="text-2xl font-bold">
             {{ __(':x Account', ['x' => config('app.name')]) }}
         </h2>
     </x-slot:header>

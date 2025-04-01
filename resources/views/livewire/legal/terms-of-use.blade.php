@@ -22,17 +22,17 @@
     {{-- Header --}}
     <section class="bg-secondary shadow">
         <article>
-            <header class="flex pl-4 pr-4 py-6">
-                <h1 class="font-semibold text-xl text-primary leading-tight">{{ __('Legal') }}</h1>
+            <header class="flex pt-4 pb-6 pl-4 pr-4">
+                <h2 class="text-2xl font-bold">{{ __('Legal') }}</h2>
             </header>
         </article>
     </section>
 
     {{-- Content --}}
-    <section class="pl-4 pr-4 py-6">
+    <section class="pt-4 pb-6 pl-4 pr-4">
         <article>
             <hedaer class="text-center mt-16">
-                <h2 class="text-xl font-bold">{{ __('Terms of Use') }}</h2>
+                <h1 class="text-xl font-bold">{{ __('Terms of Use') }}</h1>
             </hedaer>
         </article>
 

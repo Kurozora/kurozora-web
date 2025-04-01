@@ -15,7 +15,7 @@
         <link rel="canonical" href="{{ route('anime.seasons.archive') }}">
     </x-slot:meta>
 
-    <div class="py-6">
+    <div class="pt-4 pb-6">
         <h1 class="pl-4 pr-4 text-2xl font-bold">{{ __('Seasonal Anime Archive') }}</h1>
 
         <section>

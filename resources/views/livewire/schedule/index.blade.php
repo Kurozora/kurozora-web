@@ -16,7 +16,7 @@
     </x-slot:meta>
 
     <div
-        class="py-6"
+        class="pt-4 pb-6"
         x-data="{
             selectedDate: null
         }"

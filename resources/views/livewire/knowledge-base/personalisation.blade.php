@@ -14,7 +14,7 @@
         <meta property="og:type" content="website" />
     </x-slot:meta>
 
-    <div class="py-6 max-w-full prose prose-theme lg:prose-lg">
+    <div class="pt-4 pb-6 max-w-full prose prose-theme lg:prose-lg">
         <x-picture class="mb-8 ml-4 mr-4 not-prose">
             <img class="h-32 w-full object-cover object-center rounded-lg shadow-lg sm:h-60" src="{{ asset('images/static/banners/personalisation.webp') }}"  alt="About Personalisation" />
         </x-picture>

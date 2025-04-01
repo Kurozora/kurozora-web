@@ -25,7 +25,7 @@
             <livewire:components.banner-image-view :user="$user" />
         </section>
 
-        <section class="relative pl-4 pr-4 py-6 z-10">
+        <section class="relative pt-4 pb-6 pl-4 pr-4 z-10">
             <div class="flex items-end justify-between -mt-14 sm:-mt-20">
                 <div class="flex items-end">
                     <div class="relative">

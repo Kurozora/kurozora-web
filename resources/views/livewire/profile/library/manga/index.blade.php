@@ -14,7 +14,7 @@
         <meta property="og:type" content="website" />
     </x-slot:meta>
 
-    <div class="py-6">
+    <div class="pt-4 pb-6">
         <div class="flex flex-nowrap gap-4 justify-between pl-4 pr-4 text-center whitespace-nowrap overflow-x-scroll no-scrollbar">
             @foreach (\App\Enums\UserLibraryStatus::asMangaSelectArray() as $key => $value)
                 <button

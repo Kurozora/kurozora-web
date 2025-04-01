@@ -37,7 +37,7 @@
         search
     </x-slot:appArgument>
 
-    <div class="py-6" wire:init="loadPage">
+    <div class="pt-4 pb-6" wire:init="loadPage">
         <section class="mb-4">
             <div class="flex gap-1 pl-4 pr-4">
                 <div class="flex flex-wrap items-center w-full">

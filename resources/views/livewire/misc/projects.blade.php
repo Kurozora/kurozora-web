@@ -33,7 +33,7 @@
 
         {{-- Projects --}}
         <section class="pt-36 pb-10 bg-secondary">
-            <div class="max-w-7xl mx-auto pl-4 pr-4 py-6">
+            <div class="max-w-7xl mx-auto pt-4 pb-6 pl-4 pr-4">
                 <div class="flex flex-wrap justify-between gap-4">
                     <div class="flex flex-col w-full gap-2 md:w-3/4">
                         <h2 class="text-4xl font-semibold">{{ __('Open-source projects') }}</h2>

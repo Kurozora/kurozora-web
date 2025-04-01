@@ -15,7 +15,7 @@
         <link rel="canonical" href="{{ route('misc.team') }}">
     </x-slot:meta>
 
-    <div class="py-6">
+    <div class="pt-4 pb-6">
         <x-picture class="ml-4 mr-4">
             <img class="h-32 w-full object-cover object-center rounded-lg shadow-lg sm:h-60" src="{{ asset('images/static/banners/made_with_love.webp') }}" alt="Made with love by an amazing community." />
         </x-picture>

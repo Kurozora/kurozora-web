@@ -15,7 +15,7 @@
         <link rel="canonical" href="{{ route('charts.index') }}">
     </x-slot:meta>
 
-    <div class="py-6">
+    <div class="pt-4 pb-6">
         <section class="mb-4">
             <div class="flex gap-1 pl-4 pr-4">
                 <div class="flex flex-wrap items-center w-full">

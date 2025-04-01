@@ -19,7 +19,7 @@
         themes
     </x-slot:appArgument>
 
-    <div class="py-6">
+    <div class="pt-4 pb-6">
         <section class="grid gap-4 pl-4 pr-4 sm:grid-cols-2 lg:grid-cols-4">
             @foreach ($themes as $theme)
                 <x-lockups.theme-lockup :theme="$theme" />

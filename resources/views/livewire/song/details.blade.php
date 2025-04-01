@@ -49,7 +49,7 @@
         }"
         x-on:musicmanagerloaded.window="await fetchSongData('{{ $song->am_id }}')"
     >
-        <div class="py-6">
+        <div class="pt-4 pb-6">
             <section class="flex flex-col items-center gap-4 pb-8 pl-4 pr-4">
                 <div style="max-width: 320px">
                     <x-picture class="aspect-square rounded-lg natural-shadow overflow-hidden">

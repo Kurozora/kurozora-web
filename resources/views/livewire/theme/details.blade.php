@@ -26,7 +26,7 @@
         themes/{{ $theme->id }}
     </x-slot:appArgument>
 
-    <div class="py-6">
+    <div class="pt-4 pb-6">
         <section class="relative mb-8 ml-4 mr-4 rounded-lg shadow-md overflow-hidden" style="{{ $backgroundColor }}">
             <picture class="flex justify-center">
                 <img class="aspect-square lazyload" width="250px" data-sizes="auto" data-src="{{ $theme->getFirstMediaFullUrl(\App\Enums\MediaCollection::Symbol()) ?? asset('images/static/icon/logo.webp') }}" alt="{{ $theme->name }} Symbol" title="{{ $theme->name }}">

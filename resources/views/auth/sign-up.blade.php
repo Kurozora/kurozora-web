@@ -4,12 +4,12 @@
     </x-slot:title>
 
     <x-slot:header>
-        <h2 class="font-semibold text-xl text-primary leading-tight">
+        <h2 class="text-2xl font-bold">
             {{ __(':x Account', ['x' => config('app.name')]) }}
         </h2>
     </x-slot:header>
 
-    <div class="flex flex-col justify-center w-screen h-full max-w-prose mx-auto pl-4 pr-4 py-6">
+    <div class="flex flex-col justify-center w-screen h-full max-w-prose mx-auto pt-4 pb-6 pl-4 pr-4">
         <div class="mb-5 text-center">
             <h1 class="text-2xl font-bold">{{ __('New to :x?', ['x' => config('app.name')]) }}</h1>
             <p>{{ __('Create an account and join the community.') }}</p>

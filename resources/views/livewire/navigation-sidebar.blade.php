@@ -1,6 +1,6 @@
 <aside class="hidden flex-col w-64 h-screen bg-primary z-[999] overflow-hidden xl:fixed xl:flex">
     <nav class="flex flex-col h-full border-e border-primary">
-        <div class="flex flex-col gap-6 mt-4 mr-4 ml-4">
+        <div class="flex flex-col gap-4 mt-4 mr-4 ml-4">
             <a
                 class="inline-flex items-center w-full space-x-2 text-secondary transition duration-150 ease-in-out hover:text-primary focus:text-primary"
                 href="/"

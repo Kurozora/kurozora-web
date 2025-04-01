@@ -19,7 +19,7 @@
         app-icon
     </x-slot:appArgument>
 
-    <div class="py-6">
+    <div class="pt-4 pb-6">
         <section class="mb-4">
             <div>
                 <div class="flex gap-1 pl-4 pr-4">
