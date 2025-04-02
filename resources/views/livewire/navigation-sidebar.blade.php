@@ -48,12 +48,8 @@
         </div>
 
         <div class="flex flex-col justify-between w-full h-full overflow-y-scroll">
-            <div class="mt-4 mr-4 ml-4">
-                <section>
-                    <div>
-                        <h2 class="text-secondary text-sm font-semibold">{{ config('app.name') }}</h2>
-                    </div>
-
+            <div class="mr-4 ml-4">
+                <section class="mt-4">
                     <x-sidebar-nav-link href="{{ route('home') }}" wire:navigate :active="request()->routeIs('home')">
                         @svg('house', 'fill-current', ['width' => '18']) {{ __('Explore') }}
                     </x-sidebar-nav-link>
@@ -103,25 +99,57 @@
                     </x-sidebar-nav-link>
                 </section>
 
-                <section>
-                    <div>
-                        <h2 class="text-secondary text-sm font-semibold">{{ __('Library') }}</h2>
-                    </div>
+                @auth
+                    <section class="mt-4">
+                        <div class="mb-2">
+                            <h2 class="text-secondary text-sm font-semibold">{{ __('Library') }}</h2>
+                        </div>
 
-                    <x-sidebar-nav-link href="{{ route('profile.anime.library', $user) }}" wire:navigate :active="request()->routeIs('profile.anime.library', $user)">
-                        @svg('tv', 'fill-current', ['width' => '18']) {{ __('Anime') }}
-                    </x-sidebar-nav-link>
+                        <x-sidebar-nav-link href="{{ route('profile.anime.library', $user) }}" wire:navigate :active="request()->routeIs('profile.anime.library', $user)">
+                            @svg('tv', 'fill-current', ['width' => '18']) {{ __('Anime') }}
+                        </x-sidebar-nav-link>
 
-                    <x-sidebar-nav-link href="{{ route('profile.manga.library', $user) }}" wire:navigate :active="request()->routeIs('profile.manga.library', $user)">
-                        @svg('book', 'fill-current', ['width' => '18']) {{ __('Manga') }}
-                    </x-sidebar-nav-link>
+                        <x-sidebar-nav-link href="{{ route('profile.manga.library', $user) }}" wire:navigate :active="request()->routeIs('profile.manga.library', $user)">
+                            @svg('book', 'fill-current', ['width' => '18']) {{ __('Manga') }}
+                        </x-sidebar-nav-link>
 
-                    <x-sidebar-nav-link href="{{ route('profile.games.library', $user) }}" wire:navigate :active="request()->routeIs('profile.games.library', $user)">
-                        @svg('gamecontroller', 'fill-current', ['width' => '18']) {{ __('Games') }}
-                    </x-sidebar-nav-link>
-                </section>
+                        <x-sidebar-nav-link href="{{ route('profile.games.library', $user) }}" wire:navigate :active="request()->routeIs('profile.games.library', $user)">
+                            @svg('gamecontroller', 'fill-current', ['width' => '18']) {{ __('Games') }}
+                        </x-sidebar-nav-link>
+                    </section>
+
+                    <section class="mt-4">
+                        <div class="mb-2">
+                            <h2 class="text-secondary text-sm font-semibold">{{ __('Favorite') }}</h2>
+                        </div>
+
+                        <x-sidebar-nav-link href="{{ route('profile.anime.favorites', $user) }}" wire:navigate :active="request()->routeIs('profile.anime.favorites', $user)">
+                            @svg('tv', 'fill-current', ['width' => '18']) {{ __('Anime') }}
+                        </x-sidebar-nav-link>
+
+                        <x-sidebar-nav-link href="{{ route('profile.manga.favorites', $user) }}" wire:navigate :active="request()->routeIs('profile.manga.favorites', $user)">
+                            @svg('book', 'fill-current', ['width' => '18']) {{ __('Manga') }}
+                        </x-sidebar-nav-link>
+
+                        <x-sidebar-nav-link href="{{ route('profile.games.favorites', $user) }}" wire:navigate :active="request()->routeIs('profile.games.favorites', $user)">
+                            @svg('gamecontroller', 'fill-current', ['width' => '18']) {{ __('Games') }}
+                        </x-sidebar-nav-link>
+                    </section>
+
+                    <section class="mt-4">
+                        <div class="mb-2">
+                            <h2 class="text-secondary text-sm font-semibold">{{ __('Reminder') }}</h2>
+                        </div>
+
+                        <x-sidebar-nav-link href="{{ route('profile.anime.reminders', $user) }}" wire:navigate :active="request()->routeIs('profile.anime.reminders', $user)">
+                            @svg('tv', 'fill-current', ['width' => '18']) {{ __('Anime') }}
+                        </x-sidebar-nav-link>
+                    </section>
+                @endauth
             </div>
+        </div>
 
+        <div>
             <a href="{{ empty($user) ? route('sign-in') : route('me') }}" class="flex items-center pl-4 pt-4 pr-4 pb-4" wire:navigate>
                 @auth
                     <div class="shrink-0">
