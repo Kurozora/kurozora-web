@@ -18,7 +18,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Pipeline\Pipeline;
 use Illuminate\Routing\Redirector;
-use Session;
 use Throwable;
 
 class SignUpUserController extends Controller
@@ -65,7 +64,7 @@ class SignUpUserController extends Controller
         event(new Registered($newUser));
 
         return $this->signInPipeline($request)->then(function () {
-            Session::flash('success', __('Account created successfully! Please check your email for confirmation.'));
+            session()->flash('success', __('Account created successfully! Please check your email for confirmation.'));
 
             return redirect()->intended();
         });

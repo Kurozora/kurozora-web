@@ -15,7 +15,6 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use Livewire\Component;
 use Livewire\Features\SupportRedirects\Redirector;
-use Session;
 
 class MergeLibrary extends Component
 {
@@ -143,7 +142,7 @@ class MergeLibrary extends Component
     public function finishMerge(bool $merging): Redirector
     {
         if ($merging) {
-            Session::flash('success', __('Local Library import is in progress.'));
+            session()->flash('success', __('Local Library import is in progress.'));
         }
 
         return $this->goToHome();

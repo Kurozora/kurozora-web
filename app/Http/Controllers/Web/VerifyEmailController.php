@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Web;
 use App\Http\Requests\VerifyEmailRequest;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Http\RedirectResponse;
-use Session;
 
 class VerifyEmailController
 {
@@ -25,7 +24,7 @@ class VerifyEmailController
             event(new Verified($request->user()));
         }
 
-        Session::flash('success', __('Your email has been verified!'));
+        session()->flash('success', __('Your email has been verified!'));
 
         return redirect()->intended('/?verified=1');
     }
