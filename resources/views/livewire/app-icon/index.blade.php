@@ -12,7 +12,7 @@
         <meta property="og:description" content="{{ __('Discover the extensive list of app icons only on :x, the largest, free online anime, manga, game & music database in the world.', ['x' => config('app.name')]) }}" />
         <meta property="og:image" content="{{ asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="og:type" content="website" />
-        <link rel="canonical" href="{{ route('app-icon.index') }}">
+        <link rel="canonical" href="{{ route('app-icons.index') }}">
     </x-slot:meta>
 
     <x-slot:appArgument>
