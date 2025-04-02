@@ -96,11 +96,11 @@ class Index extends Component
                         $fileName = $file->getFilename();
 
                         if (preg_match('/^(.+?)~dark\.webp$/', $fileName)) {
-                            $dark = "$this->iconPath/$category/$iconName/$fileName";
+                            $dark = "/$this->iconPath/$category/$iconName/$fileName";
                         } elseif (preg_match('/^(.+?)~tinted\.webp$/', $fileName)) {
-                            $tinted = "$this->iconPath/$category/$iconName/$fileName";
+                            $tinted = "/$this->iconPath/$category/$iconName/$fileName";
                         } elseif (preg_match('/^(.+?)\.webp$/', $fileName)) {
-                            $light = "$this->iconPath/$category/$iconName/$fileName";
+                            $light = "/$this->iconPath/$category/$iconName/$fileName";
                         }
                     });
 
