@@ -27,7 +27,7 @@ class GetButton extends Component
      *
      * @var int|string $currentThemeID
      */
-    public int|string $currentThemeID;
+    public int|string $currentThemeID = 'kurozora';
 
     /**
      * The name of the theme.
