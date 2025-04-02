@@ -12,7 +12,7 @@ class MentionParser extends BaseMentionParser
      *
      * @var array
      */
-    protected $defaultConfig = [
+    protected array $defaultConfig = [
         'pool' => 'users',
         'mention' => true,
         'notify' => true,
