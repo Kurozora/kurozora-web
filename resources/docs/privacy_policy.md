@@ -2,7 +2,7 @@
 
 <div style="text-align: center;">
 
-### The Kurozora Privacy Policy was updated on #UPDATE_DATE#.
+#### The Kurozora Privacy Policy was updated on #UPDATE_DATE#.
 Your privacy is important to Kurozora, so we have developed a Privacy Policy that covers how we collect, use, disclose, transfer, and store your personal information.
 <div></div>
 
