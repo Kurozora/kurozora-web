@@ -26,6 +26,7 @@ use App\Models\Song;
 use App\Models\Studio;
 use App\Models\User;
 use App\Models\UserLibrary;
+use App\Scopes\IgnoreListScope;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -89,7 +90,12 @@ class SearchController extends Controller
                             ->where('user_id', auth()->id())
                             ->where('trackable_type', addslashes(Game::class))
                             ->query(function ($query) {
-                                $query->with(['trackable', 'user']);
+                                $query->with([
+                                    'trackable' => function ($query) {
+                                        $query->withoutGlobalScopes([IgnoreListScope::class]);
+                                    },
+                                    'user'
+                                ]);
                             });
                         $this->filter(Game::class, $request, $resource);
                         $resource = $resource->paginate($data['limit'] ?? 5)
@@ -120,7 +126,12 @@ class SearchController extends Controller
                             ->where('user_id', auth()->id())
                             ->where('trackable_type', addslashes(Manga::class))
                             ->query(function ($query) {
-                                $query->with(['trackable', 'user']);
+                                $query->with([
+                                    'trackable' => function ($query) {
+                                        $query->withoutGlobalScopes([IgnoreListScope::class]);
+                                    },
+                                    'user'
+                                ]);
                             });
                         $this->filter(Manga::class, $request, $resource);
                         $resource = $resource->paginate($data['limit'] ?? 5)
@@ -165,7 +176,12 @@ class SearchController extends Controller
                             ->where('user_id', auth()->id())
                             ->where('trackable_type', addslashes(Anime::class))
                             ->query(function ($query) {
-                                $query->with(['trackable', 'user']);
+                                $query->with([
+                                    'trackable' => function ($query) {
+                                        $query->withoutGlobalScopes([IgnoreListScope::class]);
+                                    },
+                                    'user'
+                                ]);
                             });
                         $this->filter(Anime::class, $request, $resource);
                         $resource = $resource->paginate($data['limit'] ?? 5)
