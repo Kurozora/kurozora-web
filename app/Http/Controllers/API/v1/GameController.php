@@ -479,7 +479,13 @@ class GameController extends Controller
 
         // Get the anime studios
         $mediaStudios = $game->studios()
-            ->with(['media'])
+            ->with([
+                'media',
+                'mediaStat',
+                'successor',
+                'predecessors',
+                'tv_rating',
+            ])
             ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
 
         // Get next page url minus domain
