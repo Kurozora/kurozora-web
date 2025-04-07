@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class GetGameStudiosRequest extends FormRequest
+class GetPaginatedRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,7 +25,7 @@ class GetGameStudiosRequest extends FormRequest
     {
         return [
             'limit' => ['bail', 'integer', 'min:1', 'max:100'],
-            'page'  => ['bail', 'integer', 'min:1']
+            'page' => ['bail', 'integer', 'min:1']
         ];
     }
 }
