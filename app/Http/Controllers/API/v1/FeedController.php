@@ -4,8 +4,7 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\GetFeedMessagesExploreRequest;
-use App\Http\Requests\GetFeedMessagesHomeRequest;
+use App\Http\Requests\GetPaginatedRequest;
 use App\Http\Requests\PostFeedRequest;
 use App\Http\Resources\FeedMessageResource;
 use App\Models\FeedMessage;
@@ -146,11 +145,11 @@ class FeedController extends Controller
     /**
      * Returns the user's personal feed.
      *
-     * @param GetFeedMessagesHomeRequest $request
+     * @param GetPaginatedRequest $request
      *
      * @return JsonResponse
      */
-    function home(GetFeedMessagesHomeRequest $request): JsonResponse
+    function home(GetPaginatedRequest $request): JsonResponse
     {
         $data = $request->validated();
 
@@ -216,11 +215,11 @@ class FeedController extends Controller
     /**
      * Returns the global feed.
      *
-     * @param GetFeedMessagesExploreRequest $request
+     * @param GetPaginatedRequest $request
      *
      * @return JsonResponse
      */
-    function explore(GetFeedMessagesExploreRequest $request): JsonResponse
+    function explore(GetPaginatedRequest $request): JsonResponse
     {
         $data = $request->validated();
 

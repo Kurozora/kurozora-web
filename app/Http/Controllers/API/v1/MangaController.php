@@ -7,17 +7,8 @@ use App\Enums\SearchType;
 use App\Events\ModelViewed;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\GetMangaCastRequest;
-use App\Http\Requests\GetMangaCharactersRequest;
-use App\Http\Requests\GetMangaMoreByStudioRequest;
-use App\Http\Requests\GetMangaReviewsRequest;
-use App\Http\Requests\GetMangaStudiosRequest;
-use App\Http\Requests\GetMediaRelatedGamesRequest;
-use App\Http\Requests\GetMediaRelatedLiteraturesRequest;
-use App\Http\Requests\GetMediaRelatedShowsRequest;
-use App\Http\Requests\GetMediaStaffRequest;
-use App\Http\Requests\GetUpcomingMangaRequest;
-use App\Http\Requests\RateMangaRequest;
+use App\Http\Requests\GetPaginatedRequest;
+use App\Http\Requests\RateModelRequest;
 use App\Http\Requests\SearchRequest;
 use App\Http\Resources\CharacterResourceIdentity;
 use App\Http\Resources\LiteratureResource;
@@ -183,12 +174,12 @@ class MangaController extends Controller
     /**
      * Returns character information of a Manga.
      *
-     * @param GetMangaCharactersRequest $request
+     * @param GetPaginatedRequest $request
      * @param Manga                     $manga
      *
      * @return JsonResponse
      */
-    public function characters(GetMangaCharactersRequest $request, Manga $manga): JsonResponse
+    public function characters(GetPaginatedRequest $request, Manga $manga): JsonResponse
     {
         $data = $request->validated();
 
@@ -208,12 +199,12 @@ class MangaController extends Controller
     /**
      * Returns the cast information of a Manga.
      *
-     * @param GetMangaCastRequest $request
+     * @param GetPaginatedRequest $request
      * @param Manga               $manga
      *
      * @return JsonResponse
      */
-    public function cast(GetMangaCastRequest $request, Manga $manga): JsonResponse
+    public function cast(GetPaginatedRequest $request, Manga $manga): JsonResponse
     {
         $data = $request->validated();
 
@@ -233,12 +224,12 @@ class MangaController extends Controller
     /**
      * Returns related-shows information of a Manga.
      *
-     * @param GetMediaRelatedShowsRequest $request
+     * @param GetPaginatedRequest $request
      * @param Manga                       $manga
      *
      * @return JsonResponse
      */
-    public function relatedShows(GetMediaRelatedShowsRequest $request, Manga $manga): JsonResponse
+    public function relatedShows(GetPaginatedRequest $request, Manga $manga): JsonResponse
     {
         $data = $request->validated();
 
@@ -283,12 +274,12 @@ class MangaController extends Controller
     /**
      * Returns related-mangas information of a Manga.
      *
-     * @param GetMediaRelatedLiteraturesRequest $request
+     * @param GetPaginatedRequest $request
      * @param Manga                             $manga
      *
      * @return JsonResponse
      */
-    public function relatedLiteratures(GetMediaRelatedLiteraturesRequest $request, Manga $manga): JsonResponse
+    public function relatedLiteratures(GetPaginatedRequest $request, Manga $manga): JsonResponse
     {
         $data = $request->validated();
 
@@ -330,12 +321,12 @@ class MangaController extends Controller
     /**
      * Returns related-mangas information of a Manga.
      *
-     * @param GetMediaRelatedGamesRequest $request
+     * @param GetPaginatedRequest $request
      * @param Manga                       $manga
      *
      * @return JsonResponse
      */
-    public function relatedGames(GetMediaRelatedGamesRequest $request, Manga $manga): JsonResponse
+    public function relatedGames(GetPaginatedRequest $request, Manga $manga): JsonResponse
     {
         $data = $request->validated();
 
@@ -377,12 +368,12 @@ class MangaController extends Controller
     /**
      * Returns staff information of a Manga.
      *
-     * @param GetMediaStaffRequest $request
+     * @param GetPaginatedRequest $request
      * @param Manga                $manga
      *
      * @return JsonResponse
      */
-    public function staff(GetMediaStaffRequest $request, Manga $manga): JsonResponse
+    public function staff(GetPaginatedRequest $request, Manga $manga): JsonResponse
     {
         $data = $request->validated();
 
@@ -413,12 +404,12 @@ class MangaController extends Controller
     /**
      * Returns the studios information of a Manga.
      *
-     * @param GetMangaStudiosRequest $request
+     * @param GetPaginatedRequest $request
      * @param Manga                  $manga
      *
      * @return JsonResponse
      */
-    public function studios(GetMangaStudiosRequest $request, Manga $manga): JsonResponse
+    public function studios(GetPaginatedRequest $request, Manga $manga): JsonResponse
     {
         $data = $request->validated();
 
@@ -445,12 +436,12 @@ class MangaController extends Controller
     /**
      * Returns the more manga made by the same studio.
      *
-     * @param GetMangaMoreByStudioRequest $request
+     * @param GetPaginatedRequest $request
      * @param Manga                       $manga
      *
      * @return JsonResponse
      */
-    public function moreByStudio(GetMangaMoreByStudioRequest $request, Manga $manga): JsonResponse
+    public function moreByStudio(GetPaginatedRequest $request, Manga $manga): JsonResponse
     {
         $data = $request->validated();
         $studioMangas = new LengthAwarePaginator([], 0, 1);
@@ -478,14 +469,14 @@ class MangaController extends Controller
     /**
      * Adds a rating for a Manga item
      *
-     * @param RateMangaRequest $request
+     * @param RateModelRequest $request
      * @param Manga            $manga
      *
      * @return JsonResponse
      * @throws AuthorizationException
      * @throws Exception
      */
-    public function rateManga(RateMangaRequest $request, Manga $manga): JsonResponse
+    public function rateManga(RateModelRequest $request, Manga $manga): JsonResponse
     {
         $user = auth()->user();
 
@@ -540,11 +531,11 @@ class MangaController extends Controller
     /**
      * Retrieves upcoming Manga results
      *
-     * @param GetUpcomingMangaRequest $request
+     * @param GetPaginatedRequest $request
      *
      * @return JsonResponse
      */
-    public function upcoming(GetUpcomingMangaRequest $request): JsonResponse
+    public function upcoming(GetPaginatedRequest $request): JsonResponse
     {
         $data = $request->validated();
 
@@ -563,12 +554,12 @@ class MangaController extends Controller
     /**
      * Returns the reviews of a Manga.
      *
-     * @param GetMangaReviewsRequest $request
+     * @param GetPaginatedRequest $request
      * @param Manga                  $manga
      *
      * @return JsonResponse
      */
-    public function reviews(GetMangaReviewsRequest $request, Manga $manga): JsonResponse
+    public function reviews(GetPaginatedRequest $request, Manga $manga): JsonResponse
     {
         $reviews = $manga->mediaRatings()
             ->withoutTvRatings()

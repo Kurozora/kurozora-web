@@ -5,9 +5,9 @@ namespace App\Http\Controllers\API\v1;
 use App\Events\ModelViewed;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\GetEpisodeReviewsRequest;
+use App\Http\Requests\GetPaginatedRequest;
 use App\Http\Requests\MarkEpisodeAsWatchedRequest;
-use App\Http\Requests\RateEpisodeRequest;
+use App\Http\Requests\RateModelRequest;
 use App\Http\Resources\EpisodeResource;
 use App\Http\Resources\MediaRatingResource;
 use App\Models\Episode;
@@ -24,6 +24,7 @@ class EpisodeController extends Controller
      *
      * @param Request $request
      * @param Episode $episode
+     *
      * @return JsonResponse
      */
     public function details(Request $request, Episode $episode): JsonResponse
@@ -112,12 +113,13 @@ class EpisodeController extends Controller
     /**
      * Adds a rating for an Anime item
      *
-     * @param RateEpisodeRequest $request
+     * @param RateModelRequest $request
      * @param Episode $episode
+     *
      * @return JsonResponse
      * @throws AuthorizationException
      */
-    public function rateEpisode(RateEpisodeRequest $request, Episode $episode): JsonResponse
+    public function rateEpisode(RateModelRequest $request, Episode $episode): JsonResponse
     {
         $user = auth()->user();
 
@@ -149,19 +151,19 @@ class EpisodeController extends Controller
             } else {
                 // Update the current rating
                 $foundRating->update([
-                    'rating'        => $givenRating,
-                    'description'   => $description
+                    'rating' => $givenRating,
+                    'description' => $description
                 ]);
             }
         } else {
             // Only insert the rating if it's rated higher than 0
             if ($givenRating > 0) {
                 MediaRating::create([
-                    'user_id'       => $user->id,
-                    'model_id'      => $episode->id,
-                    'model_type'    => $episode->getMorphClass(),
-                    'rating'        => $givenRating,
-                    'description'   => $description,
+                    'user_id' => $user->id,
+                    'model_id' => $episode->id,
+                    'model_type' => $episode->getMorphClass(),
+                    'rating' => $givenRating,
+                    'description' => $description,
                 ]);
             }
         }
@@ -172,11 +174,12 @@ class EpisodeController extends Controller
     /**
      * Returns the reviews of an Episode.
      *
-     * @param GetEpisodeReviewsRequest $request
+     * @param GetPaginatedRequest $request
      * @param Episode $episode
+     *
      * @return JsonResponse
      */
-    public function reviews(GetEpisodeReviewsRequest $request, Episode $episode): JsonResponse
+    public function reviews(GetPaginatedRequest $request, Episode $episode): JsonResponse
     {
         $reviews = $episode->mediaRatings()
             ->withoutTvRatings()

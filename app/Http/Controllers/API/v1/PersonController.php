@@ -7,10 +7,8 @@ use App\Enums\SearchType;
 use App\Events\ModelViewed;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\GetPersonAnimeRequest;
-use App\Http\Requests\GetPersonCharactersRequest;
-use App\Http\Requests\GetPersonGameRequest;
-use App\Http\Requests\GetPersonLiteratureRequest;
+use App\Http\Requests\GetPaginatedRequest;
+use App\Http\Requests\RateModelRequest;
 use App\Http\Requests\SearchRequest;
 use App\Http\Resources\AnimeResourceIdentity;
 use App\Http\Resources\CharacterResourceIdentity;
@@ -117,11 +115,11 @@ class PersonController extends Controller
     /**
      * Returns character information of the person.
      *
-     * @param GetPersonCharactersRequest $request
+     * @param GetPaginatedRequest $request
      * @param Person $person
      * @return JsonResponse
      */
-    public function characters(GetPersonCharactersRequest $request, Person $person): JsonResponse
+    public function characters(GetPaginatedRequest $request, Person $person): JsonResponse
     {
         $data = $request->validated();
 
@@ -142,11 +140,11 @@ class PersonController extends Controller
     /**
      * Returns anime information of the person.
      *
-     * @param GetPersonAnimeRequest $request
+     * @param GetPaginatedRequest $request
      * @param Person $person
      * @return JsonResponse
      */
-    public function anime(GetPersonAnimeRequest $request, Person $person): JsonResponse
+    public function anime(GetPaginatedRequest $request, Person $person): JsonResponse
     {
         $data = $request->validated();
 
@@ -167,11 +165,11 @@ class PersonController extends Controller
     /**
      * Returns literatures information of the person.
      *
-     * @param GetPersonLiteratureRequest $request
+     * @param GetPaginatedRequest $request
      * @param Person $person
      * @return JsonResponse
      */
-    public function literatures(GetPersonLiteratureRequest $request, Person $person): JsonResponse
+    public function literatures(GetPaginatedRequest $request, Person $person): JsonResponse
     {
         $data = $request->validated();
 
@@ -192,11 +190,11 @@ class PersonController extends Controller
     /**
      * Returns games information of the person.
      *
-     * @param GetPersonGameRequest $request
+     * @param GetPaginatedRequest $request
      * @param Person $person
      * @return JsonResponse
      */
-    public function games(GetPersonGameRequest $request, Person $person): JsonResponse
+    public function games(GetPaginatedRequest $request, Person $person): JsonResponse
     {
         $data = $request->validated();
 

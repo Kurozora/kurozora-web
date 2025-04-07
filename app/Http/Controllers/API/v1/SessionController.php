@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\GetAccessTokensRequest;
+use App\Http\Requests\GetPaginatedRequest;
 use App\Http\Resources\SessionResource;
 use App\Models\Session;
 use Illuminate\Http\JsonResponse;
@@ -14,10 +14,10 @@ class SessionController extends Controller
     /**
      * Returns the current active sessions for a user
      *
-     * @param GetAccessTokensRequest $request
+     * @param GetPaginatedRequest $request
      * @return JsonResponse
      */
-    public function index(GetAccessTokensRequest $request): JsonResponse
+    public function index(GetPaginatedRequest $request): JsonResponse
     {
         $data = $request->validated();
 

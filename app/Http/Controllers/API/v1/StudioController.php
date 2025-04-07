@@ -7,12 +7,8 @@ use App\Enums\SearchType;
 use App\Events\ModelViewed;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\GetStudioAnimeRequest;
-use App\Http\Requests\GetStudioGamesRequest;
-use App\Http\Requests\GetStudioLiteraturesRequest;
-use App\Http\Requests\GetStudioReviewsRequest;
-use App\Http\Requests\GetStudioSuccessorsRequest;
-use App\Http\Requests\RateStudioRequest;
+use App\Http\Requests\GetPaginatedRequest;
+use App\Http\Requests\RateModelRequest;
 use App\Http\Requests\SearchRequest;
 use App\Http\Resources\AnimeResourceIdentity;
 use App\Http\Resources\GameResourceIdentity;
@@ -112,11 +108,11 @@ class StudioController extends Controller
     /**
      * Returns predecessors information of a Studio.
      *
-     * @param GetStudioSuccessorsRequest $request
+     * @param GetPaginatedRequest $request
      * @param Studio $studio
      * @return JsonResponse
      */
-    public function predecessors(GetStudioSuccessorsRequest $request, Studio $studio): JsonResponse
+    public function predecessors(GetPaginatedRequest $request, Studio $studio): JsonResponse
     {
         $data = $request->validated();
 
@@ -136,11 +132,11 @@ class StudioController extends Controller
     /**
      * Returns successors information of a Studio.
      *
-     * @param GetStudioSuccessorsRequest $request
+     * @param GetPaginatedRequest $request
      * @param Studio $studio
      * @return JsonResponse
      */
-    public function successors(GetStudioSuccessorsRequest $request, Studio $studio): JsonResponse
+    public function successors(GetPaginatedRequest $request, Studio $studio): JsonResponse
     {
         $data = $request->validated();
 
@@ -160,11 +156,11 @@ class StudioController extends Controller
     /**
      * Returns anime information of a Studio.
      *
-     * @param GetStudioAnimeRequest $request
+     * @param GetPaginatedRequest $request
      * @param Studio $studio
      * @return JsonResponse
      */
-    public function anime(GetStudioAnimeRequest $request, Studio $studio): JsonResponse
+    public function anime(GetPaginatedRequest $request, Studio $studio): JsonResponse
     {
         $data = $request->validated();
 
@@ -185,11 +181,11 @@ class StudioController extends Controller
     /**
      * Returns literatures information of a Studio.
      *
-     * @param GetStudioLiteraturesRequest $request
+     * @param GetPaginatedRequest $request
      * @param Studio $studio
      * @return JsonResponse
      */
-    public function literatures(GetStudioLiteraturesRequest $request, Studio $studio): JsonResponse
+    public function literatures(GetPaginatedRequest $request, Studio $studio): JsonResponse
     {
         $data = $request->validated();
 
@@ -210,11 +206,11 @@ class StudioController extends Controller
     /**
      * Returns games information of a Studio.
      *
-     * @param GetStudioGamesRequest $request
+     * @param GetPaginatedRequest $request
      * @param Studio $studio
      * @return JsonResponse
      */
-    public function games(GetStudioGamesRequest $request, Studio $studio): JsonResponse
+    public function games(GetPaginatedRequest $request, Studio $studio): JsonResponse
     {
         $data = $request->validated();
 
@@ -235,12 +231,12 @@ class StudioController extends Controller
     /**
      * Adds a rating for a studio item
      *
-     * @param RateStudioRequest $request
-     * @param Studio            $studio
+     * @param RateModelRequest $request
+     * @param Studio           $studio
      *
      * @return JsonResponse
      */
-    public function rateStudio(RateStudioRequest $request, Studio $studio): JsonResponse
+    public function rateStudio(RateModelRequest $request, Studio $studio): JsonResponse
     {
         $user = auth()->user();
 
@@ -290,12 +286,12 @@ class StudioController extends Controller
     /**
      * Returns the reviews of a studio.
      *
-     * @param GetStudioReviewsRequest $request
+     * @param GetPaginatedRequest $request
      * @param Studio                  $studio
      *
      * @return JsonResponse
      */
-    public function reviews(GetStudioReviewsRequest $request, Studio $studio): JsonResponse
+    public function reviews(GetPaginatedRequest $request, Studio $studio): JsonResponse
     {
         $reviews = $studio->mediaRatings()
             ->withoutTvRatings()

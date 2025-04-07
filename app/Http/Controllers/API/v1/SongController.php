@@ -7,10 +7,8 @@ use App\Enums\SearchType;
 use App\Events\ModelViewed;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\GetSongAnimesRequest;
-use App\Http\Requests\GetSongGamesRequest;
-use App\Http\Requests\GetSongReviewsRequest;
-use App\Http\Requests\RateSongRequest;
+use App\Http\Requests\GetPaginatedRequest;
+use App\Http\Requests\RateModelRequest;
 use App\Http\Requests\SearchRequest;
 use App\Http\Resources\AnimeResource;
 use App\Http\Resources\GameResource;
@@ -88,12 +86,12 @@ class SongController extends Controller
     /**
      * Returns anime information for a Song
      *
-     * @param GetSongAnimesRequest $request
+     * @param GetPaginatedRequest $request
      * @param Song                 $song
      *
      * @return JsonResponse
      */
-    public function anime(GetSongAnimesRequest $request, Song $song): JsonResponse
+    public function anime(GetPaginatedRequest $request, Song $song): JsonResponse
     {
         $data = $request->validated();
 
@@ -131,12 +129,12 @@ class SongController extends Controller
     /**
      * Returns anime information for a Song
      *
-     * @param GetSongGamesRequest $request
+     * @param GetPaginatedRequest $request
      * @param Song                $song
      *
      * @return JsonResponse
      */
-    public function games(GetSongGamesRequest $request, Song $song): JsonResponse
+    public function games(GetPaginatedRequest $request, Song $song): JsonResponse
     {
         $data = $request->validated();
 
@@ -174,14 +172,14 @@ class SongController extends Controller
     /**
      * Adds a rating for a Song item
      *
-     * @param RateSongRequest $request
-     * @param Song            $song
+     * @param RateModelRequest $request
+     * @param Song             $song
      *
      * @return JsonResponse
      * @throws AuthorizationException
      * @throws Exception
      */
-    public function rateSong(RateSongRequest $request, Song $song): JsonResponse
+    public function rateSong(RateModelRequest $request, Song $song): JsonResponse
     {
         $user = auth()->user();
 
@@ -231,12 +229,12 @@ class SongController extends Controller
     /**
      * Returns the reviews of an Song.
      *
-     * @param GetSongReviewsRequest $request
+     * @param GetPaginatedRequest $request
      * @param Song                  $song
      *
      * @return JsonResponse
      */
-    public function reviews(GetSongReviewsRequest $request, Song $song): JsonResponse
+    public function reviews(GetPaginatedRequest $request, Song $song): JsonResponse
     {
         $reviews = $song->mediaRatings()
             ->withoutTvRatings()

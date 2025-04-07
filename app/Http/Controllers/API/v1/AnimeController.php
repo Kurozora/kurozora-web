@@ -7,20 +7,12 @@ use App\Enums\SearchType;
 use App\Events\ModelViewed;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\GetAnimeCharactersRequest;
 use App\Http\Requests\GetAnimeIndexRequest;
-use App\Http\Requests\GetAnimeMoreByStudioRequest;
-use App\Http\Requests\GetAnimeReviewsRequest;
 use App\Http\Requests\GetAnimeSeasonsRequest;
-use App\Http\Requests\GetAnimeStudiosRequest;
-use App\Http\Requests\GetMediaCastRequest;
-use App\Http\Requests\GetMediaRelatedGamesRequest;
-use App\Http\Requests\GetMediaRelatedLiteraturesRequest;
-use App\Http\Requests\GetMediaRelatedShowsRequest;
+use App\Http\Requests\GetBrowseSeasonRequest;
 use App\Http\Requests\GetMediaSongsRequest;
-use App\Http\Requests\GetMediaStaffRequest;
-use App\Http\Requests\GetUpcomingAnimeRequest;
-use App\Http\Requests\RateAnimeRequest;
+use App\Http\Requests\GetPaginatedRequest;
+use App\Http\Requests\RateModelRequest;
 use App\Http\Requests\SearchRequest;
 use App\Http\Resources\AnimeResource;
 use App\Http\Resources\AnimeResourceIdentity;
@@ -340,12 +332,12 @@ class AnimeController extends Controller
     /**
      * Returns character information of an Anime.
      *
-     * @param GetAnimeCharactersRequest $request
+     * @param GetPaginatedRequest $request
      * @param Anime                     $anime
      *
      * @return JsonResponse
      */
-    public function characters(GetAnimeCharactersRequest $request, Anime $anime): JsonResponse
+    public function characters(GetPaginatedRequest $request, Anime $anime): JsonResponse
     {
         $data = $request->validated();
 
@@ -365,12 +357,12 @@ class AnimeController extends Controller
     /**
      * Returns the cast information of an Anime.
      *
-     * @param GetMediaCastRequest $request
+     * @param GetPaginatedRequest $request
      * @param Anime               $anime
      *
      * @return JsonResponse
      */
-    public function cast(GetMediaCastRequest $request, Anime $anime): JsonResponse
+    public function cast(GetPaginatedRequest $request, Anime $anime): JsonResponse
     {
         $data = $request->validated();
 
@@ -390,12 +382,12 @@ class AnimeController extends Controller
     /**
      * Returns related-shows information of an Anime.
      *
-     * @param GetMediaRelatedShowsRequest $request
+     * @param GetPaginatedRequest $request
      * @param Anime                       $anime
      *
      * @return JsonResponse
      */
-    public function relatedShows(GetMediaRelatedShowsRequest $request, Anime $anime): JsonResponse
+    public function relatedShows(GetPaginatedRequest $request, Anime $anime): JsonResponse
     {
         $data = $request->validated();
 
@@ -440,12 +432,12 @@ class AnimeController extends Controller
     /**
      * Returns related-literatures information of an Anime.
      *
-     * @param GetMediaRelatedLiteraturesRequest $request
+     * @param GetPaginatedRequest $request
      * @param Anime                             $anime
      *
      * @return JsonResponse
      */
-    public function relatedLiteratures(GetMediaRelatedLiteraturesRequest $request, Anime $anime): JsonResponse
+    public function relatedLiteratures(GetPaginatedRequest $request, Anime $anime): JsonResponse
     {
         $data = $request->validated();
 
@@ -487,12 +479,12 @@ class AnimeController extends Controller
     /**
      * Returns related-literatures information of an Anime.
      *
-     * @param GetMediaRelatedGamesRequest $request
+     * @param GetPaginatedRequest $request
      * @param Anime                       $anime
      *
      * @return JsonResponse
      */
-    public function relatedGames(GetMediaRelatedGamesRequest $request, Anime $anime): JsonResponse
+    public function relatedGames(GetPaginatedRequest $request, Anime $anime): JsonResponse
     {
         $data = $request->validated();
 
@@ -601,12 +593,12 @@ class AnimeController extends Controller
     /**
      * Returns staff information of an Anime.
      *
-     * @param GetMediaStaffRequest $request
+     * @param GetPaginatedRequest $request
      * @param Anime                $anime
      *
      * @return JsonResponse
      */
-    public function staff(GetMediaStaffRequest $request, Anime $anime): JsonResponse
+    public function staff(GetPaginatedRequest $request, Anime $anime): JsonResponse
     {
         $data = $request->validated();
 
@@ -637,12 +629,12 @@ class AnimeController extends Controller
     /**
      * Returns the studios information of an Anime.
      *
-     * @param GetAnimeStudiosRequest $request
+     * @param GetPaginatedRequest $request
      * @param Anime                  $anime
      *
      * @return JsonResponse
      */
-    public function studios(GetAnimeStudiosRequest $request, Anime $anime): JsonResponse
+    public function studios(GetPaginatedRequest $request, Anime $anime): JsonResponse
     {
         $data = $request->validated();
 
@@ -669,12 +661,12 @@ class AnimeController extends Controller
     /**
      * Returns the more anime made by the same studio.
      *
-     * @param GetAnimeMoreByStudioRequest $request
+     * @param GetPaginatedRequest $request
      * @param Anime                       $anime
      *
      * @return JsonResponse
      */
-    public function moreByStudio(GetAnimeMoreByStudioRequest $request, Anime $anime): JsonResponse
+    public function moreByStudio(GetPaginatedRequest $request, Anime $anime): JsonResponse
     {
         $data = $request->validated();
         $studioAnimes = new LengthAwarePaginator([], 0, 1);
@@ -702,14 +694,14 @@ class AnimeController extends Controller
     /**
      * Adds a rating for an Anime item
      *
-     * @param RateAnimeRequest $request
+     * @param RateModelRequest $request
      * @param Anime            $anime
      *
      * @return JsonResponse
      * @throws AuthorizationException
      * @throws Exception
      */
-    public function rateAnime(RateAnimeRequest $request, Anime $anime): JsonResponse
+    public function rateAnime(RateModelRequest $request, Anime $anime): JsonResponse
     {
         $user = auth()->user();
 
@@ -764,11 +756,11 @@ class AnimeController extends Controller
     /**
      * Retrieves upcoming Anime results
      *
-     * @param GetUpcomingAnimeRequest $request
+     * @param GetPaginatedRequest $request
      *
      * @return JsonResponse
      */
-    public function upcoming(GetUpcomingAnimeRequest $request): JsonResponse
+    public function upcoming(GetPaginatedRequest $request): JsonResponse
     {
         $data = $request->validated();
 
@@ -787,12 +779,12 @@ class AnimeController extends Controller
     /**
      * Returns the reviews of an Anime.
      *
-     * @param GetAnimeReviewsRequest $request
-     * @param Anime                  $anime
+     * @param GetPaginatedRequest $request
+     * @param Anime $anime
      *
      * @return JsonResponse
      */
-    public function reviews(GetAnimeReviewsRequest $request, Anime $anime): JsonResponse
+    public function reviews(GetPaginatedRequest $request, Anime $anime): JsonResponse
     {
         $reviews = $anime->mediaRatings()
             ->withoutTvRatings()

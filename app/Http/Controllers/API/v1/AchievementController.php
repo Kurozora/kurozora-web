@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\GetUserAchievementsRequest;
+use App\Http\Requests\GetPaginatedRequest;
 use App\Http\Resources\AchievementResource;
 use App\Models\Badge;
 use App\Models\User;
@@ -16,12 +16,12 @@ class AchievementController extends Controller
     /**
      * Returns a list of the user's achievements.
      *
-     * @param GetUserAchievementsRequest $request
+     * @param GetPaginatedRequest $request
      * @param User                       $user
      *
      * @return JsonResponse
      */
-    public function index(GetUserAchievementsRequest $request, User $user): JsonResponse
+    public function index(GetPaginatedRequest $request, User $user): JsonResponse
     {
         $data = $request->validated();
 

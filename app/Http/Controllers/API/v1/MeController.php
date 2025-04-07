@@ -5,13 +5,9 @@ namespace App\Http\Controllers\API\v1;
 use App\Enums\MediaCollection;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\GetFeedMessagesRequest;
-use App\Http\Requests\GetFollowersRequest;
-use App\Http\Requests\GetFollowingRequest;
 use App\Http\Requests\GetLibraryRequest;
-use App\Http\Requests\GetRatingsRequest;
+use App\Http\Requests\GetPaginatedRequest;
 use App\Http\Requests\GetUpNextEpisodesRequest;
-use App\Http\Requests\GetUserAchievementsRequest;
 use App\Http\Requests\GetUserFavoritesRequest;
 use App\Http\Requests\UpdateProfileRequest;
 use App\Http\Resources\EpisodeResourceIdentity;
@@ -201,11 +197,11 @@ class MeController extends Controller
     /**
      * Returns a list of the authenticated user's achievements.
      *
-     * @param GetUserAchievementsRequest $request
+     * @param GetPaginatedRequest $request
      *
      * @return JsonResponse
      */
-    function getAchievements(GetUserAchievementsRequest $request): JsonResponse
+    function getAchievements(GetPaginatedRequest $request): JsonResponse
     {
         // Get the authenticated user
         $user = auth()->user();
@@ -233,11 +229,11 @@ class MeController extends Controller
     /**
      * Returns a list of the user's feed messages.
      *
-     * @param GetFeedMessagesRequest $request
+     * @param GetPaginatedRequest $request
      *
      * @return JsonResponse
      */
-    function getFeedMessages(GetFeedMessagesRequest $request): JsonResponse
+    function getFeedMessages(GetPaginatedRequest $request): JsonResponse
     {
         return (new UserController())
             ->getFeedMessages($request, auth()->user());
@@ -246,11 +242,11 @@ class MeController extends Controller
     /**
      * Returns a list of the user's followers.
      *
-     * @param GetFollowersRequest $request
+     * @param GetPaginatedRequest $request
      *
      * @return JsonResponse
      */
-    function getFollowers(GetFollowersRequest $request): JsonResponse
+    function getFollowers(GetPaginatedRequest $request): JsonResponse
     {
         return (new FollowingController())
             ->getFollowers($request, auth()->user());
@@ -259,11 +255,11 @@ class MeController extends Controller
     /**
      * Returns a list of the user's following.
      *
-     * @param GetFollowingRequest $request
+     * @param GetPaginatedRequest $request
      *
      * @return JsonResponse
      */
-    function getFollowing(GetFollowingRequest $request): JsonResponse
+    function getFollowing(GetPaginatedRequest $request): JsonResponse
     {
         return (new FollowingController())
             ->getFollowing($request, auth()->user());
@@ -272,11 +268,11 @@ class MeController extends Controller
     /**
      * Returns a list of the user's ratings.
      *
-     * @param GetRatingsRequest $request
+     * @param GetPaginatedRequest $request
      *
      * @return JsonResponse
      */
-    function getRatings(GetRatingsRequest $request): JsonResponse
+    function getRatings(GetPaginatedRequest $request): JsonResponse
     {
         return (new UserController())
             ->getRatings($request, auth()->user());

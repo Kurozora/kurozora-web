@@ -5,8 +5,8 @@ namespace App\Http\Controllers\API\v1;
 use App\Enums\FeedVoteType;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\FeedMessageRepliesRequest;
 use App\Http\Requests\FeedMessageUpdateRequest;
+use App\Http\Requests\GetPaginatedRequest;
 use App\Http\Resources\FeedMessageResource;
 use App\Models\FeedMessage;
 use Exception;
@@ -14,6 +14,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\JsonResponse;
+use Throwable;
 
 class FeedMessageController extends Controller
 {
@@ -101,11 +102,11 @@ class FeedMessageController extends Controller
     /**
      * Get the replies of the feed message.
      *
-     * @param FeedMessageRepliesRequest $request
+     * @param GetPaginatedRequest $request
      * @param FeedMessage $feedMessage
      * @return JsonResponse
      */
-    function replies(FeedMessageRepliesRequest $request, FeedMessage $feedMessage): JsonResponse
+    function replies(GetPaginatedRequest $request, FeedMessage $feedMessage): JsonResponse
     {
         $data = $request->validated();
 
@@ -216,7 +217,9 @@ class FeedMessageController extends Controller
      * Pin a feed message to profile.
      *
      * @param FeedMessage $feedMessage
+     *
      * @return JsonResponse
+     * @throws Throwable
      */
     function pin(FeedMessage $feedMessage): JsonResponse
     {

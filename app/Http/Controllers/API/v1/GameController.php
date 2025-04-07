@@ -7,18 +7,9 @@ use App\Enums\SearchType;
 use App\Events\ModelViewed;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\GetGameCharactersRequest;
-use App\Http\Requests\GetGameMoreByStudioRequest;
-use App\Http\Requests\GetGameReviewsRequest;
-use App\Http\Requests\GetGameStudiosRequest;
-use App\Http\Requests\GetMediaCastRequest;
-use App\Http\Requests\GetMediaRelatedGamesRequest;
-use App\Http\Requests\GetMediaRelatedLiteraturesRequest;
-use App\Http\Requests\GetMediaRelatedShowsRequest;
 use App\Http\Requests\GetMediaSongsRequest;
-use App\Http\Requests\GetMediaStaffRequest;
-use App\Http\Requests\GetUpcomingGameRequest;
-use App\Http\Requests\RateGameRequest;
+use App\Http\Requests\GetPaginatedRequest;
+use App\Http\Requests\RateModelRequest;
 use App\Http\Requests\SearchRequest;
 use App\Http\Resources\CharacterResourceIdentity;
 use App\Http\Resources\GameResource;
@@ -198,12 +189,12 @@ class GameController extends Controller
     /**
      * Returns character information of a game.
      *
-     * @param GetGameCharactersRequest $request
-     * @param game                     $game
+     * @param GetPaginatedRequest $request
+     * @param game $game
      *
      * @return JsonResponse
      */
-    public function characters(GetGameCharactersRequest $request, game $game): JsonResponse
+    public function characters(GetPaginatedRequest $request, game $game): JsonResponse
     {
         $data = $request->validated();
 
@@ -223,12 +214,12 @@ class GameController extends Controller
     /**
      * Returns the cast information of a game.
      *
-     * @param GetMediaCastRequest $request
-     * @param game                $game
+     * @param GetPaginatedRequest $request
+     * @param game $game
      *
      * @return JsonResponse
      */
-    public function cast(GetMediaCastRequest $request, game $game): JsonResponse
+    public function cast(GetPaginatedRequest $request, game $game): JsonResponse
     {
         $data = $request->validated();
 
@@ -248,12 +239,12 @@ class GameController extends Controller
     /**
      * Returns related-shows information of a game.
      *
-     * @param GetMediaRelatedShowsRequest $request
-     * @param game                        $game
+     * @param GetPaginatedRequest $request
+     * @param game $game
      *
      * @return JsonResponse
      */
-    public function relatedShows(GetMediaRelatedShowsRequest $request, game $game): JsonResponse
+    public function relatedShows(GetPaginatedRequest $request, game $game): JsonResponse
     {
         $data = $request->validated();
 
@@ -298,12 +289,12 @@ class GameController extends Controller
     /**
      * Returns related-literatures information of a game.
      *
-     * @param GetMediaRelatedLiteraturesRequest $request
-     * @param game                              $game
+     * @param GetPaginatedRequest $request
+     * @param game $game
      *
      * @return JsonResponse
      */
-    public function relatedLiteratures(GetMediaRelatedLiteraturesRequest $request, game $game): JsonResponse
+    public function relatedLiteratures(GetPaginatedRequest $request, game $game): JsonResponse
     {
         $data = $request->validated();
 
@@ -345,12 +336,12 @@ class GameController extends Controller
     /**
      * Returns related-games information of a game.
      *
-     * @param GetMediaRelatedGamesRequest $request
-     * @param game                        $game
+     * @param GetPaginatedRequest $request
+     * @param game $game
      *
      * @return JsonResponse
      */
-    public function relatedGames(GetMediaRelatedGamesRequest $request, game $game): JsonResponse
+    public function relatedGames(GetPaginatedRequest $request, game $game): JsonResponse
     {
         $data = $request->validated();
 
@@ -432,12 +423,12 @@ class GameController extends Controller
     /**
      * Returns staff information of a game.
      *
-     * @param GetMediaStaffRequest $request
-     * @param game                 $game
+     * @param GetPaginatedRequest $request
+     * @param game $game
      *
      * @return JsonResponse
      */
-    public function staff(GetMediaStaffRequest $request, game $game): JsonResponse
+    public function staff(GetPaginatedRequest $request, game $game): JsonResponse
     {
         $data = $request->validated();
 
@@ -468,12 +459,12 @@ class GameController extends Controller
     /**
      * Returns the studios information of a game.
      *
-     * @param GetGameStudiosRequest $request
-     * @param game                  $game
+     * @param GetPaginatedRequest $request
+     * @param game $game
      *
      * @return JsonResponse
      */
-    public function studios(GetGameStudiosRequest $request, game $game): JsonResponse
+    public function studios(GetPaginatedRequest $request, game $game): JsonResponse
     {
         $data = $request->validated();
 
@@ -500,12 +491,12 @@ class GameController extends Controller
     /**
      * Returns the more anime made by the same studio.
      *
-     * @param GetGameMoreByStudioRequest $request
-     * @param game                       $game
+     * @param GetPaginatedRequest $request
+     * @param game $game
      *
      * @return JsonResponse
      */
-    public function moreByStudio(GetGameMoreByStudioRequest $request, game $game): JsonResponse
+    public function moreByStudio(GetPaginatedRequest $request, game $game): JsonResponse
     {
         $data = $request->validated();
         $studioGames = new LengthAwarePaginator([], 0, 1);
@@ -531,16 +522,16 @@ class GameController extends Controller
     }
 
     /**
-     * Adds a rating for an game item
+     * Adds a rating for a game item
      *
-     * @param RateGameRequest $request
-     * @param game            $game
+     * @param RateModelRequest $request
+     * @param game $game
      *
      * @return JsonResponse
      * @throws AuthorizationException
      * @throws Exception
      */
-    public function rate(RateGameRequest $request, game $game): JsonResponse
+    public function rate(RateModelRequest $request, game $game): JsonResponse
     {
         $user = auth()->user();
 
@@ -595,11 +586,11 @@ class GameController extends Controller
     /**
      * Retrieves upcoming games results
      *
-     * @param GetUpcomingGameRequest $request
+     * @param GetPaginatedRequest $request
      *
      * @return JsonResponse
      */
-    public function upcoming(GetUpcomingGameRequest $request): JsonResponse
+    public function upcoming(GetPaginatedRequest $request): JsonResponse
     {
         $data = $request->validated();
 
@@ -618,12 +609,12 @@ class GameController extends Controller
     /**
      * Returns the reviews of a Game.
      *
-     * @param GetGameReviewsRequest $request
-     * @param Game                  $game
+     * @param GetPaginatedRequest $request
+     * @param Game $game
      *
      * @return JsonResponse
      */
-    public function reviews(GetGameReviewsRequest $request, Game $game): JsonResponse
+    public function reviews(GetPaginatedRequest $request, Game $game): JsonResponse
     {
         $reviews = $game->mediaRatings()
             ->withoutTvRatings()

@@ -4,8 +4,7 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\GetFollowersRequest;
-use App\Http\Requests\GetFollowingRequest;
+use App\Http\Requests\GetPaginatedRequest;
 use App\Http\Resources\UserResourceIdentity;
 use App\Models\User;
 use App\Models\UserFollow;
@@ -42,11 +41,11 @@ class FollowingController extends Controller
     /**
      * Returns a list of the user's followers.
      *
-     * @param GetFollowersRequest $request
+     * @param GetPaginatedRequest $request
      * @param User $user
      * @return JsonResponse
      */
-    function getFollowers(GetFollowersRequest $request, User $user): JsonResponse
+    function getFollowers(GetPaginatedRequest $request, User $user): JsonResponse
     {
         $data = $request->validated();
 
@@ -67,11 +66,11 @@ class FollowingController extends Controller
     /**
      * Returns a list of the user's following.
      *
-     * @param GetFollowingRequest $request
+     * @param GetPaginatedRequest $request
      * @param User $user
      * @return JsonResponse
      */
-    function getFollowing(GetFollowingRequest $request, User $user): JsonResponse
+    function getFollowing(GetPaginatedRequest $request, User $user): JsonResponse
     {
         $data = $request->validated();
 

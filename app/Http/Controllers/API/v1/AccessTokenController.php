@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Helpers\JSONResult;
 use App\Http\Requests\CreateSessionAttributeRequest;
-use App\Http\Requests\GetAccessTokensRequest;
+use App\Http\Requests\GetPaginatedRequest;
 use App\Http\Requests\UpdateSessionAttributeRequest;
 use App\Http\Resources\AccessTokenResource;
 use App\Http\Resources\UserResource;
@@ -21,10 +21,10 @@ class AccessTokenController
     /**
      * Returns the current active access tokens for a user
      *
-     * @param GetAccessTokensRequest $request
+     * @param GetPaginatedRequest $request
      * @return JsonResponse
      */
-    public function index(GetAccessTokensRequest $request): JsonResponse
+    public function index(GetPaginatedRequest $request): JsonResponse
     {
         $data = $request->validated();
 

@@ -7,8 +7,7 @@ use App\Events\ModelViewed;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DeleteUserRequest;
-use App\Http\Requests\GetFeedMessagesRequest;
-use App\Http\Requests\GetRatingsRequest;
+use App\Http\Requests\GetPaginatedRequest;
 use App\Http\Requests\ResetPassword;
 use App\Http\Resources\FeedMessageResource;
 use App\Http\Resources\MediaRatingResource;
@@ -86,11 +85,11 @@ class UserController extends Controller
     /**
      * Returns the feed messages for a user.
      *
-     * @param GetFeedMessagesRequest $request
+     * @param GetPaginatedRequest $request
      * @param User $user
      * @return JsonResponse
      */
-    public function getFeedMessages(GetFeedMessagesRequest $request, User $user): JsonResponse
+    public function getFeedMessages(GetPaginatedRequest $request, User $user): JsonResponse
     {
         $data = $request->validated();
 
@@ -148,11 +147,11 @@ class UserController extends Controller
     /**
      * Returns a list of the user's ratings.
      *
-     * @param GetRatingsRequest $request
+     * @param GetPaginatedRequest $request
      * @param User $user
      * @return JsonResponse
      */
-    public function getRatings(GetRatingsRequest $request, User $user): JsonResponse
+    public function getRatings(GetPaginatedRequest $request, User $user): JsonResponse
     {
         $data = $request->validated();
 
