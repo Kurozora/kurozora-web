@@ -87,8 +87,9 @@ class EpisodeResourceBasic extends JsonResource
 
         // Return the array
         return [
-            'givenRating'   => (double) $givenRating?->rating,
-            'isWatched'     => $watchStatus->boolValue
+            'givenRating' => (double) $givenRating?->rating,
+            'givenReview' => $givenRating?->description,
+            'isWatched' => $watchStatus->boolValue
         ];
     }
 }
