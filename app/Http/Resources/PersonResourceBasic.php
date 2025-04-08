@@ -25,7 +25,7 @@ class PersonResourceBasic extends JsonResource
     public function toArray(Request $request): array
     {
         $resource = PersonResourceIdentity::make($this->resource)->toArray($request);
-        return array_merge($resource, [
+        $resource = array_merge($resource, [
             'attributes'    => [
                 'slug'              => $this->resource->slug,
                 'profile'           => MediaResource::make($this->resource->getFirstMedia(MediaCollection::Profile)),
@@ -41,5 +41,28 @@ class PersonResourceBasic extends JsonResource
                 'astrologicalSign'  => $this->resource->astrological_sign?->description,
             ]
         ]);
+
+
+        if (auth()->check()) {
+            $resource['attributes'] = array_merge($resource['attributes'], $this->getUserSpecificDetails());
+        }
+
+        return $resource;
+    }
+
+    /**
+     * Returns the user specific details for the resource.
+     *
+     * @return array
+     */
+    protected function getUserSpecificDetails(): array
+    {
+        $givenRating = $this->resource->mediaRatings->first();
+
+        // Return the array
+        return [
+            'givenRating' => (double) $givenRating?->rating,
+            'givenReview' => $givenRating?->description,
+        ];
     }
 }

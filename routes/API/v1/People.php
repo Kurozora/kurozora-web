@@ -29,5 +29,13 @@ Route::prefix('/people')
 
                 Route::get('/characters', [PersonController::class, 'characters'])
                     ->name('.characters');
+
+                Route::post('/rate', [PersonController::class, 'ratePerson'])
+                    ->middleware('auth.kurozora')
+                    ->name('.rate');
+
+                Route::get('/reviews', [PersonController::class, 'reviews'])
+                    ->middleware('auth.kurozora:optional')
+                    ->name('.reviews');
             });
     });
