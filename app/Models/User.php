@@ -389,6 +389,17 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     }
 
     /**
+     * Returns the character ratings the user has.
+     *
+     * @return HasMany
+     */
+    public function characterRatings(): HasMany
+    {
+        return $this->mediaRatings()
+            ->where('model_type', '=', Character::class);
+    }
+
+    /**
      * Returns the game ratings the user has.
      *
      * @return HasMany
@@ -419,6 +430,17 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     {
         return $this->mediaRatings()
             ->where('model_type', '=', Episode::class);
+    }
+
+    /**
+     * Returns the person ratings the user has.
+     *
+     * @return HasMany
+     */
+    public function personRatings(): HasMany
+    {
+        return $this->mediaRatings()
+            ->where('model_type', '=', Person::class);
     }
 
     /**
