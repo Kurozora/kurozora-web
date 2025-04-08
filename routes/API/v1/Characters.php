@@ -29,5 +29,13 @@ Route::prefix('/characters')
                 Route::get('/games', [CharacterController::class, 'games'])
                     ->middleware('auth.kurozora:optional')
                     ->name('.games');
+
+                Route::post('/rate', [CharacterController::class, 'rateCharacter'])
+                    ->middleware('auth.kurozora')
+                    ->name('.rate');
+
+                Route::get('/reviews', [CharacterController::class, 'reviews'])
+                    ->middleware('auth.kurozora:optional')
+                    ->name('.reviews');
             });
     });

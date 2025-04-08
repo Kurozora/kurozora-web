@@ -63,6 +63,7 @@ class CharacterController extends Controller
      *
      * @param Request $request
      * @param Character $character
+     *
      * @return JsonResponse
      */
     public function details(Request $request, Character $character): JsonResponse
@@ -70,7 +71,16 @@ class CharacterController extends Controller
         // Call the ModelViewed event
         ModelViewed::dispatch($character, $request->ip());
 
-        $character->load(['media', 'translation']);
+        $user = auth()->user();
+
+        $character->load(['media', 'mediaStat', 'translation'])
+            ->when($user, function ($query, $user) use ($character) {
+                $character->load(['mediaRatings' => function ($query) use ($user) {
+                    $query->where([
+                        ['user_id', '=', $user->id]
+                    ]);
+                }]);
+            });
 
         $includeArray = [];
         if ($includeInput = $request->input('include')) {
@@ -217,6 +227,108 @@ class CharacterController extends Controller
         return JSONResult::success([
             'data' => GameResourceIdentity::collection($games),
             'next' => empty($nextPageURL) ? null : $nextPageURL
+        ]);
+    }
+
+    /**
+     * Adds a rating for a Character item
+     *
+     * @param RateModelRequest $request
+     * @param Character        $character
+     *
+     * @return JsonResponse
+     * @throws AuthorizationException
+     * @throws Exception
+     */
+    public function rateCharacter(RateModelRequest $request, Character $character): JsonResponse
+    {
+        $user = auth()->user();
+
+        // Validate the request
+        $data = $request->validated();
+
+        // Fetch the variables
+        $givenRating = $data['rating'];
+        $description = $data['description'] ?? null;
+
+        // Modify the rating if it already exists
+        /** @var MediaRating $foundRating */
+        $foundRating = $user->characterRatings()
+            ->withoutTvRatings()
+            ->where('model_id', '=', $character->id)
+            ->first();
+
+        // The rating exists
+        if ($foundRating) {
+            // If the given rating is 0
+            if ($givenRating <= 0) {
+                // Delete the rating
+                $foundRating->delete();
+            } else {
+                // Update the current rating
+                $foundRating->update([
+                    'rating' => $givenRating,
+                    'description' => $description ?? $foundRating->description,
+                ]);
+            }
+        } else {
+            // Only insert the rating if it's rated higher than 0
+            if ($givenRating > 0) {
+                MediaRating::create([
+                    'user_id' => $user->id,
+                    'model_id' => $character->id,
+                    'model_type' => $character->getMorphClass(),
+                    'rating' => $givenRating,
+                    'description' => $description,
+                ]);
+            }
+        }
+
+        return JSONResult::success();
+    }
+
+    /**
+     * Returns the reviews of a Character.
+     *
+     * @param GetPaginatedRequest $request
+     * @param Character           $character
+     *
+     * @return JsonResponse
+     */
+    public function reviews(GetPaginatedRequest $request, Character $character): JsonResponse
+    {
+        $reviews = $character->mediaRatings()
+            ->withoutTvRatings()
+            ->with([
+                'user' => function ($query) {
+                    $query->with([
+                        'badges' => function ($query) {
+                            $query->with(['media']);
+                        },
+                        'media',
+                        'tokens' => function ($query) {
+                            $query
+                                ->orderBy('last_used_at', 'desc')
+                                ->limit(1);
+                        },
+                        'sessions' => function ($query) {
+                            $query
+                                ->orderBy('last_activity', 'desc')
+                                ->limit(1);
+                        },
+                    ])
+                        ->withCount(['followers', 'followedModels as following_count', 'mediaRatings']);
+                },
+            ])
+            ->where('description', '!=', null)
+            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $reviews->nextPageUrl() ?? '');
+
+        return JSONResult::success([
+            'data' => MediaRatingResource::collection($reviews),
+            'next' => empty($nextPageURL) ? null : $nextPageURL,
         ]);
     }
 }
