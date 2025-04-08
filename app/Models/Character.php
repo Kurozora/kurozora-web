@@ -59,6 +59,7 @@ class Character extends KModel implements HasMedia, Sitemapable
     public array $translatedAttributes = [
         'name',
         'about',
+        'short_description',
     ];
 
     /**
