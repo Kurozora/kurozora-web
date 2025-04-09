@@ -263,25 +263,43 @@
                 <section id="badges" class="flex flex-row flex-nowrap whitespace-nowrap justify-between text-center pl-4 pr-4 overflow-x-scroll no-scrollbar">
                     <div id="ratingBadge" class="flex-grow pr-12">
                         <a href="#ratingsAndReviews">
-                            <p class="inline-flex font-bold text-tint">
-                                {{ number_format($episode->mediaStat->rating_average ?? 0, 1) }}
-                                <livewire:components.star-rating :rating="$episode->mediaStat->rating_average" :star-size="'sm'" :disabled="true" />
+                            <p class="font-bold text-tint">
+                                {{ number_format($episode->mediaStat->rating_average, 1) }}
                             </p>
+
+                            <livewire:components.star-rating :rating="$episode->mediaStat->rating_average" :star-size="'sm'" :disabled="true" />
+
                             <p class="text-sm text-secondary">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x reviews', (int) $episode->mediaStat->rating_count, ['x' => number_shorten((int) $episode->mediaStat->rating_count, 0, true)]) }}</p>
                         </a>
                     </div>
 
                     <div id="seasonBadge" class="flex-grow px-12 border-l border-primary">
-                        <a href="{{ route('anime.seasons', $anime) }}" wire:navigate>
+                        <a class="flex flex-col items-center" href="{{ route('anime.seasons', $anime) }}" wire:navigate>
                             <p class="font-bold">#{{ $season->number }}</p>
+                            <p class="text-tint">
+                                @svg('tv_fill', 'fill-current', ['width' => '20'])
+                            </p>
                             <p class="text-sm text-secondary">{{ __('Season') }}</p>
+                        </a>
+                    </div>
+
+                    <div id="rankingBadge" class="flex-grow px-12 border-l border-primary">
+                        <a class="flex flex-col items-center" href="{{ route('charts.top', App\Enums\ChartKind::Episodes) }}" wire:navigate>
+                            <p class="font-bold">{{ trans_choice('{0} -|[1,*] #:x', $episode->mediaStat->rank_total ?? 0, ['x' => $episode->mediaStat->rank_total]) }}</p>
+                            <p class="text-tint">
+                                @svg('chart_bar_fill', 'fill-current', ['width' => '20'])
+                            </p>
+                            <p class="text-sm text-secondary">{{ __('Chart') }}</p>
                         </a>
                     </div>
 
                     @if ($previousEpisode)
                         <div id="previousEpisodeBadge" class="flex-grow px-12 border-l border-primary">
-                            <a href="{{ route('episodes.details', $previousEpisode) }}" wire:navigate>
+                            <a class="flex flex-col items-center" href="{{ route('episodes.details', $previousEpisode) }}" wire:navigate>
                                 <p class="font-bold">{{ __('Episode :x', ['x' => $previousEpisode->number_total]) }}</p>
+                                <p class="text-tint">
+                                    @svg('arrowshape_turn_up_backward_tv_fill', 'fill-current', ['width' => '20'])
+                                </p>
                                 <p class="text-sm text-secondary">{{ __('Previous') }}</p>
                             </a>
                         </div>
@@ -289,16 +307,22 @@
 
                     @if ($nextEpisode)
                         <div id="nextEpisodeBadge" class="flex-grow px-12 border-l border-primary">
-                            <a href="{{ route('episodes.details', $nextEpisode) }}" wire:navigate>
+                            <a class="flex flex-col items-center" href="{{ route('episodes.details', $nextEpisode) }}" wire:navigate>
                                 <p class="font-bold">{{ __('Episode :x', ['x' => $nextEpisode->number_total]) }}</p>
+                                <p class="text-tint">
+                                    @svg('arrowshape_turn_up_forward_tv_fill', 'fill-current', ['width' => '20'])
+                                </p>
                                 <p class="text-sm text-secondary">{{ __('Next') }}</p>
                             </a>
                         </div>
                     @endif
 
                     <div id="animeBadge" class="flex-grow px-12 border-l border-primary">
-                        <a href="{{ route('anime.details', $anime) }}" wire:navigate>
+                        <a class="flex flex-col items-center" href="{{ route('anime.details', $anime) }}" wire:navigate>
                             <p class="font-bold line-clamp-1">{{ substr($anime->title, 0, 25) }}</p>
+                            <p class="text-tint">
+                                @svg('tv_fill', 'fill-current', ['width' => '20'])
+                            </p>
                             <p class="text-sm text-secondary">{{ __('Anime') }}</p>
                         </a>
                     </div>
