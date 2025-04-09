@@ -35,6 +35,7 @@ class EpisodeController extends Controller
         $includeArray = [
             'media',
             'mediaStat',
+            'mediaRatings',
             'translation',
             'videos',
         ];
@@ -71,6 +72,47 @@ class EpisodeController extends Controller
 
         return JSONResult::success([
             'data' => EpisodeResource::collection([$episode])
+        ]);
+    }
+
+    public function suggestions(Episode $episode): JsonResponse
+    {
+        $title = mb_convert_encoding(substr($episode->title, 0, 20), 'UTF-8', mb_list_encodings());
+
+        $suggestedEpisodes = Episode::search($title)
+            ->take(10)
+            ->query(function ($query) {
+                $query->with([
+                    'anime' => function ($query) {
+                        $query->with([
+                            'media',
+                            'translation',
+                        ]);
+                    },
+                    'media',
+                    'mediaStat',
+                    'mediaRatings',
+                    'season' => function ($query) {
+                        $query->with([
+                            'media',
+                            'translation'
+                        ]);
+                    },
+                    'translation',
+                    'videos',
+                ])
+                    ->when(auth()->user(), function ($query, $user) {
+                        $query->withExists([
+                            'user_watched_episodes as isWatched' => function ($query) use ($user) {
+                                $query->where('user_id', $user->id);
+                            },
+                        ]);
+                    });
+            })
+            ->get();
+
+        return JSONResult::success([
+            'data' => EpisodeResource::collection($suggestedEpisodes)
         ]);
     }
 

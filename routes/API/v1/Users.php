@@ -38,11 +38,11 @@ Route::prefix('/users')
                     ->name('.achievements');
 
                 Route::post('/block', [UserBlockController::class, 'blockUser'])
-                    ->middleware(['auth.kurozora'])
+                    ->middleware('auth.kurozora')
                     ->name('.block');
 
                 Route::get('/blocked', [UserBlockController::class, 'index'])
-                    ->middleware(['auth.kurozora'])
+                    ->middleware('auth.kurozora')
                     ->name('.blocked');
 
                 Route::get('/library', [LibraryController::class, 'index'])
@@ -58,7 +58,7 @@ Route::prefix('/users')
                     ->name('.feed-messages');
 
                 Route::post('/follow', [FollowingController::class, 'followUser'])
-                    ->middleware(['auth.kurozora'])
+                    ->middleware('auth.kurozora')
                     ->can('follow', 'user')
                     ->name('.follow');
 

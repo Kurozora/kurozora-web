@@ -11,6 +11,10 @@ Route::prefix('/episodes')
                     ->middleware('auth.kurozora:optional')
                     ->name('.details');
 
+                Route::get('/suggestions', [EpisodeController::class, 'suggestions'])
+                    ->middleware('auth.kurozora:optional')
+                    ->name('.suggestions');
+
                 Route::post('/watched', [EpisodeController::class, 'watched'])
                     ->middleware('auth.kurozora');
 
