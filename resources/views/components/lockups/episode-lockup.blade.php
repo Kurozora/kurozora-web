@@ -21,7 +21,7 @@
     <div class="relative flex flex-grow mt-2">
         <div class="flex flex-col w-full gap-2 justify-between">
             <div>
-                <a href="{{ route('episodes.details', $episode) }}">
+                <a href="{{ route('seasons.episodes', $episode->season) }}" wire:navigate>
                     @if ($isRanked)
                         <p class="text-sm font-semibold">#{{ $rank }}</p>
                     @endif
@@ -36,7 +36,7 @@
                 </a>
 
                 <div class="mt-1">
-                    <a class="text-xs text-tint font-semibold line-clamp-2" href="{{ route('anime.details', $episode->anime) }}">{{ $episode->anime->title }}</a>
+                    <a class="text-xs text-tint font-semibold line-clamp-2" href="{{ route('anime.details', $episode->anime) }}" wire:navigate>{{ $episode->anime->title }}</a>
 
                     <p class="text-xs line-clamp-2" title="{{ $episode->started_at?->format('F d, Y H:i:s') }}">{{ __(':x views', ['x' => number_format($episode->view_count)]) . ' · ' . $episode->started_at?->toFormattedDateString() }}</p>
                 </div>
