@@ -15,11 +15,9 @@ ENV TZ=UTC
 # Set timezone
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-# Update packages
-RUN apk update && apk upgrade --no-cache
-
-# Install Git
-RUN apk add git nginx supervisor --no-cache
+# Update packages and install Git
+RUN apk update && apk upgrade --no-cache && \
+    apk add --no-cache git nginx supervisor
 
 # Install PHP extensions
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
