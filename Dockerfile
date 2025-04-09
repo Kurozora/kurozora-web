@@ -1,4 +1,4 @@
-FROM php:8.3-fpm-alpine AS app
+FROM php:8.4-fpm-alpine AS app
 
 # Set labels
 LABEL app.kurozora.authors="Kiritokatklian"
