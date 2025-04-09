@@ -46,4 +46,18 @@ class MediaRatingController extends Controller
             'data' => MediaRatingResource::collection([$mediaRating])
         ]);
     }
+
+    /**
+     * Delete the given media rating.
+     *
+     * @param MediaRating $mediaRating
+     *
+     * @return JsonResponse
+     */
+    public function delete(MediaRating $mediaRating)
+    {
+        $mediaRating->forceDelete();
+
+        return JSONResult::success();
+    }
 }

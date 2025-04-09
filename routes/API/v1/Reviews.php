@@ -9,5 +9,9 @@ Route::prefix('/reviews')
             ->group(function () {
                 Route::get('/', [MediaRatingController::class, 'details'])
                     ->name('.details');
+
+                Route::delete('/delete', [MediaRatingController::class, 'delete'])
+                    ->middleware('auth.kurozora')
+                    ->name('.delete');
             });
     });
