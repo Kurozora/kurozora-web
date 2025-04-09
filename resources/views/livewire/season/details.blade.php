@@ -36,10 +36,16 @@
         </section>
 
         @if ($this->seasons->count())
-            <section class="grid gap-4 sm:grid-cols-2 sm:auto-cols-[unset] lg:grid-cols-3">
-                @foreach ($this->seasons as $season)
-                    <x-lockups.season-lockup :season="$season" :isRow="false" />
-                @endforeach
+            <section class="mt-4">
+                <div class="flex flex-wrap gap-4 justify-between pl-4 pr-4">
+                    @foreach ($this->seasons as $season)
+                        <x-lockups.season-lockup :season="$season" :isRow="false" />
+                    @endforeach
+                    <div class="w-64 md:w-80 flex-grow"></div>
+                    <div class="w-64 md:w-80 flex-grow"></div>
+                    <div class="w-64 md:w-80 flex-grow"></div>
+                    <div class="w-64 md:w-80 flex-grow"></div>
+                </div>
             </section>
 
             <div class="mt-4 pl-4 pr-4">
