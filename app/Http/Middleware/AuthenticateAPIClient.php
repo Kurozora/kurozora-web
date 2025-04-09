@@ -22,9 +22,7 @@ class AuthenticateAPIClient
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (str($request->userAgent())->contains(config('app.ios.bundle_id'))) {
-            return $next($request);
-        }
+        $userAgent = parse_user_agent($request->userAgent());
 
         if ($request->routeIs('api') || $request->routeIs('api.index')) {
             return $next($request);
@@ -40,7 +38,10 @@ class AuthenticateAPIClient
         }
 
         // TODO: - Replace with JWT validation
-        if (APIClientToken::where('token', '=', $jwt)->exists()) {
+        if (APIClientToken::where([
+            ['identifier', '=', $userAgent['bundle']],
+            ['token', '=', $jwt],
+        ])->exists()) {
             return $next($request);
         } else {
             throw new AuthenticationException('The request wasn’t accepted due to an issue with the credentials.');

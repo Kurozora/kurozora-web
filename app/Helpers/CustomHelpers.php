@@ -308,3 +308,48 @@ if (! function_exists('str_index')) {
         return $index;
     }
 }
+
+if (! function_exists('parse_user_agent')) {
+    /**
+     * Parse the given user agent and return the components as array.
+     *
+     * @param null|string $userAgent
+     *
+     * @return array
+     */
+    function parse_user_agent(?string $userAgent): array
+    {
+        if (!$userAgent) {
+            return [];
+        }
+
+        // Example input:
+        // "Example App/1.0.0 (com.example.app; build:9999; iOS 18.5.0) Client/1.0.0"
+
+        $matches = [];
+        preg_match('/^(?<appName>[^\/]+)\/(?<version>\S+) \((?<meta>[^)]+)\) (?<clientInfo>.+)$/', $userAgent, $matches);
+
+        // Split the meta info: "com.example.app; build:9999; iOS 18.5.0"
+        $metaParts = array_map('trim', explode(';', $matches['meta'] ?? ''));
+        $bundle = $build = $os = null;
+
+        foreach ($metaParts as $part) {
+            if (str_starts_with($part, 'build:')) {
+                $build = substr($part, 6);
+            } else if (str_starts_with($part, 'iOS') || str_starts_with($part, 'Android') || str_starts_with($part, 'macOS')) {
+                $os = $part;
+            } else {
+                $bundle = $part;
+            }
+        }
+
+        return [
+            'app_name' => $matches['appName'] ?? null,
+            'app_version' => $matches['version'] ?? null,
+            'bundle' => $bundle,
+            'build' => $build,
+            'os' => $os,
+            'client_info' => $matches['clientInfo'] ?? null,
+        ];
+    }
+}
