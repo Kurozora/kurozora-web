@@ -2,7 +2,9 @@
 
 namespace App\Scopes;
 
+use App\Models\Character;
 use App\Models\MediaSong;
+use App\Models\Person;
 use App\Traits\Model\TvRated;
 use File;
 use Illuminate\Database\Eloquent\Builder;
@@ -23,7 +25,8 @@ class MorphTvRatingScope extends TvRatingScope
             $builder->whereMorphRelation($this->getMorphTvRatingRelation(), $this->getMorphTvRatingTypes($model), $model->getQualifiedTvRatingColumn(), '<=', $preferredTvRating)
             ->orWhereHasMorph($this->getMorphTvRatingRelation(), [MediaSong::class], function (Builder $builder) use ($model, $preferredTvRating) {
                 $builder->whereMorphRelation($this->getMorphTvRatingRelation(), $this->getMorphTvRatingTypes($model), $model->getQualifiedTvRatingColumn(), '<=', $preferredTvRating);
-            });
+            })
+            ->orWhereHasMorph($this->getMorphTvRatingRelation(), [Character::class, Person::class]);
         }
     }
 
