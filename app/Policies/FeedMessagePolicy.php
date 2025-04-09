@@ -54,9 +54,7 @@ class FeedMessagePolicy
      */
     public function update(User $user, FeedMessage $feedMessage): Response|bool
     {
-        return $user->hasRole('superAdmin')
-            || $user->can('updateFeedMessage')
-            || $user->id === $feedMessage->user_id;
+        return $user->can('updateFeedMessage') || $user->id === $feedMessage->user_id;
     }
 
     /**
@@ -68,9 +66,7 @@ class FeedMessagePolicy
      */
     public function delete(User $user, FeedMessage $feedMessage): Response|bool
     {
-        return $user->hasRole('superAdmin')
-            || $user->can('deleteFeedMessage')
-            || $user->id === $feedMessage->user_id;
+        return $user->can('deleteFeedMessage') || $user->id === $feedMessage->user_id;
     }
 
     /**
@@ -82,8 +78,7 @@ class FeedMessagePolicy
      */
     public function restore(User $user, FeedMessage $feedMessage): Response|bool
     {
-        return $user->hasRole('superAdmin')
-            || $user->can('restoreFeedMessage');
+        return $user->can('restoreFeedMessage');
     }
 
     /**
@@ -95,7 +90,6 @@ class FeedMessagePolicy
      */
     public function forceDelete(User $user, FeedMessage $feedMessage): Response|bool
     {
-        return $user->hasRole('superAdmin')
-            || $user->can('forceDeleteFeedMessage');
+        return $user->can('forceDeleteFeedMessage');
     }
 }

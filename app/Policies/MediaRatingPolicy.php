@@ -54,7 +54,7 @@ class MediaRatingPolicy
      */
     public function update(User $user, MediaRating $mediaRating): Response|bool
     {
-        return $user->can('updateMediaRating');
+        return $user->can('updateMediaRating') || $user->id === $mediaRating->user_id;
     }
 
     /**
@@ -66,7 +66,7 @@ class MediaRatingPolicy
      */
     public function delete(User $user, MediaRating $mediaRating): Response|bool
     {
-        return $user->can('deleteMediaRating');
+        return $user->can('deleteMediaRating') || $user->id === $mediaRating->user_id;
     }
 
     /**
