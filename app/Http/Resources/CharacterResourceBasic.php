@@ -26,25 +26,26 @@ class CharacterResourceBasic extends JsonResource
     {
         $resource = CharacterResourceIdentity::make($this->resource)->toArray($request);
         $resource = array_merge($resource, [
-            'attributes'    => [
-                'slug'              => $this->resource->slug,
-                'profile'           => MediaResource::make($this->resource->media->firstWhere('collection_name', '=', MediaCollection::Profile)),
-                'name'              => $this->resource->name,
-                'nicknames'         => $this->resource->nicknames,
-                'about'             => $this->resource->about,
-                'shortDescription'  => $this->resource->short_description,
-                'debut'             => $this->resource->debut,
-                'status'            => $this->resource->status?->description,
-                'bloodType'         => $this->resource->blood_type,
-                'favoriteFood'      => $this->resource->favorite_food,
-                'bust'              => $this->resource->bust,
-                'waist'             => $this->resource->waist,
-                'hip'               => $this->resource->hip,
-                'height'            => $this->resource->height_string,
-                'weight'            => $this->resource->weight_string,
-                'age'               => $this->resource->age_string,
-                'birthdate'         => $this->resource->birthdate,
-                'astrologicalSign'  => $this->resource->astrological_sign?->description,
+            'attributes' => [
+                'slug' => $this->resource->slug,
+                'profile' => MediaResource::make($this->resource->media->firstWhere('collection_name', '=', MediaCollection::Profile)),
+                'name' => $this->resource->name,
+                'nicknames' => $this->resource->nicknames,
+                'about' => $this->resource->about,
+                'shortDescription' => $this->resource->short_description,
+                'debut' => $this->resource->debut,
+                'status' => $this->resource->status?->description,
+                'bloodType' => $this->resource->blood_type,
+                'favoriteFood' => $this->resource->favorite_food,
+                'bust' => $this->resource->bust,
+                'waist' => $this->resource->waist,
+                'hip' => $this->resource->hip,
+                'height' => $this->resource->height_string,
+                'weight' => $this->resource->weight_string,
+                'age' => $this->resource->age_string,
+                'birthdate' => $this->resource->birthdate,
+                'astrologicalSign' => $this->resource->astrological_sign?->description,
+                'stats' => MediaStatsResource::make($this->resource->mediaStat),
             ]
         ]);
 

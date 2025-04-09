@@ -26,22 +26,22 @@ class PersonResourceBasic extends JsonResource
     {
         $resource = PersonResourceIdentity::make($this->resource)->toArray($request);
         $resource = array_merge($resource, [
-            'attributes'    => [
-                'slug'              => $this->resource->slug,
-                'profile'           => MediaResource::make($this->resource->getFirstMedia(MediaCollection::Profile)),
-                'fullName'          => $this->resource->full_name,
-                'fullGivenName'     => $this->resource->full_given_name,
-                'alternativeNames'  => $this->resource->alternative_names,
-                'age'               => $this->resource->age_string,
-                'birthdate'         => $this->resource->birthdate?->timestamp,
-                'deceasedDate'      => $this->resource->deceased_date?->timestamp,
-                'about'             => $this->resource->about,
-                'shortDescription'  => $this->resource->short_description,
-                'websiteURLs'       => $this->resource->website_urls,
-                'astrologicalSign'  => $this->resource->astrological_sign?->description,
+            'attributes' => [
+                'slug' => $this->resource->slug,
+                'profile' => MediaResource::make($this->resource->getFirstMedia(MediaCollection::Profile)),
+                'fullName' => $this->resource->full_name,
+                'fullGivenName' => $this->resource->full_given_name,
+                'alternativeNames' => $this->resource->alternative_names,
+                'age' => $this->resource->age_string,
+                'birthdate' => $this->resource->birthdate?->timestamp,
+                'deceasedDate' => $this->resource->deceased_date?->timestamp,
+                'about' => $this->resource->about,
+                'shortDescription' => $this->resource->short_description,
+                'websiteURLs' => $this->resource->website_urls,
+                'astrologicalSign' => $this->resource->astrological_sign?->description,
+                'stats' => MediaStatsResource::make($this->resource->mediaStat),
             ]
         ]);
-
 
         if (auth()->check()) {
             $resource['attributes'] = array_merge($resource['attributes'], $this->getUserSpecificDetails());
