@@ -4,12 +4,12 @@
     </x-slot:title>
 
     <x-slot:description>
-        {{ __('Discover all openings, endings and background music of :x only on :y, the largest, free online anime, manga, game & music database in the world.', ['x' => $anime->title, 'y' => config('app.name')] }}
+        {{ __('Discover all openings, endings and background music of :x only on :y, the largest, free online anime, manga, game & music database in the world.', ['x' => $anime->title, 'y' => config('app.name')]) }}
     </x-slot:description>
 
     <x-slot:meta>
         <meta property="og:title" content="{{ __('Songs') }} | {{ $anime->title }} — {{ config('app.name') }}" />
-        <meta property="og:description" content="{{ __('Discover all openings, endings and other music of :x only on :y, the largest, free online anime, manga, game & music database in the world.', ['x' => $anime->title, 'y' => config('app.name')] }}" />
+        <meta property="og:description" content="{{ __('Discover all openings, endings and other music of :x only on :y, the largest, free online anime, manga, game & music database in the world.', ['x' => $anime->title, 'y' => config('app.name')]) }}" />
         <meta property="og:image" content="{{ asset('images/static/placeholders/music_album.webp') }}" />
         <meta property="og:type" content="music.song" />
         <meta property="music:musician" content="{{ route('anime.details', $anime) }}" />
