@@ -69,7 +69,7 @@ class GameSongsSection extends Component
                 }
             ])
             ->limit(Game::MAXIMUM_RELATIONSHIPS_LIMIT)
-            ->orderBy('episodes')
+            ->orderBy('position')
             ->get();
     }
 

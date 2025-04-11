@@ -69,7 +69,7 @@ class AnimeSongsSection extends Component
                 }
             ])
             ->limit(Anime::MAXIMUM_RELATIONSHIPS_LIMIT)
-            ->orderBy('episodes')
+            ->orderBy('position')
             ->get();
     }
 
