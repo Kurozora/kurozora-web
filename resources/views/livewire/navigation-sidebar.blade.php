@@ -94,9 +94,9 @@
                         @svg('building_2', 'fill-current', ['width' => '18']) {{ __('Studios') }}
                     </x-sidebar-nav-link>
 
-                    <x-sidebar-nav-link href="{{ route('platforms.index') }}" wire:navigate :active="request()->routeIs('platforms.index')">
-                        @svg('tv_and_mediabox', 'fill-current', ['width' => '18']) {{ __('Platforms') }}
-                    </x-sidebar-nav-link>
+{{--                    <x-sidebar-nav-link href="{{ route('platforms.index') }}" wire:navigate :active="request()->routeIs('platforms.index')">--}}
+{{--                        @svg('tv_and_mediabox', 'fill-current', ['width' => '18']) {{ __('Platforms') }}--}}
+{{--                    </x-sidebar-nav-link>--}}
                 </section>
 
                 @auth
@@ -150,41 +150,117 @@
         </div>
 
         <div>
-            <a href="{{ empty($user) ? route('sign-in') : route('me') }}" class="flex items-center pl-4 pt-4 pr-4 pb-4" wire:navigate>
-                @auth
-                    <div class="shrink-0">
-                        <x-picture>
-                            <img
-                                class="w-10 h-10 object-cover rounded-full lazyload"
-                                data-sizes="auto"
-                                data-src="{{ $user->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) }}"
-                                alt="{{ $user->username }} Profile Image"
-                                title="{{ $user->username }}"
-                            >
+            <x-dropdown align="top" width="48" content-classes="left-4 bg-secondary" class="left-4">
+                <x-slot:trigger>
+                    <button class="flex items-center w-full pl-4 pt-4 pr-4 pb-4">
+                        @auth
+                            <div class="shrink-0">
+                                <x-picture>
+                                    <img
+                                        class="w-10 h-10 object-cover rounded-full lazyload"
+                                        data-sizes="auto"
+                                        data-src="{{ $user->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) }}"
+                                        alt="{{ $user->username }} Profile Image"
+                                        title="{{ $user->username }}"
+                                    >
 
-                            <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-full"></div>
-                        </x-picture>
-                    </div>
+                                    <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-full"></div>
+                                </x-picture>
+                            </div>
 
-                    <div class="ml-3">
-                        <div class="font-medium text-base text-primary">{{ $user->username }}</div>
-                    </div>
-                @else
-                    <div class="shrink-0">
-                        <div
-                            class="h-10 w-10 bg-cover rounded-full"
-                            style="background-image: url({{ $user?->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/user_profile.webp') }});"
-                            alt="{{ $user?->username ?? __('Guest') }} {{ __('Profile') }}"
-                            title="{{ $user?->username ?? __('Guest') }}"
-                            role="img"
-                        ></div>
-                    </div>
+                            <div class="ml-3">
+                                <div class="font-medium text-base text-primary">{{ $user->username }}</div>
+                            </div>
+                        @else
+                            <div class="shrink-0">
+                                <div
+                                    class="h-10 w-10 bg-cover rounded-full"
+                                    style="background-image: url({{ $user?->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/user_profile.webp') }});"
+                                    alt="{{ $user?->username ?? __('Guest') }} {{ __('Profile') }}"
+                                    title="{{ $user?->username ?? __('Guest') }}"
+                                    role="img"
+                                ></div>
+                            </div>
 
-                    <div class="ml-3">
-                        <div class="font-medium text-base text-primary">{{ __('Sign In') }}</div>
+                            <div class="ml-3">
+                                <div class="font-medium text-base text-primary">{{ __('Sign In') }}</div>
+                            </div>
+                        @endauth
+                    </button>
+                </x-slot:trigger>
+
+                <x-slot:content>
+                    <div>
+                        <x-dropdown-link href="{{ route('me') }}" wire:navigate>
+                            {{ __('Profile') }}
+                        </x-dropdown-link>
+
+                        <div class="border-t border-primary"></div>
+
+                        {{-- More Pages --}}
+                        <div class="block pl-4 pr-4 pt-2 pb-2 text-xs text-secondary">
+                            {{ __('More') }}
+                        </div>
+
+                        <x-dropdown-link href="{{ route('app-icons.index') }}" wire:navigate>
+                            {{ __('App Icons') }}
+                        </x-dropdown-link>
+
+                        <x-dropdown-link href="{{ route('theme-store.index') }}" wire:navigate>
+                            {{ __('Theme Store') }}
+                        </x-dropdown-link>
+
+                        <div class="border-t border-primary"></div>
+
+                        @auth
+                            {{-- Account Management --}}
+                            <div class="block pl-4 pr-4 pt-2 pb-2 text-xs text-secondary">
+                                {{ __('Manage Account') }}
+                            </div>
+
+                            <x-dropdown-link href="{{ route('profile.settings') }}" wire:navigate>
+                                {{ __('Settings') }}
+                            </x-dropdown-link>
+
+                            <div class="border-t border-primary"></div>
+                        @endauth
+
+                        {{-- Authentication --}}
+                        @auth
+                            @if (session()->has('nova_impersonated_by'))
+                                <form method="POST" action="{{ route('impersonation.stop') }}">
+                                    @method('DELETE')
+                                    @csrf
+
+                                    <x-dropdown-link href="{{ route('impersonation.stop') }}"
+                                                     onclick="event.preventDefault(); this.closest('form').submit();">
+                                        {{ __('Stop impersonation') }}
+                                    </x-dropdown-link>
+                                </form>
+                            @endif
+
+                            <form method="POST" action="{{ route('sign-out') }}">
+                                @csrf
+
+                                <x-dropdown-link href="{{ route('sign-out') }}"
+                                                 onclick="event.preventDefault(); this.closest('form').submit();">
+                                    {{ __('Sign out') }}
+                                </x-dropdown-link>
+                            </form>
+                        @else
+                            <x-dropdown-link href="{{ route('sign-in') }}" wire:navigate>
+                                {{ __('Sign in') }}
+                            </x-dropdown-link>
+
+                            @if (Route::has('sign-up'))
+                                <x-dropdown-link href="{{ route('sign-up') }}" wire:navigate>
+                                    {{ __('Create Account') }}
+                                </x-dropdown-link>
+                            @endif
+                        @endauth
                     </div>
-                @endauth
-            </a>
+                </x-slot:content>
+            </x-dropdown>
         </div>
     </nav>
 </aside>
