@@ -11,6 +11,10 @@
         '48'=>'w-48',
         '64'=>'w-64'
     };
+    $style = match ($align) {
+        'top' => 'bottom: 100%;',
+        default => ''
+    };
 @endphp
 
 <div
@@ -32,8 +36,8 @@
          x-transition:leave="transition ease-in duration-75"
          x-transition:leave-start="transform opacity-100 scale-100"
          x-transition:leave-end="transform opacity-0 scale-95"
-         class="absolute z-50 mt-2 {{ $width }} rounded-md shadow-lg {{ $alignmentClasses }}"
-         style="display: none;">
+         {{ $attributes->merge(['class' => 'absolute z-50 mt-2 ' . $width . ' rounded-md shadow-lg ' . $alignmentClasses ]) }}
+         style="display: none; {{ $style }}">
         <div
             class="rounded-md border border-black/5 overflow-x-hidden {{ $maxHeight ? 'overflow-y-scroll' : null }} {{ $contentClasses }}"
             style="{{ $maxHeight ? 'max-height:' . $maxHeight : null }}"
