@@ -1,4 +1,4 @@
-<aside class="hidden flex-col w-64 h-screen bg-primary z-[999] overflow-hidden xl:fixed xl:flex">
+<aside class="hidden flex-col w-64 h-screen bg-primary z-[999] xl:fixed xl:flex">
     <nav class="flex flex-col h-full border-e border-primary">
         <div class="flex flex-col gap-4 mt-4 mr-4 ml-4">
             <a
@@ -17,34 +17,7 @@
                 <p class="text-2xl font-bold">{{ config('app.name') }}</p>
             </a>
 
-            <div class="w-full">
-                <form
-                    id="search"
-                    class="relative flex items-center gap-2 w-full"
-                    action="{{ route('search.index') }}"
-                    method="get"
-                    x-transition:enter="ease duration-[500ms] delay-300 transform"
-                    x-transition:enter-start="opacity-0 translate-x-8"
-                    x-transition:enter-end="opacity-100 translate-x-0"
-                    x-transition:leave="ease-in duration-200"
-                    x-transition:leave-start="opacity-100"
-                    x-transition:leave-end="opacity-0"
-                >
-                    {{-- Search icon --}}
-                    <div class="absolute left-0 flex pl-4 h-full text-secondary sm:pl-3">
-                        @svg('magnifyingglass', 'fill-current', ['width' => '14'])
-                    </div>
-
-                    {{-- Search field --}}
-                    <x-input
-                        class="pr-8 pl-8 h-8 w-full text-sm"
-                        type="search"
-                        name="q"
-                        placeholder="{{ [__('Search'), '⌘+K, ctrl+K or /'][array_rand([0,1])] }}"
-                        x-ref="search"
-                    />
-                </form>
-            </div>
+            <livewire:sidebar-search />
         </div>
 
         <div class="flex flex-col justify-between w-full h-full overflow-y-scroll">
@@ -94,15 +67,15 @@
                         @svg('building_2', 'fill-current', ['width' => '18']) {{ __('Studios') }}
                     </x-sidebar-nav-link>
 
-{{--                    <x-sidebar-nav-link href="{{ route('platforms.index') }}" wire:navigate :active="request()->routeIs('platforms.index')">--}}
-{{--                        @svg('tv_and_mediabox', 'fill-current', ['width' => '18']) {{ __('Platforms') }}--}}
-{{--                    </x-sidebar-nav-link>--}}
+                    {{--                    <x-sidebar-nav-link href="{{ route('platforms.index') }}" wire:navigate :active="request()->routeIs('platforms.index')">--}}
+                    {{--                        @svg('tv_and_mediabox', 'fill-current', ['width' => '18']) {{ __('Platforms') }}--}}
+                    {{--                    </x-sidebar-nav-link>--}}
                 </section>
 
                 @auth
                     <section class="mt-4">
                         <div class="mb-2">
-                            <h2 class="text-secondary text-sm font-semibold">{{ __('Library') }}</h2>
+                            <h2 class="text-secondary text-xs font-semibold">{{ __('Library') }}</h2>
                         </div>
 
                         <x-sidebar-nav-link href="{{ route('profile.anime.library', $user) }}" wire:navigate :active="request()->routeIs('profile.anime.library', $user)">
@@ -120,7 +93,7 @@
 
                     <section class="mt-4">
                         <div class="mb-2">
-                            <h2 class="text-secondary text-sm font-semibold">{{ __('Favorite') }}</h2>
+                            <h2 class="text-secondary text-xs font-semibold">{{ __('Favorite') }}</h2>
                         </div>
 
                         <x-sidebar-nav-link href="{{ route('profile.anime.favorites', $user) }}" wire:navigate :active="request()->routeIs('profile.anime.favorites', $user)">
@@ -138,7 +111,7 @@
 
                     <section class="mt-4">
                         <div class="mb-2">
-                            <h2 class="text-secondary text-sm font-semibold">{{ __('Reminder') }}</h2>
+                            <h2 class="text-secondary text-xs font-semibold">{{ __('Reminder') }}</h2>
                         </div>
 
                         <x-sidebar-nav-link href="{{ route('profile.anime.reminders', $user) }}" wire:navigate :active="request()->routeIs('profile.anime.reminders', $user)">
