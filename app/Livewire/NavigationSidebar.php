@@ -11,13 +11,6 @@ use Livewire\Component;
 class NavigationSidebar extends Component
 {
     /**
-     * Whether search is enabled.
-     *
-     * @var bool $isSearchEnabled
-     */
-    public bool $isSearchEnabled = false;
-
-    /**
      * The object containing the user data.
      *
      * @var User|null $user
