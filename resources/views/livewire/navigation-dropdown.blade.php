@@ -5,7 +5,7 @@
         isNavOpen: false
     }"
 >
-    <nav class="relative bg-primary text-primary border-b border-primary z-[300]">
+    <nav class="relative bg-primary text-primary border-b border-black/20 z-[300]">
         {{-- Primary Navigation Menu --}}
         <div class="pl-4 pr-4">
             <div class="flex justify-between gap-2 h-12">
@@ -375,6 +375,10 @@
                                     {{ __('More') }}
                                 </div>
 
+                                <x-dropdown-link href="{{ route('app-icons.index') }}" wire:navigate>
+                                    {{ __('App Icons') }}
+                                </x-dropdown-link>
+
                                 <x-dropdown-link href="{{ route('theme-store.index') }}" wire:navigate>
                                     {{ __('Theme Store') }}
                                 </x-dropdown-link>
@@ -601,6 +605,12 @@
 
                 {{-- More Pages --}}
                 <div class="space-y-1 pt-1">
+                    <x-responsive-nav-link href="{{ route('app-icons.index') }}"
+                                           wire:navigate
+                                           :active="request()->routeIs('app-icons.index')">
+                        {{ __('App Icons') }}
+                    </x-responsive-nav-link>
+
                     <x-responsive-nav-link href="{{ route('theme-store.index') }}"
                                            wire:navigate
                                            :active="request()->routeIs('theme-store.index')">
