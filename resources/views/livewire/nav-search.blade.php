@@ -19,7 +19,7 @@
         prevFocusable() { return this.focusables()[this.prevFocusableIndex()] || this.lastFocusable() },
         nextFocusableIndex() { return (this.focusables().indexOf(document.activeElement) + 1) % (this.focusables().length + 1) },
         prevFocusableIndex() { return Math.max(0, this.focusables().indexOf(document.activeElement)) -1 },
-        focusOnSearch() { setTimeout(() => $refs.search.focus(), 0) },
+        focusOnSearch() { isSearchEnabled = true; setTimeout(() => $refs.search.focus(), 0) },
         submit() {
             let search = document.getElementById('search');
             search.submit();
@@ -27,12 +27,15 @@
     }"
     x-on:close.stop="resetAndClose()"
     x-on:keydown.escape.window="resetAndClose()"
-    x-on:keydown.meta.k.window.prevent="isSearchEnabled = true"
-    x-on:keydown.window.prevent.slash="isSearchEnabled = true"
+    x-on:keydown.meta.k.window.prevent="focusOnSearch()"
+    x-on:keydown.slash.window.prevent="focusOnSearch()"
     x-on:keydown.tab.prevent="$event.shiftKey || nextFocusable().focus()"
     x-on:keydown.shift.tab.prevent="prevFocusable().focus()"
-    x-on:keydown.enter="submit()"
-    x-on:transitionstart="focusOnSearch()"
+    x-init="$watch('isSearchEnabled', function(value) {
+        if (value) {
+            focusOnSearch()
+        }
+    })"
 >
     <div class="absolute top-0 right-0 left-0 mx-auto max-w-full sm:max-w-2xl"
          style="z-index: 300; max-height: 85vh"
@@ -60,23 +63,24 @@
                 x-transition:leave-end="opacity-0"
             >
                 {{-- Search icon --}}
-                <button class="absolute left-0 pl-4 h-full text-secondary sm:pl-3">
+                <div class="absolute inline-flex left-0 pl-4 h-full text-secondary sm:pl-2">
                     @svg('magnifyingglass', 'fill-current', ['width' => '16'])
-                </button>
+                </div>
 
                 {{-- Search field --}}
                 <input
-                    class="absolute top-0 left-0 px-10 h-full w-full border-0 bg-transparent text-primary focus:ring-0"
+                    class="absolute top-0 left-0 pl-12 pr-12 h-full w-full border-0 bg-transparent text-primary focus:ring-0 sm:px-10"
                     type="search"
                     name="q"
                     placeholder="{{ [__('I’m searching for…'), __('Search faster with ⌘+K, ctrl+K or /')][array_rand([0,1])] }}"
-                    x-ref="search" wire:model.live.debounce.500ms="searchQuery"
+                    x-ref="search"
+                    wire:model.live.debounce.500ms="searchQuery"
                 />
             </form>
 
             {{-- Close button --}}
-            <button
-                class="absolute right-0 pr-4 h-full text-secondary transition duration-150 ease-in-out hover:text-primary sm:pr-2"
+            <x-square-button
+                class="absolute right-0 mt-2 mr-1"
                 x-show="isSearchEnabled"
                 x-on:click="resetAndClose()"
                 x-transition:enter="ease duration-[400ms] delay-[325ms] transform"
@@ -85,12 +89,13 @@
                 x-transition:leave="ease-in duration-200"
                 x-transition:leave-start="opacity-100"
                 x-transition:leave-end="opacity-0"
+                type="reset"
             >
                 @svg('xmark', 'fill-current', ['width' => '20'])
-            </button>
+            </x-square-button>
         </div>
 
-        {{-- Quick Links --}}
+        {{-- Search Results --}}
         <div
             class="absolute right-0 left-0 pt-4 pb-4 bg-primary rounded-b-2xl overflow-y-scroll"
             style="max-height: 85vh;"
@@ -151,6 +156,7 @@
                 <p class="text-sm text-secondary text-center font-bold" wire:key="no-results-found">{{ __('No search results found :(') }}</p>
             @endif
 
+            {{-- Quick Links --}}
             @if (!empty($quickLinks) && empty($searchResults))
                 <x-search-header
                     x-show="isSearchEnabled"
@@ -166,7 +172,7 @@
                     </x-slot:title>
                 </x-search-header>
 
-                <ul class="space-y-4">
+                <ul class="space-y-4 ml-4 mr-4">
                     @foreach ($quickLinks as $key => $quickLink)
                         <li
                             x-show="isSearchEnabled"
@@ -179,9 +185,19 @@
                             x-transition:leave-end="opacity-0"
                         >
                             @if (isset($quickLink['action']))
-                                <x-footer-link class="inline-block w-full" wire:click="{{ $quickLink['action'] }}">{{ $quickLink['title'] }}</x-footer-link>
+                                <x-footer-button
+                                    class="inline-block w-full"
+                                    wire:click="{{ $quickLink['action'] }}"
+                                >
+                                    {{ $quickLink['title'] }}
+                                </x-footer-button>
                             @elseif (isset($quickLink['link']))
-                                <x-footer-link class="inline-block w-full" href="{{ $quickLink['link'] }}">{{ $quickLink['title'] }}</x-footer-link>
+                                <x-footer-link
+                                    class="inline-block w-full"
+                                    href="{{ $quickLink['link'] }}"
+                                >
+                                    {{ $quickLink['title'] }}
+                                </x-footer-link>
                             @endif
                         </li>
                     @endforeach
