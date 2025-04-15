@@ -65,10 +65,10 @@
 
         @if (empty($this->searchResults) || empty($this->searchResults->total()))
             <section class="mt-4">
-                <ul class="flex flex-col gap-4 items-center">
+                <ul class="flex flex-col gap-4 items-center justify-center mr-4" style="min-height: 50vh;">
                     @foreach ($this->searchSuggestions as $searchSuggestion)
                         <li>
-                            <button class="pl-4 pr-4 pb-2 text-tint" wire:click="$set('search', '{{ $searchSuggestion }}')">
+                            <button class="pl-4 pr-4 pt-2 pb-2 text-tint" wire:click="$set('search', '{{ $searchSuggestion }}')">
                                 {{ $searchSuggestion }}
                             </button>
                         </li>

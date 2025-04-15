@@ -65,7 +65,7 @@
                     </section>
                 @endforeach
             @else
-                <section class="flex flex-col items-center mt-4 text-center">
+                <section class="flex flex-col items-center justify-center mt-4 text-center" style="min-height: 50vh;">
                     <x-picture>
                         <img class="w-full max-w-sm" src="{{ asset('images/static/placeholders/empty_anime_library.webp') }}" alt="Empty App Icon" title="Empty App Icon">
                     </x-picture>

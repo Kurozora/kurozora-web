@@ -47,7 +47,7 @@
                         </div>
                     </section>
                 @else
-                    <section class="flex flex-col items-center mt-4 text-center" wire:key="empty-{{ strtolower($status) }}">
+                    <section class="flex flex-col items-center justify-center mt-4 text-center" wire:key="empty-{{ strtolower($status) }}" style="min-height: 50vh;">
                         <x-picture>
                             <img class="w-full max-w-sm" src="{{ asset('images/static/placeholders/empty_manga_library.webp') }}" alt="Empty Library" title="Empty Library">
                         </x-picture>
