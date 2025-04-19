@@ -25,9 +25,9 @@ class GetButton extends Component
     /**
      * The id of the current theme.
      *
-     * @var int|string $currentThemeID
+     * @var string $currentThemeID
      */
-    public int|string $currentThemeID = 'kurozora';
+    public string $currentThemeID = 'kurozora';
 
     /**
      * The name of the theme.
@@ -62,11 +62,11 @@ class GetButton extends Component
     /**
      * Handles the incoming `theme-changed` event.
      *
-     * @param int|string $currentThemeID
+     * @param string $currentThemeID
      *
      * @return void
      */
-    public function handleThemeChanged(int|string $currentThemeID): void
+    public function handleThemeChanged(string $currentThemeID): void
     {
         $this->currentThemeID = $currentThemeID;
     }
@@ -112,7 +112,7 @@ class GetButton extends Component
             'download_count' => $appTheme->download_count + 1
         ]);
 
-        $this->currentThemeID = $appTheme->id;
+        $this->currentThemeID = (string) $appTheme->id;
         $this->dispatch('theme-download', theme: [
             'id' => $appTheme->id,
             'css' => $appTheme->toCSS(),
