@@ -138,8 +138,13 @@ class Season extends Resource
                 ->hideFromIndex()
                 ->help('The sequence in which the season starts.'),
 
+            Text::make('Title', function($resource) {
+                return $resource->title;
+            })
+                ->onlyOnIndex(),
+
             Text::make('Title Translations', 'title')
-                ->sortable()
+                ->hideFromIndex()
                 ->required()
                 ->translatable()
                 ->help('Usually the name of the arc of the story. If unknown, use "Season #" as the title.'),
@@ -171,7 +176,7 @@ class Season extends Resource
     public function title(): string
     {
         $season = $this->resource;
-        $seasonName = ''; // $season->title;
+        $seasonName = $season->title;
 
         if (!is_string($seasonName) || !strlen($seasonName)) {
             $seasonName = 'No season title';
