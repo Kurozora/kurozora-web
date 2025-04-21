@@ -1,8 +1,8 @@
 {
-  "openapi": "3.0.3",
+  "openapi": "3.1.1",
   "info": {
     "description": "Integrate tracking shows with Kurozora content.\n *** \nThe Kurozora API is a web service that lets you access information about the media found in the Kurozora&nbsp;Catalog and the user's personal Kurozora&nbsp;Library. Here's what each one includes:\n- The Kurozora&nbsp;Catalog includes all resources available in Kurozora.\n- The user's Kurozora&nbsp;Library contains only those resources that the user added to their personal library. For example, it contains shows added to their tracking list, and favorites.\n\nUse this service to retrieve information about characters, episodes, feeds, games, genres, manga, people, seasons, shows, studios, users, and the users' library.\nWith proper authorization from the user, you can also create or modify their library, apply ratings to shows, create or modify feeds and react on replies.",
-    "version": "1.4.0",
+    "version": "1.12.0",
     "title": "Kurozora API",
     "termsOfService": "https://kurozora.app/legal/terms-of-use",
     "contact": {
@@ -71,6 +71,10 @@
     {
       "name": "people",
       "description": "Everything people related"
+    },
+    {
+      "name": "reviews",
+      "description": "Everything reviews related"
     },
     {
       "name": "search",
@@ -1980,6 +1984,74 @@
           },
           "403": {
             "$ref": "#/components/responses/AuthenticationError"
+          }
+        }
+      }
+    },
+    "/reviews/{reviewID}": {
+      "get": {
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "tags": [
+          "reviews"
+        ],
+        "operationId": "getReview",
+        "summary": "Review information.",
+        "description": "This endpoint will retrieve the details of a review item.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "reviewID",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "ID of the review."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetReviewSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/reviews/{reviewID}/delete": {
+      "delete": {
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "tags": [
+          "reviews"
+        ],
+        "operationId": "deleteReview",
+        "summary": "Delete a review.",
+        "description": "This endpoint will delete a review item.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "reviewID",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "ID of the review."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
           }
         }
       }
@@ -6119,7 +6191,7 @@
                       "ip": "127.0.0.1"
                     },
                     "string": "A new client has logged in to your account. (IP: 127.0.0.1)",
-                    "createdAt": "2020-07-27 13:57:12"
+                    "createdAt": 1524009600
                   }
                 }
               }
@@ -9845,6 +9917,40 @@
                       "about": "Corporis quia ducimus eveniet beatae. Aut repellat voluptates porro esse ea. Similique quos nemo voluptas beatae enim molestias. Qui perspiciatis unde ipsa ipsam rerum veniam. Non explicabo hic incidunt quibusdam nobis accusantium. Voluptatum vero vel et animi et amet. Quis autem quod enim ut incidunt odio. Tenetur omnis amet qui delectus. Temporibus cupiditate ullam similique harum voluptas. Nostrum deserunt eum voluptas ex ut similique omnis. Ipsa illo voluptates nobis quisquam fugit rerum voluptatem dolore. Voluptatem ratione ut veritatis illum eveniet aliquam. Eaque maxime nemo maiores dolor hic.",
                       "founded": "2007-02-25",
                       "websiteUrl": "https://streich.net/blanditiis-tempora-molestiae-in-aut"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "GetReviewSuccess": {
+        "description": "Successful GET Review JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "id": 8,
+                    "type": "reviews",
+                    "href": "/v1/reviews/8",
+                    "attributes": {
+                      "score": 4.5,
+                      "description": "The best anime I've seen in a while",
+                      "createdAt": 1524009600
+                    }
+                  },
+                  {
+                    "id": 9,
+                    "type": "reviews",
+                    "href": "/v1/reviews/9",
+                    "attributes": {
+                      "score": 2.5,
+                      "description": null,
+                      "createdAt": 1524009600
                     }
                   }
                 ]
