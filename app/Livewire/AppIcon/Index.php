@@ -41,7 +41,7 @@ class Index extends Component
      *
      * @var string[]
      */
-    protected array $iconOrder = ['Kurozora', 'Kuro-chan'];
+    protected array $iconOrder = ['Kurozora', 'Kuro-chan', '6 Colors', '6 Colors Inverted', 'Kurozora Connect', 'Kurozora Support', 'Kurozora Support Inverted', 'iOS 6', 'Winter', 'Spring', 'Summer', 'Fall'];
 
     /**
      * Prepare the component.
