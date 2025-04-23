@@ -50,12 +50,15 @@ class ResmushIt {
         ];
 
         // Send file to the API
-        $ch = curl_init();
+        $headers[] = 'user-agent: Firefox/140.0';
+        $headers[] = 'referer: https://resmush.it';
+        $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_URL, 'https://api.resmush.it/ws.php?qlty=60');
         curl_setopt($ch, CURLOPT_POST,1);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         $body = curl_exec($ch);
 
         if (curl_errno($ch)) {
