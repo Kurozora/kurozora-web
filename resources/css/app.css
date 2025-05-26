@@ -272,7 +272,7 @@ img:not([src]):not([srcset]) {
   display: none !important;
 }
 
-[target="_blank"]::after {
+[target="_blank"]:not(.no-external-icon)::after {
   content: "\0020\2197";
   white-space: nowrap;
 }
