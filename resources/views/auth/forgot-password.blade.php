@@ -12,7 +12,7 @@
     <div class="flex flex-col justify-center w-screen h-full max-w-prose mx-auto pt-4 pb-6 pl-4 pr-4">
         <div class="text-center mb-5">
             <h1 class="text-2xl font-bold">{{ __('Forgot your password?') }}</h1>
-            <p>{{ __('Enter your :x Account to continue.', ['x' => __(config('app.name'))]) }}</p>
+            <p>{{ __('Enter your :x Account to continue.', ['x' => config('app.name')]) }}</p>
         </div>
 
         @if (session('status'))

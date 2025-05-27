@@ -616,7 +616,7 @@
                             <p>{{ __('You can download the app on the') }} <x-link target="_blank" href="{{ config('app.ios.store_url') }}">App Store</x-link> {{ __('on your favorite device. :x works on iPhone, iPad, iPod Touch, Mac, and Apple Vision Pro.', ['x' => config('app.name')]) }}</p>
                             <br />
                             <br />
-                            <p>{{ __(':x can also be used on Android, Windows, Linux and all other devices through the website, or as a Progressive Web App (PWA), at', ['x' => config('app.name')]) }} <x-link href="{{ route('home') }}">{{ config('app.domain') }}</x-link>.</p>
+                            <p>{{ __(':x can also be used on Android, Windows, Linux and all other devices through the website, or as a Progressive Web App (PWA), at', ['x' => config('app.name')]) }} <x-link href="{{ route('home') }}" wire:navigate>{{ config('app.domain') }}</x-link>.</p>
                         </div>
                     </div>
                 </li>

@@ -98,15 +98,15 @@
         {{-- Services --}}
         <section class="flex flex-col items-center space-y-4 mt-16 text-center">
             <x-picture class="max-w-sm">
-                <img src="{{ asset('images/static/promotional/kurozora_services.webp') }}" alt="{{ __(':x services', ['x' => __(config('app.name'))]) }}" title="{{ __(':x services', ['x' => __(config('app.name'))]) }}">
+                <img src="{{ asset('images/static/promotional/kurozora_services.webp') }}" alt="{{ __(':x services', ['x' => config('app.name')]) }}" title="{{ __(':x services', ['x' => config('app.name')]) }}">
             </x-picture>
 
-            <p class="text-sm">{{ __('Your :x Account lets you access your library, favorites, reminders, reviews, and more on your devices, automatically.', ['x' => __(config('app.name'))]) }}</p>
+            <p class="text-sm">{{ __('Your :x Account lets you access your library, favorites, reminders, reviews, and more on your devices, automatically.', ['x' => config('app.name')]) }}</p>
         </section>
 
         {{-- Legal --}}
         <section class="space-y-1 mt-16 text-center text-sm">
-            <p class="text-secondary">{{ __('Your :x Account information is used to enable :x services when you sign in. :x services includes the library where you can keep track of the shows you are interested in.', ['x' => __(config('app.name'))]) }}</p>
+            <p class="text-secondary">{{ __('Your :x Account information is used to enable :x services when you sign in. :x services includes the library where you can keep track of the shows you are interested in.', ['x' => config('app.name')]) }}</p>
             <x-link href="{{ route('legal.privacy-policy') }}" wire:navigate>{{ __('See how your data is managed…') }}</x-link>
         </section>
     </div>
