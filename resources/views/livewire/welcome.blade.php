@@ -92,7 +92,7 @@
                     </h2>
 
                     <div class="flex flex-wrap gap-4 justify-center mt-12 pr-5 pl-5">
-                        <x-link-button class="text-lg" href="{{ route('home') }}">
+                        <x-link-button class="text-lg" href="{{ route('home') }}" wire:navigate>
                             <span>{{ __('Visit the Website') }}</span>
                         </x-link-button>
 
@@ -442,7 +442,7 @@
 
                 <p class="my-2 text-4xl font-bold leading-tight md:text-6xl">{{ __('Use :x anywhere you go.', ['x' => config('app.name')]) }}</p>
 
-                <p class="font-semibold md:text-xl">{{ __('Explore on iPhone. Track on Mac. Share on iPad. Find the :x app on your favorite devices. Or use :x online at', ['x' => config('app.name')]) }} <x-link href="{{ route('home') }}">
+                <p class="font-semibold md:text-xl">{{ __('Explore on iPhone. Track on Mac. Share on iPad. Find the :x app on your favorite devices. Or use :x online at', ['x' => config('app.name')]) }} <x-link href="{{ route('home') }}" wire:navigate>
                 {{ config('app.domain') }}</x-link></p>
             </div>
 
@@ -508,7 +508,7 @@
             </div>
 
             <div class="flex flex-wrap gap-4 justify-center mt-12 pr-5 pl-5">
-                <x-link-button class="text-lg" href="{{ route('home') }}">
+                <x-link-button class="text-lg" href="{{ route('home') }}" wire:navigate>
                     <span>{{ __('Visit the Website') }}</span>
                 </x-link-button>
 

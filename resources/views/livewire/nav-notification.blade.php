@@ -15,7 +15,7 @@
                                             <p class="text-xs leading-tight opacity-75">{{ $notification->description }}</p>
                                         </div>
 
-                                        <a class="absolute w-full h-full" href="{{ route('profile.settings') }}"></a>
+                                        <a class="absolute w-full h-full" href="{{ route('profile.settings') }}" wire:navigate></a>
                                     </div>
                                 </div>
                                 @break
@@ -61,7 +61,7 @@
                                     </div>
 
                                     @if ($notification->notifier)
-                                        <a class="absolute w-full h-full" href="{{ route('profile.details', $notification->notifier) }}"></a>
+                                        <a class="absolute w-full h-full" href="{{ route('profile.details', $notification->notifier) }}" wire:navigate></a>
                                     @endif
                                 </div>
                                 @break
@@ -85,7 +85,7 @@
                 @else
                     <p class="text-sm text-center">{{ __('Notifications are only available to registered :x users.', ['x' => config('app.name')]) }}</p>
 
-                    <x-link class="text-sm" href="{{ route('sign-in') }}">{{ __('Sign in') }}</x-link>
+                    <x-link class="text-sm" href="{{ route('sign-in') }}" wire:navigate>{{ __('Sign in') }}</x-link>
                 @endauth
             </div>
         @endif

@@ -61,7 +61,7 @@
                     @endphp
 
                     <div class="relative flex-grow w-64 md:w-80">
-                        <a class="block pt-6 pb-6 pl-6 pr-6 text-center rounded-lg shadow-lg" style="background: url({{ asset('images/static/patterns/genre_pattern.svg') }}) no-repeat center center / cover, url({{ asset('images/static/patterns/grain.svg') }}), {{ $backgroundColor }};" href="{{ route('profile.details', $user) }}">
+                        <a class="block pt-6 pb-6 pl-6 pr-6 text-center rounded-lg shadow-lg" style="background: url({{ asset('images/static/patterns/genre_pattern.svg') }}) no-repeat center center / cover, url({{ asset('images/static/patterns/grain.svg') }}), {{ $backgroundColor }};" href="{{ route('profile.details', $user) }}" wire:navigate>
                             <div class="flex justify-center mb-3">
                                 <picture class="relative w-40 h-40 rounded-full shadow-lg overflow-hidden">
                                     <img class="w-full h-full object-cover" width="160" height="160" src="{{ $user->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) }}" alt="{{ $user->username }} Profile Image" title="{{ $user->username }}">
@@ -104,7 +104,7 @@
                     @endphp
 
                     <div class="relative flex-grow w-64 md:w-80">
-                        <a class="block pt-6 pb-6 pl-6 pr-6 text-center rounded-lg shadow-lg" style="background: url({{ asset('images/static/patterns/genre_pattern.svg') }}) no-repeat center center / cover, url({{ asset('images/static/patterns/grain.svg') }}), {{ $backgroundColor }};" href="{{ route('profile.details', $user) }}">
+                        <a class="block pt-6 pb-6 pl-6 pr-6 text-center rounded-lg shadow-lg" style="background: url({{ asset('images/static/patterns/genre_pattern.svg') }}) no-repeat center center / cover, url({{ asset('images/static/patterns/grain.svg') }}), {{ $backgroundColor }};" href="{{ route('profile.details', $user) }}" wire:navigate>
                             <div class="flex justify-center mb-3">
                                 <picture class="relative w-40 h-40 rounded-full shadow-lg overflow-hidden">
                                     <img class="w-full h-full object-cover" width="160" height="160" src="{{ $user->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) }}" alt="{{ $user->username }} Profile Image" title="{{ $user->username }}">
