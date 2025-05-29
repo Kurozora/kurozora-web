@@ -47,13 +47,13 @@
         <div class="flex flex-col w-full gap-2 justify-between">
             <div>
                 @if ($isRanked)
-                    <p class="text-sm font-semibold">#{{ $rank }}</p>
+                    <p class="text-sm leading-tight font-semibold" title="{{ __('Ranked #:x', ['x' => $rank]) }}">{{ __('#:x', ['x' => $rank]) }}</p>
                 @endif
 
-                <p class="line-clamp-2">{{ $platform->name }}</p>
+                <p class="line-clamp-2" title="{{ $platform->name }}">{{ $platform->name }}</p>
 
                 @if (!empty($platform->started_at))
-                    <p class="text-sm">{{ __('Released on :x', ['x' => $platform->started_at->toFormattedDateString()]) }}</p>
+                    <p class="text-sm opacity-75 line-clamp-2" title="{{ __('Released on :x', ['x' => $platform->started_at->toFormattedDateString()]) }}">{{ __('Released on :x', ['x' => $platform->started_at->toFormattedDateString()]) }}</p>
                 @endif
             </div>
         </div>

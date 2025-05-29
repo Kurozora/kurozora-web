@@ -3,8 +3,8 @@
 <div class="relative flex-grow w-64 md:w-80">
     <div class="flex items-end gap-2 pt-4 pb-4">
         <div class="w-full">
-            <p class="leading-tight line-clamp-2">{{ $theme->name }}</p>
-            <p class="text-xs leading-tight opacity-75 line-clamp-2">{{ \App\Enums\KTheme::OTHER()->descriptionValue($theme) }}</p>
+            <p class="leading-tight line-clamp-2" title="{{ $theme->name }}">{{ $theme->name }}</p>
+            <p class="text-xs leading-tight opacity-75 line-clamp-2" title="{{ \App\Enums\KTheme::OTHER()->descriptionValue($theme) }}">{{ \App\Enums\KTheme::OTHER()->descriptionValue($theme) }}</p>
         </div>
 
         <div class="flex gap-2">

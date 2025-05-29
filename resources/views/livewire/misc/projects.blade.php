@@ -62,9 +62,9 @@
 
                             <div class="flex flex-col justify-between pt-4 pr-2 pb-4 pl-2">
                                 <div class="flex flex-col gap-2 mt-1">
-                                    <p class="text-lg leading-tight line-clamp-2">{{ $project->name }}</p>
+                                    <p class="text-lg leading-tight line-clamp-2" title="{{ $project->name }}">{{ $project->name }}</p>
 
-                                    <p class="text-sm text-secondary leading-tight line-clamp-2">{{ $project->stack }}</p>
+                                    <p class="text-sm text-secondary leading-tight line-clamp-2" title="{{ $project->stack }}">{{ $project->stack }}</p>
 
                                     <p class="text-sm leading-tight">{{ $project->description }}</p>
                                 </div>

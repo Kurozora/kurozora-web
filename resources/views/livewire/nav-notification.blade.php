@@ -11,8 +11,8 @@
                                 <div class="flex flex-nowrap justify-between pr-2 pl-2">
                                     <div class="flex items-center">
                                         <div class="pl-2 pr-2">
-                                            <p class="leading-tight line-clamp-2">{{ $notification->localized_type }}</p>
-                                            <p class="text-xs leading-tight opacity-75">{{ $notification->description }}</p>
+                                            <p class="leading-tight line-clamp-2" title="{{ $notification->localized_type }}">{{ $notification->localized_type }}</p>
+                                            <p class="text-xs leading-tight opacity-75" title="{{ $notification->description }}">{{ $notification->description }}</p>
                                         </div>
 
                                         <a class="absolute w-full h-full" href="{{ route('profile.settings') }}" wire:navigate></a>
@@ -30,7 +30,7 @@
                                 <div class="flex flex-nowrap justify-between pr-2 pl-2">
                                     <div class="flex items-center">
                                         <div class="pl-2 pr-2">
-                                            <p class="leading-tight line-clamp-2">{{ $notification->localized_type }}</p>
+                                            <p class="leading-tight line-clamp-2" title="{{ $notification->localized_type }}">{{ $notification->localized_type }}</p>
                                             <p class="text-xs leading-tight opacity-75">{{ $notification->description }}</p>
                                         </div>
                                     </div>
@@ -55,7 +55,7 @@
                                         </picture>
 
                                         <div class="pl-2 pr-2">
-                                            <p class="leading-tight line-clamp-2">{{ $notification->getData('username') }}</p>
+                                            <p class="leading-tight line-clamp-2" title="{{ $notification->getData('username') }}">{{ $notification->getData('username') }}</p>
                                             <p class="text-xs leading-tight opacity-75">{{ $notification->description }}</p>
                                         </div>
                                     </div>

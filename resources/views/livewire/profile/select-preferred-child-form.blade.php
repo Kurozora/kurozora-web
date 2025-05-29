@@ -47,7 +47,7 @@
                             </picture>
 
                             <div class="pl-2 pr-2">
-                                <p class="leading-tight line-clamp-2">{{ $child->username }}</p>
+                                <p class="leading-tight line-clamp-2" title="{{ $child->username }}">{{ $child->username }}</p>
                                 <p class="text-xs leading-tight opacity-75">{{ __('@:x', ['x' => $child->slug]) }}</p>
                             </div>
                         </div>

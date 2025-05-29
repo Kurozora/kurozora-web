@@ -58,7 +58,7 @@
                                 >
                                     <x-app-icon size="64px" :image-url="$appIcon->getImage()" />
 
-                                    <p class="text-center leading-tight line-clamp-2">{{ $appIcon->name }}</p>
+                                    <p class="text-center leading-tight line-clamp-2" title="{{ $appIcon->name }}">{{ $appIcon->name }}</p>
                                 </button>
                             @endforeach
                         </div>

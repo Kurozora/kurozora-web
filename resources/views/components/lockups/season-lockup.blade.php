@@ -19,8 +19,8 @@
 
         <div class="flex flex-col w-full justify-between">
             <div>
-                <p class="text-xs leading-tight opacity-75 line-clamp-2">{{ __('Season') . ' ' . $season->number }}</p>
-                <p class="leading-tight line-clamp-2">{{ $season->title }}</p>
+                <p class="text-xs leading-tight opacity-75 line-clamp-2" title="{{ __('Season :x', ['x' => $season->number]) }}">{{ __('Season :x', ['x' => $season->number]) }}</p>
+                <p class="leading-tight line-clamp-2" title="{{ $season->title }}">{{ $season->title }}</p>
             </div>
 
             <div class="flex flex-wrap gap-1.5 justify-between">

@@ -5,7 +5,7 @@
 @endphp
 
 <div {{ $attributes->merge(['class' => 'relative flex-grow w-28 ' . $class]) }}>
-    <a class="absolute w-full h-full" href="{{ route('people.details', $person) }}"></a>
+    <a class="absolute w-full h-full" href="{{ route('people.details', $person) }}" wire:navigate></a>
 
     <div class="flex flex-col">
         <picture
@@ -24,14 +24,14 @@
         <div class="flex flex-col w-full gap-2 justify-between">
             <div class="text-center">
                 @if ($isRanked)
-                    <p class="text-sm leading-tight font-semibold">#{{ $rank }}</p>
+                    <p class="text-sm leading-tight font-semibold" title="{{ __('Ranked #:x', ['x' => $rank]) }}">{{ __('#:x', ['x' => $rank]) }}</p>
                 @endif
 
-                <p class="text-center leading-tight line-clamp-2">{{ $person->full_name }}</p>
+                <p class="text-center leading-tight line-clamp-2" title="{{ $person->full_name }}">{{ $person->full_name }}</p>
             </div>
 
             @if (!empty($staffRole))
-                <p class="text-sm text-secondary text-center leading-tight line-clamp-2">{{ $staffRole }}</p>
+                <p class="text-sm text-secondary text-center leading-tight line-clamp-2" title="{{ $staffRole }}">{{ $staffRole }}</p>
             @endif
         </div>
     </div>

@@ -28,9 +28,9 @@
                 @if (!empty($cast->person))
                     <a class="text-tint leading-tight line-clamp-2" href="{{ route('people.details', $cast->person) }}">{{ $cast->person->full_name }}</a>
                 @else
-                    <p class="text-tint leading-tight line-clamp-2">{{ __('Unknown') }}</p>
+                    <p class="text-tint leading-tight line-clamp-2" title="{{ __('Unknown') }}">{{ __('Unknown') }}</p>
                 @endif
-                <p class="text-xs leading-tight opacity-75 line-clamp-2">{{ __('Voice actor') }}</p>
+                <p class="text-xs leading-tight opacity-75 line-clamp-2" title="{{ __('Voice actor') }}">{{ __('Voice actor') }}</p>
             </div>
 
             <div class="flex flex-col text-end gap-1">

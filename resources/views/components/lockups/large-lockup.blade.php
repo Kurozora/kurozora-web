@@ -33,8 +33,8 @@
 
         <div class="flex gap-2 justify-between">
             <div>
-                <p class="leading-tight line-clamp-2">{{ $anime->title }}</p>
-                <p class="text-xs leading-tight opacity-75 line-clamp-2">{{ empty($anime->tagline) ? $anime->genres?->pluck('name')->join(', ', ' and ') : $anime->tagline }}</p>
+                <p class="leading-tight line-clamp-2" title="{{ $anime->title }}">{{ $anime->title }}</p>
+                <p class="text-xs leading-tight opacity-75 line-clamp-2" title="{{ empty($anime->tagline) ? $anime->genres?->pluck('name')->join(', ', ' and ') : $anime->tagline }}">{{ empty($anime->tagline) ? $anime->genres?->pluck('name')->join(', ', ' and ') : $anime->tagline }}</p>
             </div>
 
             <livewire:components.library-button :model="$anime" wire:key="{{ uniqid($anime->id, true) }}" />

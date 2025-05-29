@@ -21,8 +21,8 @@
                 style="padding-top: 15%;"
             >
                 <div class="max-w-[50%]">
-                    <p class="text-white leading-tight line-clamp-2">{{ $anime->title }}</p>
-                    <p class="text-xs text-white/60 leading-tight line-clamp-2">{{ empty($anime->tagline) ? $anime->genres?->pluck('name')->join(', ', ' and ') : $anime->tagline }}</p>
+                    <p class="text-white leading-tight line-clamp-2" title="{{ $anime->title }}">{{ $anime->title }}</p>
+                    <p class="text-xs text-white/60 leading-tight line-clamp-2" title="{{ empty($anime->tagline) ? $anime->genres?->pluck('name')->join(', ', ' and ') : $anime->tagline }}">{{ empty($anime->tagline) ? $anime->genres?->pluck('name')->join(', ', ' and ') : $anime->tagline }}</p>
                 </div>
             </div>
 

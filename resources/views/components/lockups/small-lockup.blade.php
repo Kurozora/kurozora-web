@@ -21,16 +21,17 @@
             <div class="flex flex-col w-full gap-2 justify-between">
                 <div>
                     @if ($isRanked)
-                        <p class="text-sm leading-tight font-semibold">#{{ $rank }}</p>
+                        <p class="text-sm leading-tight font-semibold" title="{{ __('Ranked #:x', ['x' => $rank]) }}">{{ __('#:x', ['x' => $rank]) }}</p>
                     @endif
 
                     @if (!empty($relation))
-                        <p class="text-xs leading-tight font-semibold opacity-75 line-clamp-2">{{ $relation->name }}</p>
+                        <p class="text-xs leading-tight font-semibold opacity-75 line-clamp-2" title="{{ $relation->name }}">{{ $relation->name }}</p>
                     @endif
 
                     @if ($showsSchedule)
                         <p
                             class="text-xs leading-tight font-semibold opacity-75 line-clamp-2"
+                            x-bind:title="'{{ __('Broadcasts at :x', ['x' => $anime->broadcast_date?->format('H:i T')]) }} ' + broadcastString"
                             x-data="{
                                 broadcastTimestamp: {{ $anime->broadcast_date?->timestamp }},
                                 broadcastDuration: {{ $anime->duration }},
@@ -54,11 +55,11 @@
                         </p>
                     @endif
 
-                    <p class="leading-tight line-clamp-2">{{ $anime->title }}</p>
+                    <p class="leading-tight line-clamp-2" title="{{ $anime->title }}">{{ $anime->title }}</p>
 
                     <div class="flex flex-col gap-1">
-                        <p class="text-xs leading-tight opacity-75 line-clamp-2">{{ empty($anime->tagline) ? ($anime->genres?->pluck('name')->join(', ', ' and ') ?? $anime->themes?->pluck('name')->join(', ', ' and ')) : $anime->tagline }}</p>
-                        <p class="text-xs leading-tight opacity-75 line-clamp-2">{{ $anime->tv_rating->name }}</p>
+                        <p class="text-xs leading-tight opacity-75 line-clamp-2" title="{{ empty($anime->tagline) ? ($anime->genres?->pluck('name')->join(', ', ' and ') ?? $anime->themes?->pluck('name')->join(', ', ' and ')) : $anime->tagline }}">{{ empty($anime->tagline) ? ($anime->genres?->pluck('name')->join(', ', ' and ') ?? $anime->themes?->pluck('name')->join(', ', ' and ')) : $anime->tagline }}</p>
+                        <p class="text-xs leading-tight opacity-75 line-clamp-2" title="{{ $anime->tv_rating->name }}">{{ $anime->tv_rating->name }}</p>
                     </div>
 
                     @if (!empty($anime->mediaStat?->rating_count) && $trackingEnabled)
@@ -91,16 +92,17 @@
             <div class="flex flex-col w-full gap-2 justify-between">
                 <div>
                     @if ($isRanked)
-                        <p class="text-sm leading-tight font-semibold">#{{ $rank }}</p>
+                        <p class="text-sm leading-tight font-semibold" title="{{ __('Ranked #:x', ['x' => $rank]) }}">{{ __('#:x', ['x' => $rank]) }}</p>
                     @endif
 
                     @if (!empty($relation))
-                        <p class="text-xs leading-tight font-semibold opacity-75 line-clamp-2">{{ $relation->name }}</p>
+                        <p class="text-xs leading-tight font-semibold opacity-75 line-clamp-2" title="{{ $relation->name }}">{{ $relation->name }}</p>
                     @endif
 
                     @if ($showsSchedule)
                         <p
                             class="text-xs leading-tight font-semibold opacity-75 line-clamp-2"
+                            x-bind:title="'{{ __('Publishes at :x', ['x' => $game->publication_date?->format('H:i T')]) }} ' + publicationString"
                             x-data="{
                                 publicationTimestamp: {{ $game->publication_date?->timestamp }},
                                 publicationDuration: 25,
@@ -124,11 +126,11 @@
                         </p>
                     @endif
 
-                    <p class="leading-tight line-clamp-1">{{ $game->title }}</p>
+                    <p class="leading-tight line-clamp-1" title="{{ $game->title }}">{{ $game->title }}</p>
 
                     <div class="flex flex-col gap-1">
-                        <p class="text-xs leading-tight opacity-75 line-clamp-1">{{ empty($game->tagline) ? ($game->genres?->pluck('name')->join(', ', ' and ') ?? $game->themes?->pluck('name')->join(', ', ' and ')) : $game->tagline }}</p>
-                        <p class="text-xs leading-tight opacity-75 line-clamp-1">{{ $game->tv_rating->name }}</p>
+                        <p class="text-xs leading-tight opacity-75 line-clamp-1" title="{{ empty($game->tagline) ? ($game->genres?->pluck('name')->join(', ', ' and ') ?? $game->themes?->pluck('name')->join(', ', ' and ')) : $game->tagline }}">{{ empty($game->tagline) ? ($game->genres?->pluck('name')->join(', ', ' and ') ?? $game->themes?->pluck('name')->join(', ', ' and ')) : $game->tagline }}</p>
+                        <p class="text-xs leading-tight opacity-75 line-clamp-1" title="{{ $game->tv_rating->name }}">{{ $game->tv_rating->name }}</p>
                     </div>
 
                     @if (!empty($game->mediaStat?->rating_count) && $trackingEnabled)
@@ -171,11 +173,11 @@
             <div class="flex flex-col w-full gap-2 justify-between">
                 <div>
                     @if ($isRanked)
-                        <p class="text-sm leading-tight font-semibold">#{{ $rank }}</p>
+                        <p class="text-sm leading-tight font-semibold" title="{{ __('Ranked #:x', ['x' => $rank]) }}">{{ __('#:x', ['x' => $rank]) }}</p>
                     @endif
 
                     @if (!empty($relation))
-                        <p class="text-xs leading-tight font-semibold opacity-75 line-clamp-2">{{ $relation->name }}</p>
+                        <p class="text-xs leading-tight font-semibold opacity-75 line-clamp-2" title="{{ $relation->name }}">{{ $relation->name }}</p>
                     @endif
 
                     @if ($showsSchedule)
@@ -204,11 +206,11 @@
                         </p>
                     @endif
 
-                    <p class="leading-tight line-clamp-2">{{ $manga->title }}</p>
+                    <p class="leading-tight line-clamp-2" title="{{ $manga->title }}">{{ $manga->title }}</p>
 
                     <div class="flex flex-col gap-1">
-                        <p class="text-xs leading-tight opacity-75 line-clamp-2">{{ empty($manga->tagline) ? ($manga->genres?->pluck('name')->join(', ', ' and ') ?? $manga->themes?->pluck('name')->join(', ', ' and ')) : $manga->tagline }}</p>
-                        <p class="text-xs leading-tight opacity-75 line-clamp-2">{{ $manga->tv_rating->name }}</p>
+                        <p class="text-xs leading-tight opacity-75 line-clamp-2" title="{{ empty($manga->tagline) ? ($manga->genres?->pluck('name')->join(', ', ' and ') ?? $manga->themes?->pluck('name')->join(', ', ' and ')) : $manga->tagline }}">{{ empty($manga->tagline) ? ($manga->genres?->pluck('name')->join(', ', ' and ') ?? $manga->themes?->pluck('name')->join(', ', ' and ')) : $manga->tagline }}</p>
+                        <p class="text-xs leading-tight opacity-75 line-clamp-2" title="{{ $manga->tv_rating->name }}">{{ $manga->tv_rating->name }}</p>
                     </div>
 
                     @if (!empty($manga->mediaStat?->rating_count) && $trackingEnabled)

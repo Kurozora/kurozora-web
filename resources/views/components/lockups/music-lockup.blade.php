@@ -47,6 +47,7 @@
                         <button
                             class="inline-flex items-center pt-4 pr-4 pb-4 pl-4 bg-blur backdrop-blur border border-transparent rounded-full font-semibold text-xs uppercase tracking-widest shadow-md hover:bg-tint-800 hover:btn-text-tinted active:bg-tint active:btn-text-tinted focus:outline-none disabled:bg-gray-100 disabled:text-gray-300 disabled:cursor-default disabled:opacity-100 transition ease-in-out duration-150"
                             x-on:click="await musicManager?.playSong(song)"
+                            x-bind:title="musicManager?.isPlaying ? '{{ __('Pause') }}' : '{{ __('Play') }}'"
                         >
                             <template x-if="musicManager?.isPlaying && musicManager?.currentMusicID === '{{ $song->am_id }}'">
                                 @svg('pause_fill', 'fill-current', ['width' => '24'])
@@ -66,25 +67,25 @@
         <div class="flex flex-col w-full gap-2 justify-between">
             <div>
             @if ($isRanked)
-                <p class="text-sm leading-tight font-semibold">#{{ $rank }}</p>
+                <p class="text-sm leading-tight font-semibold" title="{{ __('Ranked #:x', ['x' => $rank]) }}">{{ __('#:x', ['x' => $rank]) }}</p>
             @endif
 
             <a class="flex gap-2 justify-between" href="{{ route('songs.details', $song) }}" wire:navigate>
-                <p class="line-clamp-2" x-text="songTitle">{{ $song->original_title }}</p>
+                <p class="line-clamp-2" x-bind:title="songTitle" x-text="songTitle">{{ $song->original_title }}</p>
 
                 @if ($type && !$showModel || $type && $anime)
-                    <span class="ml-1 pl-2 pr-2 pt-1 pb-1 h-full {{ $type->color() }} text-white text-xs font-semibold whitespace-nowrap rounded-full">{{ $type->abbreviated() . ' #' . $position }}</span>
+                    <span class="ml-1 pl-2 pr-2 pt-1 pb-1 h-full {{ $type->color() }} text-white text-xs font-semibold whitespace-nowrap rounded-full" title="{{ __(':x #:y', ['x' => $type->description, 'y' => $position]) }}">{{ __(':x #:y', ['x' => $type->abbreviated(), 'y' => $position]) }}</span>
                 @endif
             </a>
 
-            <p class="opacity-75 line-clamp-2" x-text="artistName">{{ $song->artist }}</p>
+            <p class="opacity-75 line-clamp-2" x-bind:title="artistName" x-text="artistName">{{ $song->artist }}</p>
 
             @if ($anime && $showModel)
                 <x-simple-link class="text-sm" href="{{ route('anime.details', $anime) }}" wire:navigate>{{ $anime->title }}</x-simple-link>
             @endif
 
             @if (!empty($episodes) && $showEpisodes)
-                <p class="text-sm opacity-75 line-clamp-2">{{ __('Episodes: :x', ['x' => $episodes]) }}</p>
+                <p class="text-sm opacity-75 line-clamp-2" title="{{ __('Episodes: :x', ['x' => $episodes]) }}">{{ __('Episodes: :x', ['x' => $episodes]) }}</p>
             @endif
             </div>
         </div>

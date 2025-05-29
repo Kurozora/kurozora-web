@@ -23,7 +23,7 @@
             <div>
                 <a href="{{ route('seasons.episodes', $episode->season) }}" wire:navigate>
                     @if ($isRanked)
-                        <p class="text-sm font-semibold">#{{ $rank }}</p>
+                        <p class="text-sm leading-tight font-semibold" title="{{ __('Ranked #:x', ['x' => $rank]) }}">{{ __('#:x', ['x' => $rank]) }}</p>
                     @endif
 
                     @if ($episode->number != $episode->number_total)
@@ -32,11 +32,11 @@
                         <p class="text-xs line-clamp-2" aria-label="{{ __('Season :x, episode :y.', ['x' => $episode->season->number, 'y' => $episode->number]) }}">{{ __('S:x · E:y', ['x' => $episode->season->number, 'y' => $episode->number]) }}</p>
                     @endif
 
-                    <p class="line-clamp-2">{{ $episode->title }}</p>
                 </a>
+                    <a class="line-clamp-2" title="{{ $episode->title }}" href="{{ route('episodes.details', $episode) }}" wire:navigate>{{ $episode->title }}</a>
 
                 <div class="mt-1">
-                    <a class="text-xs text-tint font-semibold line-clamp-2" href="{{ route('anime.details', $episode->anime) }}" wire:navigate>{{ $episode->anime->title }}</a>
+                    <a class="text-xs text-tint font-semibold line-clamp-2" title="{{ $episode->anime->title }}" href="{{ route('anime.details', $episode->anime) }}" wire:navigate>{{ $episode->anime->title }}</a>
 
                     <p class="text-xs line-clamp-2" title="{{ $episode->started_at?->format('F d, Y H:i:s') }}">{{ __(':x views', ['x' => number_format($episode->view_count)]) . ' · ' . $episode->started_at?->toFormattedDateString() }}</p>
                 </div>
