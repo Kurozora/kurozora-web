@@ -21,19 +21,19 @@
     <div class="relative flex flex-grow mt-2">
         <div class="flex flex-col w-full gap-2 justify-between">
             <div>
-                <a href="{{ route('seasons.episodes', $episode->season) }}" wire:navigate>
+                <div>
                     @if ($isRanked)
                         <p class="text-sm leading-tight font-semibold" title="{{ __('Ranked #:x', ['x' => $rank]) }}">{{ __('#:x', ['x' => $rank]) }}</p>
                     @endif
 
                     @if ($episode->number != $episode->number_total)
-                        <p class="text-xs line-clamp-2" aria-label="{{ __('Season :x, episode :y. (Episode :z in total)', ['x' => $episode->season->number, 'y' => $episode->number, 'z' => $episode->number_total]) }}">{{ __('S:x · E:y (E:z)', ['x' => $episode->season->number, 'y' => $episode->number, 'z' => $episode->number_total]) }}</p>
+                        <a class="text-xs line-clamp-2" href="{{ route('seasons.episodes', $episode->season) }}" wire:navigate>{{ __('S:x · E:y (E:z)', ['x' => $episode->season->number, 'y' => $episode->number, 'z' => $episode->number_total]) }}</a>
                     @else
-                        <p class="text-xs line-clamp-2" aria-label="{{ __('Season :x, episode :y.', ['x' => $episode->season->number, 'y' => $episode->number]) }}">{{ __('S:x · E:y', ['x' => $episode->season->number, 'y' => $episode->number]) }}</p>
+                        <a class="text-xs line-clamp-2" href="{{ route('seasons.episodes', $episode->season) }}" wire:navigate>{{ __('S:x · E:y', ['x' => $episode->season->number, 'y' => $episode->number]) }}</a>
                     @endif
 
-                </a>
                     <a class="line-clamp-2" title="{{ $episode->title }}" href="{{ route('episodes.details', $episode) }}" wire:navigate>{{ $episode->title }}</a>
+                </div>
 
                 <div class="mt-1">
                     <a class="text-xs text-tint font-semibold line-clamp-2" title="{{ $episode->anime->title }}" href="{{ route('anime.details', $episode->anime) }}" wire:navigate>{{ $episode->anime->title }}</a>
