@@ -41,7 +41,7 @@
                 <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-lg"></div>
             </picture>
 
-            <a class="absolute w-full h-full" href="{{ route('anime.details', $anime) }}"></a>
+            <a class="absolute w-full h-full" href="{{ route('anime.details', $anime) }}" wire:navigate></a>
 
             <div class="flex flex-col gap-2 justify-between">
                 <div>

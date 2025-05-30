@@ -17,7 +17,7 @@
                     <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-lg"></div>
                 </picture>
 
-                <a class="absolute w-full h-full" href="{{ route('anime.details', $mediaRating->model) }}"></a>
+                <a class="absolute w-full h-full" href="{{ route('anime.details', $mediaRating->model) }}" wire:navigate></a>
 
                 <div class="flex flex-col items-baseline w-full">
                     <div class="flex justify-between gap-2 w-full">
@@ -51,7 +51,7 @@
                     <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-full"></div>
                 </picture>
 
-                <a class="absolute w-full h-full" href="{{ route('characters.details', $mediaRating->model) }}"></a>
+                <a class="absolute w-full h-full" href="{{ route('characters.details', $mediaRating->model) }}" wire:navigate></a>
 
                 <div class="flex flex-col items-baseline w-full">
                     <div class="flex justify-between gap-2 w-full">
@@ -85,7 +85,7 @@
                     <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-lg"></div>
                 </picture>
 
-                <a class="absolute w-full h-full" href="{{ route('episodes.details', $mediaRating->model) }}"></a>
+                <a class="absolute w-full h-full" href="{{ route('episodes.details', $mediaRating->model) }}" wire:navigate></a>
 
                 <div class="flex flex-col items-baseline w-full">
                     <div class="flex justify-between gap-2 w-full">
@@ -119,7 +119,7 @@
                     <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-3xl"></div>
                 </picture>
 
-                <a class="absolute w-full h-full" href="{{ route('games.details', $mediaRating->model) }}"></a>
+                <a class="absolute w-full h-full" href="{{ route('games.details', $mediaRating->model) }}" wire:navigate></a>
 
                 <div class="flex flex-col items-baseline w-full">
                     <div class="flex justify-between gap-2 w-full">
@@ -159,7 +159,7 @@
                     </g>
                 </svg>
 
-                <a class="absolute w-full h-full" href="{{ route('manga.details', $mediaRating->model) }}"></a>
+                <a class="absolute w-full h-full" href="{{ route('manga.details', $mediaRating->model) }}" wire:navigate></a>
 
                 <div class="flex flex-col items-baseline w-full">
                     <div class="flex justify-between gap-2 w-full">
@@ -193,7 +193,7 @@
                     <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-full"></div>
                 </picture>
 
-                <a class="absolute w-full h-full" href="{{ route('people.details', $mediaRating->model) }}"></a>
+                <a class="absolute w-full h-full" href="{{ route('people.details', $mediaRating->model) }}" wire:navigate></a>
 
                 <div class="flex flex-col items-baseline w-full">
                     <div class="flex justify-between gap-2 w-full">
@@ -273,7 +273,7 @@
                 </x-picture>
 
                 <div class="relative flex flex-col items-baseline w-full">
-                    <a class="absolute w-full h-full" href="{{ route('songs.details', $mediaRating->model) }}"></a>
+                    <a class="absolute w-full h-full" href="{{ route('songs.details', $mediaRating->model) }}" wire:navigate></a>
 
                     <div class="flex justify-between gap-2 w-full">
                         <p class="inline-flex items-center text-sm font-semibold break-all overflow-hidden" x-text="songTitle">{{ $mediaRating->model->title }}</p>
@@ -306,7 +306,7 @@
                     <div class="absolute top-0 left-0 h-full w-full border-2 border-solid border-black/20 rounded-full"></div>
                 </picture>
 
-                <a class="absolute w-full h-full" href="{{ route('studios.details', $mediaRating->model) }}"></a>
+                <a class="absolute w-full h-full" href="{{ route('studios.details', $mediaRating->model) }}" wire:navigate></a>
 
                 <div class="flex flex-col items-baseline w-full">
                     <div class="flex justify-between gap-2 w-full">

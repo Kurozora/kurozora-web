@@ -70,7 +70,7 @@
             </div>
         </div>
 
-        <a class="absolute w-full h-full" href="{{ route('profile.details', $user) }}"></a>
+        <a class="absolute w-full h-full" href="{{ route('profile.details', $user) }}" wire:navigate></a>
 
         <div class="flex flex-row flex-nowrap items-center justify-between z-10 whitespace-nowrap">
             @if ($user->id != auth()->user()?->id)

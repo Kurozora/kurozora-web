@@ -29,6 +29,6 @@
             <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-lg"></div>
         </x-picture>
 
-        <a class="absolute h-full w-full" href="{{ route('recap.index', ['year' => $recap->year]) }}"></a>
+        <a class="absolute h-full w-full" href="{{ route('recap.index', ['year' => $recap->year]) }}" wire:navigate></a>
     </div>
 </div>

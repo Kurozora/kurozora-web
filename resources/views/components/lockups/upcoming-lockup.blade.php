@@ -27,7 +27,7 @@
             </picture>
         </div>
 
-        <a class="absolute bottom-0 w-full h-full" href="{{ route('anime.details', $anime) }}"></a>
+        <a class="absolute bottom-0 w-full h-full" href="{{ route('anime.details', $anime) }}" wire:navigate></a>
 
         <div class="absolute bottom-0 left-0 right-0 pt-3 pr-3 pl-3 pb-5">
             <div class="flex flex-col text-center mt-auto">
@@ -78,7 +78,7 @@
             </picture>
         </div>
 
-        <a class="absolute bottom-0 w-full h-full" href="{{ route('games.details', $game) }}"></a>
+        <a class="absolute bottom-0 w-full h-full" href="{{ route('games.details', $game) }}" wire:navigate></a>
 
         <div class="absolute bottom-0 left-0 right-0 pt-3 pr-3 pl-3 pb-5">
             <div class="flex flex-col text-center mt-auto">
@@ -129,7 +129,7 @@
             </picture>
         </div>
 
-        <a class="absolute bottom-0 w-full h-full" href="{{ route('manga.details', $manga) }}"></a>
+        <a class="absolute bottom-0 w-full h-full" href="{{ route('manga.details', $manga) }}" wire:navigate></a>
 
         <div class="absolute bottom-0 left-0 right-0 pt-3 pr-3 pl-3 pb-5">
             <div class="flex flex-col text-center mt-auto">
