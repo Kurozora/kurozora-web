@@ -150,6 +150,8 @@
     @elseif (!empty($manga))
         <div class="flex flex-nowrap gap-2">
             <svg class="relative shrink-0 w-28 h-40 overflow-hidden">
+                <rect width="100%" height="100%" fill="{{ $manga->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }}" mask="url(#svg-mask-book-cover)" />
+
                 <foreignObject width="112" height="160" mask="url(#svg-mask-book-cover)">
                     <img
                         class="h-full w-full object-cover lazyload"

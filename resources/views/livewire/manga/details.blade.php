@@ -104,9 +104,11 @@
 
                     <svg
                         class="relative shrink-0 w-28 h-40 mr-2 overflow-hidden"
-                        style="min-width: 7rem; max-height: 10rem; background-color: {{ $manga->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
+                        style="min-width: 7rem; max-height: 10rem;"
                         wire:ignore
                     >
+                        <rect width="100%" height="100%" fill="{{ $manga->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }}" mask="url(#svg-mask-book-cover)" />
+
                         <foreignObject width="112" height="160" mask="url(#svg-mask-book-cover)">
                             <img class="h-full w-full object-cover lazyload" data-sizes="auto" data-src="{{ $manga->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $manga->title }} Poster" title="{{ $manga->title }}" />
                         </foreignObject>
