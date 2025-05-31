@@ -275,7 +275,7 @@
 
                     <div id="seasonBadge" class="flex-grow px-12 border-l border-primary">
                         <a class="flex flex-col items-center" href="{{ route('anime.seasons', $anime) }}" wire:navigate>
-                            <p class="font-bold">#{{ $season->number }}</p>
+                            <p class="font-bold">{{ __('#:x', ['x' => $season->number]) }}</p>
                             <p class="text-tint">
                                 @svg('tv_fill', 'fill-current', ['width' => '20'])
                             </p>
