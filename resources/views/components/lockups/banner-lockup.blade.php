@@ -1,7 +1,7 @@
 @props(['anime'])
 
-<div {{ $attributes->merge(['class' => 'relative flex snap-normal snap-center']) }}>
-    <div class="flex flex-nowrap">
+<div {{ $attributes->merge(['class' => 'relative flex snap-normal snap-center']) }} style="min-width: 100%;">
+    <div class="flex flex-nowrap" style="min-width: 100%;">
         <picture
             class="relative w-full aspect-video overflow-hidden"
             style="background-color: {{ $anime->getFirstMedia(\App\Enums\MediaCollection::Banner)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
