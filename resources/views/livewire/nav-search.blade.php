@@ -97,7 +97,7 @@
 
         {{-- Search Results --}}
         <div
-            class="absolute right-0 left-0 pt-4 pb-4 bg-primary rounded-b-2xl overflow-y-scroll"
+            class="absolute right-0 left-0 pt-4 pb-4 bg-primary rounded-b-2xl overflow-y-auto"
             style="max-height: 85vh;"
         >
             <div class="flex justify-center">

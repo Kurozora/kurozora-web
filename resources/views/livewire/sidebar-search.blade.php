@@ -88,7 +88,7 @@
 
     {{-- Search Results --}}
     <div
-        class="absolute right-0 left-0 pt-4 pb-4 bg-primary border border-black/20 rounded-lg shadow-md overflow-y-scroll"
+        class="absolute right-0 left-0 pt-4 pb-4 bg-primary border border-black/20 rounded-lg shadow-md overflow-y-auto z-10"
         style="max-height: 85vh; width: 360px;"
         x-cloak
         x-show="isSearchEnabled && searchQuery !== ''"

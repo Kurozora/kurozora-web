@@ -20,7 +20,7 @@
             <livewire:sidebar-search />
         </div>
 
-        <div class="flex flex-col justify-between w-full h-full overflow-y-scroll">
+        <div class="flex flex-col justify-between w-full h-full overflow-y-auto">
             <div class="mr-4 ml-4">
                 <section class="mt-4">
                     <x-sidebar-nav-link href="{{ route('home') }}" wire:navigate :active="request()->routeIs('home')">

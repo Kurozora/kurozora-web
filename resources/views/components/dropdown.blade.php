@@ -39,7 +39,7 @@
          {{ $attributes->merge(['class' => 'absolute z-50 mt-2 ' . $width . ' rounded-md shadow-lg ' . $alignmentClasses ]) }}
          style="display: none; {{ $style }}">
         <div
-            class="rounded-md border border-black/5 overflow-x-hidden {{ $maxHeight ? 'overflow-y-scroll' : null }} {{ $contentClasses }}"
+            class="rounded-md border border-black/5 overflow-x-hidden {{ $maxHeight ? 'overflow-y-auto' : null }} {{ $contentClasses }}"
             style="{{ $maxHeight ? 'max-height:' . $maxHeight : null }}"
         >
             {{ $content }}
