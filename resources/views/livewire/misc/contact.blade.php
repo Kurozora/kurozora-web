@@ -46,7 +46,7 @@
                         <div class="flex flex-row items-center gap-2 pt-4 pb-4 pr-4 pl-4">
                             @svg('lock_fill', 'fill-current', ['width' => 24])
 
-                            <p class="text-lg leading-tight line-clamp-2">{{ __('In-App Purchases') }}</p>
+                            <p class="text-lg leading-tight">{{ __('In-App Purchases') }}</p>
                         </div>
                     </a>
 
@@ -54,7 +54,7 @@
                         <div class="flex flex-row items-center gap-2 pt-4 pb-4 pr-4 pl-4">
                             @svg('person_fill', 'fill-current', ['width' => 24])
 
-                            <p class="text-lg leading-tight line-clamp-2">{{ __('About Personalisation') }}</p>
+                            <p class="text-lg leading-tight">{{ __('About Personalisation') }}</p>
                         </div>
                     </a>
 
@@ -62,7 +62,7 @@
                         <div class="flex flex-row items-center gap-2 pt-4 pb-4 pr-4 pl-4">
                             @svg('megaphone_fill', 'fill-current', ['width' => 24])
 
-                            <p class="text-lg leading-tight line-clamp-2">{{ __('Press-Kit') }}</p>
+                            <p class="text-lg leading-tight">{{ __('Press-Kit') }}</p>
                         </div>
                     </a>
 
@@ -70,7 +70,7 @@
                         <div class="flex flex-row items-center gap-2 pt-4 pb-4 pr-4 pl-4">
                             @svg('hand_raised_fill', 'fill-current', ['width' => 24])
 
-                            <p class="text-lg leading-tight line-clamp-2">{{ __('Privacy Policy') }}</p>
+                            <p class="text-lg leading-tight">{{ __('Privacy Policy') }}</p>
                         </div>
                     </a>
 
@@ -78,7 +78,7 @@
                         <div class="flex flex-row items-center gap-2 pt-4 pb-4 pr-4 pl-4">
                             @svg('text_page_fill', 'fill-current', ['width' => 24])
 
-                            <p class="text-lg leading-tight line-clamp-2">{{ __('Terms of Use') }}</p>
+                            <p class="text-lg leading-tight">{{ __('Terms of Use') }}</p>
                         </div>
                     </a>
 
