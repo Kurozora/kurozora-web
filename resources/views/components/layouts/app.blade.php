@@ -3,18 +3,6 @@
         {{ $title }}
     </x-slot:title>
 
-    <x-slot:themeColor>
-        {{ $themeColor ?? null }}
-    </x-slot:themeColor>
-
-    <x-slot:lightThemeColor>
-        {{ $lightThemeColor ?? null }}
-    </x-slot:lightThemeColor>
-
-    <x-slot:darkThemeColor>
-        {{ $darkThemeColor ?? null }}
-    </x-slot:darkThemeColor>
-
     <x-slot:meta>
         {{ $meta ?? '' }}
     </x-slot:meta>

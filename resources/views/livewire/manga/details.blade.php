@@ -1,8 +1,4 @@
 <main>
-    <x-slot:themeColor>
-        {{ ($manga->getFirstMedia(\App\Enums\MediaCollection::Banner) ?? $manga->getFirstMedia(\App\Enums\MediaCollection::Poster))?->custom_properties['background_color'] ?? null }}
-    </x-slot:themeColor>
-
     <x-slot:title>
         {!! $manga->title !!}
     </x-slot:title>

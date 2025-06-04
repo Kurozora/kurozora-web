@@ -1,8 +1,4 @@
 <main>
-    <x-slot:themeColor>
-        {{ ($game->getFirstMedia(\App\Enums\MediaCollection::Banner) ?? $game->getFirstMedia(\App\Enums\MediaCollection::Poster))?->custom_properties['background_color'] ?? null }}
-    </x-slot:themeColor>
-
     <x-slot:title>
         {!! $game->title !!}
     </x-slot:title>
