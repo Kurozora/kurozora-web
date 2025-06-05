@@ -121,7 +121,7 @@
 
             <livewire:navigation-dropdown />
 
-            <div class="overflow-y-scroll xl:ml-64">
+            <div class="xl:ml-64">
                 @if (!(auth()->user()?->hasVerifiedEmail() ?? true))
                     <x-alert
                         :message="__('You have not confirmed your email address yet. Please check your email inbox or spam folder.')"
