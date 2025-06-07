@@ -505,7 +505,7 @@ class GameController extends Controller
         if ($mediaStudio = $game->studios()->firstWhere('is_studio', '=', true)) {
             $studioGames = $mediaStudio->games()
                 ->where('model_id', '!=', $game->id)
-                ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);;
+                ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
         } else if ($mediaStudio = $game->studios()->first()) {
             $studioGames = $mediaStudio->games()
                 ->where('model_id', '!=', $game->id)

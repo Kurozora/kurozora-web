@@ -27,7 +27,7 @@ class SessionController extends Controller
         // Get paginated sessions except current session
         $sessions = $user->sessions()
             ->with(['session_attribute'])
-            ->paginate($data['limit'] ?? 25);
+            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $sessions->nextPageUrl() ?? '');

@@ -454,7 +454,7 @@ class MangaController extends Controller
         } else if ($mangaStudio = $manga->studios()->first()) {
             $studioMangas = $mangaStudio->manga()
                 ->where('model_id', '!=', $manga->id)
-                ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);;
+                ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
         }
 
         // Get next page url minus domain

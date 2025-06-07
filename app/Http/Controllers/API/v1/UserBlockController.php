@@ -23,7 +23,7 @@ class UserBlockController extends Controller
     {
         $blockedUsers = $request->user()
             ->getBlocking()
-            ->paginate(10);
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $blockedUsers->nextPageUrl() ?? '');

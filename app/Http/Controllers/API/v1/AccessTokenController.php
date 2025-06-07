@@ -34,7 +34,7 @@ class AccessTokenController
         // Get paginated sessions except current session
         $tokens = $user->tokens()
             ->with(['session_attribute'])
-            ->paginate($data['limit'] ?? 25);
+            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $tokens->nextPageUrl() ?? '');

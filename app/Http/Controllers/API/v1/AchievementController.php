@@ -31,7 +31,7 @@ class AchievementController extends Controller
             ->orderBy('is_achieved', 'desc')
             ->orderBy(UserBadge::TABLE_NAME . '.created_at')
             ->orderBy(Badge::TABLE_NAME . '.name')
-            ->paginate($data['limit'] ?? 25);
+            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $badges->nextPageUrl() ?? '');

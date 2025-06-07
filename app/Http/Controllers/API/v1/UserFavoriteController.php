@@ -69,7 +69,7 @@ class UserFavoriteController extends Controller
                     },
                 ]);
             })
-            ->paginate($data['limit'] ?? 25);
+            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $userFavorites->nextPageUrl() ?? '');
