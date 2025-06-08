@@ -145,7 +145,7 @@ class UserReminderController extends Controller
                     },
                 ]);
             })
-            ->paginate($data['limit'] ?? 25);
+            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $userReminders->nextPageUrl() ?? '');
