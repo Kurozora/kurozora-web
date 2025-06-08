@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\GetPaginatedRequest;
 use App\Http\Resources\UserResourceBasic;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -15,14 +16,17 @@ class UserBlockController extends Controller
     /**
      * Get the list of blocked users.
      *
-     * @param Request $request
+     * @param GetPaginatedRequest $request
      *
      * @return JsonResponse
      */
-    public function index(Request $request)
+    public function index(GetPaginatedRequest $request)
     {
+        $data = $request->validated();
+
         $blockedUsers = $request->user()
             ->getBlocking()
+            ->orderBy('username')
             ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
