@@ -12,4 +12,6 @@
     <div class="w-64 md:w-80 flex-grow"></div>
     <div class="w-64 md:w-80 flex-grow"></div>
     <div class="w-64 md:w-80 flex-grow"></div>
+    <div class="w-64 md:w-80 flex-grow"></div>
+    <div class="w-64 md:w-80 flex-grow"></div>
 </div>
