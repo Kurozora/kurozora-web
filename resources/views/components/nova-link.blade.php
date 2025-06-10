@@ -2,7 +2,7 @@
 
 <x-circle-link
     href="{{ $href }}"
-    rel="nofollow"
+    rel="noindex nofollow"
     :color="$color"
     :disabled="$disabled"
 >
