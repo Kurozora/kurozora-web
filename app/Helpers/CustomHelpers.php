@@ -325,7 +325,6 @@ if (! function_exists('parse_user_agent')) {
 
         // Example input:
         // "Example App/1.0.0 (com.example.app; build:9999; iOS 18.5.0) Client/1.0.0"
-
         $matches = [];
         preg_match('/^(?<appName>[^\/]+)\/(?<version>\S+) \((?<meta>[^)]+)\) (?<clientInfo>.+)$/', $userAgent, $matches);
 
@@ -336,7 +335,7 @@ if (! function_exists('parse_user_agent')) {
         foreach ($metaParts as $part) {
             if (str_starts_with($part, 'build:')) {
                 $build = substr($part, 6);
-            } else if (str_starts_with($part, 'iOS') || str_starts_with($part, 'Android') || str_starts_with($part, 'macOS')) {
+            } else if (str_starts_with($part, 'iOS') || str_starts_with($part, 'Android') || str_starts_with($part, 'macOS') || str_starts_with($part, 'Linux') || str_starts_with($part, 'Windows')) {
                 $os = $part;
             } else {
                 $bundle = $part;
