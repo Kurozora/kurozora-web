@@ -120,10 +120,12 @@ class MediaSong extends Resource
 
             Select::make('Type')
                 ->options(SongType::asSelectArray())
-                ->displayUsingLabels()
+                ->displayUsing(function (SongType $songType) {
+                    return $songType->key;
+                })
+                ->required()
                 ->sortable()
-                ->help('Choose the type depending on when the song is played.')
-                ->required(),
+                ->help('Choose the type depending on when the song is played.'),
 
             Number::make('Position')
                 ->sortable()
