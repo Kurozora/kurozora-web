@@ -4,6 +4,7 @@
     $colorCSS = match ($color) {
         'orange' => 'bg-tint btn-text-tinted hover:bg-tint-800 active:bg-tint active:border-tint active:ring-tint',
         'transparent' => '',
+        'glass' => 'bg-blur backdrop-blur text-primary hover:bg-tertiary active:bg-blur active:border-tint active:ring-tint',
         default => 'bg-secondary hover:bg-tertiary active:bg-secondary active:border-tint active:ring-tint',
     };
 @endphp
