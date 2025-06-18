@@ -15,7 +15,7 @@
 
             <div class="flex flex-col gap-6 pl-4 pr-4">
                 @foreach ($this->feedMessages as $feedMessage)
-                    <x-lockups.feed-message-lockup :feed-message="$feedMessage" />
+                    <livewire:components.feed.message-lockup :feed-message="$feedMessage" wire:key="{{ uniqid($feedMessage->id, true) }}" />
                 @endforeach
             </div>
 
