@@ -23,6 +23,7 @@ return new class extends Migration
             $table->text('content');
             $table->text('content_html');
             $table->text('content_markdown');
+            $table->text('last_link')->nullable();
             $table->boolean('is_nsfw')->default(false);
             $table->boolean('is_pinned')->default(false);
             $table->boolean('is_reply')->default(false);
