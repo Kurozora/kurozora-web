@@ -1,3 +1,3 @@
 import KSettings from './helpers/settings'
 
-window.Settings = KSettings
+window.settings = new KSettings()

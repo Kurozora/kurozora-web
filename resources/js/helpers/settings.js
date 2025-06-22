@@ -80,5 +80,3 @@ export default class KSettings {
         this.#appIconManager.apply(appIcon)
     }
 }
-
-window.settings = new KSettings()
