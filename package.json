@@ -22,6 +22,7 @@
     "dependencies": {
         "@jaames/iro": "^5.3",
         "@picmo/popup-picker": "^5.1.0",
+        "gifuct-js": "^2.1.2",
         "hls.js": "^0.9.1",
         "lazysizes": "^5.3.2",
         "picmo": "^5.6.0",
