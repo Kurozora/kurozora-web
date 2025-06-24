@@ -164,7 +164,7 @@ export class GIF {
         this.ctx.putImageData(imgData, frame.dims.left, frame.dims.top)
 
         this.elapsedTime = this.frames
-            .slice(0, this.frameIndex)
+            .slice(0, this.frameIndex + (this.frameIndex === 0 ? 0 : 1))
             .map(frame => frame.delay)
             .reduce((sum, delay) => sum + delay, 0)
     }
@@ -198,12 +198,22 @@ export class GIF {
     /**
      * Scrubs to a specific frame in the GIF.
      *
-     * @param frameIndex
+     * @param time {number} The time in milliseconds to scrub to.
      */
-    scrubTo(frameIndex) {
+    scrubTo(time) {
         this.pause()
-        this.frameIndex = frameIndex
-        this.renderFrame(this.frames[frameIndex])
+
+        let delay = 0
+        this.frameIndex = this.frames.findIndex(frame => {
+            delay += frame.delay
+            return delay >= time
+        })
+
+        if (this.frameIndex === -1) {
+            this.frameIndex = this.frames.length - 1
+        }
+
+        this.renderFrame(this.frames[this.frameIndex])
     }
 
     /**
