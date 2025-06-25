@@ -4,7 +4,7 @@
     </x-slot:title>
 
     <x-slot:content>
-        <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-4 pt-4 pb-4 pl-4 pr-4">
             <div class="flex flex-col gap-2">
                 <div class="flex items-center">
                     <p class="">{{ __('Click to Rate:') }}</p>
@@ -24,6 +24,12 @@
     </x-slot:content>
 
     <x-slot:footer>
-        <x-button wire:click="submitReview">{{ __('Submit') }}</x-button>
+        <x-outlined-button wire:click="$toggle('showPopup')" wire:loading.attr="disabled">
+            {{ __('Cancel') }}
+        </x-outlined-button>
+
+        <x-button class="ml-2" wire:click="submitReview" wire:loading.attr="disabled">
+            {{ __('Submit') }}
+        </x-button>
     </x-slot:footer>
 </x-dialog-modal>
