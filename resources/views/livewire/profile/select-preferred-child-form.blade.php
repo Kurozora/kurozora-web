@@ -75,15 +75,17 @@
             </x-slot:title>
 
             <x-slot:content>
-                {{ __('Are you sure you want to unlink this child account? Enter your password to confirm.') }}
+                <div class="pt-4 pb-4 pl-4 pr-4">
+                    <p>{{ __('Are you sure you want to unlink this child account? Enter your password to confirm.') }}</p>
 
-                <div class="mt-4" x-data="{}" x-on:confirming-delete-child.window="setTimeout(() => $refs.password.focus(), 250)">
-                    <x-input type="password" class="mt-1 block w-3/4" placeholder="{{ __('Password') }}"
-                             x-ref="password"
-                             wire:model="password"
-                             wire:keydown.enter="unlinkChild" />
+                    <div class="mt-4" x-data="{}" x-on:confirming-delete-child.window="setTimeout(() => $refs.password.focus(), 250)">
+                        <x-input type="password" class="mt-1 block w-3/4" placeholder="{{ __('Password') }}"
+                                 x-ref="password"
+                                 wire:model="password"
+                                 wire:keydown.enter="unlinkChild" />
 
-                    <x-input-error for="password" class="mt-2" />
+                        <x-input-error for="password" class="mt-2" />
+                    </div>
                 </div>
             </x-slot:content>
 
@@ -92,7 +94,7 @@
                     {{ __('Cancel') }}
                 </x-outlined-button>
 
-                <x-danger-button wire:click="unlinkChild" wire:loading.attr="disabled">
+                <x-danger-button class="ml-2" wire:click="unlinkChild" wire:loading.attr="disabled">
                     {{ __('Unlink Child') }}
                 </x-danger-button>
             </x-slot:footer>

@@ -1,20 +1,22 @@
 @props(['id' => null, 'maxWidth' => null])
 
 <x-modal :id="$id" :maxWidth="$maxWidth" {{ $attributes }}>
-    <div class="px-6 pt-4 pb-4">
-        <div class="text-lg">
-            {{ $title }}
+    <div>
+        <div class="pt-4 pb-4 pl-4 pr-4">
+            <p class="text-lg">
+                {{ $title }}
+            </p>
+
+            @if (isset($description))
+                <p class="text-sm">
+                    {{ $description }}
+                </p>
+            @endif
         </div>
 
-        @if (isset($description))
-            <p class="text-sm">
-                {{ $description }}
-            </p>
-        @endif
+        <x-hr />
 
-        <x-hr class="mt-4 mb-4"/>
-
-        <div class="mt-4">
+        <div>
             {{ $content }}
         </div>
     </div>

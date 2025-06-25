@@ -44,15 +44,17 @@
             </x-slot:title>
 
             <x-slot:content>
-                {{ __('Are you sure you want to delete your library? Once your library is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your library.') }}
+                <div class="pt-4 pb-4 pl-4 pr-4">
+                    <p>{{ __('Are you sure you want to delete your library? Once your library is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your library.') }}</p>
 
-                <div class="mt-4" x-data="{}" x-on:confirming-delete-library.window="setTimeout(() => $refs.password.focus(), 250)">
-                    <x-input type="password" class="mt-1 block w-3/4" placeholder="{{ __('Password') }}"
-                             x-ref="password"
-                             wire:model="password"
-                             wire:keydown.enter="deleteLibrary" />
+                    <div class="mt-4" x-data="{}" x-on:confirming-delete-library.window="setTimeout(() => $refs.password.focus(), 250)">
+                        <x-input type="password" class="mt-1 block w-3/4" placeholder="{{ __('Password') }}"
+                                 x-ref="password"
+                                 wire:model="password"
+                                 wire:keydown.enter="deleteLibrary" />
 
-                    <x-input-error for="password" class="mt-2" />
+                        <x-input-error for="password" class="mt-2" />
+                    </div>
                 </div>
             </x-slot:content>
 

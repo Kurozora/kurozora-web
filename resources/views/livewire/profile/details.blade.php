@@ -149,19 +149,25 @@
         @break
     @case('block')
         @auth
-            <x-dialog-modal model="showPopup" submit="">
+            <x-dialog-modal model="showPopup">
                 <x-slot:title>
                     {{ $this->isBlocked ? __('Unblock :x', ['x' => $this->user->username]) : __('Block :x', ['x' => $this->user->username]) }}
                 </x-slot:title>
 
                 <x-slot:content>
-                    <p>{{ $this->isBlocked ? __('They wil be able to follow you and view your messages.') : __('They won’t be able to see your profile, and public posts. They will also not be able to follow you, and you will not see notifications from them.') }}</p>
+                    <div class="pt-4 pb-4 pl-4 pr-4">
+                        <p>{{ $this->isBlocked ? __('They wil be able to follow you and view your messages.') : __('They won’t be able to see your profile, and public posts. They will also not be able to follow you, and you will not see notifications from them.') }}</p>
+                    </div>
                 </x-slot:content>
 
                 <x-slot:footer>
-                    <x-outlined-button wire:click="$toggle('showPopup')">{{ __('Cancel') }}</x-outlined-button>
+                    <x-outlined-button wire:click="$toggle('showPopup')" wire:loading.attr="disabled">
+                        {{ __('Cancel') }}
+                    </x-outlined-button>
 
-                    <x-button wire:click="toggleBlockUser">{{ $this->isBlocked ? __('Unblock') : __('Block') }}</x-button>
+                    <x-button class="ml-2" wire:click="toggleBlockUser" wire:loading.attr="disabled">
+                        {{ $this->isBlocked ? __('Unblock') : __('Block') }}
+                    </x-button>
                 </x-slot:footer>
             </x-dialog-modal>
         @endauth

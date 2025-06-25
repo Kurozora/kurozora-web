@@ -4,7 +4,9 @@
     </x-slot:title>
 
     <x-slot:content>
-        <p>{{ $alertData['message'] }}</p>
+        <div class="pt-4 pb-4 pl-4 pr-4">
+            <p>{{ $alertData['message'] }}</p>
+        </div>
     </x-slot:content>
 
     <x-slot:footer>

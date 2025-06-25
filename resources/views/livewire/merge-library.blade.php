@@ -365,21 +365,31 @@
             </x-slot:title>
 
             <x-slot:content>
-                <p>{{ $popupData['message'] }}</p>
+                <div class="pt-4 pb-4 pl-4 pr-4">
+                    <p>{{ $popupData['message'] }}</p>
+                </div>
             </x-slot:content>
 
             <x-slot:footer>
-                <x-button wire:click="$toggle('showPopup')">{{ __('Cancel') }}</x-button>
+                <x-outlined-button wire:click="$toggle('showPopup')" wire:loading.attr="disabled">
+                    {{ __('Cancel') }}
+                </x-outlined-button>
 
                 @switch ($selectedPopupType)
                     @case ('local')
-                        <x-button x-on:click="getLocalLibraryJSON().then(data => $wire.overwriteLibrary(data))">{{ __('Keep') }}</x-button>
+                        <x-button class="ml-2" x-on:click="getLocalLibraryJSON().then(data => $wire.overwriteLibrary(data))" wire:loading.attr="disabled">
+                            {{ __('Keep') }}
+                        </x-button>
                         @break
                     @case ('kurozora')
-                        <x-button x-on:click="clearLocalLibrary(false)">{{ __('Keep') }}</x-button>
+                        <x-button class="ml-2" x-on:click="clearLocalLibrary(false)" wire:loading.attr="disabled">
+                            {{ __('Keep') }}
+                        </x-button>
                         @break
                     @case ('merge')
-                        <x-button x-on:click="getLocalLibraryJSON().then(data => $wire.mergeLibrary(data))">{{ __('Merge Libraries') }}</x-button>
+                        <x-button class="ml-2" x-on:click="getLocalLibraryJSON().then(data => $wire.mergeLibrary(data))" wire:loading.attr="disabled">
+                            {{ __('Merge Libraries') }}
+                        </x-button>
                         @break
                     @default
                         @break

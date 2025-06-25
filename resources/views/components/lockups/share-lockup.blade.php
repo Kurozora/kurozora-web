@@ -1,7 +1,7 @@
 @props(['link', 'embedLink' => null, 'title', 'imageUrl', 'type'])
 
 <div
-    {{ $attributes->merge(['class' => 'flex flex-col gap-4']) }}
+    {{ $attributes->merge(['class' => 'flex flex-col gap-4 pb-4']) }}
     x-data="{
         shareLink: '{{ $link }}',
         updateShareLink() {
@@ -72,7 +72,7 @@
     "
 >
     <div
-        class="flex flex-row flex-nowrap gap-4 overflow-scroll no-scrollbar"
+        class="flex flex-row flex-nowrap gap-4 pt-4 pl-4 pr-4 overflow-scroll no-scrollbar"
         x-show="!shouldEmbed"
     >
         <div class="relative flex flex-col items-center">
@@ -195,7 +195,7 @@
         @endswitch
     </div>
 
-    <div class="flex gap-2">
+    <div class="flex gap-2 pl-4 pr-4">
         <x-input id="link" class="w-full" x-model="shareLink" readonly />
 
         <x-button
@@ -217,7 +217,7 @@
     </div>
 
     @if ($type === 'episode')
-        <div class="flex gap-2">
+        <div class="flex gap-2 pl-4 pr-4">
             <x-checkbox x-model="shouldStartAt">
                 {{ __('Start at') }}
             </x-checkbox>
@@ -232,7 +232,7 @@
     @endif
 
     @if (!empty($embedLink))
-        <div class="flex gap-2">
+        <div class="flex gap-2 pl-4 pr-4">
             <x-checkbox x-model="shouldEmbed">
                 {{ __('Embed') }}
             </x-checkbox>

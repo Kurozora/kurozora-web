@@ -56,15 +56,17 @@
             </x-slot:title>
 
             <x-slot:content>
-                {{ __('Please enter your password to confirm you would like to sign out of your app sessions across all of your devices.') }}
+                <div class="pt-4 pb-4 pl-4 pr-4">
+                    <p>{{ __('Please enter your password to confirm you would like to sign out of your app sessions across all of your devices.') }}</p>
 
-                <div class="mt-4" x-data="{}" x-on:confirming-sign-out-app-sessions.window="setTimeout(() => $refs.password.focus(), 250)">
-                    <x-input type="password" class="mt-1 block w-3/4" placeholder="{{ __('Password') }}"
-                             x-ref="password"
-                             wire:model="password"
-                             wire:keydown.enter="signOutAppSessions" />
+                    <div class="mt-4" x-data="{}" x-on:confirming-sign-out-app-sessions.window="setTimeout(() => $refs.password.focus(), 250)">
+                        <x-input type="password" class="mt-1 block w-3/4" placeholder="{{ __('Password') }}"
+                                 x-ref="password"
+                                 wire:model="password"
+                                 wire:keydown.enter="signOutAppSessions" />
 
-                    <x-input-error for="password" class="mt-2" />
+                        <x-input-error for="password" class="mt-2" />
+                    </div>
                 </div>
             </x-slot:content>
 

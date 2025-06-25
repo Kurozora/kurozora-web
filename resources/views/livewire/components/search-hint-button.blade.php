@@ -13,7 +13,7 @@
         </x-slot:description>
 
         <x-slot:content>
-            <ul class="flex flex-wrap justify-between m-0 mb-4 gap-6 list-none">
+            <ul class="flex flex-wrap justify-between m-0 pt-4 pb-4 pl-4 pr-4 gap-6 list-none">
                 <li class="flex flex-col">
                     <p class="font-bold uppercase">{{ __('Quick Search') }}</p>
                     <p class="text-sm">{{ __('Invoke global search without leaving your keyboard.') }}</p>
