@@ -70,7 +70,7 @@
                                 </div>
                             </div>
 
-                            <a class="absolute bottom-0 w-full h-full after:absolute after:inset-0" href="{{ config('social.github.url') }}/{{ $project->repo }}" target="_blank"></a>
+                            <a class="absolute bottom-0 w-full h-full no-external-icon" href="{{ config('social.github.url') }}/{{ $project->repo }}" target="_blank"></a>
                         </div>
                     @endforeach
 

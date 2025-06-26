@@ -58,8 +58,8 @@
                     <img class="mt-8 mb-8 pr-5 pl-5" src="https://raw.githubusercontent.com/Kurozora/kurozora-press-kit/master/Logos/4_Full_Logo_Lockup_Monochrome/full_logo_orange_RGB_monochrome.png" alt="{{ __(':x full logo orange RGB monochrome', ['x' => config('app.name')]) }}">
 
                     <div class="absolute right-0 bottom-0 pr-2 pb-2 pl-2">
-                        <x-link href="https://github.com/Kurozora/kurozora-press-kit/raw/master/Logos/4_Full_Logo_Lockup_Monochrome/full_logo_orange_RGB_monochrome.svg" target="_blank" class="relative after:absolute after:inset-0">.svg</x-link>
-                        <x-link href="https://github.com/Kurozora/kurozora-press-kit/raw/master/Logos/4_Full_Logo_Lockup_Monochrome/full_logo_orange_RGB_monochrome.png" target="_blank" class="relative after:absolute after:inset-0">.png</x-link>
+                        <x-link href="https://github.com/Kurozora/kurozora-press-kit/raw/master/Logos/4_Full_Logo_Lockup_Monochrome/full_logo_orange_RGB_monochrome.svg" target="_blank" class="relative no-external-icon">.svg</x-link>
+                        <x-link href="https://github.com/Kurozora/kurozora-press-kit/raw/master/Logos/4_Full_Logo_Lockup_Monochrome/full_logo_orange_RGB_monochrome.png" target="_blank" class="relative no-external-icon">.png</x-link>
                     </div>
                 </div>
 
@@ -70,8 +70,8 @@
                     <img class="mt-8 mb-8 pr-5 pl-5" src="https://raw.githubusercontent.com/Kurozora/kurozora-press-kit/master/Logos/4_Full_Logo_Lockup_Monochrome/full_logo_blueberry_RGB_monochrome.png" alt="{{ __(':x full logo blueberry RGB monochrome', ['x' => config('app.name')]) }}">
 
                     <div class="absolute right-0 bottom-0 pr-2 pb-2 pl-2">
-                        <x-link href="https://github.com/Kurozora/kurozora-press-kit/raw/master/Logos/4_Full_Logo_Lockup_Monochrome/full_logo_blueberry_RGB_monochrome.svg" target="_blank" class="relative after:absolute after:inset-0">.svg</x-link>
-                        <x-link href="https://github.com/Kurozora/kurozora-press-kit/raw/master/Logos/4_Full_Logo_Lockup_Monochrome/full_logo_blueberry_RGB_monochrome.png" target="_blank" class="relative after:absolute after:inset-0">.png</x-link>
+                        <x-link href="https://github.com/Kurozora/kurozora-press-kit/raw/master/Logos/4_Full_Logo_Lockup_Monochrome/full_logo_blueberry_RGB_monochrome.svg" target="_blank" class="relative no-external-icon">.svg</x-link>
+                        <x-link href="https://github.com/Kurozora/kurozora-press-kit/raw/master/Logos/4_Full_Logo_Lockup_Monochrome/full_logo_blueberry_RGB_monochrome.png" target="_blank" class="relative no-external-icon">.png</x-link>
                     </div>
                 </div>
 
@@ -82,8 +82,8 @@
                     <img class="mt-8 mb-8 pr-5 pl-5" src="https://raw.githubusercontent.com/Kurozora/kurozora-press-kit/master/Logos/4_Full_Logo_Lockup_Monochrome/full_logo_white_RGB_monochrome.png" alt="{{ __(':x full logo white RGB monochrome', ['x' => config('app.name')]) }}">
 
                     <div class="absolute right-0 bottom-0 pr-2 pb-2 pl-2">
-                        <x-link href="https://github.com/Kurozora/kurozora-press-kit/raw/master/Logos/4_Full_Logo_Lockup_Monochrome/full_logo_white_RGB_monochrome.svg" target="_blank" class="relative after:absolute after:inset-0">.svg</x-link>
-                        <x-link href="https://github.com/Kurozora/kurozora-press-kit/raw/master/Logos/4_Full_Logo_Lockup_Monochrome/full_logo_white_RGB_monochrome.png" target="_blank" class="relative after:absolute after:inset-0">.png</x-link>
+                        <x-link href="https://github.com/Kurozora/kurozora-press-kit/raw/master/Logos/4_Full_Logo_Lockup_Monochrome/full_logo_white_RGB_monochrome.svg" target="_blank" class="relative no-external-icon">.svg</x-link>
+                        <x-link href="https://github.com/Kurozora/kurozora-press-kit/raw/master/Logos/4_Full_Logo_Lockup_Monochrome/full_logo_white_RGB_monochrome.png" target="_blank" class="relative no-external-icon">.png</x-link>
                     </div>
                 </div>
 
@@ -94,8 +94,8 @@
                     <img class="mt-8 mb-8 pr-5 pl-5" src="https://raw.githubusercontent.com/Kurozora/kurozora-press-kit/master/Logos/4_Full_Logo_Lockup_Monochrome/full_logo_black_RGB_monochrome.png" alt="{{ __(':x full logo black RGB monochrome', ['x' => config('app.name')]) }}">
 
                     <div class="absolute right-0 bottom-0 pr-2 pb-2 pl-2">
-                        <x-link href="https://github.com/Kurozora/kurozora-press-kit/raw/master/Logos/4_Full_Logo_Lockup_Monochrome/full_logo_black_RGB_monochrome.svg" target="_blank" class="relative after:absolute after:inset-0">.svg</x-link>
-                        <x-link href="https://github.com/Kurozora/kurozora-press-kit/raw/master/Logos/4_Full_Logo_Lockup_Monochrome/full_logo_black_RGB_monochrome.png" target="_blank" class="relative after:absolute after:inset-0">.png</x-link>
+                        <x-link href="https://github.com/Kurozora/kurozora-press-kit/raw/master/Logos/4_Full_Logo_Lockup_Monochrome/full_logo_black_RGB_monochrome.svg" target="_blank" class="relative no-external-icon">.svg</x-link>
+                        <x-link href="https://github.com/Kurozora/kurozora-press-kit/raw/master/Logos/4_Full_Logo_Lockup_Monochrome/full_logo_black_RGB_monochrome.png" target="_blank" class="relative no-external-icon">.png</x-link>
                     </div>
                 </div>
 

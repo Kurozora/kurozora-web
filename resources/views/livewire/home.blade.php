@@ -43,7 +43,7 @@
 {{--        </section>--}}
 
 {{--        <section class="relative mb-8">--}}
-{{--            <a href="{{ config('social.discord.url') }}" target="_blank" class="after:absolute after:inset-0">--}}
+{{--            <a href="{{ config('social.discord.url') }}" target="_blank" class="no-external-icon">--}}
 {{--                <x-picture>--}}
 {{--                    <img class="h-32 w-full object-cover object-center rounded-lg shadow-lg sm:h-44" src="{{ asset('images/static/banners/kurozora_art_challenge_2022.webp') }}"  alt="Kurozora Art Challenge 2022" />--}}
 {{--                </x-picture>--}}

@@ -80,7 +80,7 @@
             <a
                 href="https://api.whatsapp.com/send/?text={{ $link }}&type=custom_url&app_absent=0"
                 target="_blank"
-                class="text-sm whitespace-nowrap after:absolute after:inset-0"
+                class="text-sm whitespace-nowrap no-external-icon"
             >WhatsApp</a>
         </div>
 
@@ -89,7 +89,7 @@
             <a
                 href="https://twitter.com/intent/tweet?url={{ $link }}&text={{ $title }}&via={{ config('social.twitter.username') }}&related={{ config('social.twitter.username') }}&hashtags={{ config('app.name') }},{{ config('social.twitter.username') }},anime"
                 target="_blank"
-                class="text-sm whitespace-nowrap after:absolute after:inset-0"
+                class="text-sm whitespace-nowrap no-external-icon"
             >Twitter</a>
         </div>
 
@@ -98,7 +98,7 @@
             <a
                 href="mailto:?body={{ $link }}"
                 target="_blank"
-                class="text-sm whitespace-nowrap after:absolute after:inset-0"
+                class="text-sm whitespace-nowrap no-external-icon"
             >{{ __('E-mail') }}</a>
         </div>
 
@@ -107,7 +107,7 @@
             <a
                 href="https://story.kakao.com/share?url={{ $link }}&feature=share"
                 target="_blank"
-                class="text-sm whitespace-nowrap after:absolute after:inset-0"
+                class="text-sm whitespace-nowrap no-external-icon"
             >KakaoTalk</a>
         </div>
 
@@ -116,7 +116,7 @@
             <a
                 href="https://t.me/share/url?url={{ $link }}&text={{ $title }}"
                 target="_blank"
-                class="text-sm whitespace-nowrap after:absolute after:inset-0"
+                class="text-sm whitespace-nowrap no-external-icon"
             >Telegram</a>
         </div>
 
@@ -125,7 +125,7 @@
             <a
                 href="https://www.reddit.com/submit?url={{ $link }}&feature=share&title={{ $title }}"
                 target="_blank"
-                class="text-sm whitespace-nowrap after:absolute after:inset-0"
+                class="text-sm whitespace-nowrap no-external-icon"
             >Reddit</a>
         </div>
 
@@ -134,7 +134,7 @@
             <a
                 href="https://connect.ok.ru/dk?st.cmd=OAuth2Login&st.layout=w&st.redirect=/dk?cmd=WidgetSharePreview&st.cmd=WidgetSharePreview&st.title={{ $title }}&st.shareUrl={{ $link }}&feature=share&st._wt=1&st.client_id=-1"
                 target="_blank"
-                class="text-sm whitespace-nowrap after:absolute after:inset-0"
+                class="text-sm whitespace-nowrap no-external-icon"
             >OK</a>
         </div>
 
@@ -143,7 +143,7 @@
             <a
                 href="https://www.pinterest.com/pin/create/button/?url={{ $link }}&feature=share&description={{ $title }}&is_video=true{{ !empty($imageUrl) ? '&media=' . $imageUrl : '' }}"
                 target="_blank"
-                class="text-sm whitespace-nowrap after:absolute after:inset-0"
+                class="text-sm whitespace-nowrap no-external-icon"
             >Pinterest</a>
         </div>
 
@@ -152,7 +152,7 @@
             <a
                 href="https://www.tumblr.com/widgets/share/tool/preview?shareSource=legacy&canonicalUrl=&url={{ $link }}&feature=share&posttype=video&content={{ $link }}&feature=share&caption={{ $title }}"
                 target="_blank"
-                class="text-sm whitespace-nowrap after:absolute after:inset-0"
+                class="text-sm whitespace-nowrap no-external-icon"
             >Tumblr</a>
         </div>
 
@@ -161,7 +161,7 @@
             <a
                 href="https://www.linkedin.com/shareArticle?url={{ $link }}&feature=share&title={{ $title }}&source={{ config('app.name') }}"
                 target="_blank"
-                class="text-sm whitespace-nowrap after:absolute after:inset-0"
+                class="text-sm whitespace-nowrap no-external-icon"
             >LinkedIn</a>
         </div>
 
@@ -170,7 +170,7 @@
             <a
                 href="https://mix.com/add?url={{ $link }}&feature=share"
                 target="_blank"
-                class="text-sm whitespace-nowrap after:absolute after:inset-0"
+                class="text-sm whitespace-nowrap no-external-icon"
             >Mix</a>
         </div>
 
@@ -179,7 +179,7 @@
             <a
                 href="https://blog.goo.ne.jp/portal_login/blogparts?key=9dgmp3KmwGg&title={{ $title }}&type={{ config('app.name') }}"
                 target="_blank"
-                class="text-sm whitespace-nowrap after:absolute after:inset-0"
+                class="text-sm whitespace-nowrap no-external-icon"
             >goo</a>
         </div>
     </div>
