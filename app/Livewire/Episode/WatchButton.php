@@ -75,6 +75,7 @@ class WatchButton extends Component
         $this->dispatch('update-episode');
         $this->dispatch('update-episode')->to('season.watch-button');
         $this->dispatch('refresh-up-next-episodes');
+        $this->dispatch('refresh-past-episodes');
         $this->dispatch('refresh-up-next-section')->to('components.episode.up-next-section');
 
         return null;
