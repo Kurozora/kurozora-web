@@ -53,7 +53,7 @@
             >
                 <div>
                     <x-picture
-                        class="aspect-square rounded-lg shadow-md overflow-hidden"
+                        class="aspect-square rounded-lg natural-shadow overflow-hidden"
                         style="height: calc(100vh - 2.50rem);max-height: 200px;min-height: 164px;"
                         x-on:click="await musicManager.playSong(song)"
                     >
