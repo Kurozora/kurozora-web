@@ -63,6 +63,26 @@ class Detail extends Component
      */
     public function mount(FeedMessage $feedMessage): void
     {
+        $feedMessage->load([
+            'user' => function (BelongsTo $belongsTo) {
+                $belongsTo->with(['media']);
+            },
+            'loveReactant' => function (BelongsTo $query) {
+                $query->with([
+                    'reactionCounters',
+                    'reactions' => function (HasMany $hasMany) {
+                        $hasMany->with(['reacter', 'type']);
+                    }
+                ]);
+            }
+        ])
+            ->loadCount(['replies', 'reShares'])
+            ->when(auth()->user(), function ($query, $user) {
+                $query->withExists(['reShares as isReShared' => function ($query) use ($user) {
+                    $query->where('user_id', '=', $user->id);
+                }]);
+            });
+
         $this->feedMessage = $feedMessage;
     }
 
