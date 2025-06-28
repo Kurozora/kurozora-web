@@ -12,6 +12,48 @@ export class GIF {
     canvas
 
     /**
+     * Rendering context for the canvas.
+     *
+     * @type {RenderingContext | null}
+     */
+    ctx
+
+    /**
+     * Canvas used for temporary rendering of GIF frames.
+     *
+     * @type {HTMLCanvasElement}
+     */
+    tempCanvas
+
+    /**
+     * Rendering context for the temporary canvas.
+     *
+     * @type {RenderingContext | null}
+     */
+    tempCtx
+
+    /**
+     * Canvas used for full GIF rendering.
+     *
+     * @type {HTMLCanvasElement}
+     */
+    gifCanvas
+
+    /**
+     * Rendering context for the full GIF canvas.
+     *
+     * @type {RenderingContext | null}
+     */
+    gifCtx
+
+    /**
+     * ImageData object to hold the current frame's pixel data.
+     *
+     * @type {ImageData | null}
+     */
+    imgData
+
+    /**
      * URL of the GIF to load.
      *
      * @type {string}
@@ -54,13 +96,6 @@ export class GIF {
     elapsedTime
 
     /**
-     * Rendering context for the canvas.
-     *
-     * @type {RenderingContext | null}
-     */
-    ctx
-
-    /**
      * Array of parsed frames from the GIF.
      *
      * @type {ParsedFrame[]}
@@ -82,6 +117,13 @@ export class GIF {
     lastRender
 
     /**
+     * Determines if the GIF needs to be cleared before rendering the next frame.
+     *
+     * @type {boolean}
+     */
+    needsDisposal
+
+    /**
      * Creates a new GIF player instance.
      *
      * @param canvas {HTMLCanvasElement} Canvas element to render the GIF on.
@@ -89,8 +131,16 @@ export class GIF {
      * @param speed {number} Playback speed multiplier (default is 1.0).
      */
     constructor({canvas, gifUrl, speed = 1.0}) {
+        // User canvas
         this.canvas = canvas
         this.ctx = canvas.getContext('2d')
+        // GIF patch canvas
+        this.tempCanvas = document.createElement('canvas')
+        this.tempCtx = this.tempCanvas.getContext('2d')
+        // Full GIF canvas
+        this.gifCanvas = document.createElement('canvas')
+        this.gifCtx = this.gifCanvas.getContext('2d')
+
         this.gifUrl = gifUrl
         this.speed = speed
 
@@ -103,6 +153,11 @@ export class GIF {
         this.elapsedTime = 0
     }
 
+    /**
+     * Initializes the GIF player by loading the GIF and setting up the frames.
+     *
+     * @returns {Promise<void>}
+     */
     async init() {
         await this.loadGIF()
         this.frameCount = this.frames.length
@@ -127,6 +182,12 @@ export class GIF {
         const buffer = await response.arrayBuffer()
         const parsedGif = parseGIF(buffer)
         this.frames = decompressFrames(parsedGif, true)
+
+        this.canvas.width = this.frames[0].dims.width
+        this.canvas.height = this.frames[0].dims.height
+
+        this.gifCanvas.width = this.canvas.width
+        this.gifCanvas.height = this.canvas.height
     }
 
     /**
@@ -139,7 +200,7 @@ export class GIF {
             }
 
             const frame = this.frames[this.frameIndex]
-            const delay = (frame.delay || 10) / this.speed // delay is in hundredths of sec
+            const delay = (frame.delay || 10) / this.speed
 
             if (timestamp - this.lastRender > delay) {
                 this.frameIndex = (this.frameIndex + 1) % this.frames.length
@@ -153,15 +214,54 @@ export class GIF {
     }
 
     /**
+     * Renders a specific patch of the GIF frame onto the temporary canvas.
+     *
+     * @param frame {ParsedFrame} The frame to render.
+     */
+    renderPatch(frame) {
+        if (
+            !this.imgData ||
+            frame.dims.width !== this.imgData.width ||
+            frame.dims.height !== this.imgData.height
+        ) {
+            this.tempCanvas.width = frame.dims.width
+            this.tempCanvas.height = frame.dims.height
+            this.imgData = this.tempCtx.createImageData(frame.dims.width, frame.dims.height)
+        }
+
+        // Set the patch data as an override
+        this.imgData.data.set(frame.patch)
+
+        // Draw the patch back over the canvas
+        this.tempCtx.putImageData(this.imgData, 0,0)
+        this.gifCtx.drawImage(this.tempCanvas, 0,0)
+    }
+
+    /**
+     * Manipulates the GIF canvas to apply the current frame's pixel data.
+     */
+    manipulate() {
+        let imgData = this.gifCtx.getImageData(0,0, this.gifCanvas.width, this.gifCanvas.height)
+        this.ctx.putImageData(imgData, 0,0)
+    }
+
+    /**
      * Renders a specific frame on the canvas.
      *
      * @param frame {ParsedFrame} The frame to render.
      */
     renderFrame(frame) {
-        const imgData = new ImageData(new Uint8ClampedArray(frame.patch), frame.dims.width, frame.dims.height)
-        this.canvas.width = frame.dims.width
-        this.canvas.height = frame.dims.height
-        this.ctx.putImageData(imgData, frame.dims.left, frame.dims.top)
+        if (this.needsDisposal) {
+            this.gifCtx.clearRect(0,0, this.canvas.width, this.canvas.height)
+            this.needsDisposal = false
+        }
+
+        this.renderPatch(frame)
+        this.manipulate()
+
+        if (frame.disposalType === 2) {
+            this.needsDisposal = true
+        }
 
         this.elapsedTime = this.frames
             .slice(0, this.frameIndex + (this.frameIndex === 0 ? 0 : 1))
@@ -213,7 +313,13 @@ export class GIF {
             this.frameIndex = this.frames.length - 1
         }
 
-        this.renderFrame(this.frames[this.frameIndex])
+        let frame = this.frames[this.frameIndex]
+
+        if (frame.disposalType === 2) {
+            this.needsDisposal = true
+        }
+
+        this.renderFrame(frame)
     }
 
     /**
@@ -225,6 +331,13 @@ export class GIF {
         this.speed = speed
     }
 
+    /**
+     * Formats a time in milliseconds into a human-readable string.
+     *
+     * @param ms {number} Time in milliseconds to format.
+     *
+     * @returns {string}
+     */
     formatTime(ms) {
         const totalSeconds = Math.floor(ms / 1000);
         const minutes = Math.floor(totalSeconds / 60);
@@ -232,10 +345,20 @@ export class GIF {
         return `${minutes}:${seconds.toString().padStart(2, '0')}`;
     }
 
+    /**
+     * Formats the current time of the GIF into a human-readable string.
+     *
+     * @returns {string}
+     */
     get currentTimeFormatted() {
         return this.formatTime(this.elapsedTime);
     }
 
+    /**
+     * Formats the total duration of the GIF into a human-readable string.
+     *
+     * @returns {string}
+     */
     get totalTimeFormatted() {
         return this.formatTime(this.totalDuration);
     }
