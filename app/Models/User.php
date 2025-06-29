@@ -724,6 +724,33 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
             ->orderBy(Episode::TABLE_NAME . '.started_at');
     }
 
+    function past_episodes(?Anime $anime = null): Builder
+    {
+        return Episode::join(UserWatchedEpisode::TABLE_NAME, UserWatchedEpisode::TABLE_NAME . '.episode_id', '=', Episode::TABLE_NAME . '.id')
+            ->join(Season::TABLE_NAME, Episode::TABLE_NAME . '.season_id', '=', Season::TABLE_NAME . '.id')
+            ->join(Anime::TABLE_NAME, Season::TABLE_NAME . '.anime_id', '=', Anime::TABLE_NAME . '.id')
+            ->join(UserLibrary::TABLE_NAME, function ($join) use ($anime) {
+                $join->on(UserLibrary::TABLE_NAME . '.trackable_id', '=', Anime::TABLE_NAME . '.id')
+                    ->where(UserLibrary::TABLE_NAME . '.trackable_type', '=', Anime::class)
+                    ->where(UserLibrary::TABLE_NAME . '.user_id', '=', $this->id)
+                    ->where(UserLibrary::TABLE_NAME . '.status', '=', UserLibraryStatus::InProgress);
+
+                if ($anime) {
+                    $join->where(UserLibrary::TABLE_NAME . '.trackable_id', '=', $anime->id);
+                }
+            })
+            ->where(UserWatchedEpisode::TABLE_NAME . '.user_id', '=', $this->id)
+            ->where(Episode::TABLE_NAME . '.started_at', '<=', now())
+            ->orderBy(UserWatchedEpisode::TABLE_NAME . '.created_at', 'desc')
+            ->select(Episode::TABLE_NAME . '.*')
+            ->with([
+                'anime' => fn ($q) => $q->with(['media', 'translation']),
+                'media',
+                'season' => fn ($q) => $q->with(['translation']),
+                'translation'
+            ]);
+    }
+
     /**
      * Returns the associated badges for the user
      *

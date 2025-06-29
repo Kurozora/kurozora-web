@@ -34,13 +34,15 @@
         </section>
 
         @if ($this->episodes->count())
-            <x-rows.episode-lockup :episodes="$this->episodes" :is-row="false" />
+            <section id="up-next">
+                <x-rows.episode-lockup :episodes="$this->episodes" :is-row="false" />
 
-            <div class="mt-4 pl-4 pr-4">
-                {{ $this->episodes->links() }}
-            </div>
+                <div class="mt-4 pl-4 pr-4">
+                    {{ $this->episodes->links() }}
+                </div>
+            </section>
         @elseif (!$readyToLoad)
-            <section>
+            <section id="up-next-skeleton">
                 <div class="flex flex-wrap gap-4 justify-between pl-4 pr-4">
                     @foreach (range(1,25) as $range)
                         <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
@@ -50,5 +52,7 @@
                 </div>
             </section>
         @endif
+
+        <livewire:components.episode.past-episodes-section />
     </div>
 </main>
