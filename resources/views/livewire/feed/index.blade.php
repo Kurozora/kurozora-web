@@ -15,13 +15,19 @@
         <link rel="canonical" href="{{ route('feed.index') }}">
     </x-slot:meta>
 
+    <x-slot:styles>
+        <link rel="preload" href="{{ url(mix('css/watch.css')) }}" as="style">
+        <link rel="stylesheet" href="{{ url(mix('css/watch.css')) }}">
+    </x-slot:styles>
+
     <x-slot:scripts>
         <script src="{{ url(mix('js/gif.js')) }}"></script>
         <script src="{{ url(mix('js/markdown.js')) }}"></script>
+        <script src="{{ url(mix('js/watch.js')) }}"></script>
     </x-slot:scripts>
 
-    <div class="pt-4 pb-6" wire:init="loadPage">
-        <section class="mb-4">
+    <div class="pb-6" wire:init="loadPage">
+        <section class="sticky top-0 pt-4 pb-4 backdrop-blur bg-blur z-10">
             <div class="flex gap-1 pl-4 pr-4">
                 <div class="flex flex-wrap items-center w-full">
                     <h1 class="text-2xl font-bold">{{ __('Feed') }}</h1>
@@ -56,8 +62,8 @@
 {{--                                <p class="text-sm text-secondary">{{ $linkPreview->provider }}</p><br>--}}
 {{--                                <p class="text-primary">{{ $linkPreview->title }}</p><br>--}}
 {{--                                <p class="text-sm text-secondary line-clamp-2">{!! nl2br(e($linkPreview->description)) !!}</p><br>--}}
-{{--                                @if ($linkPreview->image_url)--}}
-{{--                                    <img src="{{ $linkPreview->image_url }}" class="mt-2 rounded max-w-2xl" />--}}
+{{--                                @if ($linkPreview->media_url)--}}
+{{--                                    <img src="{{ $linkPreview->media_url }}" class="mt-2 rounded max-w-2xl" />--}}
 {{--                                @endif--}}
 {{--                            </div>--}}
 {{--                        @endif--}}
@@ -75,6 +81,10 @@
 {{--                </div>--}}
             </div>
         </section>
+
+        <div class="flex justify-center">
+            <x-spinner wire:target="loadPage" />
+        </div>
 
         @if ($this->feedMessages->count())
             <section class="mt-4 border-t border-primary">
@@ -96,38 +106,73 @@
                 <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
                     @if ($selectedPopupType === 'edit')
                         <h2 class="text-lg font-bold mb-2">{{ __('Edit Message') }}</h2>
+
                         <textarea wire:model.defer="message" class="w-full border rounded p-2 mb-4" rows="4"></textarea>
+
                         <div class="flex justify-end gap-2">
-                            <x-button wire:click="closePopup">{{ __('Cancel') }}</x-button>
-                            <x-button color="orange" wire:click="confirmEdit">{{ __('Save') }}</x-button>
+                            <x-outlined-button wire:click="closePopup" wire:loading.attr="disabled">
+                                {{ __('Cancel') }}
+                            </x-outlined-button>
+
+                            <x-button color="orange" wire:click="confirmEdit" wire:loading.attr="disabled">
+                                {{ __('Save') }}
+                            </x-button>
                         </div>
                     @elseif ($selectedPopupType === 'delete')
                         <h2 class="text-lg font-bold mb-2">{{ __('Delete Message') }}</h2>
+
                         <p class="mb-4">{{ __('Are you sure you want to delete this message?') }}</p>
+
                         <div class="flex justify-end gap-2">
-                            <x-button wire:click="closePopup">{{ __('Cancel') }}</x-button>
-                            <x-button color="red" wire:click="confirmDelete">{{ __('Delete') }}</x-button>
+                            <x-outlined-button wire:click="closePopup" wire:loading.attr="disabled">
+                                {{ __('Cancel') }}
+                            </x-outlined-button>
+
+                            <x-button color="red" wire:click="confirmDelete" wire:loading.attr="disabled">
+                                {{ __('Delete') }}
+                            </x-button>
                         </div>
                     @elseif ($selectedPopupType === 'reShare')
                         <h2 class="text-lg font-bold mb-2">{{ __('Re-share Message') }}</h2>
+
                         <p class="mb-4">{{ __('Do you want to re-share this message?') }}</p>
+
                         <div class="flex justify-end gap-2">
-                            <x-button wire:click="closePopup">{{ __('Cancel') }}</x-button>
-                            <x-button color="orange" wire:click="confirmReShare">{{ __('Re-share') }}</x-button>
+                            <x-outlined-button wire:click="closePopup" wire:loading.attr="disabled">
+                                {{ __('Cancel') }}
+                            </x-outlined-button>
+
+                            <x-button color="orange" wire:click="confirmReShare" wire:loading.attr="disabled">
+                                {{ __('Re-share') }}
+                            </x-button>
                         </div>
                     @elseif ($selectedPopupType === 'report')
                         <h2 class="text-lg font-bold mb-2">{{ __('Report Message') }}</h2>
+
                         <p class="mb-4">{{ __('Are you sure you want to report this message?') }}</p>
+
                         <div class="flex justify-end gap-2">
-                            <x-button wire:click="closePopup">{{ __('Cancel') }}</x-button>
-                            <x-button color="red" wire:click="confirmReport">{{ __('Report') }}</x-button>
+                            <x-outlined-button wire:click="closePopup" wire:loading.attr="disabled">
+                                {{ __('Cancel') }}
+                            </x-outlined-button>
+
+                            <x-button color="red" wire:click="confirmReport" wire:loading.attr="disabled">
+                                {{ __('Report') }}
+                            </x-button>
                         </div>
                     @elseif ($selectedPopupType === 'share')
                         <h2 class="text-lg font-bold mb-2">{{ __('Share Message') }}</h2>
+
                         <p class="mb-4">{{ __('Share this message with others?') }}</p>
+
                         <div class="flex justify-end gap-2">
-                            <x-button wire:click="closePopup">{{ __('Cancel') }}</x-button>
-                            <x-button color="orange" wire:click="confirmShare">{{ __('Share') }}</x-button>
+                            <x-outlined-button wire:click="closePopup" wire:loading.attr="disabled">
+                                {{ __('Cancel') }}
+                            </x-outlined-button>
+
+                            <x-button color="orange" wire:click="confirmShare" wire:loading.attr="disabled">
+                                {{ __('Share') }}
+                            </x-button>
                         </div>
                     @endif
                 </div>
