@@ -30,8 +30,7 @@ export default class Markdown {
      * @returns {string} The escaped text.
      */
     #escapeHTML(text) {
-        return text.replace(/&/g, "&amp;")
-            .replace(/"/g, "&quot;")
+        return text.replace(/"/g, "&quot;")
             .replace(/'/g, "&#39;")
             .replace(/</g, "&lt;")
             .replace(/>/g, "&gt;")
