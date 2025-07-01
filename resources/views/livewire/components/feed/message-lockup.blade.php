@@ -7,11 +7,11 @@
 <article
     class="relative flex flex-row gap-2 pr-4 pl-4 pt-4 pb-2 border-b border-primary"
     x-data="{
-        content: @js($feedMessage->content),
         displayContent: '',
 
         init() {
-            const content = this.content
+            const content = @js($feedMessage->content)
+
             this.displayContent = markdown.parse(content.replace(/(?:https?|http):\/\/[\n\S]+$/, '').trim(), 0, null, true)
         }
     }"
