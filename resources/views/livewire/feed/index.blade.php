@@ -26,7 +26,7 @@
         <script src="{{ url(mix('js/watch.js')) }}"></script>
     </x-slot:scripts>
 
-    <div class="pb-6" wire:init="loadPage">
+    <div class="pb-6">
         <section class="sticky top-0 pt-4 pb-4 backdrop-blur bg-blur z-10">
             <div class="flex gap-1 pl-4 pr-4">
                 <div class="flex flex-wrap items-center w-full">
@@ -82,23 +82,69 @@
             </div>
         </section>
 
-        <div class="flex justify-center">
-            <x-spinner wire:target="loadPage" />
-        </div>
+        <section class="mt-4 border-t border-primary">
+            <div
+                style="content-visibility: auto;"
+                x-data="{
+                    onFocus() {
+                        $el.setAttribute('wire:poll.5s', 'pollForNewFeedMessages');
+                        console.log('Feed focused');
+                    },
+                    onBlur() {
+                        $el.removeAttribute('wire:poll.5s');
+                        console.log('Feed blurred');
+                    }
+                }"
+                x-on:focus.window="onFocus()"
+                x-on:blur.window="onBlur()"
+            >
+                @if ($newFeedMessagesCount)
+                    <div class="text-center">
+                        <button wire:click="showNewFeedMessages" class="w-full pt-4 pb-4 font-semibold text-tint border-b border-primary hover:bg-tertiary focus:bg-secondary">
+                            {{ trans_choice('{1} Show :x message|[2,*] Show :x messages', $newFeedMessagesCount, ['x' => $newFeedMessagesCount]) }}
+                        </button>
+                    </div>
+                @endif
 
-        @if ($this->feedMessages->count())
-            <section class="mt-4 border-t border-primary">
-                <div class="flex flex-col">
-                    @foreach ($this->feedMessages as $feedMessage)
-                        <livewire:components.feed.message-lockup :feed-message="$feedMessage" wire:key="{{ uniqid($feedMessage->id, true) }}" />
+                <div class="flex flex-col-reverse">
+                    @foreach($newSections as $key => $section)
+                        @if ($section['type'] === 'messages')
+                            <livewire:components.feed.list-section
+                                :cursor="$section['cursor']"
+                                :is-active="false"
+                                :count="$section['count']"
+                                :reverse="true"
+                                wire:key="new-section-{{ $key }}"
+                            />
+                        @elseif ($section['type'] === 'ad')
+                            <div class="flex items-center w-full pt-4 pb-4 pl-4 pr-4 bg-secondary rounded-lg">
+                                <p>{{ 'custom component shown here wink wink ;)' }}</p>
+                            </div>
+                        @endif
                     @endforeach
                 </div>
+            </div>
 
-                <div class="mt-4 pl-4 pr-4">
-                    {{ $this->feedMessages->links() }}
-                </div>
-            </section>
-       @endif
+            <div class="flex flex-col" style="content-visibility: auto;">
+                @foreach ($sections as $key => $section)
+                    @if ($section['type'] === 'messages')
+                        <livewire:components.feed.list-section
+                            :cursor="$section['cursor']"
+                            :is-active="$key === $activeSectionKey"
+                            wire:key="section-{{ $key }}"
+                         />
+                    @elseif ($section['type'] === 'ad')
+                        <div class="flex items-center w-full pt-4 pb-4 pl-4 pr-4 bg-secondary rounded-lg">
+                         <p>{{ 'custom component shown here wink wink ;)' }}</p>
+                        </div>
+                    @endif
+                @endforeach
+            </div>
+        </section>
+
+        <div class="flex justify-center mt-4">
+            <x-spinner />
+        </div>
 
         {{-- Popup Modal --}}
         @if ($showPopup)

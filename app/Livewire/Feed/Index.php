@@ -8,12 +8,8 @@ use App\Models\User;
 use App\Services\LinkPreviewService;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\Pagination\CursorPaginator;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Collection;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -63,6 +59,7 @@ class Index extends Component
         'feed-message-edit' => 'edit',
         'feed-message-delete' => 'delete',
         'feed-message-report' => 'report',
+        'load-more' => 'loadMore'
     ];
 
     /**
@@ -108,14 +105,39 @@ class Index extends Component
     public ?int $selectedMessageId = null;
 
     /**
-     * Prepare the component.
+     * The sections of the feed.
      *
-     * @return void
+     * @var array
      */
-    public function mount(): void
-    {
-        $this->user = auth()->user();
-    }
+    public array $sections = [];
+
+    /**
+     * The new sections of the feed.
+     *
+     * @var array
+     */
+    public array $newSections = [];
+
+    /**
+     * The key of the active section.
+     *
+     * @var int|null
+     */
+    public ?int $activeSectionKey = null;
+
+    /**
+     * The latest feed message id.
+     *
+     * @var int|null
+     */
+    public ?int $latestFeedMessageId = null;
+
+    /**
+     * The count of new feed messages.
+     *
+     * @var int
+     */
+    public int $newFeedMessagesCount = 0;
 
     /**
      * Boot the component.
@@ -130,6 +152,30 @@ class Index extends Component
     }
 
     /**
+     * Prepare the component.
+     *
+     * @return void
+     */
+    public function mount(): void
+    {
+        $this->user = auth()->user();
+        $this->sections[] = ['type' => 'messages', 'cursor' => null];
+        $this->activeSectionKey = 0;
+        $this->setLatestFeedMessageId();
+    }
+
+    /**
+     * Sets the latest feed message id.
+     *
+     * @return void
+     */
+    function setLatestFeedMessageId(): void
+    {
+        $this->latestFeedMessageId = FeedMessage::where('is_reply', '=', false)
+            ->max('id');
+    }
+
+    /**
      * Sets the property to load the page.
      *
      * @return void
@@ -140,41 +186,57 @@ class Index extends Component
     }
 
     /**
-     * Returns the user's feed messages.
+     * Loads the next page of feed messages.
      *
-     * @return Collection|CursorPaginator
+     * @param int $cursor
+     *
+     * @return void
      */
-    public function getFeedMessagesProperty(): Collection|CursorPaginator
+    public function loadMore(int $cursor): void
     {
-        if (!$this->readyToLoad) {
-            return collect();
-        }
-
-        return FeedMessage::where('is_reply', '=', false)
-            ->with([
-                'user' => function (BelongsTo $belongsTo) {
-                    $belongsTo->with(['media']);
-                },
-                'loveReactant' => function (BelongsTo $query) {
-                    $query->with([
-                        'reactionCounters',
-                        'reactions' => function (HasMany $hasMany) {
-                            $hasMany->with(['reacter', 'type']);
-                        },
-                    ]);
-                },
-            ])
-            ->withCount(['replies', 'reShares'])
-            ->when(auth()->user(), function ($query, $user) {
-                $query->withExists(['reShares as isReShared' => function ($query) use ($user) {
-                    $query->where('user_id', '=', $user->id);
-                }]);
-            })
-            ->orderBy('created_at', 'desc')
-            ->cursorPaginate(25, ['*'], 'fmc');
+        $this->activeSectionKey++;
+        $this->sections[] = ['type' => 'messages', 'cursor' => $cursor];
     }
 
-    function delete($id): void
+    /**
+     * Polls for new feed messages.
+     *
+     * @return void
+     */
+    public function pollForNewFeedMessages(): void
+    {
+        $feedMessages = FeedMessage::where('is_reply', '=', false)
+            ->where('id', '>', $this->latestFeedMessageId)
+            ->orderBy('id')
+            ->count();
+
+        if ($feedMessages) {
+            $this->newFeedMessagesCount = $feedMessages;
+            $this->setLatestFeedMessageId();
+        }
+    }
+
+    /**
+     * Shows the new feed messages section.
+     *
+     * @return void
+     */
+    public function showNewFeedMessages(): void
+    {
+        $this->newSections[] = ['type' => 'messages', 'cursor' => null, 'count' => $this->newFeedMessagesCount];
+
+        $this->newFeedMessagesCount = 0;
+        $this->setLatestFeedMessageId();
+    }
+
+    /**
+     * Deletes a feed message.
+     *
+     * @param int $id
+     *
+     * @return void
+     */
+    function delete(int $id): void
     {
         $this->selectedPopupType = 'delete';
         $this->selectedMessageId = $id;
@@ -191,14 +253,14 @@ class Index extends Component
         $this->closePopup();
     }
 
-    function reply($id): void
+    function reply(int $id): void
     {
         $this->selectedPopupType = 'reply';
         $this->selectedMessageId = $id;
         $this->showPopup = true;
     }
 
-    function reShare($id): void
+    function reShare(int $id): void
     {
         $this->selectedPopupType = 'reShare';
         $this->selectedMessageId = $id;
@@ -211,7 +273,7 @@ class Index extends Component
         $this->closePopup();
     }
 
-    function share($id): void
+    function share(int $id): void
     {
         $this->selectedPopupType = 'share';
         $this->selectedMessageId = $id;
@@ -224,7 +286,7 @@ class Index extends Component
         $this->closePopup();
     }
 
-    function edit($id): void
+    function edit(int $id): void
     {
         $this->selectedPopupType = 'edit';
         $this->selectedMessageId = $id;
@@ -242,7 +304,7 @@ class Index extends Component
         $this->closePopup();
     }
 
-    function report($id): void
+    function report(int $id): void
     {
         $this->selectedPopupType = 'report';
         $this->selectedMessageId = $id;
