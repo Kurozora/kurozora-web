@@ -27,10 +27,10 @@
     </x-slot:scripts>
 
     <div class="pb-6" wire:init="loadPage">
-        <section class="sticky top-0 pt-4 pb-4 backdrop-blur bg-blur z-10">
+        <section class="sticky top-0 pt-4 pb-4 backdrop-blur bg-blur z-10" wire:ignore>
             <div class="flex gap-1 pl-4 pr-4">
                 <div class="flex flex-wrap gap-4 items-center w-full">
-                    <x-circle-button aria-label="{{ __('Back') }}" onclick="history.back()">
+                    <x-circle-button aria-label="{{ __('Back') }}" onclick="historyManager.back('{{ route('feed.index') }}')">
                         @svg('chevron_backward', 'fill-current', ['width' => '20'])
                     </x-circle-button>
 
