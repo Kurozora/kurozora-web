@@ -16,7 +16,6 @@
         }
     }"
     x-init="init()"
-    wire:key="{{ uniqid(more_entropy: true) }}"
     role="article"
     tabindex="0"
 >
