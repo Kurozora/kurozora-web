@@ -1,7 +1,7 @@
 @props(['user'])
 
 <a
-    {{ $attributes->merge(['class' => 'flex aspect-square']) }}
+    {{ $attributes->merge(['class' => 'flex aspect-square rounded-full']) }}
     href="{{ $user ? route('profile.details', $user) : route('sign-in') }}"
     wire:navigate
 >
