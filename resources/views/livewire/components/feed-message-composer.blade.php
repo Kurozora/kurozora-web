@@ -9,11 +9,11 @@
 >
     <div
         id="comment-box-message-box"
-        class="w-full p-3 border rounded outline-none whitespace-pre-wrap break-words"
+        class="w-full rounded whitespace-pre-wrap break-words focus:ring-0 focus:ring-offset-0"
         style="min-height: 100px"
         role="textbox"
         aria-multiline="true"
-        placeholder="{{ __('Share your thoughts...') }}"
+        placeholder="{{ __('What’s happening?') }}"
         contenteditable
         x-ref="editor"
         x-html="displayContent"
@@ -23,7 +23,10 @@
 
     <input type="hidden" x-model="body">
 
-    <div class="flex gap-4 justify-between overflow-x-scroll no-scrollbar">
+    <div
+        class="flex gap-4 justify-between overflow-x-scroll no-scrollbar"
+        x-bind:class="{'hidden': attachments.length === 0}"
+    >
         <template x-for="(file, i) in attachments" :key="file.previewUrl">
             <div class="relative inline-block mr-2">
                 <div class="rounded-lg overflow-hidden">
@@ -53,7 +56,10 @@
         </template>
     </div>
 
-    <div class="flex justify-between pt-2 border-t border-primary">
+    <div
+        class="flex justify-between pt-2"
+        x-bind:class="{'border-t border-primary': charCount !== 0}"
+    >
         <div class="flex gap-2">
             <div>
                 <x-circle-button tabindex="0" title="{{ __('Add media') }}" x-ref="filesButton" x-on:click="$refs.files.click()">
