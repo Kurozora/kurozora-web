@@ -4,6 +4,8 @@ namespace App\Services;
 
 use App\Contracts\LinkPreviewHandlerInterface;
 use App\Enums\LinkPreviewType;
+use App\Handlers\TenorHandler;
+use App\Handlers\TwitterHandler;
 use App\Models\LinkPreview;
 use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
 use DOMDocument;
@@ -27,7 +29,8 @@ class LinkPreviewService
     public function __construct()
     {
         $this->handlers = [
-            // TODO: - Create handlers to add here
+            new TwitterHandler,
+            new TenorHandler,
         ];
     }
 

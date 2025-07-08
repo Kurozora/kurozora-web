@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Models\PersonalAccessToken;
 use App\Models\User;
 use App\Policies\NotificationPolicy;
+use App\Services\LinkPreviewService;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Events\QueryExecuted;
@@ -116,5 +117,10 @@ class AppServiceProvider extends ServiceProvider
 
         // Register roach with the app container.
         Roach::useContainer($this->app);
+
+        // Register link preview service.
+        $this->app->singleton(LinkPreviewService::class, function () {
+            return new LinkPreviewService;
+        });
     }
 }
