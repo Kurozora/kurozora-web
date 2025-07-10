@@ -142,6 +142,16 @@ class FeedMessage extends KModel implements ReactableContract
     }
 
     /**
+     * Returns the link preview the current feed message has.
+     *
+     * @return HasOne
+     */
+    public function linkPreview(): HasOne
+    {
+        return $this->hasOne(LinkPreview::class, 'url', 'last_link');
+    }
+
+    /**
      * Filters out the feed messages that are replies.
      *
      * @param Builder $query
