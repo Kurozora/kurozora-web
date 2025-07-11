@@ -63,7 +63,7 @@ class Detail extends Component
      */
     public function mount(FeedMessage $feedMessage): void
     {
-        $feedMessage->load([
+        $this->feedMessage = $feedMessage->loadMissing([
             'user' => function (BelongsTo $belongsTo) {
                 $belongsTo->with(['media']);
             },
@@ -74,16 +74,19 @@ class Detail extends Component
                         $hasMany->with(['reacter', 'type']);
                     }
                 ]);
-            }
+            },
+            'linkPreview'
         ])
             ->loadCount(['replies', 'reShares'])
-            ->when(auth()->user(), function ($query, $user) {
-                $query->withExists(['reShares as isReShared' => function ($query) use ($user) {
-                    $query->where('user_id', '=', $user->id);
-                }]);
+            ->when(auth()->user(), function ($query, $user) use ($feedMessage) {
+                return $feedMessage->loadExists([
+                    'reShares as isReShared' => function ($query) use ($user) {
+                        $query->where('user_id', '=', $user->id);
+                    }
+                ]);
+            }, function() use ($feedMessage) {
+                return $feedMessage;
             });
-
-        $this->feedMessage = $feedMessage;
     }
 
     /**
@@ -119,7 +122,8 @@ class Detail extends Component
                             $hasMany->with(['reacter', 'type']);
                         }
                     ]);
-                }
+                },
+                'linkPreview'
             ])
             ->withCount(['replies', 'reShares'])
             ->when(auth()->user(), function ($query, $user) {
