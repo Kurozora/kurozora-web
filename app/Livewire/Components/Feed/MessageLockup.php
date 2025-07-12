@@ -40,7 +40,17 @@ class MessageLockup extends Component
     }
 
     /**
-     * Toggles the like status of the feed message.
+     * Hydrate the feed message.
+     *
+     * @return void
+     */
+    public function hydrateFeedMessage(): void
+    {
+        $this->feedMessage->loadCount(['replies', 'reShares']);
+    }
+
+    /**
+     * Toggle the like status of the feed message.
      *
      * @return void
      */
@@ -56,7 +66,7 @@ class MessageLockup extends Component
      */
     public function reShare(): void
     {
-        $this->dispatch('feed-message-reShare', $this->feedMessage->id);
+        $this->dispatch('feed-message-reShare', id: $this->feedMessage->id);
     }
 
     /**
@@ -66,7 +76,7 @@ class MessageLockup extends Component
      */
     public function reply(): void
     {
-        $this->dispatch('feed-message-reply', $this->feedMessage->id);
+        $this->dispatch('feed-message-reply', id: $this->feedMessage->id);
     }
 
     /**
@@ -76,7 +86,7 @@ class MessageLockup extends Component
      */
     public function share(): void
     {
-        $this->dispatch('feed-message-share', $this->feedMessage->id);
+        $this->dispatch('feed-message-share', id: $this->feedMessage->id);
     }
 
     /**
@@ -86,7 +96,7 @@ class MessageLockup extends Component
      */
     public function edit(): void
     {
-        $this->dispatch('feed-message-edit', $this->feedMessage->id);
+        $this->dispatch('feed-message-edit', id: $this->feedMessage->id);
     }
 
     /**
@@ -96,7 +106,7 @@ class MessageLockup extends Component
      */
     public function delete(): void
     {
-        $this->dispatch('feed-message-delete', $this->feedMessage->id);
+        $this->dispatch('feed-message-delete', id: $this->feedMessage->id);
     }
 
     /**
@@ -106,12 +116,12 @@ class MessageLockup extends Component
      */
     public function report(): void
     {
-        $this->dispatch('feed-message-report', $this->feedMessage->id);
+        $this->dispatch('feed-message-report', id: $this->feedMessage->id);
     }
 
     public function getLinkPreviewProperty(): ?LinkPreview
     {
-        return $this->feedMessage->linkPreview()->first();
+        return $this->feedMessage->linkPreview;
     }
 
     /**
