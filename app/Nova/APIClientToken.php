@@ -36,7 +36,7 @@ class APIClientToken extends Resource
      *
      * @var string
      */
-    public static $title = 'name';
+    public static $title = 'identifier';
 
     /**
      * The columns that should be searched.
@@ -44,7 +44,7 @@ class APIClientToken extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'client_id', 'name', 'token'
+        'id', 'identifier', 'description', 'token'
     ];
 
     /**
