@@ -109,7 +109,7 @@ class Song extends Resource
                 })->preview(function () {
                     return $this->resource->getFirstMediaFullUrl(MediaCollection::Artwork()) ?? asset('images/static/placeholders/music_album.webp');
                 })
-                ->rounded()
+                ->squared()
                 ->deletable(false)
                 ->disableDownload()
                 ->readonly()

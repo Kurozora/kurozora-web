@@ -128,7 +128,7 @@ class Game extends Resource
                 })->preview(function () {
                     return $this->resource->getFirstMediaFullUrl(MediaCollection::Poster());
                 })
-                ->rounded()
+                ->squared()
                 ->deletable(false)
                 ->disableDownload()
                 ->readonly()
