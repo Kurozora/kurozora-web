@@ -8,7 +8,7 @@
     </x-slot:description>
 
     <x-slot:form>
-        <div class="col-span-12">
+        <div class="col-span-6">
             <div class="max-w-xl text-sm text-primary">
                 <p>{{ __(':x does not guarantee all shows and mangas will be imported to your library. Once the request has been processed a notification which contains the status of the import request will be sent. Furthermore, the uploaded file is deleted as soon as the import request has been processed.', ['x' => config('app.name')]) }}</p>
 

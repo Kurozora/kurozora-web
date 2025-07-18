@@ -8,7 +8,7 @@
     </x-slot:description>
 
     <x-slot:form>
-        <div class="col-span-12">
+        <div class="col-span-6">
             <div class="max-w-xl text-sm text-primary">
                 <p>{{ __('TV ratings are tiered. Depending on the chosen TV rating some shows might be hidden.') }}</p>
                 <br/>

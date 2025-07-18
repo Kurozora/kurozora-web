@@ -8,7 +8,7 @@
     </x-slot:description>
 
     <x-slot:form>
-        <div class="col-span-12">
+        <div class="col-span-6">
             <div class="max-w-xl text-sm text-primary">
                 <p>{{ __('The selected timezone will be used to display all dates and times, including premiere dates, broadcasts, and schedules.') }}</p>
             </div>
