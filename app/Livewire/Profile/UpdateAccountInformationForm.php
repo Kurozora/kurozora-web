@@ -4,6 +4,7 @@ namespace App\Livewire\Profile;
 
 use App\Contracts\UpdatesUserAccountInformation;
 use App\Models\User;
+use App\Traits\Livewire\WithRateLimiting;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\View\View;
@@ -11,6 +12,8 @@ use Livewire\Component;
 
 class UpdateAccountInformationForm extends Component
 {
+    use WithRateLimiting;
+
     /**
      * The component's state.
      *
@@ -26,6 +29,13 @@ class UpdateAccountInformationForm extends Component
     protected $listeners = [
         'refresh-component' => '$refresh'
     ];
+
+    /**
+     * The rate limit decay in seconds.
+     *
+     * @var int $rateLimitDecay
+     */
+    protected int $rateLimitDecay = 90;
 
     /**
      * Prepare the component.
@@ -47,6 +57,7 @@ class UpdateAccountInformationForm extends Component
      * Update the user's account information.
      *
      * @param UpdatesUserAccountInformation $updater
+     *
      * @return void
      */
     public function updateAccountInformation(UpdatesUserAccountInformation $updater): void
@@ -58,6 +69,14 @@ class UpdateAccountInformationForm extends Component
         $updater->update(auth()->user(), $attributes);
 
         $this->dispatch('saved');
+
+        if (!$this->user->hasVerifiedEmail()) {
+            $this->rateLimit(1, $this->rateLimitDecay);
+
+            $this->user->sendEmailVerificationNotification();
+
+            $this->dispatch('verification-link-sent', countdown: $this->rateLimitDecay);
+        }
     }
 
     /**
@@ -77,6 +96,18 @@ class UpdateAccountInformationForm extends Component
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.profile.update-account-information-form');
+        $hasVerifiedEmail = $this->user->hasVerifiedEmail();
+
+        if ($hasVerifiedEmail) {
+            $rateLimitDecay = 0;
+        } else {
+            $errors = $this->getErrorBag();
+            $rateLimitDecay = $errors->has('seconds_until_available') ? (int) $errors->get('seconds_until_available')[0] : $this->rateLimitAvailableIn('updateAccountInformation');
+        }
+
+        return view('livewire.profile.update-account-information-form', [
+            'hasVerifiedEmail' => $hasVerifiedEmail,
+            'rateLimitDecay' => $rateLimitDecay,
+        ]);
     }
 }
