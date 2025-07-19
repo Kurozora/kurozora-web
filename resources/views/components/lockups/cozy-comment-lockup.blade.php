@@ -9,7 +9,7 @@
     x-on:mouseleave="showOptions = false"
     wire:key="{{ uniqid($comment->created_at, true) }}"
 >
-    <x-profile-image-view class="w-16 h-16" :user="$comment->user" />
+    <x-profile-image-view class="w-12 h-12" :user="$comment->user" />
 
     <div class="flex flex-col items-baseline w-full">
         <div class="flex gap-2 justify-between w-full">

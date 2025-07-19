@@ -10,7 +10,7 @@
         x-data="{}"
         wire:key="{{ uniqid($review->id, true) }}"
     >
-        <x-profile-image-view class="w-16 h-16" :user="$review->user" />
+        <x-profile-image-view class="w-12 h-12" :user="$review->user" />
 
         <div class="flex flex-col items-baseline w-full">
             <div class="flex flex-wrap justify-between w-full">

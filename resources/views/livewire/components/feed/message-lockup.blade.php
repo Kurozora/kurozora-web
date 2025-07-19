@@ -22,7 +22,7 @@
     <a class="absolute top-0 left-0 w-full h-full" href="{{ route('feed.details', $feedMessage) }}"
        wire:navigate.hover wire:show="!isDetailPage"></a>
 
-    <x-profile-image-view class="w-16 h-16" :user="$feedMessage->user" />
+    <x-profile-image-view class="w-12 h-12" :user="$feedMessage->user" />
 
     <div class="flex flex-col items-baseline w-full">
         <div class="flex gap-2 justify-between w-full">
