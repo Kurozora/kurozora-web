@@ -123,11 +123,11 @@
 
             <div class="xl:ml-64">
                 @if (!(auth()->user()?->hasVerifiedEmail() ?? true))
-                    <x-alert
-                        :message="__('You have not confirmed your email address yet. Please check your email inbox or spam folder.')"
-                        :is-ephemeral="false"
-                        type="warning"
-                    ></x-alert>
+                    <a class="flex items-center gap-2 bg-yellow-500 text-white text-sm pl-4 pr-4 pt-3 pb-3" role="alert" href="{{ route('settings') }}" wire:navigate>
+                        @svg('exclamationmark_circle', 'fill-current', ['width' => 20])
+
+                        <p class="flex">{{ __('You have not confirmed your email address yet. Please check your email inbox or spam folder.') }}</p>
+                    </a>
                 @endif
 
                 @if (session()->has('success'))
