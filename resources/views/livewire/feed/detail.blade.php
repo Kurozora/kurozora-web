@@ -56,6 +56,18 @@
             <livewire:components.feed.message-lockup :feed-message="$this->feedMessage" :is-detail-page="true" wire:key="{{ uniqid($this->feedMessage->id, true) }}" />
         </section>
 
+        <section class="pb-4 border-b border-primary">
+            <a livewire:navigate href="{{ route('profile.details', $this->feedMessage->user) }}" class="pl-4 pr-4 text-secondary text-sm">{!! __('Replying to <span class="text-tint">@:x</span>', ['x' => $this->feedMessage->user->slug]) !!}</a>
+
+            <div class="flex flex-row gap-2 mt-4 pl-4 pr-4">
+                <x-profile-image-view class="w-12 h-12" :user="auth()->user()" />
+
+                <div class="flex flex-col gap-2 w-full">
+                    <livewire:components.feed-message-composer is-reply="true" />
+                </div>
+            </div>
+        </section>
+
         <div class="flex justify-center">
             <x-spinner wire:target="loadPage" />
         </div>
@@ -79,8 +91,6 @@
                 <p class="font-bold">{{ __('No Replies') }}</p>
 
                 <p class="text-sm text-secondary">{{ __('Be the first to reply to this message!') }}</p>
-
-                <x-button class="mt-2">{{ __('Reply to :x', ['x' => $this->feedMessage->user->username]) }}</x-button>
             </section>
         @endif
     </div>
