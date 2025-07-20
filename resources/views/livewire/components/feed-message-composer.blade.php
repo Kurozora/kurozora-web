@@ -1,7 +1,7 @@
 <div
     x-data="composer({
         charLimit: @js($charLimit),
-        body: @entangle('body').defer
+        content: @entangle('content').defer
     })"
     x-init="init()"
     class="space-y-3"
@@ -13,7 +13,7 @@
         style="min-height: 100px"
         role="textbox"
         aria-multiline="true"
-        placeholder="{{ __('What’s happening?') }}"
+        placeholder="{{ $this->isReply ? __('Post your reply') : __('What’s happening?') }}"
         contenteditable
         x-ref="editor"
         x-html="displayContent"
@@ -21,7 +21,7 @@
         x-on:paste.prevent="onPaste($event)"
     ></div>
 
-    <input type="hidden" x-model="body">
+    <input type="hidden" x-model="content">
 
     <div
         class="flex gap-4 justify-between overflow-x-scroll no-scrollbar"
@@ -58,16 +58,18 @@
 
     <div
         class="flex justify-between pt-2"
-        x-bind:class="{'border-t border-primary': charCount !== 0}"
+        @if(!$this->isReply)
+            x-bind:class="{'border-t border-primary': charCount !== 0}"
+        @endif
     >
         <div class="flex gap-2">
-            <div>
-                <x-circle-button tabindex="0" title="{{ __('Add media') }}" x-ref="filesButton" x-on:click="$refs.files.click()">
-                    @svg('photo_on_rectangle_angled', 'fill-current', ['width' => '24'])
-                </x-circle-button>
+{{--            <div>--}}
+{{--                <x-circle-button tabindex="0" title="{{ __('Add media') }}" x-ref="filesButton" x-on:click="$refs.files.click()">--}}
+{{--                    @svg('photo_on_rectangle_angled', 'fill-current', ['width' => '24'])--}}
+{{--                </x-circle-button>--}}
 
-                <x-input-file class="hidden" x-ref="files" multiple accept="image/*,video/gif" x-on:change="Array.from($event.target.files).forEach(file => addAttachment($wire, file))" />
-            </div>
+{{--                <x-input-file class="hidden" x-ref="files" multiple accept="image/*,video/gif" x-on:change="Array.from($event.target.files).forEach(file => addAttachment($wire, file))" />--}}
+{{--            </div>--}}
         </div>
 
         <div class="flex gap-4 items-center">
@@ -77,16 +79,16 @@
             <div class="h-full border-e border-primary"></div>
 
             <x-button
-                x-on:click="$wire.set('body', body); $wire.submit()"
+                x-on:click="$wire.set('content', content); $wire.submit()"
                 x-bind:disabled="charCount == 0 || charCount > charLimit"
             >{{ __('Post') }}</x-button>
         </div>
     </div>
 
     <script>
-        function composer({ charLimit, body }) {
+        function composer({ charLimit, content }) {
             return {
-                body: body || '',
+                content: content || '',
                 displayContent: '',
                 charLimit: charLimit,
                 attachments: [],
@@ -103,35 +105,35 @@
                 },
 
                 init() {
-                    // Restore draft from localStorage if available and `body` is empty
+                    // Restore draft from localStorage if available and `content` is empty
                     const saved = localStorage.getItem(this.draftKey)
-                    if (saved && !this.body) {
-                        this.body = saved;
+                    if (saved && !this.content) {
+                        this.content = saved;
                     }
 
-                    if (this.body) {
+                    if (this.content) {
                         this.renderEditMode()
                     }
                     // Initialize history stack
-                    this.pushHistory(this.body)
+                    this.pushHistory(this.content)
                 },
                 onInput() {
                     this.saveSelection()
-                    this.body = this.extractTextFromEditor()
+                    this.content = this.extractTextFromEditor()
 
                     // Save draft to localStorage
-                    if (this.body) {
-                        localStorage.setItem(this.draftKey, this.body)
+                    if (this.content) {
+                        localStorage.setItem(this.draftKey, this.content)
                     } else {
                         localStorage.removeItem(this.draftKey)
                     }
 
                     // Only push to history if not undo/redo
                     if (!this.isComposing) {
-                        this.pushHistory(this.body)
+                        this.pushHistory(this.content)
                     }
 
-                    const formatted = markdown.parse(this.body, this.charLimit, this.charCountCallback.bind(this))
+                    const formatted = markdown.parse(this.content, this.charLimit, this.charCountCallback.bind(this))
 
                     if (this.displayContent !== formatted) {
                         this.displayContent = formatted;
@@ -146,7 +148,7 @@
                 onPaste(e) {
                     const text = (e.clipboardData || window.clipboardData).getData('text')
 
-                    if (text === this.body) {
+                    if (text === this.content) {
                         return
                     }
 
@@ -215,7 +217,7 @@
                     return node;
                 },
                 renderEditMode() {
-                    this.displayContent = markdown.parse(this.body, this.charLimit, this.charCountCallback.bind(this))
+                    this.displayContent = markdown.parse(this.content, this.charLimit, this.charCountCallback.bind(this))
                 },
                 handleShortcuts(e) {
                     if (!e.metaKey) {
@@ -294,7 +296,7 @@
                     if (this.historyIndex > 0) {
                         this.isComposing = true;
                         this.historyIndex--;
-                        this.body = this.history[this.historyIndex]
+                        this.content = this.history[this.historyIndex]
                         this.renderEditMode()
                         this.$nextTick(() => {
                             this.placeCaretAtEnd()
@@ -309,7 +311,7 @@
 
                         this.isComposing = true;
                         this.historyIndex++;
-                        this.body = this.history[this.historyIndex]
+                        this.content = this.history[this.historyIndex]
                         this.renderEditMode()
                         this.$nextTick(() => {
                             this.placeCaretAtEnd()

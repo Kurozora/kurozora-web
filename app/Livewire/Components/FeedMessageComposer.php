@@ -2,6 +2,8 @@
 
 namespace App\Livewire\Components;
 
+use App\Models\FeedMessage;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -9,21 +11,56 @@ class FeedMessageComposer extends Component
 {
     use WithFileUploads;
 
-    public ?string $body;
-    public $charLimit = 500; // dynamic limit
+    /**
+     * The content of the message.
+     *
+     * @var string|null $content
+     */
+    #[Validate]
+    public ?string $content;
+
+    /**
+     * The character limit for the message.
+     *
+     * @var int $charLimit
+     */
+    public int $charLimit;
+
+    #[Validate]
     public $attachments = []; // temporary uploads
     public $meta = []; // [{ spoiler, nsfw, alt }]
 
-    protected $rules = [
-        'body' => 'max:1000',
-        'attachments.*' => 'image|max:2048',
-    ];
+    /**
+     * Whether the message is a reply.
+     *
+     * @var bool $isReply
+     */
+    public bool $isReply;
 
-    public function updatedBody(): void
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array
+     */
+    protected function rules(): array
     {
-        if (strlen($this->body) > $this->charLimit) {
-            $this->body = substr($this->body, 0, $this->charLimit);
-        }
+        return [
+            'content' => ['bail', 'string', 'min:1', 'max:' . FeedMessage::maxContentLength()],
+            'attachments.*' => 'image|max:2048'
+        ];
+    }
+
+    /**
+     * Prepare the component.
+     *
+     * @param bool $isReply
+     *
+     * @return void
+     */
+    public function mount(bool $isReply): void
+    {
+        $this->isReply = $isReply;
+        $this->charLimit = FeedMessage::maxContentLength();
     }
 
     public function addAttachment($file): void
@@ -51,10 +88,24 @@ class FeedMessageComposer extends Component
         $this->meta = array_values($this->meta);
     }
 
-    public function submit(): void
+    public function submit()
     {
+        if (!auth()->check()) {
+            return to_route('sign-in');
+        }
+
         $this->validate();
-        // store attachments and post...
+
+        auth()->user()->feed_messages()
+            ->create([
+                'parent_feed_message_id' => null,
+                'content' => $this->content,
+                'is_nsfw' => false,
+                'is_reply' => false,
+                'is_reshare' => false,
+                'is_spoiler' => false,
+            ]);
+
         $this->dispatch('postSubmitted', ['body' => $this->body, 'attachments' => $this->attachments, 'meta' => $this->meta]);
     }
 
