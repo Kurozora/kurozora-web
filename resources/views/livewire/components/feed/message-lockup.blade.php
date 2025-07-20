@@ -24,8 +24,8 @@
 
     <x-profile-image-view class="w-12 h-12" :user="$feedMessage->user" />
 
-    <div class="flex flex-col items-baseline w-full">
-        <div class="flex gap-2 justify-between w-full">
+    <div class="flex flex-col w-full">
+        <div class="flex gap-2 justify-between items-baseline w-full">
             <div class="relative flex gap-1">
                 <a
                     class="inline-flex items-center font-semibold whitespace-nowrap overflow-hidden"
@@ -41,7 +41,7 @@
                href="{{ route('feed.details', $feedMessage) }}">{{ $feedMessage->created_at->shortAbsoluteDiffForHumans() }}</a>
         </div>
 
-        <div class="relative">
+        <div class="relative flex">
             <a
                 class="inline-flex items-center text-sm text-secondary whitespace-nowrap overflow-hidden hover:underline"
                 href="{{ route('profile.details', $feedMessage->user) }}"
