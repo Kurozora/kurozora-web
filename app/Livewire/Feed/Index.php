@@ -25,29 +25,6 @@ class Index extends Component
     public ?User $user;
 
     /**
-     * The current page query parameter's alias.
-     *
-     * @var string $bgc
-     */
-    public string $fmc = '';
-
-    /**
-     * The current page query parameter.
-     *
-     * @var string $cursor
-     */
-    public string $cursor = '';
-
-    /**
-     * The query strings of the component.
-     *
-     * @var string[] $queryString
-     */
-    protected $queryString = [
-        'cursor' => ['as' => 'fmc'],
-    ];
-
-    /**
      * The component's listeners.
      *
      * @var array
