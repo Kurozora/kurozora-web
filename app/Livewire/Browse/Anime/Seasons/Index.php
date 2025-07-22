@@ -19,7 +19,7 @@ class Index extends Component
      *
      * @var int $year
      */
-    public int $year;
+    public $year;
 
     /**
      * The selected season.
@@ -32,12 +32,14 @@ class Index extends Component
      * Prepare the component.
      *
      * @param string $season
-     * @param int $year
+     * @param string $year
      *
      * @return void
      */
-    public function mount(string $season, int $year): void
+    public function mount(string $season, string $year): void
     {
+        $year = (int) $year;
+
         if ($year < 1917) {
             to_route('anime.seasons.index');
             return;
