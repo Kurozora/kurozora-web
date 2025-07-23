@@ -44,11 +44,11 @@ class SignUpUserController extends Controller
      */
     public function store(SignUpRequest $request): Application|RedirectResponse|Redirector
     {
-        $data = $request->only(['username', 'email', 'password']);
+        $data = $request->validated();
 
         // Create the user
         $newUser = User::create([
-            'username' => $data['username'],
+            'username' => $data['nickname'] ?? $data['username'] ?? str()->random(8),
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
             'can_change_username' => false,
