@@ -13,7 +13,8 @@ use App\Http\Controllers\Auth\SignInWithAppleController;
 Route::prefix('/users')
     ->name('.users')
     ->group(function () {
-        Route::post('/', [RegistrationController::class, 'signUp']);
+        Route::post('/', [RegistrationController::class, 'signUp'])
+            ->name('.sign-up');
 
         Route::post('/signin', [AccessTokenController::class, 'create'])
             ->name('.sign-in');

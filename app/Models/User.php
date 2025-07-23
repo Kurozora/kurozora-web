@@ -260,6 +260,9 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      */
     public function toSearchableArray(): array
     {
+        $createdAt = is_string($this->created_at) ? Carbon::parse($this->created_at) : $this->created_at;
+        $updatedAt = is_string($this->updated_at) ? Carbon::parse($this->updated_at) : $this->updated_at;
+
         return [
             'id' => $this->id,
             'slug' => $this->slug,
@@ -275,8 +278,8 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
             'subscribed_at' => $this->subscribed_at?->timestamp,
             'anime_imported_at' => $this->anime_imported_at?->timestamp,
             'manga_imported_at' => $this->manga_imported_at?->timestamp,
-            'created_at' => $this->created_at?->timestamp,
-            'updated_at' => $this->updated_at?->timestamp,
+            'created_at' => $createdAt?->timestamp,
+            'updated_at' => $updatedAt?->timestamp,
         ];
     }
 
