@@ -250,27 +250,7 @@
                             @svg('magnifyingglass', 'fill-current', ['width' => '18'])
                         </button>
 
-                        <x-dropdown id="nav-notification" align="right" width="64">
-                            <x-slot:trigger>
-                                <button
-                                    class="inline-flex h-8 w-8 items-center justify-center text-secondary cursor-pointer transition duration-150 ease-in-out hover:text-primary focus:text-primary"
-                                    x-show="! isSearchEnabled"
-                                    wire:click="$dispatch('is-notifications-open', { 'isOpen': true })"
-                                    x-transition:enter="ease-out duration-150 delay-[350ms] transform"
-                                    x-transition:enter-start="opacity-0 scale-75"
-                                    x-transition:enter-end="opacity-100 scale-100"
-                                    x-transition:leave="ease-in duration-200 transform"
-                                    x-transition:leave-start="opacity-100 scale-100"
-                                    x-transition:leave-end="opacity-0 scale-75"
-                                >
-                                    @svg('app_badge', 'fill-current', ['width' => '18'])
-                                </button>
-
-                                <x-slot:content>
-                                    <livewire:nav-notification />
-                                </x-slot:content>
-                            </x-slot:trigger>
-                        </x-dropdown>
+                        <livewire:nav-notification />
 
                         {{-- Settings Dropdown --}}
                         <x-dropdown id="more-settings" align="right" width="48" content-classes="hidden bg-secondary md:block">

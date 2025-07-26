@@ -18,6 +18,20 @@ class NavNotification extends Component
     public bool $isNotificationOpen = false;
 
     /**
+     * The latest notification id.
+     *
+     * @var string|null
+     */
+    public ?string $latestNotificationId = null;
+
+    /**
+     * Whether there are new notifications.
+     *
+     * @var bool
+     */
+    public bool $newNotifications = false;
+
+    /**
      * The component's listeners.
      *
      * @var array
@@ -44,6 +58,7 @@ class NavNotification extends Component
     public function handleIsNotificationOpen(bool $isOpen): void
     {
         $this->isNotificationOpen = $isOpen;
+        $this->newNotifications = false;
     }
 
     /**
@@ -57,10 +72,45 @@ class NavNotification extends Component
             return collect();
         }
 
-        return auth()->user()
+        $notifications = auth()->user()
             ->notifications()
             ->with(['notifier'])
             ->get();
+        $this->latestNotificationId = $notifications->last->id;
+        return $notifications;
+    }
+
+    /**
+     * Polls for new notifications.
+     *
+     * @return void
+     */
+    public function pollForNewNotifications(): void
+    {
+        $notifications = auth()->user()
+            ->notifications()
+            ->when($this->latestNotificationId, function ($query) {
+                return $query->where('id', '>', $this->latestNotificationId);
+            })
+            ->orderBy('id')
+            ->exists();
+
+        if ($notifications) {
+            $this->newNotifications = $notifications;
+            $this->setLatestNotificationId();
+        }
+    }
+
+    /**
+     * Sets the latest notification id.
+     *
+     * @return void
+     */
+    function setLatestNotificationId(): void
+    {
+        $this->latestNotificationId = auth()->user()
+            ->notifications()
+            ->max('id');
     }
 
     /**
