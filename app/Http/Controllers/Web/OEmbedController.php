@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GetOEmbedRequest;
 use App\Http\Resources\OEmbedResource;
+use App\Models\Anime;
 use App\Models\Episode;
 use App\Models\Song;
 use Illuminate\Contracts\Foundation\Application;
@@ -33,8 +34,19 @@ class OEmbedController extends Controller
             ->values();
 
         $model = match ($modelAttributes[0] ?? '') {
-            'episodes' => Episode::firstWhere('id', '=', $modelAttributes[1] ?? ''),
-            'songs' => Song::firstWhere('id', '=', $modelAttributes[1] ?? ''),
+            'episodes' => Episode::withoutGlobalScopes()
+                ->with([
+                    'anime' => function ($query) {
+                        $query->withoutGlobalScopes()
+                            ->select([Anime::TABLE_NAME . '.id'])
+                            ->with(['translation']);
+                    },
+                    'translation'
+                ])
+                ->firstWhere('id', '=', $modelAttributes[1] ?? ''),
+            'songs' => Song::withoutGlobalScopes()
+                ->with(['translation'])
+                ->firstWhere('id', '=', $modelAttributes[1] ?? ''),
             default => throw new ModelNotFoundException()
         };
 
