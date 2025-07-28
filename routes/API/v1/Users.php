@@ -42,10 +42,6 @@ Route::prefix('/users')
                     ->middleware('auth.kurozora')
                     ->name('.block');
 
-                Route::get('/blocked', [UserBlockController::class, 'index'])
-                    ->middleware('auth.kurozora')
-                    ->name('.blocked');
-
                 Route::get('/library', [LibraryController::class, 'index'])
                     ->middleware('auth.kurozora:optional')
                     ->name('.library');

@@ -240,6 +240,19 @@ class MeController extends Controller
     }
 
     /**
+     * Returns a list of the users blocked by the auth user.
+     *
+     * @param GetPaginatedRequest $request
+     *
+     * @return JsonResponse
+     */
+    function getBlocked(GetPaginatedRequest $request): JsonResponse
+    {
+        return (new UserBlockController())
+            ->index($request);
+    }
+
+    /**
      * Returns a list of the user's followers.
      *
      * @param GetPaginatedRequest $request

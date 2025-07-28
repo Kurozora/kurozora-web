@@ -25,7 +25,7 @@ class UserBlockController extends Controller
         $data = $request->validated();
 
         $blockedUsers = $request->user()
-            ->getBlocking()
+            ->blockedModels()
             ->orderBy('username')
             ->cursorPaginate($data['limit'] ?? 25);
 

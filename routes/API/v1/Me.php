@@ -12,6 +12,10 @@ Route::prefix('/me')
             ->middleware('auth.kurozora')
             ->name('.update');
 
+        Route::get('/blocked', [MeController::class, 'getBlocked'])
+            ->middleware('auth.kurozora')
+            ->name('.blocked');
+
         Route::get('/followers', [MeController::class, 'getFollowers'])
             ->middleware('auth.kurozora')
             ->name('.followers');
