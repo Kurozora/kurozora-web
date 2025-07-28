@@ -38,7 +38,7 @@ class ValidateUsername implements ValidationRule
         }
 
         // Check alphanumeric and space
-        if (!ctype_alnum(str_replace([' ', '-', '_'], '', $value))) {
+        if (!str_replace([' ', '-', '_'], '', $value)) {
             $fail($this->message('alpha-num'));
             return;
         }
