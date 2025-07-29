@@ -84,7 +84,7 @@ Schedule::command('calculate:views', [
     ->onOneServer();
 
 /**********************************************/
-// Calculate episode stats every week
+// Calculate episode stats every day
 Schedule::command('calculate:episode_stats')
     ->dailyAt('2:00')
     ->name('Calculate episode stats')

@@ -41,7 +41,7 @@ Route::get('/sign-up', [SignUpUserController::class, 'create'])
     ->name('sign-up');
 
 Route::post('/sign-up', [SignUpUserController::class, 'store'])
-    ->middleware(['guest', 'honey', 'honey-recaptcha']);
+    ->middleware(['guest', 'honey']);
 
 Route::prefix('/siwa')
     ->name('siwa')
