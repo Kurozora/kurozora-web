@@ -34,7 +34,7 @@
         </section>
 
         @if ($this->achievements->count())
-            <section class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <section class="grid gap-4 pl-4 pr-4 sm:grid-cols-2 lg:grid-cols-4">
                 @foreach ($this->achievements as $achievement)
                    <x-lockups.achievement-lockup :achievement="$achievement" />
                 @endforeach
