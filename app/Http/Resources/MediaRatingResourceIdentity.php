@@ -3,10 +3,8 @@
 namespace App\Http\Resources;
 
 use App\Models\MediaRating;
-use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use JsonSerializable;
 
 class MediaRatingResourceIdentity extends JsonResource
 {
@@ -22,9 +20,9 @@ class MediaRatingResourceIdentity extends JsonResource
      *
      * @param Request $request
      *
-     * @return array|Arrayable|JsonSerializable
+     * @return array
      */
-    public function toArray(Request $request): array|JsonSerializable|Arrayable
+    public function toArray(Request $request): array
     {
         return [
             'id' => (string) $this->resource->id,
