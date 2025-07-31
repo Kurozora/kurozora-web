@@ -6,6 +6,7 @@ use App\Models\User;
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Translation\PotentiallyTranslatedString;
+use Validator;
 
 class ValidateUsername implements ValidationRule
 {
@@ -43,6 +44,15 @@ class ValidateUsername implements ValidationRule
             return;
         }
 
+        // Check if username is not an email
+        if (
+            Validator::make([], [])
+                ->validateEmail('username', $value, [])
+        ) {
+            $fail($this->message('email'));
+            return;
+        }
+
         // Check if username is allowed
         if (collect(explode(',', config('username.banned_list')))->contains(strtolower($value))) {
             $fail($this->message('blocked-username'));
@@ -76,8 +86,9 @@ class ValidateUsername implements ValidationRule
         return match ($type) {
             'length' => __('validation.between.string', ['min' => User::MINIMUM_USERNAME_LENGTH, 'max' => User::MAXIMUM_USERNAME_LENGTH]),
             'alpha-num' => __('validation.alpha_num'),
+            'email' => __('The :attribute must not be an email address.'),
             'exists' => __('validation.unique'),
-            'blocked-username' => __('This username is not allowed. Please choose a different one.'),
+            'blocked-username' => __('This :attribute is not allowed. Please choose a different one.'),
             default => __('The :attribute is invalid.'),
         };
     }
