@@ -9,7 +9,6 @@ use App\Http\Requests\FeedMessageUpdateRequest;
 use App\Http\Requests\GetPaginatedRequest;
 use App\Http\Resources\FeedMessageResource;
 use App\Models\FeedMessage;
-use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -22,6 +21,7 @@ class FeedMessageController extends Controller
      * Get the feed message details.
      *
      * @param FeedMessage $feedMessage
+     *
      * @return JsonResponse
      */
     function details(FeedMessage $feedMessage): JsonResponse
@@ -72,7 +72,8 @@ class FeedMessageController extends Controller
      * Update a feed message's details.
      *
      * @param FeedMessageUpdateRequest $request
-     * @param FeedMessage $feedMessage
+     * @param FeedMessage              $feedMessage
+     *
      * @return JsonResponse
      * @throws AuthorizationException
      */
@@ -82,19 +83,19 @@ class FeedMessageController extends Controller
 
         // Update feed message
         $feedMessage->update([
-            'content'       => $request->input('content') ?? $request->input('body'),
-            'is_nsfw'       => $data['is_nsfw'],
-            'is_spoiler'    => $data['is_spoiler']
+            'content' => $request->input('content') ?? $request->input('body'),
+            'is_nsfw' => $data['is_nsfw'],
+            'is_spoiler' => $data['is_spoiler']
         ]);
 
         // Show successful response
         return JSONResult::success([
             'data' => [
-                'content'           => $feedMessage->content,
-                'contentHTML'       => $feedMessage->content_html,
-                'contentMarkdown'   => $feedMessage->content_markdown,
-                'isNSFW'            => (bool) $data['is_nsfw'],
-                'isSpoiler'         => (bool) $data['is_spoiler']
+                'content' => $feedMessage->content,
+                'contentHTML' => $feedMessage->content_html,
+                'contentMarkdown' => $feedMessage->content_markdown,
+                'isNSFW' => (bool) $data['is_nsfw'],
+                'isSpoiler' => (bool) $data['is_spoiler']
             ]
         ]);
     }
@@ -103,7 +104,8 @@ class FeedMessageController extends Controller
      * Get the replies of the feed message.
      *
      * @param GetPaginatedRequest $request
-     * @param FeedMessage $feedMessage
+     * @param FeedMessage         $feedMessage
+     *
      * @return JsonResponse
      */
     function replies(GetPaginatedRequest $request, FeedMessage $feedMessage): JsonResponse
@@ -195,6 +197,7 @@ class FeedMessageController extends Controller
      * Heart a feed message.
      *
      * @param FeedMessage $feedMessage
+     *
      * @return JsonResponse
      */
     function heart(FeedMessage $feedMessage): JsonResponse
@@ -219,6 +222,7 @@ class FeedMessageController extends Controller
      * @param FeedMessage $feedMessage
      *
      * @return JsonResponse
+     *
      * @throws Throwable
      */
     function pin(FeedMessage $feedMessage): JsonResponse
@@ -241,8 +245,8 @@ class FeedMessageController extends Controller
      * Deletes the authenticated user's feed message.
      *
      * @param FeedMessage $feedMessage
+     *
      * @return JsonResponse
-     * @throws Exception
      */
     public function delete(FeedMessage $feedMessage): JsonResponse
     {

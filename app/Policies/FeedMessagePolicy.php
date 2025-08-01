@@ -46,6 +46,19 @@ class FeedMessagePolicy
     }
 
     /**
+     * Determine whether the user can heart models.
+     *
+     * @param User        $user
+     * @param FeedMessage $feedMessage
+     *
+     * @return Response|bool
+     */
+    public function heart(User $user, FeedMessage $feedMessage): Response|bool
+    {
+        return true;
+    }
+
+    /**
      * Determine whether the user can update the model.
      *
      * @param User $user
