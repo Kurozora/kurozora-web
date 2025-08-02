@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use App\Models\APIClientToken;
 use App\Models\SessionAttribute;
 use App\Models\User;
 use Illuminate\Foundation\Mix;
@@ -63,9 +64,17 @@ abstract class TestCase extends BaseTestCase
             $this->fail('Used "auth", but no user present.');
         }
 
-        // Add bearer token to header
+        $apiClientToken = APIClientToken::factory()->create([
+            'user_id' => $user->id
+        ]);
+
+        // Add headers
         $personalAccessToken = $user->createToken('Auth token');
+
         $this->withHeader('Authorization', 'Bearer ' . $personalAccessToken->plainTextToken);
+        $this->withHeader('X-API-Key', $apiClientToken->token);
+        $this->withHeader('User-Agent', config('app.name') . '/' . config('app.version') . ' (' . $apiClientToken->identifier . '; build:9999; macOS 26' . ') libcurl/' . curl_version()['version']);
+
         SessionAttribute::factory()->create([
             'model_id' => $personalAccessToken->accessToken->token
         ]);
