@@ -3,13 +3,15 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Concerns\HasVersion4Uuids as HasUuids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Str;
 
 class APIClientToken extends KModel
 {
-    use HasUuids,
+    use HasFactory,
+        HasUuids,
         SoftDeletes;
 
     // Table name
