@@ -3,6 +3,7 @@
 namespace Tests\API;
 
 use App\Models\FeedMessage;
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Str;
 use PHPUnit\Framework\Attributes\Test;
@@ -94,6 +95,53 @@ class FeedMessageTest extends TestCase
     }
 
     /**
+     * User can update own feed message.
+     *
+     * @return void
+     */
+    #[Test]
+    function user_can_update_own_feed_message(): void
+    {
+        $feedMessage = FeedMessage::factory()->create([
+            'user_id' => $this->user->id,
+            'content' => 'Initial content',
+        ]);
+
+        $this->auth()->json('POST', 'v1/feed/messages/' . $feedMessage->id . '/update', [
+            'content' => 'Updated content',
+            'is_nsfw' => 0,
+            'is_spoiler' => 0,
+        ])->assertSuccessfulAPIResponse();
+
+        // Check whether the feed message was created
+        $this->assertEquals('Updated content', $feedMessage->fresh()->content);
+    }
+
+    /**
+     * User cannot update the feed message of other users.
+     *
+     * @return void
+     */
+    #[Test]
+    function user_cannot_update_the_feed_message_of_other_users(): void
+    {
+        $anotherUser = User::factory()->create();
+        $feedMessage = FeedMessage::factory()->create([
+            'user_id' => $anotherUser->id,
+            'content' => 'Initial content',
+        ]);
+
+        $this->auth()->json('POST', 'v1/feed/messages/' . $feedMessage->id . '/update', [
+            'content' => 'Updated content',
+            'is_nsfw' => 0,
+            'is_spoiler' => 0,
+        ])->assertUnsuccessfulAPIResponse();
+
+        // Check whether the feed message was created
+        $this->assertEquals('Initial content', $feedMessage->fresh()->content);
+    }
+
+    /**
      * User can reply to a feed message.
      *
      * @return void
@@ -151,25 +199,67 @@ class FeedMessageTest extends TestCase
     }
 
     /**
-     * User can reply to feed messages.
+     * User can pin a feed message.
      *
      * @return void
      */
     #[Test]
-    function user_can_reply_to_feed_messages(): void
+    function user_can_pin_a_feed_message(): void
     {
-        $parent = FeedMessage::factory()->create([
-            'parent_feed_message_id' => FeedMessage::factory()->create()->id
+        $feedMessage = FeedMessage::factory()->create([
+            'user_id' => $this->user->id
         ]);
 
-        $this->auth()->json('POST', 'v1/feed', [
-            'content' => 'Hello, Kurozora!',
-            'parent_id' => $parent->id,
-            'is_reply' => 1,
-            'is_reshare' => 0,
-            'is_nsfw' => 0,
-            'is_spoiler' => 0,
-        ])->assertSuccessfulAPIResponse();
+       $this->auth()->json('POST', 'v1/feed/messages/' . $feedMessage->id . '/pin')->assertSuccessfulAPIResponse();
+    }
+
+    /**
+     * User cannot pin the feed message of another user.
+     *
+     * @return void
+     */
+    #[Test]
+    function user_cannot_pin_the_feed_message_of_another_user(): void
+    {
+        $anotherUser = User::factory()->create();
+
+        $feedMessage = FeedMessage::factory()->create([
+            'user_id' => $anotherUser->id
+        ]);
+
+        $this->auth()->json('POST', 'v1/feed/messages/' . $feedMessage->id . '/pin')->assertUnsuccessfulAPIResponse();
+    }
+
+    /**
+     * User can delete own feed message.
+     *
+     * @return void
+     */
+    #[Test]
+    function user_can_delete_own_feed_message(): void
+    {
+        $feedMessage = FeedMessage::factory()->create([
+            'user_id' => $this->user->id
+        ]);
+
+        $this->auth()->json('POST', 'v1/feed/messages/' . $feedMessage->id . '/delete')->assertSuccessfulAPIResponse();
+    }
+
+    /**
+     * User cannot delete the feed message of another user.
+     *
+     * @return void
+     */
+    #[Test]
+    function user_cannot_delete_the_feed_message_of_another_user(): void
+    {
+        $anotherUser = User::factory()->create();
+
+        $feedMessage = FeedMessage::factory()->create([
+            'user_id' => $anotherUser->id
+        ]);
+
+        $this->auth()->json('POST', 'v1/feed/messages/' . $feedMessage->id . '/delete')->assertUnsuccessfulAPIResponse();
     }
 
     /**
