@@ -107,6 +107,13 @@ Schedule::call(function() {
     ->onOneServer();
 
 /**********************************************/
+// Calculate user reputation every week
+Schedule::command('calculate:user_reputation')
+    ->weeklyOn(0)
+    ->name('Calculate user reputation')
+    ->onOneServer();
+
+/**********************************************/
 // Delete all activity logs every week
 Schedule::command('activitylog:clean', ['--days' => 7, '--force'])
     ->weeklyOn(0, '3:35')
