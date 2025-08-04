@@ -44,6 +44,7 @@ return new class extends Migration
             $table->boolean('is_verified')->default(false);
             $table->boolean('can_change_username')->default(false);
             $table->integer('view_count')->default(0);
+            $table->integer('reputation_count')->default(0);
             $table->timestamp('anime_imported_at')->nullable();
             $table->timestamp('manga_imported_at')->nullable();
             $table->timestamp('subscribed_at')->nullable();
