@@ -164,6 +164,13 @@ Schedule::command('calculate:rankings -g')
     ->onOneServer();
 
 /**********************************************/
+// Delete stale link previews every week
+Schedule::command('delete:stale_link_previews')
+    ->weeklyOn(1, '3:00')
+    ->name('Delete stale link previews')
+    ->onOneServer();
+
+/**********************************************/
 // Generate ReCAP every month except January and December
 Schedule::command('generate:recaps', [
     'all',
