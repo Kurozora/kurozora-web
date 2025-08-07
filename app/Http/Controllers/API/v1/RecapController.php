@@ -6,7 +6,14 @@ use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\RecapItemResource;
 use App\Http\Resources\RecapResource;
+use App\Models\Anime;
+use App\Models\Game;
+use App\Models\Genre;
+use App\Models\Manga;
 use App\Models\Recap;
+use App\Models\Theme;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Http\JsonResponse;
 
 class RecapController extends Controller
@@ -77,7 +84,28 @@ class RecapController extends Controller
     public function view(int|string $year, int|string $month): JsonResponse
     {
         $recaps = auth()->user()->recaps()
-            ->with(['recapItems.model'])
+            ->with([
+                'recapItems.model' => function (MorphTo $morphTo) {
+                    $morphTo->withoutGlobalScopes()
+                        ->constrain([
+                            Anime::class => function (Builder $query) {
+                                $query->with(['genres', 'mediaStat', 'media', 'translation', 'tv_rating', 'themes']);
+                            },
+                            Game::class => function (Builder $query) {
+                                $query->with(['genres', 'mediaStat', 'media', 'translation', 'tv_rating', 'themes']);
+                            },
+                            Genre::class => function (Builder $query) {
+                                $query->with(['media']);
+                            },
+                            Manga::class => function (Builder $query) {
+                                $query->with(['genres', 'mediaStat', 'media', 'translation', 'tv_rating', 'themes']);
+                            },
+                            Theme::class => function (Builder $query) {
+                                $query->with(['media']);
+                            },
+                        ]);
+                }
+            ])
             ->where('year', '=', $year)
             ->where('month', '=', $month)
             ->get();
