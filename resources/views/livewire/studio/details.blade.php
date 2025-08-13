@@ -21,7 +21,7 @@
     </x-slot:appArgument>
 
     <div class="pt-4 pb-6" wire:init="loadPage">
-        <section class="pt-4 pb-8 pl-4 pr-4">
+        <section class="pt-4 pb-4 pl-4 pr-4">
             <div class="relative">
                 <div class="flex flex-col flex-wrap text-center items-center">
                     <picture
@@ -47,7 +47,7 @@
             </div>
         </section>
 
-        <section id="badges" class="flex flex-row flex-nowrap whitespace-nowrap justify-between items-center text-center pb-5 pl-4 pr-4 overflow-x-scroll no-scrollbar">
+        <section id="badges" class="flex flex-row flex-nowrap whitespace-nowrap justify-between items-center text-center pt-4 pb-5 pl-4 pr-4 overflow-x-scroll no-scrollbar">
             <div id="ratingBadge" class="flex-grow pr-12">
                 <a href="#ratingsAndReviews">
                     <p class="font-bold text-tint">

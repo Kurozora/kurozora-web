@@ -83,8 +83,10 @@
                 @endif
             </button>
 
-            <div x-ref="content" style="white-space: pre-wrap; overflow-wrap: break-word;"
-                 x-html="displayContent"></div>
+            <div
+                x-ref="content" style="white-space: pre-wrap; overflow-wrap: break-word;"
+                x-html="displayContent"
+            ></div>
 
             @if ($this->linkPreview)
                 {!! $this->linkPreview->render() !!}
