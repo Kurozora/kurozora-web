@@ -40,6 +40,7 @@ use App\Nova\MediaTag;
 use App\Nova\MediaTheme;
 use App\Nova\MediaType;
 use App\Nova\Notification;
+use App\Nova\ParentalGuideEntry;
 use App\Nova\Permission;
 use App\Nova\Person;
 use App\Nova\PersonalAccessToken;
@@ -226,6 +227,7 @@ if (class_exists('Laravel\Nova\NovaApplicationServiceProvider')) {
                             MediaTag::class,
                             MediaTheme::class,
                             MediaType::class,
+                            ParentalGuideEntry::class,
                             Video::class,
                         ])->map(fn($resource) => MenuItem::resource($resource))
                     )

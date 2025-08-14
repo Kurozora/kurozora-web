@@ -3,6 +3,7 @@
 use App\Livewire\Anime\Cast as AnimeCast;
 use App\Livewire\Anime\Details as AnimeDetails;
 use App\Livewire\Anime\Index as AnimeIndex;
+use App\Livewire\Anime\ParentalGuide;
 use App\Livewire\Anime\RelatedGames;
 use App\Livewire\Anime\RelatedMangas;
 use App\Livewire\Anime\RelatedShows;
@@ -74,6 +75,9 @@ Route::prefix('/anime')
                 })
                     ->middleware('auth')
                     ->name('.edit');
+
+                Route::get('/parentalguide', ParentalGuide::class)
+                    ->name('.parentalguide');
 
                 Route::get('/related-games', RelatedGames::class)
                     ->name('.related-games');
