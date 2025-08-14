@@ -21,6 +21,16 @@ trait HasBlocking
     }
 
     /**
+     * The models blocking the user.
+     *
+     * @return HasMany
+     */
+    public function blocked_by(): HasMany
+    {
+        return $this->hasMany(UserBlock::class, 'blocked_user_id', 'id');
+    }
+
+    /**
      * The models blocked by the user.
      *
      * @return BelongsToMany

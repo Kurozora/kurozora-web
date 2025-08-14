@@ -683,6 +683,17 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     }
 
     /**
+     * Returns the user's UserWatchedEpisode models where `rewatch_count` count is > 0.
+     *
+     * @return HasMany
+     */
+    function user_rewatched_episodes(): HasMany
+    {
+        return $this->hasMany(UserWatchedEpisode::class)
+            ->where('rewatch_count', '>', 0);
+    }
+
+    /**
      * Get the user's up-next episodes.
      *
      * @param null|Anime $anime
@@ -846,27 +857,6 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     }
 
     /**
-     * Returns the total amount of reputation the user has
-     *
-     * @return int
-     */
-    public function getReputationCount(): int
-    {
-        // Find location of cached data
-        $cacheKey = sprintf(self::CACHE_KEY_REPUTATION_COUNT, $this->id);
-
-        // Retrieve or save cached result
-        $repCount = Cache::remember($cacheKey, self::CACHE_KEY_REPUTATION_COUNT_SECONDS, function () {
-            $foundRep = UserReputation::where('given_user_id', $this->id)->sum('amount');
-
-            if ($foundRep === null) return 0;
-            return (int) $foundRep;
-        });
-
-        return (int) $repCount;
-    }
-
-    /**
      * Checks the cooldown whether the user can do an anime import.
      *
      * @return bool
@@ -973,5 +963,43 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         return \Spatie\Sitemap\Tags\Url::create(route('profile.details', $this))
             ->setChangeFrequency('daily')
             ->setLastModificationDate($this->updated_at);
+    }
+
+    public function reshares_received(): HasMany
+    {
+        return $this->feed_messages()
+            ->whereHas('reShares');
+    }
+
+    public function replies_received(): HasMany
+    {
+        return $this->feed_messages()
+            ->whereHas('replies');
+    }
+
+    public function hearts_received(): HasMany
+    {
+        return $this->feed_messages()
+            ->whereHas('loveReactant.reactionTotal', function (Builder $query) {
+                $query->where('count', '>', 0);
+            });
+    }
+
+    public function media_ratings_without_description(): HasMany
+    {
+        return $this->mediaRatings()
+            ->whereNull('description');
+    }
+
+    public function media_ratings_with_description(): HasMany
+    {
+        return $this->mediaRatings()
+            ->whereNotNull('description');
+    }
+
+    public function library_completed(): HasMany
+    {
+        return $this->library()
+            ->where('status', '=', UserLibraryStatus::Completed);
     }
 }

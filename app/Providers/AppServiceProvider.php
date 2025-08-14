@@ -6,6 +6,7 @@ use App\Models\PersonalAccessToken;
 use App\Models\User;
 use App\Policies\NotificationPolicy;
 use App\Services\LinkPreviewService;
+use App\Services\ReputationService;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Events\QueryExecuted;
@@ -121,6 +122,11 @@ class AppServiceProvider extends ServiceProvider
         // Register link preview service.
         $this->app->singleton(LinkPreviewService::class, function () {
             return new LinkPreviewService;
+        });
+
+        // Register reputation service.
+        $this->app->singleton(ReputationService::class, function () {
+            return new ReputationService;
         });
     }
 }
