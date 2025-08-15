@@ -173,17 +173,175 @@
                 <section class="pb-8">
                     <x-hr class="ml-4 mr-4 pb-5" />
 
-                    <x-section-nav class="flex flex-nowrap justify-between mb-5">
+                    <x-section-nav class="flex-nowrap">
                         <x-slot:title>
                             {{ __('Lyrics') }}
                         </x-slot:title>
+
+{{--                        <x-slot:action>--}}
+{{--                            <x-select>--}}
+{{--                                <option value="1">English</option>--}}
+{{--                            </x-select>--}}
+{{--                        </x-slot:action>--}}
                     </x-section-nav>
 
-                    <x-truncated-text class="ml-4 mr-4">
-                        <x-slot:text>
-                            {!! nl2br(e($song->original_lyrics)) !!}
-                        </x-slot:text>
-                    </x-truncated-text>
+                    <div
+                        class="relative pl-2 pr-2 overflow-x-scroll no-scrollbar"
+                        x-data="{
+                            columns: [
+                                { key: 'showJa', label: '{{ __('Japanese') }}' },
+                                { key: 'showRomanized', label: '{{ __('Romanized') }}' },
+                                { key: 'showUser', label: '{{ __($song->getTranslation(app()->getLocale())?->language->name ?? __('English')) }}' }
+                            ],
+                            showJa: true,
+                            showRomanized: true,
+                            showUser: true,
+                            enabledCount() {
+                                return [this.showJa, this.showRomanized, this.showUser].filter(Boolean).length
+                            },
+                            toggle(column) {
+                                if (this.enabledCount() > 1) {
+                                    this[column] = !this[column]
+                                } else {
+                                    this[column] = true
+                                }
+                            },
+                            isToggled(column) {
+                                return this[column]
+                            },
+                            isCollapsed: true,
+                            headHeight: 0,
+                            rowHeight: 0,
+                            visibleRows: 5,
+                            initCollapse() {
+                                // Estimate row height from first row
+                                let headRow = this.$refs.content.querySelector('thead > tr')
+                                let bodyRow = this.$refs.content.querySelector('tbody > tr')
+
+                                if (headRow) {
+                                    this.headHeight = headRow.offsetHeight || 0
+                                    this.headHeight -= 8
+                                }
+                                if (bodyRow) {
+                                    this.rowHeight = bodyRow.offsetHeight || 0
+                                }
+                            },
+                            handleExpand() {
+                                this.isCollapsed = false
+                            }
+                        }"
+                    >
+                        {{-- Toggle Buttons --}}
+                        <div class="flex gap-2 mb-5 pl-2 pr-2">
+                            <template x-for="col in columns" :key="col.key">
+                                <span>
+                                    <template x-if="isToggled(col.key)">
+                                        <x-button
+                                            x-on:click="toggle(col.key)"
+                                            x-bind:disabled="enabledCount() === 1 && isToggled(col.key)"
+                                            x-text="col.label"
+                                        ></x-button>
+                                    </template>
+
+                                    <template x-if="!isToggled(col.key)">
+                                        <x-outlined-button
+                                            x-on:click="toggle(col.key)"
+                                            x-text="col.label"
+                                        ></x-outlined-button>
+                                    </template>
+                                </span>
+                            </template>
+                        </div>
+
+                        {{-- Lyrics Table --}}
+                        <div
+                            x-init="initCollapse()"
+                            x-ref="content"
+                            :style="isCollapsed && rowHeight
+                                ? `max-height: ${headHeight + rowHeight * visibleRows}px; overflow: hidden; position: relative; mask: linear-gradient(0deg, rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 0) 22px, rgb(0, 0, 0) 22px), linear-gradient(270deg, rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 0) 40px, rgb(0, 0, 0) 70px);` : ''"
+                        >
+                            <table class="whitespace-nowrap">
+                                <thead class="text-xs uppercase">
+                                    <tr>
+                                        <th x-show="showJa"
+                                            scope="col"
+                                            :class="{
+                                                'pl-2 text-left border-e border-primary': showRomanized || showUser,
+                                                'pl-2 text-left': !showRomanized && !showUser
+                                            }">
+                                            {{ __('Japanese') }}
+                                        </th>
+
+                                        <th x-show="showRomanized"
+                                            scope="col"
+                                            :class="{
+                                                'pl-2 pr-2 text-left border-e border-primary': showUser,
+                                                'pl-2 pr-2 text-left': !showUser
+                                            }">
+                                            {{ __('Romanized') }}
+                                        </th>
+
+                                        <th x-show="showUser"
+                                            scope="col"
+                                            class="pl-2 pr-2 text-left">
+                                            {{ $song->getTranslation(app()->getLocale())?->language->name ?? __('English') }}
+                                        </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @php
+                                        $jaLines = preg_split('/\r\n|\r|\n/', $song->getTranslation('ja')?->lyrics ?? '');
+                                        $romajiLines = preg_split('/\r\n|\r|\n/', $song->original_lyrics ?? '');
+                                        $userLines = preg_split('/\r\n|\r|\n/', $song->getTranslation(app()->getLocale())?->lyrics
+                                            ?? $song->getTranslation('en')?->lyrics
+                                            ?? ''
+                                        );
+
+                                        $max = max(count($jaLines), count($romajiLines), count($userLines));
+                                        $jaLines = array_pad($jaLines, $max, '');
+                                        $romajiLines = array_pad($romajiLines, $max, '');
+                                        $userLines = array_pad($userLines, $max, '');
+                                    @endphp
+
+                                    @foreach(range(0, $max-1) as $i)
+                                        <tr
+                                            :class="isCollapsed ? '' : 'hover:bg-tertiary'"
+                                        >
+                                            <td x-show="showJa"
+                                                :class="{
+                                                    'pt-2 pb-2 pl-2 pr-8': showRomanized || showUser,
+                                                    'pt-2 pb-2 pl-2 pr-2': !showRomanized && !showUser
+                                                }">
+                                                {{ $jaLines[$i] === '' ? "\u{00A0}" : $jaLines[$i] }}
+                                            </td>
+
+                                            <td x-show="showRomanized"
+                                                :class="{
+                                                    'pt-2 pb-2 pl-2 pr-8': showUser,
+                                                    'pt-2 pb-2 pl-2 pr-2': !showJa || !showUser
+                                                }">
+                                                {{ $romajiLines[$i] === '' ? "\u{00A0}" : $romajiLines[$i] }}
+                                            </td>
+
+                                            <td x-show="showUser"
+                                                class="pt-2 pb-2 pl-2 pr-2"
+                                            >
+                                                {{ $userLines[$i] === '' ? "\u{00A0}" : $userLines[$i] }}
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <x-simple-button
+                            @click="handleExpand()"
+                            x-show="isCollapsed"
+                            x-text="'{{ __('more') }}'"
+                            class="absolute bottom-0 right-0 mr-4 text-base tracking-normal leading-snug"
+                        />
+                    </div>
                 </section>
             @endif
 

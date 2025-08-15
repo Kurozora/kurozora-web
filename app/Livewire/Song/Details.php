@@ -48,7 +48,16 @@ class Details extends Component
         // Call the ModelViewed event
         ModelViewed::dispatch($song, request()->ip());
 
-        $this->song = $song->load(['media'])
+        $locales = array_values(array_unique(array_filter([
+            'ja',
+            app()->getLocale(),
+            config('app.fallback_locale'),
+        ])));
+
+        $this->song = $song->load(['media', 'translations' => function ($query) use ($locales) {
+            $query->with('language')
+                ->whereIn('locale', $locales);
+        }])
             ->when(auth()->user(), function ($query, $user) use ($song) {
                 return $song->loadMissing(['mediaRatings' => function ($query) {
                     $query->where('user_id', '=', auth()->user()->id);
