@@ -257,13 +257,13 @@ img:not([src]):not([srcset]) {
   --secondary-separator-color: #5A5D6D;
 }
 
-a[href*="#"]:not([href="#"]) {
+a[href*="#"]:not([href="#"]):not(.no-external-icon) {
   color: inherit;
   text-decoration: none;
 }
 
-a[href*="#"]:not([href="#"]):hover::after,
-a[href*="#"]:not([href="#"]):focus::after {
+a[href*="#"]:not([href="#"]):not(.no-external-icon):hover::after,
+a[href*="#"]:not([href="#"]):not(.no-external-icon):focus::after {
   content: "\0020\1F517";
   white-space: nowrap;
 }

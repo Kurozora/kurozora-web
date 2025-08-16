@@ -169,7 +169,7 @@
         <div>
             <section id="badges" class="flex flex-row flex-nowrap whitespace-nowrap justify-between items-center text-center pt-4 pb-5 pl-4 pr-4 overflow-x-scroll no-scrollbar">
                 <div id="ratingBadge" class="flex-grow pr-12">
-                    <a href="#ratingsAndReviews">
+                    <a class="no-external-icon" href="#ratingsAndReviews">
                         <p class="font-bold text-tint">
                             {{ number_format($anime->mediaStat->rating_average, 1) }}
                         </p>
@@ -182,7 +182,7 @@
 
                 @if ($anime->air_season)
                     <div id="seasonBadge" class="flex-grow px-12 border-l border-primary">
-                        <a class="flex flex-col items-center" href="#aired">
+                        <a class="flex flex-col items-center no-external-icon" href="#aired">
                             <p class="font-bold">{{ $anime->air_season->description }}</p>
                             <p class="text-tint">
                                 {{ $anime->air_season->symbol() }}
@@ -226,7 +226,7 @@
 
                 @if (!empty($anime->country_of_origin))
                     <div id="countryBadge" class="flex-grow px-12 border-l border-primary">
-                        <a class="flex flex-col items-center" href="#country">
+                        <a class="flex flex-col items-center no-external-icon" href="#country">
                             <p class="font-bold">{{ strtoupper($anime->country_of_origin->code) }}</p>
                             <p class="text-tint">
                                 @svg('globe', 'fill-current', ['width' => '20'])
@@ -237,7 +237,7 @@
                 @endif
 
                 <div id="languageBadge" class="flex-grow px-12 border-l border-primary">
-                    <a class="flex flex-col items-center" href="#languages">
+                    <a class="flex flex-col items-center no-external-icon" href="#languages">
                         <p class="font-bold">{{ strtoupper($anime->languages->first()->code) }}</p>
                         <p class="text-tint">
                             @svg('character_bubble_fill', 'fill-current', ['width' => '20'])
