@@ -34,7 +34,14 @@ class ParentalGuide extends Component
      */
     public function mount(Anime $anime): void
     {
-        $this->anime = $anime->load(['media', 'translation']);
+        $this->anime = $anime->load([
+            'media',
+            'translation',
+            'parental_guide_entries' => function ($query) {
+                $query->visible();
+            },
+            'parental_guide_stat'
+        ]);
     }
 
     /**
@@ -54,13 +61,7 @@ class ParentalGuide extends Component
      */
     public function getParentalGuideEntriesProperty(): Collection
     {
-        if (!$this->readyToLoad) {
-            return collect();
-        }
-
-        return $this->anime->parental_guide_entries()
-            ->visible()
-            ->get()
+        return $this->anime->parental_guide_entries
             ->groupBy('category');
     }
 
