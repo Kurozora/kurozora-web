@@ -689,16 +689,6 @@ class Anime extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * Get the model's parental guide entries.
-     *
-     * @return MorphMany
-     */
-    public function parental_guide_entries(): MorphMany
-    {
-        return $this->morphMany(ParentalGuideEntry::class, 'model');
-    }
-
-    /**
      * Get the model's videos in order.
      *
      * @return MorphMany

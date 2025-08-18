@@ -20,6 +20,7 @@ use App\Traits\Model\HasMediaStat;
 use App\Traits\Model\HasMediaStudios;
 use App\Traits\Model\HasMediaTags;
 use App\Traits\Model\HasMediaThemes;
+use App\Traits\Model\HasParentalGuideStat;
 use App\Traits\Model\HasSlug;
 use App\Traits\Model\HasVideos;
 use App\Traits\Model\HasViews;
@@ -66,6 +67,7 @@ class Manga extends KModel implements HasMedia, Sitemapable
         HasMediaStudios,
         HasMediaTags,
         HasMediaThemes,
+        HasParentalGuideStat,
         HasSlug,
         HasVideos,
         HasViews,
@@ -566,7 +568,7 @@ class Manga extends KModel implements HasMedia, Sitemapable
     {
         return $this->belongsTo(Source::class);
     }
-
+    
     /**
      * The manga's adaptation source.
      *

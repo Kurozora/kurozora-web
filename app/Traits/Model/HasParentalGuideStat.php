@@ -2,8 +2,10 @@
 
 namespace App\Traits\Model;
 
+use App\Models\ParentalGuideEntry;
 use App\Models\ParentalGuideStat;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -46,5 +48,15 @@ trait HasParentalGuideStat
     public function parental_guide_stat(): MorphOne
     {
         return $this->morphOne(ParentalGuideStat::class, 'model');
+    }
+
+    /**
+     * Get the model's parental guide entries.
+     *
+     * @return MorphMany
+     */
+    public function parental_guide_entries(): MorphMany
+    {
+        return $this->morphMany(ParentalGuideEntry::class, 'model');
     }
 }
