@@ -203,7 +203,7 @@
                 </div>
 
                 <div id="tvRatingBadge" class="flex-grow px-12 border-l border-primary">
-                    <a class="flex flex-col items-center" href="#tvRating">
+                    <a class="flex flex-col items-center" href="{{ route('anime.parentalguide', $anime) }}">
                         <p class="font-bold">{{ $anime->tv_rating->name }}</p>
                         <p class="text-tint">
                             @svg('tv_fill', 'fill-current', ['width' => '20'])

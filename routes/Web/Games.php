@@ -6,6 +6,7 @@ use App\Livewire\Browse\Game\Upcoming\Index as BrowseGameUpcomingIndex;
 use App\Livewire\Game\Cast as GameCast;
 use App\Livewire\Game\Details as GameDetails;
 use App\Livewire\Game\Index as GameIndex;
+use App\Livewire\Game\ParentalGuide;
 use App\Livewire\Game\RelatedGames;
 use App\Livewire\Game\RelatedMangas;
 use App\Livewire\Game\RelatedShows;
@@ -65,6 +66,9 @@ Route::prefix('/games')
                 })
                     ->middleware('auth')
                     ->name('.edit');
+
+                Route::get('/parentalguide', ParentalGuide::class)
+                    ->name('.parentalguide');
 
                 Route::get('/related-games', RelatedGames::class)
                     ->name('.related-games');

@@ -7,6 +7,7 @@ use App\Livewire\Browse\Manga\Upcoming\Index as BrowseMangaUpcomingIndex;
 use App\Livewire\Manga\Cast as MangaCast;
 use App\Livewire\Manga\Details as MangaDetails;
 use App\Livewire\Manga\Index as MangaIndex;
+use App\Livewire\Manga\ParentalGuide;
 use App\Livewire\Manga\RelatedGames;
 use App\Livewire\Manga\RelatedMangas;
 use App\Livewire\Manga\RelatedShows;
@@ -72,6 +73,9 @@ Route::prefix('/manga')
                 })
                     ->middleware('auth')
                     ->name('.edit');
+
+                Route::get('/parentalguide', ParentalGuide::class)
+                    ->name('.parentalguide');
 
                 Route::get('/related-games', RelatedGames::class)
                     ->name('.related-games');
