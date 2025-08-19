@@ -20,11 +20,13 @@ class NavigationSidebar extends Component
     /**
      * Prepare the component.
      *
+     * @param ?User $user
+     *
      * @return void
      */
-    public function mount(): void
+    public function mount($user): void
     {
-        $this->user = auth()->user()?->load(['media']);
+        $this->user = $user?->loadMissing(['media']);
     }
 
     /**

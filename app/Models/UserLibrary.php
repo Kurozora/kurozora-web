@@ -115,7 +115,7 @@ class UserLibrary extends Pivot
     }
 
     /**
-     * The anime the library belongs to.
+     * The trackable model the library belongs to.
      *
      * @return MorphTo
      */

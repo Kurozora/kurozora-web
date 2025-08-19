@@ -117,9 +117,9 @@
         </svg>
 
         <div class="flex flex-col w-full">
-            <livewire:navigation-sidebar />
+            <livewire:navigation-sidebar :user="auth()->user()" />
 
-            <livewire:navigation-dropdown />
+            <livewire:navigation-dropdown :user="auth()->user()" />
 
             <div class="xl:ml-64">
                 @if (!(auth()->user()?->hasVerifiedEmail() ?? true))

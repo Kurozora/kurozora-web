@@ -15,7 +15,7 @@ class MediaStat extends KModel
     protected $table = self::TABLE_NAME;
 
     /**
-     * Returns the model in the category item.
+     * Returns the model of the media stat.
      *
      * @return MorphTo
      */

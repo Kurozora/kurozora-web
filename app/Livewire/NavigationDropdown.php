@@ -36,11 +36,13 @@ class NavigationDropdown extends Component
     /**
      * Prepare the component.
      *
+     * @param null|User $user
+     *
      * @return void
      */
-    public function mount(): void
+    public function mount($user): void
     {
-        $this->user = auth()->user()?->load(['media']);
+        $this->user = $user?->loadMissing(['media']);
     }
 
     /**
