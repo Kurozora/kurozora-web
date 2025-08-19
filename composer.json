@@ -24,11 +24,13 @@
     "require": {
         "php": "^8.3",
         "ext-curl": "*",
+        "ext-dom": "*",
         "ext-gd": "*",
         "ext-intl": "*",
         "ext-json": "*",
         "ext-pdo": "*",
         "ext-simplexml": "*",
+        "ext-libxml": "*",
         "astrotomic/laravel-translatable": "dev-l12-compatibility",
         "aws/aws-sdk-php": "^3.198",
         "bacon/bacon-qr-code": "^3.0",
@@ -71,9 +73,8 @@
         "spatie/laravel-permission": "^6.0",
         "spatie/laravel-sitemap": "^7.0",
         "spatie/laravel-sluggable": "^3.0",
-        "staudenmeir/eloquent-json-relations": "^1.10",
-        "titasgailius/search-relations": "^2.0",
-        "xetaio/xetaravel-mentions": "^11.0"
+        "staudenmeir/eloquent-json-relations": "^1.14",
+        "xetaio/xetaravel-mentions": "^12.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.6",
