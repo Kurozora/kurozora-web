@@ -16,6 +16,17 @@
         <link rel="canonical" href="{{ route('profile.details', $user) }}">
     </x-slot:meta>
 
+    <x-slot:styles>
+        <link rel="preload" href="{{ url(mix('css/watch.css')) }}" as="style">
+        <link rel="stylesheet" href="{{ url(mix('css/watch.css')) }}">
+    </x-slot:styles>
+
+    <x-slot:scripts>
+        <script src="{{ url(mix('js/gif.js')) }}"></script>
+        <script src="{{ url(mix('js/markdown.js')) }}"></script>
+        <script src="{{ url(mix('js/watch.js')) }}"></script>
+    </x-slot:scripts>
+
     <x-slot:appArgument>
         users/{{ $user->id }}
     </x-slot:appArgument>
