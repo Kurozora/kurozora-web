@@ -3,12 +3,10 @@
 namespace App\Livewire\Profile;
 
 use App\Models\User;
-use App\Rules\ValidateEmail;
+use App\Notifications\InviteToFamilyEmail;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -21,9 +19,7 @@ class SelectPreferredChildForm extends Component
      * @var string
      */
     #[Validate('required')]
-    #[Validate([
-        new ValidateEmail(['must-be-available' => true])
-    ])]
+    #[Validate('email:filter,dns')]
     public string $email = '';
 
     /**
@@ -45,13 +41,24 @@ class SelectPreferredChildForm extends Component
         $this->children = $user->children;
     }
 
-    public function inviteChild(): void
+    /**
+     * Invite an account to join the family.
+     *
+     * @return void
+     */
+    public function inviteAccount(): void
     {
         $this->validateOnly('email');
 
-        // Logic for inviting a child (to be implemented)
-        // e.g., sending an email invitation or creating a pending child account
-        session()->flash('message', __('Invitation sent successfully.'));
+        $user = User::where('email', '=', $this->email)
+            ->where('id', '!=', auth()->id())
+            ->first();
+
+        if ($user) {
+            $user->notify(new InviteToFamilyEmail());
+        }
+
+        $this->dispatch('invitation-sent');
         $this->reset('email');
     }
 

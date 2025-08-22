@@ -5,6 +5,7 @@ use App\Http\Controllers\Web\AuthenticatedSessionController;
 use App\Http\Controllers\Web\ConfirmedTwoFactorAuthenticationController;
 use App\Http\Controllers\Web\EmailVerificationNotificationController;
 use App\Http\Controllers\Web\EmailVerificationPromptController;
+use App\Http\Controllers\Web\Invitation\FamilyInviteController;
 use App\Http\Controllers\Web\NewPasswordController;
 use App\Http\Controllers\Web\PasswordResetLinkController;
 use App\Http\Controllers\Web\RecoveryCodeController;
@@ -53,6 +54,15 @@ Route::prefix('/siwa')
         Route::post('/callback', [SignInWithAppleController::class, 'callback'])
             ->middleware(['guest'])
             ->name('.callback');
+    });
+
+// Family
+Route::name('family')
+    ->prefix('/family')
+    ->group(function () {
+        Route::get('/invite/{id}/{hash}', [FamilyInviteController::class, '__invoke'])
+            ->middleware(['auth', 'signed', 'throttle:6,1'])
+            ->name('.invite');
     });
 
 // Email Verification
