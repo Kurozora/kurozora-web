@@ -16,13 +16,6 @@ use Livewire\Component;
 class SelectPreferredChildForm extends Component
 {
     /**
-     * The user instance.
-     *
-     * @var User
-     */
-    public User $user;
-
-    /**
      * The email to end an invitation to.
      *
      * @var string
@@ -32,27 +25,6 @@ class SelectPreferredChildForm extends Component
         new ValidateEmail(['must-be-available' => true])
     ])]
     public string $email = '';
-
-    /**
-     * Indicates if user deletion is being confirmed.
-     *
-     * @var bool
-     */
-    public bool $confirmingChildDeletion = false;
-
-    /**
-     * The user's current password.
-     *
-     * @var string
-     */
-    public string $password = '';
-
-    /**
-     * The child instance to delete.
-     *
-     * @var null|User
-     */
-    public ?User $childToDelete = null;
 
     /**
      * The user's children.
@@ -70,7 +42,6 @@ class SelectPreferredChildForm extends Component
      */
     public function mount(User $user): void
     {
-        $this->user = $user;
         $this->children = $user->children;
     }
 
@@ -82,42 +53,6 @@ class SelectPreferredChildForm extends Component
         // e.g., sending an email invitation or creating a pending child account
         session()->flash('message', __('Invitation sent successfully.'));
         $this->reset('email');
-    }
-
-    public function confirmChildDeletion($childId): void
-    {
-        if ($this->children->firstWhere('id', '=', $childId) === null) {
-            return;
-        }
-
-        $this->resetErrorBag();
-
-        $this->password = '';
-        $this->childToDelete = $this->children->firstWhere('id', '=', $childId);
-
-        $this->dispatch('confirming-delete-child');
-
-        $this->confirmingChildDeletion = true;
-    }
-
-    public function unlinkChild(): void
-    {
-        $this->resetErrorBag();
-
-        if (!Hash::check($this->password, $this->user->password)) {
-            throw ValidationException::withMessages([
-                'password' => [__('This password does not match our records.')],
-            ]);
-        }
-
-        // Remove parent_id from the child's account
-        $this->childToDelete?->update([
-            'parent_id' => null
-        ]);
-
-        $this->confirmingChildDeletion = false;
-
-        session()->flash('message', __('Child account unlinked successfully.'));
     }
 
     /**

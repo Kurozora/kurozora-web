@@ -10,11 +10,11 @@
     </x-slot:header>
 
     <div class="pl-4 pr-4 py-6 space-y-10">
+        <livewire:profile.update-account-information-form :user="$user" />
+
+        <x-hr class="hidden sm:block" />
+
         @if ($user === auth()->user())
-            <livewire:profile.update-account-information-form />
-
-            <x-hr class="hidden sm:block" />
-
             <div class="sm:mt-0">
                 <livewire:profile.update-profile-information-form />
             </div>
@@ -23,11 +23,11 @@
         @endif
 
         @if ($user->parent_id === null)
-{{--            <div class="sm:mt-0">--}}
-{{--                <livewire:profile.select-preferred-child-form :user="$user" />--}}
-{{--            </div>--}}
+            <div class="sm:mt-0">
+                <livewire:profile.select-preferred-child-form :user="$user" />
+            </div>
 
-{{--            <x-hr class="hidden sm:block" />--}}
+            <x-hr class="hidden sm:block" />
         @endif
 
         <div class="sm:mt-0">
@@ -93,6 +93,12 @@
 
             <div class="sm:mt-0">
                 <livewire:profile.delete-user-form />
+            </div>
+        @else
+            <x-hr class="hidden sm:block" />
+
+            <div class="sm:mt-0">
+                <livewire:profile.unlink-user-form :user="$user" />
             </div>
         @endif
     </div>
