@@ -17,14 +17,14 @@
         {{-- Slug --}}
         <div class="col-span-3 sm:col-span-2">
             <x-label for="username" value="{{ __('Username') }}" />
-            <x-input id="username" type="text" class="mt-1 block w-full {{ ($this->user->is_subscribed || $this->user->can_change_username) ?: 'select-none opacity-25' }}" wire:model="state.username" autocomplete="username" disabled="{{ !($this->user->is_subscribed || $this->user->can_change_username) }}" />
+            <x-input id="username" type="text" class="mt-1 block w-full {{ ($this->user->is_subscribed || $this->user->can_change_username) ?: 'select-none opacity-25' }}" autocomplete="username" placeholder="{{ $state['username'] }}" disabled="{{ !($this->user->is_subscribed || $this->user->can_change_username) }}" wire:model="state.username" />
             <x-input-error for="username" class="mt-2" />
         </div>
 
         {{-- Email --}}
         <div class="col-span-6 sm:col-span-4">
             <x-label for="email" value="{{ __('Email') }}" />
-            <x-input id="email" type="email" class="mt-1 block w-full" wire:model="state.email" x-bind:disabled="countdown > 0" />
+            <x-input id="email" type="email" class="mt-1 block w-full" autocomplete="email" placeholder="{{ $state['email'] }}" wire:model="state.email" x-bind:disabled="countdown > 0" />
             <x-input-error for="email" class="mt-2" />
         </div>
 

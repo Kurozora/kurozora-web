@@ -15,6 +15,13 @@ class UpdateAccountInformationForm extends Component
     use WithRateLimiting;
 
     /**
+     * The object containing the user data.
+     *
+     * @var User $user
+     */
+    public User $user;
+
+    /**
      * The component's state.
      *
      * @var array
@@ -40,13 +47,15 @@ class UpdateAccountInformationForm extends Component
     /**
      * Prepare the component.
      *
+     * @param $user
+     *
      * @return void
      */
-    public function mount(): void
+    public function mount($user): void
     {
-        $state = auth()->user()
-            ->only(['slug', 'email']);
+        $state = $user->only(['slug', 'email']);
 
+        $this->user = $user;
         $this->state = [
             'username' => $state['slug'],
             'email' => $state['email']
@@ -66,7 +75,7 @@ class UpdateAccountInformationForm extends Component
 
         $attributes = $this->state;
 
-        $updater->update(auth()->user(), $attributes);
+        $updater->update($this->user, $attributes);
 
         $this->dispatch('saved');
 
@@ -77,16 +86,6 @@ class UpdateAccountInformationForm extends Component
 
             $this->dispatch('verification-link-sent', countdown: $this->rateLimitDecay);
         }
-    }
-
-    /**
-     * Get the current user of the application.
-     *
-     * @return User|null
-     */
-    public function getUserProperty(): User|null
-    {
-        return auth()->user();
     }
 
     /**
