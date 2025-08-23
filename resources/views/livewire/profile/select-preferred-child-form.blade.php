@@ -4,24 +4,39 @@
     </x-slot:title>
 
     <x-slot:description>
-        {{ __('Invite and manage child accounts for children 13 and younger.') }}
+        {{ __('Child accounts can be created by a parent or legal guardian for children 12 and younger.') }}
     </x-slot:description>
 
     <x-slot:content>
         <div class="max-w-xl text-sm text-primary">
-            {{ __('Instead of sharing an account with your child, which can give them unwanted access to your personal data, create a :x Account for them. Then you can easily set age-based parental controls, and they can use Family Sharing, and other :x services.', ['x' => config('app.name')]) }}
+            {{ __('Instead of sharing an account with your child, which can give them unwanted access to your personal data, invite them to join your family or create a :x Account for them. Then you can easily set age-based parental controls, and they can use Family Sharing, and other :x services.', ['x' => config('app.name')]) }}
         </div>
 
         <!-- Invitation Form -->
-        <div class="mt-5">
-            <x-input label="{{ __('Invite Child') }}" type="email" wire:model="email" placeholder="{{ __('Child’s Email') }}" />
+        @if ($children->count() < 6)
+            <div class="flex flex-col items-center justify-end gap-4 mt-5">
+                <div class="w-full">
+                    <x-label for="inviteEmail" value="{{ __('Email') }}" />
+                    <x-input id="inviteEmail" label="{{ __('Invite Child') }}" type="email" class="mt-1 block w-full" autocomplete="email" wire:model="email" />
+                    <x-input-error for="email" class="mt-2" />
+                    <x-action-message class="mt-2" on="invitation-sent">
+                        <p>{{ __('An invitation has been sent to the provided email address if an account exists.') }}</p>
+                    </x-action-message>
+                </div>
 
-            <x-button wire:click="inviteChild" wire:loading.attr="disabled" class="mt-2">
-                {{ __('Send Invitation') }}
-            </x-button>
+                <x-button wire:click="inviteAccount" wire:loading.attr="disabled">
+                    {{ __('Send Invitation') }}
+                </x-button>
+            </div>
 
-            <x-input-error for="email" class="mt-2" />
-        </div>
+            <div class="flex flex-col items-center justify-end gap-4 mt-4 text-center">
+                <p class="">{{ __('———— or ————') }}</p>
+
+                <x-link-button href="{{ route('sign-up.child') }}" wire:navigate>
+                    {{ __('Create Child Account') }}
+                </x-link-button>
+            </div>
+        @endif
 
         <!-- Child Accounts List -->
         @if ($children->isNotEmpty())

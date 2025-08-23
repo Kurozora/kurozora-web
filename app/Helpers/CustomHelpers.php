@@ -78,6 +78,21 @@ if (!function_exists('number_shorten')) {
     }
 }
 
+if (! function_exists('number_to_words')) {
+    /**
+     * Convert the given number to words.
+     *
+     * @param float|int $number
+     *
+     * @return string
+     */
+    function number_to_words(float|int $number): string
+    {
+        $formatter = new NumberFormatter(app()->getLocale(), NumberFormatter::SPELLOUT);
+        return $formatter->format($number);
+    }
+}
+
 if (!function_exists('size_shorten')) {
     /**
      * Shorten the size and append a unit.

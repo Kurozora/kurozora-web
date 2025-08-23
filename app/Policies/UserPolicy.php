@@ -74,6 +74,18 @@ class UserPolicy
 //    }
 
     /**
+     * Determine whether the user can create child models.
+     *
+     * @param User $user
+     *
+     * @return Response|bool
+     */
+    public function create_child(User $user): Response|bool
+    {
+        return $user->parent_id === null && $user->children()->count() < 6;
+    }
+
+    /**
      * Determine whether the user can update the model.
      *
      * @param User $user

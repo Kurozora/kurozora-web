@@ -9,6 +9,7 @@ use App\Http\Controllers\Web\Invitation\FamilyInviteController;
 use App\Http\Controllers\Web\NewPasswordController;
 use App\Http\Controllers\Web\PasswordResetLinkController;
 use App\Http\Controllers\Web\RecoveryCodeController;
+use App\Http\Controllers\Web\SignUpUserChildController;
 use App\Http\Controllers\Web\SignUpUserController;
 use App\Http\Controllers\Web\TwoFactorAuthenticatedSessionController;
 use App\Http\Controllers\Web\TwoFactorAuthenticationController;
@@ -37,12 +38,24 @@ Route::post('/sign-out', [AuthenticatedSessionController::class, 'destroy'])
     ->name('sign-out');
 
 // Sign Up
-Route::get('/sign-up', [SignUpUserController::class, 'create'])
-    ->middleware(['guest', 'throttle:6,1'])
-    ->name('sign-up');
+Route::prefix('/sign-up')
+    ->group(function () {
+        Route::get('/', [SignUpUserController::class, 'create'])
+            ->middleware(['guest', 'throttle:6,1'])
+            ->name('sign-up');
 
-Route::post('/sign-up', [SignUpUserController::class, 'store'])
-    ->middleware(['guest', 'honey']);
+        Route::post('/', [SignUpUserController::class, 'store'])
+            ->middleware(['guest', 'honey']);
+
+        Route::get('/child', [SignUpUserChildController::class, 'create'])
+            ->middleware(['auth', 'throttle:6,1'])
+            ->can('create_child', App\Models\User::class)
+            ->name('sign-up.child');
+
+        Route::post('/child', [SignUpUserChildController::class, 'store'])
+            ->can('create_child', App\Models\User::class)
+            ->middleware(['auth']);
+    });
 
 Route::prefix('/siwa')
     ->name('siwa')
