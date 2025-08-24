@@ -101,7 +101,8 @@ class FeedMessagesSection extends Component
                             $hasMany->with(['reacter', 'type']);
                         }
                     ]);
-                }
+                },
+                'linkPreview'
             ])
             ->withCount(['replies', 'reShares'])
             ->when(auth()->user(), function ($query, $user) {
