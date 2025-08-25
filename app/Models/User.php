@@ -148,16 +148,22 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
 
         static::saving(function (User $user) {
             // Strip HTML tags
-            $user->biography = strip_tags(trim(Markdown::parse(nl2br($user->biography))));
+            if (empty($user->biography)) {
+                $user->biography = null;
+                $user->biography_markdown = null;
+                $user->biography_html = null;
+            } else {
+                $user->biography = strip_tags(trim(Markdown::parse(nl2br($user->biography))));
 
-            // Parse user mentions
-            $parser = new MentionParser($user, [
-                'notify' => false,
-            ]);
-            $user->biography_markdown = $parser->parse($user->biography);
+                // Parse user mentions
+                $parser = new MentionParser($user, [
+                    'notify' => false,
+                ]);
+                $user->biography_markdown = $parser->parse($user->biography);
 
-            // Parse user mentions
-            $user->biography_html = trim(Markdown::parse(nl2br($user->biography_markdown)));
+                // Parse user mentions
+                $user->biography_html = trim(Markdown::parse(nl2br($user->biography_markdown)));
+            }
         });
     }
 
@@ -531,7 +537,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         // the following constraints: orderBy('last_activity', 'desc'),
         // limit(1), and select('last_activity').
         $session = $this->sessions->first();
-        $sessionLastActivity = Carbon::createFromTimestamp($session?->last_activity ?? now()->timestamp);
+        $sessionLastActivity = Carbon::createFromTimestamp($session?->last_activity ?? 0);
 
         $activity = max($sessionLastActivity, $personalAccessTokenLastUsedAt);
 
@@ -931,7 +937,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     public function sendEmailVerificationNotification(): void
     {
         // Force root url, because the API will send the request from the API subdomain.
-        URL::forceRootUrl(config('app.url'));
+        URL::useOrigin(config('app.url'));
 
         // Notify user
         $this->notify(new VerifyEmailNotification);
@@ -947,7 +953,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     public function sendPasswordResetNotification($token): void
     {
         // Force root url, because the API will send the request from the API subdomain.
-        URL::forceRootUrl(config('app.url'));
+        URL::useOrigin(config('app.url'));
 
         // Notify user
         $this->notify(new ResetPasswordNotification($token));
