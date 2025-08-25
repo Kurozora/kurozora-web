@@ -15,7 +15,7 @@
         <form wire:submit="{{ $submit }}">
             @csrf
 
-            <div class="bg-primary shadow shadow-primary overflow-hidden sm:rounded-md">
+            <div class="bg-primary shadow shadow-primary overflow-hidden rounded-md">
                 @if (isset($header))
                     <div>
                         {{ $header }}
