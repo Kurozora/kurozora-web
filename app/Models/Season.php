@@ -9,6 +9,7 @@ use App\Traits\Model\HasViews;
 use App\Traits\Model\TvRated;
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -59,6 +60,46 @@ class Season extends KModel implements HasMedia, Sitemapable
             'started_at' => 'datetime',
             'ended_at' => 'datetime',
         ];
+    }
+
+    /**
+     * Get the started_at attribute with the correct timezone.
+     *
+     * @return Attribute
+     */
+    public function startedAt(): Attribute
+    {
+        return Attribute::make(
+            get: function ($value) {
+                if (!$value && $value !== 0) {
+                    return null;
+                }
+
+                $value = $this->asDateTime($value);
+                $value->setTimezone(config('app.format_timezone'));
+                return $value;
+            }
+        );
+    }
+
+    /**
+     * Get the ended_at attribute with the correct timezone.
+     *
+     * @return Attribute
+     */
+    public function endedAt(): Attribute
+    {
+        return Attribute::make(
+            get: function ($value) {
+                if (!$value && $value !== 0) {
+                    return null;
+                }
+
+                $value = $this->asDateTime($value);
+                $value->setTimezone(config('app.format_timezone'));
+                return $value;
+            }
+        );
     }
 
     /**
