@@ -20,17 +20,17 @@ class Timezone
     {
         // Check header request and determine localization
         if (auth()->check()) {
-            $tvRating = auth()->user()->timezone;
+            $timezone = auth()->user()->timezone;
         } else if ($request->hasHeader('X-Timezone')) {
-            $tvRating = $request->header('X-Timezone');
+            $timezone = $request->header('X-Timezone');
         } else if (session()->has('timezone')) {
-            $tvRating = session('timezone');
+            $timezone = session('timezone');
         } else {
-            $tvRating = 4;
+            $timezone = 'UTC';
         }
 
         // Set TVRating in config
-        config()->set('app.format_timezone', $tvRating);
+        config()->set('app.format_timezone', $timezone);
 
         // Continue request
         return $next($request);

@@ -38,7 +38,7 @@ trait WithEpisodeSearch
     }
 
     /**
-     * Redirect the user to a random anime.
+     * Redirect the user to a random episode.
      *
      * @return void
      */
