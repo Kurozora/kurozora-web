@@ -45,7 +45,6 @@ use Illuminate\Support\Facades\Cache;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Scout\Searchable;
 use Markdown;
-use Ramsey\Uuid\Uuid;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\IcalendarGenerator\Components\Alert;
@@ -97,10 +96,6 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
 
     // Cache user's calendar
     const int|float CACHE_KEY_CALENDAR_SECONDS = 60 * 60 * 24;
-
-    // Cache user's reputation count
-    const string CACHE_KEY_REPUTATION_COUNT = 'user-reputation-%d';
-    const int|float CACHE_KEY_REPUTATION_COUNT_SECONDS = 10 * 60;
 
     // Length limits
     const int MAX_BIOGRAPHY_LENGTH = 500;
@@ -571,8 +566,9 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     {
         $reminders = $this->reminders;
 
-        // Find location of cached data
-        $cacheKey = self::TABLE_NAME . '-name-reminders-id-' . $this->id . '-reminder_count-' . $reminders->count();
+        // Find the location of cached data
+        $lastUpdated = $reminders->max('updated_at')?->timestamp ?? 0;
+        $cacheKey = UserReminder::TABLE_NAME . '-id_' . $this->id . '-last_updated-' . $lastUpdated;
 
         // Retrieve or save cached result
         return Cache::remember($cacheKey, self::CACHE_KEY_CALENDAR_SECONDS, function () use ($reminders) {
@@ -581,59 +577,67 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
             $appLocale = config('app.locale');
             $productIdentifier = '-//' . $appName . '//' . $appName . '//' . strtoupper($appLocale);
 
-            $calendar = Calendar::create($appName);
-            $calendar->description(__('The Kurozora calendar group contains all reminders you have subscribed to in the Kurozora app.'))
+            $calendar = Calendar::create($appName)
+                ->description(__('The Kurozora calendar group contains all reminders you have subscribed to in the Kurozora app.'))
                 ->productIdentifier($productIdentifier)
                 ->refreshInterval(UserReminder::CAL_REFRESH_INTERVAL)
                 ->appendProperty(TextProperty::create('CALSCALE', 'GREGORIAN'))
                 ->appendProperty(TextProperty::create('X-APPLE-CALENDAR-COLOR', '#FF9300'))
                 ->appendProperty(TextProperty::create('COLOR', 'orange'))
-                ->appendProperty(TextProperty::create('ORGANIZER', 'reminder@' . $appDomain)
-                    ->addParameter(Parameter::create('CN', $appName)));
+                ->appendProperty(
+                    TextProperty::create('ORGANIZER', 'reminder@' . $appDomain)
+                        ->addParameter(Parameter::create('CN', $appName))
+                );
 
             foreach ($reminders as $reminder) {
                 /** @var Anime $anime */
                 $anime = $reminder->remindable;
-                $episodes = $anime->episodes;
 
-                foreach ($episodes as $episode) {
-                    $uniqueIdentifier = Uuid::uuid4() . '@' . $appDomain;
-                    $eventName = $anime->title . ' Episode ' . $episode->number . ' (' . $episode->number_total . ')';
-                    $startsAt = $episode->started_at->setTimezone('Asia/Tokyo');
-                    $endsAt = $episode->ended_at->setTimezone('Asia/Tokyo');
+                foreach ($anime->episodes as $episode) {
+                    // Generate a deterministic UID instead of random UUID
+                    $uniqueIdentifier = 'episode-' . $episode->id . '@' . $appDomain;
+
+                    if ( $episode->number != $episode->number_total) {
+                        $eventName = __(':title Episode :number (:total_number)', ['title' => $anime->title, 'number' => $episode->number, 'total_number' => $episode->number_total]);
+                    } else {
+                        $eventName = __(':title Episode :number', ['title' => $anime->title, 'number' => $episode->number]);
+                    }
 
                     // Create event
                     $calendarEvent = Event::create($eventName)
                         ->description($episode->synopsis ?? $anime->synopsis ?? '')
                         ->organizer('reminder@' . $appDomain, $appName)
-                        ->startsAt($startsAt)
-                        ->endsAt($endsAt)
-                        ->uniqueIdentifier($uniqueIdentifier);
-
-                    // Add custom properties
-                    $calendarEvent->appendProperty(TextProperty::create('URL', route('anime.details', $anime)))
+                        ->startsAt($episode->started_at)
+                        ->endsAt($episode->ended_at)
+                        ->uniqueIdentifier($uniqueIdentifier)
+                        ->appendProperty(TextProperty::create('URL', route('anime.details', $anime)))
                         ->appendProperty(TextProperty::create('X-APPLE-TRAVEL-ADVISORY-BEHAVIOR', 'AUTOMATIC'));
 
-                    // Add alerts
-                    $firstReminderMessage = $eventName . ' starts in ' . UserReminder::CAL_FIRST_ALERT_MINUTES . ' minutes.';
-                    $secondReminderMessage = $eventName . ' starts in ' . UserReminder::CAL_SECOND_ALERT_MINUTES . ' minutes.';
-                    $thirdReminderMessage = $eventName . ' starts in ' . UserReminder::CAL_THIRD_ALERT_DAY . ' day.';
+                    // Prebuild alert messages with deterministic UIDs
+                    $alerts = [
+                        [
+                            'minutes' => UserReminder::CAL_FIRST_ALERT_MINUTES,
+                            'message' => __(':event starts in :x minutes.', ['event' => $eventName, 'x' => UserReminder::CAL_FIRST_ALERT_MINUTES]),
+                        ],
+                        [
+                            'minutes' => UserReminder::CAL_SECOND_ALERT_MINUTES,
+                            'message' => __(':event starts in :x minutes.', ['event' => $eventName, 'x' => UserReminder::CAL_SECOND_ALERT_MINUTES]),
+                        ],
+                        [
+                            'minutes' => UserReminder::CAL_THIRD_ALERT_DAY,
+                            'message' => __(':event starts in :x day.', ['event' => $eventName, 'x' => UserReminder::CAL_THIRD_ALERT_DAY]),
+                        ],
+                    ];
 
-                    $firstAlert = Alert::minutesBeforeStart(UserReminder::CAL_FIRST_ALERT_MINUTES)
-                        ->message($firstReminderMessage)
-                        ->appendProperty(TextProperty::create('UID', Uuid::uuid4() . '@' . $appDomain));
-                    $secondAlert = Alert::minutesBeforeStart(UserReminder::CAL_SECOND_ALERT_MINUTES)
-                        ->message($secondReminderMessage)
-                        ->appendProperty(TextProperty::create('UID', Uuid::uuid4() . '@' . $appDomain));
-                    $thirdAlert = Alert::minutesBeforeStart(UserReminder::CAL_THIRD_ALERT_DAY)
-                        ->message($thirdReminderMessage)
-                        ->appendProperty(TextProperty::create('UID', Uuid::uuid4() . '@' . $appDomain));
+                    foreach ($alerts as $i => $alertData) {
+                        $calendarEvent->alert(
+                            Alert::minutesBeforeStart($alertData['minutes'])
+                                ->message($alertData['message'])
+                                ->appendProperty(TextProperty::create('UID', 'alert-' . $episode->id . '-' . $i . '@' . $appDomain))
+                        );
+                    }
 
-                    $calendarEvent->alert($firstAlert)
-                        ->alert($secondAlert)
-                        ->alert($thirdAlert);
-
-                    // Add event to calendar
+                    // Add event to the calendar
                     $calendar->event($calendarEvent);
                 }
             }

@@ -16,6 +16,7 @@ class GetExplorePageRequest extends FormRequest
         return [
             'genre_id' => ['bail', 'nullable', 'string'],
             'theme_id' => ['bail', 'nullable', 'string'],
+            'limit' => ['bail', 'integer', 'min:1', 'max:100'],
         ];
     }
 }
