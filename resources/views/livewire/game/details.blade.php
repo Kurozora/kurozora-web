@@ -170,7 +170,7 @@
         <div>
             <section id="badges" class="flex flex-row flex-nowrap whitespace-nowrap justify-between items-center text-center pt-4 pb-5 pl-4 pr-4 overflow-x-scroll no-scrollbar">
                 <div id="ratingBadge" class="flex-grow pr-12">
-                    <a class="no-external-icon" href="#ratingsAndReviews">
+                    <a class="flex flex-col items-center no-external-icon" href="#ratingsAndReviews">
                         <p class="font-bold text-tint">
                             {{ number_format($game->mediaStat->rating_average, 1) }}
                         </p>

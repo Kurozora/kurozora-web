@@ -262,7 +262,7 @@
 
                 <section id="badges" class="flex flex-row flex-nowrap whitespace-nowrap justify-between text-center pl-4 pr-4 overflow-x-scroll no-scrollbar">
                     <div id="ratingBadge" class="flex-grow pr-12">
-                        <a href="#ratingsAndReviews">
+                        <a class="flex flex-col items-center no-external-icon" href="#ratingsAndReviews">
                             <p class="font-bold text-tint">
                                 {{ number_format($episode->mediaStat->rating_average, 1) }}
                             </p>
