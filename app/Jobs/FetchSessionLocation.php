@@ -49,11 +49,11 @@ class FetchSessionLocation implements ShouldQueue
         $data = $this->getDataFromAPI();
 
         // Add IP info to the session
-        $this->sessionAttribute->city = $data->city ?? null;
-        $this->sessionAttribute->region = $data->region ?? $data->state ?? $data->subdivision ?? null;
-        $this->sessionAttribute->country = $data->country ?? $data->country_name ?? null;
-        $this->sessionAttribute->latitude = $data->latitude ?? null;
-        $this->sessionAttribute->longitude = $date->longitude ?? null;
+        $this->sessionAttribute->city = $data?->city ?? null;
+        $this->sessionAttribute->region = $data?->regionName ?? $data?->region ?? $data?->state ?? $data?->subdivision ?? null;
+        $this->sessionAttribute->country = $data?->country ?? $data?->country_name ?? null;
+        $this->sessionAttribute->latitude = $data?->lat ?? $data?->latitude ?? null;
+        $this->sessionAttribute->longitude = $data?->lon ?? $data?->longitude ?? null;
 
         // Save changes
         $this->sessionAttribute->save();
@@ -63,22 +63,60 @@ class FetchSessionLocation implements ShouldQueue
      * Queries the API for information regarding an IP address.
      *
      * @return mixed
-     * @throws Exception
      */
     private function getDataFromAPI(): mixed
     {
-        // Get the IP in question and query the API
         $ip = $this->sessionAttribute->ip_address;
-        $rawContent = file_get_contents('https://www.iplocate.io/api/lookup/' . $ip);
+        $url = 'http://ip-api.com/json/' . $ip;
 
-        // Attempt to decode the content
-        $decodedResponse = json_decode($rawContent);
+        $context = stream_context_create([
+            'http' => [
+                'method' => 'GET',
+                'ignore_errors' => true, // Needed to read response headers on 429 etc.
+            ]
+        ]);
 
-        // If the content could not be decoded throw an exception
-        if (!$decodedResponse) {
-            throw new Exception("Could not get IP info for IP: " . $ip);
+        try {
+            $response = file_get_contents($url, false, $context);
+
+            if ($response === false || !isset($http_response_header)) {
+                return null;
+            }
+
+            // Parse headers
+            $headers = [];
+            foreach ($http_response_header as $headerLine) {
+                if (stripos($headerLine, ':') !== false) {
+                    [$key, $value] = explode(':', $headerLine, 2);
+                    $headers[trim($key)] = trim($value);
+                } else if (stripos($headerLine, 'HTTP/') === 0) {
+                    $headers['Http-Status'] = $headerLine;
+                }
+            }
+
+            $statusCode = null;
+            if (preg_match('/HTTP\/\d\.\d\s+(\d+)/', $headers['Http-Status'], $matches)) {
+                $statusCode = (int) $matches[1];
+            }
+
+            $remaining = (int) ($headers['X-Rl'] ?? 1);
+
+            if ($remaining === 0) {
+                return null;
+            }
+
+            if ($statusCode === 429) {
+                return null;
+            }
+
+            $decoded = json_decode($response, true);
+            if (!$decoded) {
+                return null;
+            }
+
+            return $decoded;
+        } catch (Exception $e) {
+            return null;
         }
-
-        return $decodedResponse;
     }
 }

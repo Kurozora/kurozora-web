@@ -124,7 +124,7 @@ Kurozora makes it easy for you to keep your personal information accurate, compl
 To provide location-based services on Kurozora products, Kurozora and our partners and licensees, such as maps data providers, may collect, use, and share precise location data. Where available, Kurozora uses existing platform APIs for location-based services. These APIs may use GPS, Bluetooth, and your IP Address, along with crowd-sourced Wi-Fi hotspot and cell tower locations, and other technologies to determine your devices' approximate location.
 <div></div>
 
-We may also use a third party provider, <q>IP Info</q>, to resolve your IP address to a geographical location. We have picked <q>IP Info</q> with care, but what they do with your IP address is beyond our control. You can read their privacy policy at <a href="https://ipinfo.io/privacy-policy" target="_blank">ipinfo.io/privacy-policy</a>. The collected information consists of:
+We may also use a third party provider, <q>IP-API</q>, to resolve your IP address to a geographical location. The collected information consists of:
 <div></div>
 
 * Approximate city
@@ -133,10 +133,28 @@ We may also use a third party provider, <q>IP Info</q>, to resolve your IP addre
 * Approximate coordinates (latitude/longitude)
 <div></div>
 
-We may, for example, use geographical locations to determine where a sign in session was created. Location based information is removed as soon as it is no longer in use, for example, when a session has expired or you explicitly signed out of your account.
+We have picked <q>IP-API</q> with care, but what they do with your IP address is beyond our control. You can read their privacy policy at <a href="https://ip-api.com/docs/legal" target="_blank">ip-api.com/docs/legal</a>.
 <div></div>
 
-We also keep track of IP addresses that have made failed login attempts. We do this to temporarily <q>block</q> IP addresses from logging in once they have done this too many times.
+### How we use location data
+We use this information only for:
+<div></div>
+
+- Verifying where a sign-in session was created
+- Protecting accounts by blocking suspicious or repeated failed login attempts
+- Providing limited in-app features that rely on approximate location
+<div></div>
+
+Location based information is removed as soon as it is no longer in use, for example, when a session has expired, or you explicitly signed out of your account.
+<div></div>
+
+### What we don’t do
+We do not use location data for:
+<div></div>
+
+- Tracking your movements
+- Serving any form of advertisements
+- Selling or sharing your location with any third parties
 <div></div>
 
 ## Third-Party Sites and Services
