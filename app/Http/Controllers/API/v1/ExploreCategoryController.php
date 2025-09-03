@@ -156,39 +156,40 @@ class ExploreCategoryController extends Controller
      */
     function details(GetExplorePageRequest $request, ExploreCategory $exploreCategory): JsonResponse
     {
+        $data = $request->validated();
         $genreOrTheme = null;
 
         // Check if categories should be genre or theme specific.
-        if ($genreID = $request->input('genre_id')) {
+        if ($genreID = $data['genre_id'] ?? null) {
             $genreOrTheme = Genre::firstWhere('id', '=', $genreID);
-        } else if ($themeID = $request->input('theme_id')) {
+        } else if ($themeID = $data['theme_id'] ?? null) {
             $genreOrTheme = Theme::firstWhere('id', '=', $themeID);
         }
 
         $exploreCategory = match ($exploreCategory->type) {
-            ExploreCategoryTypes::UpNextEpisodes => $exploreCategory->upNextEpisodes(25),
-            ExploreCategoryTypes::MostPopularShows => $exploreCategory->mostPopular(Anime::class, $genreOrTheme, 25),
-            ExploreCategoryTypes::UpcomingShows => $exploreCategory->upcoming(Anime::class, $genreOrTheme, 25),
-            ExploreCategoryTypes::NewShows => $exploreCategory->recentlyAdded(Anime::class, $genreOrTheme, 25),
-            ExploreCategoryTypes::RecentlyUpdateShows => $exploreCategory->recentlyUpdated(Anime::class, $genreOrTheme, 25),
-            ExploreCategoryTypes::RecentlyFinishedShows => $exploreCategory->recentlyFinished(Anime::class, $genreOrTheme, 25),
-            ExploreCategoryTypes::ContinuingShows => $exploreCategory->ongoing(Anime::class, $genreOrTheme, 25),
-            ExploreCategoryTypes::ShowsSeason => $exploreCategory->currentSeason(Anime::class, $genreOrTheme, 25),
-            ExploreCategoryTypes::MostPopularLiteratures => $exploreCategory->mostPopular(Manga::class, $genreOrTheme, 25),
-            ExploreCategoryTypes::UpcomingLiteratures => $exploreCategory->upcoming(Manga::class, $genreOrTheme, 25),
-            ExploreCategoryTypes::NewLiteratures => $exploreCategory->recentlyAdded(Manga::class, $genreOrTheme, 25),
-            ExploreCategoryTypes::RecentlyUpdateLiteratures => $exploreCategory->recentlyUpdated(Manga::class, $genreOrTheme, 25),
-            ExploreCategoryTypes::RecentlyFinishedLiteratures => $exploreCategory->recentlyFinished(Manga::class, $genreOrTheme, 25),
-            ExploreCategoryTypes::ContinuingLiteratures => $exploreCategory->ongoing(Manga::class, $genreOrTheme, 25),
-            ExploreCategoryTypes::LiteraturesSeason => $exploreCategory->currentSeason(Manga::class, $genreOrTheme, 25),
-            ExploreCategoryTypes::MostPopularGames => $exploreCategory->mostPopular(Game::class, $genreOrTheme, 25),
-            ExploreCategoryTypes::UpcomingGames => $exploreCategory->upcoming(Game::class, $genreOrTheme, 25),
-            ExploreCategoryTypes::NewGames => $exploreCategory->recentlyAdded(Game::class, $genreOrTheme, 25),
-            ExploreCategoryTypes::RecentlyUpdateGames => $exploreCategory->recentlyUpdated(Game::class, $genreOrTheme, 25),
-            ExploreCategoryTypes::GamesSeason => $exploreCategory->currentSeason(Game::class, $genreOrTheme, 25),
-            ExploreCategoryTypes::Characters => $exploreCategory->charactersBornToday(25),
-            ExploreCategoryTypes::People => $exploreCategory->peopleBornToday(25),
-            ExploreCategoryTypes::ReCAP => $exploreCategory->reCAP(25),
+            ExploreCategoryTypes::UpNextEpisodes => $exploreCategory->upNextEpisodes($data['limit'] ?? 25, $data['page'] ?? 1),
+            ExploreCategoryTypes::MostPopularShows => $exploreCategory->mostPopular(Anime::class, $genreOrTheme, $data['limit'] ?? 25, $data['page'] ?? 1),
+            ExploreCategoryTypes::UpcomingShows => $exploreCategory->upcoming(Anime::class, $genreOrTheme, $data['limit'] ?? 25, $data['page'] ?? 1),
+            ExploreCategoryTypes::NewShows => $exploreCategory->recentlyAdded(Anime::class, $genreOrTheme, $data['limit'] ?? 25, $data['page'] ?? 1),
+            ExploreCategoryTypes::RecentlyUpdateShows => $exploreCategory->recentlyUpdated(Anime::class, $genreOrTheme, $data['limit'] ?? 25, $data['page'] ?? 1),
+            ExploreCategoryTypes::RecentlyFinishedShows => $exploreCategory->recentlyFinished(Anime::class, $genreOrTheme, $data['limit'] ?? 25, $data['page'] ?? 1),
+            ExploreCategoryTypes::ContinuingShows => $exploreCategory->ongoing(Anime::class, $genreOrTheme, $data['limit'] ?? 25, $data['page'] ?? 1),
+            ExploreCategoryTypes::ShowsSeason => $exploreCategory->currentSeason(Anime::class, $genreOrTheme, $data['limit'] ?? 25, $data['page'] ?? 1),
+            ExploreCategoryTypes::MostPopularLiteratures => $exploreCategory->mostPopular(Manga::class, $genreOrTheme, $data['limit'] ?? 25, $data['page'] ?? 1),
+            ExploreCategoryTypes::UpcomingLiteratures => $exploreCategory->upcoming(Manga::class, $genreOrTheme, $data['limit'] ?? 25, $data['page'] ?? 1),
+            ExploreCategoryTypes::NewLiteratures => $exploreCategory->recentlyAdded(Manga::class, $genreOrTheme, $data['limit'] ?? 25, $data['page'] ?? 1),
+            ExploreCategoryTypes::RecentlyUpdateLiteratures => $exploreCategory->recentlyUpdated(Manga::class, $genreOrTheme, $data['limit'] ?? 25, $data['page'] ?? 1),
+            ExploreCategoryTypes::RecentlyFinishedLiteratures => $exploreCategory->recentlyFinished(Manga::class, $genreOrTheme, $data['limit'] ?? 25, $data['page'] ?? 1),
+            ExploreCategoryTypes::ContinuingLiteratures => $exploreCategory->ongoing(Manga::class, $genreOrTheme, $data['limit'] ?? 25, $data['page'] ?? 1),
+            ExploreCategoryTypes::LiteraturesSeason => $exploreCategory->currentSeason(Manga::class, $genreOrTheme, $data['limit'] ?? 25, $data['page'] ?? 1),
+            ExploreCategoryTypes::MostPopularGames => $exploreCategory->mostPopular(Game::class, $genreOrTheme, $data['limit'] ?? 25, $data['page'] ?? 1),
+            ExploreCategoryTypes::UpcomingGames => $exploreCategory->upcoming(Game::class, $genreOrTheme, $data['limit'] ?? 25, $data['page'] ?? 1),
+            ExploreCategoryTypes::NewGames => $exploreCategory->recentlyAdded(Game::class, $genreOrTheme, $data['limit'] ?? 25, $data['page'] ?? 1),
+            ExploreCategoryTypes::RecentlyUpdateGames => $exploreCategory->recentlyUpdated(Game::class, $genreOrTheme, $data['limit'] ?? 25, $data['page'] ?? 1),
+            ExploreCategoryTypes::GamesSeason => $exploreCategory->currentSeason(Game::class, $genreOrTheme, $data['limit'] ?? 25, $data['page'] ?? 1),
+            ExploreCategoryTypes::Characters => $exploreCategory->charactersBornToday($data['limit'] ?? 25, $data['page'] ?? 1),
+            ExploreCategoryTypes::People => $exploreCategory->peopleBornToday($data['limit'] ?? 25, $data['page'] ?? 1),
+            ExploreCategoryTypes::ReCAP => $exploreCategory->reCAP($data['limit'] ?? 25, $data['page'] ?? 1),
             default => $exploreCategory->load([
                 'exploreCategoryItems.model' => function (MorphTo $morphTo) {
                     $morphTo->constrain([

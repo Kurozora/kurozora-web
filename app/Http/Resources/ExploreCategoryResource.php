@@ -74,6 +74,8 @@ class ExploreCategoryResource extends JsonResource
      */
     private function getTypeSpecificData(Request $request): array
     {
+        $nextPageURL = str_replace($request->root(), '', $this->resource->next_page_url ?? '');
+
         switch ($this->resource->type) {
             case ExploreCategoryTypes::UpNextEpisodes:
                 return [
@@ -81,7 +83,8 @@ class ExploreCategoryResource extends JsonResource
                         'data' => EpisodeResourceIdentity::collection($this->resource
                             ->exploreCategoryItems
                             ->pluck('model')
-                        )
+                        ),
+                        'next' => empty($nextPageURL) ? null : $nextPageURL,
                     ]
                 ];
             case ExploreCategoryTypes::People:
@@ -90,7 +93,8 @@ class ExploreCategoryResource extends JsonResource
                         'data' => PersonResourceIdentity::collection($this->resource
                             ->exploreCategoryItems
                             ->pluck('model')
-                        )
+                        ),
+                        'next' => empty($nextPageURL) ? null : $nextPageURL,
                     ]
                 ];
             case ExploreCategoryTypes::Characters:
@@ -99,7 +103,8 @@ class ExploreCategoryResource extends JsonResource
                         'data' => CharacterResourceIdentity::collection($this->resource
                             ->exploreCategoryItems
                             ->pluck('model')
-                        )
+                        ),
+                        'next' => empty($nextPageURL) ? null : $nextPageURL,
                     ]
                 ];
             case ExploreCategoryTypes::Genres:
@@ -108,7 +113,8 @@ class ExploreCategoryResource extends JsonResource
                         'data' => GenreResourceIdentity::collection($this->resource
                             ->exploreCategoryItems
                             ->pluck('model')
-                        )
+                        ),
+                        'next' => empty($nextPageURL) ? null : $nextPageURL,
                     ]
                 ];
             case ExploreCategoryTypes::Themes:
@@ -117,7 +123,8 @@ class ExploreCategoryResource extends JsonResource
                         'data' => ThemeResourceIdentity::collection($this->resource
                             ->exploreCategoryItems
                             ->pluck('model')
-                        )
+                        ),
+                        'next' => empty($nextPageURL) ? null : $nextPageURL,
                     ]
                 ];
             case ExploreCategoryTypes::Songs:
@@ -128,7 +135,8 @@ class ExploreCategoryResource extends JsonResource
                         'data' => MediaSongResource::collection($this->resource
                             ->exploreCategoryItems
                             ->pluck('model')
-                        )->toArray($request)
+                        )->toArray($request),
+                        'next' => empty($nextPageURL) ? null : $nextPageURL,
                     ]
                 ];
 
@@ -148,7 +156,8 @@ class ExploreCategoryResource extends JsonResource
                         'data' => AnimeResourceIdentity::collection($this->resource
                             ->exploreCategoryItems
                             ->pluck('model')
-                        )
+                        ),
+                        'next' => empty($nextPageURL) ? null : $nextPageURL,
                     ]
                 ];
             case ExploreCategoryTypes::Literatures:
@@ -156,7 +165,8 @@ class ExploreCategoryResource extends JsonResource
                     'literatures' => [
                         'data' => LiteratureResourceIdentity::collection($this->resource
                             ->pluck('model')
-                        )
+                        ),
+                        'next' => empty($nextPageURL) ? null : $nextPageURL,
                     ]
                 ];
             case ExploreCategoryTypes::NewLiteratures:
@@ -171,7 +181,8 @@ class ExploreCategoryResource extends JsonResource
                         'data' => LiteratureResourceIdentity::collection($this->resource
                             ->exploreCategoryItems
                             ->pluck('model')
-                        )
+                        ),
+                        'next' => empty($nextPageURL) ? null : $nextPageURL,
                     ]
                 ];
             case ExploreCategoryTypes::Games:
@@ -179,7 +190,8 @@ class ExploreCategoryResource extends JsonResource
                     'games' => [
                         'data' => GameResourceIdentity::collection($this->resource
                             ->pluck('model')
-                        )
+                        ),
+                        'next' => empty($nextPageURL) ? null : $nextPageURL,
                     ]
                 ];
             case ExploreCategoryTypes::NewGames:
@@ -192,7 +204,8 @@ class ExploreCategoryResource extends JsonResource
                         'data' => GameResourceIdentity::collection($this->resource
                             ->exploreCategoryItems
                             ->pluck('model')
-                        )
+                        ),
+                        'next' => empty($nextPageURL) ? null : $nextPageURL,
                     ]
                 ];
             case ExploreCategoryTypes::ReCAP:
@@ -201,12 +214,14 @@ class ExploreCategoryResource extends JsonResource
                         'data' => RecapResource::collection($this->resource
                             ->exploreCategoryItems
                             ->pluck('model')
-                        )
+                        ),
+                        'next' => empty($nextPageURL) ? null : $nextPageURL,
                     ]
                 ];
-            default: // Return empty shows by default
+            default: // Return empty type by default
                 return [
-                    'shows' => null
+                    $this->resource->type => null,
+                    'next' => null,
                 ];
         }
     }

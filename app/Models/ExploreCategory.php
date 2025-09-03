@@ -158,7 +158,7 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
                         }]);
                     }
                 })
-                ->get(),
+                ->cursorPaginate($limit),
             Game::class => $this->game($genreOrTheme)
                 ->mostPopular($limit, 3, (bool) $genreOrTheme?->is_nsfw)
                 ->when($withRelations, function ($query) {
@@ -170,7 +170,7 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
                         }]);
                     }
                 })
-                ->get(),
+                ->cursorPaginate($limit),
             Manga::class => $this->manga($genreOrTheme)
                 ->mostPopular($limit, 3, (bool) $genreOrTheme?->is_nsfw)
                 ->when($withRelations, function ($query) {
@@ -182,10 +182,11 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
                         }]);
                     }
                 })
-                ->get(),
+                ->cursorPaginate($limit),
             // No default, so it errors out, and we can fix it.
         };
 
+        $this->next_page_url = $models->nextPageUrl();
         $this->exploreCategoryItems = $models->map(function ($model) {
             return new ExploreCategoryItem([
                 'model' => $model
@@ -224,7 +225,7 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
                             ]);
                     }
                 })
-                ->get(),
+                ->cursorPaginate($limit),
             Game::class => $this->game($genreOrTheme)
                 ->upcoming($limit, (bool) $genreOrTheme?->is_nsfw)
                 ->when($withRelations, function ($query) {
@@ -241,7 +242,7 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
                             ]);
                     }
                 })
-                ->get(),
+                ->cursorPaginate($limit),
             Manga::class => $this->manga($genreOrTheme)
                 ->upcoming($limit, (bool) $genreOrTheme?->is_nsfw)
                 ->when($withRelations, function ($query) {
@@ -258,10 +259,11 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
                             ]);
                     }
                 })
-                ->get(),
+                ->cursorPaginate($limit),
             // No default, so it errors out, and we can fix it.
         };
 
+        $this->next_page_url = $models->nextPageUrl();
         $this->exploreCategoryItems = $models->map(function ($model) {
             return new ExploreCategoryItem([
                 'model' => $model
@@ -272,7 +274,7 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
     }
 
     /**
-     * Returns models that's been added recently.
+     * Returns models that have been added recently.
      *
      * @param string|null      $class
      * @param Genre|Theme|null $genreOrTheme
@@ -295,7 +297,7 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
                         }]);
                     }
                 })
-                ->get(),
+                ->cursorPaginate($limit),
             Game::class => $this->game($genreOrTheme)
                 ->recentlyAdded($limit, (bool) $genreOrTheme?->is_nsfw)
                 ->when($withRelations, function ($query) {
@@ -307,7 +309,7 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
                         }]);
                     }
                 })
-                ->get(),
+                ->cursorPaginate($limit),
             Manga::class => $this->manga($genreOrTheme)
                 ->recentlyAdded($limit, (bool) $genreOrTheme?->is_nsfw)
                 ->when($withRelations, function ($query) {
@@ -319,9 +321,10 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
                         }]);
                     }
                 })
-                ->get(),
+                ->cursorPaginate($limit),
         };
 
+        $this->next_page_url = $models->nextPageUrl();
         $this->exploreCategoryItems = $models->map(function ($model) {
             return new ExploreCategoryItem([
                 'model' => $model
@@ -332,7 +335,7 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
     }
 
     /**
-     * Returns anime that's been added recently.
+     * Returns models that have been updated recently.
      *
      * @param string|null      $class
      * @param Genre|Theme|null $genreOrTheme
@@ -355,7 +358,7 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
                         }]);
                     }
                 })
-                ->get(),
+                ->cursorPaginate($limit),
             Game::class => $this->game($genreOrTheme)
                 ->recentlyUpdated($limit, (bool) $genreOrTheme?->is_nsfw)
                 ->when($withRelations, function ($query) {
@@ -367,7 +370,7 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
                         }]);
                     }
                 })
-                ->get(),
+                ->cursorPaginate($limit),
             Manga::class => $this->manga($genreOrTheme)
                 ->recentlyUpdated($limit, (bool) $genreOrTheme?->is_nsfw)
                 ->when($withRelations, function ($query) {
@@ -379,9 +382,10 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
                         }]);
                     }
                 })
-                ->get(),
+                ->cursorPaginate($limit),
         };
 
+        $this->next_page_url = $models->nextPageUrl();
         $this->exploreCategoryItems = $models->map(function ($model) {
             return new ExploreCategoryItem([
                 'model' => $model
@@ -392,7 +396,7 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
     }
 
     /**
-     * Returns anime that's finished recently.
+     * Returns models that have finished recently.
      *
      * @param string|null      $class
      * @param Genre|Theme|null $genreOrTheme
@@ -415,7 +419,7 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
                         }]);
                     }
                 })
-                ->get(),
+                ->cursorPaginate($limit),
             Manga::class => $this->manga($genreOrTheme)
                 ->recentlyFinished($limit, (bool) $genreOrTheme?->is_nsfw)
                 ->when($withRelations, function ($query) {
@@ -427,9 +431,10 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
                         }]);
                     }
                 })
-                ->get(),
+                ->cursorPaginate($limit),
         };
 
+        $this->next_page_url = $models->nextPageUrl();
         $this->exploreCategoryItems = $models->map(function ($model) {
             return new ExploreCategoryItem([
                 'model' => $model
@@ -440,7 +445,7 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
     }
 
     /**
-     * Append the shows continuing since past season(s) to the category's items.
+     * Append the models continuing since past season(s) to the category's items.
      *
      * @param string|null      $class
      * @param Genre|Theme|null $genreOrTheme
@@ -463,7 +468,7 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
                         }]);
                     }
                 })
-                ->get(),
+                ->cursorPaginate($limit),
             Manga::class => $this->manga($genreOrTheme)
                 ->ongoing($limit, (bool) $genreOrTheme?->is_nsfw)
                 ->when($withRelations, function ($query) {
@@ -475,9 +480,10 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
                         }]);
                     }
                 })
-                ->get(),
+                ->cursorPaginate($limit),
         };
 
+        $this->next_page_url = $models->nextPageUrl();
         $this->exploreCategoryItems = $models->map(function ($model) {
             return new ExploreCategoryItem([
                 'model' => $model
@@ -499,7 +505,7 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
      */
     public function currentSeason(string|null $class = null, Genre|Theme|null $genreOrTheme = null, int $limit = 10, bool $withRelations = true): ExploreCategory
     {
-        $animeSeason = match ($class) {
+        $models = match ($class) {
             Anime::class => $this->anime($genreOrTheme)
                 ->currentSeason($limit, (bool) $genreOrTheme?->is_nsfw)
                 ->where('air_day', '=', today()->dayOfWeek)
@@ -512,7 +518,7 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
                         }]);
                     }
                 })
-                ->get(),
+                ->cursorPaginate($limit),
             Game::class => $this->game($genreOrTheme)
                 ->currentSeason($limit, (bool) $genreOrTheme?->is_nsfw)
                 ->when($withRelations, function ($query) {
@@ -524,7 +530,7 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
                         }]);
                     }
                 })
-                ->get(),
+                ->cursorPaginate($limit),
             Manga::class => $this->manga($genreOrTheme)
                 ->currentSeason($limit, (bool) $genreOrTheme?->is_nsfw)
                 ->when($withRelations, function ($query) {
@@ -536,12 +542,13 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
                         }]);
                     }
                 })
-                ->get(),
+                ->cursorPaginate($limit),
         };
 
-        $this->exploreCategoryItems = $animeSeason->map(function (Anime $anime) {
+        $this->next_page_url = $models->nextPageUrl();
+        $this->exploreCategoryItems = $models->map(function ($model) {
             return new ExploreCategoryItem([
-                'model' => $anime
+                'model' => $model
             ]);
         });
 
@@ -552,6 +559,7 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
      * Append the characters born today to the category's items.
      *
      * @param int  $limit
+     * @param int  $page
      * @param bool $withRelations
      *
      * @return ExploreCategory
@@ -560,8 +568,9 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
     {
         $models = Character::bornToday($limit)
             ->with($withRelations ? ['media', 'translation'] : [])
-            ->get();
+            ->cursorPaginate($limit);
 
+        $this->next_page_url = $models->nextPageUrl();
         $this->exploreCategoryItems = $models->map(function ($model) {
             return new ExploreCategoryItem([
                 'model' => $model,
@@ -575,6 +584,7 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
      * Append the people born today to the category's items
      *
      * @param int  $limit
+     * @param int  $page
      * @param bool $withRelations
      *
      * @return ExploreCategory
@@ -583,8 +593,9 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
     {
         $models = Person::bornToday($limit)
             ->with($withRelations ? ['media'] : [])
-            ->get();
+            ->cursorPaginate($limit);
 
+        $this->next_page_url = $models->nextPageUrl();
         $this->exploreCategoryItems = $models->map(function ($model) {
             return new ExploreCategoryItem([
                 'model' => $model,
@@ -607,9 +618,9 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
             ->selectRaw('MIN(id) as id, year, MAX(month) as month')
             ->orderBy('year', 'desc')
             ->groupBy('year')
-            ->limit($limit)
-            ->get();
+            ->cursorPaginate($limit);
 
+        $this->next_page_url = $models->nextPageUrl();
         $this->exploreCategoryItems = $models?->map(function ($model) {
             return new ExploreCategoryItem([
                 'model' => $model,
@@ -629,9 +640,9 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
     public function upNextEpisodes(int $limit = 10): ExploreCategory
     {
         $models = auth()->user()?->up_next_episodes()
-            ->limit($limit)
-            ->get();
+            ->cursorPaginate($limit);
 
+        $this->next_page_url = $models->nextPageUrl();
         $this->exploreCategoryItems = $models?->map(function ($model) {
             return new ExploreCategoryItem([
                 'model' => $model,
