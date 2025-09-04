@@ -559,7 +559,6 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
      * Append the characters born today to the category's items.
      *
      * @param int  $limit
-     * @param int  $page
      * @param bool $withRelations
      *
      * @return ExploreCategory
@@ -584,7 +583,6 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
      * Append the people born today to the category's items
      *
      * @param int  $limit
-     * @param int  $page
      * @param bool $withRelations
      *
      * @return ExploreCategory
