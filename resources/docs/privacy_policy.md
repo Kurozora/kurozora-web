@@ -116,6 +116,16 @@ We do our very best to protect your data as much as we can. However, as with any
 Kurozora does not take any decisions involving the use of algorithms or profiling that significantly affect you.
 <div></div>
 
+## Use of Artificial Intelligence (AI)
+Kurozora may utilize artificial intelligence (AI) technologies in limited ways to support and enhance the functionality of its services, such as recommendation systems, content classification, or moderation assistance.
+<div></div>
+
+Kurozora does not use generative AI to create artistic or creative works within its services. Furthermore, Kurozora does not use, license, or permit the use of user submissions — including but not limited to artwork, text, audiovisual content, or other creative material — for the training, fine-tuning, or improvement of generative AI models, whether internal or third-party.
+<div></div>
+
+Any AI technologies employed by Kurozora are restricted to operational purposes that do not involve exploiting user content for model training.
+<div></div>
+
 ## Integrity and Retention of Personal Information
 Kurozora makes it easy for you to keep your personal information accurate, complete, and up to date. We will retain your personal information for the period necessary to fulfil the purposes outlined in this Privacy Policy and our service specific privacy summaries. When assessing these periods we carefully examine our need to collect personal information at all and if we establish a relevant need we only retain it for the shortest possible period to realize the purpose of collection unless a longer retention period is required by law.
 <div></div>
