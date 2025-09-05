@@ -39,9 +39,11 @@
                         @svg('gamecontroller', 'fill-current', ['width' => '18']) {{ __('Game') }}
                     </x-sidebar-nav-link>
 
+                    @if (app()->isLocal())
                     <x-sidebar-nav-link href="#">
                         @svg('person_tv', 'fill-current', ['width' => '18']) {{ __('Live Action') }}
                     </x-sidebar-nav-link>
+                    @endif
 
                     <x-sidebar-nav-link href="{{ route('songs.index') }}" wire:navigate :active="request()->routeIs('songs.index')">
                         @svg('music_note', 'fill-current', ['width' => '18']) {{ __('Songs') }}

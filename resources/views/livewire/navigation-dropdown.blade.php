@@ -140,17 +140,19 @@
                             {{ __('Game') }}
                         </x-nav-link>
 
-{{--                        <x-nav-link class="hidden md:inline-flex" href="#"--}}
-{{--                                    x-show="! isSearchEnabled"--}}
-{{--                                    x-transition:enter="ease-out duration-150 delay-100 transform"--}}
-{{--                                    x-transition:enter-start="opacity-0 scale-75"--}}
-{{--                                    x-transition:enter-end="opacity-100 scale-100"--}}
-{{--                                    x-transition:leave="ease-in duration-200 delay-300 transform"--}}
-{{--                                    x-transition:leave-start="opacity-100 scale-100"--}}
-{{--                                    x-transition:leave-end="opacity-0 scale-75"--}}
-{{--                        >--}}
-{{--                            {{ __('Live Action') }}--}}
-{{--                        </x-nav-link>--}}
+                        @if (app()->isLocal())
+                        <x-nav-link class="hidden md:inline-flex" href="#"
+                                    x-show="! isSearchEnabled"
+                                    x-transition:enter="ease-out duration-150 delay-100 transform"
+                                    x-transition:enter-start="opacity-0 scale-75"
+                                    x-transition:enter-end="opacity-100 scale-100"
+                                    x-transition:leave="ease-in duration-200 delay-300 transform"
+                                    x-transition:leave-start="opacity-100 scale-100"
+                                    x-transition:leave-end="opacity-0 scale-75"
+                        >
+                            {{ __('Live Action') }}
+                        </x-nav-link>
+                        @endif
 
                         <x-nav-link class="hidden md:inline-flex" href="{{ route('songs.index') }}" wire:navigate :active="request()->routeIs('songs.index')"
                                     x-show="! isSearchEnabled"
