@@ -167,6 +167,11 @@ class EpisodeSpider extends BasicSpider
     {
         logger()->channel('stderr')->info('🕷 [tvdb_id:' . $this->tvdbID . '] Parsing episode response');
 
+        if ($response->getStatus() >= 400) {
+            logger()->error('Episode: ' . $response->getUri() . ';status:' . $response->getStatus());
+            return $this->item([]);
+        }
+
         // Title and synopsis
         $translations = $response->filter('div#translations div[data-language]')
             ->each(function (Crawler $item) {

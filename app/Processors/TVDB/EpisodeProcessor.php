@@ -94,13 +94,13 @@ class EpisodeProcessor implements ItemProcessorInterface
                     'is_nsfw' => $season->is_nsfw,
                 ], $translations);
                 if ($episodeStartedAtDateTime) {
-                    $episodeAttributes['started_at'] = $episodeStartedAtDateTime;
+                    $episodeAttributes['started_at'] = $episodeStartedAtDateTime->unix();
                 }
                 if ($episodeEndedAtDateTime) {
-                    $episodeAttributes['ended_at'] = $episodeEndedAtDateTime;
+                    $episodeAttributes['ended_at'] = $episodeEndedAtDateTime->unix();
                 }
 
-                // Update or create episode
+                // Update or create the episode
                 $episode = $season->episodes()->updateOrCreate([
                     'number' => $episodeNumber
                 ], $episodeAttributes);
@@ -168,7 +168,11 @@ class EpisodeProcessor implements ItemProcessorInterface
                 $synopsis = empty($translation['synopsis'])
                     ? null
                     : $translation['synopsis'];
-                logger()->channel('stderr')->info('title: ' . $title . ', number: ' . $number . ', coder:' . $code);
+                logger()->channel('stderr')->info('title: ' . $title . ', number: ' . $number . ', code: ' . $code);
+
+                if (strtolower($title) === 'tba') {
+                    $title = $code === 'jpn' ? ('第' . $number . '話') : ('Episode ' . $number);
+                }
 
                 $cleanTranslations[$language->code] = [
                     'title' => $title,
@@ -268,8 +272,9 @@ class EpisodeProcessor implements ItemProcessorInterface
     {
         try {
             $date = Carbon::createFromFormat('M d, Y', $value);
+
             if ($date) {
-                return $date;
+                return $date->shiftTimezone('Asia/Tokyo');
             }
         } catch (Exception $exception) {
             logger()->error('getStartedAt error: ' . $exception->getMessage());
@@ -331,10 +336,10 @@ class EpisodeProcessor implements ItemProcessorInterface
 
         try {
             $animeAirTime = Carbon::createFromFormat('H:i:s', $anime->air_time, 'Asia/Tokyo');
-        } catch (InvalidFormatException $invalidFormatException) {
+        } catch (InvalidFormatException) {
             try {
                 $animeAirTime = Carbon::createFromFormat('H:i', $anime->air_time, 'Asia/Tokyo');
-            } catch (InvalidFormatException $invalidFormatException) {
+            } catch (InvalidFormatException) {
                 $animeAirTime = null;
             }
         }

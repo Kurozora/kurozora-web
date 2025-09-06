@@ -466,20 +466,76 @@ class AnimeSpider extends BasicSpider
                 $artist = empty($artist) ? '' : $artist[0];
 
                 // Get episodes
-                $regex = '/\(([^)]+)\)$/';
-                preg_match($regex, $artist, $episodes);
-                $episodes = empty($episodes) ? '' : $episodes[0];
-                $episodes = str($episodes)->remove(['(', 'eps', 'ep', ')']);
+                $episodes = $this->normalizeEpisodes($artist);
 
-                // Done with episode, clean artist string
+                // Done with episodes, clean artist string
                 $artist = str($artist)
-                    ->replaceMatches($regex, '')
                     ->remove(['by', ' ']);
 
                 $malSong['title'] = empty($title) ? null : trim($title);
                 $malSong['artist'] = empty($artist) ? null : trim($artist);
-                $malSong['episodes'] = empty($episodes) ? null : trim($episodes);
+                $malSong['episodes'] = empty($episodes) ? null : $episodes;
                 return $malSong;
             });
+    }
+
+    /**
+     *
+     *
+     * @param string $artistText
+     *
+     * @return null|string
+     */
+    private function normalizeEpisodes(string $artistText): ?string
+    {
+        preg_match_all('/\(([^)]+)\)/', $artistText, $matches);
+
+        if (empty($matches[1])) {
+            return null;
+        }
+
+        $episodes = [];
+        foreach ($matches[1] as $raw) {
+            $text = trim($raw);
+
+            // Skip if empty
+            if ($text === '') {
+                continue;
+            }
+
+            // Contains numbers → likely episode info
+            if (preg_match('/\d/', $text)) {
+                // Clean prefixes
+                $text = preg_replace('/^Episodes?\s*/i', '', $text);
+
+                // Normalize conjunctions
+                $text = str_replace([' and ', ';'], [',', ','], $text);
+
+                // Handle "#-current"
+                $text = preg_replace('/(\d+)\s*-\s*current/i', '$1-current', $text);
+
+                // If the text has extra descriptors
+                if (preg_match('/(.*?)(\d.*)/', $text, $parts)) {
+                    $label = trim($parts[1]);
+                    $nums = trim($parts[2]);
+
+                    if ($label !== '') {
+                        $episodes[] = "$nums ($label)";
+                    } else {
+                        $episodes[] = $nums;
+                    }
+                } else {
+                    $episodes[] = $text;
+                }
+            } else {
+                // No numbers → make empty
+                $episodes[] = null;
+            }
+        }
+
+        // Combine and normalize
+        $episodes = implode(', ', array_filter($episodes));
+
+        return $episodes ? str($episodes)->remove(['(', 'eps', 'ep', ')'])->trim() : null;
     }
 }

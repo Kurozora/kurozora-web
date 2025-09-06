@@ -285,6 +285,7 @@ class AnimeProcessor extends CustomItemProcessor
      * Get the attribute
      *
      * @param string $attributeKey
+     *
      * @return array|int|Stringable|string|null
      */
     private function getAttribute(string $attributeKey): array|int|Stringable|string|null
@@ -351,6 +352,7 @@ class AnimeProcessor extends CustomItemProcessor
      * Cleans the attribute of unnecessary string.
      *
      * @param string $attribute
+     *
      * @return string
      */
     private function getCleanAttribute(string $attribute): string
@@ -363,6 +365,7 @@ class AnimeProcessor extends CustomItemProcessor
      * Get the media type.
      *
      * @param string $value
+     *
      * @return int
      */
     private function getMediaType(string $value): int
@@ -381,6 +384,7 @@ class AnimeProcessor extends CustomItemProcessor
      * Get the status.
      *
      * @param string $value
+     *
      * @return int
      */
     private function getStatus(string $value): int
@@ -399,6 +403,7 @@ class AnimeProcessor extends CustomItemProcessor
      * Get the source.
      *
      * @param string $value
+     *
      * @return int
      */
     private function getSource(string $value): int
@@ -416,6 +421,7 @@ class AnimeProcessor extends CustomItemProcessor
      * Get tv rating.
      *
      * @param string $value
+     *
      * @return TvRating
      */
     private function getRating(string $value): TvRating
@@ -445,6 +451,7 @@ class AnimeProcessor extends CustomItemProcessor
      * Get the duration of the anime.
      *
      * @param string $value
+     *
      * @return int
      */
     private function getDuration(string $value): int
@@ -486,8 +493,9 @@ class AnimeProcessor extends CustomItemProcessor
     /**
      * Add the given genre to the anime if necessary.
      *
-     * @param array|null $genres
+     * @param array|null       $genres
      * @param Model|Anime|null $anime
+     *
      * @return void
      */
     private function addGenres(?array $genres, Model|Anime|null $anime): void
@@ -497,7 +505,7 @@ class AnimeProcessor extends CustomItemProcessor
         }
 
         foreach ($genres as $genreID => $genreName) {
-            preg_match('/((?:^|[A-Z])[a-z]+)/', $genreName,$genreName);
+            preg_match('/((?:^|[A-Z])[a-z]+)/', $genreName, $genreName);
             $genreName = implode('', array_unique($genreName));
 
             $genre = Genre::withoutGlobalScopes()
@@ -521,8 +529,9 @@ class AnimeProcessor extends CustomItemProcessor
     /**
      * Add the given theme to the anime if necessary.
      *
-     * @param array|null $themes
+     * @param array|null       $themes
      * @param Model|Anime|null $anime
+     *
      * @return void
      */
     private function addThemes(?array $themes, Model|Anime|null $anime): void
@@ -532,7 +541,7 @@ class AnimeProcessor extends CustomItemProcessor
         }
 
         foreach ($themes as $themeID => $themeName) {
-            preg_match('/((?:^|[A-Z])[a-z]+)/', $themeName,$themeName);
+            preg_match('/((?:^|[A-Z])[a-z]+)/', $themeName, $themeName);
             $themeName = implode('', array_unique($themeName));
 
             $theme = Theme::withoutGlobalScopes()
@@ -556,9 +565,10 @@ class AnimeProcessor extends CustomItemProcessor
     /**
      * Add the given studios to the anime if necessary.
      *
-     * @param array|null $malStudios
+     * @param array|null       $malStudios
      * @param Model|Anime|null $anime
-     * @param string $attribute
+     * @param string           $attribute
+     *
      * @return void
      */
     private function addStudios(?array $malStudios, Model|Anime|null $anime, string $attribute): void
@@ -602,6 +612,7 @@ class AnimeProcessor extends CustomItemProcessor
      * Get the first airing date of the anime.
      *
      * @param string $aired
+     *
      * @return Carbon|null
      */
     private function getStartedAt(string $aired): ?Carbon
@@ -614,6 +625,7 @@ class AnimeProcessor extends CustomItemProcessor
      * Get the last airing date of the anime.
      *
      * @param string $aired
+     *
      * @return Carbon|null
      */
     private function getEndedAt(string $aired): ?Carbon
@@ -627,6 +639,7 @@ class AnimeProcessor extends CustomItemProcessor
      *
      * @param string $regex
      * @param string $aired
+     *
      * @return Carbon|null
      */
     private function getAirDate(string $regex, string $aired): ?Carbon
@@ -667,6 +680,7 @@ class AnimeProcessor extends CustomItemProcessor
      * Get the synonym titles.
      *
      * @param Model|Anime|null $anime
+     *
      * @return array|null
      */
     private function getSynonymTitles(Model|Anime|null $anime): ?array
@@ -682,11 +696,12 @@ class AnimeProcessor extends CustomItemProcessor
      * The synopsis of the anime.
      *
      * @param string|null $synopsis
+     *
      * @return ?string
      */
     private function getSynopsis(?string $synopsis): ?string
     {
-        $synopsis = empty(trim($synopsis)) ? null: $synopsis;
+        $synopsis = empty(trim($synopsis)) ? null : $synopsis;
 
         if (!empty($synopsis)) {
             if (str($synopsis)->contains('No synopsis information')) {
@@ -737,6 +752,7 @@ class AnimeProcessor extends CustomItemProcessor
      * Get the air time.
      *
      * @param string|null $broadcast
+     *
      * @return string|null
      */
     private function getAirTime(?string $broadcast): ?string
@@ -754,6 +770,7 @@ class AnimeProcessor extends CustomItemProcessor
      * Get the air season.
      *
      * @param Carbon|null $startedAt
+     *
      * @return int
      */
     private function getAirSeason(?Carbon $startedAt): int
@@ -764,8 +781,9 @@ class AnimeProcessor extends CustomItemProcessor
     /**
      * Add related media.
      *
-     * @param array|null $relations
+     * @param array|null       $relations
      * @param Model|Anime|null $anime
+     *
      * @return void
      */
     private function addRelations(?array $relations, Model|Anime|null $anime): void
@@ -843,9 +861,10 @@ class AnimeProcessor extends CustomItemProcessor
     /**
      * Add related songs.
      *
-     * @param SongType $songType
-     * @param array|null $malSongs
+     * @param SongType         $songType
+     * @param array|null       $malSongs
      * @param Model|Anime|null $anime
+     *
      * @return void
      */
     private function addSongs(SongType $songType, ?array $malSongs, Model|Anime|null $anime): void
@@ -859,52 +878,161 @@ class AnimeProcessor extends CustomItemProcessor
                 continue;
             }
 
-            $song = Song::where('mal_id', '=', $malSong['mal_id']);
+            // Try to find the song by identifiers
+            $song = Song::when($malSong['mal_id'], fn($q) => $q->orWhere('mal_id', $malSong['mal_id']))
+                ->when($malSong['amazon_id'], fn($q) => $q->orWhere('amazon_id', '=', $malSong['amazon_id']))
+                ->when($malSong['am_id'], fn($q) => $q->orWhere('am_id', '=', $malSong['am_id']))
+                ->when($malSong['spotify_id'], fn($q) => $q->orWhere('spotify_id', '=', $malSong['spotify_id']))
+                ->when($malSong['youtube_id'], fn($q) => $q->orWhere('youtube_id', '=', $malSong['youtube_id']))
+                ->first();
 
-            if (!empty($malSong['amazon_id'])) {
-                $song->orWhere('amazon_id', '=', $malSong['amazon_id']);
-            }
-            if (!empty($malSong['am_id'])) {
-                $song->orWhere('am_id', '=', $malSong['am_id']);
-            }
-            if (!empty($malSong['spotify_id'])) {
-                $song->orWhere('spotify_id', '=', $malSong['spotify_id']);
-            }
-            if (!empty($malSong['youtube_id'])) {
-                $song->orWhere('youtube_id', '=', $malSong['youtube_id']);
+            // Fuzzy match by title and artist if not found
+            if (!$song && !empty($malSong['artist'])) {
+                $normalizedTitle = $this->normalizeString($malSong['title']);
+                $normalizedArtist = str($malSong['artist'])
+                    ->trim()->lower();
+
+                $possibleSongs = Song::whereRaw('LOWER(artist) = ?', [$normalizedArtist])
+                    ->get();
+
+                foreach ($possibleSongs as $candidate) {
+                    $dbTitle = $this->normalizeString($candidate->original_title);
+
+                    $distance = levenshtein($dbTitle, $normalizedTitle);
+
+                    // Dynamic threshold: max(2, 10% of length)
+                    $threshold = max(2, (int) round(strlen($normalizedTitle) * 0.1));
+
+                    if ($distance <= $threshold) {
+                        $song = $candidate;
+                        break;
+                    }
+                }
             }
 
-            $song = $song->first();
-
-            if (empty($song)) {
-                $song = Song::create([
-                    'mal_id' => $malSong['mal_id'],
-                    'amazon_id' => $malSong['amazon_id'],
-                    'am_id' => $malSong['am_id'],
-                    'spotify_id' => $malSong['spotify_id'],
-                    'youtube_id' => $malSong['youtube_id'],
-                    'original_title' => $malSong['title'],
-                    'artist' => $malSong['artist'],
-                ]);
+            // Create a new song if still not found
+            if (!$song) {
+                $song = new Song();
             }
 
-            MediaSong::updateOrCreate([
+            // Always update mal_id if not null
+            if (!empty($malSong['mal_id'])) {
+                $song->mal_id = $malSong['mal_id'];
+            }
+
+            // Normalize title
+            $title = $malSong['title'];
+            $romajiTitle = trim(preg_replace('/\s*\(.*?\)\s*/u', '', $title));
+
+            preg_match('/\((.*?)\)/u', $title, $matches);
+            $parenthesisTitle = $matches[1] ?? null;
+
+            // Guess the locale of the title
+            $localeMap = [];
+
+            if ($parenthesisTitle) {
+                if (preg_match('/[一-龯]/u', $parenthesisTitle)) {
+                    $localeMap['ja'] = ['title' => $parenthesisTitle]; // Japanese
+                } else if (preg_match('/\p{Hangul}/u', $parenthesisTitle)) {
+                    $localeMap['ko'] = ['title' => $parenthesisTitle]; // Korean
+                } else if (preg_match('/\p{Han}/u', $parenthesisTitle)) {
+                    $localeMap['zh'] = ['title' => $parenthesisTitle]; // Chinese
+                }
+            }
+
+            // Always add an English title
+            $localeMap['en'] = ['title' => $romajiTitle];
+
+            // Fallback to Japanese if no other locale detected
+            if (!isset($localeMap['ja']) && !isset($localeMap['zh']) && !isset($localeMap['ko']) && $parenthesisTitle) {
+                $localeMap['ja'] = ['title' => $parenthesisTitle];
+            }
+
+            // Normalize artist name
+            if (!empty($malSong['artist'])) {
+                $artistName = $malSong['artist'];
+                $normalizedArtist = trim(preg_replace('/\s*\(.*?\)\s*/u', '', $artistName));
+            } else {
+                $normalizedArtist = 'Unknown';
+            }
+
+            $this->updateIfEmpty($song, [
+                'mal_id' => $malSong['mal_id'] ?? null,
+                'amazon_id' => $malSong['amazon_id'] ?? null,
+                'am_id' => $malSong['am_id'] ?? null,
+                'spotify_id' => $malSong['spotify_id'] ?? null,
+                'youtube_id' => $malSong['youtube_id'] ?? null,
+                'original_title' => $romajiTitle,
+                'artist' => $normalizedArtist,
+            ]);
+
+            if (count($localeMap)) {
+                $song->update($localeMap);
+            }
+
+            // Create or update MediaSong relation
+            $mediaSong = MediaSong::firstOrNew([
                 'model_type' => $anime?->getMorphClass(),
                 'model_id' => $anime?->id,
                 'song_id' => $song->id,
                 'type' => $songType->value,
-            ], [
-                'position' => $key + 1,
-                'episodes' => $malSong['episodes']
+            ]);
+            $mediaSong->update(['position' => $key + 1]);
+
+            $this->updateIfEmpty($mediaSong, [
+                'episodes' => $malSong['episodes'],
             ]);
         }
     }
 
     /**
+     * Update the song only if the fields are empty.
+     *
+     * @param Model $song
+     * @param array $data
+     *
+     * @return void
+     */
+    private function updateIfEmpty(Model $song, array $data): void
+    {
+        $dirty = false;
+
+        foreach ($data as $field => $value) {
+            if (!empty($value) && empty($song->{$field})) {
+                $song->{$field} = $value;
+                $dirty = true;
+            }
+        }
+
+        if ($dirty) {
+            $song->save();
+        }
+    }
+
+    /**
+     * Normalize a string for fuzzy matching.
+     *
+     * @param string|null $value
+     *
+     * @return string
+     */
+    private function normalizeString(?string $value): string
+    {
+        return str($value ?? '')
+            ->ascii() // convert accented/full-width chars
+            ->lower()
+            ->replaceMatches('/[[:punct:]]+/', '') // strip punctuation
+            ->replaceMatches('/\s+/', ' ') // collapse spaces
+            ->trim()
+            ->value();
+    }
+
+    /**
      * Download and link the given image to the specified anime.
      *
-     * @param string|null $imageURL
+     * @param string|null         $imageURL
      * @param Model|Builder|Anime $anime
+     *
      * @return void
      */
     private function addPosterImage(?string $imageURL, Model|Builder|Anime $anime): void
@@ -922,6 +1050,7 @@ class AnimeProcessor extends CustomItemProcessor
      * Determines whether the anime is NSFW.
      *
      * @param TvRating $tvRating
+     *
      * @return bool
      */
     private function getIsNSFW(TvRating $tvRating): bool

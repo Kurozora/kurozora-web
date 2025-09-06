@@ -53,7 +53,8 @@ class CharacterProcessor extends CustomItemProcessor
             $character = Character::withoutGlobalScopes()
                 ->create([
                     'mal_id' => $malID,
-                    'name' => $name,                    'ja' => [
+                    'name' => $name,
+                    'ja' => [
                         'name' => $japaneseName,
                         'about' => null
                     ],
