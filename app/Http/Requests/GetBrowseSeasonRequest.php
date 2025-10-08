@@ -2,9 +2,11 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\BrowseSeasonKind;
+use App\Models\MediaType;
 use Illuminate\Foundation\Http\FormRequest;
 
-class GetGameMoreByStudioRequest extends FormRequest
+class GetBrowseSeasonRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +26,9 @@ class GetGameMoreByStudioRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'limit' => ['bail', 'integer', 'min:1', 'max:100'],
-            'page'  => ['bail', 'integer', 'min:1']
+            'kind' => ['bail', 'nullable', 'integer', 'in:' . implode(',', BrowseSeasonKind::getValues())],
+            'mediaTypes' => ['bail', 'nullable', 'array'],
+            'mediaTypes.*' => ['bail', 'integer', 'exists:' . MediaType::TABLE_NAME . ',id'],
         ];
     }
 }
