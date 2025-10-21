@@ -618,7 +618,7 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
             ->groupBy('year')
             ->cursorPaginate($limit);
 
-        $this->next_page_url = $models->nextPageUrl();
+        $this->next_page_url = $models?->nextPageUrl();
         $this->exploreCategoryItems = $models?->map(function ($model) {
             return new ExploreCategoryItem([
                 'model' => $model,
@@ -640,7 +640,7 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
         $models = auth()->user()?->up_next_episodes()
             ->cursorPaginate($limit);
 
-        $this->next_page_url = $models->nextPageUrl();
+        $this->next_page_url = $models?->nextPageUrl();
         $this->exploreCategoryItems = $models?->map(function ($model) {
             return new ExploreCategoryItem([
                 'model' => $model,
