@@ -58,6 +58,10 @@ class AppServiceProvider extends ServiceProvider
         Event::listen(SocialiteWasCalled::class, AppleExtendSocialite::class.'@handle');
 
         /// Register gates
+        Gate::define('viewPulse', function (User $user) {
+            return $user->hasRole('superAdmin');
+        });
+
         Gate::before(function (User $user, $ability) {
             return $user->hasRole('superAdmin') ? true : null;
         });
@@ -81,7 +85,7 @@ class AppServiceProvider extends ServiceProvider
         }
 
         if ($this->app->hasDebugModeEnabled()) {
-            /// This snippet logs the amount of executed queries per request
+            /// This snippet logs the number of executed queries per request
             /// to the config.
             DB::listen(function (QueryExecuted $query) {
                 $currentConfigValue = Config::get(self::$queryCountConfigKey);
