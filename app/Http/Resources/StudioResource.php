@@ -24,9 +24,16 @@ class StudioResource extends JsonResource
     public function toArray(Request $request): array
     {
         $resource = StudioResourceBasic::make($this->resource)->toArray($request);
+        $include = $request->input('include');
 
-        if ($request->input('include')) {
-            $includes = array_unique(explode(',', $request->input('include')));
+        if ($include) {
+            if (is_string($include)) {
+                $includes = array_unique(explode(',', $include));
+            } else if (is_array($include)) {
+                $includes = $include;
+            } else {
+                $includes = [];
+            }
 
             $relationships = [];
             foreach ($includes as $include) {
@@ -40,7 +47,9 @@ class StudioResource extends JsonResource
                 };
             }
 
-            $resource = array_merge($resource, ['relationships' => $relationships]);
+            if (count($relationships)) {
+                $resource = array_merge($resource, ['relationships' => $relationships]);
+            }
         }
 
         return $resource;
@@ -85,7 +94,7 @@ class StudioResource extends JsonResource
     {
         return [
             'shows' => [
-                'href' => route('.studios.anime', $this->resource, false),
+                'href' => route('api.studios.anime', $this->resource, false),
                 'data' => AnimeResourceIdentity::collection($this->resource->anime)
             ]
         ];

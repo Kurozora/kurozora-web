@@ -34,8 +34,16 @@ class MediaSongResourceBasic extends JsonResource
             ]
         ]);
 
-        if ($request->input('include')) {
-            $includes = array_unique(explode(',', $request->input('include')));
+        $include = $request->input('include');
+
+        if ($include) {
+            if (is_string($include)) {
+                $includes = array_unique(explode(',', $include));
+            } else if (is_array($include)) {
+                $includes = $include;
+            } else {
+                $includes = [];
+            }
 
             foreach ($includes as $include) {
                 switch ($include) {

@@ -24,9 +24,16 @@ class SongResource extends JsonResource
     public function toArray(Request $request): array
     {
         $resource = SongResourceBasic::make($this->resource)->toArray($request);
+        $include = $request->input('include');
 
-        if ($request->input('include')) {
-            $includes = array_unique(explode(',', $request->input('include')));
+        if ($include) {
+            if (is_string($include)) {
+                $includes = array_unique(explode(',', $include));
+            } else if (is_array($include)) {
+                $includes = $include;
+            } else {
+                $includes = [];
+            }
 
             $relationships = [];
             foreach ($includes as $include) {
@@ -37,7 +44,9 @@ class SongResource extends JsonResource
                 }
             }
 
-            $resource = array_merge($resource, ['relationships' => $relationships]);
+            if (count($relationships)) {
+                $resource = array_merge($resource, ['relationships' => $relationships]);
+            }
         }
 
         return $resource;
