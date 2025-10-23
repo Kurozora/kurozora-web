@@ -303,14 +303,14 @@ class MeController extends Controller
         $data = $request->validated();
 
         // Get the feed messages
-        $mediaRatings = auth()->user()->up_next_episodes($data['model_id'] ?? null)
+        $upNextEpisodes = auth()->user()?->up_next_episodes($data['model_id'] ?? null)
             ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
-        $nextPageURL = str_replace($request->root(), '', $mediaRatings->nextPageUrl() ?? '');
+        $nextPageURL = str_replace($request->root(), '', $upNextEpisodes?->nextPageUrl() ?? '');
 
         return JSONResult::success([
-            'data' => EpisodeResourceIdentity::collection($mediaRatings),
+            'data' => EpisodeResourceIdentity::collection($upNextEpisodes ?? collect()),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
