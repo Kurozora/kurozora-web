@@ -50,8 +50,6 @@ class CalculateRatings extends Command
      */
     public function handle(): int
     {
-        DB::disableQueryLog();
-
         $chunkSize = 1000;
         $class = $this->argument('model');
 
@@ -75,7 +73,6 @@ class CalculateRatings extends Command
 
         if ($class::minimumRatingsRequired() == 999999999) {
             $this->warn('Calculating ' . $class . ' ratings is blocked for now.');
-            DB::enableQueryLog();
             return Command::SUCCESS;
         }
 
@@ -187,8 +184,6 @@ class CalculateRatings extends Command
                     });
                 });
             });
-
-        DB::enableQueryLog();
 
         return Command::SUCCESS;
     }

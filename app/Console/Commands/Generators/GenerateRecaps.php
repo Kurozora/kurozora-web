@@ -71,7 +71,6 @@ class GenerateRecaps extends Command
             Theme::class,
         ]);
 
-        DB::disableQueryLog();
         User::withoutGlobalScopes()
             ->when($user != 'all', function (Builder $query) use ($user) {
                 $query->where('id', '=', $user);
@@ -443,7 +442,6 @@ class GenerateRecaps extends Command
                     });
                 });
         });
-        DB::enableQueryLog();
 
         return Command::SUCCESS;
     }

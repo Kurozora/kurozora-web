@@ -51,8 +51,6 @@ class CalculateRankings extends Command
             return Command::FAILURE;
         }
 
-        DB::disableQueryLog();
-
         if ($class === 'all') {
             MediaStat::withoutGlobalScopes()
                 ->distinct()
@@ -100,8 +98,6 @@ class CalculateRankings extends Command
                 $page++;
             });
         });
-
-        DB::enableQueryLog();
 
         return Command::SUCCESS;
     }

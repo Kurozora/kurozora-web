@@ -33,8 +33,6 @@ class AnimeAiringSeason extends Command
     {
         $year = $this->argument('year') ?? now()->year;
 
-        DB::disableQueryLog();
-
         Anime::where([
             ['started_at', '!=', null],
         ])
@@ -54,8 +52,6 @@ class AnimeAiringSeason extends Command
                     DB::rollBack();
                 }
             });
-
-        DB::enableQueryLog();
 
         return Command::SUCCESS;
     }

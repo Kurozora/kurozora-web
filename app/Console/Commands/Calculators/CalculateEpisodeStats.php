@@ -41,8 +41,6 @@ class CalculateEpisodeStats extends Command
      */
     public function handle(): int
     {
-        DB::disableQueryLog();
-
         $chunkSize = 100;
         $model = Episode::withoutGlobalScopes();
 
@@ -86,8 +84,6 @@ class CalculateEpisodeStats extends Command
             });
 
         $bar->finish();
-
-        DB::enableQueryLog();
 
         return Command::SUCCESS;
     }

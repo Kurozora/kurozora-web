@@ -46,8 +46,6 @@ class CalculateLibraryStats extends Command
      */
     public function handle(): int
     {
-        DB::disableQueryLog();
-
         $chunkSize = 100;
         $class = $this->argument('model');
 
@@ -155,8 +153,6 @@ class CalculateLibraryStats extends Command
             });
 
         $bar->finish();
-
-        DB::enableQueryLog();
 
         return Command::SUCCESS;
     }

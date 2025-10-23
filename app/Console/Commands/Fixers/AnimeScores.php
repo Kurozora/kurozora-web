@@ -4,7 +4,6 @@ namespace App\Console\Commands\Fixers;
 
 use App\Models\Anime;
 use App\Models\MediaStat;
-use DB;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 
@@ -31,8 +30,6 @@ class AnimeScores extends Command
      */
     public function handle(): int
     {
-        DB::disableQueryLog();
-
         Anime::withoutGlobalScopes()
             ->without(['genres', 'media', 'mediaStat', 'tv_rating', 'translations'])
             ->join(MediaStat::TABLE_NAME, MediaStat::TABLE_NAME . '.model_id', '=', Anime::TABLE_NAME . '.id')
@@ -54,8 +51,6 @@ class AnimeScores extends Command
             ->chunkById(5, function (Collection $animes) use (&$skip) {
                 $this->call('scrape:mal_anime', ['malID' => $animes->pluck('mal_id')->join(',')]);
             }, Anime::TABLE_NAME . '.id', 'AS');
-
-        DB::enableQueryLog();
 
         return Command::SUCCESS;
     }

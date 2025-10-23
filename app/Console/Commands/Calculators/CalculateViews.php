@@ -39,8 +39,6 @@ class CalculateViews extends Command
      */
     public function handle(): int
     {
-        DB::disableQueryLog();
-
         $chunkSize = 50;
         $class = $this->argument('model');
 
@@ -116,8 +114,6 @@ class CalculateViews extends Command
             }, 'viewable_id');
 
         $bar->finish();
-
-        DB::enableQueryLog();
 
         return Command::SUCCESS;
     }

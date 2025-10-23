@@ -50,8 +50,6 @@ class GenerateSitemap extends Command
      */
     public function handle(): int
     {
-        DB::disableQueryLog();
-
         // Prepare sitemap index
         $sitemapIndex = SitemapIndex::create();
 
