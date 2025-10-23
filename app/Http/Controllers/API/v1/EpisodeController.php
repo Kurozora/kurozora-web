@@ -98,6 +98,7 @@ class EpisodeController extends Controller
                             'translation'
                         ]);
                     },
+                    'tv_rating',
                     'translation',
                     'videos',
                 ])
