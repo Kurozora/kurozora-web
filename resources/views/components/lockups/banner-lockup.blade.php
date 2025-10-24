@@ -16,23 +16,26 @@
                 height="{{ ($anime->getFirstMedia(\App\Enums\MediaCollection::Banner) ?? $anime->getFirstMedia(\App\Enums\MediaCollection::Poster))?->custom_properties['height'] ?? 300 }}"
             >
 
-            <div
-                class="absolute bottom-0 left-0 right-0 pr-3 pb-3 pl-3 bg-gradient-to-t from-black to-transparent"
-                style="padding-top: 15%;"
-            >
-                <div class="max-w-[50%]">
-                    <p class="text-white leading-tight line-clamp-2" title="{{ $anime->title }}">{{ $anime->title }}</p>
-                    <p class="text-xs text-white/60 leading-tight line-clamp-2" title="{{ empty($anime->tagline) ? $anime->genres?->pluck('name')->join(', ', ' and ') : $anime->tagline }}">{{ empty($anime->tagline) ? $anime->genres?->pluck('name')->join(', ', ' and ') : $anime->tagline }}</p>
-                </div>
-            </div>
-
             <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20"></div>
         </picture>
+
+        <article
+            class="absolute bottom-0 left-0 right-0 pr-3 pb-3 pl-3"
+            style="padding-top: 15%; background: linear-gradient(transparent, {{ $anime->getFirstMedia(\App\Enums\MediaCollection::Banner)?->custom_properties['background_color'] ?? 'var(--bg-primary-color)' }}); mask-image: linear-gradient(to top, black 50%, transparent); backdrop-filter: blur(8px);"
+        >
+            <div
+                class="max-w-[50%] text-pretty text-balance text-break"
+                style="color: {{ $anime->getFirstMedia(\App\Enums\MediaCollection::Banner)?->custom_properties['background_color'] ?? 'var(--bg-primary-color)' }}; filter: invert(1) grayscale(1) brightness(1.3) contrast(9000); mix-blend-mode: luminosity;"
+            >
+                <p class="text-lg font-semibold leading-tight line-clamp-2 md:text-4xl" title="{{ $anime->title }}">{{ $anime->title }}</p>
+                <p class="opacity-75 text-xs leading-tight line-clamp-2 md:text-lg" title="{{ empty($anime->tagline) ? $anime->genres?->pluck('name')->join(', ', ' and ') : $anime->tagline }}">{{ empty($anime->tagline) ? $anime->genres?->pluck('name')->join(', ', ' and ') : $anime->tagline }}</p>
+            </div>
+        </article>
     </div>
 
     <a class="absolute bottom-0 w-full h-full" href="{{ route('anime.details', $anime) }}" wire:navigate></a>
 
-    <div class="absolute bottom-0 right-0 pt-3 pr-3 pl-3 pb-5">
+    <div class="absolute bottom-0 right-0 pt-3 pr-3 pl-3 pb-3">
         <div class="flex h-10 mt-auto">
             <livewire:components.library-button :model="$anime" wire:key="{{ uniqid($anime->id, true) }}" />
         </div>

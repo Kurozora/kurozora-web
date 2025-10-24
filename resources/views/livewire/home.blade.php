@@ -60,7 +60,7 @@
                         x-init="startAutoScroll()"
                     >
                         <div
-                            class="flex flex-nowrap snap-mandatory snap-x aspect-video overflow-x-scroll no-scrollbar natural-shadow-lg xl:rounded-b-2xl xl:ml-40 xl:mr-40"
+                            class="flex flex-nowrap snap-mandatory snap-x aspect-video overflow-x-scroll no-scrollbar xl:rounded-b-2xl"
                             x-ref="scrollContainer"
                             @mouseenter="pauseAutoScroll()"
                             @mouseleave="resumeAutoScroll()"
@@ -72,17 +72,17 @@
                         </div>
 
                         {{-- Play/Pause Button --}}
-                        <div class="absolute top-4 right-4 xl:mr-40">
+                        <div class="absolute top-4 right-4">
                             <button
-                                class="inline-flex items-center pt-3 pr-3 pb-3 pl-3 bg-blur backdrop-blur border border-transparent rounded-full font-semibold text-xs uppercase tracking-widest shadow-md hover:bg-tint-800 hover:btn-text-tinted active:bg-tint active:btn-text-tinted focus:outline-none disabled:bg-secondary disabled:text-gray-300 disabled:cursor-default disabled:opacity-100 transition ease-in-out duration-150"
+                                class="inline-flex items-center pt-2 pr-2 pb-2 pl-2 bg-blur backdrop-blur border border-transparent rounded-full font-semibold text-xs uppercase tracking-widest shadow-md hover:bg-tint-800 hover:btn-text-tinted active:bg-tint active:btn-text-tinted focus:outline-none disabled:bg-secondary disabled:text-gray-300 disabled:cursor-default disabled:opacity-100 transition ease-in-out duration-150"
                                 x-on:click="toggleAutoScroll()"
                             >
                                 <template x-if="isPlaying">
-                                    @svg('pause_fill', 'fill-current', ['width' => '24'])
+                                    @svg('pause_fill', 'fill-current', ['width' => '18'])
                                 </template>
 
                                 <template x-if="!isPlaying">
-                                    @svg('play_fill', 'fill-current', ['width' => '24'])
+                                    @svg('play_fill', 'fill-current', ['width' => '18'])
                                 </template>
                             </button>
                         </div>
