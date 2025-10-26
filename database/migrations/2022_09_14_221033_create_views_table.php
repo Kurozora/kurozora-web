@@ -17,7 +17,13 @@ return new class extends Migration
         Schema::create(View::TABLE_NAME, function (Blueprint $table) {
             $table->id();
             $table->morphs('viewable');
+            $table->string('ip_address');
             $table->timestamps();
+        });
+
+        Schema::table(View::TABLE_NAME, function (Blueprint $table) {
+            // Set index key constraints
+            $table->index(['viewable_id', 'viewable_type', 'ip_address', 'created_at']);
         });
     }
 
