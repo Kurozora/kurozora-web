@@ -7,6 +7,7 @@ use App\Enums\SearchType;
 use App\Events\ModelViewed;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\GetIndexRequest;
 use App\Http\Requests\GetMediaSongsRequest;
 use App\Http\Requests\GetPaginatedRequest;
 use App\Http\Requests\RateModelRequest;
@@ -39,31 +40,37 @@ class GameController extends Controller
     /**
      * Returns the games index.
      *
-     * @param Request $request
+     * @param GetIndexRequest $request
      *
      * @return JsonResponse
      * @throws AuthenticationException
      * @throws BindingResolutionException
      */
-    public function index(Request $request): JsonResponse
+    public function index(GetIndexRequest $request): JsonResponse
     {
-        // Override parameters
-        $request->merge([
-            'scope' => SearchScope::Kurozora,
-            'types' => [
-                SearchType::Games
-            ]
-        ]);
+        $data = $request->validated();
 
-        // Convert request type
-        $app = app();
-        $searchRequest = SearchRequest::createFrom($request)
-            ->setContainer($app) // Necessary or validation fails (validate on null)
-            ->setRedirector($app->make(Redirector::class)); // Necessary or validation failure fails (422)
-        $searchRequest->validateResolved(); // Necessary for preparing for validation
+        if (isset($data['ids'])) {
+            return $this->views($request);
+        } else {
+            // Override parameters
+            $request->merge([
+                'scope' => SearchScope::Kurozora,
+                'types' => [
+                    SearchType::Games
+                ]
+            ]);
 
-        return (new SearchController())
-            ->index($searchRequest);
+            // Convert request type
+            $app = app();
+            $searchRequest = SearchRequest::createFrom($request)
+                ->setContainer($app) // Necessary or validation fails (validate on null)
+                ->setRedirector($app->make(Redirector::class)); // Necessary or validation failure fails (422)
+            $searchRequest->validateResolved(); // Necessary for preparing for validation
+
+            return (new SearchController())
+                ->index($searchRequest);
+        }
     }
 
     /**
@@ -187,10 +194,127 @@ class GameController extends Controller
     }
 
     /**
+     * Returns detailed information of requested IDs.
+     *
+     * @param GetIndexRequest $request
+     *
+     * @return JsonResponse
+     */
+    public function views(GetIndexRequest $request): JsonResponse
+    {
+        $data = $request->validated();
+
+        $game = Game::whereIn('id', $data['ids']);
+        $game->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
+            ->when(auth()->user(), function ($query, $user) use ($game) {
+                $game->with(['mediaRatings' => function ($query) use ($user) {
+                    $query->where([
+                        ['user_id', '=', $user->id],
+                    ]);
+                }, 'library' => function ($query) use ($user) {
+                    $query->where('user_id', '=', $user->id);
+                }])
+                    ->withExists([
+                        'favoriters as isFavorited' => function ($query) use ($user) {
+                            $query->where('user_id', '=', $user->id);
+                        },
+                    ]);
+            });
+
+        $includeArray = [];
+        if ($includeInput = $request->input('include')) {
+            if (is_string($includeInput)) {
+                $includeInput = explode(',', $includeInput);
+            }
+            $includes = array_unique($includeInput);
+
+            foreach ($includes as $include) {
+                switch ($include) {
+                    case 'cast':
+                        $includeArray['cast'] = function ($query) {
+                            $query->limit(Game::MAXIMUM_RELATIONSHIPS_LIMIT);
+                        };
+                        break;
+                    case 'characters':
+                        $includeArray['characters'] = function ($query) {
+                            $query->with(['media', 'translation'])
+                                ->limit(Game::MAXIMUM_RELATIONSHIPS_LIMIT);
+                        };
+                        break;
+                    case 'related-shows':
+                        $includeArray['animeRelations'] = function ($query) {
+                            $query->with([
+                                'related' => function ($query) {
+                                    $query->withoutGlobalScopes([TvRatingScope::class])
+                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin']);
+                                },
+                                'relation'
+                            ])
+                                ->limit(Game::MAXIMUM_RELATIONSHIPS_LIMIT);
+                        };
+                        break;
+                    case 'related-literatures':
+                        $includeArray['mangaRelations'] = function ($query) {
+                            $query->with([
+                                'related' => function ($query) {
+                                    $query->withoutGlobalScopes([TvRatingScope::class])
+                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin']);
+                                },
+                                'relation'
+                            ])
+                                ->limit(Game::MAXIMUM_RELATIONSHIPS_LIMIT);
+                        };
+                        break;
+                    case 'related-games':
+                        $includeArray['gameRelations'] = function ($query) {
+                            $query->with([
+                                'related' => function ($query) {
+                                    $query->withoutGlobalScopes([TvRatingScope::class])
+                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin']);
+                                },
+                                'relation'
+                            ])
+                                ->limit(Game::MAXIMUM_RELATIONSHIPS_LIMIT);
+                        };
+                        break;
+                    case 'songs':
+                        $includeArray['mediaSongs'] = function ($query) {
+                            $query->with([
+                                'song' => function ($query) {
+                                    $query->with(['media', 'mediaStat', 'translation']);
+                                },
+                                'model'
+                            ])
+                                ->limit(Game::MAXIMUM_RELATIONSHIPS_LIMIT);
+                        };
+                        break;
+                    case 'staff':
+                        $includeArray['mediaStaff'] = function ($query) {
+                            $query->with(['model', 'staff_role', 'person.media'])
+                                ->limit(Game::MAXIMUM_RELATIONSHIPS_LIMIT);
+                        };
+                        break;
+                    case 'studios':
+                        $includeArray['studios'] = function ($query) {
+                            $query->limit(Game::MAXIMUM_RELATIONSHIPS_LIMIT);
+                        };
+                        break;
+                }
+            }
+        }
+        $game->with($includeArray);
+
+        // Show the anime details response
+        return JSONResult::success([
+            'data' => GameResource::collection($game->get()),
+        ]);
+    }
+
+    /**
      * Returns character information of a game.
      *
      * @param GetPaginatedRequest $request
-     * @param game $game
+     * @param game                $game
      *
      * @return JsonResponse
      */
@@ -215,7 +339,7 @@ class GameController extends Controller
      * Returns the cast information of a game.
      *
      * @param GetPaginatedRequest $request
-     * @param game $game
+     * @param game                $game
      *
      * @return JsonResponse
      */
@@ -224,14 +348,14 @@ class GameController extends Controller
         $data = $request->validated();
 
         // Get the anime cast
-        $game = $game->cast()
+        $cast = $game->cast()
             ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
 
         // Get next page url minus domain
-        $nextPageURL = str_replace($request->root(), '', $game->nextPageUrl() ?? '');
+        $nextPageURL = str_replace($request->root(), '', $cast->nextPageUrl() ?? '');
 
         return JSONResult::success([
-            'data' => ShowCastResourceIdentity::collection($game),
+            'data' => ShowCastResourceIdentity::collection($cast),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
@@ -240,7 +364,7 @@ class GameController extends Controller
      * Returns related-shows information of a game.
      *
      * @param GetPaginatedRequest $request
-     * @param game $game
+     * @param game                $game
      *
      * @return JsonResponse
      */
@@ -290,7 +414,7 @@ class GameController extends Controller
      * Returns related-literatures information of a game.
      *
      * @param GetPaginatedRequest $request
-     * @param game $game
+     * @param game                $game
      *
      * @return JsonResponse
      */
@@ -337,7 +461,7 @@ class GameController extends Controller
      * Returns related-games information of a game.
      *
      * @param GetPaginatedRequest $request
-     * @param game $game
+     * @param game                $game
      *
      * @return JsonResponse
      */
@@ -424,7 +548,7 @@ class GameController extends Controller
      * Returns staff information of a game.
      *
      * @param GetPaginatedRequest $request
-     * @param game $game
+     * @param game                $game
      *
      * @return JsonResponse
      */
@@ -460,7 +584,7 @@ class GameController extends Controller
      * Returns the studios information of a game.
      *
      * @param GetPaginatedRequest $request
-     * @param game $game
+     * @param game                $game
      *
      * @return JsonResponse
      */
@@ -492,7 +616,7 @@ class GameController extends Controller
      * Returns the more anime made by the same studio.
      *
      * @param GetPaginatedRequest $request
-     * @param game $game
+     * @param game                $game
      *
      * @return JsonResponse
      */
@@ -525,7 +649,7 @@ class GameController extends Controller
      * Adds a rating for a game item
      *
      * @param RateModelRequest $request
-     * @param game $game
+     * @param game             $game
      *
      * @return JsonResponse
      * @throws AuthorizationException
@@ -610,7 +734,7 @@ class GameController extends Controller
      * Returns the reviews of a Game.
      *
      * @param GetPaginatedRequest $request
-     * @param Game $game
+     * @param Game                $game
      *
      * @return JsonResponse
      */

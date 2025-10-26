@@ -7,9 +7,9 @@ use App\Enums\SearchType;
 use App\Events\ModelViewed;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\GetAnimeIndexRequest;
 use App\Http\Requests\GetAnimeSeasonsRequest;
 use App\Http\Requests\GetBrowseSeasonRequest;
+use App\Http\Requests\GetIndexRequest;
 use App\Http\Requests\GetMediaSongsRequest;
 use App\Http\Requests\GetPaginatedRequest;
 use App\Http\Requests\RateModelRequest;
@@ -43,13 +43,13 @@ class AnimeController extends Controller
     /**
      * Returns the anime index.
      *
-     * @param GetAnimeIndexRequest $request
+     * @param GetIndexRequest $request
      *
      * @return JsonResponse
      * @throws AuthenticationException
      * @throws BindingResolutionException
      */
-    public function index(GetAnimeIndexRequest $request): JsonResponse
+    public function index(GetIndexRequest $request): JsonResponse
     {
         $data = $request->validated();
 
@@ -79,12 +79,12 @@ class AnimeController extends Controller
     /**
      * Returns detailed information of an Anime.
      *
-     * @param Request $request
-     * @param Anime   $anime
+     * @param Request    $request
+     * @param Anime|null $anime
      *
      * @return JsonResponse
      */
-    public function view(Request $request, Anime $anime): JsonResponse
+    public function view(Request $request, ?Anime $anime): JsonResponse
     {
         // Call the ModelViewed event
         ModelViewed::dispatch($anime, $request->ip());
@@ -206,11 +206,11 @@ class AnimeController extends Controller
     /**
      * Returns detailed information of requested IDs.
      *
-     * @param GetAnimeIndexRequest $request
+     * @param GetIndexRequest $request
      *
      * @return JsonResponse
      */
-    public function views(GetAnimeIndexRequest $request): JsonResponse
+    public function views(GetIndexRequest $request): JsonResponse
     {
         $data = $request->validated();
 
@@ -323,7 +323,7 @@ class AnimeController extends Controller
         }
         $anime->with($includeArray);
 
-        // Show the Anime details response
+        // Show the anime details response
         return JSONResult::success([
             'data' => AnimeResource::collection($anime->get()),
         ]);
@@ -333,7 +333,7 @@ class AnimeController extends Controller
      * Returns character information of an Anime.
      *
      * @param GetPaginatedRequest $request
-     * @param Anime                     $anime
+     * @param Anime               $anime
      *
      * @return JsonResponse
      */
@@ -383,7 +383,7 @@ class AnimeController extends Controller
      * Returns related-shows information of an Anime.
      *
      * @param GetPaginatedRequest $request
-     * @param Anime                       $anime
+     * @param Anime               $anime
      *
      * @return JsonResponse
      */
@@ -433,7 +433,7 @@ class AnimeController extends Controller
      * Returns related-literatures information of an Anime.
      *
      * @param GetPaginatedRequest $request
-     * @param Anime                             $anime
+     * @param Anime               $anime
      *
      * @return JsonResponse
      */
@@ -480,7 +480,7 @@ class AnimeController extends Controller
      * Returns related-literatures information of an Anime.
      *
      * @param GetPaginatedRequest $request
-     * @param Anime                       $anime
+     * @param Anime               $anime
      *
      * @return JsonResponse
      */
@@ -594,7 +594,7 @@ class AnimeController extends Controller
      * Returns staff information of an Anime.
      *
      * @param GetPaginatedRequest $request
-     * @param Anime                $anime
+     * @param Anime               $anime
      *
      * @return JsonResponse
      */
@@ -630,7 +630,7 @@ class AnimeController extends Controller
      * Returns the studios information of an Anime.
      *
      * @param GetPaginatedRequest $request
-     * @param Anime                  $anime
+     * @param Anime               $anime
      *
      * @return JsonResponse
      */
@@ -662,7 +662,7 @@ class AnimeController extends Controller
      * Returns the more anime made by the same studio.
      *
      * @param GetPaginatedRequest $request
-     * @param Anime                       $anime
+     * @param Anime               $anime
      *
      * @return JsonResponse
      */
@@ -780,7 +780,7 @@ class AnimeController extends Controller
      * Returns the reviews of an Anime.
      *
      * @param GetPaginatedRequest $request
-     * @param Anime $anime
+     * @param Anime               $anime
      *
      * @return JsonResponse
      */

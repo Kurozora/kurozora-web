@@ -7,6 +7,7 @@ use App\Enums\SearchType;
 use App\Events\ModelViewed;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\GetIndexRequest;
 use App\Http\Requests\GetPaginatedRequest;
 use App\Http\Requests\RateModelRequest;
 use App\Http\Requests\SearchRequest;
@@ -37,31 +38,36 @@ class MangaController extends Controller
     /**
      * Returns the manga index.
      *
-     * @param Request $request
+     * @param GetIndexRequest $request
      *
      * @return JsonResponse
      * @throws AuthenticationException
      * @throws BindingResolutionException
      */
-    public function index(Request $request): JsonResponse
+    public function index(GetIndexRequest $request): JsonResponse
     {
-        // Override parameters
-        $request->merge([
-            'scope' => SearchScope::Kurozora,
-            'types' => [
-                SearchType::Literatures
-            ]
-        ]);
+        $data = $request->validated();
 
-        // Convert request type
-        $app = app();
-        $searchRequest = SearchRequest::createFrom($request)
-            ->setContainer($app) // Necessary or validation fails (validate on null)
-            ->setRedirector($app->make(Redirector::class)); // Necessary or validation failure fails (422)
-        $searchRequest->validateResolved(); // Necessary for preparing for validation
+        if (isset($data['ids'])) {
+            return $this->views($request);
+        } else {
+            // Override parameters
+            $request->merge([
+                'scope' => SearchScope::Kurozora,
+                'types' => [
+                    SearchType::Literatures
+                ]
+            ]);
+            // Convert request type
+            $app = app();
+            $searchRequest = SearchRequest::createFrom($request)
+                ->setContainer($app) // Necessary or validation fails (validate on null)
+                ->setRedirector($app->make(Redirector::class)); // Necessary or validation failure fails (422)
+            $searchRequest->validateResolved(); // Necessary for preparing for validation
 
-        return (new SearchController())
-            ->index($searchRequest);
+            return (new SearchController())
+                ->index($searchRequest);
+        }
     }
 
     /**
@@ -172,10 +178,116 @@ class MangaController extends Controller
     }
 
     /**
+     * Returns detailed information of requested IDs.
+     *
+     * @param GetIndexRequest $request
+     *
+     * @return JsonResponse
+     */
+    public function views(GetIndexRequest $request): JsonResponse
+    {
+        $data = $request->validated();
+
+        $manga = Manga::whereIn('id', $data['ids']);
+        $manga->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
+            ->when(auth()->user(), function ($query, $user) use ($manga) {
+                $manga->with(['mediaRatings' => function ($query) use ($user) {
+                    $query->where([
+                        ['user_id', '=', $user->id],
+                    ]);
+                }, 'library' => function ($query) use ($user) {
+                    $query->where('user_id', '=', $user->id);
+                }])
+                    ->withExists([
+                        'favoriters as isFavorited' => function ($query) use ($user) {
+                            $query->where('user_id', '=', $user->id);
+                        },
+                    ]);
+            });
+
+        $includeArray = [];
+        if ($includeInput = $request->input('include')) {
+            if (is_string($includeInput)) {
+                $includeInput = explode(',', $includeInput);
+            }
+            $includes = array_unique($includeInput);
+
+            foreach ($includes as $include) {
+                switch ($include) {
+                    case 'cast':
+                        $includeArray['cast'] = function ($query) {
+                            $query->limit(Manga::MAXIMUM_RELATIONSHIPS_LIMIT);
+                        };
+                        break;
+                    case 'characters':
+                        $includeArray['characters'] = function ($query) {
+                            $query->with(['media', 'translation'])
+                                ->limit(Manga::MAXIMUM_RELATIONSHIPS_LIMIT);
+                        };
+                        break;
+                    case 'related-shows':
+                        $includeArray['animeRelations'] = function ($query) {
+                            $query->with([
+                                'related' => function ($query) {
+                                    $query->withoutGlobalScopes([TvRatingScope::class])
+                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin']);
+                                },
+                                'relation'
+                            ])
+                                ->limit(Manga::MAXIMUM_RELATIONSHIPS_LIMIT);
+                        };
+                        break;
+                    case 'related-literatures':
+                        $includeArray['mangaRelations'] = function ($query) {
+                            $query->with([
+                                'related' => function ($query) {
+                                    $query->withoutGlobalScopes([TvRatingScope::class])
+                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin']);
+                                },
+                                'relation'
+                            ])
+                                ->limit(Manga::MAXIMUM_RELATIONSHIPS_LIMIT);
+                        };
+                        break;
+                    case 'related-games':
+                        $includeArray['gameRelations'] = function ($query) {
+                            $query->with([
+                                'related' => function ($query) {
+                                    $query->withoutGlobalScopes([TvRatingScope::class])
+                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin']);
+                                },
+                                'relation'
+                            ])
+                                ->limit(Manga::MAXIMUM_RELATIONSHIPS_LIMIT);
+                        };
+                        break;
+                    case 'staff':
+                        $includeArray['mediaStaff'] = function ($query) {
+                            $query->with(['model', 'staff_role', 'person.media'])
+                                ->limit(Manga::MAXIMUM_RELATIONSHIPS_LIMIT);
+                        };
+                        break;
+                    case 'studios':
+                        $includeArray['studios'] = function ($query) {
+                            $query->limit(Manga::MAXIMUM_RELATIONSHIPS_LIMIT);
+                        };
+                        break;
+                }
+            }
+        }
+        $manga->with($includeArray);
+
+        // Show the manga details response
+        return JSONResult::success([
+            'data' => LiteratureResource::collection($manga->get()),
+        ]);
+    }
+
+    /**
      * Returns character information of a Manga.
      *
      * @param GetPaginatedRequest $request
-     * @param Manga                     $manga
+     * @param Manga               $manga
      *
      * @return JsonResponse
      */
@@ -209,14 +321,14 @@ class MangaController extends Controller
         $data = $request->validated();
 
         // Get the anime cast
-        $mangaCast = $manga->cast()
+        $cast = $manga->cast()
             ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
 
         // Get next page url minus domain
-        $nextPageURL = str_replace($request->root(), '', $mangaCast->nextPageUrl() ?? '');
+        $nextPageURL = str_replace($request->root(), '', $cast->nextPageUrl() ?? '');
 
         return JSONResult::success([
-            'data' => MangaCastResourceIdentity::collection($mangaCast),
+            'data' => MangaCastResourceIdentity::collection($cast),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
@@ -225,7 +337,7 @@ class MangaController extends Controller
      * Returns related-shows information of a Manga.
      *
      * @param GetPaginatedRequest $request
-     * @param Manga                       $manga
+     * @param Manga               $manga
      *
      * @return JsonResponse
      */
@@ -275,7 +387,7 @@ class MangaController extends Controller
      * Returns related-mangas information of a Manga.
      *
      * @param GetPaginatedRequest $request
-     * @param Manga                             $manga
+     * @param Manga               $manga
      *
      * @return JsonResponse
      */
@@ -322,7 +434,7 @@ class MangaController extends Controller
      * Returns related-mangas information of a Manga.
      *
      * @param GetPaginatedRequest $request
-     * @param Manga                       $manga
+     * @param Manga               $manga
      *
      * @return JsonResponse
      */
@@ -369,7 +481,7 @@ class MangaController extends Controller
      * Returns staff information of a Manga.
      *
      * @param GetPaginatedRequest $request
-     * @param Manga                $manga
+     * @param Manga               $manga
      *
      * @return JsonResponse
      */
@@ -405,7 +517,7 @@ class MangaController extends Controller
      * Returns the studios information of a Manga.
      *
      * @param GetPaginatedRequest $request
-     * @param Manga                  $manga
+     * @param Manga               $manga
      *
      * @return JsonResponse
      */
@@ -437,7 +549,7 @@ class MangaController extends Controller
      * Returns the more manga made by the same studio.
      *
      * @param GetPaginatedRequest $request
-     * @param Manga                       $manga
+     * @param Manga               $manga
      *
      * @return JsonResponse
      */
@@ -555,7 +667,7 @@ class MangaController extends Controller
      * Returns the reviews of a Manga.
      *
      * @param GetPaginatedRequest $request
-     * @param Manga                  $manga
+     * @param Manga               $manga
      *
      * @return JsonResponse
      */
