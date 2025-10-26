@@ -28,9 +28,9 @@ use App\Models\User;
 use App\Models\UserLibrary;
 use App\Scopes\IgnoreListScope;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Pagination\Paginator;
 use Laravel\Scout\Builder;
 use Uri;
 
@@ -40,6 +40,7 @@ class SearchController extends Controller
      * Retrieves search results of the given type.
      *
      * @param SearchRequest $request
+     *
      * @return JsonResponse
      * @throws AuthenticationException
      */
@@ -248,7 +249,8 @@ class SearchController extends Controller
                         'next' => empty($nextPageURL) ? null : $nextPageURL
                     ];
                     break;
-                default: break;
+                default:
+                    break;
             }
         }
 
@@ -260,9 +262,10 @@ class SearchController extends Controller
     /**
      * Applies filter to the search request.
      *
-     * @param $model
+     * @param               $model
      * @param SearchRequest $request
-     * @param Builder $resource
+     * @param Builder       $resource
+     *
      * @return void
      */
     private function filter($model, SearchRequest $request, Builder $resource)
@@ -285,6 +288,7 @@ class SearchController extends Controller
      * Returns a list of search suggestions.
      *
      * @param SearchRequest $request
+     *
      * @return JsonResponse
      * @throws AuthenticationException
      */
@@ -423,12 +427,13 @@ class SearchController extends Controller
                         });
                     $response = $response->merge($resource);
                     break;
-                default: break;
+                default:
+                    break;
             }
         }
 
         $response = $response
-            ->unique(function($item) {
+            ->unique(function ($item) {
                 return strtolower(trim($item));
             })
             ->sort(function ($a, $b) use ($query) {
