@@ -69,22 +69,18 @@ class EpisodeResourceBasic extends JsonResource
     }
 
     /**
-     * Returns the user specific details for the resource.
+     * Returns the user-specific details for the resource.
      *
      * @return array
      */
     protected function getUserSpecificDetails(): array
     {
-        $user = auth()->user();
         $anime = $this->resource->anime;
-
-        // Get the user rating for this episode
         $givenRating = $this->resource->mediaRatings->first();
-
-        // Get watch status
         $watchStatus = WatchStatus::Disabled();
-        if ($user->hasTracked($anime)) {
-            $watchStatus = WatchStatus::fromBool($user->episodes()->where('episode_id', $this->resource->id)->exists());
+
+        if ($anime->isTracked) {
+            $watchStatus = WatchStatus::fromBool($this->resource->isWatched);
         }
 
         // Return the array
