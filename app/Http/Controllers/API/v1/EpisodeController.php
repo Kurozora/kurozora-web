@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\v1;
 use App\Events\ModelViewed;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\GetIndexRequest;
 use App\Http\Requests\GetPaginatedRequest;
 use App\Http\Requests\MarkEpisodeAsWatchedRequest;
 use App\Http\Requests\RateModelRequest;
@@ -32,17 +33,24 @@ class EpisodeController extends Controller
         // Call the ModelViewed event
         ModelViewed::dispatch($episode, $request->ip());
 
-        $includeArray = [
-            'media',
-            'mediaStat',
-            'mediaRatings',
-            'translation',
-            'videos',
-        ];
+        $episode->load(['media', 'mediaStat', 'translation', 'tv_rating', 'videos'])
+            ->when(auth()->user(), function ($query, $user) use ($episode) {
+                $episode->load(['mediaRatings' => function ($query) use ($user) {
+                    $query->where([
+                        ['user_id', '=', $user->id],
+                    ]);
+                }])
+                    ->loadExists([
+                        'user_watched_episodes as isWatched' => function ($query) use ($user) {
+                            $query->where('user_id', '=', $user->id);
+                        }
+                    ]);
+            });
 
         // Skeleton in case this logic ever changes.
         // For now both relations are already included,
         // so nothing else needs to be done.
+        $includeArray = [];
         if ($includeInput = $request->input('include')) {
             if (is_string($includeInput)) {
                 $includeInput = explode(',', $includeInput);
@@ -62,7 +70,14 @@ class EpisodeController extends Controller
 
         $includeArray['anime'] = function ($query) {
             $query->withoutGlobalScopes()
-                ->with(['media', 'translation']);
+                ->with(['media', 'translation'])
+                ->when(auth()->user(), function ($query, $user) {
+                    $query->withExists([
+                        'library as isTracked' => function ($query) use ($user) {
+                            $query->where('user_id', '=', $user->id);
+                        }
+                    ]);
+                });
         };
         $includeArray['season'] = function ($query) {
             $query->with(['media']);
@@ -72,6 +87,73 @@ class EpisodeController extends Controller
 
         return JSONResult::success([
             'data' => EpisodeResource::collection([$episode])
+        ]);
+    }
+
+    /**
+     * Returns detailed information of requested IDs.
+     *
+     * @param GetIndexRequest $request
+     *
+     * @return JsonResponse
+     */
+    public function views(GetIndexRequest $request): JsonResponse
+    {
+        $data = $request->validated();
+
+        $episode = Episode::whereIn('id', $data['ids']);
+        $episode->with(['media', 'mediaStat', 'translation', 'tv_rating', 'videos'])
+            ->when(auth()->user(), function ($query, $user) use ($episode) {
+                $episode->with(['mediaRatings' => function ($query) use ($user) {
+                    $query->where([
+                        ['user_id', '=', $user->id],
+                    ]);
+                }])
+                    ->withExists([
+                        'user_watched_episodes as isWatched' => function ($query) use ($user) {
+                            $query->where('user_id', '=', $user->id);
+                        }
+                    ]);
+            });
+
+        $includeArray = [];
+        if ($includeInput = $request->input('include')) {
+            if (is_string($includeInput)) {
+                $includeInput = explode(',', $includeInput);
+            }
+            $includes = array_unique($includeInput);
+
+            foreach ($includes as $include) {
+                switch ($include) {
+                    case 'show':
+                        // Already included.
+                    case 'season':
+                        // Already included.
+                        break;
+                }
+            }
+        }
+
+        $includeArray['anime'] = function ($query) {
+            $query->withoutGlobalScopes()
+                ->with(['media', 'translation'])
+                ->when(auth()->user(), function ($query, $user) {
+                    $query->withExists([
+                        'library as isTracked' => function ($query) use ($user) {
+                            $query->where('user_id', '=', $user->id);
+                        }
+                    ]);
+                });
+        };
+        $includeArray['season'] = function ($query) {
+            $query->with(['media']);
+        };
+
+        $episode->with($includeArray);
+
+        // Show the character details response
+        return JSONResult::success([
+            'data' => EpisodeResource::collection($episode->get()),
         ]);
     }
 
@@ -87,11 +169,17 @@ class EpisodeController extends Controller
                         $query->with([
                             'media',
                             'translation',
-                        ]);
+                        ])
+                            ->when(auth()->user(), function ($query, $user) {
+                                $query->withExists([
+                                    'library as isTracked' => function ($query) use ($user) {
+                                        $query->where('user_id', '=', $user->id);
+                                    }
+                                ]);
+                            });
                     },
                     'media',
                     'mediaStat',
-                    'mediaRatings',
                     'season' => function ($query) {
                         $query->with([
                             'media',
@@ -103,11 +191,16 @@ class EpisodeController extends Controller
                     'videos',
                 ])
                     ->when(auth()->user(), function ($query, $user) {
-                        $query->withExists([
-                            'user_watched_episodes as isWatched' => function ($query) use ($user) {
-                                $query->where('user_id', $user->id);
-                            },
-                        ]);
+                        $query->with(['mediaRatings' => function ($query) use ($user) {
+                            $query->where([
+                                ['user_id', '=', $user->id],
+                            ]);
+                        }])
+                            ->withExists([
+                                'user_watched_episodes as isWatched' => function ($query) use ($user) {
+                                    $query->where('user_id', $user->id);
+                                },
+                            ]);
                     });
             })
             ->get();

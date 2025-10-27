@@ -7,6 +7,7 @@ use App\Enums\SearchType;
 use App\Events\ModelViewed;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\GetIndexRequest;
 use App\Http\Requests\GetPaginatedRequest;
 use App\Http\Requests\RateModelRequest;
 use App\Http\Requests\SearchRequest;
@@ -31,31 +32,37 @@ class PersonController extends Controller
     /**
      * Returns the people index.
      *
-     * @param Request $request
+     * @param GetIndexRequest $request
      *
      * @return JsonResponse
      * @throws AuthenticationException
      * @throws BindingResolutionException
      */
-    public function index(Request $request): JsonResponse
+    public function index(GetIndexRequest $request): JsonResponse
     {
-        // Override parameters
-        $request->merge([
-            'scope' => SearchScope::Kurozora,
-            'types' => [
-                SearchType::People
-            ]
-        ]);
+        $data = $request->validated();
 
-        // Convert request type
-        $app = app();
-        $searchRequest = SearchRequest::createFrom($request)
-            ->setContainer($app) // Necessary or validation fails (validate on null)
-            ->setRedirector($app->make(Redirector::class)); // Necessary or validation failure fails (422)
-        $searchRequest->validateResolved(); // Necessary for preparing for validation
+        if (isset($data['ids'])) {
+            return $this->views($request);
+        } else {
+            // Override parameters
+            $request->merge([
+                'scope' => SearchScope::Kurozora,
+                'types' => [
+                    SearchType::People
+                ]
+            ]);
 
-        return (new SearchController())
-            ->index($searchRequest);
+            // Convert request type
+            $app = app();
+            $searchRequest = SearchRequest::createFrom($request)
+                ->setContainer($app) // Necessary or validation fails (validate on null)
+                ->setRedirector($app->make(Redirector::class)); // Necessary or validation failure fails (422)
+            $searchRequest->validateResolved(); // Necessary for preparing for validation
+
+            return (new SearchController())
+                ->index($searchRequest);
+        }
     }
 
     /**
@@ -124,6 +131,73 @@ class PersonController extends Controller
             'data' => PersonResource::collection([$person])
         ]);
     }
+
+
+    /**
+     * Returns detailed information of requested IDs.
+     *
+     * @param GetIndexRequest $request
+     *
+     * @return JsonResponse
+     */
+    public function views(GetIndexRequest $request): JsonResponse
+    {
+        $data = $request->validated();
+
+        $person = Person::whereIn('id', $data['ids']);
+        $person->with(['media', 'mediaStat'])
+            ->when(auth()->user(), function ($query, $user) use ($person) {
+                $person->with(['mediaRatings' => function ($query) use ($user) {
+                    $query->where([
+                        ['user_id', '=', $user->id]
+                    ]);
+                }]);
+            });
+
+        $includeArray = [];
+        if ($includeInput = $request->input('include')) {
+            if (is_string($includeInput)) {
+                $includeInput = explode(',', $includeInput);
+            }
+            $includes = array_unique($includeInput);
+
+            foreach ($includes as $include) {
+                switch ($include) {
+                    case 'characters':
+                        $includeArray['characters'] = function ($query) {
+                            $query->with(['media', 'translation'])
+                                ->limit(Person::MAXIMUM_RELATIONSHIPS_LIMIT);
+                        };
+                        break;
+                    case 'shows':
+                        $includeArray['anime'] = function ($query) {
+                            $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
+                                ->limit(Person::MAXIMUM_RELATIONSHIPS_LIMIT);
+                        };
+                        break;
+                    case 'literatures':
+                        $includeArray['manga'] = function ($query) {
+                            $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
+                                ->limit(Person::MAXIMUM_RELATIONSHIPS_LIMIT);
+                        };
+                        break;
+                    case 'games':
+                        $includeArray['games'] = function ($query) {
+                            $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
+                                ->limit(Person::MAXIMUM_RELATIONSHIPS_LIMIT);
+                        };
+                        break;
+                }
+            }
+        }
+        $person->with($includeArray);
+
+        // Show the character details response
+        return JSONResult::success([
+            'data' => PersonResource::collection($person->get()),
+        ]);
+    }
+
 
     /**
      * Returns character information of the person.

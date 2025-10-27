@@ -7,6 +7,7 @@ use App\Enums\SearchType;
 use App\Events\ModelViewed;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\GetIndexRequest;
 use App\Http\Requests\GetPaginatedRequest;
 use App\Http\Requests\RateModelRequest;
 use App\Http\Requests\SearchRequest;
@@ -29,31 +30,37 @@ class StudioController extends Controller
     /**
      * Returns the studios index.
      *
-     * @param Request $request
+     * @param GetIndexRequest $request
      *
      * @return JsonResponse
      * @throws AuthenticationException
      * @throws BindingResolutionException
      */
-    public function index(Request $request): JsonResponse
+    public function index(GetIndexRequest $request): JsonResponse
     {
-        // Override parameters
-        $request->merge([
-            'scope' => SearchScope::Kurozora,
-            'types' => [
-                SearchType::Studios
-            ]
-        ]);
+        $data = $request->validated();
 
-        // Convert request type
-        $app = app();
-        $searchRequest = SearchRequest::createFrom($request)
-            ->setContainer($app) // Necessary or validation fails (validate on null)
-            ->setRedirector($app->make(Redirector::class)); // Necessary or validation failure fails (422)
-        $searchRequest->validateResolved(); // Necessary for preparing for validation
+        if (isset($data['ids'])) {
+            return $this->views($request);
+        } else {
+            // Override parameters
+            $request->merge([
+                'scope' => SearchScope::Kurozora,
+                'types' => [
+                    SearchType::Studios
+                ]
+            ]);
 
-        return (new SearchController())
-            ->index($searchRequest);
+            // Convert request type
+            $app = app();
+            $searchRequest = SearchRequest::createFrom($request)
+                ->setContainer($app) // Necessary or validation fails (validate on null)
+                ->setRedirector($app->make(Redirector::class)); // Necessary or validation failure fails (422)
+            $searchRequest->validateResolved(); // Necessary for preparing for validation
+
+            return (new SearchController())
+                ->index($searchRequest);
+        }
     }
 
     /**
@@ -68,7 +75,7 @@ class StudioController extends Controller
         // Call the ModelViewed event
         ModelViewed::dispatch($studio, $request->ip());
 
-        $studio->load(['media']);
+        $studio->load(['media', 'mediaStat', 'tv_rating', 'predecessors', 'successor']);
 
         $includeArray = [];
         if ($includeInput = $request->input('include')) {
@@ -102,6 +109,55 @@ class StudioController extends Controller
         // Show studio details
         return JSONResult::success([
             'data' => StudioResource::collection([$studio])
+        ]);
+    }
+
+    /**
+     * Returns detailed information of requested IDs.
+     *
+     * @param GetIndexRequest $request
+     *
+     * @return JsonResponse
+     */
+    public function views(GetIndexRequest $request): JsonResponse
+    {
+        $data = $request->validated();
+
+        $studio = Studio::whereIn('id', $data['ids']);
+        $studio->with(['media', 'mediaStat', 'tv_rating', 'predecessors', 'successor']);
+
+        $includeArray = [];
+        if ($includeInput = $request->input('include')) {
+            if (is_string($includeInput)) {
+                $includeInput = explode(',', $includeInput);
+            }
+            $includes = array_unique($includeInput);
+
+            foreach ($includes as $include) {
+                switch ($include) {
+                    case 'shows':
+                        $includeArray['anime'] = function ($query) {
+                            $query->limit(Studio::MAXIMUM_RELATIONSHIPS_LIMIT);
+                        };
+                        break;
+                    case 'literatures':
+                        $includeArray['manga'] = function ($query) {
+                            $query->limit(Studio::MAXIMUM_RELATIONSHIPS_LIMIT);
+                        };
+                        break;
+                    case 'games':
+                        $includeArray['games'] = function ($query) {
+                            $query->limit(Studio::MAXIMUM_RELATIONSHIPS_LIMIT);
+                        };
+                        break;
+                }
+            }
+        }
+        $studio->with($includeArray);
+
+        // Show the character details response
+        return JSONResult::success([
+            'data' => StudioResource::collection($studio->get()),
         ]);
     }
 

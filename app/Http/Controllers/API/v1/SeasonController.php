@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\v1;
 use App\Events\ModelViewed;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\GetIndexRequest;
 use App\Http\Requests\GetSeasonEpisodesRequest;
 use App\Http\Requests\MarkSeasonAsWatchedRequest;
 use App\Http\Resources\EpisodeResourceIdentity;
@@ -46,6 +47,40 @@ class SeasonController extends Controller
             'data' => SeasonResource::collection([$season]),
         ]);
     }
+
+
+    /**
+     * Returns detailed information of requested IDs.
+     *
+     * @param GetIndexRequest $request
+     *
+     * @return JsonResponse
+     */
+    public function views(GetIndexRequest $request): JsonResponse
+    {
+        $data = $request->validated();
+
+        $season = Season::whereIn('id', $data['ids']);
+        $season->with([
+            'anime' => function ($query) {
+                $query->withoutGlobalScopes();
+            },
+            'media',
+            'translation',
+        ])
+            ->withCount(['episodes'])
+            ->withAvg([
+                'episodesMediaStats as rating_average' => function ($query) {
+                    $query->where('rating_average', '!=', 0);
+                }
+            ], 'rating_average');
+
+        // Show the character details response
+        return JSONResult::success([
+            'data' => SeasonResource::collection($season->get()),
+        ]);
+    }
+
 
     /**
      * Returns the episodes for a season
