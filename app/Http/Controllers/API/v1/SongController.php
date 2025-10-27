@@ -7,6 +7,7 @@ use App\Enums\SearchType;
 use App\Events\ModelViewed;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\GetIndexRequest;
 use App\Http\Requests\GetPaginatedRequest;
 use App\Http\Requests\RateModelRequest;
 use App\Http\Requests\SearchRequest;
@@ -29,31 +30,37 @@ class SongController extends Controller
     /**
      * Returns the songs index.
      *
-     * @param Request $request
+     * @param GetIndexRequest $request
      *
      * @return JsonResponse
      * @throws AuthenticationException
      * @throws BindingResolutionException
      */
-    public function index(Request $request): JsonResponse
+    public function index(GetIndexRequest $request): JsonResponse
     {
-        // Override parameters
-        $request->merge([
-            'scope' => SearchScope::Kurozora,
-            'types' => [
-                SearchType::Songs
-            ]
-        ]);
+        $data = $request->validated();
 
-        // Convert request type
-        $app = app();
-        $searchRequest = SearchRequest::createFrom($request)
-            ->setContainer($app) // Necessary or validation fails (validate on null)
-            ->setRedirector($app->make(Redirector::class)); // Necessary or validation failure fails (422)
-        $searchRequest->validateResolved(); // Necessary for preparing for validation
+        if (isset($data['ids'])) {
+            return $this->views($request);
+        } else {
+            // Override parameters
+            $request->merge([
+                'scope' => SearchScope::Kurozora,
+                'types' => [
+                    SearchType::Songs
+                ]
+            ]);
 
-        return (new SearchController())
-            ->index($searchRequest);
+            // Convert request type
+            $app = app();
+            $searchRequest = SearchRequest::createFrom($request)
+                ->setContainer($app) // Necessary or validation fails (validate on null)
+                ->setRedirector($app->make(Redirector::class)); // Necessary or validation failure fails (422)
+            $searchRequest->validateResolved(); // Necessary for preparing for validation
+
+            return (new SearchController())
+                ->index($searchRequest);
+        }
     }
 
     /**
@@ -80,6 +87,33 @@ class SongController extends Controller
 
         return JSONResult::success([
             'data' => SongResource::collection([$song])
+        ]);
+    }
+
+    /**
+     * Returns detailed information of requested IDs.
+     *
+     * @param GetIndexRequest $request
+     *
+     * @return JsonResponse
+     */
+    public function views(GetIndexRequest $request): JsonResponse
+    {
+        $data = $request->validated();
+
+        $song = Song::whereIn('id', $data['ids']);
+        $song->with(['media', 'mediaStat', 'translation'])
+            ->when(auth()->user(), function ($query, $user) use ($song) {
+                $song->with(['mediaRatings' => function ($query) use ($user) {
+                    $query->where([
+                        ['user_id', '=', $user->id],
+                    ]);
+                }]);
+            });
+
+        // Show the anime details response
+        return JSONResult::success([
+            'data' => SongResource::collection($song->get()),
         ]);
     }
 
