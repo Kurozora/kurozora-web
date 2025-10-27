@@ -53,7 +53,7 @@ class SongResourceBasic extends JsonResource
     }
 
     /**
-     * Returns the user specific details for the resource.
+     * Returns the user-specific details for the resource.
      *
      * @return array
      */
