@@ -28,7 +28,7 @@
     x-on:musicmanagerloaded.window="await fetchSongData('{{ $song->am_id }}')"
     x-init="window.musicManager !== undefined ? await fetchSongData('{{ $song->am_id }}') : null"
 >
-    <div class="flex flex-col">
+    <div class="relative flex flex-col">
         <x-picture class="aspect-square rounded-lg shadow-md overflow-hidden">
             <img class="w-full h-full object-cover"
                  width="320" height="320"
@@ -40,27 +40,29 @@
             >
 
             <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-lg"></div>
-
-            <div class="absolute top-0 bottom-0 left-0 right-0">
-                <div class="flex flex-col justify-center items-center h-full">
-                    @if (!empty($song->am_id))
-                        <button
-                            class="inline-flex items-center pt-4 pr-4 pb-4 pl-4 bg-blur backdrop-blur border border-transparent rounded-full font-semibold text-xs uppercase tracking-widest shadow-md hover:bg-tint-800 hover:btn-text-tinted active:bg-tint active:btn-text-tinted focus:outline-none disabled:bg-gray-100 disabled:text-gray-300 disabled:cursor-default disabled:opacity-100 transition ease-in-out duration-150"
-                            x-on:click="await musicManager?.playSong(song)"
-                            x-bind:title="musicManager?.isPlaying ? '{{ __('Pause') }}' : '{{ __('Play') }}'"
-                        >
-                            <template x-if="musicManager?.isPlaying && musicManager?.currentMusicID === '{{ $song->am_id }}'">
-                                @svg('pause_fill', 'fill-current', ['width' => '24'])
-                            </template>
-
-                            <template x-if="!(musicManager?.isPlaying && musicManager?.currentMusicID === '{{ $song->am_id }}')">
-                                @svg('play_fill', 'fill-current', ['width' => '24'])
-                            </template>
-                        </button>
-                    @endif
-                </div>
-            </div>
         </x-picture>
+
+        <a class="absolute bottom-0 w-full h-full" href="{{ route('songs.details', $song) }}" wire:navigate></a>
+
+        <div class="absolute bottom-2 right-2">
+            <div class="flex flex-col justify-center items-center h-full">
+                @if (!empty($song->am_id))
+                    <button
+                        class="inline-flex items-center pt-2 pr-2 pb-2 pl-2 bg-blur backdrop-blur border border-transparent rounded-full font-semibold text-xs uppercase tracking-widest shadow-md hover:bg-tint-800 hover:btn-text-tinted active:bg-tint active:btn-text-tinted focus:outline-none disabled:bg-gray-100 disabled:text-gray-300 disabled:cursor-default disabled:opacity-100 transition ease-in-out duration-150"
+                        x-on:click="await musicManager?.playSong(song)"
+                        x-bind:title="musicManager?.isPlaying ? '{{ __('Pause') }}' : '{{ __('Play') }}'"
+                    >
+                        <template x-if="musicManager?.isPlaying && musicManager?.currentMusicID === '{{ $song->am_id }}'">
+                            @svg('pause_fill', 'fill-current', ['width' => '18'])
+                        </template>
+
+                        <template x-if="!(musicManager?.isPlaying && musicManager?.currentMusicID === '{{ $song->am_id }}')">
+                            @svg('play_fill', 'fill-current', ['width' => '18'])
+                        </template>
+                    </button>
+                @endif
+            </div>
+        </div>
     </div>
 
     <div class="relative flex flex-grow mt-2">
