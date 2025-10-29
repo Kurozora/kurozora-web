@@ -252,7 +252,15 @@ class SignInWithAppleController extends Controller
 
         if (empty($user)) {
             try {
-                $email = $payload->get('email');
+                // Email can technically be optional in case of Sign in with Apple
+                // We can detect this in the frontend and prompt the user to add
+                // an email if necessary.
+                try {
+                    $email = $payload->get('email');
+                }  catch (ValueNotFoundException $e) {
+                    $email = null;
+                }
+
                 $siwaID = $payload->get('sub');
 
                 $user = $this->signUpUser($email, $siwaID)
@@ -272,12 +280,12 @@ class SignInWithAppleController extends Controller
     /**
      * Creates a new user from the given payload.
      *
-     * @param string $email
-     * @param string $siwaID
+     * @param null|string $email
+     * @param string      $siwaID
      *
      * @return User|null
      */
-    protected function signUpUser(string $email, string $siwaID): ?User
+    protected function signUpUser(?string $email, string $siwaID): ?User
     {
         return User::create([
             'username' => str()->random(8),
