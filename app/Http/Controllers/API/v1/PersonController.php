@@ -144,7 +144,7 @@ class PersonController extends Controller
     {
         $data = $request->validated();
 
-        $person = Person::whereIn('id', $data['ids']);
+        $person = Person::whereIn('id', $data['ids'] ?? []);
         $person->with(['media', 'mediaStat'])
             ->when(auth()->user(), function ($query, $user) use ($person) {
                 $person->with(['mediaRatings' => function ($query) use ($user) {

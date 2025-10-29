@@ -101,7 +101,7 @@ class EpisodeController extends Controller
     {
         $data = $request->validated();
 
-        $episode = Episode::whereIn('id', $data['ids']);
+        $episode = Episode::whereIn('id', $data['ids'] ?? []);
         $episode->with(['media', 'mediaStat', 'translation', 'tv_rating', 'videos'])
             ->when(auth()->user(), function ($query, $user) use ($episode) {
                 $episode->with(['mediaRatings' => function ($query) use ($user) {

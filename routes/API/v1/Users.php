@@ -13,6 +13,9 @@ use App\Http\Controllers\Auth\SignInWithAppleController;
 Route::prefix('/users')
     ->name('.users')
     ->group(function () {
+        Route::get('/', [UserController::class, 'views'])
+            ->name('.index');
+
         Route::post('/', [RegistrationController::class, 'signUp'])
             ->name('.sign-up');
 

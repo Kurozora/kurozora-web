@@ -214,7 +214,7 @@ class AnimeController extends Controller
     {
         $data = $request->validated();
 
-        $anime = Anime::whereIn('id', $data['ids']);
+        $anime = Anime::whereIn('id', $data['ids'] ?? []);
         $anime->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
             ->when(auth()->user(), function ($query, $user) use ($anime) {
                 $anime->with(['mediaRatings' => function ($query) use ($user) {

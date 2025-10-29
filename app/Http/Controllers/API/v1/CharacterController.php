@@ -144,7 +144,7 @@ class CharacterController extends Controller
     {
         $data = $request->validated();
 
-        $character = Character::whereIn('id', $data['ids']);
+        $character = Character::whereIn('id', $data['ids'] ?? []);
         $character->with(['media', 'mediaStat', 'translation'])
             ->when(auth()->user(), function ($query, $user) use ($character) {
                 $character->with(['mediaRatings' => function ($query) use ($user) {

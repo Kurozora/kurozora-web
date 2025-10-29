@@ -7,6 +7,7 @@ use App\Events\ModelViewed;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DeleteUserRequest;
+use App\Http\Requests\GetIndexRequest;
 use App\Http\Requests\GetPaginatedRequest;
 use App\Http\Requests\ResetPassword;
 use App\Http\Resources\FeedMessageResource;
@@ -65,6 +66,47 @@ class UserController extends Controller
         // Show profile response
         return JSONResult::success([
             'data' => UserResource::collection([$user])
+        ]);
+    }
+
+    /**
+     * Returns the profile details for a user
+     *
+     * @param GetIndexRequest $request
+     *
+     * @return JsonResponse
+     */
+    public function views(GetIndexRequest $request): JsonResponse
+    {
+        $data = $request->validated();
+
+        $character = User::whereIn('id', $data['ids'] ?? []);
+        $character->with([
+            'badges' => function ($query) {
+                $query->with(['media']);
+            },
+            'media',
+            'tokens' => function ($query) {
+                $query
+                    ->orderBy('last_used_at', 'desc')
+                    ->limit(1);
+            },
+            'sessions' => function ($query) {
+                $query
+                    ->orderBy('last_activity', 'desc')
+                    ->limit(1);
+            },
+        ])
+            ->withCount(['followers', 'followedModels as following_count', 'mediaRatings'])
+            ->when(auth()->user(), function ($query, $user) use ($character) {
+                $user->withExists(['followers as isFollowed' => function ($query) {
+                    $query->where('user_id', '=', auth()->user()->id);
+                }]);
+            });
+
+        // Show the character details response
+        return JSONResult::success([
+            'data' => UserResource::collection($character->get()),
         ]);
     }
 

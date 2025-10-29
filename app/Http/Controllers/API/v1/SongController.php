@@ -101,7 +101,7 @@ class SongController extends Controller
     {
         $data = $request->validated();
 
-        $song = Song::whereIn('id', $data['ids']);
+        $song = Song::whereIn('id', $data['ids'] ?? []);
         $song->with(['media', 'mediaStat', 'translation'])
             ->when(auth()->user(), function ($query, $user) use ($song) {
                 $song->with(['mediaRatings' => function ($query) use ($user) {

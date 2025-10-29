@@ -60,7 +60,7 @@ class SeasonController extends Controller
     {
         $data = $request->validated();
 
-        $season = Season::whereIn('id', $data['ids']);
+        $season = Season::whereIn('id', $data['ids'] ?? []);
         $season->with([
             'anime' => function ($query) {
                 $query->withoutGlobalScopes();

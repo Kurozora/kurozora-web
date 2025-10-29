@@ -188,7 +188,7 @@ class MangaController extends Controller
     {
         $data = $request->validated();
 
-        $manga = Manga::whereIn('id', $data['ids']);
+        $manga = Manga::whereIn('id', $data['ids'] ?? []);
         $manga->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
             ->when(auth()->user(), function ($query, $user) use ($manga) {
                 $manga->with(['mediaRatings' => function ($query) use ($user) {

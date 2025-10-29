@@ -123,7 +123,7 @@ class StudioController extends Controller
     {
         $data = $request->validated();
 
-        $studio = Studio::whereIn('id', $data['ids']);
+        $studio = Studio::whereIn('id', $data['ids'] ?? []);
         $studio->with(['media', 'mediaStat', 'tv_rating', 'predecessors', 'successor']);
 
         $includeArray = [];

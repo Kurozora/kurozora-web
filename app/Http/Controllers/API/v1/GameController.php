@@ -204,7 +204,7 @@ class GameController extends Controller
     {
         $data = $request->validated();
 
-        $game = Game::whereIn('id', $data['ids']);
+        $game = Game::whereIn('id', $data['ids'] ?? []);
         $game->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
             ->when(auth()->user(), function ($query, $user) use ($game) {
                 $game->with(['mediaRatings' => function ($query) use ($user) {
