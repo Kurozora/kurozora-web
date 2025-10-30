@@ -37,7 +37,7 @@ class Index extends Component
      *
      * @var string $internalType
      */
-    private string $internalType = SearchType::Shows;
+    public string $internalType = SearchType::Shows;
 
     /**
      * The scope of the search.
