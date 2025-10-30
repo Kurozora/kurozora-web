@@ -5,6 +5,10 @@ use App\Http\Controllers\API\v1\EpisodeController;
 Route::prefix('/episodes')
     ->name('.episodes')
     ->group(function () {
+        Route::get('/', [EpisodeController::class, 'views'])
+            ->middleware('auth.kurozora:optional')
+            ->name('.index');
+
         Route::prefix('{episode}')
             ->group(function () {
                 Route::get('/', [EpisodeController::class, 'details'])
