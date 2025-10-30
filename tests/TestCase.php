@@ -5,6 +5,7 @@ namespace Tests;
 use App\Models\APIClientToken;
 use App\Models\SessionAttribute;
 use App\Models\User;
+use Http;
 use Illuminate\Foundation\Mix;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Testing\Assert as PHPUnit;
@@ -24,6 +25,9 @@ abstract class TestCase extends BaseTestCase
     function setUp(): void
     {
         parent::setUp();
+
+        // Throw an exception if an HTTP request isn't faked
+        Http::preventStrayRequests();
 
         // Swap out the Mix manifest implementation, so we don't need
         // to run the npm commands to generate a manifest file for
