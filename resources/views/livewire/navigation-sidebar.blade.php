@@ -27,6 +27,20 @@
                         @svg('house', 'fill-current', ['width' => '18']) {{ __('Explore') }}
                     </x-sidebar-nav-link>
 
+                    <x-sidebar-nav-link href="{{ route('schedule') }}" wire:navigate :active="request()->routeIs('schedule')">
+                        @svg('calendar', 'fill-current', ['width' => '18']) {{ __('Schedule') }}
+                    </x-sidebar-nav-link>
+
+                    <x-sidebar-nav-link href="{{ route('charts.index') }}" wire:navigate :active="request()->routeIs('charts.index')">
+                        @svg('chart_bar', 'fill-current', ['width' => '18']) {{ __('Charts') }}
+                    </x-sidebar-nav-link>
+                </section>
+
+                <section class="mt-4">
+                    <div class="mb-2">
+                        <h2 class="text-secondary text-xs font-semibold">{{ __('Catalog') }}</h2>
+                    </div>
+
                     <x-sidebar-nav-link href="{{ route('anime.index') }}" wire:navigate :active="request()->routeIs('anime.index')">
                         @svg('tv', 'fill-current', ['width' => '18'])  {{ __('Anime') }}
                     </x-sidebar-nav-link>
@@ -40,21 +54,13 @@
                     </x-sidebar-nav-link>
 
                     @if (app()->isLocal())
-                    <x-sidebar-nav-link href="#">
-                        @svg('person_tv', 'fill-current', ['width' => '18']) {{ __('Live Action') }}
-                    </x-sidebar-nav-link>
+                        <x-sidebar-nav-link href="#">
+                            @svg('person_tv', 'fill-current', ['width' => '18']) {{ __('Live Action') }}
+                        </x-sidebar-nav-link>
                     @endif
 
                     <x-sidebar-nav-link href="{{ route('songs.index') }}" wire:navigate :active="request()->routeIs('songs.index')">
                         @svg('music_note', 'fill-current', ['width' => '18']) {{ __('Songs') }}
-                    </x-sidebar-nav-link>
-
-                    <x-sidebar-nav-link href="{{ route('schedule') }}" wire:navigate :active="request()->routeIs('schedule')">
-                        @svg('calendar', 'fill-current', ['width' => '18']) {{ __('Schedule') }}
-                    </x-sidebar-nav-link>
-
-                    <x-sidebar-nav-link href="{{ route('charts.index') }}" wire:navigate :active="request()->routeIs('charts.index')">
-                        @svg('chart_bar', 'fill-current', ['width' => '18']) {{ __('Charts') }}
                     </x-sidebar-nav-link>
 
                     <x-sidebar-nav-link href="{{ route('characters.index') }}" wire:navigate :active="request()->routeIs('characters.index')">
@@ -69,56 +75,105 @@
                         @svg('building_2', 'fill-current', ['width' => '18']) {{ __('Studios') }}
                     </x-sidebar-nav-link>
 
-                    {{--                    <x-sidebar-nav-link href="{{ route('platforms.index') }}" wire:navigate :active="request()->routeIs('platforms.index')">--}}
-                    {{--                        @svg('tv_and_mediabox', 'fill-current', ['width' => '18']) {{ __('Platforms') }}--}}
-                    {{--                    </x-sidebar-nav-link>--}}
+{{--                    <x-sidebar-nav-link href="{{ route('platforms.index') }}" wire:navigate :active="request()->routeIs('platforms.index')">--}}
+{{--                        @svg('tv_and_mediabox', 'fill-current', ['width' => '18']) {{ __('Platforms') }}--}}
+{{--                    </x-sidebar-nav-link>--}}
                 </section>
 
                 @auth
-                    <section class="mt-4">
-                        <div class="mb-2">
-                            <h2 class="text-secondary text-xs font-semibold">{{ __('Library') }}</h2>
+                    <section
+                        class="mt-4"
+                        x-data="{ collapsed: $persist(false).as('sidebar.library.collapsed') }"
+                    >
+                        <div
+                            class="flex items-center justify-between mb-2 text-secondary cursor-pointer"
+                            @click="collapsed = !collapsed"
+                        >
+                            <h2 class="text-xs font-semibold">{{ __('Library') }}</h2>
+
+                            <div class='transform transition duration-300 ease-in-out' :class="{'rotate-90': !collapsed,' -translate-y-0.0': collapsed }">
+                                @svg('chevron_forward', 'fill-current', ['width' => 10])
+                            </div>
                         </div>
 
-                        <x-sidebar-nav-link href="{{ route('profile.anime.library', $user) }}" wire:navigate :active="request()->routeIs('profile.anime.library', $user)">
-                            @svg('tv', 'fill-current', ['width' => '18']) {{ __('Anime') }}
-                        </x-sidebar-nav-link>
+                        <div
+                            x-show="!collapsed"
+                            x-collapse
+                            x-collapse.duration.500ms
+                        >
+                            <x-sidebar-nav-link href="{{ route('profile.anime.library', $user) }}" wire:navigate :active="request()->routeIs('profile.anime.library', $user)">
+                                @svg('tv', 'fill-current', ['width' => '18']) {{ __('Anime') }}
+                            </x-sidebar-nav-link>
 
-                        <x-sidebar-nav-link href="{{ route('profile.manga.library', $user) }}" wire:navigate :active="request()->routeIs('profile.manga.library', $user)">
-                            @svg('book', 'fill-current', ['width' => '18']) {{ __('Manga') }}
-                        </x-sidebar-nav-link>
+                            <x-sidebar-nav-link href="{{ route('profile.manga.library', $user) }}" wire:navigate :active="request()->routeIs('profile.manga.library', $user)">
+                                @svg('book', 'fill-current', ['width' => '18']) {{ __('Manga') }}
+                            </x-sidebar-nav-link>
 
-                        <x-sidebar-nav-link href="{{ route('profile.games.library', $user) }}" wire:navigate :active="request()->routeIs('profile.games.library', $user)">
-                            @svg('gamecontroller', 'fill-current', ['width' => '18']) {{ __('Games') }}
-                        </x-sidebar-nav-link>
+                            <x-sidebar-nav-link href="{{ route('profile.games.library', $user) }}" wire:navigate :active="request()->routeIs('profile.games.library', $user)">
+                                @svg('gamecontroller', 'fill-current', ['width' => '18']) {{ __('Games') }}
+                            </x-sidebar-nav-link>
+                        </div>
                     </section>
 
-                    <section class="mt-4">
-                        <div class="mb-2">
-                            <h2 class="text-secondary text-xs font-semibold">{{ __('Favorite') }}</h2>
+                    <section
+                        class="mt-4"
+                        x-data="{ collapsed: $persist(false).as('sidebar.favorite.collapsed') }"
+                    >
+                        <div
+                            class="flex items-center justify-between mb-2 text-secondary cursor-pointer"
+                            @click="collapsed = !collapsed"
+                        >
+                            <h2 class="text-xs font-semibold">{{ __('Favorite') }}</h2>
+
+                            <div class='transform transition duration-300 ease-in-out' :class="{'rotate-90': !collapsed,' -translate-y-0.0': collapsed }">
+                                @svg('chevron_forward', 'fill-current', ['width' => 10])
+                            </div>
                         </div>
 
-                        <x-sidebar-nav-link href="{{ route('profile.anime.favorites', $user) }}" wire:navigate :active="request()->routeIs('profile.anime.favorites', $user)">
-                            @svg('tv', 'fill-current', ['width' => '18']) {{ __('Anime') }}
-                        </x-sidebar-nav-link>
+                        <div
+                            x-show="!collapsed"
+                            x-collapse
+                            x-collapse.duration.500ms
+                        >
+                            <x-sidebar-nav-link href="{{ route('profile.anime.favorites', $user) }}" wire:navigate :active="request()->routeIs('profile.anime.favorites', $user)">
+                                @svg('tv', 'fill-current', ['width' => '18']) {{ __('Anime') }}
+                            </x-sidebar-nav-link>
 
-                        <x-sidebar-nav-link href="{{ route('profile.manga.favorites', $user) }}" wire:navigate :active="request()->routeIs('profile.manga.favorites', $user)">
-                            @svg('book', 'fill-current', ['width' => '18']) {{ __('Manga') }}
-                        </x-sidebar-nav-link>
+                            <x-sidebar-nav-link href="{{ route('profile.manga.favorites', $user) }}" wire:navigate :active="request()->routeIs('profile.manga.favorites', $user)">
+                                @svg('book', 'fill-current', ['width' => '18']) {{ __('Manga') }}
+                            </x-sidebar-nav-link>
 
-                        <x-sidebar-nav-link href="{{ route('profile.games.favorites', $user) }}" wire:navigate :active="request()->routeIs('profile.games.favorites', $user)">
-                            @svg('gamecontroller', 'fill-current', ['width' => '18']) {{ __('Games') }}
-                        </x-sidebar-nav-link>
+                            <x-sidebar-nav-link href="{{ route('profile.games.favorites', $user) }}" wire:navigate :active="request()->routeIs('profile.games.favorites', $user)">
+                                @svg('gamecontroller', 'fill-current', ['width' => '18']) {{ __('Games') }}
+                            </x-sidebar-nav-link>
+                        </div>
                     </section>
 
-                    <section class="mt-4">
-                        <div class="mb-2">
-                            <h2 class="text-secondary text-xs font-semibold">{{ __('Reminder') }}</h2>
+                    <section
+
+                        class="mt-4"
+                        x-data="{ collapsed: $persist(false).as('sidebar.reminder.collapsed') }"
+                    >
+                        <div
+                            class="flex items-center justify-between mb-2 text-secondary cursor-pointer"
+                            @click="collapsed = !collapsed"
+                        >
+                            <h2 class="text-xs font-semibold">{{ __('Reminder') }}</h2>
+
+                            <div class='transform transition duration-300 ease-in-out' :class="{'rotate-90': !collapsed,' -translate-y-0.0': collapsed }">
+                                @svg('chevron_forward', 'fill-current', ['width' => 10])
+                            </div>
                         </div>
 
-                        <x-sidebar-nav-link href="{{ route('profile.anime.reminders', $user) }}" wire:navigate :active="request()->routeIs('profile.anime.reminders', $user)">
-                            @svg('tv', 'fill-current', ['width' => '18']) {{ __('Anime') }}
-                        </x-sidebar-nav-link>
+                        <div
+                            x-show="!collapsed"
+                            x-collapse
+                            x-collapse.duration.500ms
+                        >
+                            <x-sidebar-nav-link href="{{ route('profile.anime.reminders', $user) }}" wire:navigate :active="request()->routeIs('profile.anime.reminders', $user)">
+                                @svg('tv', 'fill-current', ['width' => '18']) {{ __('Anime') }}
+                            </x-sidebar-nav-link>
+                        </div>
                     </section>
                 @endauth
             </div>
