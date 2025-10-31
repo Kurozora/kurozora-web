@@ -8,7 +8,7 @@
     <div class="flex flex-nowrap">
         <picture
             class="relative w-full aspect-video rounded-lg overflow-hidden"
-            style="background-color: {{ $studio->getFirstMedia(\App\Enums\MediaCollection::Banner)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
+            style="background-color: {{ $studio->getFirstMedia(\App\Enums\MediaCollection::Banner)?->custom_properties['background_color'] ?? $studio->getFirstMedia(\App\Enums\MediaCollection::Profile)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
         >
             <img class="w-full h-full object-cover lazyload"
                  data-sizes="auto"
@@ -22,7 +22,10 @@
             @if (!empty($studio->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile())))
                 <div class="absolute top-0 bottom-0 left-0 right-0 bg-black/20">
                     <div class="flex flex-col flex-wrap h-full pt-4 pb-4 text-center items-center justify-center">
-                        <picture class="relative h-32 aspect-square rounded-full shadow-lg overflow-hidden">
+                        <picture
+                            class="relative h-32 aspect-square rounded-full shadow-lg overflow-hidden"
+                            style="background-color: {{ $studio->getFirstMedia(\App\Enums\MediaCollection::Profile)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
+                        >
                             <img class="w-full h-full object-cover lazyload"
                                  data-sizes="auto"
                                  data-src="{{ $studio->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) }}"
