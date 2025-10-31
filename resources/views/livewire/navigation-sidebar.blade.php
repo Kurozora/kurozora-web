@@ -75,9 +75,11 @@
                         @svg('building_2', 'fill-current', ['width' => '18']) {{ __('Studios') }}
                     </x-sidebar-nav-link>
 
-{{--                    <x-sidebar-nav-link href="{{ route('platforms.index') }}" wire:navigate :active="request()->routeIs('platforms.index')">--}}
-{{--                        @svg('tv_and_mediabox', 'fill-current', ['width' => '18']) {{ __('Platforms') }}--}}
-{{--                    </x-sidebar-nav-link>--}}
+                    @if (app()->isLocal())
+                    <x-sidebar-nav-link href="{{ route('platforms.index') }}" wire:navigate :active="request()->routeIs('platforms.index')">
+                        @svg('tv_and_mediabox', 'fill-current', ['width' => '18']) {{ __('Platforms') }}
+                    </x-sidebar-nav-link>
+                    @endif
                 </section>
 
                 @auth

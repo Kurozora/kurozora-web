@@ -7,7 +7,7 @@
 >
     <nav class="relative bg-primary text-primary border-b border-black/20 z-[300]">
         {{-- Primary Navigation Menu --}}
-        <div class="pl-4 pr-4">
+        <div class="pl-4 pr-2">
             <div class="flex justify-between gap-2 h-12">
                 {{-- Hamburger --}}
                 <div
@@ -226,17 +226,19 @@
                             {{ __('Studios') }}
                         </x-nav-link>
 
-{{--                        <x-nav-link class="hidden md:inline-flex" href="{{ route('platforms.index') }}" wire:navigate :active="request()->routeIs('platforms.index')"--}}
-{{--                                    x-show="! isSearchEnabled"--}}
-{{--                                    x-transition:enter="ease-out duration-150 delay-[400ms] transform"--}}
-{{--                                    x-transition:enter-start="opacity-0 scale-75"--}}
-{{--                                    x-transition:enter-end="opacity-100 scale-100"--}}
-{{--                                    x-transition:leave="ease-in duration-200 delay-[50ms] transform"--}}
-{{--                                    x-transition:leave-start="opacity-100 scale-100"--}}
-{{--                                    x-transition:leave-end="opacity-0 scale-75"--}}
-{{--                        >--}}
-{{--                            {{ __('Platforms') }}--}}
-{{--                        </x-nav-link>--}}
+                        @if (app()->isLocal())
+                        <x-nav-link class="hidden md:inline-flex" href="{{ route('platforms.index') }}" wire:navigate :active="request()->routeIs('platforms.index')"
+                                    x-show="! isSearchEnabled"
+                                    x-transition:enter="ease-out duration-150 delay-[400ms] transform"
+                                    x-transition:enter-start="opacity-0 scale-75"
+                                    x-transition:enter-end="opacity-100 scale-100"
+                                    x-transition:leave="ease-in duration-200 delay-[50ms] transform"
+                                    x-transition:leave-start="opacity-100 scale-100"
+                                    x-transition:leave-end="opacity-0 scale-75"
+                        >
+                            {{ __('Platforms') }}
+                        </x-nav-link>
+                        @endif
 
                         {{-- Search --}}
                         <button class="inline-flex h-full w-8 items-center justify-center text-secondary cursor-pointer transition duration-150 ease-in-out hover:text-primary focus:text-primary"
@@ -286,7 +288,7 @@
                                     <div class="border-t border-primary"></div>
 
                                     {{-- Library --}}
-                                    <div class="block pl-4 pr-4 pt-2 pb-2 text-xs text-secondary">
+                                    <div class="block pl-2 pr-2 pt-2 pb-2 text-xs text-secondary font-semibold">
                                         {{ __('Library') }}
                                     </div>
 
@@ -312,20 +314,20 @@
 
                                 @auth
                                     {{-- Favorite Pages --}}
-                                    <div class="block pl-4 pr-4 pt-2 pb-2 text-xs text-secondary">
+                                    <div class="block pl-2 pr-2 pt-2 pb-2 text-xs text-secondary font-semibold">
                                         {{ __('Favorite') }}
                                     </div>
 
                                     <x-dropdown-link href="{{ route('profile.anime.favorites', $user) }}" wire:navigate>
-                                        {{ __('Favorite Anime') }}
+                                        {{ __('Anime') }}
                                     </x-dropdown-link>
 
                                     <x-dropdown-link href="{{ route('profile.manga.favorites', $user) }}" wire:navigate>
-                                        {{ __('Favorite Manga') }}
+                                        {{ __('Manga') }}
                                     </x-dropdown-link>
 
                                     <x-dropdown-link href="{{ route('profile.games.favorites', $user) }}" wire:navigate>
-                                        {{ __('Favorite Game') }}
+                                        {{ __('Game') }}
                                     </x-dropdown-link>
 
                                     <div class="border-t border-primary"></div>
@@ -333,27 +335,27 @@
 
                                 @auth
                                     {{-- Reminder Pages --}}
-                                    <div class="block pl-4 pr-4 pt-2 pb-2 text-xs text-secondary">
+                                    <div class="block pl-2 pr-2 pt-2 pb-2 text-xs text-secondary font-semibold">
                                         {{ __('Reminder') }}
                                     </div>
 
                                     <x-dropdown-link href="{{ route('profile.anime.reminders', $user) }}" wire:navigate>
-                                        {{ __('Anime Reminders') }}
+                                        {{ __('Anime') }}
                                     </x-dropdown-link>
 
 {{--                                    <x-dropdown-link href="{{ route('profile.manga.reminders', $user) }}">--}}
-{{--                                        {{ __('Reminder Manga') }}--}}
+{{--                                        {{ __('Manga') }}--}}
 {{--                                    </x-dropdown-link>--}}
 
 {{--                                    <x-dropdown-link href="{{ route('profile.games.reminders', $user) }}">--}}
-{{--                                        {{ __('Reminder Game') }}--}}
+{{--                                        {{ __('Game') }}--}}
 {{--                                    </x-dropdown-link>--}}
 
                                     <div class="border-t border-primary"></div>
                                 @endauth
 
                                 {{-- More Pages --}}
-                                <div class="block pl-4 pr-4 pt-2 pb-2 text-xs text-secondary">
+                                <div class="block pl-2 pr-2 pt-2 pb-2 text-xs text-secondary font-semibold">
                                     {{ __('More') }}
                                 </div>
 
@@ -369,7 +371,7 @@
 
                                 @auth
                                     {{-- Account Management --}}
-                                    <div class="block pl-4 pr-4 pt-2 pb-2 text-xs text-secondary">
+                                    <div class="block pl-2 pr-2 pt-2 pb-2 text-xs text-secondary font-semibold">
                                         {{ __('Manage Account') }}
                                     </div>
 
@@ -422,61 +424,75 @@
 
         {{-- Responsive Navigation Menu --}}
         <div
-            class="block absolute pl-4 pr-4 w-full bg-primary rounded-b-2xl z-[300] md:hidden"
+            class="block absolute pl-4 pr-2 w-full bg-primary rounded-b-2xl z-[300] md:hidden"
             x-cloak
             x-show="isNavOpen"
             x-collapse.duration.400ms=""
         >
             <div class="pt-2 pb-3 space-y-1">
-                <x-responsive-nav-link href="{{ route('home') }}" wire:navigate :active="request()->routeIs('home')">
-                    {{ __('Explore') }}
-                </x-responsive-nav-link>
+                <x-sidebar-nav-link href="{{ route('home') }}" wire:navigate :active="request()->routeIs('home')">
+                    @svg('house', 'fill-current', ['width' => '18']) {{ __('Explore') }}
+                </x-sidebar-nav-link>
 
-                <x-responsive-nav-link href="{{ route('anime.index') }}" wire:navigate :active="request()->routeIs('anime.index')">
-                    {{ __('Anime') }}
-                </x-responsive-nav-link>
+                <x-sidebar-nav-link href="{{ route('schedule') }}" wire:navigate :active="request()->routeIs('schedule')">
+                    @svg('calendar', 'fill-current', ['width' => '18']) {{ __('Schedule') }}
+                </x-sidebar-nav-link>
 
-                <x-responsive-nav-link href="{{ route('manga.index') }}" wire:navigate :active="request()->routeIs('manga.index')">
-                    {{ __('Manga') }}
-                </x-responsive-nav-link>
+                <x-sidebar-nav-link href="{{ route('charts.index') }}" wire:navigate :active="request()->routeIs('charts.index')">
+                    @svg('chart_bar', 'fill-current', ['width' => '18']) {{ __('Charts') }}
+                </x-sidebar-nav-link>
+            </div>
 
-                <x-responsive-nav-link href="{{ route('games.index') }}" wire:navigate :active="request()->routeIs('games.index')">
-                    {{ __('Game') }}
-                </x-responsive-nav-link>
+            <div class="pt-4 pb-1 border-t border-primary">
+                <div class="block pl-2 pr-2 pt-2 pb-2 text-xs text-secondary font-semibold">
+                    {{ __('Catalog') }}
+                </div>
 
-                <x-responsive-nav-link href="{{ route('songs.index') }}" wire:navigate :active="request()->routeIs('songs.index')">
-                    {{ __('Songs') }}
-                </x-responsive-nav-link>
+                <x-sidebar-nav-link href="{{ route('anime.index') }}" wire:navigate :active="request()->routeIs('anime.index')">
+                    @svg('tv', 'fill-current', ['width' => '18']) {{ __('Anime') }}
+                </x-sidebar-nav-link>
 
-                <x-responsive-nav-link href="{{ route('schedule') }}" wire:navigate :active="request()->routeIs('schedule')">
-                    {{ __('Schedule') }}
-                </x-responsive-nav-link>
+                <x-sidebar-nav-link href="{{ route('manga.index') }}" wire:navigate :active="request()->routeIs('manga.index')">
+                    @svg('book', 'fill-current', ['width' => '18']) {{ __('Manga') }}
+                </x-sidebar-nav-link>
 
-                <x-responsive-nav-link href="{{ route('charts.index') }}" wire:navigate :active="request()->routeIs('charts.index')">
-                    {{ __('Charts') }}
-                </x-responsive-nav-link>
+                <x-sidebar-nav-link href="{{ route('games.index') }}" wire:navigate :active="request()->routeIs('games.index')">
+                    @svg('gamecontroller', 'fill-current', ['width' => '18']) {{ __('Game') }}
+                </x-sidebar-nav-link>
 
-                <x-responsive-nav-link href="{{ route('characters.index') }}" wire:navigate :active="request()->routeIs('characters.index')">
-                    {{ __('Characters') }}
-                </x-responsive-nav-link>
+                @if (app()->isLocal())
+                <x-sidebar-nav-link href="#" wire:navigate>
+                    @svg('person_tv', 'fill-current', ['width' => '18']) {{ __('Live Action') }}
+                </x-sidebar-nav-link>
+                @endif
 
-                <x-responsive-nav-link href="{{ route('people.index') }}" wire:navigate :active="request()->routeIs('people.index')">
-                    {{ __('People') }}
-                </x-responsive-nav-link>
+                <x-sidebar-nav-link href="{{ route('songs.index') }}" wire:navigate :active="request()->routeIs('songs.index')">
+                    @svg('music_note', 'fill-current', ['width' => '18']) {{ __('Songs') }}
+                </x-sidebar-nav-link>
 
-                <x-responsive-nav-link href="{{ route('studios.index') }}" wire:navigate :active="request()->routeIs('studios.index')">
-                    {{ __('Studios') }}
-                </x-responsive-nav-link>
+                <x-sidebar-nav-link href="{{ route('characters.index') }}" wire:navigate :active="request()->routeIs('characters.index')">
+                    @svg('totoro', 'fill-current', ['width' => '18']) {{ __('Characters') }}
+                </x-sidebar-nav-link>
 
-{{--                <x-responsive-nav-link href="{{ route('platforms.index') }}" wire:navigate :active="request()->routeIs('platforms.index')">--}}
-{{--                    {{ __('Platforms') }}--}}
-{{--                </x-responsive-nav-link>--}}
+                <x-sidebar-nav-link href="{{ route('people.index') }}" wire:navigate :active="request()->routeIs('people.index')">
+                    @svg('person', 'fill-current', ['width' => '18']) {{ __('People') }}
+                </x-sidebar-nav-link>
+
+                <x-sidebar-nav-link href="{{ route('studios.index') }}" wire:navigate :active="request()->routeIs('studios.index')">
+                    @svg('building_2', 'fill-current', ['width' => '18']) {{ __('Studios') }}
+                </x-sidebar-nav-link>
+
+                @if (app()->isLocal())
+                <x-sidebar-nav-link href="{{ route('platforms.index') }}" wire:navigate :active="request()->routeIs('platforms.index')">
+                    @svg('tv_and_mediabox', 'fill-current', ['width' => '18']) {{ __('Platforms') }}
+                </x-sidebar-nav-link>
+                @endif
             </div>
 
             {{-- Responsive Settings Options --}}
             <div class="pt-4 pb-1 border-t border-primary">
                 @auth
-                    <div class="flex items-center pl-4 pr-4 pb-4">
+                    <div class="flex items-center pl-2 pr-2 pb-4">
                         <div class="shrink-0">
                             <div class="h-10 w-10 bg-cover rounded-full" style="background-image: url({{ $user->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) }});" alt="{{ $user->username }}" role="img"></div>
                         </div>
@@ -489,47 +505,51 @@
 
                     {{-- Profile --}}
                     <div class="space-y-1">
-                        <x-responsive-nav-link href="{{ route('me') }}" wire:navigate>
+                        <x-sidebar-nav-link href="{{ route('me') }}" wire:navigate>
                             {{ __('Profile') }}
-                        </x-responsive-nav-link>
+                        </x-sidebar-nav-link>
 
                         <div class="border-t border-primary"></div>
                     </div>
 
                     {{-- Library --}}
                     <div class="space-y-1 pt-1">
-                        <x-responsive-nav-link href="{{ route('profile.anime.library', $user) }}"
+                        <div class="block pl-2 pr-2 pt-2 pb-2 text-xs text-secondary font-semibold">
+                            {{ __('Library') }}
+                        </div>
+
+                        <x-sidebar-nav-link href="{{ route('profile.anime.library', $user) }}"
                                                wire:navigate
                                                :active="request()->routeIs('profile.anime.library')">
-                            {{ __('Anime Library') }}
-                        </x-responsive-nav-link>
+                            @svg('tv', 'fill-current', ['width' => '18']) {{ __('Anime') }}
+                        </x-sidebar-nav-link>
 
-                        <x-responsive-nav-link href="{{ route('profile.manga.library', $user) }}"
+                        <x-sidebar-nav-link href="{{ route('profile.manga.library', $user) }}"
                                                wire:navigate
                                                :active="request()->routeIs('profile.manga.library')">
-                            {{ __('Manga Library') }}
-                        </x-responsive-nav-link>
+                            @svg('book', 'fill-current', ['width' => '18']) {{ __('Manga') }}
+                        </x-sidebar-nav-link>
 
-                        <x-responsive-nav-link href="{{ route('profile.games.library', $user) }}"
+                        <x-sidebar-nav-link href="{{ route('profile.games.library', $user) }}"
                                                wire:navigate
                                                :active="request()->routeIs('profile.games.library')">
-                            {{ __('Games Library') }}
-                        </x-responsive-nav-link>
+                            @svg('gamecontroller', 'fill-current', ['width' => '18']) {{ __('Games') }}
+                        </x-sidebar-nav-link>
 
                         <div class="border-t border-primary"></div>
                     </div>
                 @else
                     <div class="space-y-1 pt-1">
-                        <x-responsive-nav-link href="{{ route('me') }}" wire:navigate>
+                        <x-sidebar-nav-link href="{{ route('me') }}" wire:navigate>
                             {{ __('Profile') }}
-                        </x-responsive-nav-link>
+                        </x-sidebar-nav-link>
 
                         {{-- Library --}}
-                        <x-responsive-nav-link href="{{ route('library.index') }}"
+                        <x-sidebar-nav-link href="{{ route('library.index') }}"
                                                wire:navigate
                                                :active="request()->routeIs('library.index')">
                             {{ __('Library') }}
-                        </x-responsive-nav-link>
+                        </x-sidebar-nav-link>
 
                         <div class="border-t border-primary"></div>
                     </div>
@@ -538,23 +558,27 @@
                 @auth
                     {{-- Favorite Pages --}}
                     <div class="space-y-1 pt-1">
-                        <x-responsive-nav-link href="{{ route('profile.anime.favorites', $user) }}"
+                        <div class="block pl-2 pr-2 pt-2 pb-2 text-xs text-secondary font-semibold">
+                            {{ __('Favorite') }}
+                        </div>
+
+                        <x-sidebar-nav-link href="{{ route('profile.anime.favorites', $user) }}"
                                                wire:navigate
                                                :active="request()->routeIs('profile.anime.favorites', $user)">
-                            {{ __('Favorite Anime') }}
-                        </x-responsive-nav-link>
+                            @svg('tv', 'fill-current', ['width' => '18']) {{ __('Anime') }}
+                        </x-sidebar-nav-link>
 
-                        <x-responsive-nav-link href="{{ route('profile.manga.favorites', $user) }}"
+                        <x-sidebar-nav-link href="{{ route('profile.manga.favorites', $user) }}"
                                                wire:navigate
                                                :active="request()->routeIs('profile.manga.favorites', $user)">
-                            {{ __('Favorite Manga') }}
-                        </x-responsive-nav-link>
+                            @svg('book', 'fill-current', ['width' => '18']) {{ __('Manga') }}
+                        </x-sidebar-nav-link>
 
-                        <x-responsive-nav-link href="{{ route('profile.games.favorites', $user) }}"
+                        <x-sidebar-nav-link href="{{ route('profile.games.favorites', $user) }}"
                                                wire:navigate
                                                :active="request()->routeIs('profile.games.favorites', $user)">
-                            {{ __('Favorite Game') }}
-                        </x-responsive-nav-link>
+                            @svg('gamecontroller', 'fill-current', ['width' => '18']) {{ __('Game') }}
+                        </x-sidebar-nav-link>
 
                         <div class="border-t border-primary"></div>
                     </div>
@@ -563,23 +587,15 @@
                 @auth
                     {{-- Reminder Pages --}}
                     <div class="space-y-1 pt-1">
-                        <x-responsive-nav-link href="{{ route('profile.anime.reminders', $user) }}"
+                        <div class="block pl-2 pr-2 pt-2 pb-2 text-xs text-secondary font-semibold">
+                            {{ __('Reminder') }}
+                        </div>
+
+                        <x-sidebar-nav-link href="{{ route('profile.anime.reminders', $user) }}"
                                                wire:navigate
                                                :active="request()->routeIs('profile.anime.reminders', $user)">
-                            {{ __('Anime Reminders') }}
-                        </x-responsive-nav-link>
-
-{{--                        <x-responsive-nav-link href="{{ route('profile.manga.reminders', $user) }}"--}}
-{{--                                               wire:navigate--}}
-{{--                                               :active="request()->routeIs('profile.manga.reminders', $user)">--}}
-{{--                            {{ __('Manga Reminders') }}--}}
-{{--                        </x-responsive-nav-link>--}}
-
-{{--                        <x-responsive-nav-link href="{{ route('profile.games.reminders', $user) }}"--}}
-{{--                                               wire:navigate--}}
-{{--                                               :active="request()->routeIs('profile.games.reminders', $user)">--}}
-{{--                            {{ __('Game Reminders') }}--}}
-{{--                        </x-responsive-nav-link>--}}
+                            @svg('tv', 'fill-current', ['width' => '18']) {{ __('Anime') }}
+                        </x-sidebar-nav-link>
 
                         <div class="border-t border-primary"></div>
                     </div>
@@ -587,17 +603,21 @@
 
                 {{-- More Pages --}}
                 <div class="space-y-1 pt-1">
-                    <x-responsive-nav-link href="{{ route('app-icons.index') }}"
+                    <div class="block pl-2 pr-2 pt-2 pb-2 text-xs text-secondary font-semibold">
+                        {{ __('More') }}
+                    </div>
+
+                    <x-sidebar-nav-link href="{{ route('app-icons.index') }}"
                                            wire:navigate
                                            :active="request()->routeIs('app-icons.index')">
                         {{ __('App Icons') }}
-                    </x-responsive-nav-link>
+                    </x-sidebar-nav-link>
 
-                    <x-responsive-nav-link href="{{ route('theme-store.index') }}"
+                    <x-sidebar-nav-link href="{{ route('theme-store.index') }}"
                                            wire:navigate
                                            :active="request()->routeIs('theme-store.index')">
                         {{ __('Theme Store') }}
-                    </x-responsive-nav-link>
+                    </x-sidebar-nav-link>
 
                     <div class="border-t border-primary"></div>
                 </div>
@@ -605,11 +625,15 @@
                 {{-- Account Management --}}
                 @auth
                     <div class="space-y-1 pt-1">
-                        <x-responsive-nav-link href="{{ route('profile.settings') }}"
+                        <div class="block pl-2 pr-2 pt-2 pb-2 text-xs text-secondary font-semibold">
+                            {{ __('Account Management') }}
+                        </div>
+
+                        <x-sidebar-nav-link href="{{ route('profile.settings') }}"
                                                wire:navigate
                                                :active="request()->routeIs('profile.settings')">
                             {{ __('Settings') }}
-                        </x-responsive-nav-link>
+                        </x-sidebar-nav-link>
 
                         <div class="border-t border-primary"></div>
                     </div>
@@ -623,30 +647,30 @@
                                 @method('DELETE')
                                 @csrf
 
-                                <x-responsive-nav-link href="{{ route('impersonation.stop') }}"
+                                <x-sidebar-nav-link href="{{ route('impersonation.stop') }}"
                                                        onclick="event.preventDefault(); this.closest('form').submit();">
                                     {{ __('Stop impersonation') }}
-                                </x-responsive-nav-link>
+                                </x-sidebar-nav-link>
                             </form>
                         @endif
 
                         <form method="POST" action="{{ route('sign-out') }}">
                             @csrf
 
-                            <x-responsive-nav-link href="{{ route('sign-out') }}"
+                            <x-sidebar-nav-link href="{{ route('sign-out') }}"
                                                    onclick="event.preventDefault(); this.closest('form').submit();">
                                 {{ __('Sign out') }}
-                            </x-responsive-nav-link>
+                            </x-sidebar-nav-link>
                         </form>
                     @else
-                        <x-responsive-nav-link href="{{ route('sign-in') }}" wire:navigate>
+                        <x-sidebar-nav-link href="{{ route('sign-in') }}" wire:navigate>
                             {{ __('Sign in') }}
-                        </x-responsive-nav-link>
+                        </x-sidebar-nav-link>
 
                         @if (Route::has('sign-up'))
-                            <x-responsive-nav-link href="{{ route('sign-up') }}" wire:navigate>
+                            <x-sidebar-nav-link href="{{ route('sign-up') }}" wire:navigate>
                                 {{ __('Create Account') }}
-                            </x-responsive-nav-link>
+                            </x-sidebar-nav-link>
                         @endif
                     @endauth
                 </div>
