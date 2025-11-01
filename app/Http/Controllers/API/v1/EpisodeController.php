@@ -11,6 +11,7 @@ use App\Http\Requests\MarkEpisodeAsWatchedRequest;
 use App\Http\Requests\RateModelRequest;
 use App\Http\Resources\EpisodeResource;
 use App\Http\Resources\MediaRatingResource;
+use App\Models\Anime;
 use App\Models\Episode;
 use App\Models\MediaRating;
 use Exception;
@@ -222,11 +223,17 @@ class EpisodeController extends Controller
     public function watched(MarkEpisodeAsWatchedRequest $request, Episode $episode): JSONResponse
     {
         $user = auth()->user();
-        $hasNotTracked = $user->hasNotTracked($episode->anime);
+        $anime = $episode->anime()->withoutGlobalScopes()
+            ->select([Anime::TABLE_NAME . '.id'])
+            ->with([
+                'translation'
+            ])
+            ->first();
+        $hasNotTracked = $user->hasNotTracked($anime);
 
         if ($hasNotTracked) {
             // The item could not be found
-            throw new AuthorizationException(__('Please add ":x" to your library first.', ['x' => $episode->anime->title]));
+            throw new AuthorizationException(__('Please add ":x" to your library first.', ['x' => $anime->title]));
         }
 
         // Find if the user has watched the episode
