@@ -1,84 +1,70 @@
 <div
-    class="xl:hidden"
     x-data="{
         isSearchEnabled: @entangle('isSearchEnabled').live,
-        isNavOpen: false
+        isNavOpen: false,
+        showScrollEdgeEffect: false
     }"
+    x-intersect:enter="showScrollEdgeEffect = false"
+    x-intersect:leave="showScrollEdgeEffect = true"
 >
-    <nav class="relative bg-primary text-primary border-b border-black/20 z-[300]">
-        {{-- Primary Navigation Menu --}}
-        <div class="pl-4 pr-2">
-            <div class="flex justify-between gap-2 h-12">
-                {{-- Hamburger --}}
-                <div
-                    class="-mr-2 flex items-center md:hidden"
-                    x-show="! isSearchEnabled"
-                    x-transition:enter="ease-out duration-150 delay-[50ms] transform sm:delay-300"
-                    x-transition:enter-start="opacity-0 scale-75"
-                    x-transition:enter-end="opacity-100 scale-100"
-                    x-transition:leave="ease-in duration-200 delay-100 transform sm:delay-[50ms]"
-                    x-transition:leave-start="opacity-100 scale-100"
-                    x-transition:leave-end="opacity-0 scale-75"
-                >
-                    <button
-                        class="inline-flex items-center justify-center pt-2 pr-2 pb-2 pl-2 rounded-md text-secondary hover:text-primary hover:bg-tertiary focus:bg-secondary focus:text-primary transition duration-150 ease-in-out"
-                        x-on:click="isNavOpen = ! isNavOpen"
+    <div class="xl:hidden">
+        <nav class="relative bg-primary text-primary border-b border-black/20 z-[300]">
+            {{-- Primary Navigation Menu --}}
+            <div class="pl-4 pr-2">
+                <div class="flex justify-between gap-2 h-12">
+                    {{-- Hamburger --}}
+                    <div
+                        class="-mr-2 flex items-center md:hidden"
+                        x-show="! isSearchEnabled"
+                        x-transition:enter="ease-out duration-150 delay-[50ms] transform sm:delay-300"
+                        x-transition:enter-start="opacity-0 scale-75"
+                        x-transition:enter-end="opacity-100 scale-100"
+                        x-transition:leave="ease-in duration-200 delay-100 transform sm:delay-[50ms]"
+                        x-transition:leave-start="opacity-100 scale-100"
+                        x-transition:leave-end="opacity-0 scale-75"
                     >
-                        <svg stroke="currentColor" fill="none" viewBox="0 0 24 24" width="24">
-                            <path
-                                class="inline-flex transform origin-center"
-                                x-show="! isNavOpen"
-                                x-transition:enter="ease-out duration-200"
-                                x-transition:enter-start="opacity-0 scale-75 rotate-180"
-                                x-transition:enter-end="opacity-100 scale-100 rotate-0"
-                                x-transition:leave="ease-in duration-200"
-                                x-transition:leave-start="opacity-100 scale-100 rotate-0"
-                                x-transition:leave-end="opacity-0 scale-75 rotate-180"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M4 6h16M4 12h16M4 18h16"
-                            />
+                        <button
+                            class="inline-flex items-center justify-center pt-2 pr-2 pb-2 pl-2 rounded-md text-secondary hover:text-primary hover:bg-tertiary focus:bg-secondary focus:text-primary transition duration-150 ease-in-out"
+                            x-on:click="isNavOpen = ! isNavOpen"
+                        >
+                            <svg stroke="currentColor" fill="none" viewBox="0 0 24 24" width="24">
+                                <path
+                                    class="inline-flex transform origin-center"
+                                    x-show="! isNavOpen"
+                                    x-transition:enter="ease-out duration-200"
+                                    x-transition:enter-start="opacity-0 scale-75 rotate-180"
+                                    x-transition:enter-end="opacity-100 scale-100 rotate-0"
+                                    x-transition:leave="ease-in duration-200"
+                                    x-transition:leave-start="opacity-100 scale-100 rotate-0"
+                                    x-transition:leave-end="opacity-0 scale-75 rotate-180"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M4 6h16M4 12h16M4 18h16"
+                                />
 
-                            <path
-                                class="inline-flex transform origin-center"
-                                x-cloak
-                                x-show="isNavOpen"
-                                x-transition:enter="ease-out duration-200"
-                                x-transition:enter-start="opacity-0 scale-75 rotate-180"
-                                x-transition:enter-end="opacity-100 scale-100 rotate-0"
-                                x-transition:leave="ease-in duration-200"
-                                x-transition:leave-start="opacity-100 scale-100 rotate-0"
-                                x-transition:leave-end="opacity-0 scale-75 rotate-180"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M6 18L18 6M6 6l12 12"
-                            />
-                        </svg>
-                    </button>
-                </div>
+                                <path
+                                    class="inline-flex transform origin-center"
+                                    x-cloak
+                                    x-show="isNavOpen"
+                                    x-transition:enter="ease-out duration-200"
+                                    x-transition:enter-start="opacity-0 scale-75 rotate-180"
+                                    x-transition:enter-end="opacity-100 scale-100 rotate-0"
+                                    x-transition:leave="ease-in duration-200"
+                                    x-transition:leave-start="opacity-100 scale-100 rotate-0"
+                                    x-transition:leave-end="opacity-0 scale-75 rotate-180"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12"
+                                />
+                            </svg>
+                        </button>
+                    </div>
 
-                <div class="flex gap-2 w-full">
-                    {{-- Logo --}}
-                    <a class="inline-flex items-center h-full m-auto text-secondary transition duration-150 ease-in-out hover:text-primary focus:text-primary md:hidden"
-                       href="/"
-                       wire:navigate
-                       x-show="! isSearchEnabled"
-                       x-transition:enter="ease-out duration-150 delay-100 transform sm:delay-[0ms]"
-                       x-transition:enter-start="opacity-0 scale-75"
-                       x-transition:enter-end="opacity-100 scale-100"
-                       x-transition:leave="ease-in duration-200 delay-[50ms] transform sm:delay-[400ms]"
-                       x-transition:leave-start="opacity-100 scale-100"
-                       x-transition:leave-end="opacity-0 scale-75"
-                    >
-                        <x-app-icon />
-                    </a>
-
-                    {{-- Navigation Links --}}
-                    <div class="flex items-center justify-between md:-my-px md:w-full">
+                    <div class="flex gap-2 w-full">
                         {{-- Logo --}}
-                        <a class="hidden md:inline-flex items-center h-full text-secondary transition duration-150 ease-in-out hover:text-primary focus:text-primary md:pt-1"
+                        <a class="inline-flex items-center h-full m-auto text-secondary transition duration-150 ease-in-out hover:text-primary focus:text-primary md:hidden"
                            href="/"
                            wire:navigate
                            x-show="! isSearchEnabled"
@@ -92,608 +78,635 @@
                             <x-app-icon />
                         </a>
 
-                        <x-nav-link class="hidden md:inline-flex" href="{{ route('home') }}" wire:navigate :active="request()->routeIs('home')"
+                        {{-- Navigation Links --}}
+                        <div class="flex items-center justify-between md:-my-px md:w-full">
+                            {{-- Logo --}}
+                            <a class="hidden md:inline-flex items-center h-full text-secondary transition duration-150 ease-in-out hover:text-primary focus:text-primary md:pt-1"
+                               href="/"
+                               wire:navigate
+                               x-show="! isSearchEnabled"
+                               x-transition:enter="ease-out duration-150 delay-100 transform sm:delay-[0ms]"
+                               x-transition:enter-start="opacity-0 scale-75"
+                               x-transition:enter-end="opacity-100 scale-100"
+                               x-transition:leave="ease-in duration-200 delay-[50ms] transform sm:delay-[400ms]"
+                               x-transition:leave-start="opacity-100 scale-100"
+                               x-transition:leave-end="opacity-0 scale-75"
+                            >
+                                <x-app-icon />
+                            </a>
+
+                            <x-nav-link class="hidden md:inline-flex" href="{{ route('home') }}" wire:navigate :active="request()->routeIs('home')"
+                                        x-show="! isSearchEnabled"
+                                        x-transition:enter="ease-out duration-150 delay-[50ms] transform"
+                                        x-transition:enter-start="opacity-0 scale-75"
+                                        x-transition:enter-end="opacity-100 scale-100"
+                                        x-transition:leave="ease-in duration-200 delay-[350ms] transform"
+                                        x-transition:leave-start="opacity-100 scale-100"
+                                        x-transition:leave-end="opacity-0 scale-75"
+                            >
+                                {{ __('Explore') }}
+                            </x-nav-link>
+
+                            <x-nav-link class="hidden md:inline-flex" href="{{ route('anime.index') }}" wire:navigate :active="request()->routeIs('anime.index')"
+                                        x-show="! isSearchEnabled"
+                                        x-transition:enter="ease-out duration-150 delay-100 transform"
+                                        x-transition:enter-start="opacity-0 scale-75"
+                                        x-transition:enter-end="opacity-100 scale-100"
+                                        x-transition:leave="ease-in duration-200 delay-300 transform"
+                                        x-transition:leave-start="opacity-100 scale-100"
+                                        x-transition:leave-end="opacity-0 scale-75"
+                            >
+                                {{ __('Anime') }}
+                            </x-nav-link>
+
+                            <x-nav-link class="hidden md:inline-flex" href="{{ route('manga.index') }}" wire:navigate :active="request()->routeIs('manga.index')"
+                                        x-show="! isSearchEnabled"
+                                        x-transition:enter="ease-out duration-150 delay-150 transform"
+                                        x-transition:enter-start="opacity-0 scale-75"
+                                        x-transition:enter-end="opacity-100 scale-100"
+                                        x-transition:leave="ease-in duration-200 delay-[250ms] transform"
+                                        x-transition:leave-start="opacity-100 scale-100"
+                                        x-transition:leave-end="opacity-0 scale-75"
+                            >
+                                {{ __('Manga') }}
+                            </x-nav-link>
+
+                            <x-nav-link class="hidden md:inline-flex" href="{{ route('games.index') }}" wire:navigate :active="request()->routeIs('games.index')"
+                                        x-show="! isSearchEnabled"
+                                        x-transition:enter="ease-out duration-150 delay-100 transform"
+                                        x-transition:enter-start="opacity-0 scale-75"
+                                        x-transition:enter-end="opacity-100 scale-100"
+                                        x-transition:leave="ease-in duration-200 delay-300 transform"
+                                        x-transition:leave-start="opacity-100 scale-100"
+                                        x-transition:leave-end="opacity-0 scale-75"
+                            >
+                                {{ __('Game') }}
+                            </x-nav-link>
+
+                            @if (app()->isLocal())
+                            <x-nav-link class="hidden md:inline-flex" href="#"
+                                        x-show="! isSearchEnabled"
+                                        x-transition:enter="ease-out duration-150 delay-100 transform"
+                                        x-transition:enter-start="opacity-0 scale-75"
+                                        x-transition:enter-end="opacity-100 scale-100"
+                                        x-transition:leave="ease-in duration-200 delay-300 transform"
+                                        x-transition:leave-start="opacity-100 scale-100"
+                                        x-transition:leave-end="opacity-0 scale-75"
+                            >
+                                {{ __('Live Action') }}
+                            </x-nav-link>
+                            @endif
+
+                            <x-nav-link class="hidden md:inline-flex" href="{{ route('songs.index') }}" wire:navigate :active="request()->routeIs('songs.index')"
+                                        x-show="! isSearchEnabled"
+                                        x-transition:enter="ease-out duration-150 delay-200 transform"
+                                        x-transition:enter-start="opacity-0 scale-75"
+                                        x-transition:enter-end="opacity-100 scale-100"
+                                        x-transition:leave="ease-in duration-200 delay-200 transform"
+                                        x-transition:leave-start="opacity-100 scale-100"
+                                        x-transition:leave-end="opacity-0 scale-75"
+                            >
+                                {{ __('Songs') }}
+                            </x-nav-link>
+
+                            <x-nav-link class="hidden md:inline-flex" href="{{ route('schedule') }}" wire:navigate :active="request()->routeIs('schedule')"
+                                        x-show="! isSearchEnabled"
+                                        x-transition:enter="ease-out duration-150 delay-200 transform"
+                                        x-transition:enter-start="opacity-0 scale-75"
+                                        x-transition:enter-end="opacity-100 scale-100"
+                                        x-transition:leave="ease-in duration-200 delay-200 transform"
+                                        x-transition:leave-start="opacity-100 scale-100"
+                                        x-transition:leave-end="opacity-0 scale-75"
+                            >
+                                {{ __('Schedule') }}
+                            </x-nav-link>
+
+                            <x-nav-link class="hidden md:inline-flex" href="{{ route('charts.index') }}" wire:navigate :active="request()->routeIs('charts.index')"
+                                        x-show="! isSearchEnabled"
+                                        x-transition:enter="ease-out duration-150 delay-[250ms] transform"
+                                        x-transition:enter-start="opacity-0 scale-75"
+                                        x-transition:enter-end="opacity-100 scale-100"
+                                        x-transition:leave="ease-in duration-200 delay-150 transform"
+                                        x-transition:leave-start="opacity-100 scale-100"
+                                        x-transition:leave-end="opacity-0 scale-75"
+                            >
+                                {{ __('Charts') }}
+                            </x-nav-link>
+
+                            <x-nav-link class="hidden md:inline-flex" href="{{ route('characters.index') }}" wire:navigate :active="request()->routeIs('characters.index')"
+                                        x-show="! isSearchEnabled"
+                                        x-transition:enter="ease-out duration-150 delay-300 transform"
+                                        x-transition:enter-start="opacity-0 scale-75"
+                                        x-transition:enter-end="opacity-100 scale-100"
+                                        x-transition:leave="ease-in duration-200 delay-100 transform"
+                                        x-transition:leave-start="opacity-100 scale-100"
+                                        x-transition:leave-end="opacity-0 scale-75"
+                            >
+                                {{ __('Characters') }}
+                            </x-nav-link>
+
+                            <x-nav-link class="hidden md:inline-flex" href="{{ route('people.index') }}" wire:navigate :active="request()->routeIs('people.index')"
+                                        x-show="! isSearchEnabled"
+                                        x-transition:enter="ease-out duration-150 delay-[350ms] transform"
+                                        x-transition:enter-start="opacity-0 scale-75"
+                                        x-transition:enter-end="opacity-100 scale-100"
+                                        x-transition:leave="ease-in duration-200 delay-75 transform"
+                                        x-transition:leave-start="opacity-100 scale-100"
+                                        x-transition:leave-end="opacity-0 scale-75"
+                            >
+                                {{ __('People') }}
+                            </x-nav-link>
+
+                            <x-nav-link class="hidden md:inline-flex" href="{{ route('studios.index') }}" wire:navigate :active="request()->routeIs('studios.index')"
+                                        x-show="! isSearchEnabled"
+                                        x-transition:enter="ease-out duration-150 delay-[400ms] transform"
+                                        x-transition:enter-start="opacity-0 scale-75"
+                                        x-transition:enter-end="opacity-100 scale-100"
+                                        x-transition:leave="ease-in duration-200 delay-[50ms] transform"
+                                        x-transition:leave-start="opacity-100 scale-100"
+                                        x-transition:leave-end="opacity-0 scale-75"
+                            >
+                                {{ __('Studios') }}
+                            </x-nav-link>
+
+                            @if (app()->isLocal())
+                            <x-nav-link class="hidden md:inline-flex" href="{{ route('platforms.index') }}" wire:navigate :active="request()->routeIs('platforms.index')"
+                                        x-show="! isSearchEnabled"
+                                        x-transition:enter="ease-out duration-150 delay-[400ms] transform"
+                                        x-transition:enter-start="opacity-0 scale-75"
+                                        x-transition:enter-end="opacity-100 scale-100"
+                                        x-transition:leave="ease-in duration-200 delay-[50ms] transform"
+                                        x-transition:leave-start="opacity-100 scale-100"
+                                        x-transition:leave-end="opacity-0 scale-75"
+                            >
+                                {{ __('Platforms') }}
+                            </x-nav-link>
+                            @endif
+
+                            {{-- Search --}}
+                            <button class="inline-flex h-full w-8 items-center justify-center text-secondary cursor-pointer transition duration-150 ease-in-out hover:text-primary focus:text-primary"
                                     x-show="! isSearchEnabled"
-                                    x-transition:enter="ease-out duration-150 delay-[50ms] transform"
+                                    x-on:click="isNavOpen = false; isSearchEnabled = ! isSearchEnabled;"
+                                    x-transition:enter="ease-out duration-150 delay-150 transform sm:delay-300"
                                     x-transition:enter-start="opacity-0 scale-75"
                                     x-transition:enter-end="opacity-100 scale-100"
-                                    x-transition:leave="ease-in duration-200 delay-[350ms] transform"
+                                    x-transition:leave="ease-in duration-200 transform sm:delay-[50ms]"
                                     x-transition:leave-start="opacity-100 scale-100"
                                     x-transition:leave-end="opacity-0 scale-75"
-                        >
-                            {{ __('Explore') }}
-                        </x-nav-link>
+                            >
+                                @svg('magnifyingglass', 'fill-current', ['width' => '18'])
+                            </button>
 
-                        <x-nav-link class="hidden md:inline-flex" href="{{ route('anime.index') }}" wire:navigate :active="request()->routeIs('anime.index')"
-                                    x-show="! isSearchEnabled"
-                                    x-transition:enter="ease-out duration-150 delay-100 transform"
-                                    x-transition:enter-start="opacity-0 scale-75"
-                                    x-transition:enter-end="opacity-100 scale-100"
-                                    x-transition:leave="ease-in duration-200 delay-300 transform"
-                                    x-transition:leave-start="opacity-100 scale-100"
-                                    x-transition:leave-end="opacity-0 scale-75"
-                        >
-                            {{ __('Anime') }}
-                        </x-nav-link>
+                            <livewire:nav-notification />
 
-                        <x-nav-link class="hidden md:inline-flex" href="{{ route('manga.index') }}" wire:navigate :active="request()->routeIs('manga.index')"
-                                    x-show="! isSearchEnabled"
-                                    x-transition:enter="ease-out duration-150 delay-150 transform"
-                                    x-transition:enter-start="opacity-0 scale-75"
-                                    x-transition:enter-end="opacity-100 scale-100"
-                                    x-transition:leave="ease-in duration-200 delay-[250ms] transform"
-                                    x-transition:leave-start="opacity-100 scale-100"
-                                    x-transition:leave-end="opacity-0 scale-75"
-                        >
-                            {{ __('Manga') }}
-                        </x-nav-link>
+                            {{-- Settings Dropdown --}}
+                            <x-dropdown id="more-settings" align="right" width="48" content-classes="hidden bg-secondary md:block">
+                                <x-slot:trigger>
+                                    <button
+                                        class="hidden md:flex text-sm border-2 border-transparent rounded-full transition duration-150 ease-in-out focus:border-primary"
+                                        x-show="! isSearchEnabled"
+                                        x-transition:enter="ease-out duration-150 delay-[350ms] transform"
+                                        x-transition:enter-start="opacity-0 scale-75"
+                                        x-transition:enter-end="opacity-100 scale-100"
+                                        x-transition:leave="ease-in duration-200 transform"
+                                        x-transition:leave-start="opacity-100 scale-100"
+                                        x-transition:leave-end="opacity-0 scale-75"
+                                    >
+                                        <div
+                                            class="h-6 w-6 bg-cover rounded-full"
+                                            style="background-image: url({{ $user?->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/user_profile.webp') }});"
+                                            alt="{{ $user?->username ?? __('Guest') }} {{ __('Profile') }}"
+                                            title="{{ $user?->username ?? __('Guest') }}"
+                                            role="img"
+                                        ></div>
+                                    </button>
+                                </x-slot:trigger>
 
-                        <x-nav-link class="hidden md:inline-flex" href="{{ route('games.index') }}" wire:navigate :active="request()->routeIs('games.index')"
-                                    x-show="! isSearchEnabled"
-                                    x-transition:enter="ease-out duration-150 delay-100 transform"
-                                    x-transition:enter-start="opacity-0 scale-75"
-                                    x-transition:enter-end="opacity-100 scale-100"
-                                    x-transition:leave="ease-in duration-200 delay-300 transform"
-                                    x-transition:leave-start="opacity-100 scale-100"
-                                    x-transition:leave-end="opacity-0 scale-75"
-                        >
-                            {{ __('Game') }}
-                        </x-nav-link>
+                                <x-slot:content>
+                                    <x-dropdown-link href="{{ route('me') }}" wire:navigate>
+                                        {{ __('Profile') }}
+                                    </x-dropdown-link>
 
-                        @if (app()->isLocal())
-                        <x-nav-link class="hidden md:inline-flex" href="#"
-                                    x-show="! isSearchEnabled"
-                                    x-transition:enter="ease-out duration-150 delay-100 transform"
-                                    x-transition:enter-start="opacity-0 scale-75"
-                                    x-transition:enter-end="opacity-100 scale-100"
-                                    x-transition:leave="ease-in duration-200 delay-300 transform"
-                                    x-transition:leave-start="opacity-100 scale-100"
-                                    x-transition:leave-end="opacity-0 scale-75"
-                        >
-                            {{ __('Live Action') }}
-                        </x-nav-link>
-                        @endif
+                                    @auth
+                                        <div class="border-t border-primary"></div>
 
-                        <x-nav-link class="hidden md:inline-flex" href="{{ route('songs.index') }}" wire:navigate :active="request()->routeIs('songs.index')"
-                                    x-show="! isSearchEnabled"
-                                    x-transition:enter="ease-out duration-150 delay-200 transform"
-                                    x-transition:enter-start="opacity-0 scale-75"
-                                    x-transition:enter-end="opacity-100 scale-100"
-                                    x-transition:leave="ease-in duration-200 delay-200 transform"
-                                    x-transition:leave-start="opacity-100 scale-100"
-                                    x-transition:leave-end="opacity-0 scale-75"
-                        >
-                            {{ __('Songs') }}
-                        </x-nav-link>
+                                        {{-- Library --}}
+                                        <div class="block pl-2 pr-2 pt-2 pb-2 text-xs text-secondary font-semibold">
+                                            {{ __('Library') }}
+                                        </div>
 
-                        <x-nav-link class="hidden md:inline-flex" href="{{ route('schedule') }}" wire:navigate :active="request()->routeIs('schedule')"
-                                    x-show="! isSearchEnabled"
-                                    x-transition:enter="ease-out duration-150 delay-200 transform"
-                                    x-transition:enter-start="opacity-0 scale-75"
-                                    x-transition:enter-end="opacity-100 scale-100"
-                                    x-transition:leave="ease-in duration-200 delay-200 transform"
-                                    x-transition:leave-start="opacity-100 scale-100"
-                                    x-transition:leave-end="opacity-0 scale-75"
-                        >
-                            {{ __('Schedule') }}
-                        </x-nav-link>
+                                        <x-dropdown-link href="{{ route('profile.anime.library', $user) }}" wire:navigate>
+                                            {{ __('Anime Library') }}
+                                        </x-dropdown-link>
 
-                        <x-nav-link class="hidden md:inline-flex" href="{{ route('charts.index') }}" wire:navigate :active="request()->routeIs('charts.index')"
-                                    x-show="! isSearchEnabled"
-                                    x-transition:enter="ease-out duration-150 delay-[250ms] transform"
-                                    x-transition:enter-start="opacity-0 scale-75"
-                                    x-transition:enter-end="opacity-100 scale-100"
-                                    x-transition:leave="ease-in duration-200 delay-150 transform"
-                                    x-transition:leave-start="opacity-100 scale-100"
-                                    x-transition:leave-end="opacity-0 scale-75"
-                        >
-                            {{ __('Charts') }}
-                        </x-nav-link>
+                                        <x-dropdown-link href="{{ route('profile.manga.library', $user) }}" wire:navigate>
+                                            {{ __('Manga Library') }}
+                                        </x-dropdown-link>
 
-                        <x-nav-link class="hidden md:inline-flex" href="{{ route('characters.index') }}" wire:navigate :active="request()->routeIs('characters.index')"
-                                    x-show="! isSearchEnabled"
-                                    x-transition:enter="ease-out duration-150 delay-300 transform"
-                                    x-transition:enter-start="opacity-0 scale-75"
-                                    x-transition:enter-end="opacity-100 scale-100"
-                                    x-transition:leave="ease-in duration-200 delay-100 transform"
-                                    x-transition:leave-start="opacity-100 scale-100"
-                                    x-transition:leave-end="opacity-0 scale-75"
-                        >
-                            {{ __('Characters') }}
-                        </x-nav-link>
+                                        <x-dropdown-link href="{{ route('profile.games.library', $user) }}" wire:navigate>
+                                            {{ __('Games Library') }}
+                                        </x-dropdown-link>
+                                    @else
+                                        {{-- Library --}}
+                                        <x-dropdown-link href="{{ route('library.index') }}" wire:navigate>
+                                            {{ __('Library') }}
+                                        </x-dropdown-link>
+                                    @endauth
 
-                        <x-nav-link class="hidden md:inline-flex" href="{{ route('people.index') }}" wire:navigate :active="request()->routeIs('people.index')"
-                                    x-show="! isSearchEnabled"
-                                    x-transition:enter="ease-out duration-150 delay-[350ms] transform"
-                                    x-transition:enter-start="opacity-0 scale-75"
-                                    x-transition:enter-end="opacity-100 scale-100"
-                                    x-transition:leave="ease-in duration-200 delay-75 transform"
-                                    x-transition:leave-start="opacity-100 scale-100"
-                                    x-transition:leave-end="opacity-0 scale-75"
-                        >
-                            {{ __('People') }}
-                        </x-nav-link>
-
-                        <x-nav-link class="hidden md:inline-flex" href="{{ route('studios.index') }}" wire:navigate :active="request()->routeIs('studios.index')"
-                                    x-show="! isSearchEnabled"
-                                    x-transition:enter="ease-out duration-150 delay-[400ms] transform"
-                                    x-transition:enter-start="opacity-0 scale-75"
-                                    x-transition:enter-end="opacity-100 scale-100"
-                                    x-transition:leave="ease-in duration-200 delay-[50ms] transform"
-                                    x-transition:leave-start="opacity-100 scale-100"
-                                    x-transition:leave-end="opacity-0 scale-75"
-                        >
-                            {{ __('Studios') }}
-                        </x-nav-link>
-
-                        @if (app()->isLocal())
-                        <x-nav-link class="hidden md:inline-flex" href="{{ route('platforms.index') }}" wire:navigate :active="request()->routeIs('platforms.index')"
-                                    x-show="! isSearchEnabled"
-                                    x-transition:enter="ease-out duration-150 delay-[400ms] transform"
-                                    x-transition:enter-start="opacity-0 scale-75"
-                                    x-transition:enter-end="opacity-100 scale-100"
-                                    x-transition:leave="ease-in duration-200 delay-[50ms] transform"
-                                    x-transition:leave-start="opacity-100 scale-100"
-                                    x-transition:leave-end="opacity-0 scale-75"
-                        >
-                            {{ __('Platforms') }}
-                        </x-nav-link>
-                        @endif
-
-                        {{-- Search --}}
-                        <button class="inline-flex h-full w-8 items-center justify-center text-secondary cursor-pointer transition duration-150 ease-in-out hover:text-primary focus:text-primary"
-                                x-show="! isSearchEnabled"
-                                x-on:click="isNavOpen = false; isSearchEnabled = ! isSearchEnabled;"
-                                x-transition:enter="ease-out duration-150 delay-150 transform sm:delay-300"
-                                x-transition:enter-start="opacity-0 scale-75"
-                                x-transition:enter-end="opacity-100 scale-100"
-                                x-transition:leave="ease-in duration-200 transform sm:delay-[50ms]"
-                                x-transition:leave-start="opacity-100 scale-100"
-                                x-transition:leave-end="opacity-0 scale-75"
-                        >
-                            @svg('magnifyingglass', 'fill-current', ['width' => '18'])
-                        </button>
-
-                        <livewire:nav-notification />
-
-                        {{-- Settings Dropdown --}}
-                        <x-dropdown id="more-settings" align="right" width="48" content-classes="hidden bg-secondary md:block">
-                            <x-slot:trigger>
-                                <button
-                                    class="hidden md:flex text-sm border-2 border-transparent rounded-full transition duration-150 ease-in-out focus:border-primary"
-                                    x-show="! isSearchEnabled"
-                                    x-transition:enter="ease-out duration-150 delay-[350ms] transform"
-                                    x-transition:enter-start="opacity-0 scale-75"
-                                    x-transition:enter-end="opacity-100 scale-100"
-                                    x-transition:leave="ease-in duration-200 transform"
-                                    x-transition:leave-start="opacity-100 scale-100"
-                                    x-transition:leave-end="opacity-0 scale-75"
-                                >
-                                    <div
-                                        class="h-6 w-6 bg-cover rounded-full"
-                                        style="background-image: url({{ $user?->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/user_profile.webp') }});"
-                                        alt="{{ $user?->username ?? __('Guest') }} {{ __('Profile') }}"
-                                        title="{{ $user?->username ?? __('Guest') }}"
-                                        role="img"
-                                    ></div>
-                                </button>
-                            </x-slot:trigger>
-
-                            <x-slot:content>
-                                <x-dropdown-link href="{{ route('me') }}" wire:navigate>
-                                    {{ __('Profile') }}
-                                </x-dropdown-link>
-
-                                @auth
                                     <div class="border-t border-primary"></div>
 
-                                    {{-- Library --}}
+                                    @auth
+                                        {{-- Favorite Pages --}}
+                                        <div class="block pl-2 pr-2 pt-2 pb-2 text-xs text-secondary font-semibold">
+                                            {{ __('Favorite') }}
+                                        </div>
+
+                                        <x-dropdown-link href="{{ route('profile.anime.favorites', $user) }}" wire:navigate>
+                                            {{ __('Anime') }}
+                                        </x-dropdown-link>
+
+                                        <x-dropdown-link href="{{ route('profile.manga.favorites', $user) }}" wire:navigate>
+                                            {{ __('Manga') }}
+                                        </x-dropdown-link>
+
+                                        <x-dropdown-link href="{{ route('profile.games.favorites', $user) }}" wire:navigate>
+                                            {{ __('Game') }}
+                                        </x-dropdown-link>
+
+                                        <div class="border-t border-primary"></div>
+                                    @endauth
+
+                                    @auth
+                                        {{-- Reminder Pages --}}
+                                        <div class="block pl-2 pr-2 pt-2 pb-2 text-xs text-secondary font-semibold">
+                                            {{ __('Reminder') }}
+                                        </div>
+
+                                        <x-dropdown-link href="{{ route('profile.anime.reminders', $user) }}" wire:navigate>
+                                            {{ __('Anime') }}
+                                        </x-dropdown-link>
+
+    {{--                                    <x-dropdown-link href="{{ route('profile.manga.reminders', $user) }}">--}}
+    {{--                                        {{ __('Manga') }}--}}
+    {{--                                    </x-dropdown-link>--}}
+
+    {{--                                    <x-dropdown-link href="{{ route('profile.games.reminders', $user) }}">--}}
+    {{--                                        {{ __('Game') }}--}}
+    {{--                                    </x-dropdown-link>--}}
+
+                                        <div class="border-t border-primary"></div>
+                                    @endauth
+
+                                    {{-- More Pages --}}
                                     <div class="block pl-2 pr-2 pt-2 pb-2 text-xs text-secondary font-semibold">
-                                        {{ __('Library') }}
+                                        {{ __('More') }}
                                     </div>
 
-                                    <x-dropdown-link href="{{ route('profile.anime.library', $user) }}" wire:navigate>
-                                        {{ __('Anime Library') }}
+                                    <x-dropdown-link href="{{ route('app-icons.index') }}" wire:navigate>
+                                        {{ __('App Icons') }}
                                     </x-dropdown-link>
 
-                                    <x-dropdown-link href="{{ route('profile.manga.library', $user) }}" wire:navigate>
-                                        {{ __('Manga Library') }}
-                                    </x-dropdown-link>
-
-                                    <x-dropdown-link href="{{ route('profile.games.library', $user) }}" wire:navigate>
-                                        {{ __('Games Library') }}
-                                    </x-dropdown-link>
-                                @else
-                                    {{-- Library --}}
-                                    <x-dropdown-link href="{{ route('library.index') }}" wire:navigate>
-                                        {{ __('Library') }}
-                                    </x-dropdown-link>
-                                @endauth
-
-                                <div class="border-t border-primary"></div>
-
-                                @auth
-                                    {{-- Favorite Pages --}}
-                                    <div class="block pl-2 pr-2 pt-2 pb-2 text-xs text-secondary font-semibold">
-                                        {{ __('Favorite') }}
-                                    </div>
-
-                                    <x-dropdown-link href="{{ route('profile.anime.favorites', $user) }}" wire:navigate>
-                                        {{ __('Anime') }}
-                                    </x-dropdown-link>
-
-                                    <x-dropdown-link href="{{ route('profile.manga.favorites', $user) }}" wire:navigate>
-                                        {{ __('Manga') }}
-                                    </x-dropdown-link>
-
-                                    <x-dropdown-link href="{{ route('profile.games.favorites', $user) }}" wire:navigate>
-                                        {{ __('Game') }}
+                                    <x-dropdown-link href="{{ route('theme-store.index') }}" wire:navigate>
+                                        {{ __('Theme Store') }}
                                     </x-dropdown-link>
 
                                     <div class="border-t border-primary"></div>
-                                @endauth
 
-                                @auth
-                                    {{-- Reminder Pages --}}
-                                    <div class="block pl-2 pr-2 pt-2 pb-2 text-xs text-secondary font-semibold">
-                                        {{ __('Reminder') }}
-                                    </div>
+                                    @auth
+                                        {{-- Account Management --}}
+                                        <div class="block pl-2 pr-2 pt-2 pb-2 text-xs text-secondary font-semibold">
+                                            {{ __('Manage Account') }}
+                                        </div>
 
-                                    <x-dropdown-link href="{{ route('profile.anime.reminders', $user) }}" wire:navigate>
-                                        {{ __('Anime') }}
-                                    </x-dropdown-link>
+                                        <x-dropdown-link href="{{ route('profile.settings') }}" wire:navigate>
+                                            {{ __('Settings') }}
+                                        </x-dropdown-link>
 
-{{--                                    <x-dropdown-link href="{{ route('profile.manga.reminders', $user) }}">--}}
-{{--                                        {{ __('Manga') }}--}}
-{{--                                    </x-dropdown-link>--}}
+                                        <div class="border-t border-primary"></div>
+                                    @endauth
 
-{{--                                    <x-dropdown-link href="{{ route('profile.games.reminders', $user) }}">--}}
-{{--                                        {{ __('Game') }}--}}
-{{--                                    </x-dropdown-link>--}}
+                                    {{-- Authentication --}}
+                                    @auth
+                                        @if (session()->has('nova_impersonated_by'))
+                                            <form method="POST" action="{{ route('impersonation.stop') }}">
+                                                @method('DELETE')
+                                                @csrf
 
-                                    <div class="border-t border-primary"></div>
-                                @endauth
+                                                <x-dropdown-link href="{{ route('impersonation.stop') }}"
+                                                                 onclick="event.preventDefault(); this.closest('form').submit();">
+                                                    {{ __('Stop impersonation') }}
+                                                </x-dropdown-link>
+                                            </form>
+                                        @endif
 
-                                {{-- More Pages --}}
-                                <div class="block pl-2 pr-2 pt-2 pb-2 text-xs text-secondary font-semibold">
-                                    {{ __('More') }}
-                                </div>
-
-                                <x-dropdown-link href="{{ route('app-icons.index') }}" wire:navigate>
-                                    {{ __('App Icons') }}
-                                </x-dropdown-link>
-
-                                <x-dropdown-link href="{{ route('theme-store.index') }}" wire:navigate>
-                                    {{ __('Theme Store') }}
-                                </x-dropdown-link>
-
-                                <div class="border-t border-primary"></div>
-
-                                @auth
-                                    {{-- Account Management --}}
-                                    <div class="block pl-2 pr-2 pt-2 pb-2 text-xs text-secondary font-semibold">
-                                        {{ __('Manage Account') }}
-                                    </div>
-
-                                    <x-dropdown-link href="{{ route('profile.settings') }}" wire:navigate>
-                                        {{ __('Settings') }}
-                                    </x-dropdown-link>
-
-                                    <div class="border-t border-primary"></div>
-                                @endauth
-
-                                {{-- Authentication --}}
-                                @auth
-                                    @if (session()->has('nova_impersonated_by'))
-                                        <form method="POST" action="{{ route('impersonation.stop') }}">
-                                            @method('DELETE')
+                                        <form method="POST" action="{{ route('sign-out') }}">
                                             @csrf
 
-                                            <x-dropdown-link href="{{ route('impersonation.stop') }}"
+                                            <x-dropdown-link href="{{ route('sign-out') }}"
                                                              onclick="event.preventDefault(); this.closest('form').submit();">
-                                                {{ __('Stop impersonation') }}
+                                                {{ __('Sign out') }}
                                             </x-dropdown-link>
                                         </form>
-                                    @endif
-
-                                    <form method="POST" action="{{ route('sign-out') }}">
-                                        @csrf
-
-                                        <x-dropdown-link href="{{ route('sign-out') }}"
-                                                         onclick="event.preventDefault(); this.closest('form').submit();">
-                                            {{ __('Sign out') }}
+                                    @else
+                                        <x-dropdown-link href="{{ route('sign-in') }}" wire:navigate>
+                                            {{ __('Sign in') }}
                                         </x-dropdown-link>
-                                    </form>
-                                @else
-                                    <x-dropdown-link href="{{ route('sign-in') }}" wire:navigate>
-                                        {{ __('Sign in') }}
-                                    </x-dropdown-link>
 
-                                    @if (Route::has('sign-up'))
-                                        <x-dropdown-link href="{{ route('sign-up') }}" wire:navigate>
-                                            {{ __('Create Account') }}
-                                        </x-dropdown-link>
-                                    @endif
-                                @endauth
-                            </x-slot:content>
-                        </x-dropdown>
+                                        @if (Route::has('sign-up'))
+                                            <x-dropdown-link href="{{ route('sign-up') }}" wire:navigate>
+                                                {{ __('Create Account') }}
+                                            </x-dropdown-link>
+                                        @endif
+                                    @endauth
+                                </x-slot:content>
+                            </x-dropdown>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        {{-- Responsive Navigation Menu --}}
-        <div
-            class="block absolute pl-4 pr-2 w-full bg-primary rounded-b-2xl z-[300] md:hidden"
-            x-cloak
-            x-show="isNavOpen"
-            x-collapse.duration.400ms=""
-        >
-            <div class="pt-2 pb-3 space-y-1">
-                <x-sidebar-nav-link href="{{ route('home') }}" wire:navigate :active="request()->routeIs('home')">
-                    @svg('house', 'fill-current', ['width' => '18']) {{ __('Explore') }}
-                </x-sidebar-nav-link>
+            {{-- Responsive Navigation Menu --}}
+            <div
+                class="block absolute pl-4 pr-2 w-full bg-primary rounded-b-2xl z-[300] md:hidden"
+                x-cloak
+                x-show="isNavOpen"
+                x-collapse.duration.400ms=""
+            >
+                <div class="pt-2 pb-3 space-y-1">
+                    <x-sidebar-nav-link href="{{ route('home') }}" wire:navigate :active="request()->routeIs('home')">
+                        @svg('house', 'fill-current', ['width' => '18']) {{ __('Explore') }}
+                    </x-sidebar-nav-link>
 
-                <x-sidebar-nav-link href="{{ route('schedule') }}" wire:navigate :active="request()->routeIs('schedule')">
-                    @svg('calendar', 'fill-current', ['width' => '18']) {{ __('Schedule') }}
-                </x-sidebar-nav-link>
+                    <x-sidebar-nav-link href="{{ route('schedule') }}" wire:navigate :active="request()->routeIs('schedule')">
+                        @svg('calendar', 'fill-current', ['width' => '18']) {{ __('Schedule') }}
+                    </x-sidebar-nav-link>
 
-                <x-sidebar-nav-link href="{{ route('charts.index') }}" wire:navigate :active="request()->routeIs('charts.index')">
-                    @svg('chart_bar', 'fill-current', ['width' => '18']) {{ __('Charts') }}
-                </x-sidebar-nav-link>
-            </div>
-
-            <div class="pt-4 pb-1 border-t border-primary">
-                <div class="block pl-2 pr-2 pt-2 pb-2 text-xs text-secondary font-semibold">
-                    {{ __('Catalog') }}
+                    <x-sidebar-nav-link href="{{ route('charts.index') }}" wire:navigate :active="request()->routeIs('charts.index')">
+                        @svg('chart_bar', 'fill-current', ['width' => '18']) {{ __('Charts') }}
+                    </x-sidebar-nav-link>
                 </div>
 
-                <x-sidebar-nav-link href="{{ route('anime.index') }}" wire:navigate :active="request()->routeIs('anime.index')">
-                    @svg('tv', 'fill-current', ['width' => '18']) {{ __('Anime') }}
-                </x-sidebar-nav-link>
-
-                <x-sidebar-nav-link href="{{ route('manga.index') }}" wire:navigate :active="request()->routeIs('manga.index')">
-                    @svg('book', 'fill-current', ['width' => '18']) {{ __('Manga') }}
-                </x-sidebar-nav-link>
-
-                <x-sidebar-nav-link href="{{ route('games.index') }}" wire:navigate :active="request()->routeIs('games.index')">
-                    @svg('gamecontroller', 'fill-current', ['width' => '18']) {{ __('Game') }}
-                </x-sidebar-nav-link>
-
-                @if (app()->isLocal())
-                <x-sidebar-nav-link href="#" wire:navigate>
-                    @svg('person_tv', 'fill-current', ['width' => '18']) {{ __('Live Action') }}
-                </x-sidebar-nav-link>
-                @endif
-
-                <x-sidebar-nav-link href="{{ route('songs.index') }}" wire:navigate :active="request()->routeIs('songs.index')">
-                    @svg('music_note', 'fill-current', ['width' => '18']) {{ __('Songs') }}
-                </x-sidebar-nav-link>
-
-                <x-sidebar-nav-link href="{{ route('characters.index') }}" wire:navigate :active="request()->routeIs('characters.index')">
-                    @svg('totoro', 'fill-current', ['width' => '18']) {{ __('Characters') }}
-                </x-sidebar-nav-link>
-
-                <x-sidebar-nav-link href="{{ route('people.index') }}" wire:navigate :active="request()->routeIs('people.index')">
-                    @svg('person', 'fill-current', ['width' => '18']) {{ __('People') }}
-                </x-sidebar-nav-link>
-
-                <x-sidebar-nav-link href="{{ route('studios.index') }}" wire:navigate :active="request()->routeIs('studios.index')">
-                    @svg('building_2', 'fill-current', ['width' => '18']) {{ __('Studios') }}
-                </x-sidebar-nav-link>
-
-                @if (app()->isLocal())
-                <x-sidebar-nav-link href="{{ route('platforms.index') }}" wire:navigate :active="request()->routeIs('platforms.index')">
-                    @svg('tv_and_mediabox', 'fill-current', ['width' => '18']) {{ __('Platforms') }}
-                </x-sidebar-nav-link>
-                @endif
-            </div>
-
-            {{-- Responsive Settings Options --}}
-            <div class="pt-4 pb-1 border-t border-primary">
-                @auth
-                    <div class="flex items-center pl-2 pr-2 pb-4">
-                        <div class="shrink-0">
-                            <div class="h-10 w-10 bg-cover rounded-full" style="background-image: url({{ $user->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) }});" alt="{{ $user->username }}" role="img"></div>
-                        </div>
-
-                        <div class="ml-3">
-                            <div class="font-medium text-base text-primary">{{ $user->username }}</div>
-                            <div class="font-medium text-sm text-secondary">{{ $user->email }}</div>
-                        </div>
+                <div class="pt-4 pb-1 border-t border-primary">
+                    <div class="block pl-2 pr-2 pt-2 pb-2 text-xs text-secondary font-semibold">
+                        {{ __('Catalog') }}
                     </div>
 
-                    {{-- Profile --}}
-                    <div class="space-y-1">
-                        <x-sidebar-nav-link href="{{ route('me') }}" wire:navigate>
-                            {{ __('Profile') }}
-                        </x-sidebar-nav-link>
+                    <x-sidebar-nav-link href="{{ route('anime.index') }}" wire:navigate :active="request()->routeIs('anime.index')">
+                        @svg('tv', 'fill-current', ['width' => '18']) {{ __('Anime') }}
+                    </x-sidebar-nav-link>
 
-                        <div class="border-t border-primary"></div>
-                    </div>
+                    <x-sidebar-nav-link href="{{ route('manga.index') }}" wire:navigate :active="request()->routeIs('manga.index')">
+                        @svg('book', 'fill-current', ['width' => '18']) {{ __('Manga') }}
+                    </x-sidebar-nav-link>
 
-                    {{-- Library --}}
-                    <div class="space-y-1 pt-1">
-                        <div class="block pl-2 pr-2 pt-2 pb-2 text-xs text-secondary font-semibold">
-                            {{ __('Library') }}
+                    <x-sidebar-nav-link href="{{ route('games.index') }}" wire:navigate :active="request()->routeIs('games.index')">
+                        @svg('gamecontroller', 'fill-current', ['width' => '18']) {{ __('Game') }}
+                    </x-sidebar-nav-link>
+
+                    @if (app()->isLocal())
+                    <x-sidebar-nav-link href="#" wire:navigate>
+                        @svg('person_tv', 'fill-current', ['width' => '18']) {{ __('Live Action') }}
+                    </x-sidebar-nav-link>
+                    @endif
+
+                    <x-sidebar-nav-link href="{{ route('songs.index') }}" wire:navigate :active="request()->routeIs('songs.index')">
+                        @svg('music_note', 'fill-current', ['width' => '18']) {{ __('Songs') }}
+                    </x-sidebar-nav-link>
+
+                    <x-sidebar-nav-link href="{{ route('characters.index') }}" wire:navigate :active="request()->routeIs('characters.index')">
+                        @svg('totoro', 'fill-current', ['width' => '18']) {{ __('Characters') }}
+                    </x-sidebar-nav-link>
+
+                    <x-sidebar-nav-link href="{{ route('people.index') }}" wire:navigate :active="request()->routeIs('people.index')">
+                        @svg('person', 'fill-current', ['width' => '18']) {{ __('People') }}
+                    </x-sidebar-nav-link>
+
+                    <x-sidebar-nav-link href="{{ route('studios.index') }}" wire:navigate :active="request()->routeIs('studios.index')">
+                        @svg('building_2', 'fill-current', ['width' => '18']) {{ __('Studios') }}
+                    </x-sidebar-nav-link>
+
+                    @if (app()->isLocal())
+                    <x-sidebar-nav-link href="{{ route('platforms.index') }}" wire:navigate :active="request()->routeIs('platforms.index')">
+                        @svg('tv_and_mediabox', 'fill-current', ['width' => '18']) {{ __('Platforms') }}
+                    </x-sidebar-nav-link>
+                    @endif
+                </div>
+
+                {{-- Responsive Settings Options --}}
+                <div class="pt-4 pb-1 border-t border-primary">
+                    @auth
+                        <div class="flex items-center pl-2 pr-2 pb-4">
+                            <div class="shrink-0">
+                                <div class="h-10 w-10 bg-cover rounded-full" style="background-image: url({{ $user->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) }});" alt="{{ $user->username }}" role="img"></div>
+                            </div>
+
+                            <div class="ml-3">
+                                <div class="font-medium text-base text-primary">{{ $user->username }}</div>
+                                <div class="font-medium text-sm text-secondary">{{ $user->email }}</div>
+                            </div>
                         </div>
 
-                        <x-sidebar-nav-link href="{{ route('profile.anime.library', $user) }}"
-                                               wire:navigate
-                                               :active="request()->routeIs('profile.anime.library')">
-                            @svg('tv', 'fill-current', ['width' => '18']) {{ __('Anime') }}
-                        </x-sidebar-nav-link>
+                        {{-- Profile --}}
+                        <div class="space-y-1">
+                            <x-sidebar-nav-link href="{{ route('me') }}" wire:navigate>
+                                {{ __('Profile') }}
+                            </x-sidebar-nav-link>
 
-                        <x-sidebar-nav-link href="{{ route('profile.manga.library', $user) }}"
-                                               wire:navigate
-                                               :active="request()->routeIs('profile.manga.library')">
-                            @svg('book', 'fill-current', ['width' => '18']) {{ __('Manga') }}
-                        </x-sidebar-nav-link>
-
-                        <x-sidebar-nav-link href="{{ route('profile.games.library', $user) }}"
-                                               wire:navigate
-                                               :active="request()->routeIs('profile.games.library')">
-                            @svg('gamecontroller', 'fill-current', ['width' => '18']) {{ __('Games') }}
-                        </x-sidebar-nav-link>
-
-                        <div class="border-t border-primary"></div>
-                    </div>
-                @else
-                    <div class="space-y-1 pt-1">
-                        <x-sidebar-nav-link href="{{ route('me') }}" wire:navigate>
-                            {{ __('Profile') }}
-                        </x-sidebar-nav-link>
+                            <div class="border-t border-primary"></div>
+                        </div>
 
                         {{-- Library --}}
-                        <x-sidebar-nav-link href="{{ route('library.index') }}"
-                                               wire:navigate
-                                               :active="request()->routeIs('library.index')">
-                            {{ __('Library') }}
-                        </x-sidebar-nav-link>
+                        <div class="space-y-1 pt-1">
+                            <div class="block pl-2 pr-2 pt-2 pb-2 text-xs text-secondary font-semibold">
+                                {{ __('Library') }}
+                            </div>
 
-                        <div class="border-t border-primary"></div>
-                    </div>
-                @endauth
+                            <x-sidebar-nav-link href="{{ route('profile.anime.library', $user) }}"
+                                                   wire:navigate
+                                                   :active="request()->routeIs('profile.anime.library')">
+                                @svg('tv', 'fill-current', ['width' => '18']) {{ __('Anime') }}
+                            </x-sidebar-nav-link>
 
-                @auth
-                    {{-- Favorite Pages --}}
-                    <div class="space-y-1 pt-1">
-                        <div class="block pl-2 pr-2 pt-2 pb-2 text-xs text-secondary font-semibold">
-                            {{ __('Favorite') }}
+                            <x-sidebar-nav-link href="{{ route('profile.manga.library', $user) }}"
+                                                   wire:navigate
+                                                   :active="request()->routeIs('profile.manga.library')">
+                                @svg('book', 'fill-current', ['width' => '18']) {{ __('Manga') }}
+                            </x-sidebar-nav-link>
+
+                            <x-sidebar-nav-link href="{{ route('profile.games.library', $user) }}"
+                                                   wire:navigate
+                                                   :active="request()->routeIs('profile.games.library')">
+                                @svg('gamecontroller', 'fill-current', ['width' => '18']) {{ __('Games') }}
+                            </x-sidebar-nav-link>
+
+                            <div class="border-t border-primary"></div>
                         </div>
+                    @else
+                        <div class="space-y-1 pt-1">
+                            <x-sidebar-nav-link href="{{ route('me') }}" wire:navigate>
+                                {{ __('Profile') }}
+                            </x-sidebar-nav-link>
 
-                        <x-sidebar-nav-link href="{{ route('profile.anime.favorites', $user) }}"
-                                               wire:navigate
-                                               :active="request()->routeIs('profile.anime.favorites', $user)">
-                            @svg('tv', 'fill-current', ['width' => '18']) {{ __('Anime') }}
-                        </x-sidebar-nav-link>
+                            {{-- Library --}}
+                            <x-sidebar-nav-link href="{{ route('library.index') }}"
+                                                   wire:navigate
+                                                   :active="request()->routeIs('library.index')">
+                                {{ __('Library') }}
+                            </x-sidebar-nav-link>
 
-                        <x-sidebar-nav-link href="{{ route('profile.manga.favorites', $user) }}"
-                                               wire:navigate
-                                               :active="request()->routeIs('profile.manga.favorites', $user)">
-                            @svg('book', 'fill-current', ['width' => '18']) {{ __('Manga') }}
-                        </x-sidebar-nav-link>
-
-                        <x-sidebar-nav-link href="{{ route('profile.games.favorites', $user) }}"
-                                               wire:navigate
-                                               :active="request()->routeIs('profile.games.favorites', $user)">
-                            @svg('gamecontroller', 'fill-current', ['width' => '18']) {{ __('Game') }}
-                        </x-sidebar-nav-link>
-
-                        <div class="border-t border-primary"></div>
-                    </div>
-                @endauth
-
-                @auth
-                    {{-- Reminder Pages --}}
-                    <div class="space-y-1 pt-1">
-                        <div class="block pl-2 pr-2 pt-2 pb-2 text-xs text-secondary font-semibold">
-                            {{ __('Reminder') }}
+                            <div class="border-t border-primary"></div>
                         </div>
+                    @endauth
 
-                        <x-sidebar-nav-link href="{{ route('profile.anime.reminders', $user) }}"
-                                               wire:navigate
-                                               :active="request()->routeIs('profile.anime.reminders', $user)">
-                            @svg('tv', 'fill-current', ['width' => '18']) {{ __('Anime') }}
-                        </x-sidebar-nav-link>
-
-                        <div class="border-t border-primary"></div>
-                    </div>
-                @endauth
-
-                {{-- More Pages --}}
-                <div class="space-y-1 pt-1">
-                    <div class="block pl-2 pr-2 pt-2 pb-2 text-xs text-secondary font-semibold">
-                        {{ __('More') }}
-                    </div>
-
-                    <x-sidebar-nav-link href="{{ route('app-icons.index') }}"
-                                           wire:navigate
-                                           :active="request()->routeIs('app-icons.index')">
-                        {{ __('App Icons') }}
-                    </x-sidebar-nav-link>
-
-                    <x-sidebar-nav-link href="{{ route('theme-store.index') }}"
-                                           wire:navigate
-                                           :active="request()->routeIs('theme-store.index')">
-                        {{ __('Theme Store') }}
-                    </x-sidebar-nav-link>
-
-                    <div class="border-t border-primary"></div>
-                </div>
-
-                {{-- Account Management --}}
-                @auth
-                    <div class="space-y-1 pt-1">
-                        <div class="block pl-2 pr-2 pt-2 pb-2 text-xs text-secondary font-semibold">
-                            {{ __('Account Management') }}
-                        </div>
-
-                        <x-sidebar-nav-link href="{{ route('profile.settings') }}"
-                                               wire:navigate
-                                               :active="request()->routeIs('profile.settings')">
-                            {{ __('Settings') }}
-                        </x-sidebar-nav-link>
-
-                        <div class="border-t border-primary"></div>
-                    </div>
-                @endauth
-
-                {{-- Authentication --}}
-                <div class="space-y-1 pt-1">
                     @auth
-                        @if (session()->has('nova_impersonated_by'))
-                            <form method="POST" action="{{ route('impersonation.stop') }}">
-                                @method('DELETE')
+                        {{-- Favorite Pages --}}
+                        <div class="space-y-1 pt-1">
+                            <div class="block pl-2 pr-2 pt-2 pb-2 text-xs text-secondary font-semibold">
+                                {{ __('Favorite') }}
+                            </div>
+
+                            <x-sidebar-nav-link href="{{ route('profile.anime.favorites', $user) }}"
+                                                   wire:navigate
+                                                   :active="request()->routeIs('profile.anime.favorites', $user)">
+                                @svg('tv', 'fill-current', ['width' => '18']) {{ __('Anime') }}
+                            </x-sidebar-nav-link>
+
+                            <x-sidebar-nav-link href="{{ route('profile.manga.favorites', $user) }}"
+                                                   wire:navigate
+                                                   :active="request()->routeIs('profile.manga.favorites', $user)">
+                                @svg('book', 'fill-current', ['width' => '18']) {{ __('Manga') }}
+                            </x-sidebar-nav-link>
+
+                            <x-sidebar-nav-link href="{{ route('profile.games.favorites', $user) }}"
+                                                   wire:navigate
+                                                   :active="request()->routeIs('profile.games.favorites', $user)">
+                                @svg('gamecontroller', 'fill-current', ['width' => '18']) {{ __('Game') }}
+                            </x-sidebar-nav-link>
+
+                            <div class="border-t border-primary"></div>
+                        </div>
+                    @endauth
+
+                    @auth
+                        {{-- Reminder Pages --}}
+                        <div class="space-y-1 pt-1">
+                            <div class="block pl-2 pr-2 pt-2 pb-2 text-xs text-secondary font-semibold">
+                                {{ __('Reminder') }}
+                            </div>
+
+                            <x-sidebar-nav-link href="{{ route('profile.anime.reminders', $user) }}"
+                                                   wire:navigate
+                                                   :active="request()->routeIs('profile.anime.reminders', $user)">
+                                @svg('tv', 'fill-current', ['width' => '18']) {{ __('Anime') }}
+                            </x-sidebar-nav-link>
+
+                            <div class="border-t border-primary"></div>
+                        </div>
+                    @endauth
+
+                    {{-- More Pages --}}
+                    <div class="space-y-1 pt-1">
+                        <div class="block pl-2 pr-2 pt-2 pb-2 text-xs text-secondary font-semibold">
+                            {{ __('More') }}
+                        </div>
+
+                        <x-sidebar-nav-link href="{{ route('app-icons.index') }}"
+                                               wire:navigate
+                                               :active="request()->routeIs('app-icons.index')">
+                            {{ __('App Icons') }}
+                        </x-sidebar-nav-link>
+
+                        <x-sidebar-nav-link href="{{ route('theme-store.index') }}"
+                                               wire:navigate
+                                               :active="request()->routeIs('theme-store.index')">
+                            {{ __('Theme Store') }}
+                        </x-sidebar-nav-link>
+
+                        <div class="border-t border-primary"></div>
+                    </div>
+
+                    {{-- Account Management --}}
+                    @auth
+                        <div class="space-y-1 pt-1">
+                            <div class="block pl-2 pr-2 pt-2 pb-2 text-xs text-secondary font-semibold">
+                                {{ __('Account Management') }}
+                            </div>
+
+                            <x-sidebar-nav-link href="{{ route('profile.settings') }}"
+                                                   wire:navigate
+                                                   :active="request()->routeIs('profile.settings')">
+                                {{ __('Settings') }}
+                            </x-sidebar-nav-link>
+
+                            <div class="border-t border-primary"></div>
+                        </div>
+                    @endauth
+
+                    {{-- Authentication --}}
+                    <div class="space-y-1 pt-1">
+                        @auth
+                            @if (session()->has('nova_impersonated_by'))
+                                <form method="POST" action="{{ route('impersonation.stop') }}">
+                                    @method('DELETE')
+                                    @csrf
+
+                                    <x-sidebar-nav-link href="{{ route('impersonation.stop') }}"
+                                                           onclick="event.preventDefault(); this.closest('form').submit();">
+                                        {{ __('Stop impersonation') }}
+                                    </x-sidebar-nav-link>
+                                </form>
+                            @endif
+
+                            <form method="POST" action="{{ route('sign-out') }}">
                                 @csrf
 
-                                <x-sidebar-nav-link href="{{ route('impersonation.stop') }}"
+                                <x-sidebar-nav-link href="{{ route('sign-out') }}"
                                                        onclick="event.preventDefault(); this.closest('form').submit();">
-                                    {{ __('Stop impersonation') }}
+                                    {{ __('Sign out') }}
                                 </x-sidebar-nav-link>
                             </form>
-                        @endif
-
-                        <form method="POST" action="{{ route('sign-out') }}">
-                            @csrf
-
-                            <x-sidebar-nav-link href="{{ route('sign-out') }}"
-                                                   onclick="event.preventDefault(); this.closest('form').submit();">
-                                {{ __('Sign out') }}
+                        @else
+                            <x-sidebar-nav-link href="{{ route('sign-in') }}" wire:navigate>
+                                {{ __('Sign in') }}
                             </x-sidebar-nav-link>
-                        </form>
-                    @else
-                        <x-sidebar-nav-link href="{{ route('sign-in') }}" wire:navigate>
-                            {{ __('Sign in') }}
-                        </x-sidebar-nav-link>
 
-                        @if (Route::has('sign-up'))
-                            <x-sidebar-nav-link href="{{ route('sign-up') }}" wire:navigate>
-                                {{ __('Create Account') }}
-                            </x-sidebar-nav-link>
-                        @endif
-                    @endauth
+                            @if (Route::has('sign-up'))
+                                <x-sidebar-nav-link href="{{ route('sign-up') }}" wire:navigate>
+                                    {{ __('Create Account') }}
+                                </x-sidebar-nav-link>
+                            @endif
+                        @endauth
+                    </div>
                 </div>
             </div>
-        </div>
-    </nav>
+        </nav>
 
-    {{-- Responsive Overlay --}}
-    <div
-        class="fixed inset-0 transform transition-all z-[299] md:hidden"
-        x-cloak
-        x-show="isNavOpen"
-        x-on:click="isNavOpen = false;"
-        x-transition:enter="ease-out duration-300"
-        x-transition:enter-start="opacity-0"
-        x-transition:enter-end="opacity-100"
-        x-transition:leave="ease-in duration-200"
-        x-transition:leave-start="opacity-100"
-        x-transition:leave-end="opacity-0"
-    >
-        <div class="absolute inset-0 bg-black opacity-75"></div>
+        {{-- Responsive Overlay --}}
+        <div
+            class="fixed inset-0 transform transition-all z-[299] md:hidden"
+            x-cloak
+            x-show="isNavOpen"
+            x-on:click="isNavOpen = false;"
+            x-transition:enter="ease-out duration-300"
+            x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            x-transition:leave="ease-in duration-200"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+        >
+            <div class="absolute inset-0 bg-black opacity-75"></div>
+        </div>
+
+        {{-- Nav Search --}}
+        <livewire:nav-search />
     </div>
 
-    {{-- Nav Search --}}
-    <livewire:nav-search />
+    {{-- Scroll Edge Effect --}}
+    <x-edge-blur
+        style="z-index: 1;"
+        position="fixed"
+        x-show="showScrollEdgeEffect"
+        x-cloak
+        x-transition.duration.500ms=""
+    />
 </div>
