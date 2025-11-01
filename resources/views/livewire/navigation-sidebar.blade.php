@@ -1,27 +1,46 @@
-<aside class="hidden flex-col w-64 h-screen bg-primary z-[999] xl:fixed xl:flex">
+<aside
+    class="hidden flex-col w-64 h-screen bg-primary z-[999] xl:fixed xl:flex"
+    x-data="{
+        showScrollEdgeEffect: false
+    }"
+>
     <nav class="flex flex-col h-full border-e border-primary">
-        <div class="flex flex-col gap-4 mt-4 mr-4 ml-4">
-            <a
-                class="inline-flex items-center w-full space-x-2 text-secondary transition duration-150 ease-in-out hover:text-primary focus:text-primary"
-                href="/"
-                wire:navigate
-                x-transition:enter="ease-out duration-150 delay-100 transform sm:delay-[0ms]"
-                x-transition:enter-start="opacity-0 scale-75"
-                x-transition:enter-end="opacity-100 scale-100"
-                x-transition:leave="ease-in duration-200 delay-[50ms] transform sm:delay-[400ms]"
-                x-transition:leave-start="opacity-100 scale-100"
-                x-transition:leave-end="opacity-0 scale-75"
-            >
-                <x-app-icon />
+        <div class="relative">
+            {{-- Scroll Edge Effect --}}
+            <x-edge-blur
+                x-show="showScrollEdgeEffect"
+                x-cloak
+                x-transition.duration.500ms=""
+            />
 
-                <p class="text-2xl font-bold">{{ config('app.name') }}</p>
-            </a>
+            <div class="relative flex flex-col gap-4 mt-4 mr-4 ml-4">
+                <a
+                    class="inline-flex items-center w-full space-x-2 text-secondary transition duration-150 ease-in-out hover:text-primary focus:text-primary"
+                    href="/"
+                    wire:navigate
+                    x-transition:enter="ease-out duration-150 delay-100 transform sm:delay-[0ms]"
+                    x-transition:enter-start="opacity-0 scale-75"
+                    x-transition:enter-end="opacity-100 scale-100"
+                    x-transition:leave="ease-in duration-200 delay-[50ms] transform sm:delay-[400ms]"
+                    x-transition:leave-start="opacity-100 scale-100"
+                    x-transition:leave-end="opacity-0 scale-75"
+                >
+                    <x-app-icon />
 
-            <livewire:sidebar-search />
+                    <p class="text-2xl font-bold">{{ config('app.name') }}</p>
+                </a>
+
+                <livewire:sidebar-search />
+            </div>
         </div>
 
         <div class="flex flex-col justify-between w-full h-full overflow-y-auto">
             <div class="mr-4 ml-4">
+                <div
+                    x-intersect:enter="showScrollEdgeEffect = false"
+                    x-intersect:leave="showScrollEdgeEffect = true"
+                ></div>
+
                 <section class="mt-4">
                     <x-sidebar-nav-link href="{{ route('home') }}" wire:navigate :active="request()->routeIs('home')">
                         @svg('house', 'fill-current', ['width' => '18']) {{ __('Explore') }}
