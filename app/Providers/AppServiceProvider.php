@@ -8,6 +8,7 @@ use App\Policies\NotificationPolicy;
 use App\Services\LinkPreviewService;
 use App\Services\ReputationService;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Database\Connection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -38,6 +39,18 @@ class AppServiceProvider extends ServiceProvider
     {
         // Prevent dangerous actions
         DB::prohibitDestructiveCommands(app()->isProduction());
+
+        // Prevent accessing missing attributes on models
+//        Model::preventAccessingMissingAttributes();
+
+        // Log a warning if we spend more than a total of 1000 ms querying.
+        if (app()->isLocal()) {
+            DB::whenQueryingForLongerThan(1000, function (Connection $connection, QueryExecuted $query) {
+                logger()->warning("Database queries exceeded 1 second ($query->time) on {$connection->getName()}", [
+                    'sql' => $query->sql
+                ]);
+            });
+        }
 
         // CSRF verification exceptions
         VerifyCsrfToken::except([
