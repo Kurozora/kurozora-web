@@ -52,7 +52,6 @@
         "kiritokatklian/laravel-sort-request": "^2.0",
         "laravel-notification-channels/apn": "^v5.0",
         "laravel/framework": "^12.0",
-        "laravel/nova": "*",
         "laravel/pulse": "^1.4",
         "laravel/sanctum": "^4.0",
         "laravel/scout": "^10.0",
@@ -98,12 +97,13 @@
     },
     "suggest": {
         "ebess/advanced-nova-media-library": "^5.0",
-        "stepanenko3/nova-logs-tool": "^2.3",
         "kiritokatklian/nova-astrotranslatable": "^5.0",
         "kiritokatklian/nova-permission": "^5.0",
+        "laravel/nova": "*",
         "outl1ne/nova-color-field": "dev-master",
         "outl1ne/nova-sortable": "^4.0",
         "stepanenko3/nova-command-runner": "^4.5",
+        "stepanenko3/nova-logs-tool": "^2.3",
         "timothyasp/nova-color-field": "^2.0"
     },
     "repositories": [
