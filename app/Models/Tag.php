@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Tag extends KModel
 {
-    use SoftDeletes;
+    use HasFactory,
+        SoftDeletes;
 
     // Table name
     const string TABLE_NAME = 'tags';

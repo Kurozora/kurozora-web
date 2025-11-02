@@ -8,6 +8,7 @@ use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\HasSlug;
 use App\Traits\Model\TvRated;
 use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -20,9 +21,10 @@ use Spatie\Sluggable\SlugOptions;
 
 class Genre extends KModel implements HasMedia, Sitemapable
 {
-    use HasSlug,
-        InteractsWithMedia,
+    use InteractsWithMedia,
         InteractsWithMediaExtension,
+        HasFactory,
+        HasSlug,
         SoftDeletes,
         TvRated;
 

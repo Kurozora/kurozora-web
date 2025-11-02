@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\Genre;
+use App\Models\Theme;
 use Illuminate\Database\Seeder;
 
-class GenreSeeder extends Seeder
+class ThemeSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,6 +14,6 @@ class GenreSeeder extends Seeder
      */
     public function run(): void
     {
-        Genre::factory(10)->create();
+        Theme::factory(10)->create();
     }
 }
