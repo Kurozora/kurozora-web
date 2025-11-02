@@ -224,11 +224,11 @@ class AnimeProcessor extends CustomItemProcessor
             $newDuration = empty($anime->duration) ? $duration : $anime->duration;
             $newEndedAt = $anime->ended_at ?? $endedAt;
 
-            if ($anime->media_type?->id == 4 && $anime->status?->id == 3) {
+            if ($anime->media_type?->id == 4 && $anime->status?->id == 3 && $newEndedAt != null) {
                 // Movies stay in theaters about 13 weeks on average,
                 // so we only mark them as finished after 13 weeks.
-                $proposedEndedAt = $endedAt->copy()->addWeeks(13);
-                $status = now() > $proposedEndedAt ? $status : $anime->status->id;
+                $proposedEndedAt = $newEndedAt->copy()->addWeeks(13);
+                $status = now() > $proposedEndedAt ? $status : 3;
             }
 
             $anime->update(array_merge([
