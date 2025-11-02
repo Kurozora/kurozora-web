@@ -167,10 +167,11 @@ class EpisodeController extends Controller
             ->query(function ($query) {
                 $query->with([
                     'anime' => function ($query) {
-                        $query->with([
-                            'media',
-                            'translation',
-                        ])
+                        $query->withoutGlobalScopes()
+                            ->with([
+                                'media',
+                                'translation',
+                            ])
                             ->when(auth()->user(), function ($query, $user) {
                                 $query->withExists([
                                     'library as isTracked' => function ($query) use ($user) {
@@ -182,10 +183,11 @@ class EpisodeController extends Controller
                     'media',
                     'mediaStat',
                     'season' => function ($query) {
-                        $query->with([
-                            'media',
-                            'translation'
-                        ]);
+                        $query->withoutGlobalScopes()
+                            ->with([
+                                'media',
+                                'translation'
+                            ]);
                     },
                     'tv_rating',
                     'translation',
