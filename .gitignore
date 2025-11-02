@@ -60,7 +60,8 @@ phpstan*.neon
 .phpstorm.meta.php
 _ide_helper_models.php
 _ide_helper.php
-/nova
+/nova/*
+!/nova/.gitkeep
 public/vendor/nova*
 #!nova/composer.json
 
