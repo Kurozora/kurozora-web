@@ -9,7 +9,6 @@ use App\Models\Relation;
 use App\Models\Source;
 use App\Models\Tag;
 use App\Models\Theme;
-use DB;
 use Http;
 use Illuminate\Console\Command;
 use JsonMachine\Exception\InvalidArgumentException;
@@ -50,7 +49,6 @@ class ImportAnimeOfflineID extends Command
      */
     public function handle(): int
     {
-        DB::disableQueryLog();
         $file = storage_path('app/anime-offline-database-minified.json');
         $fileSize = filesize($file);
         $animes = Items::fromFile($file, [
