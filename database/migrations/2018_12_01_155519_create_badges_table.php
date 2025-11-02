@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('description')->nullable()->default(null);
             $table->string('text_color', 10)->default('#000000');
             $table->string('background_color', 10)->default('#FFFFFF');
-            $table->boolean('is_unlockable')->default('false');
+            $table->boolean('is_unlockable')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });
