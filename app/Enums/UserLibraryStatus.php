@@ -17,13 +17,13 @@ use BenSampo\Enum\Exceptions\InvalidEnumMemberException;
  */
 final class UserLibraryStatus extends Enum
 {
-    const int InProgress    = 0;
-    const int Planning      = 2;
-    const int Completed     = 3;
-    const int OnHold        = 4;
-    const int Dropped       = 1;
-    const int Interested    = 6;
-    const int Ignored       = 5;
+    const int InProgress = 0;
+    const int Planning = 2;
+    const int Completed = 3;
+    const int OnHold = 4;
+    const int Dropped = 1;
+    const int Interested = 6;
+    const int Ignored = 5;
 
     /**
      * Make an enum instance from a given key.
@@ -62,6 +62,7 @@ final class UserLibraryStatus extends Enum
      * Returns the description of the status
      *
      * @param int|string $value
+     *
      * @return string
      */
     public static function getAnimeDescription(mixed $value): string
@@ -77,6 +78,7 @@ final class UserLibraryStatus extends Enum
      * Returns the description of the status
      *
      * @param int|string $value
+     *
      * @return string
      */
     public static function getGameDescription(mixed $value): string
@@ -92,6 +94,7 @@ final class UserLibraryStatus extends Enum
      * Returns the description of the status
      *
      * @param int|string $value
+     *
      * @return string
      */
     public static function getMangaDescription(mixed $value): string

@@ -32,9 +32,20 @@ class LibraryButton extends Component
     public int $libraryStatus;
 
     /**
+     * The component's listeners.
+     *
+     * @var array
+     */
+    protected $listeners = [
+        'update-library-status' => 'handleUpdateLibraryStatus',
+        'refresh-component' => '$refresh',
+    ];
+
+    /**
      * Prepare the component.
      *
      * @param Model $model
+     *
      * @return void
      */
     public function mount(Model $model): void
@@ -47,6 +58,25 @@ class LibraryButton extends Component
         } else {
             $this->libraryStatus = -1;
         }
+    }
+
+    /**
+     * Handle updating library status from a dispatched event.
+     *
+     * @param string $modelType
+     * @param int    $modelID
+     * @param int    $libraryStatus
+     *
+     * @return void
+     */
+    public function handleUpdateLibraryStatus(string $modelType, int $modelID, int $libraryStatus): void
+    {
+        if ($this->model->getMorphClass() != $modelType && $this->model->id != $modelID) {
+            return;
+        }
+
+        $this->libraryStatus = $libraryStatus;
+        $this->dispatch('refresh-component')->self();
     }
 
     /**
@@ -75,12 +105,12 @@ class LibraryButton extends Component
             // Update or create the user library entry.
             UserLibrary::withoutSyncingToSearch(function () use ($user) {
                 $userLibrary = UserLibrary::updateOrCreate([
-                        'user_id' => $user->id,
-                        'trackable_type' => $this->model->getMorphClass(),
-                        'trackable_id' => $this->model->id,
-                    ], [
-                        'status' => $this->libraryStatus,
-                    ]);
+                    'user_id' => $user->id,
+                    'trackable_type' => $this->model->getMorphClass(),
+                    'trackable_id' => $this->model->id,
+                ], [
+                    'status' => $this->libraryStatus,
+                ]);
 
                 $userLibrary->setRelation('trackable', $this->model);
 
@@ -89,7 +119,7 @@ class LibraryButton extends Component
         }
 
         // Notify other components of an update in the model's data.
-        $eventName = match($this->model->getMorphClass()) {
+        $eventName = match ($this->model->getMorphClass()) {
             Anime::class => 'update-anime',
             Game::class => 'update-game',
             Manga::class => 'update-manga',

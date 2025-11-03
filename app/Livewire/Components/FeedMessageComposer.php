@@ -38,9 +38,9 @@ class FeedMessageComposer extends Component
     public bool $isReply;
 
     /**
-     * Get the validation rules that apply to the request.
+     * The rules of the component.
      *
-     * @return array
+     * @return string[][]
      */
     protected function rules(): array
     {

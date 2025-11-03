@@ -313,7 +313,7 @@ class Details extends Component
             }
         } else {
             $this->presentAlert(
-                title: __('That’s Unfortunate'),
+                title: __('That’s unfortunate'),
                 message: __('Reminders are only available to pro and subscribed users 🧐'),
             );
         }

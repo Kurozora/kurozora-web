@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Anime;
 
+use App\Enums\UserLibraryStatus;
 use App\Events\ModelViewed;
 use App\Models\Anime;
 use App\Models\MediaRating;
@@ -9,10 +10,12 @@ use App\Models\Studio;
 use App\Models\UserLibrary;
 use App\Traits\Livewire\PresentsAlert;
 use App\Traits\Livewire\WithReviewBox;
+use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
+use Livewire\Attributes\Renderless;
 use Livewire\Component;
 
 class Details extends Component
@@ -70,11 +73,37 @@ class Details extends Component
     public bool $showVideo = false;
 
     /**
+     * Whether to show the add-to-library modal to the user.
+     *
+     * @var bool $showAddToLibrary
+     */
+    public bool $showAddToLibrary = false;
+
+    /**
      * Whether the component is ready to load.
      *
      * @var bool $readyToLoad
      */
     public bool $readyToLoad = false;
+
+    /**
+     * The addition status.
+     *
+     * @var string
+     */
+    public string $addStatus = '';
+
+    /**
+     * The query strings of the component.
+     *
+     * @return string[][]
+     */
+    protected function queryString(): array
+    {
+        return [
+            'addStatus' => ['as' => 'add_to_library', 'except' => ''],
+        ];
+    }
 
     /**
      * Prepare the component.
@@ -111,6 +140,19 @@ class Details extends Component
                 ['trackable_id', '=', $anime->id],
                 ['user_id', '=', $user->id],
             ])->get());
+
+            // Determine whether to show the add-to-library modal
+            if ($anime->library->isEmpty()) {
+                try {
+                    $addStatus = str($this->addStatus)
+                        ->title()
+                        ->replace('-', '');
+
+                    if (UserLibraryStatus::fromKey($addStatus)) {
+                        $this->showAddToLibrary = true;
+                    }
+                } catch (Exception) {}
+            }
         } else {
             $this->anime->setRelation('library', collect());
             $this->anime->setRelation('mediaRatings', collect());
@@ -159,6 +201,48 @@ class Details extends Component
     }
 
     /**
+     * Add the model to the user's library.
+     */
+    #[Renderless]
+    public function addToLibrary(): void
+    {
+        $addStatus = str($this->addStatus)
+            ->title()
+            ->replace('-', '');
+        $libraryStatus = UserLibraryStatus::fromKey($addStatus);
+
+        // Update or create the user library entry.
+        UserLibrary::withoutSyncingToSearch(function () use($libraryStatus) {
+            $userLibrary = UserLibrary::updateOrCreate([
+                'user_id' => auth()->id(),
+                'trackable_type' => $this->anime->getMorphClass(),
+                'trackable_id' => $this->anime->id,
+            ], [
+                'status' => $libraryStatus->value,
+            ]);
+
+            $userLibrary->setRelation('trackable', $this->anime);
+
+            $userLibrary->searchable();
+        });
+
+        $this->dispatch('update-library-status', modelType: $this->anime->getMorphClass(), modelID: $this->anime->id, libraryStatus: $libraryStatus->value)
+            ->to('components.library-button');
+        $this->dismissAddToLibrary();
+    }
+
+    /**
+     * Handle the dismissing of the add-to-library modal.
+     *
+     * @return void
+     */
+    public function dismissAddToLibrary(): void
+    {
+        $this->showAddToLibrary = false;
+        $this->addStatus = '';
+    }
+
+    /**
      * Adds the anime to the user's favorite list.
      */
     public function favoriteAnime(): void
@@ -200,7 +284,7 @@ class Details extends Component
             }
         } else {
             $this->presentAlert(
-                title: __('That’s Unfortunate'),
+                title: __('That’s unfortunate'),
                 message: __('Reminders are only available to pro and subscribed users 🧐'),
             );
         }

@@ -100,7 +100,7 @@ class GetButton extends Component
 
         if (!($user->is_subscribed || $user->is_pro)) {
             $this->presentAlert(
-                title: __('That’s Unfortunate'),
+                title: __('That’s unfortunate'),
                 message: __('Premium themes are only available to pro and subscribed users 🧐')
             );
             return;

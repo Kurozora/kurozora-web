@@ -515,4 +515,28 @@
     </div>
 
     <livewire:components.review-box :review-box-id="$reviewBoxID" :model-id="$manga->id" :model-type="$manga->getMorphClass()" :user-rating="$userRating?->first()" />
+
+    <x-dialog-modal maxWidth="md" model="showAddToLibrary">
+        <x-slot:title>
+            {{ __('Confirm library addition') }}
+        </x-slot:title>
+
+        <x-slot:content>
+            <div class="pt-4 pb-4 pl-4 pr-4">
+                <p>{{ __('Are you sure you want to add ":title" to your :libraryStatus list?', ['title' => $manga->title, 'libraryStatus' => $addStatus]) }}</p>
+            </div>
+        </x-slot:content>
+
+        <x-slot:footer>
+            <div class="flex justify-end gap-2">
+                <x-outlined-button wire:click="dismissAddToLibrary" wire:loading.attr="disabled">
+                    {{ __('Cancel') }}
+                </x-outlined-button>
+
+                <x-button wire:click="addToLibrary" wire:loading.attr="disabled">
+                    {{ __('Add') }}
+                </x-button>
+            </div>
+        </x-slot:footer>
+    </x-dialog-modal>
 </main>
