@@ -1,13 +1,17 @@
 <aside
-    class="hidden flex-col w-64 h-screen bg-primary z-[999] xl:fixed xl:flex"
+    class="hidden flex-col w-64 h-screen z-[999] xl:fixed xl:flex"
     x-data="{
         showScrollEdgeEffect: false
     }"
 >
-    <nav class="flex flex-col h-full border-e border-primary">
+    <nav
+        class="flex flex-col mt-2 ml-2 bg-blur backdrop-blur border-primary border rounded-xl"
+        style="height: calc(100% - 1rem)"
+    >
         <div class="relative">
             {{-- Scroll Edge Effect --}}
             <x-edge-blur
+                class="rounded-xl"
                 x-show="showScrollEdgeEffect"
                 x-cloak
                 x-transition.duration.500ms=""
@@ -34,14 +38,14 @@
             </div>
         </div>
 
-        <div class="flex flex-col justify-between w-full h-full overflow-y-auto">
-            <div class="mr-4 ml-4">
+        <div class="flex flex-col justify-between w-full h-full pb-2 overflow-y-auto">
+            <div class="mr-2 ml-2">
                 <div
                     x-intersect:enter="showScrollEdgeEffect = false"
                     x-intersect:leave="showScrollEdgeEffect = true"
                 ></div>
 
-                <section class="mt-4">
+                <section class="mt-4 ml-2 mr-2">
                     <x-sidebar-nav-link href="{{ route('home') }}" wire:navigate :active="request()->routeIs('home')">
                         @svg('house', 'fill-current', ['width' => '18']) {{ __('Explore') }}
                     </x-sidebar-nav-link>
@@ -56,68 +60,73 @@
                 </section>
 
                 <section class="mt-4">
-                    <div class="mb-2">
+                    <div class="mb-2 pl-2 pr-2">
                         <h2 class="text-secondary text-xs font-semibold">{{ __('Catalog') }}</h2>
                     </div>
 
-                    <x-sidebar-nav-link href="{{ route('anime.index') }}" wire:navigate :active="request()->routeIs('anime.index')">
-                        @svg('tv', 'fill-current', ['width' => '18'])  {{ __('Anime') }}
-                    </x-sidebar-nav-link>
-
-                    <x-sidebar-nav-link href="{{ route('manga.index') }}" wire:navigate :active="request()->routeIs('manga.index')">
-                        @svg('book', 'fill-current', ['width' => '18'])  {{ __('Manga') }}
-                    </x-sidebar-nav-link>
-
-                    <x-sidebar-nav-link href="{{ route('games.index') }}" wire:navigate :active="request()->routeIs('games.index')">
-                        @svg('gamecontroller', 'fill-current', ['width' => '18']) {{ __('Game') }}
-                    </x-sidebar-nav-link>
-
-                    @if (app()->isLocal())
-                        <x-sidebar-nav-link href="#">
-                            @svg('person_tv', 'fill-current', ['width' => '18']) {{ __('Live Action') }}
+                    <div class="ml-2 mr-2">
+                        <x-sidebar-nav-link href="{{ route('anime.index') }}" wire:navigate :active="request()->routeIs('anime.index')">
+                            @svg('tv', 'fill-current', ['width' => '18'])  {{ __('Anime') }}
                         </x-sidebar-nav-link>
-                    @endif
 
-                    <x-sidebar-nav-link href="{{ route('songs.index') }}" wire:navigate :active="request()->routeIs('songs.index')">
-                        @svg('music_note', 'fill-current', ['width' => '18']) {{ __('Songs') }}
-                    </x-sidebar-nav-link>
+                        <x-sidebar-nav-link href="{{ route('manga.index') }}" wire:navigate :active="request()->routeIs('manga.index')">
+                            @svg('book', 'fill-current', ['width' => '18'])  {{ __('Manga') }}
+                        </x-sidebar-nav-link>
 
-                    <x-sidebar-nav-link href="{{ route('characters.index') }}" wire:navigate :active="request()->routeIs('characters.index')">
-                        @svg('totoro', 'fill-current', ['width' => '18']) {{ __('Characters') }}
-                    </x-sidebar-nav-link>
+                        <x-sidebar-nav-link href="{{ route('games.index') }}" wire:navigate :active="request()->routeIs('games.index')">
+                            @svg('gamecontroller', 'fill-current', ['width' => '18']) {{ __('Game') }}
+                        </x-sidebar-nav-link>
 
-                    <x-sidebar-nav-link href="{{ route('people.index') }}" wire:navigate :active="request()->routeIs('people.index')">
-                        @svg('person', 'fill-current', ['width' => '18']) {{ __('People') }}
-                    </x-sidebar-nav-link>
+                        @if (app()->isLocal())
+                            <x-sidebar-nav-link href="#">
+                                @svg('person_tv', 'fill-current', ['width' => '18']) {{ __('Live Action') }}
+                            </x-sidebar-nav-link>
+                        @endif
 
-                    <x-sidebar-nav-link href="{{ route('studios.index') }}" wire:navigate :active="request()->routeIs('studios.index')">
-                        @svg('building_2', 'fill-current', ['width' => '18']) {{ __('Studios') }}
-                    </x-sidebar-nav-link>
+                        <x-sidebar-nav-link href="{{ route('songs.index') }}" wire:navigate :active="request()->routeIs('songs.index')">
+                            @svg('music_note', 'fill-current', ['width' => '18']) {{ __('Songs') }}
+                        </x-sidebar-nav-link>
 
-                    @if (app()->isLocal())
-                    <x-sidebar-nav-link href="{{ route('platforms.index') }}" wire:navigate :active="request()->routeIs('platforms.index')">
-                        @svg('tv_and_mediabox', 'fill-current', ['width' => '18']) {{ __('Platforms') }}
-                    </x-sidebar-nav-link>
-                    @endif
+                        <x-sidebar-nav-link href="{{ route('characters.index') }}" wire:navigate :active="request()->routeIs('characters.index')">
+                            @svg('totoro', 'fill-current', ['width' => '18']) {{ __('Characters') }}
+                        </x-sidebar-nav-link>
+
+                        <x-sidebar-nav-link href="{{ route('people.index') }}" wire:navigate :active="request()->routeIs('people.index')">
+                            @svg('person', 'fill-current', ['width' => '18']) {{ __('People') }}
+                        </x-sidebar-nav-link>
+
+                        <x-sidebar-nav-link href="{{ route('studios.index') }}" wire:navigate :active="request()->routeIs('studios.index')">
+                            @svg('building_2', 'fill-current', ['width' => '18']) {{ __('Studios') }}
+                        </x-sidebar-nav-link>
+
+                        @if (app()->isLocal())
+                        <x-sidebar-nav-link href="{{ route('platforms.index') }}" wire:navigate :active="request()->routeIs('platforms.index')">
+                            @svg('tv_and_mediabox', 'fill-current', ['width' => '18']) {{ __('Platforms') }}
+                        </x-sidebar-nav-link>
+                        @endif
+                    </div>
                 </section>
 
                 @auth
                     <section
-                        class="mt-4"
+                        class="mt-2"
                         x-data="{ collapsed: $persist(false).as('sidebar.library.collapsed') }"
                     >
-                        <div
-                            class="flex items-center justify-between mb-2 text-secondary cursor-pointer"
-                            @click="collapsed = !collapsed"
+                        <button
+                            class="flex items-center justify-between w-full pt-2 pb-2 pl-2 pr-2 text-secondary cursor-pointer"
+                            x-on:click="collapsed = !collapsed"
+                            x-bind:title="collapsed ? '{{ __('Library section collapsed') }}' : '{{ __('Library section expanded') }}'"
+                            role="button"
                         >
                             <h2 class="text-xs font-semibold">{{ __('Library') }}</h2>
 
                             <div class='transform transition duration-300 ease-in-out' :class="{'rotate-90': !collapsed,' -translate-y-0.0': collapsed }">
                                 @svg('chevron_forward', 'fill-current', ['width' => 10])
                             </div>
-                        </div>
+                        </button>
 
                         <div
+                            class="ml-2 mr-2"
                             x-show="!collapsed"
                             x-collapse
                             x-collapse.duration.500ms
@@ -137,21 +146,23 @@
                     </section>
 
                     <section
-                        class="mt-4"
+                        class="mt-2"
                         x-data="{ collapsed: $persist(false).as('sidebar.favorite.collapsed') }"
                     >
-                        <div
-                            class="flex items-center justify-between mb-2 text-secondary cursor-pointer"
-                            @click="collapsed = !collapsed"
+                        <button
+                            class="flex items-center justify-between w-full pt-2 pb-2 pl-2 pr-2 text-secondary cursor-pointer"
+                            x-on:click="collapsed = !collapsed"
+                            x-bind:title="collapsed ? '{{ __('Favorite section collapsed') }}' : '{{ __('Favorite section expanded') }}'"
                         >
                             <h2 class="text-xs font-semibold">{{ __('Favorite') }}</h2>
 
                             <div class='transform transition duration-300 ease-in-out' :class="{'rotate-90': !collapsed,' -translate-y-0.0': collapsed }">
                                 @svg('chevron_forward', 'fill-current', ['width' => 10])
                             </div>
-                        </div>
+                        </button>
 
                         <div
+                            class="ml-2 mr-2"
                             x-show="!collapsed"
                             x-collapse
                             x-collapse.duration.500ms
@@ -171,22 +182,23 @@
                     </section>
 
                     <section
-
-                        class="mt-4"
+                        class="mt-2"
                         x-data="{ collapsed: $persist(false).as('sidebar.reminder.collapsed') }"
                     >
-                        <div
-                            class="flex items-center justify-between mb-2 text-secondary cursor-pointer"
-                            @click="collapsed = !collapsed"
+                        <button
+                            class="flex items-center justify-between w-full pt-2 pb-2 pl-2 pr-2 text-secondary cursor-pointer"
+                            x-on:click="collapsed = !collapsed"
+                            x-bind:title="collapsed ? '{{ __('Reminder section collapsed') }}' : '{{ __('Reminder section expanded') }}'"
                         >
                             <h2 class="text-xs font-semibold">{{ __('Reminder') }}</h2>
 
                             <div class='transform transition duration-300 ease-in-out' :class="{'rotate-90': !collapsed,' -translate-y-0.0': collapsed }">
                                 @svg('chevron_forward', 'fill-current', ['width' => 10])
                             </div>
-                        </div>
+                        </button>
 
                         <div
+                            class="ml-2 mr-2"
                             x-show="!collapsed"
                             x-collapse
                             x-collapse.duration.500ms
