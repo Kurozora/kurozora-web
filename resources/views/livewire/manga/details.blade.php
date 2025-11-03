@@ -246,15 +246,13 @@
 
             @if (!empty($manga->synopsis))
                 <section class="pb-8">
-                <x-hr class="ml-4 mr-4 pb-5" />
-
-                    <x-section-nav class="flex flex-nowrap justify-between mb-5">
+                    <x-section-nav class="flex flex-nowrap justify-between mb-5 pt-4">
                         <x-slot:title>
                             {{ __('Synopsis') }}
                         </x-slot:title>
                     </x-section-nav>
 
-                    <x-truncated-text class="ml-4 mr-4">
+                    <x-truncated-text class="max-w-7xl ml-4 mr-4">
                         <x-slot:text>
                             {!! nl2br(e($manga->synopsis)) !!}
                         </x-slot:text>
@@ -263,9 +261,7 @@
             @endif
 
             <section id="ratingsAndReviews" class="pb-8">
-                <x-hr class="ml-4 mr-4 pb-5" />
-
-                <x-section-nav>
+                <x-section-nav class="pt-4">
                     <x-slot:title>
                         {{ __('Ratings & Reviews') }}
                     </x-slot:title>
@@ -321,9 +317,7 @@
             </section>
 
             <section class="pb-8">
-                <x-hr class="ml-4 mr-4 pb-5" />
-
-                <x-section-nav>
+                <x-section-nav class="pt-4">
                     <x-slot:title>
                         {{ __('Information') }}
                     </x-slot:title>

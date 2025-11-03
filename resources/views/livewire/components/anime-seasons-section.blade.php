@@ -1,9 +1,7 @@
 <div wire:init="loadSection">
     @if ($this->seasons->count())
         <section class="pb-8">
-            <x-hr class="ml-4 mr-4 pb-5" />
-
-            <x-section-nav>
+            <x-section-nav class="pt-4">
                 <x-slot:title>
                     {{ __('Seasons') }}
                 </x-slot:title>
@@ -24,9 +22,7 @@
         </section>
     @elseif (!$readyToLoad)
         <section class="pb-8">
-            <x-hr class="ml-4 mr-4 pb-5" />
-
-            <div class="flex gap-2 justify-between mb-5 pl-4 pr-4">
+            <div class="flex gap-2 justify-between mb-5 pt-4 pl-4 pr-4">
                 <div>
                     <p class="bg-secondary rounded-md" style="width: 168px; height: 28px"></p>
                     <p class="bg-secondary rounded-md" style="width: 228px; height: 22px"></p>

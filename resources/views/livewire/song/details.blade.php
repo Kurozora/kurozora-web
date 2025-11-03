@@ -171,9 +171,7 @@
 
             @if (!empty($song->original_lyrics))
                 <section class="pb-8">
-                    <x-hr class="ml-4 mr-4 pb-5" />
-
-                    <x-section-nav class="flex-nowrap">
+                    <x-section-nav class="flex-nowrap pt-4">
                         <x-slot:title>
                             {{ __('Lyrics') }}
                         </x-slot:title>
@@ -346,9 +344,7 @@
             @endif
 
             <section id="ratingsAndReviews" class="pb-8">
-                <x-hr class="ml-4 mr-4 pb-5" />
-
-                <x-section-nav>
+                <x-section-nav class="pt-4">
                     <x-slot:title>
                         {{ __('Ratings & Reviews') }}
                     </x-slot:title>

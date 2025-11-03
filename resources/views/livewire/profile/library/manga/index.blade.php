@@ -59,9 +59,7 @@
                 @endif
             @elseif (!$readyToLoad)
                 <section class="mt-4 pb-8">
-                    <x-hr class="ml-4 mr-4 pb-5" />
-
-                    <div class="flex flex-wrap gap-4 justify-between pl-4 pr-4">
+                    <div class="flex flex-wrap gap-4 justify-between pt-4 pl-4 pr-4">
                         <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
                         <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
                         <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>

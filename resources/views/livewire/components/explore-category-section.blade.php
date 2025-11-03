@@ -1,16 +1,8 @@
-@php
-    $borderIndex = auth()->check() ? 1 : 2;
-@endphp
-
 <div>
     <div wire:init="loadSection">
         @if ($this->exploreCategoryItems->count())
             <section class="pt-4 pb-8">
-                @if ($index != $borderIndex)
-                    <x-hr class="ml-4 mr-4 pb-5" />
-                @endif
-
-                <x-section-nav class="flex flex-nowrap justify-between mb-5 pl-4 pr-4">
+                <x-section-nav class="flex flex-nowrap justify-between mb-5 pt-4 pl-4 pr-4">
                     <x-slot:title>
                         @switch($exploreCategory->type)
                         @case(\App\Enums\ExploreCategoryTypes::ShowsSeason)
@@ -157,9 +149,7 @@
 
     @if (!$readyToLoad)
         <section class="pt-4 pb-8">
-            <x-hr class="ml-4 mr-4 pb-5" />
-
-            <div style="height: 314px">
+            <div class="pt-4" style="height: 314px">
                 <div class="flex gap-2 justify-between mb-5 pl-4 pr-4">
                     <div>
                         <p class="bg-secondary rounded-md" style="width: 168px; height: 28px"></p>

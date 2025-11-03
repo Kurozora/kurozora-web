@@ -1,9 +1,7 @@
 <div wire:init="loadSection">
     <section id="#{{ $mediaType->name }}" class="pb-8">
-        <x-hr class="ml-4 mr-4 pb-5" />
-
         @if ($this->models->count())
-            <x-section-nav>
+            <x-section-nav class="pt-4">
                 <x-slot:title>
                     {{ $mediaType->name . ' (' . $this->models->count() . ')' }}
                 </x-slot:title>
@@ -29,7 +27,7 @@
                     @break
             @endswitch
         @elseif (!$readyToLoad)
-            <x-section-nav>
+            <x-section-nav class="pt-4">
                 <x-slot:title>
                     {{ $mediaType->name }}
                 </x-slot:title>

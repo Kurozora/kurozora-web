@@ -1,7 +1,5 @@
 <section class="pb-8">
-    <x-hr class="ml-4 mr-4 pb-5" />
-
-    <x-section-nav class="flex flex-nowrap justify-between mb-5">
+    <x-section-nav class="flex flex-nowrap justify-between mb-5 pt-4">
         <x-slot:title>
             {{ __(':x Top Charts', ['x' => ucfirst($chartKind)]) }}
         </x-slot:title>

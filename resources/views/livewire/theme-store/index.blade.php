@@ -61,9 +61,7 @@
         @endif
 
         <section id="premium" class="{{ !$this->isSearching() ? 'pt-4' : '' }}">
-            <x-hr class="ml-4 mr-4 pb-5" />
-
-            <div class="pl-4 pr-4">
+            <div class="pt-4 pl-4 pr-4">
                 <h2 class="text-lg font-bold">{{ __('Premium') }}</h2>
             </div>
 
