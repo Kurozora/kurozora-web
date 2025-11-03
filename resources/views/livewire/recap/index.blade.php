@@ -28,11 +28,9 @@
     @if ($this->recapYears->count())
         <header
             id="header"
-            class="sticky top-0 bg-black/30 backdrop-blur backdrop-saturate-200 z-10"
+            class="sticky top-0 z-10"
         >
             <div class="relative flex flex-row items-center justify-between max-w-7xl mx-auto py-6">
-                <div class="absolute top-0 left-0 bottom-0 right-0 blur backdrop-blur" style="z-index: -1;"></div>
-
                 <div class="flex items-center justify-between gap-2 pl-4">
                     {{-- Hamburger --}}
                     <div
@@ -93,8 +91,9 @@
 
             {{-- Responsive Navigation Menu --}}
             <div
-                class="absolute w-full bg-black/30 backdrop-blur backdrop-saturate-200 rounded-b-2xl"
+                class="absolute w-full rounded-b-2xl"
                 x-show="isNavOpen"
+                x-cloak
                 x-collapse.duration.400ms=""
                 x-on:click="isNavOpen = !isNavOpen"
             >
@@ -133,12 +132,12 @@
             </div>
         </header>
 
-        <div class="max-w-7xl mx-auto py-6">
+        <div class="max-w-7xl mx-auto">
             <div
                 x-data="{
                     month: @entangle('month').live
                 }"
-                class="flex gap-6 pl-4 pr-4 whitespace-nowrap overflow-x-scroll no-scrollbar md:gap-20"
+                class="flex gap-6 pt-4 pb-4 pl-4 pr-4 whitespace-nowrap overflow-x-scroll no-scrollbar md:gap-20"
                 style="mask: linear-gradient(90deg, transparent, #000 2%, #000 98%, transparent 100%);"
             >
 {{--                @if ($this->year !== now()->year || now()->month === 12)--}}

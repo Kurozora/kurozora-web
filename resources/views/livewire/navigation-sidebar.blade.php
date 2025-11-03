@@ -5,8 +5,8 @@
     }"
 >
     <nav
-        class="flex flex-col mt-2 ml-2 bg-blur backdrop-blur border-primary border rounded-xl"
-        style="height: calc(100% - 1rem)"
+        class="flex flex-col mt-2 ml-2 bg-blur backdrop-blur border-primary rounded-xl"
+        style="height: calc(100% - 1rem); border-width: 0.5px"
     >
         <div class="relative">
             {{-- Scroll Edge Effect --}}
