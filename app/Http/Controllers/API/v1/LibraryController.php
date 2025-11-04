@@ -139,22 +139,16 @@ class LibraryController extends Controller
         }
 
         // Get the model
-        if (!empty($data['anime_id'])) {
-            $modelID = $data['anime_id'];
-            $model = Anime::withoutGlobalScopes()
-                ->findOrFail($modelID);
-        } else {
-            $modelID = $data['model_id'];
-            $libraryKind = UserLibraryKind::fromValue((int) $data['library']);
-            $model = match ($libraryKind->value) {
-                UserLibraryKind::Manga => Manga::withoutGlobalScopes()
-                    ->findOrFail($modelID),
-                UserLibraryKind::Game => Game::withoutGlobalScopes()
-                    ->findOrFail($modelID),
-                default => Anime::withoutGlobalScopes()
-                    ->findOrFail($modelID),
-            };
-        }
+        $modelID = $data['model_id'];
+        $libraryKind = UserLibraryKind::fromValue((int) $data['library']);
+        $model = match ($libraryKind->value) {
+            UserLibraryKind::Manga => Manga::withoutGlobalScopes()
+                ->findOrFail($modelID),
+            UserLibraryKind::Game => Game::withoutGlobalScopes()
+                ->findOrFail($modelID),
+            default => Anime::withoutGlobalScopes()
+                ->findOrFail($modelID),
+        };
 
         // Update or create the user library entry.
         UserLibrary::withoutSyncingToSearch(function () use ($userLibraryStatus, $model, $user) {

@@ -25,76 +25,6 @@ use Illuminate\Support\Facades\Response;
 
 class UserReminderController extends Controller
 {
-    // TODO: - Delete tempIndex in favor of index
-    /**
-     * Returns the list of user's reminders.
-     *
-     * @param GetUserReminderRequest $request
-     *
-     * @return JsonResponse
-     */
-    function tempIndex(GetUserReminderRequest $request): JsonResponse
-    {
-        $data = $request->validated();
-        $library = (int) ($data['library'] ?? UserLibraryKind::Anime);
-
-        // Get the authenticated user
-        $user = auth()->user();
-
-        // Get morph class
-        $morphClass = match ($library) {
-            UserLibraryKind::Manga => Manga::class,
-            UserLibraryKind::Game => Game::class,
-            default => Anime::class,
-        };
-
-        // Paginate the reminded model
-        $userReminders = $user->whereReminded($morphClass)
-            ->when(auth()->user() !== $user, function (Builder $query) use ($user) {
-                $query->join(UserLibrary::TABLE_NAME, UserReminder::TABLE_NAME . '.remindable_id', '=', UserLibrary::TABLE_NAME . '.trackable_id')
-                    ->whereColumn(UserLibrary::TABLE_NAME . '.trackable_type', '=', UserReminder::TABLE_NAME . '.remindable_type')
-                    ->where(UserLibrary::TABLE_NAME . '.user_id', '=', $user->id)
-                    ->where(UserLibrary::TABLE_NAME . '.is_hidden', '=', false);
-            })
-            ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin', 'mediaRatings' => function ($query) use ($user) {
-                $query->where([
-                    ['user_id', '=', $user->id],
-                ]);
-            }, 'library' => function ($query) use ($user) {
-                $query->where('user_id', '=', $user->id);
-            }])
-            ->withExists([
-                'favoriters as isFavorited' => function ($query) use ($user) {
-                    $query->where('user_id', '=', $user->id);
-                },
-            ])
-            ->when(in_array(Remindable::class, class_uses_recursive($morphClass)), function ($query) use ($user) {
-                // Add your logic here if the trait is used
-                $query->withExists([
-                    'reminderers as isReminded' => function ($query) use ($user) {
-                        $query->where('user_id', '=', $user->id);
-                    },
-                ]);
-            })
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
-
-        // Get next page url minus domain
-        $nextPageURL = str_replace($request->root(), '', $userReminders->nextPageUrl() ?? '');
-
-        // Get data collection
-        $data = match ((int) ($data['library'] ?? UserLibraryKind::Anime)) {
-            UserLibraryKind::Manga => LiteratureResourceBasic::collection($userReminders),
-            UserLibraryKind::Game => GameResourceBasic::collection($userReminders),
-            default => AnimeResourceBasic::collection($userReminders),
-        };
-
-        // Show successful response
-        return JSONResult::success([
-            'data' => $data,
-            'next' => empty($nextPageURL) ? null : $nextPageURL,
-        ]);
-    }
-
     /**
      * Returns the list of user's reminders.
      *
@@ -165,7 +95,7 @@ class UserReminderController extends Controller
     }
 
     /**
-     * Adds an anime to the user's reminders.
+     * Adds a model to the user's reminders.
      *
      * @param CreateUserReminderRequest $request
      *
@@ -184,18 +114,13 @@ class UserReminderController extends Controller
         }
 
         // Get the model
-        if (!empty($data['anime_id'])) {
-            $modelID = $data['anime_id'];
-            $model = Anime::findOrFail($modelID);
-        } else {
-            $modelID = $data['model_id'];
-            $libraryKind = UserLibraryKind::fromValue((int) $data['library']);
-            $model = match ($libraryKind->value) {
-                UserLibraryKind::Manga => Manga::findOrFail($modelID),
-                UserLibraryKind::Game => Game::findOrFail($modelID),
-                default => Anime::findOrFail($modelID),
-            };
-        }
+        $modelID = $data['model_id'];
+        $libraryKind = UserLibraryKind::fromValue((int) $data['library']);
+        $model = match ($libraryKind->value) {
+            UserLibraryKind::Manga => Manga::findOrFail($modelID),
+            UserLibraryKind::Game => Game::findOrFail($modelID),
+            default => Anime::findOrFail($modelID),
+        };
 
         // Successful response
         return JSONResult::success([
