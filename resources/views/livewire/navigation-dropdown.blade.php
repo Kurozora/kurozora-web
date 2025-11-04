@@ -288,23 +288,21 @@
                                     </x-dropdown-link>
 
                                     @auth
-                                        <div class="border-t border-primary"></div>
-
                                         {{-- Library --}}
-                                        <div class="block pl-2 pr-2 pt-2 pb-2 text-xs text-secondary font-semibold">
+                                        <div class="block pl-2 pr-2 pt-4 pb-2 text-xs text-secondary font-semibold">
                                             {{ __('Library') }}
                                         </div>
 
                                         <x-dropdown-link href="{{ route('profile.anime.library', $user) }}" wire:navigate>
-                                            {{ __('Anime Library') }}
+                                            {{ __('Anime') }}
                                         </x-dropdown-link>
 
                                         <x-dropdown-link href="{{ route('profile.manga.library', $user) }}" wire:navigate>
-                                            {{ __('Manga Library') }}
+                                            {{ __('Manga') }}
                                         </x-dropdown-link>
 
                                         <x-dropdown-link href="{{ route('profile.games.library', $user) }}" wire:navigate>
-                                            {{ __('Games Library') }}
+                                            {{ __('Games') }}
                                         </x-dropdown-link>
                                     @else
                                         {{-- Library --}}
@@ -313,11 +311,9 @@
                                         </x-dropdown-link>
                                     @endauth
 
-                                    <div class="border-t border-primary"></div>
-
                                     @auth
                                         {{-- Favorite Pages --}}
-                                        <div class="block pl-2 pr-2 pt-2 pb-2 text-xs text-secondary font-semibold">
+                                        <div class="block pl-2 pr-2 pt-4 pb-2 text-xs text-secondary font-semibold">
                                             {{ __('Favorite') }}
                                         </div>
 
@@ -332,13 +328,11 @@
                                         <x-dropdown-link href="{{ route('profile.games.favorites', $user) }}" wire:navigate>
                                             {{ __('Game') }}
                                         </x-dropdown-link>
-
-                                        <div class="border-t border-primary"></div>
                                     @endauth
 
                                     @auth
                                         {{-- Reminder Pages --}}
-                                        <div class="block pl-2 pr-2 pt-2 pb-2 text-xs text-secondary font-semibold">
+                                        <div class="block pl-2 pr-2 pt-4 pb-2 text-xs text-secondary font-semibold">
                                             {{ __('Reminder') }}
                                         </div>
 
@@ -353,12 +347,10 @@
     {{--                                    <x-dropdown-link href="{{ route('profile.games.reminders', $user) }}">--}}
     {{--                                        {{ __('Game') }}--}}
     {{--                                    </x-dropdown-link>--}}
-
-                                        <div class="border-t border-primary"></div>
                                     @endauth
 
                                     {{-- More Pages --}}
-                                    <div class="block pl-2 pr-2 pt-2 pb-2 text-xs text-secondary font-semibold">
+                                    <div class="block pl-2 pr-2 pt-4 pb-2 text-xs text-secondary font-semibold">
                                         {{ __('More') }}
                                     </div>
 
@@ -370,20 +362,18 @@
                                         {{ __('Theme Store') }}
                                     </x-dropdown-link>
 
-                                    <div class="border-t border-primary"></div>
-
                                     @auth
                                         {{-- Account Management --}}
-                                        <div class="block pl-2 pr-2 pt-2 pb-2 text-xs text-secondary font-semibold">
+                                        <div class="block pl-2 pr-2 pt-4 pb-2 text-xs text-secondary font-semibold">
                                             {{ __('Manage Account') }}
                                         </div>
 
                                         <x-dropdown-link href="{{ route('profile.settings') }}" wire:navigate>
                                             {{ __('Settings') }}
                                         </x-dropdown-link>
-
-                                        <div class="border-t border-primary"></div>
                                     @endauth
+
+                                    <x-hr class="mt-2 mb-2" />
 
                                     {{-- Authentication --}}
                                     @auth
@@ -432,7 +422,7 @@
                 x-show="isNavOpen"
                 x-collapse.duration.400ms=""
             >
-                <div class="pt-2 pb-3 space-y-1">
+                <div class="pt-4">
                     <x-sidebar-nav-link href="{{ route('home') }}" wire:navigate :active="request()->routeIs('home')">
                         @svg('house', 'fill-current', ['width' => '18']) {{ __('Explore') }}
                     </x-sidebar-nav-link>
@@ -446,7 +436,7 @@
                     </x-sidebar-nav-link>
                 </div>
 
-                <div class="pt-4 pb-1 border-t border-primary">
+                <div class="pt-4 pb-1">
                     <div class="block pl-2 pr-2 pt-2 pb-2 text-xs text-secondary font-semibold">
                         {{ __('Catalog') }}
                     </div>
@@ -493,30 +483,26 @@
                 </div>
 
                 {{-- Responsive Settings Options --}}
-                <div class="pt-4 pb-1 border-t border-primary">
+                <div class="pt-4 pb-2">
                     @auth
-                        <div class="flex items-center pl-2 pr-2 pb-4">
+                        {{-- Profile --}}
+                        <x-sidebar-nav-link href="{{ route('me') }}"
+                                            wire:navigate
+                                            :active="request()->routeIs('profile.details', auth()->user())"
+                                            title="{{ __('Profile') }}"
+                        >
                             <div class="shrink-0">
                                 <div class="h-10 w-10 bg-cover rounded-full" style="background-image: url({{ $user->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) }});" alt="{{ $user->username }}" role="img"></div>
                             </div>
 
-                            <div class="ml-3">
-                                <div class="font-medium text-base text-primary">{{ $user->username }}</div>
-                                <div class="font-medium text-sm text-secondary">{{ $user->email }}</div>
+                            <div>
+                                <div class="font-medium text-base">{{ $user->username }}</div>
+                                <div class="font-medium text-sm">{{ $user->email }}</div>
                             </div>
-                        </div>
-
-                        {{-- Profile --}}
-                        <div class="space-y-1">
-                            <x-sidebar-nav-link href="{{ route('me') }}" wire:navigate>
-                                {{ __('Profile') }}
-                            </x-sidebar-nav-link>
-
-                            <div class="border-t border-primary"></div>
-                        </div>
+                        </x-sidebar-nav-link>
 
                         {{-- Library --}}
-                        <div class="space-y-1 pt-1">
+                        <div class="pt-4">
                             <div class="block pl-2 pr-2 pt-2 pb-2 text-xs text-secondary font-semibold">
                                 {{ __('Library') }}
                             </div>
@@ -538,11 +524,9 @@
                                                    :active="request()->routeIs('profile.games.library')">
                                 @svg('gamecontroller', 'fill-current', ['width' => '18']) {{ __('Games') }}
                             </x-sidebar-nav-link>
-
-                            <div class="border-t border-primary"></div>
                         </div>
                     @else
-                        <div class="space-y-1 pt-1">
+                        <div>
                             <x-sidebar-nav-link href="{{ route('me') }}" wire:navigate>
                                 {{ __('Profile') }}
                             </x-sidebar-nav-link>
@@ -553,14 +537,12 @@
                                                    :active="request()->routeIs('library.index')">
                                 {{ __('Library') }}
                             </x-sidebar-nav-link>
-
-                            <div class="border-t border-primary"></div>
                         </div>
                     @endauth
 
                     @auth
                         {{-- Favorite Pages --}}
-                        <div class="space-y-1 pt-1">
+                        <div class="pt-4">
                             <div class="block pl-2 pr-2 pt-2 pb-2 text-xs text-secondary font-semibold">
                                 {{ __('Favorite') }}
                             </div>
@@ -582,14 +564,12 @@
                                                    :active="request()->routeIs('profile.games.favorites', $user)">
                                 @svg('gamecontroller', 'fill-current', ['width' => '18']) {{ __('Game') }}
                             </x-sidebar-nav-link>
-
-                            <div class="border-t border-primary"></div>
                         </div>
                     @endauth
 
                     @auth
                         {{-- Reminder Pages --}}
-                        <div class="space-y-1 pt-1">
+                        <div class="pt-4">
                             <div class="block pl-2 pr-2 pt-2 pb-2 text-xs text-secondary font-semibold">
                                 {{ __('Reminder') }}
                             </div>
@@ -599,13 +579,11 @@
                                                    :active="request()->routeIs('profile.anime.reminders', $user)">
                                 @svg('tv', 'fill-current', ['width' => '18']) {{ __('Anime') }}
                             </x-sidebar-nav-link>
-
-                            <div class="border-t border-primary"></div>
                         </div>
                     @endauth
 
                     {{-- More Pages --}}
-                    <div class="space-y-1 pt-1">
+                    <div class="pt-4">
                         <div class="block pl-2 pr-2 pt-2 pb-2 text-xs text-secondary font-semibold">
                             {{ __('More') }}
                         </div>
@@ -621,13 +599,11 @@
                                                :active="request()->routeIs('theme-store.index')">
                             {{ __('Theme Store') }}
                         </x-sidebar-nav-link>
-
-                        <div class="border-t border-primary"></div>
                     </div>
 
                     {{-- Account Management --}}
                     @auth
-                        <div class="space-y-1 pt-1">
+                        <div class="pt-4">
                             <div class="block pl-2 pr-2 pt-2 pb-2 text-xs text-secondary font-semibold">
                                 {{ __('Account Management') }}
                             </div>
@@ -637,13 +613,13 @@
                                                    :active="request()->routeIs('profile.settings')">
                                 {{ __('Settings') }}
                             </x-sidebar-nav-link>
-
-                            <div class="border-t border-primary"></div>
                         </div>
                     @endauth
 
+                    <x-hr class="mt-4 mb-4" />
+
                     {{-- Authentication --}}
-                    <div class="space-y-1 pt-1">
+                    <div>
                         @auth
                             @if (session()->has('nova_impersonated_by'))
                                 <form method="POST" action="{{ route('impersonation.stop') }}">
