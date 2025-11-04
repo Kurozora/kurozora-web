@@ -258,10 +258,8 @@
                             {{ __('Profile') }}
                         </x-dropdown-link>
 
-                        <div class="border-t border-primary"></div>
-
                         {{-- More Pages --}}
-                        <div class="block pl-4 pr-4 pt-2 pb-2 text-xs text-secondary">
+                        <div class="block pl-2 pr-2 pt-4 pb-2 text-xs text-secondary font-semibold">
                             {{ __('More') }}
                         </div>
 
@@ -273,20 +271,18 @@
                             {{ __('Theme Store') }}
                         </x-dropdown-link>
 
-                        <div class="border-t border-primary"></div>
-
                         @auth
                             {{-- Account Management --}}
-                            <div class="block pl-4 pr-4 pt-2 pb-2 text-xs text-secondary">
+                            <div class="block pl-2 pr-2 pt-4 pb-2 text-xs text-secondary font-semibold">
                                 {{ __('Manage Account') }}
                             </div>
 
                             <x-dropdown-link href="{{ route('profile.settings') }}" wire:navigate>
                                 {{ __('Settings') }}
                             </x-dropdown-link>
-
-                            <div class="border-t border-primary"></div>
                         @endauth
+
+                        <x-hr class="mt-2 mb-2" />
 
                         {{-- Authentication --}}
                         @auth
