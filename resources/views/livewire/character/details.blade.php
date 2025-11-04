@@ -20,32 +20,37 @@
         characters/{{ $character->id }}
     </x-slot:appArgument>
 
-    <div class="pt-4 pb-6" wire:init="loadPage">
-        <section class="pt-4 pb-8 pl-4 pr-4">
+    <div class="pb-6" wire:init="loadPage">
+        <section
+            class="flex items-center justify-center relative pt-10 pb-10 pl-4 pr-4"
+            style="height: 24rem; background-color: {{ $character->getFirstMedia(\App\Enums\MediaCollection::Profile)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }}"
+        >
+            <x-edge-blur edge="bottom" />
+
             <div class="relative">
                 <div class="flex flex-col flex-wrap text-center items-center">
                     <picture
                         class="relative aspect-square rounded-full overflow-hidden"
-                        style="height: 128px; background-color: {{ $character->getFirstMedia(\App\Enums\MediaCollection::Profile)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
+                        style="height: 176px; background-color: {{ $character->getFirstMedia(\App\Enums\MediaCollection::Profile)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
                     >
                         <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $character->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/person_poster.webp') }}" alt="{{ $character->name }} Profile Image" title="{{ $character->name }}">
 
                         <div class="absolute top-0 left-0 h-full w-full border-2 border-solid border-black/20 rounded-full"></div>
                     </picture>
-
-                    <div class="flex gap-2">
-                        <p class="text-3xl font-bold">{{ $character->name }}</p>
-
-                        <x-nova-link :href="route('characters.edit', $character)">
-                            @svg('pencil', 'fill-current', ['width' => '44'])
-                        </x-nova-link>
-                    </div>
                 </div>
+            </div>
+
+            <div class="flex gap-2 absolute bottom-0 left-0 mb-4 ml-4">
+                <p class="text-3xl font-bold">{{ $character->name }}</p>
+
+                <x-nova-link :href="route('characters.edit', $character)">
+                    @svg('pencil', 'fill-current', ['width' => '44'])
+                </x-nova-link>
             </div>
         </section>
 
         @if (!empty($character->about))
-            <section class="pb-8">
+            <section class="pt-4 pb-8">
                 <x-section-nav class="pt-4">
                     <x-slot:title>
                         {{ __('About') }}

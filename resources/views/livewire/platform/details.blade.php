@@ -20,30 +20,38 @@
         platforms/{{ $platform->id }}
     </x-slot:appArgument>
 
-    <div class="pt-4 pb-6" wire:init="loadPage">
-        <section class="pt-4 pb-8 pl-4 pr-4">
+    <div class="pb-6" wire:init="loadPage">
+        <section
+            class="flex items-center justify-center relative pt-10 pb-10 pl-4 pr-4"
+            style="height: 24rem; background-color: {{ $platform->getFirstMedia(\App\Enums\MediaCollection::Profile)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }}"
+        >
+            <x-edge-blur edge="bottom" />
+
             <div class="relative">
                 <div class="flex flex-col flex-wrap text-center items-center">
                     <picture
                         class="relative aspect-square rounded-full overflow-hidden"
-                        style="height: 128px; background-color: {{ $platform->getFirstMedia(\App\Enums\MediaCollection::Profile)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
+                        style="height: 176px; background-color: {{ $platform->getFirstMedia(\App\Enums\MediaCollection::Profile)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
                     >
                         <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $platform->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/platform_profile.webp') }}" alt="{{ $platform->name }} Profile" title="{{ $platform->name }}">
 
                         <div class="absolute top-0 left-0 h-full w-full border-2 border-solid border-black/20 rounded-full"></div>
                     </picture>
-
-                    <div class="flex gap-2">
-                        <p class="text-3xl font-bold">{{ $platform->name }}</p>
-
-                        <x-nova-link :href="route('platforms.edit', $platform)">
-                            @svg('pencil', 'fill-current', ['width' => '44'])
-                        </x-nova-link>
-                    </div>
-                    @if (!empty($platform->started_at))
-                        <p class="text-lg">{{ __('Released On on :x', ['x' => $platform->started_at->toFormattedDateString()]) }}</p>
-                    @endif
                 </div>
+            </div>
+
+            <div class="absolute bottom-0 left-0 mb-4 ml-4">
+                <div class="flex gap-2">
+                    <p class="text-3xl font-bold">{{ $platform->name }}</p>
+
+                    <x-nova-link :href="route('platforms.edit', $platform)">
+                        @svg('pencil', 'fill-current', ['width' => '44'])
+                    </x-nova-link>
+                </div>
+
+                @if (!empty($platform->started_at))
+                    <p class="text-lg">{{ __('Released On on :x', ['x' => $platform->started_at->toFormattedDateString()]) }}</p>
+                @endif
             </div>
         </section>
 
