@@ -32,11 +32,11 @@ $ composer install
 ```
 
 ## 3. Set up environment variables
-Create a copy of the `.env.example` file ..
+Create a copy of the `.env.example` file ...
 ```bash
 $ cp .env.example .env
 ```
-.. and modify the values accordingly.
+... and modify the values accordingly.
 
 ## 4. Set up database
 Create a database and configure the details in your `.env` file. After that, you can migrate the database to get the correct schema.
@@ -46,6 +46,12 @@ $ php artisan migrate
 Optionally, you can choose to also seed the database with test data.
 ```bash
 $ php artisan migrate:fresh --seed
+```
+
+## 5. Link storage
+Create a symlink between `storage/app/public` and `public/storage` to make uploaded images and files accessible from the website.
+```bash
+$ php artisan storage:link
 ```
 
 ## Notes
