@@ -16,6 +16,7 @@ use App\Models\UserLibrary;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Events\Dispatcher;
 use Laravel\Scout\Console\ImportCommand;
+use Laravel\Scout\Exceptions\ScoutException;
 
 class Import extends ImportCommand
 {
@@ -26,6 +27,7 @@ class Import extends ImportCommand
      */
     protected $signature = 'scout:import
                             {model : Class name of model to bulk import}
+                            {--fresh : Flush the index before importing}
                             {--c|chunk= : The number of records to import at a time (Defaults to configuration value: `scout.chunk.searchable`)}';
 
     /**
@@ -39,7 +41,10 @@ class Import extends ImportCommand
      * Execute the console command.
      *
      * @param Dispatcher $events
+     *
      * @return int
+     *
+     * @throws ScoutException
      */
     public function handle(Dispatcher $events): int
     {
