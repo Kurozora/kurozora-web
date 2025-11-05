@@ -33,6 +33,18 @@ class Genre extends KModel implements HasMedia, Sitemapable
     protected $table = self::TABLE_NAME;
 
     /**
+     * Get the attributes that should be cast.
+     *
+     * @return array
+     */
+    protected function casts(): array
+    {
+        return [
+            'is_nsfw' => 'bool',
+        ];
+    }
+
+    /**
      * Get the options for generating the slug.
      *
      * @return SlugOptions

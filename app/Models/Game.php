@@ -110,6 +110,7 @@ class Game extends KModel implements HasMedia, Sitemapable
     {
         return [
             'synonym_titles' => AsArrayObject::class,
+            'is_nsfw' => 'bool',
             'published_at' => 'date',
         ];
     }

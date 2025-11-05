@@ -59,6 +59,7 @@ class Studio extends KModel implements HasMedia, Sitemapable
             'alternative_names' => AsArrayObject::class,
             'social_urls' => AsArrayObject::class,
             'website_urls' => AsArrayObject::class,
+            'is_nsfw' => 'bool',
             'founded_at' => 'date',
             'defunct_at' => 'date',
         ];

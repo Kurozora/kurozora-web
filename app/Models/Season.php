@@ -57,6 +57,7 @@ class Season extends KModel implements HasMedia, Sitemapable
     protected function casts(): array
     {
         return [
+            'is_nsfw' => 'bool',
             'started_at' => 'datetime',
             'ended_at' => 'datetime',
         ];

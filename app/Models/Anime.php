@@ -118,6 +118,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
     {
         return [
             'synonym_titles' => AsArrayObject::class,
+            'is_nsfw' => 'bool',
             'started_at' => 'date',
             'ended_at' => 'date',
         ];

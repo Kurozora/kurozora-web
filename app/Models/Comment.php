@@ -18,6 +18,22 @@ class Comment extends KModel
     protected $table = self::TABLE_NAME;
 
     /**
+     * Get the attributes that should be cast.
+     *
+     * @return array
+     */
+    protected function casts(): array
+    {
+        return [
+            'is_spoiler' => 'bool',
+            'is_nsfw' => 'bool',
+            'is_nsfl' => 'bool',
+            'is_locked' => 'bool',
+            'is_pinned' => 'bool',
+        ];
+    }
+
+    /**
      * Get the commentable entity that the comment belongs to.
      *
      * @return MorphTo
