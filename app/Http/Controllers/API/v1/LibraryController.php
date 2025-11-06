@@ -132,38 +132,83 @@ class LibraryController extends Controller
         $user = auth()->user();
 
         // Get the library status
-        if (is_numeric($data['status'])) {
-            $userLibraryStatus = UserLibraryStatus::fromValue((int) $data['status']);
-        } else {
-            $userLibraryStatus = UserLibraryStatus::fromKey($data['status']);
-        }
+        $userLibraryStatus = is_numeric($data['status'])
+            ? UserLibraryStatus::fromValue((int) $data['status'])
+            : UserLibraryStatus::fromKey($data['status']);
 
-        // Get the model
-        $modelID = $data['model_id'];
         $libraryKind = UserLibraryKind::fromValue((int) $data['library']);
-        $model = match ($libraryKind->value) {
-            UserLibraryKind::Manga => Manga::withoutGlobalScopes()
-                ->findOrFail($modelID),
-            UserLibraryKind::Game => Game::withoutGlobalScopes()
-                ->findOrFail($modelID),
-            default => Anime::withoutGlobalScopes()
-                ->findOrFail($modelID),
+        $modelClass = match ($libraryKind->value) {
+            UserLibraryKind::Manga => Manga::class,
+            UserLibraryKind::Game => Game::class,
+            default => Anime::class,
         };
 
-        // Update or create the user library entry.
-        UserLibrary::withoutSyncingToSearch(function () use ($userLibraryStatus, $model, $user) {
-            $userLibrary = UserLibrary::updateOrCreate([
-                'user_id' => $user->id,
-                'trackable_type' => $model->getMorphClass(),
-                'trackable_id' => $model->id,
-            ], [
-                'status' => $userLibraryStatus->value,
-            ]);
+        if (isset($data['model_ids'])) {
+            $modelIDs = $data['model_ids'];
+            $trackableType = (new $modelClass)->getMorphClass();
+            $models = $modelClass::withoutGlobalScopes()
+                ->whereIn('id', $modelIDs)
+                ->with(['translations'])
+                ->get();
 
-            $userLibrary->setRelation('trackable', $model);
+            if ($models->isNotEmpty()) {
+                $now = now();
+                $records = $models->map(fn ($model) => [
+                    'user_id'        => $user->id,
+                    'trackable_type' => $trackableType,
+                    'trackable_id'   => $model->id,
+                    'status'         => $userLibraryStatus->value,
+                    'created_at'     => $now,
+                    'updated_at'     => $now,
+                ])->all();
 
-            $userLibrary->searchable();
-        });
+                // Efficient bulk upsert
+                UserLibrary::withoutSyncingToSearch(function () use ($records) {
+                    UserLibrary::upsert(
+                        $records,
+                        ['user_id', 'trackable_type', 'trackable_id'],
+                        ['status', 'updated_at']
+                    );
+                });
+
+                // Fetch upserted models
+                $userLibraries = UserLibrary::withoutGlobalScopes()
+                    ->where('user_id', '=', $user->id)
+                    ->where('trackable_type', '=', $trackableType)
+                    ->whereIn('trackable_id', $models->pluck('id'))
+                    ->get();
+
+                // Map each trackable model to its library entry in memory
+                $modelMap = $models->keyBy('id');
+                foreach ($userLibraries as $library) {
+                    if (isset($modelMap[$library->trackable_id])) {
+                        $library->setRelation('trackable', $modelMap[$library->trackable_id]);
+                    }
+                }
+
+                $userLibraries->searchable();
+            }
+        } else {
+            // Get the model
+            $modelID = $data['model_id'];
+            $model = $modelClass::withoutGlobalScopes()
+                ->findOrFail($modelID);
+
+            // Update or create the user library entry.
+            UserLibrary::withoutSyncingToSearch(function () use ($userLibraryStatus, $model, $user) {
+                $userLibrary = UserLibrary::updateOrCreate([
+                    'user_id' => $user->id,
+                    'trackable_type' => $model->getMorphClass(),
+                    'trackable_id' => $model->id,
+                ], [
+                    'status' => $userLibraryStatus->value,
+                ]);
+
+                $userLibrary->setRelation('trackable', $model);
+
+                $userLibrary->searchable();
+            });
+        }
 
         // Successful response
         return JSONResult::success([

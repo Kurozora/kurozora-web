@@ -24,7 +24,7 @@ class GetIndexRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         if ($this->ids && is_string($this->ids)) {
-            $this->replace(['ids' => explode(',', $this->ids)]);
+            $this->merge(['ids' => explode(',', $this->ids)]);
         }
     }
 
