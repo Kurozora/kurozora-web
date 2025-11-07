@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use App\Enums\UserLibraryKind;
-use App\Rules\ValidateModelIsTracked;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreateUserReminderRequest extends FormRequest
@@ -19,6 +18,18 @@ class CreateUserReminderRequest extends FormRequest
     }
 
     /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation(): void
+    {
+        if ($this->model_ids && is_string($this->model_ids)) {
+            $this->merge(['model_ids' => explode(',', $this->model_ids)]);
+        }
+    }
+
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array
@@ -27,7 +38,9 @@ class CreateUserReminderRequest extends FormRequest
     {
         return [
             'library' => ['bail', 'integer', 'in:' . implode(',', UserLibraryKind::getValues())],
-            'model_id' => ['bail', 'string', new ValidateModelIsTracked],
+            'model_id' => ['bail', 'string'],
+            'model_ids' => ['bail', 'array', 'max:25'],
+            'model_ids*' => ['bail', 'string'],
         ];
     }
 }

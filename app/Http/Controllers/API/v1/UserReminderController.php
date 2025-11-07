@@ -16,6 +16,7 @@ use App\Models\Game;
 use App\Models\Manga;
 use App\Models\UserLibrary;
 use App\Models\UserReminder;
+use App\Rules\ValidateModelIsTracked;
 use App\Traits\Model\Remindable;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Builder;
@@ -113,19 +114,31 @@ class UserReminderController extends Controller
             throw new AuthorizationException(__('Reminders are only available to subscribed users.'));
         }
 
-        // Get the model
-        $modelID = $data['model_id'];
+        // Get the models
         $libraryKind = UserLibraryKind::fromValue((int) $data['library']);
-        $model = match ($libraryKind->value) {
-            UserLibraryKind::Manga => Manga::findOrFail($modelID),
-            UserLibraryKind::Game => Game::findOrFail($modelID),
-            default => Anime::findOrFail($modelID),
+        $modelClass = match ($libraryKind->value) {
+            UserLibraryKind::Manga => Manga::class,
+            UserLibraryKind::Game => Game::class,
+            default => Anime::class,
         };
+        $modelIDs = $data['model_ids'] ?? [$data['model_id']];
+        $models = $modelClass::withoutGlobalScopes()
+            ->whereIn('id', $modelIDs)
+            ->with(['translations'])
+            ->get();
+
+        // Validate the models are tracked by the user
+        validator([
+            'models' => $models
+        ], [
+            'models' => [new ValidateModelIsTracked],
+        ])
+            ->validate();
 
         // Successful response
         return JSONResult::success([
             'data' => [
-                'isReminded' => !is_bool($user->toggleReminder($model)),
+                'isReminded' => $user->toggleReminder($models),
             ],
         ]);
     }

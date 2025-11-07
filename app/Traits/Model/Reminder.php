@@ -3,6 +3,7 @@
 namespace App\Traits\Model;
 
 use App\Models\UserReminder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -24,6 +25,7 @@ trait Reminder
      * The models reminded by the user.
      *
      * @param string $type
+     *
      * @return MorphToMany
      */
     protected function remindedModels(string $type): MorphToMany
@@ -33,84 +35,106 @@ trait Reminder
     }
 
     /**
-     * Whether the user has reminded the given model.
+     * Whether the user has reminded the given models.
      *
-     * @param Model $model
+     * @param Model|Model[] $models
+     *
      * @return bool
      */
-    public function hasReminded(Model $model): bool
+    public function hasReminded(Model|array|Collection $models): bool
     {
+        if ($models instanceof Model) {
+            $models = collect([$models]);
+        } else {
+            $models = collect($models);
+        }
+
+        if ($models->isEmpty()) {
+            return false;
+        }
+
+        $modelType = $models->first()->getMorphClass();
+        $modelIDs = $models->pluck('id')->all();
+
         return ($this->relationLoaded('reminders') ? $this->reminders : $this->reminders())
-            ->where('remindable_id', $model->getKey())
-            ->where('remindable_type', $model->getMorphClass())
-            ->exists();
+                ->where('remindable_type', '=', $modelType)
+                ->whereIn('remindable_id', $modelIDs)
+                ->count() === count($modelIDs);
     }
 
     /**
-     * Whether the user has not reminded the given model.
+     * Whether the user has not reminded the given models.
      *
-     * @param Model $model
+     * @param Model|Model[] $models
+     *
      * @return bool
      */
-    public function hasNotReminded(Model $model): bool
+    public function hasNotReminded(Model|array|Collection $models): bool
     {
-        return !$this->hasReminded($model);
+        return !$this->hasReminded($models);
     }
 
     /**
-     * Reminder the given model.
+     * Reminder the given models.
      *
-     * @param Model $model
-     * @return UserReminder
+     * @param Model|Model[] $models
+     *
+     * @return void
      */
-    public function remind(Model $model): UserReminder
+    public function remind(Model|array|Collection $models): void
     {
-        $attributes = [
-            'remindable_id' => $model->getKey(),
-            'remindable_type' => $model->getMorphClass(),
-        ];
+        if ($models instanceof Model) {
+            $models = collect([$models]);
+        } else {
+            $models = collect($models);
+        }
 
-        return $this->reminders()
-            ->where($attributes)
-            ->firstOr(function () use ($attributes) {
-                $remindsLoaded = $this->relationLoaded('reminders');
+        if ($models->isEmpty()) {
+            return;
+        }
 
-                if ($remindsLoaded) {
-                    $this->unsetRelation('reminders');
-                }
+        $modelType = $models->first()->getMorphClass();
+        $modelKeys = $models->map(fn($model) => $model->getKey());
 
-                return $this->reminders()
-                    ->create($attributes);
-            });
+        $this->remindedModels($modelType)
+            ->attach($modelKeys);
     }
 
     /**
-     * Un-remind the given model
+     * Un-remind the given models.
      *
-     * @param Model $model
+     * @param Model|Model[] $models
+     *
      * @return bool
      */
-    public function unremind(Model $model): bool
+    public function unremind(Model|array|Collection $models): bool
     {
-        $hasNotReminded = $this->hasNotReminded($model);
+        if ($models instanceof Model) {
+            $models = collect([$models]);
+        } else {
+            $models = collect($models);
+        }
 
-        if ($hasNotReminded) {
+        if ($models->isEmpty()) {
             return true;
         }
 
-        $remindsLoaded = $this->relationLoaded('reminders');
-        if ($remindsLoaded) {
+        if ($this->relationLoaded('reminders')) {
             $this->unsetRelation('reminders');
         }
 
-        return (bool) $this->remindedModels($model::class)
-            ->detach($model->getKey());
+        $modelType = $models->first()->getMorphClass();
+        $modelKeys = $models->map(fn($model) => $model->getKey());
+
+        return (bool) $this->remindedModels($modelType)
+            ->detach($modelKeys);
     }
 
     /**
      * Clears the reminders of the given type.
      *
      * @param string|null $type
+     *
      * @return bool
      */
     public function clearReminders(?string $type = null): bool
@@ -123,22 +147,28 @@ trait Reminder
     }
 
     /**
-     * Toggle remind status of the given model.
+     * Toggle remind status of the given models.
      *
-     * @param Model $model
-     * @return UserReminder|bool
+     * @param Model|Model[] $models
+     *
+     * @return bool
      */
-    public function toggleReminder(Model $model): bool|UserReminder
+    public function toggleReminder(Model|array|Collection $models): bool
     {
-        return $this->hasReminded($model)
-            ? $this->unremind($model)
-            : $this->remind($model);
+        if ($this->hasReminded($models)) {
+            $this->unremind($models);
+            return false;
+        } else {
+            $this->remind($models);
+            return true;
+        }
     }
 
     /**
      * Eloquent builder scope that limits the query to the models of the specified type.
      *
      * @param string $type
+     *
      * @return BelongsToMany
      */
     public function whereReminded(string $type): BelongsToMany
