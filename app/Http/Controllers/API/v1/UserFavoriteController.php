@@ -16,9 +16,11 @@ use App\Models\Manga;
 use App\Models\User;
 use App\Models\UserFavorite;
 use App\Models\UserLibrary;
+use App\Rules\ValidateModelIsTracked;
 use App\Traits\Model\Remindable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Validation\ValidationException;
 
 class UserFavoriteController extends Controller
 {
@@ -26,7 +28,8 @@ class UserFavoriteController extends Controller
      * Returns a list of the user's favorite models.
      *
      * @param GetUserFavoritesRequest $request
-     * @param User $user
+     * @param User                    $user
+     *
      * @return JsonResponse
      */
     function index(GetUserFavoritesRequest $request, User $user): JsonResponse
@@ -91,7 +94,9 @@ class UserFavoriteController extends Controller
      * Adds a model to the user's favorites.
      *
      * @param CreateUserFavoriteRequest $request
+     *
      * @return JsonResponse
+     * @throws ValidationException
      */
     function create(CreateUserFavoriteRequest $request): JsonResponse
     {
@@ -100,24 +105,31 @@ class UserFavoriteController extends Controller
         // Get the authenticated user
         $user = auth()->user();
 
-        // Get the model
-        if (!empty($data['anime_id'])) {
-            $modelID = $data['anime_id'];
-            $model = Anime::findOrFail($modelID);
-        } else {
-            $modelID = $data['model_id'];
-            $libraryKind = UserLibraryKind::fromValue((int) $data['library']);
-            $model = match ($libraryKind->value) {
-                UserLibraryKind::Manga  => Manga::findOrFail($modelID),
-                UserLibraryKind::Game   => Game::findOrFail($modelID),
-                default                 => Anime::findOrFail($modelID),
-            };
-        }
+        // Get the models
+        $libraryKind = UserLibraryKind::fromValue((int) $data['library']);
+        $modelClass = match ($libraryKind->value) {
+            UserLibraryKind::Manga => Manga::class,
+            UserLibraryKind::Game => Game::class,
+            default => Anime::class,
+        };
+        $modelIDs = $data['model_ids'] ?? [$data['model_id']];
+        $models = $modelClass::withoutGlobalScopes()
+            ->whereIn('id', $modelIDs)
+            ->with(['translations'])
+            ->get();
+
+        // Validate the models are tracked by the user
+        validator([
+            'models' => $models
+        ], [
+            'models' => [new ValidateModelIsTracked],
+        ])
+            ->validate();
 
         // Successful response
         return JSONResult::success([
             'data' => [
-                'isFavorited' => !is_bool($user->toggleFavorite($model))
+                'isFavorited' => $user->toggleFavorite($models)
             ]
         ]);
     }

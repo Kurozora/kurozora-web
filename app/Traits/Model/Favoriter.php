@@ -3,6 +3,7 @@
 namespace App\Traits\Model;
 
 use App\Models\UserFavorite;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -34,82 +35,99 @@ trait Favoriter
     }
 
     /**
-     * Whether the user has favorited the given model.
+     * Whether the user has favorited the given models.
      *
-     * @param Model $model
+     * @param Model|Model[] $models
      *
      * @return bool
      */
-    public function hasFavorited(Model $model): bool
+    public function hasFavorited(Model|array|Collection $models): bool
     {
+        if ($models instanceof Model) {
+            $models = collect([$models]);
+        } else {
+            $models = collect($models);
+        }
+
+        if ($models->isEmpty()) {
+            return false;
+        }
+
+        $modelType = $models->first()->getMorphClass();
+        $modelIDs = $models->pluck('id')->all();
+
         return ($this->relationLoaded('favorites') ? $this->favorites : $this->favorites())
-            ->where('favorable_id', '=', $model->getKey())
-            ->where('favorable_type', '=', $model->getMorphClass())
-            ->exists();
+                ->where('favorable_type', '=', $modelType)
+                ->whereIn('favorable_id', $modelIDs)
+                ->count() === count($modelIDs);
     }
 
     /**
-     * Whether the user has not favorited the given model.
+     * Whether the user has not favorited the given models.
      *
-     * @param Model $model
+     * @param Model|Model[] $models
      *
      * @return bool
      */
-    public function hasNotFavorited(Model $model): bool
+    public function hasNotFavorited(Model|array|Collection $models): bool
     {
-        return !$this->hasFavorited($model);
+        return !$this->hasFavorited($models);
     }
 
     /**
-     * Favorite the given model.
+     * Favorite the given models.
      *
-     * @param Model $model
+     * @param Model|Model[] $models
      *
-     * @return UserFavorite
+     * @return void
      */
-    public function favorite(Model $model): UserFavorite
+    public function favorite(Model|array|Collection $models): void
     {
-        $attributes = [
-            'favorable_id' => $model->getKey(),
-            'favorable_type' => $model->getMorphClass(),
-        ];
+        if ($models instanceof Model) {
+            $models = collect([$models]);
+        } else {
+            $models = collect($models);
+        }
 
-        return $this->favorites()
-            ->where($attributes)
-            ->firstOr(function () use ($attributes) {
-                $favoritesLoaded = $this->relationLoaded('favorites');
+        if ($models->isEmpty()) {
+            return;
+        }
 
-                if ($favoritesLoaded) {
-                    $this->unsetRelation('favorites');
-                }
+        $modelType = $models->first()->getMorphClass();
+        $modelKeys = $models->map(fn($model) => $model->getKey());
 
-                return $this->favorites()
-                    ->create($attributes);
-            });
+        $this->favoritedModels($modelType)
+            ->attach($modelKeys);
     }
 
     /**
-     * Unfavorite the given model
+     * Unfavorite the given models.
      *
-     * @param Model $model
+     * @param Model|Model[] $models
      *
      * @return bool
      */
-    public function unfavorite(Model $model): bool
+    public function unfavorite(Model|array|Collection $models): bool
     {
-        $hasNotFavorited = $this->hasNotFavorited($model);
+        if ($models instanceof Model) {
+            $models = collect([$models]);
+        } else {
+            $models = collect($models);
+        }
 
-        if ($hasNotFavorited) {
+        if ($models->isEmpty()) {
             return true;
         }
 
-        $favoritesLoaded = $this->relationLoaded('favorites');
-        if ($favoritesLoaded) {
+        if ($this->relationLoaded('favorites')) {
             $this->unsetRelation('favorites');
         }
 
-        return (bool) $this->favoritedModels($model::class)
-            ->detach($model->getKey());
+        $modelType = $models->first()->getMorphClass();
+        $modelKeys = $models->map(fn($model) => $model->getKey());
+
+        return (bool) $this->favoritedModels($modelType)
+            ->detach($modelKeys);
     }
 
     /**
@@ -129,17 +147,21 @@ trait Favoriter
     }
 
     /**
-     * Toggle favorite status of the given model.
+     * Toggle favorite status of the given models.
      *
-     * @param Model $model
+     * @param Model|Model[] $models
      *
-     * @return UserFavorite|bool
+     * @return bool
      */
-    public function toggleFavorite(Model $model): bool|UserFavorite
+    public function toggleFavorite(Model|array|Collection $models): bool
     {
-        return $this->hasFavorited($model)
-            ? $this->unfavorite($model)
-            : $this->favorite($model);
+        if ($this->hasFavorited($models)) {
+            $this->unfavorite($models);
+            return false;
+        } else {
+            $this->favorite($models);
+            return true;
+        }
     }
 
     /**
