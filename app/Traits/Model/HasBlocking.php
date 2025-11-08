@@ -95,7 +95,7 @@ trait HasBlocking
     }
 
     /**
-     * Unfavorite the given model
+     * Unblock the given model.
      *
      * @param Model $model
      *

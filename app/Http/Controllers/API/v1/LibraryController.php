@@ -30,6 +30,7 @@ use BenSampo\Enum\Exceptions\InvalidEnumMemberException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
@@ -136,79 +137,74 @@ class LibraryController extends Controller
             ? UserLibraryStatus::fromValue((int) $data['status'])
             : UserLibraryStatus::fromKey($data['status']);
 
+        // Get the models
         $libraryKind = UserLibraryKind::fromValue((int) $data['library']);
         $modelClass = match ($libraryKind->value) {
             UserLibraryKind::Manga => Manga::class,
             UserLibraryKind::Game => Game::class,
             default => Anime::class,
         };
+        $modelIDs = $data['model_ids'] ?? [$data['model_id']];
+        $models = $modelClass::withoutGlobalScopes()
+            ->whereIn('id', $modelIDs)
+            ->with(['translations'])
+            ->get();
 
-        if (isset($data['model_ids'])) {
-            $modelIDs = $data['model_ids'];
-            $trackableType = (new $modelClass)->getMorphClass();
-            $models = $modelClass::withoutGlobalScopes()
-                ->whereIn('id', $modelIDs)
-                ->with(['translations'])
-                ->get();
-
-            if ($models->isNotEmpty()) {
-                $now = now();
-                $records = $models->map(fn ($model) => [
-                    'user_id'        => $user->id,
-                    'trackable_type' => $trackableType,
-                    'trackable_id'   => $model->id,
-                    'status'         => $userLibraryStatus->value,
-                    'created_at'     => $now,
-                    'updated_at'     => $now,
-                ])->all();
-
-                // Efficient bulk upsert
-                UserLibrary::withoutSyncingToSearch(function () use ($records) {
-                    UserLibrary::upsert(
-                        $records,
-                        ['user_id', 'trackable_type', 'trackable_id'],
-                        ['status', 'updated_at']
-                    );
-                });
-
-                // Fetch upserted models
-                $userLibraries = UserLibrary::withoutGlobalScopes()
-                    ->where('user_id', '=', $user->id)
-                    ->where('trackable_type', '=', $trackableType)
-                    ->whereIn('trackable_id', $models->pluck('id'))
-                    ->get();
-
-                // Map each trackable model to its library entry in memory
-                $modelMap = $models->keyBy('id');
-                foreach ($userLibraries as $library) {
-                    if (isset($modelMap[$library->trackable_id])) {
-                        $library->setRelation('trackable', $modelMap[$library->trackable_id]);
-                    }
-                }
-
-                $userLibraries->searchable();
-            }
-        } else {
-            // Get the model
-            $modelID = $data['model_id'];
-            $model = $modelClass::withoutGlobalScopes()
-                ->findOrFail($modelID);
-
-            // Update or create the user library entry.
-            UserLibrary::withoutSyncingToSearch(function () use ($userLibraryStatus, $model, $user) {
-                $userLibrary = UserLibrary::updateOrCreate([
-                    'user_id' => $user->id,
-                    'trackable_type' => $model->getMorphClass(),
-                    'trackable_id' => $model->id,
-                ], [
-                    'status' => $userLibraryStatus->value,
-                ]);
-
-                $userLibrary->setRelation('trackable', $model);
-
-                $userLibrary->searchable();
-            });
+        if ($models->isEmpty()) {
+            throw new ModelNotFoundException(__('No valid titles were found to add to your library.'));
         }
+
+        // Add to library in bulk
+        $modelType = $models->first()->getMorphClass();
+        $now = now();
+
+        $userLibraries = $user->library()
+            ->where('trackable_type', '=', $modelType)
+            ->whereIn('trackable_id', $modelIDs)
+            ->get()
+            ->keyBy('trackable_id');
+
+        $records = $models->map(function ($model) use ($user, $userLibraries, $userLibraryStatus, $modelType, $now) {
+            $existingUserLibraryModel = $userLibraries->get($model->id) ?? new UserLibrary();
+            $existingUserLibraryModel->updateStatus($userLibraryStatus);
+
+            return [
+                'user_id' => $user->id,
+                'trackable_type' => $modelType,
+                'trackable_id' => $model->id,
+                'status' => $userLibraryStatus->value,
+                'started_at' => $existingUserLibraryModel->started_at,
+                'ended_at' => $existingUserLibraryModel->ended_at,
+                'created_at' => $existingUserLibraryModel->created_at ?? $now,
+                'updated_at' => $now,
+            ];
+        })->all();
+
+        // Efficient bulk upsert
+        UserLibrary::withoutSyncingToSearch(function () use ($records) {
+            UserLibrary::upsert(
+                $records,
+                ['user_id', 'trackable_type', 'trackable_id'],
+                ['status', 'started_at', 'ended_at', 'updated_at']
+            );
+        });
+
+        // Fetch upserted models
+        $userLibraries = auth()->user()->library()
+            ->where('trackable_type', '=', $modelType)
+            ->whereIn('trackable_id', $models->pluck('id'))
+            ->get();
+
+        // Map each trackable model to its library entry in memory
+        $modelMap = $models->keyBy('id');
+        foreach ($userLibraries as $library) {
+            if (isset($modelMap[$library->trackable_id])) {
+                $library->setRelation('trackable', $modelMap[$library->trackable_id]);
+            }
+        }
+
+        // Make searchable
+        $userLibraries->searchable();
 
         // Successful response
         return JSONResult::success([
@@ -290,41 +286,25 @@ class LibraryController extends Controller
     {
         $data = $request->validated();
 
-        // Get the model
-        if (!empty($data['anime_id'])) {
-            $modelID = $data['anime_id'];
-            $model = Anime::withoutGlobalScopes()
-                ->findOrFail($modelID);
-        } else {
-            $modelID = $data['model_id'];
-            $libraryKind = UserLibraryKind::fromValue((int) $data['library']);
-            $model = match ($libraryKind->value) {
-                UserLibraryKind::Manga => Manga::withoutGlobalScopes()
-                    ->findOrFail($modelID),
-                UserLibraryKind::Game => Game::withoutGlobalScopes()
-                    ->findOrFail($modelID),
-                default => Anime::withoutGlobalScopes()
-                    ->findOrFail($modelID),
-            };
-        }
-
         // Get the authenticated user
         $user = auth()->user();
-        $hasNotTracked = $user->hasNotTracked($model);
 
-        if ($hasNotTracked) {
-            // The item could not be found
-            throw new AuthorizationException(__('":x" is not in your library.', ['x' => $model->title]));
-        }
+        // Get the models
+        $libraryKind = UserLibraryKind::fromValue((int) $data['library']);
+        $modelClass = match ($libraryKind->value) {
+            UserLibraryKind::Manga => Manga::class,
+            UserLibraryKind::Game => Game::class,
+            default => Anime::class,
+        };
+        $modelIDs = $data['model_ids'] ?? [$data['model_id']];
+        $models = $modelClass::withoutGlobalScopes()
+            ->whereIn('id', $modelIDs)
+            ->get();
 
-        // Remove this Anime from their library if it can be found
-        $user->untrack($model);
-
-        // Remove from favorites as you can't favorite and not have the anime in library
-        $user->unfavorite($model);
-
-        // Remove from reminders as you can't be reminded and not have the anime in library
-        $user->unremind($model);
+        // Remove from library, favorites and reminders
+        $user->untrack($models);
+        $user->unfavorite($models);
+        $user->unremind($models);
 
         return JSONResult::success([
             'data' => [

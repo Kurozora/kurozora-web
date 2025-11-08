@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use App\Enums\UserLibraryKind;
-use App\Models\Anime;
 use Illuminate\Foundation\Http\FormRequest;
 
 class DeleteFromLibraryRequest extends FormRequest
@@ -19,6 +18,18 @@ class DeleteFromLibraryRequest extends FormRequest
     }
 
     /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation(): void
+    {
+        if ($this->model_ids && is_string($this->model_ids)) {
+            $this->merge(['model_ids' => explode(',', $this->model_ids)]);
+        }
+    }
+
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array
@@ -26,9 +37,10 @@ class DeleteFromLibraryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'anime_id'  => ['bail', 'required_without:model_id,library', 'integer', 'exists:' . Anime::TABLE_NAME . ',id'],
-            'library'   => ['bail', 'required_without:anime_id', 'integer', 'in:' . implode(',', UserLibraryKind::getValues())],
-            'model_id'  => ['bail', 'required_without:anime_id', 'string']
+            'library' => ['bail', 'integer', 'in:' . implode(',', UserLibraryKind::getValues())],
+            'model_id' => ['bail', 'string'],
+            'model_ids' => ['bail', 'array', 'max:25'],
+            'model_ids*' => ['bail', 'string'],
         ];
     }
 }

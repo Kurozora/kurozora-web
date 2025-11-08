@@ -48,28 +48,39 @@ class UserLibrary extends Pivot
         parent::boot();
 
         static::saving(function (UserLibrary $model) {
-            // Check if the anime needs an end date
-            switch ($model->status) {
-                case UserLibraryStatus::InProgress:
-                    $originalStatus = $model->getOriginal('status');
-                    $model->started_at = ($originalStatus == UserLibraryStatus::Planning || $model->started_at == null) ? now() : $model->started_at;
-                    $model->ended_at = null;
-                    break;
-                case UserLibraryStatus::Dropped:
-                case UserLibraryStatus::OnHold:
-                    $model->started_at = $model->started_at ?? now();
-                    $model->ended_at = null;
-                    break;
-                case UserLibraryStatus::Completed:
-                    $model->started_at = $model->started_at ?? now();
-                    $model->ended_at = $model->ended_at ?? now();
-                    break;
-                case UserLibraryStatus::Planning:
-                default:
-                    $model->started_at = null;
-                    $model->ended_at = null;
-            }
+            $model->updateStatus($model->status);
         });
+    }
+
+    /**
+     * Update the `started_at` and `ended_at` timestamps based on the new status.
+     *
+     * @param UserLibraryStatus $newStatus
+     *
+     * @return void
+     */
+    public function updateStatus(UserLibraryStatus $newStatus): void
+    {
+        switch ($newStatus->value) {
+            case UserLibraryStatus::InProgress:
+                $originalStatus = $this->status;
+                $this->started_at = ($originalStatus == UserLibraryStatus::Planning || $this->started_at == null) ? now() : $this->started_at;
+                $this->ended_at = null;
+                break;
+            case UserLibraryStatus::Dropped:
+            case UserLibraryStatus::OnHold:
+                $this->started_at = $this->started_at ?? now();
+                $this->ended_at = null;
+                break;
+            case UserLibraryStatus::Completed:
+                $this->started_at = $this->started_at ?? now();
+                $this->ended_at = $this->ended_at ?? now();
+                break;
+            case UserLibraryStatus::Planning:
+            default:
+                $this->started_at = null;
+                $this->ended_at = null;
+        }
     }
 
     /**

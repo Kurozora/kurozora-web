@@ -2,24 +2,13 @@
 
 namespace App\Rules;
 
-use App\Enums\UserLibraryKind;
-use App\Models\Anime;
-use App\Models\Game;
-use App\Models\Manga;
 use Closure;
-use Illuminate\Contracts\Validation\DataAwareRule;
 use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Support\Collection;
 use Illuminate\Translation\PotentiallyTranslatedString;
 
-class ValidateModelIsTracked implements DataAwareRule, ValidationRule
+class ValidateModelIsTracked implements ValidationRule
 {
-    /**
-     * All of the data under validation.
-     *
-     * @var array<string, mixed>
-     */
-    protected array $data = [];
-
     /**
      * Run the validation rule.
      *
@@ -31,47 +20,36 @@ class ValidateModelIsTracked implements DataAwareRule, ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        $library = (int) ($this->data['library'] ?? UserLibraryKind::Anime);
-        $model = match($library) {
-            UserLibraryKind::Game => Game::withoutGlobalScopes()
-                ->with(['translation'])
-                ->firstWhere(Game::TABLE_NAME . '.id', '=', $value),
-            UserLibraryKind::Manga => Manga::withoutGlobalScopes()
-                ->with(['translation'])
-                ->firstWhere(Manga::TABLE_NAME . '.id', '=', $value),
-            default => Anime::withoutGlobalScopes()
-                ->with(['translation'])
-                ->firstWhere(Anime::TABLE_NAME . '.id', '=', $value)
-        };
+        $models = $value;
+        $user = auth()->user();
+        $type = $models->first()->getMorphClass();
+        $modelIDs = $models->pluck('id')->all();
+        $trackedIDs = ($user->relationLoaded('library') ? $user->library : $user->library())
+            ->where('trackable_type', '=', $type)
+            ->whereIn('trackable_id', $modelIDs)
+            ->pluck('trackable_id')
+            ->all();
 
-        if ($model == null) {
-            $fail(__('The specified title cannot be found. Please try again.'));
-        } else if (!auth()->user()->hasTracked($model)) {
-            $fail($this->message($model->title));
+        // Determine which models are missing
+        $missing = $models->whereNotIn('id', $trackedIDs);
+
+        if ($missing->isNotEmpty()) {
+            $titles = $missing->pluck('title');
+            $fail($this->message($titles));
         }
-    }
-
-    /**
-     * Set the data under validation.
-     *
-     * @param array<string, mixed> $data
-     */
-    public function setData(array $data): static
-    {
-        $this->data = $data;
-
-        return $this;
     }
 
     /**
      * Get the validation error message.
      *
-     * @param string $title
+     * @param Collection $titles
      *
      * @return string
      */
-    public function message(string $title): string
+    public function message(Collection $titles): string
     {
-        return __('Please add ":x" to your library first.', ['x' => $title]);
+        $title = $titles->map(fn($title) => '"' . $title . '"')
+            ->join(', ', __(' and '));
+        return __('Please add :x to your library first.', ['x' => $title]);
     }
 }

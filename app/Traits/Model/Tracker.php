@@ -4,6 +4,7 @@ namespace App\Traits\Model;
 
 use App\Enums\UserLibraryStatus;
 use App\Models\UserLibrary;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -35,84 +36,107 @@ trait Tracker
     }
 
     /**
-     * Whether the user has tracked the given model.
+     * Whether the user has tracked the given models.
      *
-     * @param Model $model
-     *
-     * @return bool
-     */
-    public function hasTracked(Model $model): bool
-    {
-        return ($this->relationLoaded('library') ? $this->library : $this->library())
-            ->where('trackable_id', '=', $model->getKey())
-            ->where('trackable_type', '=', $model->getMorphClass())
-            ->exists();
-    }
-
-    /**
-     * Whether the user has not tracked the given model.
-     *
-     * @param Model $model
+     * @param Model|Model[] $models
      *
      * @return bool
      */
-    public function hasNotTracked(Model $model): bool
+    public function hasTracked(Model|array|Collection $models): bool
     {
-        return !$this->hasTracked($model);
-    }
-
-    /**
-     * Track the given model.
-     *
-     * @param Model             $model
-     * @param UserLibraryStatus $status
-     *
-     * @return UserLibrary
-     */
-    public function track(Model $model, UserLibraryStatus $status): UserLibrary
-    {
-        $attributes = [
-            'trackable_type' => $model->getMorphClass(),
-            'trackable_id' => $model->getKey(),
-        ];
-
-        return $this->library()
-            ->where($attributes)
-            ->firstOr(function () use ($status, $attributes) {
-                $libraryLoaded = $this->relationLoaded('library');
-
-                if ($libraryLoaded) {
-                    $this->unsetRelation('library');
-                }
-
-                $attributes['status'] = $status->value;
-                return $this->library()
-                    ->create($attributes);
-            });
-    }
-
-    /**
-     * Un-track the given model
-     *
-     * @param Model $model
-     *
-     * @return bool
-     */
-    public function untrack(Model $model): bool
-    {
-        $hasNotTracked = $this->hasNotTracked($model);
-
-        if ($hasNotTracked) {
-            return true;
+        if ($models instanceof Model) {
+            $models = collect([$models]);
+        } else {
+            $models = collect($models);
         }
 
-        $libraryLoaded = $this->relationLoaded('library');
-        if ($libraryLoaded) {
+        if ($models->isEmpty()) {
+            return false;
+        }
+
+        $type = $models->first()->getMorphClass();
+        $ids = $models->pluck('id')->all();
+
+        return ($this->relationLoaded('library') ? $this->library : $this->library())
+                ->where('trackable_type', '=', $type)
+                ->whereIn('trackable_id', $ids)
+                ->count() === count($ids);
+    }
+
+    /**
+     * Whether the user has not tracked the given models.
+     *
+     * @param Model|Model[] $models
+     *
+     * @return bool
+     */
+    public function hasNotTracked(Model|array|Collection $models): bool
+    {
+        return !$this->hasTracked($models);
+    }
+
+    /**
+     * Track the given models.
+     *
+     * @param Model|Model[]     $models
+     * @param UserLibraryStatus $status
+     *
+     * @return void
+     */
+    public function track(Model|array|Collection $models, UserLibraryStatus $status): void
+    {
+        if ($models instanceof Model) {
+            $models = collect([$models]);
+        } else {
+            $models = collect($models);
+        }
+
+        if ($models->isEmpty()) {
+            return;
+        }
+
+        if ($this->relationLoaded('library')) {
             $this->unsetRelation('library');
         }
 
-        return (bool) $this->trackedModels($model::class)
-            ->detach($model->getKey());
+        $modelType = $models->first()->getMorphClass();
+        $modelKeys = $models->map(fn($model) => $model->getKey());
+        $attributes = [
+            'status' => $status->value
+        ];
+
+        $this->trackedModels($modelType)
+            ->attach($modelKeys, $attributes);
+    }
+
+    /**
+     * Un-track the given models.
+     *
+     * @param Model|Model[] $models
+     *
+     * @return bool
+     */
+    public function untrack(Model|array|Collection $models): bool
+    {
+        if ($models instanceof Model) {
+            $models = collect([$models]);
+        } else {
+            $models = collect($models);
+        }
+
+        if ($models->isEmpty()) {
+            return true;
+        }
+
+        if ($this->relationLoaded('library')) {
+            $this->unsetRelation('library');
+        }
+
+        $modelType = $models->first()->getMorphClass();
+        $modelKeys = $models->map(fn($model) => $model->getKey());
+
+        return (bool) $this->trackedModels($modelType)
+            ->detach($modelKeys);
     }
 
     /**
@@ -132,7 +156,7 @@ trait Tracker
     }
 
     /**
-     * Toggle tracking status of the given model.
+     * Toggle tracking status of the given models.
      *
      * @param Model $model
      *
@@ -140,9 +164,13 @@ trait Tracker
      */
     public function toggleTracking(Model $model): bool|UserLibrary
     {
-        return $this->hasTracked($model)
-            ? $this->untrack($model)
-            : $this->track($model, UserLibraryStatus::InProgress());
+        if ($this->hasTracked($model)) {
+            $this->untrack($model);
+            return false;
+        } else {
+            $this->track($model, UserLibraryStatus::InProgress());
+            return true;
+        }
     }
 
     /**
@@ -156,7 +184,7 @@ trait Tracker
     {
         return $this->belongsToMany($type, UserLibrary::class, 'user_id', 'trackable_id')
             ->where('trackable_type', '=', $type)
-            ->withPivot('status') // Needed for get library API
+            ->withPivot('status') // Needed for GET library API
             ->withTimestamps();
     }
 }

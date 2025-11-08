@@ -38,11 +38,11 @@ class AddToLibraryRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'status' => ['bail', 'required', new ValidateLibraryStatus],
             'library' => ['bail', 'required', 'integer', 'in:' . implode(',', UserLibraryKind::getValues())],
             'model_id' => ['bail', 'string'], // TODO: - Remove in favor of model_ids
             'model_ids' => ['bail', 'array', 'max:25'],
             'model_ids*' => ['bail', 'string'],
-            'status' => ['bail', 'required', new ValidateLibraryStatus],
         ];
     }
 }

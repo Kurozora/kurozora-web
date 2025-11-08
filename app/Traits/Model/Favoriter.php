@@ -93,6 +93,10 @@ trait Favoriter
             return;
         }
 
+        if ($this->relationLoaded('favorites')) {
+            $this->unsetRelation('favorites');
+        }
+
         $modelType = $models->first()->getMorphClass();
         $modelKeys = $models->map(fn($model) => $model->getKey());
 

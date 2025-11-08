@@ -93,6 +93,10 @@ trait Reminder
             return;
         }
 
+        if ($this->relationLoaded('reminders')) {
+            $this->unsetRelation('reminders');
+        }
+
         $modelType = $models->first()->getMorphClass();
         $modelKeys = $models->map(fn($model) => $model->getKey());
 
