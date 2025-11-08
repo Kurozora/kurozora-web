@@ -181,13 +181,11 @@ class LibraryController extends Controller
         })->all();
 
         // Efficient bulk upsert
-        UserLibrary::withoutSyncingToSearch(function () use ($records) {
-            UserLibrary::upsert(
-                $records,
-                ['user_id', 'trackable_type', 'trackable_id'],
-                ['status', 'started_at', 'ended_at', 'updated_at']
-            );
-        });
+        UserLibrary::upsert(
+            $records,
+            ['user_id', 'trackable_type', 'trackable_id'],
+            ['status', 'started_at', 'ended_at', 'updated_at']
+        );
 
         // Fetch upserted models
         $userLibraries = auth()->user()->library()
@@ -230,8 +228,10 @@ class LibraryController extends Controller
     {
         $data = $request->validated();
 
-        // Get the model
-        $modelID = $data['model_id'];
+        // Authenticated user
+        $user = auth()->user();
+
+        // Determine library kind and morph type
         $libraryKind = UserLibraryKind::fromValue((int) $data['library']);
         $modelType = match ($libraryKind->value) {
             UserLibraryKind::Manga => Manga::class,
@@ -240,36 +240,40 @@ class LibraryController extends Controller
         };
 
         // Get the authenticated user
-        $user = auth()->user();
-        $library = $user->library()
-            ->firstWhere([
-                ['trackable_type', '=', $modelType],
-                ['trackable_id', '=', $modelID],
-            ]);
+        $modelIDs = $data['model_ids'] ?? [$data['model_id']];
+        $userLibraries = $user->library()
+            ->where('trackable_type', '=', $modelType)
+            ->whereIn('trackable_id', $modelIDs)
+            ->get();
 
-        if (!$library) {
-            // The item could not be found
-            throw new AuthorizationException(__('":x" is not in your library.', ['x' => $data['model_id']]));
+        if ($userLibraries->isEmpty()) {
+            throw new AuthorizationException(__('None of the selected titles are in your library.'));
         }
 
-        // Update hidden status
-        if ($request->has('is_hidden')) {
-            $library->is_hidden = $data['is_hidden'];
-        }
+        // Update library in bulk
+        $now = now();
 
-        // Update rewatch count
-        if ($request->has('rewatch_count')) {
-            $library->rewatch_count = $data['rewatch_count'];
-        }
+        $records = $userLibraries->map(fn($library) => [
+            'user_id' => $library->user_id,
+            'trackable_type' => $library->trackable_type,
+            'trackable_id' => $library->trackable_id,
+            'status' => $library->status,
+            'is_hidden' => $data['is_hidden'] ?? $library->is_hidden,
+            'rewatch_count' => $data['rewatch_count'] ?? $library->rewatch_count,
+            'updated_at' => $now,
+        ])->all();
 
-        // Save changes
-        $library->save();
+        UserLibrary::upsert(
+            $records,
+            ['user_id', 'trackable_type', 'trackable_id'],
+            ['is_hidden', 'rewatch_count', 'updated_at']
+        );
 
         // Successful response
         return JSONResult::success([
             'data' => [
-                'isHidden' => $library->is_hidden,
-                'rewatchCount' => $library->rewatch_count,
+                'isHidden' => (bool) ($data['is_hidden'] ?? false),
+                'rewatchCount' => (int) ($data['rewatch_count'] ?? 0),
             ],
         ]);
     }
@@ -331,11 +335,11 @@ class LibraryController extends Controller
     {
         $data = $request->validated();
 
-        // Get the library to import to
-        $libraryKind = UserLibraryKind::fromValue((int) $data['library']);
-
         // Get the authenticated user
         $user = auth()->user();
+
+        // Get the library to import to
+        $libraryKind = UserLibraryKind::fromValue((int) $data['library']);
 
         // Get whether user is in import cooldown period
         $isInImportCooldown = match ($libraryKind->value) {

@@ -17,6 +17,18 @@ class UpdateLibraryRequest extends FormRequest
     }
 
     /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation(): void
+    {
+        if ($this->model_ids && is_string($this->model_ids)) {
+            $this->merge(['model_ids' => explode(',', $this->model_ids)]);
+        }
+    }
+
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array<string, ValidationRule|array|string>
@@ -24,8 +36,10 @@ class UpdateLibraryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'library' => ['bail', 'required_without:anime_id', 'integer', 'in:' . implode(',', UserLibraryKind::getValues())],
-            'model_id' => ['bail', 'required_without:anime_id', 'string'],
+            'library' => ['bail', 'integer', 'in:' . implode(',', UserLibraryKind::getValues())],
+            'model_id' => ['bail', 'string'],
+            'model_ids' => ['bail', 'array', 'max:25'],
+            'model_ids.*' => ['bail', 'string'],
             'is_hidden' => ['bail', 'nullable', 'boolean'],
             'rewatch_count' => ['bail', 'nullable', 'integer', 'min:0', 'max:100'],
         ];
