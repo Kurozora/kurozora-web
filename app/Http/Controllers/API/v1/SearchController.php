@@ -275,12 +275,24 @@ class SearchController extends Controller
             $searchFilters = $model::searchFilters();
 
             // Apply filters
+            $wheres = [];
+            $whereIns = [];
+
             foreach ($searchFilters as $searchFilter) {
                 if (isset($filters[$searchFilter])) {
                     $value = $filters[$searchFilter];
-                    $resource->where($searchFilter, $value);
+
+                    if (is_string($value) && str_contains($value, ',')) {
+                        $values = array_map('trim', explode(',', $value));
+                        $whereIns[$searchFilter] = $values;
+                    } else {
+                        $wheres[$searchFilter] = $value;
+                    }
                 }
             }
+
+            $resource->wheres = $wheres;
+            $resource->whereIns = $whereIns;
         }
     }
 
