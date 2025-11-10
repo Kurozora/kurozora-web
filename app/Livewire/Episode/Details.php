@@ -9,6 +9,7 @@ use App\Models\Episode;
 use App\Models\MediaRating;
 use App\Models\Season;
 use App\Models\Video;
+use App\Traits\Livewire\PresentsAlert;
 use App\Traits\Livewire\WithReviewBox;
 use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
 use Illuminate\Contracts\Foundation\Application;
@@ -21,7 +22,8 @@ use Livewire\Component;
 
 class Details extends Component
 {
-    use WithReviewBox;
+    use WithReviewBox,
+        PresentsAlert;
 
     /**
      * The object containing the episode data.
@@ -136,40 +138,23 @@ class Details extends Component
             },
             'next_episode' => function (BelongsTo $belongsTo) {
                 $belongsTo->withoutGlobalScopes()
-                    ->with([
-                        'media',
-                        'translation',
-                        'anime' => function (HasOneThrough $hasOneThrough) {
-                            $hasOneThrough
-                                ->withoutGlobalScopes()
-                                ->with([
-                                    'translation',
-                                ]);
-                        },
-                        'season' => function (BelongsTo $query) {
-                            $query->withoutGlobalScopes()
-                                ->with([
-                                    'translation',
-                                ]);
-                        }
-                    ]);
+                    ->with(['translation']);
             },
             'media',
             'mediaStat',
+            'anime' => function (HasOneThrough $hasOneThrough) {
+                $hasOneThrough->withoutGlobalScopes()
+                    ->with([
+                        'studios',
+                        'translation',
+                        'orderedVideos',
+                    ]);
+            },
             'season' => function (BelongsTo $query) {
                 $query->withoutGlobalScopes()
                     ->with([
                         'media',
-                        'translation',
-                        'anime' => function (BelongsTo $belongsTo) {
-                            $belongsTo
-                                ->withoutGlobalScopes()
-                                ->with([
-                                    'studios',
-                                    'translation',
-                                    'orderedVideos',
-                                ]);
-                        },
+                        'translation'
                     ]);
             },
             'translation',
@@ -190,6 +175,8 @@ class Details extends Component
             }, function () use ($episode) {
                 return $episode;
             });
+        $episode->season->setRelation('anime', $episode->anime);
+
         $this->previousEpisode = $episode->previous_episode;
         $this->nextEpisode = $episode->next_episode;
         $this->season = $episode->season;
@@ -225,7 +212,6 @@ class Details extends Component
     public function hydrateAnime(): void
     {
         $this->anime->loadMissing([
-            'media',
             'studios',
             'translation',
             'orderedVideos',

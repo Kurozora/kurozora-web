@@ -6,6 +6,7 @@ use App\Models\Episode;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;
 use Livewire\Component;
@@ -42,11 +43,28 @@ class WatchButton extends Component
     }
 
     /**
+     * Hydrate the episode.
+     *
+     * @return void
+     */
+    public function hydrateEpisode():void
+    {
+        $this->episode->load([
+            'anime' => function (HasOneThrough $hasOneThrough) {
+                $hasOneThrough->withoutGlobalScopes()
+                    ->with([
+                        'translation',
+                    ]);
+            },
+        ]);
+    }
+
+    /**
      * Marks the episode as (un)watched.
      *
      * @return Application|RedirectResponse|Redirector|null
      */
-    public function updateWatchStatus(): Application|RedirectResponse|Redirector|null
+    public function updateWatchStatus()
     {
         $user = auth()->user();
 
@@ -56,7 +74,7 @@ class WatchButton extends Component
         }
 
         if ($user->cannot('mark_as_watched', $this->episode)) {
-            return null;
+            return;
         }
 
         // Find if the user has watched the episode
@@ -77,8 +95,6 @@ class WatchButton extends Component
         $this->dispatch('refresh-up-next-episodes');
         $this->dispatch('refresh-past-episodes');
         $this->dispatch('refresh-up-next-section')->to('components.episode.up-next-section');
-
-        return null;
     }
 
     /**

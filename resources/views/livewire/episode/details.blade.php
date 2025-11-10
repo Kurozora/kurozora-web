@@ -92,8 +92,9 @@
     <div
         class="relative w-full"
         x-bind:class="{'lg:pt-4 lg:pl-4 lg:pr-4': !theaterMode, '': theaterMode}"
+{{--        preferredVideoSource: $persist(@entangle('preferredVideoSource').live),--}}
         x-data="{
-            preferredVideoSource: $persist(@entangle('preferredVideoSource').live),
+            preferredVideoSource: $persist(@entangle('preferredVideoSource')),
             theaterMode: $persist(false),
             showChat: $persist(false)
         }"
