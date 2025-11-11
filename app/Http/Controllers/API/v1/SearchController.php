@@ -274,25 +274,52 @@ class SearchController extends Controller
             $filters = json_decode(base64_decode($filters), true);
             $searchFilters = $model::searchFilters();
 
-            // Apply filters
             $wheres = [];
             $whereIns = [];
+            $whereNotIns = [];
+
+            $toArray = function ($value) {
+                if (is_string($value)) {
+                    return str_contains($value, ',')
+                        ? array_map('trim', explode(',', $value))
+                        : [$value];
+                }
+
+                return is_array($value) ? $value : [$value];
+            };
 
             foreach ($searchFilters as $searchFilter) {
-                if (isset($filters[$searchFilter])) {
-                    $value = $filters[$searchFilter];
+                if (!isset($filters[$searchFilter])) {
+                    continue;
+                }
 
+                $value = $filters[$searchFilter];
+
+                // Simple value (where)
+                if (!is_array($value)) {
+                    // String with commas → whereIn
                     if (is_string($value) && str_contains($value, ',')) {
-                        $values = array_map('trim', explode(',', $value));
-                        $whereIns[$searchFilter] = $values;
+                        $whereIns[$searchFilter] = $toArray($value);
                     } else {
                         $wheres[$searchFilter] = $value;
                     }
+
+                    continue;
+                }
+
+                // Structured include/exclude array
+                if (isset($value['include'])) {
+                    $whereIns[$searchFilter] = $toArray($value['include']);
+                }
+
+                if (isset($value['exclude'])) {
+                    $whereNotIns[$searchFilter] = $toArray($value['exclude']);
                 }
             }
 
             $resource->wheres = $wheres;
             $resource->whereIns = $whereIns;
+            $resource->whereNotIns = $whereNotIns;
         }
     }
 
