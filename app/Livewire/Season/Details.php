@@ -3,6 +3,7 @@
 namespace App\Livewire\Season;
 
 use App\Models\Anime;
+use App\Models\Season;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -62,19 +63,30 @@ class Details extends Component
             return collect();
         }
 
-        return $this->anime->seasons()
+        $seasons = $this->anime->seasons()
+            ->withoutGlobalScopes()
             ->with([
-                'anime',
                 'media',
-                'translation'
+                'translation',
             ])
-            ->withCount(['episodes'])
+            ->withCount([
+                'episodes' => function ($query) {
+                    $query->withoutGlobalScopes();
+                },
+            ])
             ->withAvg([
                 'episodesMediaStats as rating_average' => function ($query) {
-                    $query->where('rating_average', '!=', 0);
-                }
+                    $query->withoutGlobalScopes()
+                        ->where('rating_average', '!=', 0);
+                },
             ], 'rating_average')
             ->paginate(25);
+
+        $seasons->each(function (Season $season) {
+            return $season->setRelation('anime', $this->anime);
+        });
+
+        return $seasons;
     }
 
     /**
