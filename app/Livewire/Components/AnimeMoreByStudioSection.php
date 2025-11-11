@@ -73,6 +73,9 @@ class AnimeMoreByStudioSection extends Component
         }
 
         return $this->studio->anime()
+            ->when($this->studio->tv_rating_id > config('app.tv_rating'), function ($query) {
+                $query->withoutGlobalScopes();
+            })
             ->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating'])
             ->when(auth()->user(), function ($query, $user) {
                 $query->with(['library' => function ($query) use ($user) {

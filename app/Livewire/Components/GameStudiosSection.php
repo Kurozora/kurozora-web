@@ -63,6 +63,9 @@ class GameStudiosSection extends Component
         }
 
         return $this->game->studios()
+            ->when($this->game->tv_rating_id > config('app.tv_rating'), function ($query) {
+                $query->withoutGlobalScopes();
+            })
             ->with('media')
             ->limit(Game::MAXIMUM_RELATIONSHIPS_LIMIT)
             ->get();

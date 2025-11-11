@@ -64,11 +64,19 @@ class AnimeSeasonsSection extends Component
         }
 
         return $this->anime->seasons()
+            ->when($this->anime->tv_rating_id > config('app.tv_rating'), function ($query) {
+                $query->withoutGlobalScopes();
+            })
             ->with(['media', 'translation'])
-            ->withCount(['episodes'])
+            ->withCount([
+                'episodes' => function ($query) {
+                    $query->withoutGlobalScopes();
+                }
+            ])
             ->withAvg([
                 'episodesMediaStats as rating_average' => function ($query) {
-                    $query->where('rating_average', '!=', 0);
+                    $query->withoutGlobalScopes()
+                        ->where('rating_average', '!=', 0);
                 }
             ], 'rating_average')
             ->orderBy('number', 'desc')

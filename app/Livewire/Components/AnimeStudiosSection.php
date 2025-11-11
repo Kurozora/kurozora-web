@@ -63,6 +63,9 @@ class AnimeStudiosSection extends Component
         }
 
         return $this->anime->studios()
+            ->when($this->anime->tv_rating_id > config('app.tv_rating'), function ($query) {
+                $query->withoutGlobalScopes();
+            })
             ->with('media')
             ->limit(Anime::MAXIMUM_RELATIONSHIPS_LIMIT)
             ->get();

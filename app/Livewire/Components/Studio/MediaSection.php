@@ -95,44 +95,23 @@ class MediaSection extends Component
             return collect();
         }
 
-        return match ($this->type) {
-            Anime::class => $this->studio->anime()
-                ->when(!auth()->check(), function ($query) {
-                    return $query->withoutGlobalScopes();
-                })
-                ->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating'])
-                ->when(auth()->user(), function ($query, $user) {
-                    $query->with(['library' => function ($query) use ($user) {
-                        $query->where('user_id', '=', $user->id);
-                    }]);
-                })
-                ->limit(Studio::MAXIMUM_RELATIONSHIPS_LIMIT)
-                ->get(),
-            Manga::class => $this->studio->manga()
-                ->when(!auth()->check(), function ($query) {
-                    return $query->withoutGlobalScopes();
-                })
-                ->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating'])
-                ->when(auth()->user(), function ($query, $user) {
-                    $query->with(['library' => function ($query) use ($user) {
-                        $query->where('user_id', '=', $user->id);
-                    }]);
-                })
-                ->limit(Studio::MAXIMUM_RELATIONSHIPS_LIMIT)
-                ->get(),
-            Game::class => $this->studio->games()
-                ->when(!auth()->check(), function ($query) {
-                    return $query->withoutGlobalScopes();
-                })
-                ->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating'])
-                ->when(auth()->user(), function ($query, $user) {
-                    $query->with(['library' => function ($query) use ($user) {
-                        $query->where('user_id', '=', $user->id);
-                    }]);
-                })
-                ->limit(Studio::MAXIMUM_RELATIONSHIPS_LIMIT)
-                ->get(),
+        $query = match ($this->type) {
+            Anime::class => $this->studio->anime(),
+            Manga::class => $this->studio->manga(),
+            Game::class => $this->studio->games(),
         };
+
+        return $query->when($this->studio->tv_rating_id > config('app.tv_rating'), function ($query) {
+            $query->withoutGlobalScopes();
+        })
+            ->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating'])
+            ->when(auth()->user(), function ($query, $user) {
+                $query->with(['library' => function ($query) use ($user) {
+                    $query->where('user_id', '=', $user->id);
+                }]);
+            })
+            ->limit(Studio::MAXIMUM_RELATIONSHIPS_LIMIT)
+            ->get();
     }
 
     /**
