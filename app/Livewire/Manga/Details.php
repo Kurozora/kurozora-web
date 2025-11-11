@@ -14,6 +14,7 @@ use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\Renderless;
 use Livewire\Component;
@@ -29,6 +30,13 @@ class Details extends Component
      * @var Manga $manga
      */
     public Manga $manga;
+
+    /**
+     * The object containing the studio data.
+     *
+     * @var ?Studio $studio
+     */
+    public ?Studio $studio;
 
     /**
      * The object containing the user's rating data.
@@ -110,7 +118,23 @@ class Details extends Component
         // Call the ModelViewed event
         ModelViewed::dispatch($manga, request()->ip());
 
-        $this->manga = $manga->loadMissing(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'themes', 'translation', 'status', 'tv_rating', 'country_of_origin'])
+        $this->manga = $manga->loadMissing([
+            'genres',
+            'languages',
+            'media',
+            'mediaStat',
+            'media_type',
+            'themes',
+            'translation',
+            'status',
+            'tv_rating',
+            'country_of_origin',
+            'studios' => function (BelongsToMany $query) {
+                $query->withoutGlobalScopes()
+                    ->orderByRaw('CASE WHEN is_studio = true THEN 0 ELSE 1 END')
+                    ->limit(1);
+            },
+        ])
             ->when(auth()->user(), function ($query, $user) use ($manga) {
                 return $manga->loadMissing(['mediaRatings' => function ($query) {
                     $query->where('user_id', '=', auth()->user()->id);
@@ -126,6 +150,7 @@ class Details extends Component
             }, function() use ($manga) {
                 return $manga;
             });
+        $this->studio = $manga->studios->first();
 
         if ($user = auth()->user()) {
             $this->manga->setRelation('library', UserLibrary::where([
@@ -273,20 +298,6 @@ class Details extends Component
                 message: __('Reminders are only available to pro and subscribed users 🧐'),
             );
         }
-    }
-
-    /**
-     * Returns the studio relationship of the manga.
-     *
-     * @return Studio|null
-     */
-    public function getStudioProperty(): ?Studio
-    {
-        if (!$this->readyToLoad) {
-            return null;
-        }
-
-        return $this->manga->studios()?->firstWhere('is_studio', '=', true) ?? $this->manga->studios->first();
     }
 
     /**
