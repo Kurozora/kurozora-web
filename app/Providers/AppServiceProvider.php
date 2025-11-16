@@ -9,6 +9,7 @@ use App\Services\LinkPreviewService;
 use App\Services\ReputationService;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Connection;
+use Illuminate\Database\Console\Seeds\SeedCommand;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -39,6 +40,7 @@ class AppServiceProvider extends ServiceProvider
     {
         // Prevent dangerous actions
         DB::prohibitDestructiveCommands(app()->isProduction());
+        SeedCommand::prohibit(app()->isProduction());
 
         // Prevent accessing missing attributes on models
 //        Model::preventAccessingMissingAttributes();
