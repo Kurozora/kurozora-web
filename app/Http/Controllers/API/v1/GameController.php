@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\API\v1;
 
+use App\Enums\BrowseSeasonKind;
 use App\Enums\SearchScope;
 use App\Enums\SearchType;
 use App\Events\ModelViewed;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\GetBrowseSeasonRequest;
 use App\Http\Requests\GetIndexRequest;
 use App\Http\Requests\GetMediaSongsRequest;
 use App\Http\Requests\GetPaginatedRequest;
@@ -26,10 +28,12 @@ use App\Models\Game;
 use App\Models\Manga;
 use App\Models\MediaRating;
 use App\Scopes\TvRatingScope;
+use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Contracts\Container\BindingResolutionException;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -308,6 +312,34 @@ class GameController extends Controller
         return JSONResult::success([
             'data' => GameResource::collection($game->get()),
         ]);
+    }
+
+    /**
+     * Returns anime season.
+     *
+     * @param GetBrowseSeasonRequest $request
+     * @param int                    $year
+     * @param string                 $season
+     *
+     * @return JsonResponse
+     * @throws InvalidEnumKeyException|BindingResolutionException|ConnectionException
+     */
+    public function browseSeason(GetBrowseSeasonRequest $request, int $year, string $season)
+    {
+        // Override parameters
+        $request->merge([
+            'kind' => BrowseSeasonKind::Game
+        ]);
+
+        // Convert request type
+        $app = app();
+        $getBrowseSeasonRequest = GetBrowseSeasonRequest::createFrom($request)
+            ->setContainer($app) // Necessary or validation fails (validate on null)
+            ->setRedirector($app->make(Redirector::class)); // Necessary or validation failure fails (422)
+        $getBrowseSeasonRequest->validateResolved(); // Necessary for preparing for validation
+
+        return (new BrowseSeasonController())
+            ->view($getBrowseSeasonRequest, $year, $season);
     }
 
     /**

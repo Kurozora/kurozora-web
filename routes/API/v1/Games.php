@@ -13,6 +13,14 @@ Route::prefix('/games')
             ->middleware('auth.kurozora:optional')
             ->name('.upcoming');
 
+        Route::prefix('/seasons')
+            ->name('.seasons')
+            ->group(function () {
+                Route::get('/{year}/{season}', [GameController::class, 'browseSeason'])
+                    ->middleware('auth.kurozora:optional')
+                    ->name('.view');
+            });
+
         Route::prefix('{game}')
             ->group(function () {
                 Route::get('/', [GameController::class, 'view'])

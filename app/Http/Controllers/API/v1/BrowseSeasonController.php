@@ -7,7 +7,7 @@ use App\Enums\SeasonOfYear;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GetBrowseSeasonRequest;
-use App\Http\Resources\AnimeResource;
+use App\Http\Resources\BrowseSeasonResource;
 use App\Models\Anime;
 use App\Models\Game;
 use App\Models\Manga;
@@ -51,11 +51,11 @@ class BrowseSeasonController extends Controller
         };
         $dayKey = match ($browseSectionKind->value) {
             BrowseSeasonKind::Game,
-            BrowseSeasonKind::Manga  => 'publication_day',
+            BrowseSeasonKind::Manga => 'publication_day',
             default => 'air_day'
         };
 
-        $anime = $model::with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
+        $items = $model::with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
             ->where([
                 [$seasonOfYearKey, '=', $season],
                 [$startedAtKey, '>=', $year . '-01-01'],
@@ -65,11 +65,24 @@ class BrowseSeasonController extends Controller
                 $query->whereIn('media_type_id', $mediaTypes);
             })
             ->orderBy($dayKey)
+            ->orderBy('media_type_id')
+            ->limit(200) // This is arbitrary to prevent huge payloads. Adjust as needed.
             ->get();
 
-        // Show the Anime details response
+        // Group by media type
+        $browseSeason = $items
+            ->groupBy('media_type_id')
+            ->map(fn($models) => [
+                'mediaType' => $models->first()->media_type,
+                'type' => $model,
+                'models' => $models,
+            ])
+            ->sortBy('date')
+            ->values()
+            ->toArray();
+
         return JSONResult::success([
-            'data' => AnimeResource::collection($anime)
+            'data' => BrowseSeasonResource::collection($browseSeason),
         ]);
     }
 }
