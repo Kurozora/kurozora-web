@@ -49,7 +49,7 @@ class Details extends Component
         // Call the ModelViewed event
         ModelViewed::dispatch($studio, request()->ip());
 
-        $this->studio = $studio->load(['media'])
+        $this->studio = $studio->load(['media', 'tv_rating'])
             ->when(auth()->user(), function ($query, $user) use ($studio) {
                 return $studio->loadMissing(['mediaRatings' => function ($query) {
                     $query->where('user_id', '=', auth()->user()->id);
