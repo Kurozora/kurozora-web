@@ -55,15 +55,15 @@ class UserLibrary extends Pivot
     /**
      * Update the `started_at` and `ended_at` timestamps based on the new status.
      *
-     * @param UserLibraryStatus $newStatus
+     * @param int $newStatus
      *
      * @return void
      */
-    public function updateStatus(UserLibraryStatus $newStatus): void
+    public function updateStatus(int $newStatus): void
     {
-        switch ($newStatus->value) {
+        switch ($newStatus) {
             case UserLibraryStatus::InProgress:
-                $originalStatus = $this->status;
+                $originalStatus = $this->getOriginal('status');
                 $this->started_at = ($originalStatus == UserLibraryStatus::Planning || $this->started_at == null) ? now() : $this->started_at;
                 $this->ended_at = null;
                 break;

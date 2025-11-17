@@ -166,7 +166,7 @@ class LibraryController extends Controller
 
         $records = $models->map(function ($model) use ($user, $userLibraries, $userLibraryStatus, $modelType, $now) {
             $existingUserLibraryModel = $userLibraries->get($model->id) ?? new UserLibrary();
-            $existingUserLibraryModel->updateStatus($userLibraryStatus);
+            $existingUserLibraryModel->updateStatus($userLibraryStatus->value);
 
             return [
                 'user_id' => $user->id,
