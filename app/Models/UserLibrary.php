@@ -116,6 +116,14 @@ class UserLibrary extends Pivot
             'synopsis' => $trackable->synopsis,
             'tagline' => $trackable->tagline,
             'translations' => $trackable->translations,
+            'country_id' => $trackable->country_id,
+            'tv_rating_id' => $trackable->tv_rating_id,
+            'media_type_id' => $trackable->media_type_id,
+            'source_id' => $trackable->source_id,
+            'status_id' => $trackable->status_id,
+            'is_nsfw' => $trackable->is_nsfw,
+            'started_at' => $trackable->started_at?->timestamp,
+            'ended_at' => $trackable->ended_at?->timestamp,
         ];
         $library['started_at'] = $this->started_at?->timestamp;
         $library['ended_at'] = $this->ended_at?->timestamp;

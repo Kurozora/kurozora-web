@@ -186,7 +186,7 @@ return [
             \App\Models\UserLibrary::TABLE_NAME => [
                 'searchableAttributes' => ['trackable.original_title', 'trackable.title', 'trackable.synonym_titles', 'trackable.translations', 'trackable.synopsis', 'trackable.tagline'],
                 'sortableAttributes'=> ['ended_at', 'started_at', 'status', 'created_at', 'update_at'],
-                'filterableAttributes'=> ['id', 'user_id', 'trackable.letter', 'trackable.is_nsfw', 'trackable_id', 'trackable_type', 'status', 'started_at', 'ended_at'],
+                'filterableAttributes'=> ['id', 'user_id', 'trackable.letter', 'trackable.is_nsfw', 'trackable.country_id', 'trackable.tv_rating_id', 'trackable.media_type_id', 'trackable.source_id', 'trackable.status_id', 'trackable_id', 'trackable_type', 'status', 'started_at', 'ended_at'],
             ],
             \App\Models\User::TABLE_NAME => [
                 'searchableAttributes' => ['slug', 'username', 'biography'],
