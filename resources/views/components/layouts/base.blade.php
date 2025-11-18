@@ -54,6 +54,7 @@
         <script src="{{ url(mix('js/manifest.js')) }}" defer data-navigate-track></script>
         <script src="{{ url(mix('js/vendor.js')) }}" defer data-navigate-track></script>
         <script src="{{ url(mix('js/settings.js')) }}" defer data-navigate-track></script>
+        <script src="{{ url(mix('js/history.js')) }}" defer data-navigate-track></script>
         <script src="{{ url(mix('js/app.js')) }}" defer data-navigate-track></script>
         <script src="{{ url(mix('js/db.js')) }}" data-navigate-track></script>
         @if (app()->isLocal())
