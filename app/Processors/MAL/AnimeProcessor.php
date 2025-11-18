@@ -978,17 +978,19 @@ class AnimeProcessor extends CustomItemProcessor
             }
 
             // Create or update MediaSong relation
-            $mediaSong = MediaSong::firstOrNew([
-                'model_type' => $anime?->getMorphClass(),
-                'model_id' => $anime?->id,
-                'song_id' => $song->id,
-                'type' => $songType->value,
-            ]);
-            $mediaSong->update(['position' => $key + 1]);
+            try {
+                $mediaSong = MediaSong::firstOrNew([
+                    'model_type' => $anime?->getMorphClass(),
+                    'model_id' => $anime?->id,
+                    'song_id' => $song->id,
+                    'type' => $songType->value,
+                ]);
+                $mediaSong->update(['position' => $key + 1]);
 
-            $this->updateIfEmpty($mediaSong, [
-                'episodes' => $malSong['episodes'],
-            ]);
+                $this->updateIfEmpty($mediaSong, [
+                    'episodes' => $malSong['episodes'],
+                ]);
+            } catch(Exception) {}
         }
     }
 
