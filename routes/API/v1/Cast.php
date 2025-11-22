@@ -17,6 +17,9 @@ Route::prefix('/cast')
 Route::prefix('/show-cast')
     ->name('.show-cast')
     ->group(function () {
+        Route::get('/', [ShowCastController::class, 'index'])
+            ->name('.index');
+
         Route::prefix('{cast}')
             ->group(function () {
                 Route::get('/', [ShowCastController::class, 'details'])
@@ -27,6 +30,9 @@ Route::prefix('/show-cast')
 Route::prefix('/literature-cast')
     ->name('.literature-cast')
     ->group(function () {
+        Route::get('/', [LiteratureCastController::class, 'index'])
+            ->name('.index');
+
         Route::prefix('{cast}')
             ->group(function () {
                 Route::get('/', [LiteratureCastController::class, 'details'])
@@ -37,6 +43,9 @@ Route::prefix('/literature-cast')
 Route::prefix('/game-cast')
     ->name('.game-cast')
     ->group(function () {
+        Route::get('/', [GameCastController::class, 'index'])
+            ->name('.index');
+
         Route::prefix('{cast}')
             ->group(function () {
                 Route::get('/', [GameCastController::class, 'details'])
