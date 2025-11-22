@@ -26,7 +26,7 @@ class MangaCastResourceIdentity extends JsonResource
     {
         return [
             'id' => (string) $this->resource->id,
-            'type' => 'cast',
+            'type' => 'literature-cast',
             'href' => route('api.literature-cast.details', $this->resource, false),
         ];
     }

@@ -25,8 +25,8 @@ class ShowCastResourceIdentity extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => (string ) $this->resource->id,
-            'type' => 'cast',
+            'id' => (string) $this->resource->id,
+            'type' => 'show-cast',
             'href' => route('api.show-cast.details', $this->resource, false),
         ];
     }

@@ -26,7 +26,7 @@ class GameCastResourceIdentity extends JsonResource
     {
         return [
             'id' => (string) $this->resource->id,
-            'type' => 'cast',
+            'type' => 'game-cast',
             'href' => route('api.game-cast.details', $this->resource, false),
         ];
     }
