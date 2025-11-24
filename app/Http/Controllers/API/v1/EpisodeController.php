@@ -264,7 +264,7 @@ class EpisodeController extends Controller
      * @return JsonResponse
      * @throws AuthorizationException
      */
-    public function rateEpisode(RateModelRequest $request, Episode $episode): JsonResponse
+    public function rate(RateModelRequest $request, Episode $episode): JsonResponse
     {
         $user = auth()->user();
 
@@ -312,6 +312,25 @@ class EpisodeController extends Controller
                 ]);
             }
         }
+
+        return JSONResult::success();
+    }
+
+    /**
+     * Delete the user's media rating associated with the given model.
+     *
+     * @param Episode $episode
+     *
+     * @return JsonResponse
+     */
+    public function deleteRating(Episode $episode)
+    {
+        auth()->user()->mediaRatings()
+            ->where([
+                ['model_id', '=', $episode->id],
+                ['model_type', '=', $episode->getMorphClass()],
+            ])
+            ->forceDelete();
 
         return JSONResult::success();
     }

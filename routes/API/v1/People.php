@@ -30,9 +30,15 @@ Route::prefix('/people')
                 Route::get('/characters', [PersonController::class, 'characters'])
                     ->name('.characters');
 
-                Route::post('/rate', [PersonController::class, 'ratePerson'])
+                Route::prefix('rate')
                     ->middleware('auth.kurozora')
-                    ->name('.rate');
+                    ->group(function () {
+                        Route::post('/', [PersonController::class, 'rate'])
+                            ->name('.rate');
+
+                        Route::delete('/', [PersonController::class, 'deleteRating'])
+                            ->name('.delete-rating');
+                    });
 
                 Route::get('/reviews', [PersonController::class, 'reviews'])
                     ->middleware('auth.kurozora:optional')

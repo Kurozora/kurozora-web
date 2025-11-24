@@ -309,7 +309,7 @@ class PersonController extends Controller
      * @throws AuthorizationException
      * @throws Exception
      */
-    public function ratePerson(RateModelRequest $request, Person $person): JsonResponse
+    public function rate(RateModelRequest $request, Person $person): JsonResponse
     {
         $user = auth()->user();
 
@@ -352,6 +352,25 @@ class PersonController extends Controller
                 ]);
             }
         }
+
+        return JSONResult::success();
+    }
+
+    /**
+     * Delete the user's media rating associated with the given model.
+     *
+     * @param Person $person
+     *
+     * @return JsonResponse
+     */
+    public function deleteRating(Person $person)
+    {
+        auth()->user()->mediaRatings()
+            ->where([
+                ['model_id', '=', $person->id],
+                ['model_type', '=', $person->getMorphClass()],
+            ])
+            ->forceDelete();
 
         return JSONResult::success();
     }

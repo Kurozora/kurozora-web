@@ -312,7 +312,7 @@ class CharacterController extends Controller
      * @throws AuthorizationException
      * @throws Exception
      */
-    public function rateCharacter(RateModelRequest $request, Character $character): JsonResponse
+    public function rate(RateModelRequest $request, Character $character): JsonResponse
     {
         $user = auth()->user();
 
@@ -355,6 +355,25 @@ class CharacterController extends Controller
                 ]);
             }
         }
+
+        return JSONResult::success();
+    }
+
+    /**
+     * Delete the user's media rating associated with the given model.
+     *
+     * @param Character $character
+     *
+     * @return JsonResponse
+     */
+    public function deleteRating(Character $character)
+    {
+        auth()->user()->mediaRatings()
+            ->where([
+                ['model_id', '=', $character->id],
+                ['model_type', '=', $character->getMorphClass()],
+            ])
+            ->forceDelete();
 
         return JSONResult::success();
     }

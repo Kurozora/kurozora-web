@@ -23,9 +23,15 @@ Route::prefix('/songs')
                     ->middleware('auth.kurozora:optional')
                     ->name('.games');
 
-                Route::post('/rate', [SongController::class, 'rateSong'])
+                Route::prefix('rate')
                     ->middleware('auth.kurozora')
-                    ->name('.rate');
+                    ->group(function () {
+                        Route::post('/', [SongController::class, 'rate'])
+                            ->name('.rate');
+
+                        Route::delete('/', [SongController::class, 'deleteRating'])
+                            ->name('.delete-rating');
+                    });
 
                 Route::get('/reviews', [SongController::class, 'reviews'])
                     ->middleware('auth.kurozora:optional')

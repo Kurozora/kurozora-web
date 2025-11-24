@@ -56,9 +56,15 @@ Route::prefix('/manga')
                     ->middleware('auth.kurozora:optional')
                     ->name('.more-by-studio');
 
-                Route::post('/rate', [MangaController::class, 'rateManga'])
+                Route::prefix('rate')
                     ->middleware('auth.kurozora')
-                    ->name('.rate');
+                    ->group(function () {
+                        Route::post('/', [MangaController::class, 'rate'])
+                            ->name('.rate');
+
+                        Route::delete('/', [MangaController::class, 'deleteRating'])
+                            ->name('.delete-rating');
+                    });
 
                 Route::get('/reviews', [MangaController::class, 'reviews'])
                     ->middleware('auth.kurozora:optional')

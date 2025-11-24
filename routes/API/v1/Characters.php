@@ -30,9 +30,15 @@ Route::prefix('/characters')
                     ->middleware('auth.kurozora:optional')
                     ->name('.games');
 
-                Route::post('/rate', [CharacterController::class, 'rateCharacter'])
+                Route::prefix('rate')
                     ->middleware('auth.kurozora')
-                    ->name('.rate');
+                    ->group(function () {
+                        Route::post('/', [CharacterController::class, 'rate'])
+                            ->name('.rate');
+
+                        Route::delete('/', [CharacterController::class, 'deleteRating'])
+                            ->name('.delete-rating');
+                    });
 
                 Route::get('/reviews', [CharacterController::class, 'reviews'])
                     ->middleware('auth.kurozora:optional')

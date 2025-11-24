@@ -63,9 +63,15 @@ Route::prefix('/anime')
                     ->middleware('auth.kurozora:optional')
                     ->name('.more-by-studio');
 
-                Route::post('/rate', [AnimeController::class, 'rateAnime'])
+                Route::prefix('rate')
                     ->middleware('auth.kurozora')
-                    ->name('.rate');
+                    ->group(function () {
+                        Route::post('/', [AnimeController::class, 'rate'])
+                            ->name('.rate');
+
+                        Route::delete('/', [AnimeController::class, 'deleteRating'])
+                            ->name('.delete-rating');
+                    });
 
                 Route::get('/reviews', [AnimeController::class, 'reviews'])
                     ->middleware('auth.kurozora:optional')

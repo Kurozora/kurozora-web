@@ -22,9 +22,15 @@ Route::prefix('/episodes')
                 Route::post('/watched', [EpisodeController::class, 'watched'])
                     ->middleware('auth.kurozora');
 
-                Route::post('/rate', [EpisodeController::class, 'rateEpisode'])
+                Route::prefix('rate')
                     ->middleware('auth.kurozora')
-                    ->name('.rate');
+                    ->group(function () {
+                        Route::post('/', [EpisodeController::class, 'rate'])
+                            ->name('.rate');
+
+                        Route::delete('/', [EpisodeController::class, 'deleteRating'])
+                            ->name('.delete-rating');
+                    });
 
                 Route::get('/reviews', [EpisodeController::class, 'reviews'])
                     ->middleware('auth.kurozora:optional')

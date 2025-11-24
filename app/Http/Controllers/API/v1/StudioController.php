@@ -292,7 +292,7 @@ class StudioController extends Controller
      *
      * @return JsonResponse
      */
-    public function rateStudio(RateModelRequest $request, Studio $studio): JsonResponse
+    public function rate(RateModelRequest $request, Studio $studio): JsonResponse
     {
         $user = auth()->user();
 
@@ -335,6 +335,25 @@ class StudioController extends Controller
                 ]);
             }
         }
+
+        return JSONResult::success();
+    }
+
+    /**
+     * Delete the user's media rating associated with the given model.
+     *
+     * @param Studio $studio
+     *
+     * @return JsonResponse
+     */
+    public function deleteRating(Studio $studio)
+    {
+        auth()->user()->mediaRatings()
+            ->where([
+                ['model_id', '=', $studio->id],
+                ['model_type', '=', $studio->getMorphClass()],
+            ])
+            ->forceDelete();
 
         return JSONResult::success();
     }

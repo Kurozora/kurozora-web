@@ -740,6 +740,25 @@ class GameController extends Controller
     }
 
     /**
+     * Delete the user's media rating associated with the given model.
+     *
+     * @param Game $game
+     *
+     * @return JsonResponse
+     */
+    public function deleteRating(Game $game)
+    {
+        auth()->user()->mediaRatings()
+            ->where([
+                ['model_id', '=', $game->id],
+                ['model_type', '=', $game->getMorphClass()],
+            ])
+            ->forceDelete();
+
+        return JSONResult::success();
+    }
+
+    /**
      * Retrieves upcoming games results
      *
      * @param GetPaginatedRequest $request

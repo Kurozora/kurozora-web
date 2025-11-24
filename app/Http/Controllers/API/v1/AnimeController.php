@@ -732,7 +732,7 @@ class AnimeController extends Controller
      * @throws AuthorizationException
      * @throws Exception
      */
-    public function rateAnime(RateModelRequest $request, Anime $anime): JsonResponse
+    public function rate(RateModelRequest $request, Anime $anime): JsonResponse
     {
         $user = auth()->user();
 
@@ -780,6 +780,25 @@ class AnimeController extends Controller
                 ]);
             }
         }
+
+        return JSONResult::success();
+    }
+
+    /**
+     * Delete the user's media rating associated with the given model.
+     *
+     * @param Anime $anime
+     *
+     * @return JsonResponse
+     */
+    public function deleteRating(Anime $anime)
+    {
+        auth()->user()->mediaRatings()
+            ->where([
+                ['model_id', '=', $anime->id],
+                ['model_type', '=', $anime->getMorphClass()],
+            ])
+            ->forceDelete();
 
         return JSONResult::success();
     }

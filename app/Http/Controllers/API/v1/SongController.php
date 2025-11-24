@@ -213,7 +213,7 @@ class SongController extends Controller
      * @throws AuthorizationException
      * @throws Exception
      */
-    public function rateSong(RateModelRequest $request, Song $song): JsonResponse
+    public function rate(RateModelRequest $request, Song $song): JsonResponse
     {
         $user = auth()->user();
 
@@ -256,6 +256,25 @@ class SongController extends Controller
                 ]);
             }
         }
+
+        return JSONResult::success();
+    }
+
+    /**
+     * Delete the user's media rating associated with the given model.
+     *
+     * @param Song $song
+     *
+     * @return JsonResponse
+     */
+    public function deleteRating(Song $song)
+    {
+        auth()->user()->mediaRatings()
+            ->where([
+                ['model_id', '=', $song->id],
+                ['model_type', '=', $song->getMorphClass()],
+            ])
+            ->forceDelete();
 
         return JSONResult::success();
     }
