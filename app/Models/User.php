@@ -297,7 +297,8 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
             ['is_pro', '=', false],
             ['is_subscribed', '=', false],
             ['created_at', '<', now()->subDays(30)],
-        ]);
+        ])
+            ->whereDoesntHave('library');
     }
 
     /**
