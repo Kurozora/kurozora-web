@@ -99,6 +99,7 @@ class SearchController extends Controller
                                 ]);
                             });
                         $this->filter(Game::class, $request, $resource);
+                        $resource->where('trackable.tv_rating_id', ['<=', config('app.tv_rating')]);
                         $resource = $resource->paginate($data['limit'] ?? 5)
                             ->appends($data);
 
@@ -135,6 +136,7 @@ class SearchController extends Controller
                                 ]);
                             });
                         $this->filter(Manga::class, $request, $resource);
+                        $resource->where('trackable.tv_rating_id', ['<=', config('app.tv_rating')]);
                         $resource = $resource->paginate($data['limit'] ?? 5)
                             ->appends($data);
 
@@ -185,6 +187,7 @@ class SearchController extends Controller
                                 ]);
                             });
                         $this->filter(Anime::class, $request, $resource);
+                        $resource->where('trackable.tv_rating_id', ['<=', config('app.tv_rating')]);
                         $resource = $resource->paginate($data['limit'] ?? 5)
                             ->appends($data);
 
@@ -368,6 +371,7 @@ class SearchController extends Controller
                         $resource = collect(UserLibrary::search($data['query'] ?? '')
                             ->where('user_id', auth()->id())
                             ->where('trackable_type', addslashes(Game::class))
+                            ->where('trackable.tv_rating_id', ['<=', config('app.tv_rating')])
                             ->take($data['limit'] ?? 5)
                             ->raw()['hits'])
                             ->map(function ($item) {
@@ -391,6 +395,7 @@ class SearchController extends Controller
                         $resource = collect(UserLibrary::search($data['query'] ?? '')
                             ->where('user_id', auth()->id())
                             ->where('trackable_type', addslashes(Manga::class))
+                            ->where('trackable.tv_rating_id', ['<=', config('app.tv_rating')])
                             ->take($data['limit'] ?? 5)
                             ->raw()['hits'])
                             ->map(function ($item) {
@@ -423,6 +428,7 @@ class SearchController extends Controller
                         $resource = collect(UserLibrary::search($query)
                             ->where('user_id', auth()->id())
                             ->where('trackable_type', addslashes(Anime::class))
+                            ->where('trackable.tv_rating_id', ['<=', config('app.tv_rating')])
                             ->take($data['limit'] ?? 5)
                             ->raw()['hits'])
                             ->map(function ($item) {
