@@ -23,7 +23,7 @@ class LiteratureCastResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $resource = LiteratureResourceIdentity::make($this->resource)->toArray($request);
+        $resource = LiteratureCastResourceIdentity::make($this->resource)->toArray($request);
         $resource = array_merge($resource, [
             'attributes'    => [
                 'role'      => $this->resource->castRole->only(['name', 'description'])
