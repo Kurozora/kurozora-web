@@ -23,7 +23,7 @@ class GameCastResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $resource = GameResourceIdentity::make($this->resource)->toArray($request);
+        $resource = GameCastResourceIdentity::make($this->resource)->toArray($request);
         $resource = array_merge($resource, [
             'attributes'    => [
                 'role'      => $this->resource->castRole->only(['name', 'description']),
