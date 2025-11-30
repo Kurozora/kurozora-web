@@ -65,7 +65,7 @@ class LiteratureResource extends JsonResource
         return [
             'cast' => [
                 'href' => route('api.manga.cast', $this->resource, false),
-                'data' => MangaCastResourceIdentity::collection($this->resource->cast)
+                'data' => LiteratureCastResourceIdentity::collection($this->resource->cast)
             ]
         ];
     }

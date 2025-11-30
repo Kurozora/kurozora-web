@@ -16,7 +16,7 @@ use App\Http\Requests\SearchRequest;
 use App\Http\Resources\CharacterResourceIdentity;
 use App\Http\Resources\LiteratureResource;
 use App\Http\Resources\LiteratureResourceIdentity;
-use App\Http\Resources\MangaCastResourceIdentity;
+use App\Http\Resources\LiteratureCastResourceIdentity;
 use App\Http\Resources\MediaRatingResource;
 use App\Http\Resources\MediaRelatedResource;
 use App\Http\Resources\MediaStaffResource;
@@ -360,7 +360,7 @@ class MangaController extends Controller
         $nextPageURL = str_replace($request->root(), '', $cast->nextPageUrl() ?? '');
 
         return JSONResult::success([
-            'data' => MangaCastResourceIdentity::collection($cast),
+            'data' => LiteratureCastResourceIdentity::collection($cast),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }

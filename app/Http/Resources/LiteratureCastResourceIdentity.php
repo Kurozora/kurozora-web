@@ -6,7 +6,7 @@ use App\Models\MangaCast;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class MangaCastResourceIdentity extends JsonResource
+class LiteratureCastResourceIdentity extends JsonResource
 {
     /**
      * The resource instance.
