@@ -15,13 +15,13 @@ use App\Http\Requests\GetPaginatedRequest;
 use App\Http\Requests\RateModelRequest;
 use App\Http\Requests\SearchRequest;
 use App\Http\Resources\CharacterResourceIdentity;
+use App\Http\Resources\GameCastResourceIdentity;
 use App\Http\Resources\GameResource;
 use App\Http\Resources\GameResourceIdentity;
 use App\Http\Resources\MediaRatingResource;
 use App\Http\Resources\MediaRelatedResource;
 use App\Http\Resources\MediaSongResource;
 use App\Http\Resources\MediaStaffResource;
-use App\Http\Resources\ShowCastResourceIdentity;
 use App\Http\Resources\StudioResource;
 use App\Models\Anime;
 use App\Models\Game;
@@ -387,7 +387,7 @@ class GameController extends Controller
         $nextPageURL = str_replace($request->root(), '', $cast->nextPageUrl() ?? '');
 
         return JSONResult::success([
-            'data' => ShowCastResourceIdentity::collection($cast),
+            'data' => GameCastResourceIdentity::collection($cast),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
