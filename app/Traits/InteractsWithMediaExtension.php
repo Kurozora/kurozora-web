@@ -53,6 +53,10 @@ trait InteractsWithMediaExtension {
      */
     function updateImageMedia(MediaCollection $mediaCollection, string|UploadedFile $uploadFile, ?string $name = null, array $customProperties = [], ?string $extension = null): void
     {
+        if (empty($uploadFile)) {
+            return;
+        }
+
         // Determine media adder
         if ($isUrl = str($uploadFile)->startsWith(['http://', 'https://'])) {
             $addMedia = $this->addMediaFromUrl($uploadFile);
