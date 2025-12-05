@@ -10,8 +10,8 @@ Route::prefix('/messages')
             ->name('.details');
 
         Route::post('/{feedMessage}/update', [FeedMessageController::class, 'update'])
-            ->can('update', 'feedMessage')
             ->middleware('auth.kurozora')
+            ->can('update', 'feedMessage')
             ->name('.update');
 
         Route::get('/{feedMessage}/replies', [FeedMessageController::class, 'replies'])
@@ -19,17 +19,17 @@ Route::prefix('/messages')
             ->name('.replies');
 
         Route::post('/{feedMessage}/heart', [FeedMessageController::class, 'heart'])
-            ->can('hear', 'feedMessage')
             ->middleware('auth.kurozora')
+            ->can('heart', 'feedMessage')
             ->name('.heart');
 
         Route::post('/{feedMessage}/pin', [FeedMessageController::class, 'pin'])
-            ->can('update', 'feedMessage')
             ->middleware('auth.kurozora')
+            ->can('update', 'feedMessage')
             ->name('.pin');
 
         Route::post('/{feedMessage}/delete', [FeedMessageController::class, 'delete'])
-            ->can('delete', 'feedMessage')
             ->middleware('auth.kurozora')
+            ->can('delete', 'feedMessage')
             ->name('.delete');
     });
