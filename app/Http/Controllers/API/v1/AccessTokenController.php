@@ -12,8 +12,8 @@ use App\Models\LoginAttempt;
 use App\Models\PersonalAccessToken;
 use App\Models\User;
 use Hash;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\JsonResponse;
-use Laravel\Nova\Exceptions\AuthenticationException;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 
 class AccessTokenController
