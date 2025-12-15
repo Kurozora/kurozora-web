@@ -34,7 +34,7 @@
         </section>
 
         @if ($this->episodes->count())
-            <section id="up-next">
+            <section id="up-next" class="mb-16">
                 <x-rows.episode-lockup :episodes="$this->episodes" :is-row="false" />
 
                 <div class="mt-4 pl-4 pr-4">
@@ -42,13 +42,25 @@
                 </div>
             </section>
         @elseif (!$readyToLoad)
-            <section id="up-next-skeleton">
+            <section id="up-next-skeleton" class="mb-16">
                 <div class="flex flex-wrap gap-4 justify-between pl-4 pr-4">
                     @foreach (range(1,25) as $range)
                         <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
                     @endforeach
                     <div class="w-64 md:w-80 flex-grow"></div>
                     <div class="w-64 md:w-80 flex-grow"></div>
+                </div>
+            </section>
+        @else
+            <section id="up-next-empty" class="mb-16">
+                <div class="flex flex-col items-center justify-center mt-4 text-center">
+                    <x-picture>
+                        <img class="w-full max-w-sm" src="{{ asset('images/static/placeholders/empty_anime_library.webp') }}" alt="Empty Up-Next" title="Empty Up-Next">
+                    </x-picture>
+
+                    <p class="font-bold">{{ __('You watched them all!') }}</p>
+
+                    <p class="text-sm text-secondary">{{ __('You’re up to date with every episode. Start a new anime to see episodes appear here!') }}</p>
                 </div>
             </section>
         @endif
