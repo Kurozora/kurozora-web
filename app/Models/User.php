@@ -757,8 +757,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
             ->join(UserLibrary::TABLE_NAME, function ($join) use ($anime) {
                 $join->on(UserLibrary::TABLE_NAME . '.trackable_id', '=', Anime::TABLE_NAME . '.id')
                     ->where(UserLibrary::TABLE_NAME . '.trackable_type', '=', Anime::class)
-                    ->where(UserLibrary::TABLE_NAME . '.user_id', '=', $this->id)
-                    ->where(UserLibrary::TABLE_NAME . '.status', '=', UserLibraryStatus::InProgress);
+                    ->where(UserLibrary::TABLE_NAME . '.user_id', '=', $this->id);
 
                 if ($anime) {
                     $join->where(UserLibrary::TABLE_NAME . '.trackable_id', '=', $anime->id);
