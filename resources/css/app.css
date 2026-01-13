@@ -14,6 +14,10 @@ code {
   @apply tracking-normal;
 }
 
+::placeholder {
+  @apply text-secondary !important;
+}
+
 ::selection {
   @apply btn-text-tinted
   bg-tint;
@@ -153,6 +157,17 @@ picture::before {
   }
 
   /**
+   * Sidebar utilities
+   */
+  .safe-area-inset:not(.no-safe-area) {
+    @apply pl-[var(--sidebar-width)];
+  }
+
+  .safe-area-inset-scroll:not(.no-safe-area) {
+    @apply pl-[calc(var(--sidebar-width) + var(--sidebar-gutter))];
+  }
+
+  /**
    * Theme utilities
    */
   .bg-primary {
@@ -240,6 +255,8 @@ img:not([src]):not([srcset]) {
 }
 
 :root {
+  --sidebar-width: 18rem;
+  --sidebar-gutter: 1rem;
   --tint-color: #FF9300;
 }
 
