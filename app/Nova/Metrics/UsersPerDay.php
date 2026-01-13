@@ -13,11 +13,13 @@ class UsersPerDay extends Trend
      * Calculate the value of the metric.
      *
      * @param NovaRequest $request
+     *
      * @return mixed
      */
     public function calculate(NovaRequest $request): mixed
     {
-        return $this->countByDays($request, User::class);
+        return $this->countByDays($request, User::class)
+            ->showSumValue();
     }
 
     /**

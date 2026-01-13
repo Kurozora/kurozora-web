@@ -14,6 +14,7 @@ class GameNSFWChart extends Partition
      * Calculate the value of the metric.
      *
      * @param NovaRequest $request
+     *
      * @return mixed
      */
     public function calculate(NovaRequest $request): mixed
@@ -26,8 +27,8 @@ class GameNSFWChart extends Partition
                 };
             })
             ->colors([
-                false   => '#3dd45e',
-                true    => '#d25561'
+                false => '#3dd45e',
+                true => '#d25561'
             ]);
     }
 

@@ -12,6 +12,7 @@ class SubscribedUsers extends Partition
      * Calculate the value of the metric.
      *
      * @param NovaRequest $request
+     *
      * @return mixed
      */
     public function calculate(NovaRequest $request): mixed

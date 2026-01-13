@@ -5,6 +5,7 @@ namespace App\Nova\Metrics;
 use App\Models\Episode;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Metrics\Value;
+use Laravel\Nova\Nova;
 
 class NewEpisodes extends Value
 {
@@ -27,14 +28,14 @@ class NewEpisodes extends Value
     public function ranges(): array
     {
         return [
-            7 => __('7 Days'),
-            30 => __('30 Days'),
-            60 => __('60 Days'),
-            365 => __('365 Days'),
-            'MTD' => __('Month To Date'),
-            'QTD' => __('Quarter To Date'),
-            'YTD' => __('Year To Date'),
-            'ALL' => __('All Time'),
+            7 => Nova::__('7 Days'),
+            30 => Nova::__('30 Days'),
+            60 => Nova::__('60 Days'),
+            365 => Nova::__('365 Days'),
+            'MTD' => Nova::__('Month To Date'),
+            'QTD' => Nova::__('Quarter To Date'),
+            'YTD' => Nova::__('Year To Date'),
+            'ALL' => Nova::__('All Time'),
         ];
     }
 
