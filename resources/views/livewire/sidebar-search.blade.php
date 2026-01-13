@@ -54,13 +54,13 @@
         x-on:click="isSearchEnabled = true"
     >
         {{-- Search icon --}}
-        <div class="absolute inline-flex left-0 flex pl-2 h-full text-secondary">
+        <div class="absolute inline-flex left-0 pl-2 h-full text-secondary">
             @svg('magnifyingglass', 'fill-current', ['width' => '14'])
         </div>
 
         {{-- Search field --}}
         <x-input
-            class="pr-8 pl-8 h-8 w-full text-sm"
+            class="pr-8 pl-8 h-8 w-full text-sm bg-blur border-secondary"
             type="search"
             name="q"
             placeholder="{{ [__('Search'), '⌘+K, ctrl+K or /'][array_rand([0,1])] }}"
@@ -99,7 +99,7 @@
 
         @if (!empty($searchResults))
             @foreach ($searchResults as $searchResult)
-                <x-search-header>
+                <x-search-header class="{{ $loop->first ? 'mt-0' : 'mt-6' }}">
                     <x-slot:title>
                         {{ $searchResult['title'] }}
                     </x-slot:title>

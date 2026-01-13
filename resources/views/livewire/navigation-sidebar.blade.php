@@ -1,11 +1,11 @@
 <aside
-    class="hidden flex-col w-64 h-screen z-[999] xl:fixed xl:flex"
+    class="hidden absolute flex-col h-screen z-[999] xl:flex"
     x-data="{
         showScrollEdgeEffect: false
     }"
 >
     <nav
-        class="flex flex-col mt-2 ml-2 bg-blur backdrop-blur border-primary rounded-xl"
+        class="fixed flex flex-col mt-2 ml-2 bg-blur backdrop-blur border-primary rounded-xl"
         style="height: calc(100% - 1rem); border-width: 0.5px"
     >
         <div class="relative">
