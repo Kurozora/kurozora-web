@@ -122,7 +122,7 @@
 
             <livewire:navigation-dropdown :user="auth()->user()" />
 
-            <div class="xl:ml-64">
+            <div>
                 @if (!(auth()->user()?->hasVerifiedEmail() ?? true))
                     <a class="flex items-center gap-2 bg-yellow-500 text-white text-sm pl-4 pr-4 pt-3 pb-3" role="alert" href="{{ route('settings') }}" wire:navigate>
                         @svg('exclamationmark_circle', 'fill-current', ['width' => 20])
