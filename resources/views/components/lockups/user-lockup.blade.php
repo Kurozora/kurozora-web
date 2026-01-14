@@ -1,7 +1,7 @@
 @props(['user', 'isRow' => true])
 
 @php
-    $class = $isRow ? 'pb-2 shrink-0' : '';
+    $class = $isRow ? 'pb-2 shrink-0 snap-normal snap-center' : '';
     $isFollowed = (bool) $user->isFollowed;
     $followersCount = $user->followers_count;
 @endphp

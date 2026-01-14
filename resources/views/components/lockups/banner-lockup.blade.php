@@ -1,6 +1,6 @@
 @props(['anime'])
 
-<div {{ $attributes->merge(['class' => 'relative flex snap-normal snap-center']) }} style="min-width: 100%;">
+<div {{ $attributes->merge(['class' => 'relative flex snap-normal snap-center overflow-hidden max-h-[80vh]']) }} style="min-width: 100%;">
     <div class="flex flex-nowrap" style="min-width: 100%;">
         <picture
             class="relative w-full aspect-video overflow-hidden"
@@ -20,11 +20,11 @@
         </picture>
 
         <article
-            class="absolute bottom-0 left-0 right-0 pr-3 pb-3 pl-3"
+            class="absolute bottom-0 left-0 right-0 xl:safe-area-inset"
             style="padding-top: 15%; background: linear-gradient(transparent, {{ $anime->getFirstMedia(\App\Enums\MediaCollection::Banner)?->custom_properties['background_color'] ?? 'var(--bg-primary-color)' }}); mask-image: linear-gradient(to top, black 50%, transparent); backdrop-filter: blur(8px);"
         >
             <div
-                class="max-w-[50%] text-pretty text-balance text-break"
+                class="max-w-[50%] pr-3 pb-3 pl-3 text-pretty text-balance text-break"
                 style="color: {{ $anime->getFirstMedia(\App\Enums\MediaCollection::Banner)?->custom_properties['background_color'] ?? 'var(--bg-primary-color)' }}; filter: invert(1) grayscale(1) brightness(1.3) contrast(9000); mix-blend-mode: luminosity;"
             >
                 <p class="text-lg font-semibold leading-tight line-clamp-2 md:text-4xl" title="{{ $anime->title }}">{{ $anime->title }}</p>

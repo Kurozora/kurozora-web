@@ -1,7 +1,7 @@
 @props(['platform', 'rank', 'isRanked' => false, 'isRow' => true])
 
 @php
-    $class = $isRow ? 'pb-2 shrink-0' : '';
+    $class = $isRow ? 'pb-2 shrink-0 snap-normal snap-center' : '';
 @endphp
 
 <div {{ $attributes->merge(['class' => 'relative flex flex-col flex-grow w-64 md:w-80 ' . $class]) }}>

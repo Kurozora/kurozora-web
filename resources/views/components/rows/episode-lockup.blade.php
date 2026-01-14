@@ -1,7 +1,11 @@
-@props(['episodes' => [], 'page' => 1, 'perPage' => 25, 'isRanked' => false, 'isRow' => true])
+@props(['episodes' => [], 'page' => 1, 'perPage' => 25, 'isRanked' => false, 'isRow' => true, 'safeAreaInsetEnabled' => true])
 
 @php
-    $class = $isRow ? 'overflow-x-scroll no-scrollbar' : 'flex-wrap';
+    $class = $isRow ? 'snap-mandatory snap-x overflow-x-scroll no-scrollbar' : 'flex-wrap';
+
+    if ($isRow && $safeAreaInsetEnabled) {
+        $class .= ' xl:safe-area-inset-scroll';
+    }
 @endphp
 
 <div {{ $attributes->merge(['class' => 'flex gap-4 justify-between pl-4 pr-4 ' . $class]) }}>

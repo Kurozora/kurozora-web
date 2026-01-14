@@ -55,7 +55,7 @@
                 @switch($exploreCategory->type)
                 @case(\App\Enums\ExploreCategoryTypes::MostPopularShows)
                     <section
-                        class="relative"
+                        class="relative  overflow-hidden max-h-[80vh]"
                         x-data="carousel()"
                         x-init="startAutoScroll()"
                     >
@@ -204,7 +204,7 @@
         @endif
 
         @guest
-            <section>
+            <section class="xl:safe-area-inset">
                 <a href="{{ route('recap.index') }}" wire:navigate>
                     <x-picture>
                         <img class="h-40 w-full object-cover md:h-80" src="{{ asset('images/static/banners/kurozora_recap.webp') }}" alt="Kurozora Recap {{ now()->year }}">
@@ -213,7 +213,7 @@
             </section>
         @endguest
 
-        <section class="pt-4 pb-8">
+        <section class="pt-4 pb-8 xl:safe-area-inset">
             <x-section-nav class="mb-5 flex flex-nowrap justify-between">
                 <x-slot:title>
                     {{ __('More to Explore') }}

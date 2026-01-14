@@ -1,7 +1,11 @@
-@props(['animes' => [], 'relatedAnimes' => [], 'mangas' => [], 'relatedMangas' => [], 'games' => [], 'relatedGames' => [], 'page' => 1, 'perPage' => 25, 'trackingEnabled' => true, 'showsSchedule' => false, 'isRanked' => false, 'isRow' => true])
+@props(['animes' => [], 'relatedAnimes' => [], 'mangas' => [], 'relatedMangas' => [], 'games' => [], 'relatedGames' => [], 'page' => 1, 'perPage' => 25, 'trackingEnabled' => true, 'showsSchedule' => false, 'isRanked' => false, 'isRow' => true, 'safeAreaInsetEnabled' => true])
 
 @php
     $class = $isRow ? 'snap-mandatory snap-x overflow-x-scroll no-scrollbar' : 'flex-wrap';
+
+    if ($isRow && $safeAreaInsetEnabled) {
+        $class .= ' xl:safe-area-inset-scroll';
+    }
 @endphp
 
 @if (!empty($animes) || !empty($relatedAnimes))
