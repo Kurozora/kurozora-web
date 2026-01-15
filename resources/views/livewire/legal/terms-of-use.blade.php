@@ -22,14 +22,14 @@
     {{-- Header --}}
     <section class="bg-secondary shadow">
         <article>
-            <header class="flex pt-4 pb-6 pl-4 pr-4">
+            <header class="flex pt-4 pb-6 pl-4 pr-4 xl:safe-area-inset">
                 <h2 class="text-2xl font-bold">{{ __('Legal') }}</h2>
             </header>
         </article>
     </section>
 
     {{-- Content --}}
-    <section class="pt-4 pb-6 pl-4 pr-4">
+    <section class="pt-4 pb-6 pl-4 pr-4 xl:safe-area-inset">
         <article>
             <hedaer class="text-center mt-16">
                 <h1 class="text-xl font-bold">{{ __('Terms of Use') }}</h1>

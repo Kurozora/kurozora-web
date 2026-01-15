@@ -13,8 +13,10 @@
 
     <!-- Page Heading -->
     <header class="bg-secondary shadow">
-        <div class="flex pt-4 pb-6 pl-4 pr-4">
-            {{ $header }}
+        <div class="xl:safe-area-inset">
+            <div class="flex pt-4 pb-6 pl-4 pr-4">
+                {{ $header }}
+            </div>
         </div>
     </header>
 

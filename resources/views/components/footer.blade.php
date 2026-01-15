@@ -1,4 +1,4 @@
-<footer>
+<footer class="xl:safe-area-inset">
     <div class="pl-4 pr-4 pt-10 pb-6">
         <div class="flex flex-wrap">
             <div class="w-1/2 sm:w-1/3 text-center md:w-1/4 md:text-left lg:w-1/6">
