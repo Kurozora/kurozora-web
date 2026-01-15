@@ -25,7 +25,7 @@
     </x-slot:appArgument>
 
     <div class="pt-4 pb-6 space-y-10" wire:init="loadPage">
-        <section class="mb-4">
+        <section class="mb-4 xl:safe-area-inset">
             <div>
                 <div class="flex gap-1 pl-4 pr-4">
                     <div class="flex flex-wrap items-center w-full">
@@ -40,7 +40,7 @@
 
         @if ($this->mediaSongs->count())
             @foreach ($this->mediaSongs as $mediaSongType => $mediaSongs)
-                <section id="#{{ $mediaSongType }}">
+                <section id="#{{ $mediaSongType }}" class="xl:safe-area-inset">
                     <x-section-nav>
                         <x-slot:title>
                             {{ $mediaSongType . ' (' . $mediaSongs->count() . ')' }}
@@ -51,7 +51,7 @@
                 </section>
             @endforeach
         @elseif (!$readyToLoad)
-            <section>
+            <section class="xl:safe-area-inset">
                 <div class="flex gap-2 justify-between mb-5 pl-4 pr-4">
                     <div>
                         <p class="bg-secondary rounded-md" style="width: 168px; height: 28px"></p>

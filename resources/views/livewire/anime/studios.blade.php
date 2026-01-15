@@ -22,7 +22,7 @@
     </x-slot:appArgument>
 
     <div class="pt-4 pb-6" wire:init="loadPage">
-        <section class="mb-4">
+        <section class="mb-4 xl:safe-area-inset">
             <div>
                 <div class="flex gap-1 pl-4 pr-4">
                     <div class="flex flex-wrap items-center w-full">
@@ -36,13 +36,15 @@
         </section>
 
         @if ($this->studios->count())
-            <x-rows.studio-lockup :studios="$this->studios" :is-row="false" />
+            <section class="xl:safe-area-inset">
+                <x-rows.studio-lockup :studios="$this->studios" :is-row="false" />
 
-            <div class="mt-4 pl-4 pr-4">
-                {{ $this->studios->links() }}
-            </div>
+                <div class="mt-4 pl-4 pr-4">
+                    {{ $this->studios->links() }}
+                </div>
+            </section>
         @elseif (!$readyToLoad)
-            <section>
+            <section class="xl:safe-area-inset">
                 <div class="flex flex-wrap gap-4 justify-between pl-4 pr-4">
                     @foreach (range(1,25) as $range)
                         <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
