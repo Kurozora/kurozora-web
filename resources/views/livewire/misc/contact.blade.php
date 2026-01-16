@@ -16,7 +16,7 @@
 
     <div class="pt-4 pb-6">
         {{-- Header --}}
-        <section class="relative pl-4 pr-4 pt-36 pb-10 overflow-hidden">
+        <section class="relative pl-4 pr-4 pt-36 pb-10 overflow-hidden xl:safe-area-inset">
             <div class="relative max-w-2xl mx-auto text-center">
                 <div class="flex flex-col items-center">
                     <img class="mt-10 mb-4" width="82" height="82" src="{{ asset('images/static/icon/app_icon.webp') }}" alt="{{ config('app.name') }}">
@@ -31,7 +31,7 @@
         </section>
 
         {{-- Suggestions --}}
-        <section class="pt-36 pb-10 pl-4 pr-4 bg-secondary">
+        <section class="pt-36 pb-10 pl-4 pr-4 bg-secondary xl:safe-area-inset">
             <div class="max-w-7xl mx-auto pt-4 pb-6 pl-4 pr-4">
                 <div class="flex flex-wrap justify-between gap-4">
                     <div class="flex flex-col w-full gap-2 md:w-3/4">
@@ -89,7 +89,7 @@
         </section>
 
         {{-- E-mail --}}
-        <section class="pt-36 pb-10">
+        <section class="pt-36 pb-10 xl:safe-area-inset">
             <div class="max-w-7xl mx-auto pt-4 pb-6 pl-4 pr-4">
                 <div class="flex flex-wrap justify-between gap-4">
                     <div class="flex flex-col w-full gap-2 md:w-3/4">

@@ -21,7 +21,7 @@
         </x-picture>
 
         {{-- Staff --}}
-        <section class="flex flex-col mt-36">
+        <section class="flex flex-col mt-36 xl:safe-area-inset">
             <h2 class="mx-auto pl-4 pr-4 max-w-2xl text-4xl text-center font-semibold">{{ __(':x is built by a passionate team…', ['x' => config('app.name')]) }}</h2>
 
             <div class="flex flex-row flex-wrap justify-between gap-4 mt-36 pl-4 pr-4">
@@ -53,6 +53,11 @@
                             $usernameColor = '#C9EEFF';
                             $text = 'Linux/Windows Developer';
                             break;
+                        case 2116:
+                            $backgroundColor = '#C1C1C1';
+                            $usernameColor = '#1F2937';
+                            $text = 'Android/Windows Developer';
+                            break;
                         default:
                             $backgroundColor = '#FFFFFF';
                             $usernameColor = '#1F2937';
@@ -80,11 +85,12 @@
                 <div class="w-64 md:w-80 flex-grow"></div>
                 <div class="w-64 md:w-80 flex-grow"></div>
                 <div class="w-64 md:w-80 flex-grow"></div>
+                <div class="w-64 md:w-80 flex-grow"></div>
             </div>
         </section>
 
         {{-- Ex-Staff --}}
-        <section class="flex flex-col mt-36">
+        <section class="flex flex-col mt-36 xl:safe-area-inset">
             <h2 class="mx-auto pl-4 pr-4 max-w-2xl text-4xl text-center font-semibold">{{ __('Shaped by past contributors…') }}</h2>
 
             <div class="flex flex-row flex-wrap justify-between gap-4 mt-36 pl-4 pr-4">
@@ -127,7 +133,7 @@
         </section>
 
         {{-- You --}}
-        <section class="flex flex-col mt-36">
+        <section class="flex flex-col mt-36 xl:safe-area-inset">
             <h2 class="mx-auto pl-4 pr-4 max-w-2xl text-4xl text-center font-semibold">{{ __('And growing with :x amazing members—including you ❤️', ['x' => $this->userCount]) }}</h2>
 
             <div class="mt-36 pl-4 pr-4">

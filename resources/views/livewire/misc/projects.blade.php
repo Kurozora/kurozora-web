@@ -17,22 +17,24 @@
 
     <div>
         {{-- Open-Source --}}
-        <section class="relative pl-4 pr-4 pt-36 pb-10 overflow-hidden">
-            <div class="relative max-w-2xl mx-auto text-center">
-                <div class="flex flex-col items-center">
-                    <img class="mt-10 mb-4" width="82" height="82" src="{{ asset('images/static/icon/app_icon.webp') }}" alt="{{ config('app.name') }}">
+        <section class="relative pt-36 pb-10 overflow-hidden xl:safe-area-inset">
+            <div class="pl-4 pr-4">
+                <div class="relative max-w-2xl mx-auto text-center">
+                    <div class="flex flex-col items-center">
+                        <img class="mt-10 mb-4" width="82" height="82" src="{{ asset('images/static/icon/app_icon.webp') }}" alt="{{ config('app.name') }}">
 
-                    <h1 class="text-4xl font-bold leading-tight tracking-tight">{{ __('Open-Source at :x', ['x' => config('app.name')]) }}</h1>
-                </div>
+                        <h1 class="text-4xl font-bold leading-tight tracking-tight">{{ __('Open-Source at :x', ['x' => config('app.name')]) }}</h1>
+                    </div>
 
-                <div class="mt-10">
-                    <p class="text-lg font-light md:text-2xl">{{ __('Open-source software serves as the core of :x’s platforms and developer tools, fostering collaboration with developers worldwide to generate and distribute open-source code.', ['x' => config('app.name')]) }}</p>
+                    <div class="mt-10">
+                        <p class="text-lg font-light md:text-2xl">{{ __('Open-source software serves as the core of :x’s platforms and developer tools, fostering collaboration with developers worldwide to generate and distribute open-source code.', ['x' => config('app.name')]) }}</p>
+                    </div>
                 </div>
             </div>
         </section>
 
         {{-- Projects --}}
-        <section class="pt-36 pb-10 bg-secondary">
+        <section class="pt-36 pb-10 bg-secondary xl:safe-area-inset">
             <div class="max-w-7xl mx-auto pt-4 pb-6 pl-4 pr-4">
                 <div class="flex flex-wrap justify-between gap-4">
                     <div class="flex flex-col w-full gap-2 md:w-3/4">
