@@ -70,7 +70,7 @@
     </x-slot:appArgument>
 
     <div class="pb-6" wire:init="loadPage">
-        <div class="relative">
+        <div class="relative overflow-hidden max-h-[80vh]">
             <div class="relative flex flex-nowrap aspect-video md:relative md:h-full">
                 <x-picture
                     class="w-full overflow-hidden"
@@ -164,7 +164,7 @@
         </div>
 
         <div>
-            <section id="badges" class="flex flex-row flex-nowrap whitespace-nowrap justify-between items-center text-center pt-4 pb-5 pl-4 pr-4 overflow-x-scroll no-scrollbar">
+            <section id="badges" class="flex flex-row flex-nowrap whitespace-nowrap justify-between items-center text-center pt-4 pb-5 pl-4 pr-4 overflow-x-scroll no-scrollbar xl:safe-area-inset-scroll">
                 <div id="ratingBadge" class="flex-grow pr-12">
                     <a class="flex flex-col items-center no-external-icon" href="#ratingsAndReviews">
                         <p class="font-bold text-tint">
@@ -245,7 +245,7 @@
             </section>
 
             @if (!empty($manga->synopsis))
-                <section class="pb-8">
+                <section class="pb-8 xl:safe-area-inset">
                     <x-section-nav class="flex flex-nowrap justify-between mb-5 pt-4">
                         <x-slot:title>
                             {{ __('Synopsis') }}
@@ -260,7 +260,7 @@
                 </section>
             @endif
 
-            <section id="ratingsAndReviews" class="pb-8">
+            <section id="ratingsAndReviews" class="pb-8 xl:safe-area-inset">
                 <x-section-nav class="pt-4">
                     <x-slot:title>
                         {{ __('Ratings & Reviews') }}
@@ -292,9 +292,11 @@
             </section>
 
             <section id="writeAReview" class="pb-8">
-                <x-hr class="ml-4 mr-4 pb-5" />
+                <div class="xl:safe-area-inset">
+                    <x-hr class="ml-4 mr-4 pb-5" />
+                </div>
 
-                <div class="flex flex-row flex-wrap gap-4 pl-4 pr-4">
+                <div class="flex flex-row flex-wrap gap-4 pl-4 pr-4 xl:safe-area-inset-scroll">
                     <div class="flex justify-between items-center">
                         <p class="">{{ __('Click to Rate:') }}</p>
 
@@ -316,7 +318,7 @@
                 </div>
             </section>
 
-            <section class="pb-8">
+            <section class="pb-8 xl:safe-area-inset">
                 <x-section-nav class="pt-4">
                     <x-slot:title>
                         {{ __('Information') }}
@@ -499,8 +501,10 @@
                     <livewire:components.manga.game-relations-section :manga="$manga" />
 
                     @if (!empty($manga->copyright))
-                        <section class="pt-4 pr-4 pb-4 pl-4 border-t border-primary">
-                            <p class="text-sm text-secondary">{!! nl2br(e($manga->copyright)) !!}</p>
+                        <section class="border-t border-primary xl:safe-area-inset">
+                            <div class="pt-4 pr-4 pb-4 pl-4">
+                                <p class="text-sm text-secondary">{!! nl2br(e($manga->copyright)) !!}</p>
+                            </div>
                         </section>
                     @endif
                 </div>

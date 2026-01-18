@@ -21,7 +21,7 @@
     </x-slot:appArgument>
 
     <div class="pb-6">
-        <section class="sticky top-0 mb-4 pt-4 pb-4 backdrop-blur bg-blur z-10">
+        <section class="sticky top-0 mb-4 pt-4 pb-4 backdrop-blur bg-blur z-10 xl:safe-area-inset">
             <div>
                 <div class="flex gap-1 pl-4 pr-4">
                     <div class="flex flex-wrap items-center w-full">
@@ -37,7 +37,7 @@
             </div>
         </section>
 
-        <section class="mb-16">
+        <section class="mb-16 xl:safe-area-inset">
             <div class="flex flex-col gap-4 pb-6 pl-4 pr-4">
                 <h3 class="text-xl font-bold">{{ __('Summary') }}</h3>
 
@@ -64,7 +64,7 @@
             </div>
         </section>
 
-        <section class="mb-4">
+        <section class="mb-4 xl:safe-area-inset">
             <div class="flex flex-col gap-6 pl-4 pr-4">
                 @foreach (App\Enums\ParentalGuideCategory::getInstances() as $category)
                     <div class="flex flex-col gap-4 pb-6">
