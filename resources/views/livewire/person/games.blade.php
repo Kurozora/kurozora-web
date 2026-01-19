@@ -21,7 +21,7 @@
     </x-slot:appArgument>
 
     <div class="pt-4 pb-6" wire:init="loadPage">
-        <section class="mb-4">
+        <section class="mb-4 xl:safe-area-inset">
             <div>
                 <div class="flex gap-1 pl-4 pr-4">
                     <div class="flex flex-wrap items-center w-full">
@@ -35,11 +35,13 @@
         </section>
 
         @if ($readyToLoad)
-            <x-rows.small-lockup :games="$this->games" :is-row="false" />
+            <section class="xl:safe-area-inset">
+                <x-rows.small-lockup :games="$this->games" :is-row="false" />
 
-            <div class="mt-4 pl-4 pr-4">
-                {{ $this->games->links() }}
-            </div>
+                <div class="mt-4 pl-4 pr-4">
+                    {{ $this->games->links() }}
+                </div>
+            </section>
         @else
             <section class="mt-4 pt-4 pb-8 border-t border-primary">
                 <div class="flex flex-wrap gap-4 justify-between pl-4 pr-4">

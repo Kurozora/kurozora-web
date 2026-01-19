@@ -27,7 +27,7 @@
         >
             <x-edge-blur edge="bottom" />
 
-            <div class="relative">
+            <div class="relative xl:safe-area-inset">
                 <div class="flex flex-col flex-wrap text-center items-center">
                     <picture
                         class="relative aspect-square rounded-full overflow-hidden"
@@ -40,7 +40,7 @@
                 </div>
             </div>
 
-            <div class="flex gap-2 absolute bottom-0 left-0 mb-4 ml-4">
+            <div class="flex gap-2 absolute bottom-0 left-0 mb-4 ml-4 xl:safe-area-inset">
                 <p class="text-3xl font-bold">{{ $person->full_name }}</p>
 
                 <x-nova-link :href="route('people.edit', $person)">
@@ -50,7 +50,7 @@
         </section>
 
         @if ($person->about)
-            <section class="pt-4 pb-8">
+            <section class="pt-4 pb-8 xl:safe-area-inset">
                 <x-section-nav class="pt-4">
                     <x-slot:title>
                         {{ __('About') }}
@@ -65,7 +65,7 @@
             </section>
         @endif
 
-        <section id="ratingsAndReviews" class="pb-8">
+        <section id="ratingsAndReviews" class="pb-8 xl:safe-area-inset">
             <x-section-nav class="pt-4">
                 <x-slot:title>
                     {{ __('Ratings & Reviews') }}
@@ -97,9 +97,11 @@
         </section>
 
         <section id="writeAReview" class="pb-8">
-            <x-hr class="ml-4 mr-4 pb-5" />
+            <div class="xl:safe-area-inset">
+                <x-hr class="ml-4 mr-4 pb-5" />
+            </div>
 
-            <div class="flex flex-row flex-wrap gap-4 pl-4 pr-4">
+            <div class="flex flex-row flex-wrap gap-4 pl-4 pr-4 xl:safe-area-inset-scroll">
                 <div class="flex justify-between items-center">
                     <p class="">{{ __('Click to Rate:') }}</p>
 
@@ -121,7 +123,7 @@
             </div>
         </section>
 
-        <section class="pb-8">
+        <section class="pb-8 xl:safe-area-inset">
             <x-section-nav class="pt-4">
                 <x-slot:title>
                     {{ __('Information') }}
