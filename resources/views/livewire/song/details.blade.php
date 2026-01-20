@@ -50,29 +50,30 @@
         x-on:musicmanagerloaded.window="await fetchSongData('{{ $song->am_id }}')"
     >
         <div class="pt-4 pb-6">
-            <section class="flex flex-col items-center gap-4 pb-8 pl-4 pr-4">
-                <div style="max-width: 320px">
-                    <x-picture class="aspect-square rounded-lg natural-shadow overflow-hidden">
-                        <img class="w-full h-full object-cover"
-                             alt="{{ $song->original_title }} Artwork" title="{{ $song->original_title }}"
-                             width="500" height="500"
-                             x-bind:title="songTitle"
-                             x-bind:alt="songTitle + ' Artwork'"
-                             x-bind:src="artworkURL"
-                             x-bind:style="{'background-color': bgColor}"
-                             style="width: 320px; height: 320px;"
-                        >
+            <section class="xl:safe-area-inset-scroll">
+                <div class="flex flex-col items-center gap-4 pb-8 pl-4 pr-4">
+                    <div style="max-width: 320px">
+                        <x-picture class="aspect-square rounded-lg natural-shadow overflow-hidden">
+                            <img class="w-full h-full object-cover"
+                                 alt="{{ $song->original_title }} Artwork" title="{{ $song->original_title }}"
+                                 width="500" height="500"
+                                 x-bind:title="songTitle"
+                                 x-bind:alt="songTitle + ' Artwork'"
+                                 x-bind:src="artworkURL"
+                                 x-bind:style="{'background-color': bgColor}"
+                                 style="width: 320px; height: 320px;"
+                            >
 
-                        <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-lg"></div>
-                    </x-picture>
-                </div>
+                            <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-lg"></div>
+                        </x-picture>
+                    </div>
 
-                <div class="flex flex-col items-center">
-                    <p class="font-semibold">{{ $song->original_title }}</p>
-                    <p>{{ $song->artist }}</p>
-                </div>
+                    <div class="flex flex-col items-center">
+                        <p class="font-semibold">{{ $song->original_title }}</p>
+                        <p>{{ $song->artist }}</p>
+                    </div>
 
-                <div class="flex items-center gap-2">
+                    <div class="flex items-center gap-2">
                     <template x-if="song">
                         <div>
                             <template x-if="musicManager.isPlaying && musicManager.currentMusicID === '{{ $song->am_id }}'">
@@ -167,11 +168,12 @@
                         </x-slot:content>
                     </x-dropdown>
                 </div>
+                </div>
             </section>
 
             @if (!empty($song->original_lyrics))
                 <section class="pb-8">
-                    <x-section-nav class="flex-nowrap pt-4">
+                    <x-section-nav class="flex-nowrap pt-4  xl:safe-area-inset-scroll">
                         <x-slot:title>
                             {{ __('Lyrics') }}
                         </x-slot:title>
@@ -230,7 +232,7 @@
                         }"
                     >
                         {{-- Toggle Buttons --}}
-                        <div class="flex gap-2 mb-5 pl-2 pr-2">
+                        <div class="flex gap-2 mb-5 pl-2 pr-2  xl:safe-area-inset-scroll">
                             <template x-for="col in columns" :key="col.key">
                                 <span>
                                     <template x-if="isToggled(col.key)">
@@ -253,6 +255,7 @@
 
                         {{-- Lyrics Table --}}
                         <div
+                            class="xl:safe-area-inset-scroll"
                             x-init="initCollapse()"
                             x-ref="content"
                             :style="isCollapsed && rowHeight
@@ -343,7 +346,7 @@
                 </section>
             @endif
 
-            <section id="ratingsAndReviews" class="pb-8">
+            <section id="ratingsAndReviews" class="pb-8 xl:safe-area-inset">
                 <x-section-nav class="pt-4">
                     <x-slot:title>
                         {{ __('Ratings & Reviews') }}
@@ -375,9 +378,11 @@
             </section>
 
             <section id="writeAReview" class="pb-8">
-                <x-hr class="ml-4 mr-4 pb-5" />
+                <div class="xl:safe-area-inset">
+                    <x-hr class="ml-4 mr-4 pb-5" />
+                </div>
 
-                <div class="flex flex-row flex-wrap gap-4 pl-4 pr-4">
+                <div class="flex flex-row flex-wrap gap-4 pl-4 pr-4 xl:safe-area-inset-scroll">
                     <div class="flex justify-between items-center">
                         <p class="">{{ __('Click to Rate:') }}</p>
 
@@ -406,8 +411,10 @@
 
         <div class="bg-tinted">
             @if (!empty($song->copyright))
-                <section class="pt-4 pb-4 pl-4 pr-4">
-                    <p class="text-sm text-secondary">{!! nl2br(e($song->copyright)) !!}</p>
+                <section class="border-t border-primary xl:safe-area-inset">
+                    <div class="pt-4 pr-4 pb-4 pl-4">
+                        <p class="text-sm text-secondary">{!! nl2br(e($song->copyright)) !!}</p>
+                    </div>
                 </section>
             @endif
         </div>
