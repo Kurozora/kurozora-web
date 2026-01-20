@@ -20,7 +20,7 @@
     </x-slot:appArgument>
 
     <div class="pt-4 pb-6" wire:init="loadPage">
-        <section class="mb-4">
+        <section class="mb-4 xl:safe-area-inset">
             <div>
                 <div class="flex gap-1 pl-4 pr-4">
                     <div class="flex flex-wrap items-center w-full">
@@ -42,13 +42,15 @@
         </section>
 
         @if ($this->searchResults->count())
-            <x-rows.studio-lockup :studios="$this->searchResults" :is-row="false" />
+            <section class="xl:safe-area-inset">
+                <x-rows.studio-lockup :studios="$this->searchResults" :is-row="false" />
 
-            <div class="mt-4 pl-4 pr-4">
-                {{ $this->searchResults->links() }}
-            </div>
+                <div class="mt-4 pl-4 pr-4">
+                    {{ $this->searchResults->links() }}
+                </div>
+            </section>
         @elseif (!$readyToLoad)
-            <section class="mt-4">
+            <section class="mt-4 xl:safe-area-inset">
                 <div class="flex flex-wrap gap-4 justify-between pl-4 pr-4">
                     @foreach (range(1,25) as $range)
                         <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
@@ -58,7 +60,7 @@
                 </div>
             </section>
         @else
-            <section class="flex flex-col items-center justify-center mt-4 text-center" style="min-height: 50vh;">
+            <section class="flex flex-col items-center justify-center mt-4 text-center xl:safe-area-inset" style="min-height: 50vh;">
                 <x-picture>
                     <img class="w-full max-w-sm" src="{{ asset('images/static/placeholders/empty_anime_library.webp') }}" alt="Empty Studios Index" title="Empty Studios Index">
                 </x-picture>

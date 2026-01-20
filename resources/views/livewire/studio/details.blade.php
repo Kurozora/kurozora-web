@@ -27,7 +27,7 @@
         >
             <x-edge-blur edge="bottom" />
 
-            <div class="relative">
+            <div class="relative xl:safe-area-inset">
                 <div class="flex flex-col flex-wrap text-center items-center">
                     <picture
                         class="relative aspect-square rounded-full overflow-hidden"
@@ -40,7 +40,7 @@
                 </div>
             </div>
 
-            <div class="absolute bottom-0 left-0 mb-4 ml-4">
+            <div class="absolute bottom-0 left-0 mb-4 ml-4 xl:safe-area-inset">
                 <div class="flex gap-2">
                     <p class="text-3xl font-bold">{{ $studio->name }}</p>
 
@@ -55,7 +55,7 @@
             </div>
         </section>
 
-        <section id="badges" class="flex flex-row flex-nowrap whitespace-nowrap justify-between items-center text-center pt-4 pb-5 pl-4 pr-4 overflow-x-scroll no-scrollbar">
+        <section id="badges" class="flex flex-row flex-nowrap whitespace-nowrap justify-between items-center text-center pt-4 pb-5 pl-4 pr-4 overflow-x-scroll no-scrollbar xl:safe-area-inset-scroll">
             <div id="ratingBadge" class="flex-grow pr-12">
                 <a class="flex flex-col items-center no-external-icon" href="#ratingsAndReviews">
                     <p class="font-bold text-tint">
@@ -117,7 +117,7 @@
             </section>
         @endif
 
-        <section id="ratingsAndReviews" class="pb-8">
+        <section id="ratingsAndReviews" class="pb-8 xl:safe-area-inset">
             <x-section-nav class="pt-4">
                 <x-slot:title>
                     {{ __('Ratings & Reviews') }}
@@ -149,9 +149,11 @@
         </section>
 
         <section id="writeAReview" class="pb-8">
-            <x-hr class="ml-4 mr-4 pb-5" />
+            <div class="xl:safe-area-inset">
+                <x-hr class="ml-4 mr-4 pb-5" />
+            </div>
 
-            <div class="flex flex-row flex-wrap gap-4 pl-4 pr-4">
+            <div class="flex flex-row flex-wrap gap-4 pl-4 pr-4 xl:safe-area-inset-scroll">
                 <div class="flex justify-between items-center">
                     <p class="">{{ __('Click to Rate:') }}</p>
 
@@ -173,7 +175,7 @@
             </div>
         </section>
 
-        <section class="pb-8">
+        <section class="pb-8 xl:safe-area-inset">
             <x-section-nav class="pt-4">
                 <x-slot:title>
                     {{ __('Information') }}
