@@ -16,7 +16,7 @@
     </x-slot:meta>
 
     <div class="pt-4 pb-6">
-        <section class="mb-4">
+        <section class="mb-4 xl:safe-area-inset">
             <div class="flex gap-1 pl-4 pr-4">
                 <div class="flex flex-wrap items-center w-full">
                     <h1 class="text-2xl font-bold">{{ __('Top Charts') }}</h1>
