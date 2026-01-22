@@ -1,7 +1,7 @@
 <div wire:init="loadSection">
     @if (!empty($this->models->count()))
         <section class="pb-8">
-            <x-section-nav class="pt-4">
+            <x-section-nav class="pt-4 xl:safe-area-inset-scroll">
                 <x-slot:title>
                     {{ $title }}
                 </x-slot:title>
