@@ -2,37 +2,39 @@
     <div wire:init="loadSection">
         @if ($this->exploreCategoryItems->count())
             <section class="pt-4 pb-8">
-                <x-section-nav class="flex flex-nowrap justify-between mb-5 pt-4 pl-4 pr-4">
-                    <x-slot:title>
-                        @switch($exploreCategory->type)
-                        @case(\App\Enums\ExploreCategoryTypes::ShowsSeason)
-                        @case(\App\Enums\ExploreCategoryTypes::LiteraturesSeason)
-                        @case(\App\Enums\ExploreCategoryTypes::GamesSeason)
-                            {{ season_of_year(today()->addDays(3))->key . ' ' . today()->addDays(3)->year }}
-                        @break
-                        @default
-                            {{ $exploreCategory->title }}
-                        @endswitch
-                    </x-slot:title>
+                <div class="xl:safe-area-inset">
+                    <x-section-nav class="flex flex-nowrap justify-between mb-5 pt-4 pl-4 pr-4">
+                        <x-slot:title>
+                            @switch($exploreCategory->type)
+                            @case(\App\Enums\ExploreCategoryTypes::ShowsSeason)
+                            @case(\App\Enums\ExploreCategoryTypes::LiteraturesSeason)
+                            @case(\App\Enums\ExploreCategoryTypes::GamesSeason)
+                                {{ season_of_year(today()->addDays(3))->key . ' ' . today()->addDays(3)->year }}
+                            @break
+                            @default
+                                {{ $exploreCategory->title }}
+                            @endswitch
+                        </x-slot:title>
 
-                    <x-slot:description>
-                        {{ $exploreCategory->description }}
-                    </x-slot:description>
+                        <x-slot:description>
+                            {{ $exploreCategory->description }}
+                        </x-slot:description>
 
-                    <x-slot:action>
-                        <x-spinner />
+                        <x-slot:action>
+                            <x-spinner />
 
-                        @hasrole('superAdmin')
-                            <x-button wire:click="$refresh">{{ __('Refresh') }}</x-button>
-                        @endhasrole
+                            @hasrole('superAdmin')
+                                <x-button wire:click="$refresh">{{ __('Refresh') }}</x-button>
+                            @endhasrole
 
-                        <x-section-nav-link href="{{ $exploreCategory->secondary_slug ? url($exploreCategory->secondary_slug) : route('explore.details', $exploreCategory) }}">{{ __('See All') }}</x-section-nav-link>
-                    </x-slot:action>
-                </x-section-nav>
+                            <x-section-nav-link href="{{ $exploreCategory->secondary_slug ? url($exploreCategory->secondary_slug) : route('explore.details', $exploreCategory) }}">{{ __('See All') }}</x-section-nav-link>
+                        </x-slot:action>
+                    </x-section-nav>
+                </div>
 
                 @switch($exploreCategory->type)
                     @case(\App\Enums\ExploreCategoryTypes::MostPopularShows)
-                        <div class="flex flex-nowrap gap-4 pl-4 pr-4 snap-mandatory snap-x overflow-x-scroll no-scrollbar">
+                        <div class="flex flex-nowrap gap-4 pl-4 pr-4 snap-mandatory snap-x overflow-x-scroll no-scrollbar xl:safe-area-inset-scroll">
                             @foreach ($this->exploreCategoryItems as $show)
                                 <x-lockups.banner-lockup :anime="$show" />
                             @endforeach
@@ -44,7 +46,7 @@
                         </div>
                     @break
                     @case(\App\Enums\ExploreCategoryTypes::UpcomingShows)
-                        <div class="flex flex-nowrap gap-4 pl-4 pr-4 snap-mandatory snap-x overflow-x-scroll no-scrollbar">
+                        <div class="flex flex-nowrap gap-4 pl-4 pr-4 snap-mandatory snap-x overflow-x-scroll no-scrollbar xl:safe-area-inset-scroll">
                             @foreach ($this->exploreCategoryItems as $shows)
                                 <x-lockups.upcoming-lockup :anime="$shows" />
                             @endforeach
@@ -60,7 +62,7 @@
                     @case(\App\Enums\ExploreCategoryTypes::Shows)
                         @switch($exploreCategory->size)
                             @case(\App\Enums\ExploreCategorySize::Large)
-                                <div class="flex flex-nowrap gap-4 pl-4 pr-4 snap-mandatory snap-x overflow-x-scroll no-scrollbar">
+                                <div class="flex flex-nowrap gap-4 pl-4 pr-4 snap-mandatory snap-x overflow-x-scroll no-scrollbar xl:safe-area-inset-scroll">
                                     @foreach ($this->exploreCategoryItems as $categoryItem)
                                         <x-lockups.large-lockup :anime="$categoryItem->model" />
                                     @endforeach
@@ -70,7 +72,7 @@
                                 <x-rows.small-lockup :animes="$this->exploreCategoryItems" />
                             @break
                             @case(\App\Enums\ExploreCategorySize::Video)
-                                <div class="flex overflow-x-scroll no-scrollbar">
+                                <div class="flex overflow-x-scroll no-scrollbar xl:safe-area-inset">
                                     <div class="flex flex-nowrap gap-4 pl-4 pr-4">
                                         @foreach ($this->exploreCategoryItems as $anime)
                                             <x-lockups.video-lockup :anime="$anime" />
@@ -85,7 +87,7 @@
                         @endswitch
                     @break
                     @case(\App\Enums\ExploreCategoryTypes::UpcomingLiteratures)
-                        <div class="flex flex-nowrap gap-4 pl-4 pr-4 snap-mandatory snap-x overflow-x-scroll no-scrollbar">
+                        <div class="flex flex-nowrap gap-4 pl-4 pr-4 snap-mandatory snap-x overflow-x-scroll no-scrollbar xl:safe-area-inset-scroll">
                             @foreach ($this->exploreCategoryItems as $literature)
                                 <x-lockups.upcoming-lockup :manga="$literature" />
                             @endforeach
@@ -100,7 +102,7 @@
                         <x-rows.small-lockup :mangas="$this->exploreCategoryItems" />
                     @break
                     @case(\App\Enums\ExploreCategoryTypes::UpcomingGames)
-                        <div class="flex flex-nowrap gap-4 pl-4 pr-4 snap-mandatory snap-x overflow-x-scroll no-scrollbar">
+                        <div class="flex flex-nowrap gap-4 pl-4 pr-4 snap-mandatory snap-x overflow-x-scroll no-scrollbar xl:safe-area-inset-scroll">
                             @foreach ($this->exploreCategoryItems as $game)
                                 <x-lockups.upcoming-lockup :game="$game" />
                             @endforeach
@@ -113,14 +115,14 @@
                         <x-rows.small-lockup :games="$this->exploreCategoryItems" />
                     @break
                     @case(\App\Enums\ExploreCategoryTypes::Genres)
-                        <div class="flex flex-nowrap gap-4 pl-4 pr-4 snap-mandatory snap-x overflow-x-scroll no-scrollbar">
+                        <div class="flex flex-nowrap gap-4 pl-4 pr-4 snap-mandatory snap-x overflow-x-scroll no-scrollbar xl:safe-area-inset-scroll">
                             @foreach ($this->exploreCategoryItems as $genre)
                                 <x-lockups.medium-lockup :genre="$genre" />
                             @endforeach
                         </div>
                     @break
                     @case(\App\Enums\ExploreCategoryTypes::Themes)
-                        <div class="flex flex-nowrap gap-4 pl-4 pr-4 snap-mandatory snap-x overflow-x-scroll no-scrollbar">
+                        <div class="flex flex-nowrap gap-4 pl-4 pr-4 snap-mandatory snap-x overflow-x-scroll no-scrollbar xl:safe-area-inset-scroll">
                             @foreach ($this->exploreCategoryItems as $theme)
                                 <x-lockups.medium-lockup :theme="$theme" />
                             @endforeach
@@ -148,7 +150,7 @@
     </div>
 
     @if (!$readyToLoad)
-        <section class="pt-4 pb-8">
+        <section class="pt-4 pb-8 xl:safe-area-inset">
             <div class="pt-4" style="height: 314px">
                 <div class="flex gap-2 justify-between mb-5 pl-4 pr-4">
                     <div>

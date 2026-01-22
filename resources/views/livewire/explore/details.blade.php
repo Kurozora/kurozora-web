@@ -56,7 +56,7 @@
     </x-slot:appArgument>
 
     <div class="pt-4 pb-6" wire:init="loadPage">
-        <section class="mb-4">
+        <section class="mb-4 xl:safe-area-inset">
             <div class="flex gap-1 pl-4 pr-4">
                 <div>
                     <h1 class="text-2xl font-bold">{{ $exploreCategory->title }}</h1>
@@ -70,71 +70,73 @@
         </section>
 
         @if ($this->exploreCategoryItems->count())
-            @switch($exploreCategory->type)
-                @case(\App\Enums\ExploreCategoryTypes::UpNextEpisodes)
-                    <x-rows.episode-lockup :episodes="$this->exploreCategoryItems" :is-row="false" />
-                    @break
-                @case(\App\Enums\ExploreCategoryTypes::MostPopularShows)
-                @case(\App\Enums\ExploreCategoryTypes::UpcomingShows)
-                @case(\App\Enums\ExploreCategoryTypes::NewShows)
-                @case(\App\Enums\ExploreCategoryTypes::RecentlyUpdateShows)
-                @case(\App\Enums\ExploreCategoryTypes::RecentlyFinishedShows)
-                @case(\App\Enums\ExploreCategoryTypes::ContinuingShows)
-                @case(\App\Enums\ExploreCategoryTypes::ShowsSeason)
-                @case(\App\Enums\ExploreCategoryTypes::Shows)
-                    <x-rows.small-lockup :animes="$this->exploreCategoryItems" :is-row="false" />
-                    @break
-                @case(\App\Enums\ExploreCategoryTypes::MostPopularLiteratures)
-                @case(\App\Enums\ExploreCategoryTypes::UpcomingLiteratures)
-                @case(\App\Enums\ExploreCategoryTypes::NewLiteratures)
-                @case(\App\Enums\ExploreCategoryTypes::RecentlyUpdateLiteratures)
-                @case(\App\Enums\ExploreCategoryTypes::RecentlyFinishedLiteratures)
-                @case(\App\Enums\ExploreCategoryTypes::ContinuingLiteratures)
-                @case(\App\Enums\ExploreCategoryTypes::LiteraturesSeason)
-                @case(\App\Enums\ExploreCategoryTypes::Literatures)
-                    <x-rows.small-lockup :mangas="$this->exploreCategoryItems" :is-row="false" />
-                    @break
-                @case(\App\Enums\ExploreCategoryTypes::MostPopularGames)
-                @case(\App\Enums\ExploreCategoryTypes::UpcomingGames)
-                @case(\App\Enums\ExploreCategoryTypes::NewGames)
-                @case(\App\Enums\ExploreCategoryTypes::RecentlyUpdateGames)
-                @case(\App\Enums\ExploreCategoryTypes::GamesSeason)
-                @case(\App\Enums\ExploreCategoryTypes::Games)
-                    <x-rows.small-lockup :games="$this->exploreCategoryItems" :is-row="false" />
-                    @break
-                @case(\App\Enums\ExploreCategoryTypes::Genres)
-                    <section class="{{ $gridClass }}">
-                        @foreach ($this->exploreCategoryItems as $categoryItem)
-                            <x-lockups.genre-lockup :genre="$categoryItem" />
-                        @endforeach
-                    </section>
-                    @break
-                @case(\App\Enums\ExploreCategoryTypes::Themes)
-                    <section class="{{ $gridClass }}">
-                        @foreach ($this->exploreCategoryItems as $categoryItem)
-                            <x-lockups.theme-lockup :theme="$categoryItem" />
-                        @endforeach
-                    </section>
-                    @break
-                @case(\App\Enums\ExploreCategoryTypes::Characters)
-                    <x-rows.character-lockup :characters="$this->exploreCategoryItems" :is-row="false" />
-                    @break
-                @case(\App\Enums\ExploreCategoryTypes::People)
-                    <x-rows.person-lockup :people="$this->exploreCategoryItems" :is-row="false" />
-                    @break
-                @case(\App\Enums\ExploreCategoryTypes::Songs)
-                    <x-rows.music-lockup :media-songs="$this->exploreCategoryItems" :show-episodes="false" :show-model="true" :is-row="false" />
-                    @break
-                @case(\App\Enums\ExploreCategoryTypes::ReCAP)
-                    <x-rows.recap-lockup :recaps="$this->exploreCategoryItems" :is-row="false" />
-                    @break
-                @default
-                    @if (app()->isLocal())
-                        {{ 'Unhandled type: ' . $exploreCategory->type }}
-                    @endif
-            @endswitch
+            <section class="mt-4 xl:safe-area-inset">
+                @switch($exploreCategory->type)
+                    @case(\App\Enums\ExploreCategoryTypes::UpNextEpisodes)
+                        <x-rows.episode-lockup :episodes="$this->exploreCategoryItems" :is-row="false" />
+                        @break
+                    @case(\App\Enums\ExploreCategoryTypes::MostPopularShows)
+                    @case(\App\Enums\ExploreCategoryTypes::UpcomingShows)
+                    @case(\App\Enums\ExploreCategoryTypes::NewShows)
+                    @case(\App\Enums\ExploreCategoryTypes::RecentlyUpdateShows)
+                    @case(\App\Enums\ExploreCategoryTypes::RecentlyFinishedShows)
+                    @case(\App\Enums\ExploreCategoryTypes::ContinuingShows)
+                    @case(\App\Enums\ExploreCategoryTypes::ShowsSeason)
+                    @case(\App\Enums\ExploreCategoryTypes::Shows)
+                        <x-rows.small-lockup :animes="$this->exploreCategoryItems" :is-row="false" />
+                        @break
+                    @case(\App\Enums\ExploreCategoryTypes::MostPopularLiteratures)
+                    @case(\App\Enums\ExploreCategoryTypes::UpcomingLiteratures)
+                    @case(\App\Enums\ExploreCategoryTypes::NewLiteratures)
+                    @case(\App\Enums\ExploreCategoryTypes::RecentlyUpdateLiteratures)
+                    @case(\App\Enums\ExploreCategoryTypes::RecentlyFinishedLiteratures)
+                    @case(\App\Enums\ExploreCategoryTypes::ContinuingLiteratures)
+                    @case(\App\Enums\ExploreCategoryTypes::LiteraturesSeason)
+                    @case(\App\Enums\ExploreCategoryTypes::Literatures)
+                        <x-rows.small-lockup :mangas="$this->exploreCategoryItems" :is-row="false" />
+                        @break
+                    @case(\App\Enums\ExploreCategoryTypes::MostPopularGames)
+                    @case(\App\Enums\ExploreCategoryTypes::UpcomingGames)
+                    @case(\App\Enums\ExploreCategoryTypes::NewGames)
+                    @case(\App\Enums\ExploreCategoryTypes::RecentlyUpdateGames)
+                    @case(\App\Enums\ExploreCategoryTypes::GamesSeason)
+                    @case(\App\Enums\ExploreCategoryTypes::Games)
+                        <x-rows.small-lockup :games="$this->exploreCategoryItems" :is-row="false" />
+                        @break
+                    @case(\App\Enums\ExploreCategoryTypes::Genres)
+                        <section class="{{ $gridClass }}">
+                            @foreach ($this->exploreCategoryItems as $categoryItem)
+                                <x-lockups.genre-lockup :genre="$categoryItem" />
+                            @endforeach
+                        </section>
+                        @break
+                    @case(\App\Enums\ExploreCategoryTypes::Themes)
+                        <section class="{{ $gridClass }}">
+                            @foreach ($this->exploreCategoryItems as $categoryItem)
+                                <x-lockups.theme-lockup :theme="$categoryItem" />
+                            @endforeach
+                        </section>
+                        @break
+                    @case(\App\Enums\ExploreCategoryTypes::Characters)
+                        <x-rows.character-lockup :characters="$this->exploreCategoryItems" :is-row="false" />
+                        @break
+                    @case(\App\Enums\ExploreCategoryTypes::People)
+                        <x-rows.person-lockup :people="$this->exploreCategoryItems" :is-row="false" />
+                        @break
+                    @case(\App\Enums\ExploreCategoryTypes::Songs)
+                        <x-rows.music-lockup :media-songs="$this->exploreCategoryItems" :show-episodes="false" :show-model="true" :is-row="false" />
+                        @break
+                    @case(\App\Enums\ExploreCategoryTypes::ReCAP)
+                        <x-rows.recap-lockup :recaps="$this->exploreCategoryItems" :is-row="false" />
+                        @break
+                    @default
+                        @if (app()->isLocal())
+                            {{ 'Unhandled type: ' . $exploreCategory->type }}
+                        @endif
+                @endswitch
+            </section>
         @else (!$readyToLoad)
-            <section class="mt-4">
+            <section class="mt-4 xl:safe-area-inset">
                 <div class="flex flex-wrap gap-4 justify-between pl-4 pr-4">
                     @foreach (range(1,25) as $range)
                         <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
