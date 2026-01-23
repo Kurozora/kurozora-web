@@ -15,19 +15,21 @@
     </x-slot:meta>
 
     <div class="pt-4 pb-6">
-        <div class="flex flex-nowrap gap-4 justify-between pl-4 pr-4 text-center whitespace-nowrap overflow-x-scroll no-scrollbar">
-            @foreach (\App\Enums\UserLibraryStatus::asMangaSelectArray() as $key => $value)
-                <button
-                    class="pl-4 pr-4 pb-2 border-b hover:border-tint"
-                    :class="{'border-tint': '{{ strtolower($status) }}' === '{{ strtolower($value) }}', 'border-primary': '{{ strtolower($status) }}' !== '{{ strtolower($value) }}'}"
-                    wire:click="$set('status', '{{ strtolower($value) }}')"
-                    data-toggle="tab"
-                >{{ __($value) }}</button>
-            @endforeach
+        <div class="xl:safe-area-inset">
+            <div class="flex flex-nowrap gap-4 justify-between pl-4 pr-4 text-center whitespace-nowrap overflow-x-scroll no-scrollbar">
+                @foreach (\App\Enums\UserLibraryStatus::asMangaSelectArray() as $key => $value)
+                    <button
+                        class="pl-4 pr-4 pb-2 border-b hover:border-tint"
+                        :class="{'border-tint': '{{ strtolower($status) }}' === '{{ strtolower($value) }}', 'border-primary': '{{ strtolower($status) }}' !== '{{ strtolower($value) }}'}"
+                        wire:click="$set('status', '{{ strtolower($value) }}')"
+                        data-toggle="tab"
+                    >{{ __($value) }}</button>
+                @endforeach
+            </div>
         </div>
 
         <div class="mt-8" wire:init="loadPage">
-            <section>
+            <section class="xl:safe-area-inset">
                 <x-search-bar>
                     <x-slot:rightBarButtonItems>
                         <x-square-button wire:click="randomManga">
@@ -39,7 +41,7 @@
 
             @if (!empty($this->searchResults))
                 @if (!empty($this->searchResults->total()))
-                    <section class="mt-4" wire:key="not-empty-{{ strtolower($status) }}">
+                    <section class="mt-4 xl:safe-area-inset" wire:key="not-empty-{{ strtolower($status) }}">
                         <x-rows.small-lockup :mangas="$this->searchResults" :is-row="false" />
 
                         <div class="mt-4 pl-4 pr-4">
@@ -47,7 +49,7 @@
                         </div>
                     </section>
                 @else
-                    <section class="flex flex-col items-center justify-center mt-4 text-center" wire:key="empty-{{ strtolower($status) }}" style="min-height: 50vh;">
+                    <section class="flex flex-col items-center justify-center mt-4 text-center xl:safe-area-inset" wire:key="empty-{{ strtolower($status) }}" style="min-height: 50vh;">
                         <x-picture>
                             <img class="w-full max-w-sm" src="{{ asset('images/static/placeholders/empty_manga_library.webp') }}" alt="Empty Library" title="Empty Library">
                         </x-picture>
@@ -58,7 +60,7 @@
                     </section>
                 @endif
             @elseif (!$readyToLoad)
-                <section class="mt-4 pb-8">
+                <section class="mt-4 pb-8 xl:safe-area-inset">
                     <div class="flex flex-wrap gap-4 justify-between pt-4 pl-4 pr-4">
                         <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
                         <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
