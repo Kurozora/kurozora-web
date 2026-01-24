@@ -28,9 +28,9 @@
     @if ($this->recapYears->count())
         <header
             id="header"
-            class="sticky top-0 z-10"
+            class="sticky top-0 z-10 xl:safe-area-inset"
         >
-            <div class="relative flex flex-row items-center justify-between max-w-7xl mx-auto py-6">
+            <div class="relative flex flex-row items-center justify-between mx-auto py-6">
                 <div class="flex items-center justify-between gap-2 pl-4">
                     {{-- Hamburger --}}
                     <div
@@ -99,7 +99,7 @@
             >
                 <div class="absolute top-0 left-0 bottom-0 right-0 blur backdrop-blur" style="z-index: -1;"></div>
 
-                <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 h-screen">
+                <div class="mx-auto pl-4 pr-4 py-6 h-screen">
                     <ul class="m-0 mb-4">
                         <li class="pb-10">
                             <p class="text-2xl text-white font-semibold">{{ __('Select a year to see your recap') }}</p>
@@ -132,7 +132,7 @@
             </div>
         </header>
 
-        <div class="max-w-7xl mx-auto">
+        <div class="mx-auto xl:safe-area-inset">
             <div
                 x-data="{
                     month: @entangle('month').live
@@ -182,7 +182,7 @@
     @endif
 
     <div
-        class="max-w-7xl mx-auto mb-8 pb-6 text-white"
+        class="mx-auto mb-8 pb-6 text-white xl:safe-area-inset"
         x-show="!loadingScreenEnabled"
     >
         <div class="fixed top-0 left-0 bottom-0 right-0 blur" style="background: url('{{ asset('images/static/star_bg_lg.jpg') }}') no-repeat center center; background-size: cover; transform: scale(1.1); z-index: -1;"></div>
@@ -222,7 +222,7 @@
                                                 <p class="opacity-75 font-semibold md:text-2xl">{{ __(':x total series', ['x' => $recap->total_series_count]) }}</p>
                                             </div>
 
-                                            <x-rows.small-lockup :animes="$recap->recapItems->pluck('model')" :tracking-enabled="false" :is-ranked="true" />
+                                            <x-rows.small-lockup :animes="$recap->recapItems->pluck('model')" :tracking-enabled="false" :is-ranked="true" :safe-area-inset-enabled="false" />
                                         </div>
                                     </div>
                                 </section>
@@ -241,7 +241,7 @@
                                                 <p class="opacity-75 font-semibold md:text-2xl">{{ __(':x total series', ['x' => $recap->total_series_count]) }}</p>
                                             </div>
 
-                                            <x-rows.small-lockup :mangas="$recap->recapItems->pluck('model')" :tracking-enabled="false" :is-ranked="true" />
+                                            <x-rows.small-lockup :mangas="$recap->recapItems->pluck('model')" :tracking-enabled="false" :is-ranked="true" :safe-area-inset-enabled="false" />
                                         </div>
                                     </div>
                                 </section>
@@ -260,7 +260,7 @@
                                                 <p class="opacity-75 font-semibold md:text-2xl">{{ __(':x total series', ['x' => $recap->total_series_count]) }}</p>
                                             </div>
 
-                                            <x-rows.small-lockup :games="$recap->recapItems->pluck('model')" :tracking-enabled="false" :is-ranked="true" />
+                                            <x-rows.small-lockup :games="$recap->recapItems->pluck('model')" :tracking-enabled="false" :is-ranked="true" :safe-area-inset-enabled="false" />
                                         </div>
                                     </div>
                                 </section>
@@ -457,13 +457,13 @@
     </div>
 
     <div
-        class="absolute top-0 bottom-0 left-0 right-0 max-w-7xl mx-auto mb-8 pl-5 pr-5 pb-6 text-white z-10"
+        class="absolute top-0 bottom-0 left-0 right-0 mx-auto mb-8 pl-5 pr-5 pb-6 text-white z-10"
         x-show="loadingScreenEnabled"
     >
         <div class="fixed top-0 left-0 bottom-0 right-0 blur" style="background: url('{{ asset('images/static/star_bg_lg.jpg') }}') no-repeat center center; background-size: cover; transform: scale(1.1); z-index: -1;"></div>
         <div class="fixed top-0 left-0 bottom-0 right-0 blur backdrop-blur" style="z-index: -1;"></div>
 
-        <div class="flex flex-col items-center justify-center w-full h-screen text-center">
+        <div class="flex flex-col items-center justify-center w-full h-screen text-center xl:safe-area-inset">
             <p class="animate-pulse text-5xl font-black">{{ __('This is your Re:CAP.') }}</p>
         </div>
     </div>

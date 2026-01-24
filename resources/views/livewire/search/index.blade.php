@@ -38,7 +38,7 @@
     </x-slot:appArgument>
 
     <div class="pt-4 pb-6" wire:init="loadPage">
-        <section class="mb-4">
+        <section class="mb-4 xl:safe-area-inset">
             <div class="flex gap-1 pl-4 pr-4">
                 <div class="flex flex-wrap items-center w-full">
                     <h1 class="text-2xl font-bold">{{ __('Search') }}</h1>
@@ -64,7 +64,7 @@
         </section>
 
         @if (empty($this->searchResults) || empty($this->searchResults->total()))
-            <section class="mt-4">
+            <section class="mt-4 xl:safe-area-inset">
                 <ul class="flex flex-col gap-4 items-center justify-center mr-4" style="min-height: 50vh;">
                     @foreach ($this->searchSuggestions as $searchSuggestion)
                         <li>
@@ -76,7 +76,7 @@
                 </ul>
             </section>
         @else
-            <section class="mt-4">
+            <section class="mt-4 xl:safe-area-inset">
                 @switch($this->internalType)
                     @case(\App\Enums\SearchType::Shows)
                         <x-rows.small-lockup :animes="$this->searchResults" :is-row="false"/>
@@ -106,10 +106,10 @@
                         <x-rows.user-lockup :users="$this->searchResults" :is-row="false"/>
                         @break
                 @endswitch
-            </section>
 
-            <section class="mt-4 pl-4 pr-4">
-                {{ $this->searchResults->links() }}
+                <div class="mt-4 pl-4 pr-4">
+                    {{ $this->searchResults->links() }}
+                </div>
             </section>
         @endif
     </div>

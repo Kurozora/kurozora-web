@@ -16,7 +16,7 @@
     </x-slot:meta>
 
     <div
-        class="pt-4 pb-6"
+        class="pt-4 pb-6 xl:safe-area-inset"
         x-data="{
             selectedDate: null
         }"
