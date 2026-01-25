@@ -15,7 +15,7 @@ class GenerateStudioBanner extends Command
      * @var string
      */
     protected $signature = 'generate:studio_banner 
-                            {studioID? : The id of the studio. Accepts an array of comma seperated IDs}
+                            {studioID? : The id of the studio. Accepts an array of comma separated IDs}
                             {--f|force : Force generating banner evn if it already exists}';
 
     /**

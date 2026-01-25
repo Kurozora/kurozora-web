@@ -15,7 +15,7 @@ class Episode extends Command
      *
      * @var string
      */
-    protected $signature = 'scrape:tvdb_episode {tvdbID? : The id of the anime. Accepts an array of comma seperated IDs}';
+    protected $signature = 'scrape:tvdb_episode {tvdbID? : The id of the anime. Accepts an array of comma separated IDs}';
 
     /**
      * The console command description.

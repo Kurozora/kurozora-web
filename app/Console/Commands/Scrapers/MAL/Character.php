@@ -14,7 +14,7 @@ class Character extends Command
      *
      * @var string
      */
-    protected $signature = 'scrape:mal_character {malID? : The id of the character. Accepts an array of comma seperated IDs}';
+    protected $signature = 'scrape:mal_character {malID? : The id of the character. Accepts an array of comma separated IDs}';
 
     /**
      * The console command description.

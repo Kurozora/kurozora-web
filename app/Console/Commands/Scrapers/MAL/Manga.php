@@ -14,7 +14,7 @@ class Manga extends Command
      *
      * @var string
      */
-    protected $signature = 'scrape:mal_manga {malID? : The id of the manga. Accepts an array of comma seperated IDs}';
+    protected $signature = 'scrape:mal_manga {malID? : The id of the manga. Accepts an array of comma separated IDs}';
 
     /**
      * The console command description.

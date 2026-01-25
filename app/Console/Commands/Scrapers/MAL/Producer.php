@@ -14,7 +14,7 @@ class Producer extends Command
      *
      * @var string
      */
-    protected $signature = 'scrape:mal_producer {malID? : The id of the producer. Accepts an array of comma seperated IDs}';
+    protected $signature = 'scrape:mal_producer {malID? : The id of the producer. Accepts an array of comma separated IDs}';
 
     /**
      * The console command description.

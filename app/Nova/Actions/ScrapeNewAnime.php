@@ -56,7 +56,7 @@ class ScrapeNewAnime extends Action implements ShouldQueue
         return [
             Text::make('MAL ID', 'malID')
                 ->required()
-                ->help('The id of the anime. Accepts an array of comma seperated IDs.'),
+                ->help('The id of the anime. Accepts an array of comma separated IDs.'),
         ];
     }
 }

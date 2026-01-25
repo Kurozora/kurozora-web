@@ -56,7 +56,7 @@ class ScrapeNewManga extends Action implements ShouldQueue
         return [
             Text::make('MAL ID', 'malID')
                 ->required()
-                ->help('The id of the manga. Accepts an array of comma seperated IDs.'),
+                ->help('The id of the manga. Accepts an array of comma separated IDs.'),
         ];
     }
 }

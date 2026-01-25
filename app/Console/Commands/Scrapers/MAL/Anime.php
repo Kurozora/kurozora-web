@@ -15,7 +15,7 @@ class Anime extends Command
      * @var string
      */
     protected $signature = 'scrape:mal_anime 
-                            {malID? : The id of the anime. Accepts an array of comma seperated IDs}';
+                            {malID? : The id of the anime. Accepts an array of comma separated IDs}';
 
     /**
      * The console command description.
