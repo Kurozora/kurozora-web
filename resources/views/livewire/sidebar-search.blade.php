@@ -112,35 +112,33 @@
                 <div class="mt-4">
                     @switch($searchResult['type'])
                         @case(\App\Models\Anime::TABLE_NAME)
-                            <x-rows.small-lockup :animes="$searchResult['results']" />
+                            <x-rows.small-lockup :animes="$searchResult['results']" :safe-area-inset-enabled="false" />
                             @break
                         @case(\App\Models\Manga::TABLE_NAME)
-                            <x-rows.small-lockup :mangas="$searchResult['results']" />
+                            <x-rows.small-lockup :mangas="$searchResult['results']" :safe-area-inset-enabled="false" />
                             @break
                         @case(\App\Models\Game::TABLE_NAME)
-                            <x-rows.small-lockup :games="$searchResult['results']" />
+                            <x-rows.small-lockup :games="$searchResult['results']" :safe-area-inset-enabled="false" />
                             @break
                         @case(\App\Models\Episode::TABLE_NAME)
-                            <x-rows.episode-lockup :episodes="$searchResult['results']" />
+                            <x-rows.episode-lockup :episodes="$searchResult['results']" :safe-area-inset-enabled="false" />
                             @break
                         @case(\App\Models\Character::TABLE_NAME)
-                            <x-rows.character-lockup :characters="$searchResult['results']" />
+                            <x-rows.character-lockup :characters="$searchResult['results']" :safe-area-inset-enabled="false" />
                             @break
                         @case(\App\Models\Person::TABLE_NAME)
-                            <x-rows.person-lockup :people="$searchResult['results']" />
+                            <x-rows.person-lockup :people="$searchResult['results']" :safe-area-inset-enabled="false" />
                             @break
                         @case(\App\Models\Studio::TABLE_NAME)
-                            <x-rows.studio-lockup :studios="$searchResult['results']" />
-                            @break
-                        @case(\App\Models\User::TABLE_NAME)
-                            <x-rows.user-lockup :users="$searchResult['results']" />
+                            <x-rows.studio-lockup :studios="$searchResult['results']" :safe-area-inset-enabled="false" />
                             @break
                         @case(\App\Models\Song::TABLE_NAME)
-                            <x-rows.music-lockup :songs="$searchResult['results']" />
+                            <x-rows.music-lockup :songs="$searchResult['results']" :safe-area-inset-enabled="false" />
+                            @break
+                        @case(\App\Models\User::TABLE_NAME)
+                            <x-rows.user-lockup :users="$searchResult['results']" :safe-area-inset-enabled="false" />
                             @break
                     @endswitch
-
-                    <x-hr class="mt-4 mb-4 ml-4 mr-4" />
                 </div>
             @endforeach
         @endif
