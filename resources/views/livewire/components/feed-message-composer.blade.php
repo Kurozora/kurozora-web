@@ -4,7 +4,7 @@
         content: @entangle('content').defer
     })"
     x-init="init()"
-    class="space-y-3"
+    class="space-y-4"
     x-on:keydown="handleShortcuts($event)"
 >
     <div

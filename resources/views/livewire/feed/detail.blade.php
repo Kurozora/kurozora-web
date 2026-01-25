@@ -26,7 +26,7 @@
         <script src="{{ url(mix('js/watch.js')) }}"></script>
     </x-slot:scripts>
 
-    <div class="pb-6" wire:init="loadPage">
+    <div class="pb-6 xl:safe-area-inset" wire:init="loadPage">
         <section class="sticky top-0 pt-4 pb-4 backdrop-blur bg-blur z-10" wire:ignore>
             <div class="flex gap-1 pl-4 pr-4">
                 <div class="flex flex-wrap gap-4 items-center w-full">

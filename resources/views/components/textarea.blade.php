@@ -7,7 +7,7 @@
     };
 
     $class = $readonly
-            ? 'form-text w-full max-h-40 bg-secondary border-none outline-none resize-none shadow-none overflow-hidden focus:ring-0'
+            ? 'form-text w-full max-h-40 bg-secondary border-0 outline-none resize-none shadow-none overflow-hidden focus:ring-0'
             : 'form-text w-full max-h-40 bg-secondary border-primary ' . $rounded . ' shadow-sm focus:border-tint focus:ring-tint';
 @endphp
 

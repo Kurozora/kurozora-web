@@ -30,7 +30,7 @@
         feed
     </x-slot:appArgument>
 
-    <div class="pb-6" wire:init="loadPage">
+    <div class="pb-6 xl:safe-area-inset" wire:init="loadPage">
         <section class="sticky top-0 pt-4 pb-4 backdrop-blur bg-blur z-10">
             <div class="flex gap-1 pl-4 pr-4">
                 <div class="flex flex-wrap items-center w-full">
@@ -44,9 +44,7 @@
                 </div>
             </div>
 
-            <div>
-
-            </div>
+            <div></div>
         </section>
 
         <section class="flex flex-row gap-2 mt-4 pl-4 pr-4">

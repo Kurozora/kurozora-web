@@ -178,7 +178,7 @@
                     <form class="flex space-x-2" @submit.stop.prevent="sendMessage()">
                         <textarea
                             id="messageBox"
-                            class="form-text w-full bg-secondary text-primary rounded-3xl border-none outline-none shadow-sm resize-none placeholder:text-secondary hover:resize-y focus:ring-0"
+                            class="form-text w-full bg-secondary text-primary rounded-3xl border-0 outline-none shadow-sm resize-none placeholder:text-secondary hover:resize-y focus:ring-0"
                             style="min-height: 44px;"
                             placeholder="{{ __('Write a message') }}"
                             rows="1"
@@ -340,7 +340,7 @@
                     <form class="flex space-x-2" @submit.stop.prevent="sendMessage()">
                         <textarea
                             id="messageBox"
-                            class="form-text w-full bg-secondary text-primary rounded-3xl border-none outline-none shadow-sm resize-none placeholder:text-secondary hover:resize-y focus:ring-0"
+                            class="form-text w-full bg-secondary text-primary rounded-3xl border-0 outline-none shadow-sm resize-none placeholder:text-secondary hover:resize-y focus:ring-0"
                             style="min-height: 44px;"
                             placeholder="{{ __('Write a message') }}"
                             rows="1"
