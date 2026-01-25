@@ -20,7 +20,7 @@
     </x-slot:appArgument>
 
     <div class="pt-4 pb-6" wire:init="loadPage">
-        <section class="mb-4">
+        <section class="mb-4 xl:safe-area-inset">
             <div>
                 <div class="flex gap-1 pl-4 pr-4">
                     <div class="flex flex-wrap items-center w-full">
@@ -34,7 +34,7 @@
         </section>
 
         @if ($this->episodes->count())
-            <section id="up-next" class="mb-16">
+            <section id="up-next" class="mb-16 xl:safe-area-inset">
                 <x-rows.episode-lockup :episodes="$this->episodes" :is-row="false" />
 
                 <div class="mt-4 pl-4 pr-4">
@@ -42,7 +42,7 @@
                 </div>
             </section>
         @elseif (!$readyToLoad)
-            <section id="up-next-skeleton" class="mb-16">
+            <section id="up-next-skeleton" class="mb-16 xl:safe-area-inset">
                 <div class="flex flex-wrap gap-4 justify-between pl-4 pr-4">
                     @foreach (range(1,25) as $range)
                         <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
@@ -52,7 +52,7 @@
                 </div>
             </section>
         @else
-            <section id="up-next-empty" class="mb-16">
+            <section id="up-next-empty" class="mb-16 xl:safe-area-inset">
                 <div class="flex flex-col items-center justify-center mt-4 text-center">
                     <x-picture>
                         <img class="w-full max-w-sm" src="{{ asset('images/static/placeholders/empty_anime_library.webp') }}" alt="Empty Up-Next" title="Empty Up-Next">
