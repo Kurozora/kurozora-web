@@ -23,9 +23,22 @@ class PreventRequestsDuringMaintenance extends Middleware
     public function getExcludedPaths(): array
     {
         return array_merge(parent::getExcludedPaths(), [
-            route('.well-known.apple-app-site-association'),
-            route('api.info'),
-            route('misc.health-check'),
+            '*/forgot-password*',
+            '*/email*',
+            '*/reset-password*',
+            '*/two-factor-challenge*',
+            '*/user/two-factor-authentication*',
+            '*/user/confirmed-two-factor-authentication*',
+            '*/user/two-factor-authentication*',
+            '*/user/two-factor-qr-code*',
+            '*/user/two-factor-secret-key*',
+            '*/user/two-factor-recovery-codes*',
+            '*/v1*',
+            route('.well-known.apple-app-site-association', [] , false),
+            route('api.info', [] , false),
+            route('misc.health-check', [] , false),
+            route('liap.serverNotifications', [] , false),
+            '*/liap*',
         ]);
     }
 }
