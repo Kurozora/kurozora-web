@@ -20,7 +20,7 @@
     </x-slot:appArgument>
 
     <div class="pt-4 pb-6" wire:init="loadPage">
-        <section class="mb-4">
+        <section class="mb-4 xl:safe-area-inset">
             <div>
                 <div class="flex gap-1 pl-4 pr-4">
                     <div class="flex flex-wrap items-center w-full">
@@ -37,7 +37,7 @@
         </section>
 
         @if (!$this->isSearching())
-            <section id="default" class="mb-4">
+            <section id="default" class="mb-4 xl:safe-area-inset">
                 <div class="pl-4 pr-4">
                     <h2 class="text-lg font-bold">{{ __('Default') }}</h2>
                 </div>
@@ -60,7 +60,7 @@
             </section>
         @endif
 
-        <section id="premium" class="{{ !$this->isSearching() ? 'pt-4' : '' }}">
+        <section id="premium" class="{{ !$this->isSearching() ? 'pt-4 xl:safe-area-inset' : 'xl:safe-area-inset' }}">
             <div class="pt-4 pl-4 pr-4">
                 <h2 class="text-lg font-bold">{{ __('Premium') }}</h2>
             </div>
@@ -81,7 +81,7 @@
                     {{ $this->searchResults->links() }}
                 </div>
             @elseif (!$readyToLoad)
-                <section id="skeleton" class="mt-4">
+                <div id="skeleton" class="mt-4">
                     <div class="flex flex-wrap gap-4 justify-between pl-4 pr-4">
                         @foreach (range(1,25) as $range)
                             <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
@@ -90,9 +90,9 @@
                         <div class="w-64 md:w-80 flex-grow"></div>
                         <div class="w-64 md:w-80 flex-grow"></div>
                     </div>
-                </section>
+                </div>
             @else
-                <section class="flex flex-col items-center justify-center mt-4 text-center" style="min-height: 50vh;">
+                <div class="flex flex-col items-center justify-center mt-4 text-center" style="min-height: 50vh;">
                     <x-picture>
                         <img class="w-full max-w-sm" src="{{ asset('images/static/placeholders/empty_anime_library.webp') }}" alt="Empty Theme Store" title="Empty Theme Store">
                     </x-picture>
@@ -100,7 +100,7 @@
                     <p class="font-bold">{{ __('Themes Not Found') }}</p>
 
                     <p class="text-sm text-secondary">{{ __('No themes found with the selected criteria.') }}</p>
-                </section>
+                </div>
             @endif
         </section>
     </div>

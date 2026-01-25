@@ -20,7 +20,7 @@
     </x-slot:appArgument>
 
     <div class="pt-4 pb-6">
-        <section class="mb-4">
+        <section class="mb-4 xl:safe-area-inset">
             <div>
                 <div class="flex gap-1 pl-4 pr-4">
                     <div class="flex flex-wrap items-center w-full">
@@ -36,7 +36,7 @@
         <div class="space-y-4">
             @if ($this->searchResults->count())
                 @foreach($this->searchResults as $categoryName => $appIcons)
-                    <section id="{{ str($categoryName)->slug() }}" class="space-y-4">
+                    <section id="{{ str($categoryName)->slug() }}" class="space-y-4 xl:safe-area-inset">
                         <div class="pl-4 pr-4">
                             <h2 class="text-lg font-bold uppercase">{{ __($categoryName) }}</h2>
                         </div>
@@ -65,7 +65,7 @@
                     </section>
                 @endforeach
             @else
-                <section class="flex flex-col items-center justify-center mt-4 text-center" style="min-height: 50vh;">
+                <section class="flex flex-col items-center justify-center mt-4 text-center xl:safe-area-inset" style="min-height: 50vh;">
                     <x-picture>
                         <img class="w-full max-w-sm" src="{{ asset('images/static/placeholders/empty_anime_library.webp') }}" alt="Empty App Icon" title="Empty App Icon">
                     </x-picture>
