@@ -2,6 +2,7 @@
 
 namespace App\Traits\Livewire;
 
+use App\Models\Character;
 use App\Models\Episode;
 use App\Models\UserLibrary;
 use Carbon\Carbon;
@@ -268,7 +269,7 @@ trait WithSearch
                     $query->where($this->typeColumn(), '=', $this->typeValue);
                 })
                 ->when(!empty($this->letter), function (EloquentBuilder $query) {
-                    if (static::$searchModel === Episode::class) {
+                    if (static::$searchModel === Episode::class || static::$searchModel === Character::class) {
                         $query->whereRelation('translations', function ($query) {
                             $query->where('locale', '=', 'en');
 
