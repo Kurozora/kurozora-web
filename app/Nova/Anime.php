@@ -5,6 +5,7 @@ namespace App\Nova;
 use App\Enums\DayOfWeek;
 use App\Enums\MediaCollection;
 use App\Enums\SeasonOfYear;
+use App\Nova\Actions\BulkUpdateAnime;
 use App\Nova\Actions\FixAnimeAiringSeason;
 use App\Nova\Actions\ScrapeAnime;
 use App\Nova\Actions\ScrapeAnimeBanner;
@@ -481,6 +482,12 @@ class Anime extends Resource
     public function actions(NovaRequest $request): array
     {
         return [
+            BulkUpdateAnime::make($request)
+                ->canSee(function ($request) {
+                    return $request->user()->can('updateAnime');
+                })
+                ->confirmText('Are you sure you want to bulk update the selected anime?')
+                ->confirmButtonText('Update'),
             ScrapeNewAnime::make()
                 ->canSee(function ($request) {
                     return $request->user()->can('createAnime');
