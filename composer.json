@@ -22,7 +22,7 @@
         }
     ],
     "require": {
-        "php": "^8.3",
+        "php": "^8.4",
         "ext-curl": "*",
         "ext-dom": "*",
         "ext-gd": "*",
@@ -32,7 +32,7 @@
         "ext-pdo": "*",
         "ext-simplexml": "*",
         "abbasudo/pulse-users": "^1.0",
-        "astrotomic/laravel-translatable": "dev-l12-compatibility",
+        "astrotomic/laravel-translatable": "^11.0",
         "aws/aws-sdk-php": "^3.198",
         "bacon/bacon-qr-code": "^3.0",
         "bensampo/laravel-enum": "^6.0",
@@ -62,7 +62,7 @@
         "laravel/tinker": "^2.10",
         "league/flysystem-aws-s3-v3": "^3.0",
         "livewire/livewire": "^3.0",
-        "lukeraymonddowning/honey": "dev-l12-compatibility",
+        "lukeraymonddowning/honey": "^1.0",
         "marvinlabs/laravel-discord-logger": "^1.0.0",
         "meilisearch/meilisearch-php": "^1.0",
         "musa11971/php-jwt-decoder": "dev-php-7.4-and-8.0-support",
@@ -76,7 +76,7 @@
         "spatie/icalendar-generator": "^2.3",
         "spatie/laravel-activitylog": "^4.4",
         "spatie/laravel-medialibrary": "^11.0",
-        "spatie/laravel-permission": "^6.0",
+        "spatie/laravel-permission": "^7.0",
         "spatie/laravel-sitemap": "^7.0",
         "spatie/laravel-sluggable": "^3.0",
         "staudenmeir/eloquent-json-relations": "^1.14",
@@ -122,18 +122,6 @@
         {
             "type": "git",
             "url": "https://github.com/W2nn3ss/nova-color-field"
-        },
-        {
-            "type": "git",
-            "url": "https://github.com/laravel-shift/advanced-nova-media-library"
-        },
-        {
-            "type": "git",
-            "url": "https://github.com/laravel-shift/honey"
-        },
-        {
-            "type": "git",
-            "url": "https://github.com/laravel-shift/laravel-translatable"
         }
     ],
     "autoload": {
@@ -192,7 +180,7 @@
     "config": {
         "optimize-autoloader": true,
         "platform": {
-            "php": "8.3"
+            "php": "8.4"
         },
         "preferred-install": "dist",
         "sort-packages": true,
