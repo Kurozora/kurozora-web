@@ -160,11 +160,11 @@ picture::before {
    * Sidebar utilities
    */
   .safe-area-inset:not(.no-safe-area) {
-    @apply pl-[var(--sidebar-width)];
+    padding-left: var(--sidebar-width);
   }
 
   .safe-area-inset-scroll:not(.no-safe-area) {
-    @apply pl-[calc(var(--sidebar-width) + var(--sidebar-gutter))];
+    padding-left: calc(var(--sidebar-width) + var(--sidebar-gutter));
   }
 
   /**
