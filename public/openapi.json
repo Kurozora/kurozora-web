@@ -3112,7 +3112,7 @@
         ],
         "operationId": "getFeedExplore",
         "summary": "(optional authentication) Explore feed posts.",
-        "description": "This endpoint will retrieve the an unpersonalised feed.",
+        "description": "This endpoint will retrieve the an unpersonalized feed.",
         "parameters": [
           {
             "in": "query",

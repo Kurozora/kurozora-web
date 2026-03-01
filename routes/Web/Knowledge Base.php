@@ -2,7 +2,7 @@
 
 use App\Livewire\KnowledgeBase\GeneratingDeveloperTokens;
 use App\Livewire\KnowledgeBase\InAppPurchases;
-use App\Livewire\KnowledgeBase\Personalisation;
+use App\Livewire\KnowledgeBase\Personalization;
 
 Route::prefix('/kb')
     ->name('kb')
@@ -13,6 +13,6 @@ Route::prefix('/kb')
         Route::get('/iap', InAppPurchases::class)
             ->name('.iap');
 
-        Route::get('/personalisation', Personalisation::class)
-            ->name('.personalisation');
+        Route::get('/personalization', Personalization::class)
+            ->name('.personalization');
     });

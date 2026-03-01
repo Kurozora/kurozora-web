@@ -16,12 +16,12 @@
 
     <div class="pt-4 pb-6 max-w-full prose prose-theme lg:prose-lg">
         <x-picture class="mb-8 ml-4 mr-4 not-prose">
-            <img class="h-32 w-full object-cover object-center rounded-lg shadow-lg sm:h-60" src="{{ asset('images/static/banners/in-app_purchases.webp') }}"  alt="About Personalisation" />
+            <img class="h-32 w-full object-cover object-center rounded-lg shadow-lg sm:h-60" src="{{ asset('images/static/banners/in-app_purchases.webp') }}"  alt="In-App Purchases" />
         </x-picture>
 
         {{-- Header --}}
         <section class="xl:safe-area-inset">
-            <div class="pr-4 pl-4 ">
+            <div class="pr-4 pl-4">
                 <h1 class="text-2xl font-bold">{{ __('About In-App Purchases') }}</h1>
 
                 <p>{{ __(':x is free to download and use. However, some supplemental features can be unlocked using in-app purchases. The cost depends on which offer you choose. You can find in-app purchases in the settings of the :x app.', ['x' => config('app.name')]) }}</p>
@@ -32,7 +32,7 @@
 
         {{-- Types of IAP --}}
         <section id="what-types-of-in-app-purchases-can-you-make" class="xl:safe-area-inset">
-            <div class="pr-4 pl-4 ">
+            <div class="pr-4 pl-4">
                 <h2 class="text-xl font-bold">
                     <a href="#what-types-of-in-app-purchases-can-you-make">{{ __('What types of in-app purchases can you make?') }}</a>
                 </h2>
@@ -61,7 +61,7 @@
 
         {{-- Manage your subscriptions --}}
         <section id="manage-your-subscriptions" class="xl:safe-area-inset">
-            <div class="pr-4 pl-4 ">
+            <div class="pr-4 pl-4">
                 <h2 class="text-xl font-bold">
                     <a href="#manage-your-subscriptions">{{ __('Manage your subscriptions') }}</a>
                 </h2>
@@ -82,7 +82,7 @@
 
         {{-- Subscriptions and privacy --}}
         <section id="subscriptions-and-privacy" class="xl:safe-area-inset">
-            <div class="pr-4 pl-4 ">
+            <div class="pr-4 pl-4">
                 <h2 class="text-xl font-bold">
                     <a href="#subscriptions-and-privacy">{{ __('About subscriptions and privacy') }}</a>
                 </h2>

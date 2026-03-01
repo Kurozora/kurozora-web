@@ -7,7 +7,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
 
-class Personalisation extends Component
+class Personalization extends Component
 {
     /**
      * Render the component.
@@ -16,6 +16,6 @@ class Personalisation extends Component
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.knowledge-base.personalisation');
+        return view('livewire.knowledge-base.personalization');
     }
 }

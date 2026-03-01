@@ -179,8 +179,8 @@ class BaseSearch extends Component
                     'link' => route('kb.iap'),
                 ],
                 [
-                    'title' => __('About Personalisation'),
-                    'link' => route('kb.personalisation'),
+                    'title' => __('About Personalization'),
+                    'link' => route('kb.personalization'),
                 ],
                 [
                     'title' => __('Welcome to Kurozora'),
