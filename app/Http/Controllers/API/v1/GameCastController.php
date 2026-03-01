@@ -44,10 +44,10 @@ class GameCastController extends Controller
         $cast = GameCast::whereIn('id', $data['ids'])
             ->with([
                 'person' => function ($query) {
-                    $query->with(['media']);
+                    $query->with(['media', 'mediaStat', 'mediaRatings']);
                 },
                 'character' => function ($query) {
-                    $query->with(['media', 'translation']);
+                    $query->with(['media', 'translation', 'mediaStat', 'mediaRatings']);
                 },
                 'castRole',
                 'language'
@@ -70,10 +70,10 @@ class GameCastController extends Controller
     {
         $cast->load([
             'person' => function ($query) {
-                $query->with(['media']);
+                $query->with(['media', 'mediaStat', 'mediaRatings']);
             },
             'character' => function ($query) {
-                $query->with(['media', 'translation']);
+                $query->with(['media', 'translation', 'mediaStat', 'mediaRatings']);
             },
             'castRole',
             'language'
