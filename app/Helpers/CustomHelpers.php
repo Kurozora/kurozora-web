@@ -61,6 +61,11 @@ if (!function_exists('number_shorten')) {
      */
     function number_shorten(int|float $number, int $precision = 3, bool $abbreviated = false): string
     {
+        if ($number == 0) {
+            return '0';
+        }
+
+
         if ($abbreviated) {
             $suffixes = ['', 'K', 'M', 'B', 'T', 'Qa', 'Qi', 'Sx', 'Sp', 'Oc', 'No', 'Dc', 'Ud', 'Dd', 'Td', 'Qat', 'Qid', 'Sxd', 'Spd', 'Ocd', 'Nod', 'Vg', 'Uvg'];
         } else {
