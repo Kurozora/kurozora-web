@@ -135,15 +135,7 @@ class Episode extends KModel implements HasMedia, Sitemapable
         parent::boot();
 
         $creationCallback = function (Episode $episode) {
-            if (empty($episode->tv_rating_id)) {
-                $episode->tv_rating_id = $episode->anime()->withoutGlobalScopes()->first()->tv_rating_id;
-            }
-
-            if (empty($episode->is_nsfw)) {
-                $episode->is_nsfw = $episode->anime()->withoutGlobalScopes()->first()->is_nsfw;
-            }
-
-            if (!empty($episode->started)) {
+            if (!empty($episode->started_at)) {
                 if (!empty($episode->duration) && empty($episode->ended_at)) {
                     $episode->ended_at = $episode->started_at->addSeconds($episode->duration);
                 } else if (empty($episode->duration) && !empty($episode->ended_at)) {

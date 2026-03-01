@@ -21,16 +21,20 @@ class AnimeTVRatingPropagator
      */
     public static function handle(Anime $anime): void
     {
-        if (!$anime->wasChanged('tv_rating_id')) {
+        if (!$anime->wasChanged('tv_rating_id') && !$anime->wasChanged('is_nsfw')) {
             return;
         }
 
         $newRatingID = $anime->tv_rating_id;
+        $newIsNSFW = $anime->is_nsfw;
 
-        DB::transaction(function () use ($anime, $newRatingID) {
+        DB::transaction(function () use ($anime, $newRatingID, $newIsNSFW) {
             // Update seasons
             Season::where('anime_id', $anime->id)
-                ->update(['tv_rating_id' => $newRatingID]);
+                ->update([
+                    'tv_rating_id' => $newRatingID,
+                    'is_nsfw' => $newIsNSFW,
+                ]);
 
             // Update episodes
             Episode::whereIn('season_id', function ($query) use ($anime) {
@@ -38,16 +42,18 @@ class AnimeTVRatingPropagator
                     ->from('seasons')
                     ->where('anime_id', $anime->id);
             })
-                ->update(['tv_rating_id' => $newRatingID]);
+                ->update([
+                    'tv_rating_id' => $newRatingID,
+                    'is_nsfw' => $newIsNSFW,
+                ]);
 
             // Re-index
-            Season::where('anime_id', $anime->id)->searchable();
-
-            Episode::whereIn('season_id', function ($query) use ($anime) {
-                $query->select('id')
-                    ->from('seasons')
-                    ->where('anime_id', $anime->id);
-            })
+            Episode::with(['mediaStat', 'translations', 'tv_rating'])
+                ->whereIn('season_id', function ($query) use ($anime) {
+                    $query->select('id')
+                        ->from('seasons')
+                        ->where('anime_id', $anime->id);
+                })
                 ->searchable();
         });
     }
