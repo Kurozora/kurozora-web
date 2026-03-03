@@ -83,6 +83,11 @@ class Episode extends Resource
 
             ID::make()->sortable(),
 
+            Text::make('Public ID', 'public_id')
+                ->readonly()
+                ->hideWhenCreating()
+                ->hideWhenUpdating(),
+
             Heading::make('Media'),
 
             Images::make('Banner')

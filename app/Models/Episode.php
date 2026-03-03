@@ -9,6 +9,7 @@ use App\Traits\Model\Actionable;
 use App\Traits\Model\HasComments;
 use App\Traits\Model\HasMediaRatings;
 use App\Traits\Model\HasMediaStat;
+use App\Traits\Model\HasPublicID;
 use App\Traits\Model\HasVideos;
 use App\Traits\Model\HasViews;
 use App\Traits\Model\TvRated;
@@ -38,9 +39,10 @@ class Episode extends KModel implements HasMedia, Sitemapable
 {
     use Actionable,
         HasComments,
+        HasFactory,
         HasMediaRatings,
         HasMediaStat,
-        HasFactory,
+        HasPublicID,
         HasVideos,
         HasViews,
         InteractsWithMedia,

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('anime_id');
             $table->unsignedBigInteger('tv_rating_id')->nullable();
+            $table->string('public_id', 16);
             $table->integer('number');
             $table->boolean('is_nsfw')->default(false);
             $table->integer('view_count')->default(0);
@@ -30,10 +31,8 @@ return new class extends Migration
         });
 
         Schema::table(Season::TABLE_NAME, function (Blueprint $table) {
-            // Set index key constraints
-            $table->index('deleted_at');
-
             // Set unique key constraints
+            $table->unique(['public_id']);
             $table->unique(['anime_id', 'number']);
 
             // Set foreign key constraints

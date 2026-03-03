@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\MediaCollection;
 use App\Scopes\TvRatingScope;
 use App\Traits\InteractsWithMediaExtension;
+use App\Traits\Model\HasPublicID;
 use App\Traits\Model\HasViews;
 use App\Traits\Model\TvRated;
 use Astrotomic\Translatable\Translatable;
@@ -25,6 +26,7 @@ use Spatie\Sitemap\Tags\Url;
 class Season extends KModel implements HasMedia, Sitemapable
 {
     use HasFactory,
+        HasPublicID,
         HasViews,
         InteractsWithMedia,
         InteractsWithMediaExtension,
