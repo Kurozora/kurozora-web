@@ -141,13 +141,29 @@ class Episode extends KModel implements HasMedia, Sitemapable
                 if (!empty($episode->duration) && empty($episode->ended_at)) {
                     $episode->ended_at = $episode->started_at->addSeconds($episode->duration);
                 } else if (empty($episode->duration) && !empty($episode->ended_at)) {
-                    $episode->duration = $episode->started_at->secondsUntil($episode->ended_at);
+                    $episode->duration = $episode->started_at->diffInSeconds($episode->ended_at, true);
                 }
             }
         };
-
         static::creating($creationCallback);
         static::saving($creationCallback);
+
+        static::creating(function (Episode $episode) {
+            if (!is_null($episode->tv_rating_id) && !is_null($episode->is_nsfw)) {
+                return;
+            }
+
+            $season = $episode->relationLoaded('season')
+                ? $episode->season
+                : $episode->season()->withoutGlobalScopes()->first(['tv_rating_id', 'is_nsfw']);
+
+            if (!$season) {
+                return;
+            }
+
+            $episode->tv_rating_id = $season->tv_rating_id;
+            $episode->is_nsfw = $season->is_nsfw;
+        });
     }
 
     /**

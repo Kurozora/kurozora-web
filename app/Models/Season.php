@@ -66,6 +66,33 @@ class Season extends KModel implements HasMedia, Sitemapable
     }
 
     /**
+    * Bootstrap the model and its traits.
+    *
+    * @return void
+    */
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        static::creating(function (Season $season) {
+            if (!is_null($season->tv_rating_id) && !is_null($season->is_nsfw)) {
+                return;
+            }
+
+            $anime = $season->relationLoaded('anime')
+                ? $season->anime
+                : $season->anime()->withoutGlobalScopes()->first(['tv_rating_id', 'is_nsfw']);
+
+            if (!$anime) {
+                return;
+            }
+
+            $season->tv_rating_id = $anime->tv_rating_id;
+            $season->is_nsfw = $anime->is_nsfw;
+        });
+    }
+
+    /**
      * Get the started_at attribute with the correct timezone.
      *
      * @return Attribute

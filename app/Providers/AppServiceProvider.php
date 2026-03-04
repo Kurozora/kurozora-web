@@ -69,6 +69,9 @@ class AppServiceProvider extends ServiceProvider
             };
         });
 
+        // Register observers
+        Anime::observe(AnimeObserver::class);
+
         // Register events
         Event::listen(SocialiteWasCalled::class, AppleExtendSocialite::class.'@handle');
 
