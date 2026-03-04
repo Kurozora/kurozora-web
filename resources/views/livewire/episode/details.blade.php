@@ -334,7 +334,7 @@
                 </section>
 
                 @if (!empty($episode->synopsis))
-                    <section class="pb-8">
+                    <section class="pb-8 xl:safe-area-inset">
                         <x-section-nav class="flex flex-nowrap justify-between mb-5 pt-4">
                             <x-slot:title>
                                 {{ __('Synopsis') }}
