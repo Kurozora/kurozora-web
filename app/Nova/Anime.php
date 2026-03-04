@@ -17,6 +17,7 @@ use App\Nova\Actions\ScrapeUpcomingAnime;
 use App\Nova\Actions\UpdateAiringAnime;
 use App\Nova\Filters\IsNsfw;
 use App\Nova\Filters\StartedAtYear;
+use App\Nova\Lenses\DesyncedEpisodeCount;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
@@ -469,7 +470,9 @@ class Anime extends Resource
      */
     public function lenses(NovaRequest $request): array
     {
-        return [];
+        return [
+            new DesyncedEpisodeCount
+        ];
     }
 
     /**
