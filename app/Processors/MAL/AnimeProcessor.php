@@ -512,15 +512,21 @@ class AnimeProcessor extends CustomItemProcessor
         }
 
         foreach ($genres as $genreID => $genreName) {
-            preg_match('/((?:^|[A-Z])[a-z]+)/', $genreName, $genreName);
-            $genreName = implode('', array_unique($genreName));
-
             $genre = Genre::withoutGlobalScopes()
-                ->firstOrCreate([
+                ->where(function ($query) use ($genreID, $genreName) {
+                    $query->where('name', '=', $genreName)
+                        ->orWhere('mal_id', '=', $genreID);
+                })
+                ->orderByRaw('name = ? DESC', [$genreName])
+                ->first();
+
+            if (!$genre) {
+                $genre = Genre::create([
                     'mal_id' => $genreID,
-                ], [
-                    'name' => $genreName,
+                    'name'   => $genreName,
                 ]);
+            }
+
             $mediaGenre = $anime?->mediaGenres()->firstWhere('genre_id', '=', $genre->id);
 
             if (empty($mediaGenre)) {
@@ -548,15 +554,21 @@ class AnimeProcessor extends CustomItemProcessor
         }
 
         foreach ($themes as $themeID => $themeName) {
-            preg_match('/((?:^|[A-Z])[a-z]+)/', $themeName, $themeName);
-            $themeName = implode('', array_unique($themeName));
-
             $theme = Theme::withoutGlobalScopes()
-                ->firstOrCreate([
+                ->where(function ($query) use ($themeID, $themeName) {
+                    $query->where('name', '=', $themeName)
+                        ->orWhere('mal_id', '=', $themeID);
+                })
+                ->orderByRaw('name = ? DESC', [$themeName])
+                ->first();
+
+            if (!$theme) {
+                $theme = Theme::create([
                     'mal_id' => $themeID,
-                ], [
-                    'name' => $themeName,
+                    'name'   => $themeName,
                 ]);
+            }
+
             $mediaTheme = $anime?->mediaThemes()->firstWhere('theme_id', '=', $theme->id);
 
             if (empty($mediaTheme)) {
@@ -670,7 +682,7 @@ class AnimeProcessor extends CustomItemProcessor
                 try {
                     $date = Carbon::createFromFormat('Y', $str);
                     if ($date) {
-                        $date->month(1)
+                        $date->month(9)
                             ->day(1);
                         return $date;
                     }

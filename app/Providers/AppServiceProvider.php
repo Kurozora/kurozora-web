@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Anime;
 use App\Models\PersonalAccessToken;
 use App\Models\User;
+use App\Observers\AnimeObserver;
 use App\Policies\NotificationPolicy;
 use App\Services\LinkPreviewService;
 use App\Services\ReputationService;

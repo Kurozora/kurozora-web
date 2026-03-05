@@ -525,23 +525,19 @@ class MangaProcessor extends CustomItemProcessor
         }
 
         foreach ($genres as $genreID => $genreName) {
-            preg_match('/((?:^|[A-Z])[a-z]+)/', $genreName,$genreName);
-            $genreName = implode('', array_unique($genreName));
+            $genre = Genre::withoutGlobalScopes()
+                ->where(function ($query) use ($genreID, $genreName) {
+                    $query->where('name', '=', $genreName)
+                        ->orWhere('mal_id', '=', $genreID);
+                })
+                ->orderByRaw('name = ? DESC', [$genreName])
+                ->first();
 
-            if ($genreName != 'Suspense') {
-                $genre = Genre::withoutGlobalScopes()
-                    ->firstOrCreate([
-                        'mal_id' => $genreID,
-                    ], [
-                        'name' => $genreName,
-                    ]);
-            } else {
-                $genre = Genre::withoutGlobalScopes()
-                    ->firstOrCreate([
-                        'name' => $genreName,
-                    ], [
-                        'mal_id' => $genreID,
-                    ]);
+            if (!$genre) {
+                $genre = Genre::create([
+                    'mal_id' => $genreID,
+                    'name'   => $genreName,
+                ]);
             }
 
             $mediaGenre = $manga?->mediaGenres()->firstWhere('genre_id', '=', $genre->id);
@@ -570,15 +566,21 @@ class MangaProcessor extends CustomItemProcessor
         }
 
         foreach ($themes as $themeID => $themeName) {
-            preg_match('/((?:^|[A-Z])[a-z]+)/', $themeName,$themeName);
-            $themeName = implode('', array_unique($themeName));
-
             $theme = Theme::withoutGlobalScopes()
-                ->firstOrCreate([
+                ->where(function ($query) use ($themeID, $themeName) {
+                    $query->where('name', '=', $themeName)
+                        ->orWhere('mal_id', '=', $themeID);
+                })
+                ->orderByRaw('name = ? DESC', [$themeName])
+                ->first();
+
+            if (!$theme) {
+                $theme = Theme::create([
                     'mal_id' => $themeID,
-                ], [
-                    'name' => $themeName,
+                    'name'   => $themeName,
                 ]);
+            }
+
             $mediaTheme = $manga?->mediaThemes()->firstWhere('theme_id', '=', $theme->id);
 
             if (empty($mediaTheme)) {
