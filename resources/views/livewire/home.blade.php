@@ -28,28 +28,6 @@
     </x-slot:appArgument>
 
     <div>
-{{--        <section>--}}
-{{--            <a href="{{ route('recap.index') }}" wire:navigate>--}}
-{{--                <x-picture>--}}
-{{--                    <img class="w-full object-cover h-40 rounded-lg md:h-80" src="{{ asset('images/static/banners/kurozora_recap_2023.webp') }}" alt="Kurozora Recap 2023">--}}
-{{--                </x-picture>--}}
-{{--            </a>--}}
-{{--        </section>--}}
-
-{{--        <section>--}}
-{{--            <x-picture>--}}
-{{--                <img class="w-full object-cover h-32 rounded-lg sm:h-40 md:h-80" src="{{ asset('images/static/banners/games_now_on_kurozora.webp') }}" alt="Games and Manga tracking now available on Kurozora">--}}
-{{--            </x-picture>--}}
-{{--        </section>--}}
-
-{{--        <section class="relative mb-8">--}}
-{{--            <a href="{{ config('social.discord.url') }}" target="_blank" class="no-external-icon">--}}
-{{--                <x-picture>--}}
-{{--                    <img class="h-32 w-full object-cover object-center rounded-lg shadow-lg sm:h-44" src="{{ asset('images/static/banners/kurozora_art_challenge_2022.webp') }}"  alt="Kurozora Art Challenge 2022" />--}}
-{{--                </x-picture>--}}
-{{--            </a>--}}
-{{--        </section>--}}
-
         <section wire:init="loadPage">
             @foreach ($this->exploreCategories as $index => $exploreCategory)
                 @switch($exploreCategory->type)
