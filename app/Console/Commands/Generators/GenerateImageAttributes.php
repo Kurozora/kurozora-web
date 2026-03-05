@@ -5,8 +5,9 @@ namespace App\Console\Commands\Generators;
 use App\Jobs\ConvertImageToWebPJob;
 use App\Jobs\GenerateImageAttributesJob;
 use App\Models\Media;
-use DB;
 use Illuminate\Console\Command;
+use Laravel\Telescope\Telescope;
+use Pulse;
 
 class GenerateImageAttributes extends Command
 {
@@ -42,33 +43,35 @@ class GenerateImageAttributes extends Command
      */
     public function handle(): int
     {
-        $ids = $this->argument('id');
+        Pulse::stopRecording();
+        Telescope::stopRecording();
 
-        if (empty($ids)) {
-            $ids = $this->ask('Image ID');
-        }
+        $count = Media::where('custom_properties', 'like', '[%]')
+            ->orWhere('mime_type', 'not like', '%webp%')
+            ->count();
+        $bar = $this->output->createProgressBar($count);
 
-        $ids = explode(',', $ids);
-
-        if (empty($ids)) {
-            $this->info('ID is empty. Exiting...');
-            return Command::INVALID;
-        }
-
-        DB::disableQueryLog();
-
-        Media::whereIn('id', $ids)
-            ->each(function ($media) {
-                (new GenerateImageAttributesJob($media))
-                    ->handle();
-
-                if ($media->mime_type != 'image/webp') {
-                    (new ConvertImageToWebPJob($media))
+        Media::where('custom_properties', 'like', '[%]')
+            ->orWhere('mime_type', 'not like', '%webp%')
+            ->chunkById(100, function ($medias) use ($bar) {
+                $medias->each(function ($media) use ($bar) {
+                    new GenerateImageAttributesJob($media)
                         ->handle();
-                }
+
+                    if ($media->mime_type != 'image/webp') {
+                        new ConvertImageToWebPJob($media)
+                            ->handle();
+                    }
+
+                    $bar->advance();
+                    usleep(300);
+                });
             });
 
-        DB::enableQueryLog();
+        $bar->finish();
+
+        Pulse::startRecording();
+        Telescope::startRecording();
         return Command::SUCCESS;
     }
 }

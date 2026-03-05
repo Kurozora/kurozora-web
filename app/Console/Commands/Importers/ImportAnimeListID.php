@@ -8,6 +8,8 @@ use Illuminate\Console\Command;
 use JsonMachine\Exception\InvalidArgumentException;
 use JsonMachine\Items;
 use JsonMachine\JsonDecoder\ExtJsonDecoder;
+use Laravel\Telescope\Telescope;
+use Pulse;
 
 class ImportAnimeListID extends Command
 {
@@ -43,6 +45,9 @@ class ImportAnimeListID extends Command
      */
     public function handle(): int
     {
+        Pulse::stopRecording();
+        Telescope::stopRecording();
+
         $file = storage_path('app/anime-list-full.json');
         $fileSize = filesize($file);
         $animes = Items::fromFile($file, [
@@ -96,6 +101,9 @@ class ImportAnimeListID extends Command
         }
 
         $progressBar->finish();
+
+        Pulse::startRecording();
+        Telescope::startRecording();
 
         return Command::SUCCESS;
     }
