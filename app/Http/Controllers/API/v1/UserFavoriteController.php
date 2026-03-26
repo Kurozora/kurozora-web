@@ -46,7 +46,7 @@ class UserFavoriteController extends Controller
 
         // Paginate the favorited model
         $userFavorites = $user->whereFavorited($morphClass)
-            ->when(auth()->user() !== $user, function (Builder $query) use ($user) {
+            ->when(auth()->id() !== $user->id, function (Builder $query) use ($user) {
                 $query->join(UserLibrary::TABLE_NAME, UserFavorite::TABLE_NAME . '.favorable_id', '=', UserLibrary::TABLE_NAME . '.trackable_id')
                     ->whereColumn(UserLibrary::TABLE_NAME . '.trackable_type', '=', UserFavorite::TABLE_NAME . '.favorable_type')
                     ->where(UserLibrary::TABLE_NAME . '.user_id', '=', $user->id)

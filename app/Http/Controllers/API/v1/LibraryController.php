@@ -70,7 +70,7 @@ class LibraryController extends Controller
         // Retrieve the model from the user's library with the correct status
         $model = $user->whereTracked($morphClass)
             ->withoutGlobalScopes([IgnoreListScope::class])
-            ->when(auth()->user() !== $user, function (Builder $query) use ($user) {
+            ->when(auth()->id() !== $user->id, function (Builder $query) {
                 $query->where(UserLibrary::TABLE_NAME . '.is_hidden', '=', false);
             })
             ->sortViaRequest($request)

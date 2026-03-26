@@ -107,6 +107,9 @@ class Index extends Component
 
         $manga = $this->user
             ->whereTracked(Manga::class)
+            ->when(auth()->id() !== $this->user->id, function ($query) {
+                $query->where(UserLibrary::TABLE_NAME . '.is_hidden', '=', false);
+            })
             ->wherePivot('status', $userLibraryStatus->value)
             ->withoutIgnoreList()
             ->inRandomOrder()
@@ -178,6 +181,9 @@ class Index extends Component
         if (empty($this->search) && empty($wheres) && empty($whereIns)) {
             $models = $this->user
                 ->whereTracked(static::$searchModel)
+                ->when(auth()->id() !== $this->user->id, function ($query) {
+                    $query->where(UserLibrary::TABLE_NAME . '.is_hidden', '=', false);
+                })
                 ->withoutIgnoreList()
                 ->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating'])
                 ->when(auth()->user(), function ($query, $user) {
@@ -215,6 +221,9 @@ class Index extends Component
         $modelIDs = collect(UserLibrary::search($this->search)
             ->when(!empty($this->letter), function (ScoutBuilder $query) {
                 $query->where('trackable.letter', $this->letter);
+            })
+            ->when(auth()->id() !== $this->user->id, function (ScoutBuilder $query) {
+                $query->where('is_hidden', false);
             })
             ->where('user_id', $this->user->id)
             ->where('trackable_type', addslashes(static::$searchModel))

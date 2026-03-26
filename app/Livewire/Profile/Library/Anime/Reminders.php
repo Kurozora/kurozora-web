@@ -59,6 +59,15 @@ class Reminders extends Component
 
         $anime = $this->user
             ->whereReminded(Anime::class)
+            ->when(auth()->id() !== $this->user->id, function ($query) {
+                $query->whereExists(function ($subQuery) {
+                    $subQuery->from(UserLibrary::TABLE_NAME)
+                        ->whereColumn(UserLibrary::TABLE_NAME . '.trackable_id', Anime::TABLE_NAME . '.id')
+                        ->where(UserLibrary::TABLE_NAME . '.trackable_type', '=', Anime::class)
+                        ->where(UserLibrary::TABLE_NAME . '.user_id', '=', $this->user->id)
+                        ->where(UserLibrary::TABLE_NAME . '.is_hidden', '=', false);
+                });
+            })
             ->inRandomOrder()
             ->first();
         $this->redirectRoute('anime.details', $anime);
@@ -143,6 +152,15 @@ class Reminders extends Component
                             ->whereIn(UserLibrary::TABLE_NAME . '.status', $userLibraryStatuses);
                     });
                 })
+                ->when(auth()->id() !== $this->user->id, function ($query) {
+                    $query->whereExists(function ($subQuery) {
+                        $subQuery->from(UserLibrary::TABLE_NAME)
+                            ->whereColumn(UserLibrary::TABLE_NAME . '.trackable_id', static::$searchModel::TABLE_NAME . '.id')
+                            ->where(UserLibrary::TABLE_NAME . '.trackable_type', '=', static::$searchModel)
+                            ->where(UserLibrary::TABLE_NAME . '.user_id', '=', $this->user->id)
+                            ->where(UserLibrary::TABLE_NAME . '.is_hidden', '=', false);
+                    });
+                })
                 ->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating'])
                 ->when(auth()->user(), function ($query, $user) {
                     $query->with(['library' => function ($query) use ($user) {
@@ -186,6 +204,15 @@ class Reminders extends Component
                         ->where(UserLibrary::TABLE_NAME . '.user_id', '=', $this->user->id)
                         ->where(UserLibrary::TABLE_NAME . '.trackable_type', '=', static::$searchModel)
                         ->whereIn(UserLibrary::TABLE_NAME . '.status', $userLibraryStatuses);
+                });
+            })
+            ->when(auth()->id() !== $this->user->id, function ($query) {
+                $query->whereExists(function ($subQuery) {
+                    $subQuery->from(UserLibrary::TABLE_NAME)
+                        ->whereColumn(UserLibrary::TABLE_NAME . '.trackable_id', static::$searchModel::TABLE_NAME . '.id')
+                        ->where(UserLibrary::TABLE_NAME . '.trackable_type', '=', static::$searchModel)
+                        ->where(UserLibrary::TABLE_NAME . '.user_id', '=', $this->user->id)
+                        ->where(UserLibrary::TABLE_NAME . '.is_hidden', '=', false);
                 });
             })
             ->limit(2000)

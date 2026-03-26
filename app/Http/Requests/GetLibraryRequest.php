@@ -34,10 +34,10 @@ class GetLibraryRequest extends FormRequest
     public function rules(): array
     {
         return array_merge([
-            'library'   => ['bail', 'nullable', 'integer', 'in:' . implode(',', UserLibraryKind::getValues())],
-            'status'    => ['bail', 'required', new ValidateLibraryStatus],
-            'limit'     => ['bail', 'integer', 'min:1', 'max:100'],
-            'page'      => ['bail', 'integer', 'min:1']
+            'library' => ['bail', 'nullable', 'integer', 'in:' . implode(',', UserLibraryKind::getValues())],
+            'status' => ['bail', 'required', new ValidateLibraryStatus],
+            'limit' => ['bail', 'integer', 'min:1', 'max:100'],
+            'page' => ['bail', 'integer', 'min:1']
         ], $this->sortingRules());
     }
 
