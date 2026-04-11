@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('slug')->unique()->comment("Machine-readable slug, e.g. story, gameplay, visuals");
             $table->string('name')->comment("Human-readable label, e.g. Story, Gameplay, Visuals");
             $table->string('description')->nullable()->comment("Optional description shown as helper text in the UI");
+            $table->float('weight')->default(1.0);
             $table->timestamps();
         });
     }

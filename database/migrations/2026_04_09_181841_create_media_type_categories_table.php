@@ -21,7 +21,6 @@ return new class extends Migration
             $table->unsignedBigInteger('rating_category_id');
             $table->unsignedTinyInteger('display_order')->default(0)->comment("Controls the order in which categories are shown in the review form");
             $table->timestamps();
-
         });
 
         Schema::table(MediaTypeCategory::TABLE_NAME, function (Blueprint $table) {
@@ -30,8 +29,9 @@ return new class extends Migration
             // Set unique key constraints
             $table->unique(['model_type', 'rating_category_id']);
             // Set foreign key constraints
-            $table->foreignId('rating_category_id')
-                ->constrained(RatingCategory::TABLE_NAME)
+            $table->foreign('rating_category_id')
+                ->references('id')
+                ->on(RatingCategory::TABLE_NAME)
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
         });

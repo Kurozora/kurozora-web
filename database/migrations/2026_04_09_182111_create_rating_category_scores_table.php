@@ -30,12 +30,14 @@ return new class extends Migration
             // Set unique key constraints
             $table->unique(['rating_id', 'rating_category_id']);
             // Set foreign key constraints
-            $table->foreignId('rating_id')
-                ->constrained(MediaRating::TABLE_NAME)
+            $table->foreign('rating_id')
+                ->references('id')
+                ->on(MediaRating::TABLE_NAME)
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
-            $table->foreignId('rating_category_id')
-                ->constrained(RatingCategory::TABLE_NAME)
+            $table->foreign('rating_category_id')
+                ->references('id')
+                ->on(RatingCategory::TABLE_NAME)
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
         });

@@ -24,13 +24,15 @@ return new class extends Migration
             // Set index key constraints
             $table->index('type');
             // Set unique key constraints
-            $table->unique(['review_id', 'user_id']);
+            $table->unique(['rating_id', 'user_id']);
             // Set foreign key constraints
-            $table->foreignId('rating_id')
-                ->constrained(MediaRating::TABLE_NAME)
+            $table->foreign('rating_id')
+                ->references('id')
+                ->on(MediaRating::TABLE_NAME)
                 ->cascadeOnDelete();
-            $table->foreignId('user_id')
-                ->constrained(User::TABLE_NAME)
+            $table->foreign('user_id')
+                ->references('id')
+                ->on(User::TABLE_NAME)
                 ->cascadeOnDelete();
         });
     }
