@@ -14,7 +14,20 @@ class RatingCategory extends KModel
         'slug',
         'name',
         'description',
+        'weight',
     ];
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array
+     */
+    protected function casts(): array
+    {
+        return [
+            'weight' => 'float',
+        ];
+    }
 
     // -----------------------------------------------------------------------
     // Relations

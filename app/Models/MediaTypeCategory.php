@@ -53,7 +53,6 @@ class MediaTypeCategory extends KModel
             ->where('model_type', $type)
             ->orderBy('display_order')
             ->with('ratingCategory')
-            ->get()
-            ->pluck('ratingCategory');
+            ->get();
     }
 }

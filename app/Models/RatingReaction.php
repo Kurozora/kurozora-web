@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class RatingReaction extends Model
 {
     // Table name
-    const string TABLE_NAME = 'review_reactions';
+    const string TABLE_NAME = 'rating_reactions';
     protected $table = self::TABLE_NAME;
 
     protected $fillable = [

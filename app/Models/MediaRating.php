@@ -18,9 +18,12 @@ class MediaRating extends KModel
     use MorphTvRated,
         SoftDeletes;
 
-    // Rating boundaries
+// Rating boundaries (internal storage is 0-10)
     const float MIN_RATING_VALUE = 0.00;
-    const float MAX_RATING_VALUE = 5.00;
+    const float MAX_RATING_VALUE = 10.00;
+
+    // Legacy max for backwards compatibility display
+    const float LEGACY_MAX_RATING_VALUE = 5.00;
 
     // Table name
     const string TABLE_NAME = 'media_ratings';
@@ -62,25 +65,63 @@ class MediaRating extends KModel
         return $this->hasMany(RatingCategoryScore::class);
     }
 
-
     /**
-     * Calculate and persist the overall rating from category scores.
-     * Should be called after saving all RatingCategoryScore rows.
+     * Get the rating value formatted for display based on rating style.
      *
-     * @return $this
+     * @return float
      */
-    public function recalculateFromCategoryScores(): static
+    public function getDisplayRatingAttribute(): float
     {
-        $scores = $this->categoryScores()->pluck('score');
-
-        if ($scores->isEmpty()) {
-            return $this;
+        // For standard style (5-star), convert internal 0-10 to 0-5
+        if ($this->rating_style === null || $this->rating_style->value === RatingStyle::Standard) {
+            return RatingStyle::internalToStandard($this->rating);
         }
 
-        $this->rating = round($scores->average(), 1);
-        $this->save();
+        // For all other styles, return the 0-10 rating as-is
+        return $this->rating;
+    }
 
-        return $this;
+    /**
+     * Get the maximum rating value for display based on rating style.
+     *
+     * @return float
+     */
+    public function getDisplayMaxRatingAttribute(): float
+    {
+        if ($this->rating_style === null || $this->rating_style->value === RatingStyle::Standard) {
+            return self::LEGACY_MAX_RATING_VALUE;
+        }
+
+        return self::MAX_RATING_VALUE;
+    }
+
+    /**
+     * Calculate overall rating from category scores.
+     *
+     * @return float|null
+     */
+    public function calculateOverallFromCategories(): ?float
+    {
+        $scores = $this->categoryScores()->with('ratingCategory')->get();
+
+        if ($scores->isEmpty()) {
+            return null;
+        }
+
+        $totalWeight = 0;
+        $weightedSum = 0;
+
+        foreach ($scores as $score) {
+            $weight = $score->ratingCategory->weight ?? 1.0;
+            $weightedSum += $score->score * $weight;
+            $totalWeight += $weight;
+        }
+
+        if ($totalWeight === 0) {
+            return null;
+        }
+
+        return $weightedSum / $totalWeight;
     }
 
     public function reactions(): HasMany

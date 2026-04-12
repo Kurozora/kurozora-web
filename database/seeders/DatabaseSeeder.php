@@ -37,6 +37,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             AchievementSeeder::class,
             AppThemeSeeder::class,
+            RatingCategorySeeder::class,
         ]);
     }
 }
