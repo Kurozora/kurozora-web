@@ -27,11 +27,8 @@ return new class extends Migration
         });
 
         Schema::table(MediaRating::TABLE_NAME, function(Blueprint $table) {
-            // Set index key constraints
-            $table->index('deleted_at');
-
             // Set unique key constraints
-            $table->unique(['model_id', 'model_type', 'user_id']);
+            $table->unique(['user_id', 'model_id', 'model_type']);
 
             // Set foreign key constraints
             $table->foreign('user_id')

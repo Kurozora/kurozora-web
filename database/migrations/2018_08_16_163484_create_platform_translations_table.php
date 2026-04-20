@@ -29,7 +29,7 @@ return new class extends Migration
 
         Schema::table(PlatformTranslation::TABLE_NAME, function (Blueprint $table) {
             // Set index key constraints
-            $table->index('deleted_at');
+            $table->index(['platform_id', 'locale', 'deleted_at']);
 
             // Set unique key constraints
             $table->unique(['platform_id', 'locale']);

@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('original_title', 280);
             $table->string('artist', 500)->nullable();
             $table->text('original_lyrics')->nullable();
-            $table->unsignedBigInteger('rank_total')->default(0);
+            $table->unsignedInteger('rank_total')->default(0);
             $table->integer('view_count')->default(0);
             $table->string('copyright')->nullable();
             $table->timestamps();
@@ -35,8 +35,7 @@ return new class extends Migration
 
         Schema::table(Song::TABLE_NAME, function (Blueprint $table) {
             // Set index key constraints
-            $table->index('rank_total');
-            $table->index('deleted_at');
+            $table->index(['deleted_at', 'rank_total']);
 
             // Set unique key constraints
             $table->unique(['slug']);

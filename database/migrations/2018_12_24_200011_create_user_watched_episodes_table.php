@@ -25,8 +25,11 @@ return new class extends Migration
         });
 
         Schema::table(UserWatchedEpisode::TABLE_NAME, function (Blueprint $table) {
+            // Set index key constraints
+            $table->index(['user_id', 'created_at', 'episode_id']);
+
             // Set unique key constraints
-            $table->unique(['user_id', 'episode_id']);
+            $table->unique(['episode_id', 'user_id']);
 
             // Set foreign key constraints
             $table->foreign('user_id')

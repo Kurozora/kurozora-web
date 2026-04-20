@@ -21,7 +21,7 @@ return new class extends Migration
             $table->year('year');
             $table->tinyInteger('month');
             $table->string('type');
-            $table->unsignedSmallInteger('total_type_count')->default(0);
+            $table->unsignedSmallInteger('total_series_count')->default(0);
             $table->unsignedBigInteger('total_parts_count')->default(0);
             $table->unsignedBigInteger('total_parts_duration')->default(0);
             $table->decimal('top_percentile', 5)->default(0.00);
@@ -30,9 +30,6 @@ return new class extends Migration
         });
 
         Schema::table(Recap::TABLE_NAME, function (Blueprint $table) {
-            // Set index key constraints
-            $table->index('deleted_at');
-
             // Set unique key constraints
             $table->unique(['type', 'user_id', 'year', 'month']);
 

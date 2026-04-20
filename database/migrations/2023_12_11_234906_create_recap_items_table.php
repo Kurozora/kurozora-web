@@ -27,7 +27,6 @@ return new class extends Migration
         Schema::table(RecapItem::TABLE_NAME, function (Blueprint $table) {
             // Set index key constraints
             $table->index('position');
-            $table->index('deleted_at');
 
             // Set foreign key constraints
             $table->foreign('recap_id')

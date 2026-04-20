@@ -29,7 +29,7 @@ return new class extends Migration
 
         Schema::table(GameTranslation::TABLE_NAME, function (Blueprint $table) {
             // Set index key constraints
-            $table->index('deleted_at');
+            $table->index(['game_id', 'locale', 'deleted_at']);
 
             // Set unique key constraints
             $table->unique(['game_id', 'locale']);

@@ -39,7 +39,7 @@ return new class extends Migration
             $table->unsignedTinyInteger('publication_season')->nullable();
             $table->boolean('is_nsfw')->default(false);
             $table->string('copyright')->nullable();
-            $table->unsignedBigInteger('rank_total')->default(0);
+            $table->unsignedInteger('rank_total')->default(0);
             $table->integer('edition_count')->default(0);
             $table->integer('view_count')->default(0);
             $table->date('published_at')->nullable();
@@ -49,12 +49,11 @@ return new class extends Migration
 
         Schema::table(Game::TABLE_NAME, function (Blueprint $table) {
             // Set index key constraints
-            $table->index('is_nsfw');
-            $table->index('rank_total');
-            $table->index('published_at');
+            $table->index(['deleted_at', 'tv_rating_id']);
+            $table->index(['deleted_at', 'rank_total']);
+            $table->index(['deleted_at', 'published_at']);
             $table->index('created_at');
             $table->index('updated_at');
-            $table->index('deleted_at');
 
             // Set unique key constraints
             $table->unique(['slug']);

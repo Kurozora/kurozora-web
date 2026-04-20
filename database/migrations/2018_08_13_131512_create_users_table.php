@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('language_id', 2)->default('en')->nullable();
             $table->string('slug');
             $table->string('username', 50)->nullable();
-            $table->string('email');
+            $table->string('email')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->boolean('email_suspended')->default(false);
             $table->string('password')->nullable();
@@ -67,6 +67,7 @@ return new class extends Migration
             // Set unique key constraints
             $table->unique(['uuid']);
             $table->unique(['slug']);
+            $table->unique(['email']);
 
             // Set foreign key constraints
             $table->foreign('parent_id')

@@ -25,7 +25,7 @@ return new class extends Migration
 
         Schema::table(MediaTheme::TABLE_NAME, function (Blueprint $table) {
             // Set index key constraints
-            $table->index('deleted_at');
+            $table->index(['theme_id', 'model_type', 'model_id', 'deleted_at']);
 
             // Set unique key constraints
             $table->unique(['model_type', 'model_id', 'theme_id']);

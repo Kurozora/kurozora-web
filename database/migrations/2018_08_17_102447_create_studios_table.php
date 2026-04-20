@@ -30,7 +30,7 @@ return new class extends Migration
             $table->json('social_urls')->nullable();
             $table->json('website_urls')->nullable();
             $table->boolean('is_nsfw')->default(false);
-            $table->unsignedBigInteger('rank_total')->default(0);
+            $table->unsignedInteger('rank_total')->default(0);
             $table->integer('view_count')->default(0);
             $table->date('founded_at')->nullable();
             $table->date('defunct_at')->nullable();
@@ -40,8 +40,8 @@ return new class extends Migration
 
         Schema::table(Studio::TABLE_NAME, function (Blueprint $table) {
             // Set index key constraints
-            $table->index('rank_total');
-            $table->index('deleted_at');
+            $table->index(['deleted_at', 'tv_rating_id']);
+            $table->index(['deleted_at', 'rank_total']);
 
             // Set unique key constraints
             $table->unique(['slug']);

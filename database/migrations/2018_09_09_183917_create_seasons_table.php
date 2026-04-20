@@ -31,6 +31,9 @@ return new class extends Migration
         });
 
         Schema::table(Season::TABLE_NAME, function (Blueprint $table) {
+            // Set index key constraints
+            $table->index(['deleted_at', 'tv_rating_id']);
+
             // Set unique key constraints
             $table->unique(['public_id']);
             $table->unique(['anime_id', 'number']);

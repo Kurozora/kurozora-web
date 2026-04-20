@@ -23,6 +23,9 @@ return new class extends Migration
         });
 
         Schema::table(UserFollow::TABLE_NAME, function (Blueprint $table) {
+            // Set unique key constraints
+            $table->unique(['user_id', 'following_user_id']);
+
             // Set foreign key constraints
             $table->foreign('user_id')
                 ->references('id')

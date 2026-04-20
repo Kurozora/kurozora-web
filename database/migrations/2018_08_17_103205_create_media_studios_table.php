@@ -34,7 +34,6 @@ return new class extends Migration
             $table->index('is_studio');
             $table->index('is_publisher');
             $table->index('is_developer');
-            $table->index('deleted_at');
 
             // Set unique key constraints
             $table->unique(['model_type', 'model_id', 'studio_id']);
