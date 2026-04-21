@@ -22,6 +22,9 @@ return new class extends Migration
             $table->double('rating')->default(MediaRating::MAX_RATING_VALUE);
             $table->text('description')->nullable();
             $table->text('note')->nullable();
+            $table->unsignedTinyInteger('rating_style')->default(1);
+            $table->unsignedInteger('helpful_count')->default(0);
+            $table->unsignedInteger('not_helpful_count')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

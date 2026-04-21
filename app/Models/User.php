@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\MediaCollection;
+use App\Enums\RatingStyle;
 use App\Enums\UserActivityStatus;
 use App\Enums\UserLibraryStatus;
 use App\Helpers\OptionsBag;
@@ -129,6 +130,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
             'is_subscribed' => 'bool',
             'is_verified' => 'bool',
             'can_change_username' => 'bool',
+            'rating_style' => RatingStyle::class,
         ];
     }
 

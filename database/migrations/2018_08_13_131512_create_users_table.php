@@ -48,6 +48,7 @@ return new class extends Migration
             $table->timestamp('anime_imported_at')->nullable();
             $table->timestamp('manga_imported_at')->nullable();
             $table->timestamp('subscribed_at')->nullable();
+            $table->unsignedTinyInteger("rating_style")->default(1);
             $table->timestamps();
         });
 

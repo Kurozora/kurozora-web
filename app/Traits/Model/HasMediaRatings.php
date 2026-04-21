@@ -43,4 +43,43 @@ trait HasMediaRatings
     {
         return $this->morphMany(MediaRating::class, 'model');
     }
+
+    /**
+     * Ratings that include a written review.
+     *
+     * @return MorphMany
+     */
+    public function reviews(): MorphMany
+    {
+        return $this->morphMany(MediaRating::class, 'model')
+            ->whereNotNull('description');
+    }
+
+    /**
+     * Detailed (per-category) ratings only.
+     *
+     * @return MorphMany
+     */
+    public function detailedRatings(): MorphMany
+    {
+        return $this->morphMany(MediaRating::class, 'model')
+            ->where('rating_style', \App\Enums\RatingStyle::Detailed()->value);
+    }
+
+    // -----------------------------------------------------------------------
+    // Convenience helpers
+    // -----------------------------------------------------------------------
+
+    /**
+     * Return the MediaRating for a specific user, or null if they haven't rated yet.
+     *
+     * @param  int  $userId
+     * @return MediaRating|null
+     */
+    public function userRating(int $userId): ?MediaRating
+    {
+        return $this->ratings()
+            ->where('user_id', $userId)
+            ->first();
+    }
 }
