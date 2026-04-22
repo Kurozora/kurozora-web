@@ -25,7 +25,7 @@ trait WithAnimeSearch
      */
     public function randomAnime(): void
     {
-        $anime = Anime::inRandomOrder()->first();
+        $anime = Anime::randomFirst();
         $this->redirectRoute('anime.details', $anime);
     }
 

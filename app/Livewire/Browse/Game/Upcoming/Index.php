@@ -54,9 +54,7 @@ class Index extends Component
      */
     public function randomGame(): void
     {
-        $game = Game::where('published_at', '>=', yesterday())
-            ->inRandomOrder()
-            ->first();
+        $game = Game::where('published_at', '>=', yesterday())->randomFirst();
         $this->redirectRoute('games.details', $game);
     }
 

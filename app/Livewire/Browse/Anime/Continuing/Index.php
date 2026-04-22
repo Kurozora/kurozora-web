@@ -37,9 +37,7 @@ class Index extends Component
         $anime = Anime::where([
             ['status_id', '=', 3],
             ['started_at', '<=', season_of_year()->startDate()->toDateString()],
-        ])
-            ->inRandomOrder()
-            ->first();
+        ])->randomFirst();
 
         $this->redirectRoute('anime.details', $anime);
     }

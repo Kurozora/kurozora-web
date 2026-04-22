@@ -45,7 +45,7 @@ trait WithStudioSearch
      */
     public function randomStudio(): void
     {
-        $studio = Studio::inRandomOrder()->first();
+        $studio = Studio::randomFirst();
         $this->redirectRoute('studios.details', $studio);
     }
 

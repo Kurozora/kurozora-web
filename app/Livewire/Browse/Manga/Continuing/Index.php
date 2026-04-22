@@ -38,9 +38,7 @@ class Index extends Component
         $manga = Manga::where([
             ['status_id', '=', 3],
             ['started_at', '<=', season_of_year()->startDate()->toDateString()],
-        ])
-            ->inRandomOrder()
-            ->first();
+        ])->randomFirst();
 
         $this->redirectRoute('manga.details', $manga);
     }

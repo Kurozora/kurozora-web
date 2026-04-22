@@ -25,7 +25,7 @@ trait WithMangaSearch
      */
     public function randomManga(): void
     {
-        $manga = Manga::inRandomOrder()->first();
+        $manga = Manga::randomFirst();
         $this->redirectRoute('manga.details', $manga);
     }
 

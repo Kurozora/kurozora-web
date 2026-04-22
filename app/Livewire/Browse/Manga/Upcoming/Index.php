@@ -54,9 +54,7 @@ class Index extends Component
      */
     public function randomManga(): void
     {
-        $manga = Manga::where('started_at', '>=', yesterday())
-            ->inRandomOrder()
-            ->first();
+        $manga = Manga::where('started_at', '>=', yesterday())->randomFirst();
         $this->redirectRoute('manga.details', $manga);
     }
 

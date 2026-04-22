@@ -54,9 +54,7 @@ class Index extends Component
      */
     public function randomAnime(): void
     {
-        $anime = Anime::where('started_at', '>=', yesterday())
-            ->inRandomOrder()
-            ->first();
+        $anime = Anime::where('started_at', '>=', yesterday())->randomFirst();
         $this->redirectRoute('anime.details', $anime);
     }
 

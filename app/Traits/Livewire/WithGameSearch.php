@@ -25,7 +25,7 @@ trait WithGameSearch
      */
     public function randomGame(): void
     {
-        $game = Game::inRandomOrder()->first();
+        $game = Game::randomFirst();
         $this->redirectRoute('games.details', $game);
     }
 
