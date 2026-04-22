@@ -1016,4 +1016,22 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         return $this->library()
             ->where('status', '=', UserLibraryStatus::Completed);
     }
+
+    public function library_in_progress(): HasMany
+    {
+        return $this->library()
+            ->where('status', '=', UserLibraryStatus::InProgress);
+    }
+
+    public function library_planning(): HasMany
+    {
+        return $this->library()
+            ->where('status', '=', UserLibraryStatus::Planning);
+    }
+
+    public function library_dropped(): HasMany
+    {
+        return $this->library()
+            ->where('status', '=', UserLibraryStatus::Dropped);
+    }
 }

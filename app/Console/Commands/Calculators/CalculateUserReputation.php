@@ -55,6 +55,9 @@ class CalculateUserReputation extends Command
                 $userQuery->groupBy([User::TABLE_NAME . '.id', User::TABLE_NAME . '.view_count'])
                     ->withCount([
                         'library_completed as library_completed_count',
+                        'library_in_progress',
+                        'library_planning',
+                        'library_dropped',
                         'user_watched_episodes',
                         'user_rewatched_episodes',
                         'library',
@@ -82,6 +85,9 @@ class CalculateUserReputation extends Command
                     ->groupBy([User::TABLE_NAME . '.id', User::TABLE_NAME . '.view_count'])
                     ->withCount([
                         'library_completed',
+                        'library_in_progress',
+                        'library_planning',
+                        'library_dropped',
                         'user_watched_episodes',
                         'user_rewatched_episodes',
                         'library',
