@@ -42,16 +42,16 @@ class CalculateEpisodeStats extends Command
     public function handle(): int
     {
         $chunkSize = 100;
-        $model = Episode::withoutGlobalScopes();
 
         $this->info('Calculating stats for: ' . Episode::class);
 
-        $totalCount = $model->whereHas('user_watched_episodes')
-            ->count();
+        $base = Episode::withoutGlobalScopes()
+            ->whereHas('user_watched_episodes');
+
+        $totalCount = (clone $base)->count();
         $bar = $this->output->createProgressBar($totalCount);
 
-        $model->whereHas('user_watched_episodes')
-            ->with([
+        $base->with([
                 'mediaStat'
             ])
             ->withCount([
