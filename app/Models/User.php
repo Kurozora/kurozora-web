@@ -707,19 +707,19 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     /**
      * Get the user's up-next episodes.
      *
-     * @param null|Anime $anime
+     * @param null|string $modelId
      *
      * @return Builder
      */
-    function up_next_episodes(?Anime $anime = null): Builder
+    function up_next_episodes(?string $modelId = null): Builder
     {
         $subquery = Episode::join(Season::TABLE_NAME, Episode::TABLE_NAME . '.season_id', '=', Season::TABLE_NAME . '.id')
             ->join(Anime::TABLE_NAME, Season::TABLE_NAME . '.anime_id', '=', Anime::TABLE_NAME . '.id')
-            ->join(UserLibrary::TABLE_NAME, function ($join) use ($anime) {
+            ->join(UserLibrary::TABLE_NAME, function ($join) use ($modelId) {
                 $join->on(UserLibrary::TABLE_NAME . '.trackable_id', '=', Anime::TABLE_NAME . '.id')
                     ->where(UserLibrary::TABLE_NAME . '.trackable_type', '=', Anime::class)
-                    ->when($anime, function($query) use ($anime) {
-                        $query->where(UserLibrary::TABLE_NAME . '.trackable_id', '=', $anime->id);
+                    ->when($modelId, function($query) use ($modelId) {
+                        $query->where(UserLibrary::TABLE_NAME . '.trackable_id', '=', $modelId);
                     })
                     ->where(UserLibrary::TABLE_NAME . '.user_id', '=', $this->id)
                     ->where(UserLibrary::TABLE_NAME . '.status', '=', UserLibraryStatus::InProgress);
@@ -749,24 +749,28 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
             ->orderBy(Episode::TABLE_NAME . '.started_at');
     }
 
-    function past_episodes(?Anime $anime = null): Builder
+    /**
+     * Get the user's watched episodes.
+     *
+     * @param null|string $modelId
+     *
+     * @return Builder
+     */
+    function watched_episodes(?string $modelId = null): Builder
     {
-        return Episode::join(UserWatchedEpisode::TABLE_NAME, UserWatchedEpisode::TABLE_NAME . '.episode_id', '=', Episode::TABLE_NAME . '.id')
-            ->join(Season::TABLE_NAME, Episode::TABLE_NAME . '.season_id', '=', Season::TABLE_NAME . '.id')
-            ->join(Anime::TABLE_NAME, Season::TABLE_NAME . '.anime_id', '=', Anime::TABLE_NAME . '.id')
-            ->join(UserLibrary::TABLE_NAME, function ($join) use ($anime) {
-                $join->on(UserLibrary::TABLE_NAME . '.trackable_id', '=', Anime::TABLE_NAME . '.id')
-                    ->where(UserLibrary::TABLE_NAME . '.trackable_type', '=', Anime::class)
-                    ->where(UserLibrary::TABLE_NAME . '.user_id', '=', $this->id);
-
-                if ($anime) {
-                    $join->where(UserLibrary::TABLE_NAME . '.trackable_id', '=', $anime->id);
-                }
+        return Episode::query()
+            ->select(Episode::TABLE_NAME . '.*')
+            ->join(UserWatchedEpisode::TABLE_NAME, function ($join) {
+                $join->on(UserWatchedEpisode::TABLE_NAME . '.episode_id', '=', Episode::TABLE_NAME . '.id')
+                    ->where(UserWatchedEpisode::TABLE_NAME . '.user_id', $this->id);
             })
-            ->where(UserWatchedEpisode::TABLE_NAME . '.user_id', '=', $this->id)
+            ->when($modelId, function ($query) use ($modelId) {
+                $query->whereHas(Season::TABLE_NAME . '.anime', function ($q) use ($modelId) {
+                    $q->where(Anime::TABLE_NAME . '.id', $modelId);
+                });
+            })
             ->where(Episode::TABLE_NAME . '.started_at', '<=', now())
             ->orderBy(UserWatchedEpisode::TABLE_NAME . '.created_at', 'desc')
-            ->select(Episode::TABLE_NAME . '.*')
             ->with([
                 'anime' => fn ($q) => $q->with(['media', 'translation']),
                 'media',
