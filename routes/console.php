@@ -98,6 +98,13 @@ Schedule::command('model:prune')
     ->onOneServer();
 
 /**********************************************/
+// Verify Apple Root CA pinned fingerprints still match Apple's published copy every day
+Schedule::command('refresh:apple_root_certs')
+    ->dailyAt('3:15')
+    ->name('Verify Apple Root CA pins')
+    ->onOneServer();
+
+/**********************************************/
 // Truncates login attempts every day
 Schedule::call(function() {
     LoginAttempt::truncate();

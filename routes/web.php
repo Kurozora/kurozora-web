@@ -45,6 +45,7 @@ require 'Web/Authentication.php';
 // Landing pages
 require 'Web/Anime.php';
 require 'Web/AniDB.php';
+require 'Web/AppleRootCerts.php';
 require 'Web/AniList.php';
 require 'Web/AnimePlanet.php';
 require 'Web/AniSearch.php';
