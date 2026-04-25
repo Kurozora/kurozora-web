@@ -3,41 +3,37 @@
 namespace App\Listeners\AppStore;
 
 use Imdhemy\AppStore\ServerNotifications\V2DecodedPayload;
+use Imdhemy\Purchases\ServerNotifications\AppStoreV2ServerNotification;
 
 class RenewalExtended extends AppStoreListener
 {
-    /**
-     * Handle the received Cancel subscription event.
-     *
-     * @param \Imdhemy\Purchases\Events\AppStore\RenewalExtended $event
-     */
-    public function handle($event): void
+    protected function process($event, AppStoreV2ServerNotification $notification, V2DecodedPayload $payload): void
     {
-        // Retrieve the necessary data from the event
-        $notification = $event->getServerNotification();
-        $subscription = $notification->getSubscription();
+        $transactionInfo = $payload->getTransactionInfo();
+        $renewalInfo = $payload->getRenewalInfo();
 
-        /** @var V2DecodedPayload $providerRepresentation */
-        $providerRepresentation = $subscription->getProviderRepresentation();
+        $user = $this->resolveUser($transactionInfo->getAppAccountToken());
+        if (!$user) {
+            return;
+        }
 
-        // Collect Dates
-        $expirationTime = $subscription->getExpiryTime();
+        $product = $this->resolveProduct($transactionInfo->getProductId());
+        if (!$product) {
+            return;
+        }
 
-        // Find the user and update their receipt.
-        $userReceipt = $this->findOrCreateUserReceipt($providerRepresentation);
-        $userReceipt->update([
-            'is_subscribed' => true,
-            'expired_at' => $expirationTime->toDateTime(),
-            'revoked_at' => null
+        $transaction = $this->upsertTransaction($transactionInfo, $product, $user->uuid);
+
+        $receipt = $this->upsertReceipt($transactionInfo, $renewalInfo);
+        $receipt->update([
+            'expires_at' => $transaction->expires_at,
+            'auto_renew_product_id' => $renewalInfo->getAutoRenewProductId(),
+            'will_auto_renew' => $renewalInfo->getAutoRenewStatus() === 1,
+            'expiration_intent' => $renewalInfo->getExpirationIntent(),
+            'grace_period_expires_date' => $renewalInfo->getGracePeriodExpiresDate()?->toDateTime(),
         ]);
 
-        // Update user values.
-        $user = $userReceipt->user;
-        $user?->update([
-            'is_subscribed' => true
-        ]);
-
-        // Notify the user about the subscription update.
-        $this->notifyUserAboutUpdate($user, $event);
+        $this->recomputeUserEntitlements($user);
+        $this->notifyUserAboutUpdate($user, $event, $product, $receipt);
     }
 }

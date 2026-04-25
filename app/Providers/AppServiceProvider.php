@@ -7,6 +7,7 @@ use App\Models\PersonalAccessToken;
 use App\Models\User;
 use App\Observers\AnimeObserver;
 use App\Policies\NotificationPolicy;
+use App\Services\AppStoreService;
 use App\Services\LinkPreviewService;
 use App\Services\ReputationService;
 use Illuminate\Cache\RateLimiting\Limit;
@@ -138,6 +139,11 @@ class AppServiceProvider extends ServiceProvider
         // Register explore category scope. This makes sure only enabled categories are included.
         $this->app->bind('explore.only_enabled', function () {
             return true;
+        });
+
+        // Register App Store service.
+        $this->app->bind(AppStoreService::class, function () {
+            return new AppStoreService();
         });
 
         // Register roach with the app container.

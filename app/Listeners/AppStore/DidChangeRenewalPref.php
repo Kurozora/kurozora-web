@@ -3,36 +3,47 @@
 namespace App\Listeners\AppStore;
 
 use Imdhemy\AppStore\ServerNotifications\V2DecodedPayload;
+use Imdhemy\Purchases\ServerNotifications\AppStoreV2ServerNotification;
 
 class DidChangeRenewalPref extends AppStoreListener
 {
-    /**
-     * Handle the received Cancel subscription event.
-     *
-     * @param \Imdhemy\Purchases\Events\AppStore\DidChangeRenewalPref $event
-     */
-    public function handle($event): void
+    protected function process($event, AppStoreV2ServerNotification $notification, V2DecodedPayload $payload): void
     {
-        // Retrieve the necessary data from the event
-        $notification = $event->getServerNotification();
-        $subscription = $notification->getSubscription();
+        $transactionInfo = $payload->getTransactionInfo();
+        $renewalInfo = $payload->getRenewalInfo();
 
-        /** @var V2DecodedPayload $providerRepresentation */
-        $providerRepresentation = $subscription->getProviderRepresentation();
+        $user = $this->resolveUser($transactionInfo->getAppAccountToken());
+        if (!$user) {
+            return;
+        }
 
-        // Collect IDs
-        $productID = $subscription->getItemId();
+        $product = $this->resolveProduct($transactionInfo->getProductId());
+        if (!$product) {
+            return;
+        }
 
-        // Find the user and update their receipt.
-        $userReceipt = $this->findOrCreateUserReceipt($providerRepresentation);
-        $userReceipt->update([
-            'product_id' => $productID
-        ]);
+        $this->upsertTransaction($transactionInfo, $product, $user->uuid);
 
-        // Update user values.
-        $user = $userReceipt->user;
+        $receipt = $this->upsertReceipt($transactionInfo, $renewalInfo);
 
-        // Notify the user about the subscription update.
-        $this->notifyUserAboutUpdate($user, $event);
+        $update = [
+            'will_auto_renew' => $renewalInfo->getAutoRenewStatus() === 1,
+        ];
+
+        if ($autoRenewProductId = $renewalInfo->getAutoRenewProductId()) {
+            if ($this->resolveProduct($autoRenewProductId)) {
+                $update['auto_renew_product_id'] = $autoRenewProductId;
+            }
+        }
+
+        // User cancelled downgrade — renewal product reverts to the current one.
+        if (empty($notification->getSubtype())) {
+            $update['auto_renew_product_id'] = $receipt->product_id;
+        }
+
+        $receipt->update($update);
+
+        $this->recomputeUserEntitlements($user);
+        $this->notifyUserAboutUpdate($user, $event, $product, $receipt);
     }
 }

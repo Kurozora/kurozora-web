@@ -2,10 +2,11 @@
 
 namespace App\Listeners\AppStore;
 
+use App\Models\UserReceipt;
 use Imdhemy\AppStore\ServerNotifications\V2DecodedPayload;
 use Imdhemy\Purchases\ServerNotifications\AppStoreV2ServerNotification;
 
-class DidRenew extends AppStoreListener
+class InteractiveRenewal extends AppStoreListener
 {
     protected function process($event, AppStoreV2ServerNotification $notification, V2DecodedPayload $payload): void
     {
@@ -22,13 +23,21 @@ class DidRenew extends AppStoreListener
             return;
         }
 
-        $transaction = $this->upsertTransaction($transactionInfo, $product, $user->uuid);
+        $this->upsertTransaction($transactionInfo, $product, $user->uuid);
 
-        $receipt = $this->upsertReceipt($transactionInfo, $renewalInfo);
+        $receipt = UserReceipt::where('original_transaction_id', $transactionInfo->getOriginalTransactionId())->first();
+        if (!$receipt) {
+            return;
+        }
+
         $receipt->update([
-            'expires_at' => $transaction->expires_at,
+            'product_id' => $product->product_id,
+            'expires_at' => $transactionInfo->getExpiresDate()?->toDateTime(),
             'is_subscribed' => true,
+            'auto_renew_product_id' => $renewalInfo->getAutoRenewProductId(),
             'will_auto_renew' => $renewalInfo->getAutoRenewStatus() === 1,
+            'expiration_intent' => $renewalInfo->getExpirationIntent(),
+            'grace_period_expires_date' => $renewalInfo->getGracePeriodExpiresDate()?->toDateTime(),
         ]);
 
         $this->recomputeUserEntitlements($user);

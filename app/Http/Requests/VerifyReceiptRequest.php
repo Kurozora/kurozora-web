@@ -26,8 +26,11 @@ class VerifyReceiptRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'receipt'   => ['bail', 'required', new ValidateBase64()],
-            'password'  => ['bail', 'nullable', new ValidateHexadecimal()]
+            'receipt' => ['bail', 'required_without:transactions', new ValidateBase64()],
+            'password' => ['bail', 'nullable', new ValidateHexadecimal()],
+            'transactions' => ['bail', 'required_without:receipt', 'array', 'min:1', 'max:50'],
+            'transactions.*' => ['required', 'string'],
+            'environment' => ['nullable', 'string', 'in:Production,Sandbox,production,sandbox'],
         ];
     }
 }

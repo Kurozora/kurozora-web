@@ -20,11 +20,15 @@ use App\Nova\Episode;
 use App\Nova\EpisodeTranslation;
 use App\Nova\ExploreCategory;
 use App\Nova\ExploreCategoryItem;
+use App\Nova\FeedMessage;
+use App\Nova\FeedMessageHashtag;
 use App\Nova\Game;
 use App\Nova\GameCast;
 use App\Nova\GameTranslation;
 use App\Nova\Genre;
+use App\Nova\Hashtag;
 use App\Nova\Language;
+use App\Nova\LinkPreview;
 use App\Nova\Manga;
 use App\Nova\MangaCast;
 use App\Nova\MangaTranslation;
@@ -39,12 +43,16 @@ use App\Nova\MediaStudio;
 use App\Nova\MediaTag;
 use App\Nova\MediaTheme;
 use App\Nova\MediaType;
+use App\Nova\Mention;
 use App\Nova\Notification;
 use App\Nova\ParentalGuideEntry;
 use App\Nova\Permission;
 use App\Nova\Person;
 use App\Nova\PersonalAccessToken;
 use App\Nova\Platform;
+use App\Nova\ReconciliationRow;
+use App\Nova\ReconciliationRun;
+use App\Nova\ReconciliationUserImpact;
 use App\Nova\Relation;
 use App\Nova\Role;
 use App\Nova\Season;
@@ -67,6 +75,10 @@ use App\Nova\UserLibrary;
 use App\Nova\UserReminder;
 use App\Nova\Video;
 use App\Nova\View;
+use App\Nova\WordleCategory;
+use App\Nova\WordleDailyPuzzle;
+use App\Nova\WordleGame as NovaWordleGame;
+use App\Nova\WordleWord;
 use App\Policies\PermissionPolicy;
 use App\Policies\RolePolicy;
 use Illuminate\Http\Request;
@@ -308,6 +320,20 @@ if (class_exists('Laravel\Nova\NovaApplicationServiceProvider')) {
                     )
                         ->collapsable()
                         ->icon('arrow-left-end-on-rectangle'),
+
+                    MenuSection::make(
+                        __('Store Reconciliation'),
+                        collect([
+                            ReconciliationRun::class,
+                            ReconciliationRow::class,
+                            ReconciliationUserImpact::class,
+                        ])->map(fn($resource) => MenuItem::resource($resource))
+                    )
+                        ->collapsable()
+                        ->icon('currency-dollar')
+                        ->canSee(function ($request) {
+                            return $request->user()->hasRole('superAdmin');
+                        }),
 
                     collect($this->tools())
                         ->map(fn($tool) => $tool->menu($request)),

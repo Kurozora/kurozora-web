@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\API\v1\StoreController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Imdhemy\Purchases\Http\Controllers\ServerNotificationController;
 
 Route::prefix('/store')
     ->name('.store')
@@ -9,8 +11,9 @@ Route::prefix('/store')
         Route::prefix('/subscriptions')
             ->name('.subscriptions')
             ->group(function () {
-                Route::post('/apple', function(\Illuminate\Http\Request $request) {
-                    Http::post(route('liap.serverNotifications', ['provider' => 'app-store']), $request->all());
+                Route::post('/apple', function (Request $request) {
+                    $request->merge(['provider' => 'app-store']);
+                    return app()->call(ServerNotificationController::class);
                 })
                     ->name('.apple');
             });

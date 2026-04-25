@@ -1,6 +1,12 @@
 <?php
 
 use App\Enums\SeasonOfYear;
+use App\Exceptions\AppStore\AppleRootCertificateUnavailableException;
+use App\Services\AppStoreService;
+use AppStoreServerLibrary\AppStoreServerAPIClient;
+use AppStoreServerLibrary\Models\Environment;
+use AppStoreServerLibrary\SignedDataVerifier;
+use AppStoreServerLibrary\SignedDataVerifier\VerificationException;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Date;
@@ -83,7 +89,7 @@ if (!function_exists('number_shorten')) {
     }
 }
 
-if (! function_exists('number_to_words')) {
+if (!function_exists('number_to_words')) {
     /**
      * Convert the given number to words.
      *
@@ -221,7 +227,7 @@ if (!function_exists('season_of_year')) {
     }
 }
 
-if (! function_exists('yesterday')) {
+if (!function_exists('yesterday')) {
     /**
      * Create a new Carbon instance for yesterday's time.
      *
@@ -234,7 +240,7 @@ if (! function_exists('yesterday')) {
     }
 }
 
-if (! function_exists('generate_random_color')) {
+if (!function_exists('generate_random_color')) {
     /**
      * Generate a random color based on a seed.
      *
@@ -260,7 +266,7 @@ if (! function_exists('generate_random_color')) {
     }
 }
 
-if (! function_exists('strip_html')) {
+if (!function_exists('strip_html')) {
     /**
      * Strips the given string from any HTML tags,
      * and convers breaks to new line among other stuff.
@@ -295,7 +301,7 @@ if (! function_exists('strip_html')) {
     }
 }
 
-if (! function_exists('str_index')) {
+if (!function_exists('str_index')) {
     /**
      * Get the index of the string based on the first character.
      * If the character is an alphabet, then the index is equivalent
@@ -329,7 +335,7 @@ if (! function_exists('str_index')) {
     }
 }
 
-if (! function_exists('parse_user_agent')) {
+if (!function_exists('parse_user_agent')) {
     /**
      * Parse the given user agent and return the components as array.
      *
@@ -370,5 +376,63 @@ if (! function_exists('parse_user_agent')) {
             'os' => $os,
             'client_info' => $matches['clientInfo'] ?? null,
         ];
+    }
+}
+
+if (!function_exists('appStore')) {
+    /**
+     * Get an App Store Server API client instance for the given environment.
+     *
+     * @param string|null $env
+     *
+     * @return AppStoreServerAPIClient
+     */
+    function appStore(?string $env = null): AppStoreServerAPIClient
+    {
+        return app(AppStoreService::class)->client($env);
+    }
+}
+
+if (!function_exists('appStoreVerifier')) {
+    /**
+     * Get a StoreKit 2 signed-data verifier for the given environment.
+     *
+     * @param string|null $env
+     *
+     * @return SignedDataVerifier
+     * @throws VerificationException
+     */
+    function appStoreVerifier(?string $env = null): SignedDataVerifier
+    {
+        $config = config('services.apple.store_kit');
+
+        if ($env) {
+            $environment = Environment::from($env);
+        } else {
+            $environment = app()->isProduction() ? Environment::PRODUCTION : Environment::SANDBOX;
+        }
+
+        $rootCerts = array_map(function (string $filename): string {
+            $path = resource_path('certs/apple/' . $filename);
+            $contents = @file_get_contents($path);
+
+            if ($contents === false || $contents === '') {
+                throw new AppleRootCertificateUnavailableException(sprintf(
+                    'Apple root certificate "%s" is unreadable at %s.',
+                    $filename,
+                    $path,
+                ));
+            }
+
+            return $contents;
+        }, ['AppleRootCA-G2.cer', 'AppleRootCA-G3.cer']);
+
+        return new SignedDataVerifier(
+            rootCertificates: $rootCerts,
+            enableOnlineChecks: true,
+            environment: $environment,
+            bundleId: $config['bundle_id'],
+            appAppleId: $environment === Environment::PRODUCTION ? (int) config('app.ios.id') : null,
+        );
     }
 }

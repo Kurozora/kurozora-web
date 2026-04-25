@@ -2,40 +2,43 @@
 
 namespace App\Listeners\AppStore;
 
+use App\Models\UserReceipt;
 use Imdhemy\AppStore\ServerNotifications\V2DecodedPayload;
+use Imdhemy\Purchases\ServerNotifications\AppStoreV2ServerNotification;
 
 class PriceIncrease extends AppStoreListener
 {
-    /**
-     * Handle the received Cancel subscription event.
-     *
-     * @param \Imdhemy\Purchases\Events\AppStore\PriceIncrease $event
-     */
-    public function handle($event): void
+    protected function process($event, AppStoreV2ServerNotification $notification, V2DecodedPayload $payload): void
     {
-        // Retrieve the necessary data from the event
-        $notification = $event->getServerNotification();
-        $subscription = $notification->getSubscription();
+        $transactionInfo = $payload->getTransactionInfo();
+        $renewalInfo = $payload->getRenewalInfo();
 
-        /** @var V2DecodedPayload $providerRepresentation */
-        $providerRepresentation = $subscription->getProviderRepresentation();
+        $user = $this->resolveUser($transactionInfo->getAppAccountToken());
+        if (!$user) {
+            return;
+        }
 
-        // Decide whether it will auto-renew
-        $renewalInfo = $providerRepresentation->getRenewalInfo();
+        $product = $this->resolveProduct($transactionInfo->getProductId());
+        if (!$product) {
+            return;
+        }
 
-        // Decide whether it will auto-renew
-        $willAutoRenew = $renewalInfo->getPriceIncreaseStatus() ?? 0;
+        $receipt = UserReceipt::where('original_transaction_id', $transactionInfo->getOriginalTransactionId())->first();
+        if (!$receipt) {
+            return;
+        }
 
-        // Find the user and update their receipt.
-        $userReceipt = $this->findOrCreateUserReceipt($providerRepresentation);
-        $userReceipt->update([
-            'will_auto_renew' => $willAutoRenew
+        $receipt->update([
+            'auto_renew_product_id' => $renewalInfo->getAutoRenewProductId(),
+            'will_auto_renew' => $renewalInfo->getAutoRenewStatus() === 1,
+            'will_price_increase' => $renewalInfo->getPriceIncreaseStatus() === 1,
+            'expiration_intent' => $renewalInfo->getExpirationIntent(),
+            'grace_period_expires_date' => $renewalInfo->getGracePeriodExpiresDate()?->toDateTime(),
         ]);
 
-        // Update user values.
-        $user = $userReceipt->user;
-
-        // Notify the user about the subscription update.
-        $this->notifyUserAboutUpdate($user, $event);
+        // Notify the user when consent for the price increase is still required.
+        if ($renewalInfo->getPriceIncreaseStatus() === 0) {
+            $this->notifyUserAboutUpdate($user, $event, $product, $receipt);
+        }
     }
 }

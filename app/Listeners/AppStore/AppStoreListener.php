@@ -3,144 +3,182 @@
 namespace App\Listeners\AppStore;
 
 use App\Contracts\AppStore\HandlesSubscription;
+use App\Models\AppStoreNotification;
+use App\Models\StoreProduct;
 use App\Models\User;
 use App\Models\UserReceipt;
+use App\Models\UserReceiptTransaction;
 use App\Notifications\SubscriptionStatus;
-use Exception;
+use App\Services\EntitlementService;
+use Illuminate\Support\Facades\DB;
 use Imdhemy\AppStore\ServerNotifications\V2DecodedPayload;
 use Imdhemy\AppStore\ValueObjects\JwsRenewalInfo;
-use Imdhemy\Purchases\Events\PurchaseEvent;
+use Imdhemy\AppStore\ValueObjects\JwsTransactionInfo;
+use Imdhemy\Purchases\ServerNotifications\AppStoreV2ServerNotification;
 
 abstract class AppStoreListener implements HandlesSubscription
 {
     /**
-     * Handle the received purchase event.
-     *
-     * @param $event
+     * {@inheritDoc}
      */
-    public function handle($event) { }
+    final public function handle($event): void
+    {
+        /** @var AppStoreV2ServerNotification $notification */
+        $notification = $event->getServerNotification();
+        $payload = V2DecodedPayload::fromArray($notification->getPayload());
+        $notificationUUID = $payload->getNotificationUUID();
+
+        if (AppStoreNotification::where('notification_uuid', $notificationUUID)->exists()) {
+            return;
+        }
+
+        $transactionInfo = $payload->getTransactionInfo();
+
+        AppStoreNotification::create([
+            'notification_uuid' => $notificationUUID,
+            'notification_type' => $notification->getType(),
+            'subtype' => $notification->getSubtype(),
+            'transaction_id' => $transactionInfo?->getTransactionId(),
+            'original_transaction_id' => $transactionInfo?->getOriginalTransactionId(),
+            'payload' => $notification->getPayload(),
+            'received_at' => now(),
+        ]);
+
+        DB::transaction(fn () => $this->process($event, $notification, $payload));
+    }
 
     /**
-     * Finds the user to which the subscription belongs.
-     *
-     * @param ?string $userID
-     * @param string $originalTransactionID
-     * @return UserReceipt|null
+     * Per-listener event processing, wrapped in a database transaction.
      */
-    public function findUserReceipt(?string $userID, string $originalTransactionID): ?UserReceipt
+    abstract protected function process(
+        $event,
+        AppStoreV2ServerNotification $notification,
+        V2DecodedPayload $payload
+    ): void;
+
+    /**
+     * Upsert the canonical {@see UserReceiptTransaction} row for this transaction.
+     */
+    final protected function upsertTransaction(JwsTransactionInfo $tx, StoreProduct $product, ?string $userUuid = null): UserReceiptTransaction
     {
-        $receipt = UserReceipt::firstWhere('original_transaction_id', '=', $originalTransactionID);
+        $claims = $tx->getClaims();
+        $now = now();
 
-        // Return receipt if no user ID is provided or no receipt is found
-        if (empty($userID) || empty($receipt)) {
-            return $receipt;
-        }
+        UserReceiptTransaction::upsert(
+            [[
+                'transaction_id' => $tx->getTransactionId(),
+                'user_id' => $userUuid,
+                'original_transaction_id' => $tx->getOriginalTransactionId(),
+                'product_id' => $product->product_id,
+                'web_order_line_item_id' => $tx->getWebOrderLineItemId(),
+                'offer_id' => $tx->getOfferIdentifier(),
+                'offer_type' => $tx->getOfferType(),
+                'offer_period' => $claims['offerPeriod'] ?? null,
+                'offer_discount_type' => $claims['offerDiscountType'] ?? null,
+                'currency' => $claims['currency'] ?? null,
+                'price_milliunits' => $claims['price'] ?? null,
+                'price_usd_milliunits' => $product->price_usd_milliunits,
+                'quantity' => $tx->getQuantity(),
+                'is_trial_period' => (bool) ($claims['isTrialPeriod'] ?? false),
+                'is_in_intro_offer_period' => (bool) ($claims['isInIntroOfferPeriod'] ?? false),
+                'is_upgraded' => (bool) $tx->getIsUpgraded(),
+                'purchased_at' => $tx->getPurchaseDate()?->toDateTime(),
+                'expires_at' => $tx->getExpiresDate()?->toDateTime(),
+                'revoked_at' => $tx->getRevocationDate()?->toDateTime(),
+                'revocation_reason' => $tx->getRevocationReason(),
+                'created_at' => $now,
+                'updated_at' => $now,
+            ]],
+            ['transaction_id'],
+            [
+                'user_id', 'original_transaction_id', 'product_id', 'web_order_line_item_id',
+                'offer_id', 'offer_type', 'offer_period', 'offer_discount_type',
+                'currency', 'price_milliunits', 'price_usd_milliunits', 'quantity',
+                'is_trial_period', 'is_in_intro_offer_period', 'is_upgraded',
+                'purchased_at', 'expires_at', 'revoked_at', 'revocation_reason',
+                'updated_at',
+            ],
+        );
 
-        // Update the user ID if it's not already set
-        // This is a corrective measure for missing user ID in some receipts
-        if (empty($receipt->user_id)) {
-            $receipt->user_id = $userID;
-            $receipt->save();
-        }
+        return UserReceiptTransaction::where('transaction_id', $tx->getTransactionId())->first();
+    }
 
-        // If the receipt belongs to another user, return null
-        if ($receipt->user_id != $userID) {
+    /**
+     * Find-or-create the subscription receipt and return it.
+     */
+    final protected function upsertReceipt(JwsTransactionInfo $tx, ?JwsRenewalInfo $renewalInfo = null): UserReceipt
+    {
+        $now = now();
+
+        UserReceipt::upsert(
+            [[
+                'original_transaction_id' => $tx->getOriginalTransactionId(),
+                'user_id' => $tx->getAppAccountToken(),
+                'product_id' => $tx->getProductId(),
+                'subscription_group_id' => $tx->getSubscriptionGroupIdentifier(),
+                'original_purchased_at' => $tx->getOriginalPurchaseDate()?->toDateTime(),
+                'created_at' => $now,
+                'updated_at' => $now,
+            ]],
+            ['original_transaction_id'],
+            ['user_id', 'product_id', 'subscription_group_id', 'original_purchased_at', 'updated_at'],
+        );
+
+        return UserReceipt::where('original_transaction_id', $tx->getOriginalTransactionId())->first();
+    }
+
+    /**
+     * Resolve the owning user from an app-account-token.
+     */
+    final protected function resolveUser(?string $appAccountToken): ?User
+    {
+        if (empty($appAccountToken)) {
             return null;
         }
 
-        // Return the receipt
-        return $receipt;
+        return User::where('uuid', $appAccountToken)->first();
     }
 
     /**
-     * Creates and returns a new user receipt.
-     *
-     * @param V2DecodedPayload $providerRepresentation
-     * @return UserReceipt
+     * Resolve the product row backing this transaction.
      */
-    public function findOrCreateUserReceipt(V2DecodedPayload $providerRepresentation): UserReceipt
+    final protected function resolveProduct(?string $productId): ?StoreProduct
     {
-        logger()->channel('stack')->critical(print_r(request()->all(), true));
-        logger()->channel('stack')->critical(print_r($providerRepresentation->toArray(), true));
-        $receiptInfo = $providerRepresentation->getTransactionInfo();
-        $userID = $receiptInfo->getAppAccountToken();
-        $originalTransactionID = $receiptInfo->getOriginalTransactionId();
-
-        if ($userReceipt = $this->findUserReceipt($userID, $originalTransactionID)) {
-            return $userReceipt;
+        if (empty($productId)) {
+            return null;
         }
 
-        // Collect IDs
-        $webOrderLineItemID = $receiptInfo->getWebOrderLineItemId();
-        $offerID = $receiptInfo->getOfferIdentifier();
-        $subscriptionGroupID = $receiptInfo->getSubscriptionGroupIdentifier();
-        $productID = $receiptInfo->getProductId();
-
-        // Collect dates
-        $originalPurchaseDate = $receiptInfo->getOriginalPurchaseDate();
-        $purchaseDate = $receiptInfo->getPurchaseDate();
-        $expiresDate = $receiptInfo->getExpiresDate();
-        $revocationDate = $receiptInfo->getRevocationDate();
-
-        try {
-            // Check for grace period
-            $renewalInfo = $providerRepresentation->getRenewalInfo();
-            $isInGracePeriod = $this->isInGracePeriod($renewalInfo);
-
-            // Decide validity of the subscription and whether it will auto-renew
-            $isSubscriptionValid = $expiresDate?->isFuture() || $isInGracePeriod;
-            $willAutoRenew = $renewalInfo->getAutoRenewStatus();
-        } catch (Exception $e) {
-            $willAutoRenew = false;
-            $isSubscriptionValid = false;
-        }
-
-        return UserReceipt::create([
-                'user_id'                   => $userID,
-                'original_transaction_id'   => $originalTransactionID,
-                'web_order_line_item_id'    => $webOrderLineItemID,
-                'offer_id'                  => $offerID,
-                'subscription_group_id'     => $subscriptionGroupID,
-                'product_id'                => $productID,
-                'is_subscribed'             => $isSubscriptionValid,
-                'will_auto_renew'           => $willAutoRenew,
-                'original_purchased_at'     => $originalPurchaseDate?->toDateTime(),
-                'purchased_at'              => $purchaseDate?->toDateTime(),
-                'expired_at'                => $expiresDate?->toDateTime(),
-                'revoked_at'                => $revocationDate?->toDateTime()
-            ]);
+        return StoreProduct::where('product_id', $productId)->first();
     }
 
     /**
-     * Notify the user of the changes applied to the subscription.
-     *
-     * @param User|null $user
-     * @param PurchaseEvent $event
+     * {@inheritDoc}
      */
-    public function notifyUserAboutUpdate(?User $user, PurchaseEvent $event): void
+    final public function isInGracePeriod(JwsRenewalInfo $renewalInfo): bool
+    {
+        return $renewalInfo->getIsInBillingRetryPeriod() &&
+            $renewalInfo->getGracePeriodExpiresDate() !== null &&
+            $renewalInfo->getGracePeriodExpiresDate()->isFuture();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    final public function notifyUserAboutUpdate(?User $user, $event, StoreProduct $product, ?UserReceipt $receipt = null): void
     {
         if (empty($user)) {
             return;
         }
 
-        // Get server notification.
         $notification = $event->getServerNotification();
-
-        // Notify the user about the subscription update.
-        $user->notify(new SubscriptionStatus($notification->getType()));
+        $user->notify(new SubscriptionStatus($notification->getType(), $notification->getSubtype(), $product, $receipt,));
     }
 
     /**
-     * Whether bill is in retrying period and grace period expiry date is in the future.
-     *
-     * @param JwsRenewalInfo $renewalInfo
-     *
-     * @return bool
+     * {@inheritDoc}
      */
-    public function isInGracePeriod(JwsRenewalInfo $renewalInfo): bool
+    final public function recomputeUserEntitlements(User $user): void
     {
-        return $renewalInfo->getIsInBillingRetryPeriod() &&
-            $renewalInfo->getGracePeriodExpiresDate() !== null &&
-            $renewalInfo->getGracePeriodExpiresDate()->isFuture();
+        EntitlementService::recompute($user);
     }
 }

@@ -81,7 +81,7 @@ class Notification extends DatabaseNotification
                 return $body;
             // Subscription notifications
             case SubscriptionStatus::class:
-                return SubscriptionStatus::getDescription(self::getData('subscriptionStatus')) ?? '';
+                return self::getData('message') ?? '';
         }
 
         return 'Something went wrong... please contact an administrator.';
