@@ -5,6 +5,7 @@ use App\Http\Controllers\API\v1\AchievementController;
 use App\Http\Controllers\API\v1\FollowingController;
 use App\Http\Controllers\API\v1\LibraryController;
 use App\Http\Controllers\API\v1\RegistrationController;
+use App\Http\Controllers\API\v1\TwoFactorChallengeController;
 use App\Http\Controllers\API\v1\UserBlockController;
 use App\Http\Controllers\API\v1\UserController;
 use App\Http\Controllers\API\v1\UserFavoriteController;
@@ -21,6 +22,9 @@ Route::prefix('/users')
 
         Route::post('/signin', [AccessTokenController::class, 'create'])
             ->name('.sign-in');
+
+        Route::post('/two-factor-challenge', [TwoFactorChallengeController::class, 'create'])
+            ->name('.two-factor-challenge');
 
         Route::post('/reset-password', [UserController::class, 'resetPassword'])
             ->name('.reset-password');

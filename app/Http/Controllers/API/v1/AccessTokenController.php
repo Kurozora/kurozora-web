@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\v1;
 
+use App\Contracts\Web\Auth\TwoFactorAuthenticationProvider;
 use App\Helpers\JSONResult;
 use App\Http\Requests\CreateSessionAttributeRequest;
 use App\Http\Requests\GetPaginatedRequest;
@@ -10,8 +11,10 @@ use App\Http\Resources\AccessTokenResource;
 use App\Http\Resources\UserResource;
 use App\Models\LoginAttempt;
 use App\Models\PersonalAccessToken;
+use App\Models\TwoFactorChallenge;
 use App\Models\User;
 use Hash;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
@@ -66,6 +69,7 @@ class AccessTokenController
      * @param CreateSessionAttributeRequest $request
      * @return JsonResponse
      * @throws AuthenticationException
+     * @throws AuthorizationException
      * @throws TooManyRequestsHttpException
      */
     public function create(CreateSessionAttributeRequest $request): JsonResponse
@@ -97,8 +101,33 @@ class AccessTokenController
             ->first();
 
         // Compare the passwords
-        if (!$user || !Hash::check($data['password'], $user->password)) {
-            // Register the sign in attempt
+        $passwordIsValid  = $user && Hash::check($data['password'], $user->password);
+        $resolvedViaSplit = false;
+
+        if (
+            !$passwordIsValid
+            && $user
+            && empty($data['client_supports_2fa'])
+            && $user->hasEnabledTwoFactorAuthentication()
+            && preg_match('/^(.+)(\d{6})$/', $data['password'], $matches)
+        ) {
+            [, $passwordOnly, $otp] = $matches;
+
+            if (Hash::check($passwordOnly, $user->password)) {
+                $otpIsValid = app(TwoFactorAuthenticationProvider::class)->verify(
+                    decrypt($user->two_factor_secret),
+                    $otp
+                );
+
+                if ($otpIsValid) {
+                    $passwordIsValid  = true;
+                    $resolvedViaSplit = true;
+                }
+            }
+        }
+
+        if (!$passwordIsValid) {
+            // Register the sign-in attempt
             LoginAttempt::registerFailedLoginAttempt($request->ip());
 
             // Throw authorization error message
@@ -108,6 +137,25 @@ class AccessTokenController
         // Check if email is confirmed
         if (!$user->hasVerifiedEmail()) {
             throw new AuthenticationException('You have not confirmed your email address yet. Please check your email inbox or spam folder.');
+        }
+
+        // Issue a 2FA challenge if the account has it enabled
+        if (!$resolvedViaSplit && $user->hasEnabledTwoFactorAuthentication()) {
+            if (empty($data['client_supports_2fa'])) {
+                throw new AuthorizationException(__('Your app version does not support two-factor authentication. Update to the latest version, or append your 6-digit verification code to the end of your password and try again.'));
+            }
+
+            $challengeToken = TwoFactorChallenge::issue($user, [
+                'platform'         => $data['platform'],
+                'platform_version' => $data['platform_version'],
+                'device_vendor'    => $data['device_vendor'],
+                'device_model'     => $data['device_model'],
+            ]);
+
+            return JSONResult::success([
+                'two_factor'      => true,
+                'challenge_token' => $challengeToken,
+            ]);
         }
 
         // Create new token
