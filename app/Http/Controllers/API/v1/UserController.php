@@ -148,8 +148,8 @@ class UserController extends Controller
             },
         ])
             ->withCount(['followers', 'followedModels as following_count', 'mediaRatings'])
-            ->when(auth()->user(), function ($query, $user) use ($character) {
-                $user->withExists(['followers as isFollowed' => function ($query) {
+            ->when(auth()->user(), function ($query, $user) use ($users) {
+                $query->withExists(['followers as isFollowed' => function ($query) {
                     $query->where('user_id', '=', auth()->user()->id);
                 }]);
             });
