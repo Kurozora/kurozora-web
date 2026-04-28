@@ -600,6 +600,7 @@ class AnimeController extends Controller
                 'song' => function ($query) {
                     $query->with([
                         'media',
+                        'mediaRatings',
                         'mediaStat',
                         'translation',
                     ]);
@@ -673,6 +674,7 @@ class AnimeController extends Controller
         $mediaStudios = $anime->studios()
             ->with([
                 'media',
+                'mediaRatings',
                 'mediaStat',
                 'successor',
                 'predecessors',
