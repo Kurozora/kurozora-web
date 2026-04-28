@@ -361,7 +361,7 @@ if (!function_exists('parse_user_agent')) {
         foreach ($metaParts as $part) {
             if (str_starts_with($part, 'build:')) {
                 $build = substr($part, 6);
-            } else if (str_starts_with($part, 'iOS') || str_starts_with($part, 'Android') || str_starts_with($part, 'macOS') || str_contains($part, 'Linux') || str_starts_with($part, 'Windows')) {
+            } else if (str_starts_with($part, 'iOS') || str_starts_with($part, 'Android') || str_starts_with($part, 'macOS') || str_contains($part, 'Linux') || str_starts_with($part, 'Windows') || str_starts_with($part, 'watchOS')) {
                 $os = $part;
             } else {
                 $bundle = $part;
