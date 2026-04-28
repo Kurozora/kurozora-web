@@ -14,7 +14,8 @@ use App\Http\Controllers\Auth\SignInWithAppleController;
 Route::prefix('/users')
     ->name('.users')
     ->group(function () {
-        Route::get('/', [UserController::class, 'views'])
+        Route::get('/', [UserController::class, 'index'])
+            ->middleware('auth.kurozora:optional')
             ->name('.index');
 
         Route::post('/', [RegistrationController::class, 'signUp'])
