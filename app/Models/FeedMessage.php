@@ -172,4 +172,22 @@ class FeedMessage extends KModel implements ReactableContract
     {
         return $query->where('is_reply', '=', true);
     }
+
+    /**
+     * Filters out feed messages whose author is mutually invisible to the given user.
+     *
+     * @param Builder $query
+     * @param User|null $user
+     * @return Builder
+     */
+    public function scopeVisibleTo(Builder $query, ?User $user): Builder
+    {
+        if ($user === null) {
+            return $query;
+        }
+
+        return $query->whereHas('user', function (Builder $query) use ($user): Builder {
+            return $query->visibleTo($user);
+        });
+    }
 }

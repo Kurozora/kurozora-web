@@ -81,12 +81,19 @@ class UserResourceBasic extends JsonResource
         $user = auth()->user();
 
         $isFollowed = null;
+        $isBlocked = null;
+        $isBlockedBy = null;
+
         if ($followedUser->id != $user->id) {
             $isFollowed = (bool) $this->resource->isFollowed;
+            $isBlocked = $user->hasBlocked($followedUser);
+            $isBlockedBy = $user->isBlockedBy($followedUser);
         }
 
         return [
-            'isFollowed' => $isFollowed
+            'isFollowed' => $isFollowed,
+            'isBlocked' => $isBlocked,
+            'isBlockedBy' => $isBlockedBy,
         ];
     }
 

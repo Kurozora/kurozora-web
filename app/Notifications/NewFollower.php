@@ -44,6 +44,19 @@ class NewFollower extends Notification implements ShouldQueue
     }
 
     /**
+     * Suppress delivery if the notifiable user has blocked the actor.
+     *
+     * @param mixed $notifiable
+     * @param string $channel
+     *
+     * @return bool
+     */
+    public function shouldSend(mixed $notifiable, string $channel): bool
+    {
+        return !($notifiable instanceof User) || !$notifiable->hasBlocked($this->follower);
+    }
+
+    /**
      * Get the database representation of the notification.
      *
      * @param mixed $notifiable

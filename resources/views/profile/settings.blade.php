@@ -63,6 +63,10 @@
                 </div>
 
                 <div class="pt-10">
+                    <livewire:profile.blocked-accounts-section :user="$user" />
+                </div>
+
+                <div class="pt-10">
                     <livewire:profile.delete-library-form />
                 </div>
 

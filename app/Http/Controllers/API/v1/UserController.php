@@ -41,6 +41,7 @@ class UserController extends Controller
         }
 
         $users = User::query()
+            ->visibleTo(auth()->user())
             ->with([
                 'badges' => function ($query) {
                     $query->with(['media']);
@@ -168,6 +169,14 @@ class UserController extends Controller
      */
     public function search(User $user): JsonResponse
     {
+        $authUser = auth()->user();
+
+        if ($authUser !== null && !$authUser->canInteractWith($user)) {
+            return JSONResult::success([
+                'data' => UserResourceIdentity::collection([])
+            ]);
+        }
+
         // Show profile response
         return JSONResult::success([
             'data' => UserResourceIdentity::collection([$user])

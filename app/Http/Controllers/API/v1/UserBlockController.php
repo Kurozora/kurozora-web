@@ -54,11 +54,12 @@ class UserBlockController extends Controller
             throw new BadRequestHttpException('You cannot block yourself.');
         }
 
-        $isBlocked = $authUser->toggleBlock($user);
+        $isBlocked = !is_bool($authUser->toggleBlock($user));
 
         return JSONResult::success([
             'data' => [
                 'isBlocked' => $isBlocked,
+                'isBlockedBy' => $user->hasBlocked($authUser),
             ]
         ]);
     }

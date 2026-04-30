@@ -45,6 +45,15 @@ class FeedController extends Controller
             }
         }
 
+        // Check if engagement must be blocked
+        if (($data['is_reply'] ?? false) || ($data['is_reshare'] ?? false)) {
+            $parentMessage = FeedMessage::with('user')->find($data['parent_id'] ?? null);
+
+            if ($parentMessage && !$user->canInteractWith($parentMessage->user)) {
+                throw new AuthorizationException(__('You are not allowed to engage with this user.'));
+            }
+        }
+
         // Create the feed message
         $feedMessage = $user->feed_messages()
             ->create([

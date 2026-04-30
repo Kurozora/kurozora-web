@@ -205,6 +205,13 @@ class FeedMessageController extends Controller
         // Get the authenticated user
         $user = auth()->user();
 
+        // Check if engagement must be blocked
+        $feedMessage->loadMissing('user');
+
+        if (!$user->canInteractWith($feedMessage->user)) {
+            throw new AuthorizationException(__('You are not allowed to engage with this user.'));
+        }
+
         // Get the vote
         $voteAction = $user->toggleHeart($feedMessage);
 

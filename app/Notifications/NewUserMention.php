@@ -43,6 +43,65 @@ class NewUserMention extends Notification
     }
 
     /**
+     * Suppresses delivery when block-related conditions apply.
+     *
+     * @param mixed $notifiable
+     * @param string $channel
+     *
+     * @return bool
+     */
+    public function shouldSend(mixed $notifiable, string $channel): bool
+    {
+        if (!($notifiable instanceof User)) {
+            return true;
+        }
+
+        $actor = $this->model->user;
+
+        if ($actor instanceof User && $notifiable->hasBlocked($actor)) {
+            return false;
+        }
+
+        if ($this->model instanceof FeedMessage) {
+            $rootAuthor = $this->resolveRootAuthor($this->model);
+
+            if ($rootAuthor instanceof User
+                && $actor instanceof User
+                && $rootAuthor->id !== $actor->id
+                && $notifiable->hasBlocked($rootAuthor)
+            ) {
+                return $notifiable->isFollowing($actor);
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Walks the parent chain and returns the author of the root message.
+     *
+     * @param FeedMessage $feedMessage
+     *
+     * @return User|null
+     */
+    private function resolveRootAuthor(FeedMessage $feedMessage): ?User
+    {
+        $current = $feedMessage;
+
+        while ($current->parent_feed_message_id !== null) {
+            $parent = $current->parentMessage()->first();
+
+            if ($parent === null) {
+                break;
+            }
+
+            $current = $parent;
+        }
+
+        return $current->user;
+    }
+
+    /**
      * Get the array representation of the notification.
      *
      * @param mixed $notifiable

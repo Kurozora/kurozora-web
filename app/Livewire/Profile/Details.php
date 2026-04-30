@@ -73,6 +73,13 @@ class Details extends Component
     public bool $showSharePopup = false;
 
     /**
+     * Whether the auth user has opted in to view the blocked user's posts.
+     *
+     * @var bool $showBlockedPosts
+     */
+    public bool $showBlockedPosts = false;
+
+    /**
      * The component's listeners.
      *
      * @var array
@@ -143,6 +150,20 @@ class Details extends Component
     }
 
     /**
+     * Whether the auth user is blocked by this profile's user.
+     *
+     * @return bool
+     */
+    public function getIsBlockedByProperty(): bool
+    {
+        if ($authUser = auth()->user()) {
+            return $this->user->hasBlocked($authUser);
+        }
+
+        return false;
+    }
+
+    /**
      * Whether the user is followed by the auth user.
      *
      * @return bool
@@ -181,8 +202,19 @@ class Details extends Component
     public function toggleBlockUser(): void
     {
         auth()->user()->toggleBlock($this->user);
+        $this->showBlockedPosts = false;
         $this->selectedPopupType = '';
         $this->showPopup = false;
+    }
+
+    /**
+     * Reveal posts of the blocked user the auth user has blocked.
+     *
+     * @return void
+     */
+    public function revealBlockedPosts(): void
+    {
+        $this->showBlockedPosts = true;
     }
 
     /**

@@ -1034,4 +1034,39 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         return $this->library()
             ->where('status', '=', UserLibraryStatus::Dropped);
     }
+
+    /**
+     * Whether the user can engage with the given user (follow, heart, reply, reshare).
+     *
+     * @param User $other
+     * @return bool
+     */
+    public function canInteractWith(User $other): bool
+    {
+        if ($this->id === $other->id) {
+            return true;
+        }
+
+        return !$this->hasBlocked($other) && !$this->isBlockedBy($other);
+    }
+
+    /**
+     * Eloquent builder scope that limits the query to users mutually visible to the given user.
+     *
+     * Hides users that the given user has blocked, and users that have blocked the given user.
+     *
+     * @param Builder $query
+     * @param User|null $user
+     * @return Builder
+     */
+    public function scopeVisibleTo(Builder $query, ?User $user): Builder
+    {
+        if ($user === null) {
+            return $query;
+        }
+
+        return $query
+            ->whereNotBlockedBy($user)
+            ->whereNotBlocking($user);
+    }
 }

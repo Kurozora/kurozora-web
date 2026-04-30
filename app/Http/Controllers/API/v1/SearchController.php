@@ -239,7 +239,10 @@ class SearchController extends Controller
                     ];
                     break;
                 case SearchType::Users:
-                    $resource = User::search($data['query'] ?? '');
+                    $resource = User::search($data['query'] ?? '')
+                        ->query(function ($query) {
+                            $query->visibleTo(auth()->user());
+                        });
                     $this->filter(User::class, $request, $resource);
                     $resource = $resource->paginate($data['limit'] ?? 5)
                         ->appends($data);

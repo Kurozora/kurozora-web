@@ -1,4 +1,4 @@
-@props(['user', 'isRow' => true])
+@props(['user', 'isRow' => true, 'trailingAction' => null])
 
 @php
     $class = $isRow ? 'pb-2 shrink-0 snap-normal snap-center' : '';
@@ -73,7 +73,9 @@
         <a class="absolute w-full h-full" href="{{ route('profile.details', $user) }}" wire:navigate></a>
 
         <div class="flex flex-row flex-nowrap items-center justify-between z-10 whitespace-nowrap">
-            @if ($user->id != auth()->user()?->id)
+            @if ($trailingAction)
+                {{ $trailingAction }}
+            @elseif ($user->id != auth()->user()?->id)
                 <livewire:components.follow-button :user="$user" :is-followed="$isFollowed" wire:key="{{ uniqid(more_entropy: true) }}" />
             @endif
         </div>

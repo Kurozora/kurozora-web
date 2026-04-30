@@ -6,6 +6,7 @@ use App\Http\Controllers\Web\Profile\GameLibraryController;
 use App\Http\Controllers\Web\Profile\MangaLibraryController;
 use App\Http\Controllers\Web\UserProfileController;
 use App\Livewire\Profile\Achievements\Index as AchievementsIndex;
+use App\Livewire\Profile\Blocked\Index as BlockedIndex;
 use App\Livewire\Profile\Details;
 use App\Livewire\Profile\Followers\Index as FollowersIndex;
 use App\Livewire\Profile\Following\Index as FollowingIndex;
@@ -91,6 +92,10 @@ Route::prefix('/profile')
 
                 Route::get('/ratings', RatingsIndex::class)
                     ->name('.ratings');
+
+                Route::get('/blocked', BlockedIndex::class)
+                    ->middleware('auth')
+                    ->name('.blocked');
             });
     });
 
