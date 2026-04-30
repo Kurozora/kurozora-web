@@ -25,7 +25,8 @@ class PostFeedRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'content' => ['bail', 'required_without:body', 'string', 'min:1', 'max:' . FeedMessage::maxContentLength()],
+            'content' => ['bail', 'required_without_all:body,is_reshare', 'nullable', 'string', 'max:' . FeedMessage::maxContentLength()],
+            'body' => ['bail', 'required_without_all:content,is_reshare', 'nullable', 'string', 'max:' . FeedMessage::maxContentLength()],
             'parent_id' => ['bail', 'required_with:is_reply,is_reshare', 'integer', 'exists:' . FeedMessage::TABLE_NAME . ',id'],
             'is_nsfw' => ['bail', 'required', 'integer', 'in:0,1', 'nullable'],
             'is_reply' => ['bail', 'required_with:parent_id', 'different:is_reshare', 'integer', 'in:0,1', 'nullable'],

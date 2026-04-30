@@ -2,13 +2,12 @@
 
 namespace App\Livewire\Components\User;
 
+use App\Models\FeedMessage;
 use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Pagination\CursorPaginator;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\Isolate;
 use Livewire\Component;
@@ -89,24 +88,13 @@ class FeedMessagesSection extends Component
             return collect();
         }
 
+        $authUser = auth()->user();
+
         return $this->user->feed_messages()
-            ->with([
-                'user' => function (BelongsTo $belongsTo) {
-                    $belongsTo->with(['media']);
-                },
-                'loveReactant' => function (BelongsTo $query) {
-                    $query->with([
-                        'reactionCounters',
-                        'reactions' => function (HasMany $hasMany) {
-                            $hasMany->with(['reacter', 'type']);
-                        }
-                    ]);
-                },
-                'linkPreview'
-            ])
+            ->with(FeedMessage::lockupEagerLoads($authUser))
             ->withCount(['replies', 'reShares'])
-            ->when(auth()->user(), function ($query, $user) {
-                $query->withExists(['reShares as isReShared' => function ($query) use ($user) {
+            ->when($authUser, function ($query, $user) {
+                $query->withExists(['simpleReShares as isReShared' => function ($query) use ($user) {
                     $query->where('user_id', '=', $user->id);
                 }]);
             })

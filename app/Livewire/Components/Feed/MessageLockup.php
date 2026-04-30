@@ -40,13 +40,29 @@ class MessageLockup extends Component
     }
 
     /**
-     * Hydrate the feed message.
+     * Returns the feed message rendered in the lockup body.
      *
-     * @return void
+     * @return FeedMessage
      */
-    public function hydrateFeedMessage(): void
+    public function getDisplayMessageProperty(): FeedMessage
     {
-        $this->feedMessage->loadCount(['replies', 'reShares']);
+        if ($this->isSimpleReShareEnvelope()) {
+            return $this->feedMessage->parentMessage;
+        }
+
+        return $this->feedMessage;
+    }
+
+    /**
+     * Whether the envelope is a simple re-share of a parent message.
+     *
+     * @return bool
+     */
+    private function isSimpleReShareEnvelope(): bool
+    {
+        return $this->feedMessage->is_reshare
+            && trim((string) $this->feedMessage->content) === ''
+            && $this->feedMessage->parentMessage !== null;
     }
 
     /**
@@ -56,17 +72,31 @@ class MessageLockup extends Component
      */
     public function toggleLike(): void
     {
-        auth()->user()->toggleHeart($this->feedMessage);
+        auth()->user()->toggleHeart($this->displayMessage);
     }
 
     /**
-     * Reshare a feed message.
+     * Toggle a simple re-share of the feed message.
      *
      * @return void
      */
-    public function reShare(): void
+    public function toggleSimpleReShare(): void
     {
-        $this->dispatch('feed-message-reShare', id: $this->feedMessage->id);
+        if ($this->displayMessage->isReShared) {
+            $this->dispatch('feed-message-undo-reshare', id: $this->displayMessage->id);
+        } else {
+            $this->dispatch('feed-message-simple-reshare', id: $this->displayMessage->id);
+        }
+    }
+
+    /**
+     * Open the quote composer for the feed message.
+     *
+     * @return void
+     */
+    public function quote(): void
+    {
+        $this->dispatch('feed-message-quote', id: $this->displayMessage->id);
     }
 
     /**
@@ -76,7 +106,7 @@ class MessageLockup extends Component
      */
     public function reply(): void
     {
-        $this->dispatch('feed-message-reply', id: $this->feedMessage->id);
+        $this->dispatch('feed-message-reply', id: $this->displayMessage->id);
     }
 
     /**
@@ -86,7 +116,7 @@ class MessageLockup extends Component
      */
     public function share(): void
     {
-        $this->dispatch('feed-message-share', id: $this->feedMessage->id);
+        $this->dispatch('feed-message-share', id: $this->displayMessage->id);
     }
 
     /**
@@ -96,7 +126,7 @@ class MessageLockup extends Component
      */
     public function edit(): void
     {
-        $this->dispatch('feed-message-edit', id: $this->feedMessage->id);
+        $this->dispatch('feed-message-edit', id: $this->displayMessage->id);
     }
 
     /**
@@ -106,7 +136,7 @@ class MessageLockup extends Component
      */
     public function delete(): void
     {
-        $this->dispatch('feed-message-delete', id: $this->feedMessage->id);
+        $this->dispatch('feed-message-delete', id: $this->displayMessage->id);
     }
 
     /**
@@ -116,12 +146,17 @@ class MessageLockup extends Component
      */
     public function report(): void
     {
-        $this->dispatch('feed-message-report', id: $this->feedMessage->id);
+        $this->dispatch('feed-message-report', id: $this->displayMessage->id);
     }
 
+    /**
+     * Returns the link preview for the displayed message, if any.
+     *
+     * @return ?LinkPreview
+     */
     public function getLinkPreviewProperty(): ?LinkPreview
     {
-        return $this->feedMessage->linkPreview;
+        return $this->displayMessage->linkPreview;
     }
 
     /**

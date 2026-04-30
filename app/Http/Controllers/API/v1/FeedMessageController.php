@@ -7,6 +7,7 @@ use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FeedMessageUpdateRequest;
 use App\Http\Requests\GetPaginatedRequest;
+use App\Http\Requests\GetSortedPaginatedRequest;
 use App\Http\Resources\FeedMessageResource;
 use App\Models\FeedMessage;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -49,19 +50,19 @@ class FeedMessageController extends Controller
                     }
                 ])
                     ->withCount(['replies', 'reShares'])
-                    ->when(auth()->user(), function ($query, $user) {
-                        $query->withExists(['reShares as isReShared' => function ($query) use ($user) {
-                            $query->where('user_id', '=', $user->id);
-                        }]);
-                    });
+                    ->when(auth()->user(), $this->authReShareState());
             }
         ])
-            ->loadCount(['replies', 'reShares'])
-            ->when(auth()->user(), function ($query, $user) use ($feedMessage) {
-                $feedMessage->loadExists(['reShares as isReShared' => function ($query) use ($user) {
+            ->loadCount(['replies', 'reShares']);
+
+        if ($user = auth()->user()) {
+            $feedMessage->loadExists(['simpleReShares as isReShared' => function ($query) use ($user) {
+                $query->where('user_id', '=', $user->id);
+            }])
+                ->loadMax(['simpleReShares as my_reshare_id' => function ($query) use ($user) {
                     $query->where('user_id', '=', $user->id);
-                }]);
-            });
+                }], 'id');
+        }
 
         return JSONResult::success([
             'data' => FeedMessageResource::collection([$feedMessage])
@@ -137,19 +138,11 @@ class FeedMessageController extends Controller
                         }
                     ])
                         ->withCount(['replies', 'reShares'])
-                        ->when(auth()->user(), function ($query, $user) {
-                            $query->withExists(['reShares as isReShared' => function ($query) use ($user) {
-                                $query->where('user_id', '=', $user->id);
-                            }]);
-                        });
+                        ->when(auth()->user(), $this->authReShareState());
                 }
             ])
             ->withCount(['replies', 'reShares'])
-            ->when(auth()->user(), function ($query, $user) use ($feedMessage) {
-                $feedMessage->withExists(['reShares as isReShared' => function ($query) use ($user) {
-                    $query->where('user_id', '=', $user->id);
-                }]);
-            })
+            ->when(auth()->user(), $this->authReShareState())
             ->orderByDesc('created_at')
             ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
 
@@ -160,6 +153,109 @@ class FeedMessageController extends Controller
             'data' => FeedMessageResource::collection($feedMessageReplies),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
+    }
+
+    /**
+     * Get the quote re-shares of the feed message.
+     *
+     * @param GetSortedPaginatedRequest $request
+     * @param FeedMessage               $feedMessage
+     *
+     * @return JsonResponse
+     */
+    function quotes(GetSortedPaginatedRequest $request, FeedMessage $feedMessage): JsonResponse
+    {
+        return $this->paginatedReShares($request, $feedMessage, simple: false);
+    }
+
+    /**
+     * Get the simple re-shares of the feed message.
+     *
+     * @param GetSortedPaginatedRequest $request
+     * @param FeedMessage               $feedMessage
+     *
+     * @return JsonResponse
+     */
+    function reShares(GetSortedPaginatedRequest $request, FeedMessage $feedMessage): JsonResponse
+    {
+        return $this->paginatedReShares($request, $feedMessage, simple: true);
+    }
+
+    /**
+     * Get the paginated re-shares of the feed message.
+     *
+     * @param GetSortedPaginatedRequest $request
+     * @param FeedMessage               $feedMessage
+     * @param bool                      $simple
+     *
+     * @return JsonResponse
+     */
+    private function paginatedReShares(GetSortedPaginatedRequest $request, FeedMessage $feedMessage, bool $simple): JsonResponse
+    {
+        $data = $request->validated();
+        $sort = $data['sort'] ?? 'recent';
+
+        $query = ($simple ? $feedMessage->simpleReShares() : $feedMessage->quoteReShares())
+            ->with([
+                'user' => fn($query) => $this->eagerLoadUser($query),
+                'loveReactant' => function (BelongsTo $query) {
+                    $query->with([
+                        'reactionCounters',
+                        'reactions' => function (HasMany $hasMany) {
+                            $hasMany->with(['reacter', 'type']);
+                        }
+                    ]);
+                },
+                'parentMessage' => function ($query) {
+                    $query->with([
+                        'user' => fn($query) => $this->eagerLoadUser($query),
+                        'loveReactant' => function (BelongsTo $query) {
+                            $query->with([
+                                'reactionCounters',
+                                'reactions' => function (HasMany $hasMany) {
+                                    $hasMany->with(['reacter', 'type']);
+                                }
+                            ]);
+                        }
+                    ])
+                        ->withCount(['replies', 'reShares'])
+                        ->when(auth()->user(), $this->authReShareState());
+                }
+            ])
+            ->withCount(['replies', 'reShares'])
+            ->when(auth()->user(), $this->authReShareState());
+
+        match ($sort) {
+            'top' => $query->orderByDesc('ranking_score')->orderByDesc('created_at'),
+            default => $query->orderByDesc('created_at'),
+        };
+
+        $paginator = $query->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+
+        $nextPageURL = str_replace($request->root(), '', $paginator->nextPageUrl() ?? '');
+
+        return JSONResult::success([
+            'data' => FeedMessageResource::collection($paginator),
+            'next' => empty($nextPageURL) ? null : $nextPageURL
+        ]);
+    }
+
+    /**
+     * Returns the closure for eager loading the auth user's re-share state.
+     *
+     * @return callable
+     */
+    private function authReShareState(): callable
+    {
+        return function ($query, $user) {
+            $query
+                ->withExists(['simpleReShares as isReShared' => function ($query) use ($user) {
+                    $query->where('user_id', '=', $user->id);
+                }])
+                ->withMax(['simpleReShares as my_reshare_id' => function ($query) use ($user) {
+                    $query->where('user_id', '=', $user->id);
+                }], 'id');
+        };
     }
 
     /**

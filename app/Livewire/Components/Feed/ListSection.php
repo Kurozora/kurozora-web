@@ -6,8 +6,6 @@ use App\Models\FeedMessage;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\Client\ConnectionException;
 use Livewire\Component;
 
@@ -59,25 +57,14 @@ class ListSection extends Component
      */
     public function render(): Application|Factory|View
     {
+        $authUser = auth()->user();
+
         $query = FeedMessage::where('is_reply', '=', false)
             ->orderByDesc('id')
-            ->with([
-                'user' => function (BelongsTo $belongsTo) {
-                    $belongsTo->with(['media']);
-                },
-                'loveReactant' => function (BelongsTo $query) {
-                    $query->with([
-                        'reactionCounters',
-                        'reactions' => function (HasMany $hasMany) {
-                            $hasMany->with(['reacter', 'type']);
-                        },
-                    ]);
-                },
-                'linkPreview'
-            ])
+            ->with(FeedMessage::lockupEagerLoads($authUser))
             ->withCount(['replies', 'reShares'])
-            ->when(auth()->user(), function ($query, $user) {
-                $query->withExists(['reShares as isReShared' => function ($query) use ($user) {
+            ->when($authUser, function ($query, $user) {
+                $query->withExists(['simpleReShares as isReShared' => function ($query) use ($user) {
                     $query->where('user_id', '=', $user->id);
                 }]);
             });

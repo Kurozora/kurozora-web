@@ -18,6 +18,14 @@ Route::prefix('/messages')
             ->middleware('auth.kurozora:optional')
             ->name('.replies');
 
+        Route::get('/{feedMessage}/quotes', [FeedMessageController::class, 'quotes'])
+            ->middleware('auth.kurozora:optional')
+            ->name('.quotes');
+
+        Route::get('/{feedMessage}/re-shares', [FeedMessageController::class, 'reShares'])
+            ->middleware('auth.kurozora:optional')
+            ->name('.reShares');
+
         Route::post('/{feedMessage}/heart', [FeedMessageController::class, 'heart'])
             ->middleware('auth.kurozora')
             ->can('heart', 'feedMessage')

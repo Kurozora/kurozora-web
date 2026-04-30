@@ -16,6 +16,14 @@ Schedule::command('queue:work --timeout=0')
     ->runInBackground();
 
 /**********************************************/
+// Re-score feed messages within the activity window every fifteen minutes
+Schedule::command('calculate:feed_message_ranking')
+    ->everyFifteenMinutes()
+    ->name('Calculate feed message ranking')
+    ->withoutOverlapping()
+    ->onOneServer();
+
+/**********************************************/
 // Delete stale cache every two hours
 Schedule::command('delete:stale_cache')
     ->everyTwoHours()

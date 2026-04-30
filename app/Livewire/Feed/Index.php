@@ -7,6 +7,7 @@ use App\Models\LinkPreview;
 use App\Models\User;
 use App\Services\LinkPreviewService;
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -31,7 +32,9 @@ class Index extends Component
      */
     protected $listeners = [
         'feed-message-reply' => 'reply',
-        'feed-message-reShare' => 'reShare',
+        'feed-message-quote' => 'quote',
+        'feed-message-simple-reshare' => 'simpleReShare',
+        'feed-message-undo-reshare' => 'undoSimpleReShare',
         'feed-message-share' => 'share',
         'feed-message-edit' => 'edit',
         'feed-message-delete' => 'delete',
@@ -61,7 +64,7 @@ class Index extends Component
     private array $popupTypes = [
         'edit',
         'share',
-        'reShare',
+        'quote',
         'reply',
         'delete',
         'report',
@@ -79,7 +82,7 @@ class Index extends Component
      *
      * @var int|null
      */
-    public ?int $selectedMessageId = null;
+    public ?int $selectedMessageID = null;
 
     /**
      * The sections of the feed.
@@ -107,7 +110,7 @@ class Index extends Component
      *
      * @var int|null
      */
-    public ?int $latestFeedMessageId = null;
+    public ?int $latestFeedMessageID = null;
 
     /**
      * The count of new feed messages.
@@ -148,7 +151,7 @@ class Index extends Component
      */
     function setLatestFeedMessageId(): void
     {
-        $this->latestFeedMessageId = FeedMessage::where('is_reply', '=', false)
+        $this->latestFeedMessageID = FeedMessage::where('is_reply', '=', false)
             ->max('id');
     }
 
@@ -183,7 +186,7 @@ class Index extends Component
     public function pollForNewFeedMessages(): void
     {
         $feedMessages = FeedMessage::where('is_reply', '=', false)
-            ->where('id', '>', $this->latestFeedMessageId)
+            ->where('id', '>', $this->latestFeedMessageID)
             ->orderBy('id')
             ->count();
 
@@ -216,15 +219,15 @@ class Index extends Component
     function delete(int $id): void
     {
         $this->selectedPopupType = 'delete';
-        $this->selectedMessageId = $id;
+        $this->selectedMessageID = $id;
         $this->showPopup = true;
     }
 
     function confirmDelete(): void
     {
-        if ($this->selectedMessageId) {
+        if ($this->selectedMessageID) {
             $this->user->feed_messages()
-                ->where('id', '=', $this->selectedMessageId)
+                ->where('id', '=', $this->selectedMessageID)
                 ->delete();
         }
         $this->closePopup();
@@ -233,27 +236,90 @@ class Index extends Component
     function reply(int $id): void
     {
         $this->selectedPopupType = 'reply';
-        $this->selectedMessageId = $id;
+        $this->selectedMessageID = $id;
         $this->showPopup = true;
     }
 
-    function reShare(int $id): void
+    function quote(int $id): void
     {
-        $this->selectedPopupType = 'reShare';
-        $this->selectedMessageId = $id;
+        $this->selectedPopupType = 'quote';
+        $this->selectedMessageID = $id;
+        $this->message = '';
         $this->showPopup = true;
+    }
+
+    function simpleReShare(int $id): void
+    {
+        if (!auth()->check()) {
+            return;
+        }
+
+        try {
+            FeedMessage::createFor(auth()->user(), [
+                'parent_id' => $id,
+                'content' => '',
+                'is_reshare' => true,
+                'is_reply' => false,
+                'is_nsfw' => false,
+                'is_spoiler' => false,
+            ]);
+        } catch (AuthorizationException $exception) {
+            session()->flash('error', $exception->getMessage());
+            return;
+        }
+
+        $this->dispatch('feed-messages-updated', id: $id);
+    }
+
+    function undoSimpleReShare(int $id): void
+    {
+        $authUser = auth()->user();
+
+        if ($authUser === null) {
+            return;
+        }
+
+        $authUser->feed_messages()
+            ->where('parent_feed_message_id', '=', $id)
+            ->where('is_reshare', '=', true)
+            ->where(function ($query) {
+                $query->whereNull('content')->orWhere('content', '=', '');
+            })
+            ->delete();
+
+        $this->dispatch('feed-messages-updated', id: $id);
     }
 
     function confirmReShare(): void
     {
-        // Implement your reShare logic here
+        if (!$this->selectedMessageID || !auth()->check()) {
+            $this->closePopup();
+            return;
+        }
+
+        try {
+            FeedMessage::createFor(auth()->user(), [
+                'parent_id' => $this->selectedMessageID,
+                'content' => $this->message,
+                'is_reshare' => true,
+                'is_reply' => false,
+                'is_nsfw' => false,
+                'is_spoiler' => false,
+            ]);
+        } catch (AuthorizationException $exception) {
+            session()->flash('error', $exception->getMessage());
+            $this->closePopup();
+            return;
+        }
+
+        $this->dispatch('feed-messages-updated', id: $this->selectedMessageID);
         $this->closePopup();
     }
 
     function share(int $id): void
     {
         $this->selectedPopupType = 'share';
-        $this->selectedMessageId = $id;
+        $this->selectedMessageID = $id;
         $this->showPopup = true;
     }
 
@@ -266,15 +332,15 @@ class Index extends Component
     function edit(int $id): void
     {
         $this->selectedPopupType = 'edit';
-        $this->selectedMessageId = $id;
+        $this->selectedMessageID = $id;
         $this->message = FeedMessage::find($id)?->content ?? '';
         $this->showPopup = true;
     }
 
     function confirmEdit(): void
     {
-        if ($this->selectedMessageId) {
-            FeedMessage::where('id', $this->selectedMessageId)
+        if ($this->selectedMessageID) {
+            FeedMessage::where('id', $this->selectedMessageID)
                 ->where('user_id', $this->user->id)
                 ->update(['content' => $this->message]);
         }
@@ -284,7 +350,7 @@ class Index extends Component
     function report(int $id): void
     {
         $this->selectedPopupType = 'report';
-        $this->selectedMessageId = $id;
+        $this->selectedMessageID = $id;
         $this->showPopup = true;
     }
 
@@ -297,7 +363,7 @@ class Index extends Component
     function closePopup(): void
     {
         $this->selectedPopupType = '';
-        $this->selectedMessageId = null;
+        $this->selectedMessageID = null;
         $this->showPopup = false;
         $this->message = '';
     }

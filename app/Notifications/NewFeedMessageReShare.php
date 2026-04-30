@@ -35,7 +35,8 @@ class NewFeedMessageReShare extends Notification implements ShouldQueue
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function via(mixed $notifiable): array
@@ -46,7 +47,7 @@ class NewFeedMessageReShare extends Notification implements ShouldQueue
     /**
      * Suppress delivery if the notifiable user has blocked the message author.
      *
-     * @param mixed $notifiable
+     * @param mixed  $notifiable
      * @param string $channel
      *
      * @return bool
@@ -59,16 +60,17 @@ class NewFeedMessageReShare extends Notification implements ShouldQueue
     /**
      * Get the database representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function toDatabase(mixed $notifiable): array
     {
         return [
-            'userID'            => (string) $this->feedMessage->user->id,
-            'username'          => $this->feedMessage->user->username,
-            'profileImageURL'   => $this->feedMessage->user->getFirstMediaFullUrl(MediaCollection::Profile()),
-            'feedMessageID'     => (string) $this->feedMessage->id,
+            'userID' => (string) $this->feedMessage->user->id,
+            'username' => $this->feedMessage->user->username,
+            'profileImageURL' => $this->feedMessage->user->getFirstMediaFullUrl(MediaCollection::Profile()),
+            'feedMessageID' => (string) $this->feedMessage->id,
         ];
     }
 
@@ -76,13 +78,17 @@ class NewFeedMessageReShare extends Notification implements ShouldQueue
      * Get the APN representation of the notification.
      *
      * @param User $notifiable
+     *
      * @return ApnMessage
      */
     public function toApn(User $notifiable): ApnMessage
     {
+        $username = $this->feedMessage->user->username;
+        $isQuote = trim((string) $this->feedMessage->content) !== '';
+
         return ApnMessage::create()
-            ->title($this->feedMessage->user->username . ' ReShared Your Message')
+            ->title($isQuote ? $username . ' quoted your message' : $username . ' re-shared your message')
             ->badge($notifiable->unreadNotifications()->count())
-            ->body($this->feedMessage->content);
+            ->body($isQuote ? $this->feedMessage->content : '');
     }
 }

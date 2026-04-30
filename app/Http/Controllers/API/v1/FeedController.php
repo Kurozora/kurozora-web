@@ -9,8 +9,6 @@ use App\Http\Requests\PostFeedRequest;
 use App\Http\Resources\FeedMessageResource;
 use App\Models\FeedMessage;
 use App\Models\User;
-use App\Notifications\NewFeedMessageReply;
-use App\Notifications\NewFeedMessageReShare;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -29,60 +27,16 @@ class FeedController extends Controller
     public function post(PostFeedRequest $request): JsonResponse
     {
         $data = $request->validated();
-
-        // Get the auth user
         $user = auth()->user();
 
-        // Check if the message has already been re-shared as user is allowed only one re-share per message
-        if ($data['is_reshare'] ?? false) {
-            $reShareExists = FeedMessage::where('parent_feed_message_id', '=', $data['parent_id'])
-                ->where('user_id', $user->id)
-                ->where('is_reshare', true)
-                ->exists();
-
-            if ($reShareExists) {
-                throw new AuthorizationException(__('You are not allowed to re-share a message more than once.'));
-            }
-        }
-
-        // Check if engagement must be blocked
-        if (($data['is_reply'] ?? false) || ($data['is_reshare'] ?? false)) {
-            $parentMessage = FeedMessage::with('user')->find($data['parent_id'] ?? null);
-
-            if ($parentMessage && !$user->canInteractWith($parentMessage->user)) {
-                throw new AuthorizationException(__('You are not allowed to engage with this user.'));
-            }
-        }
-
-        // Create the feed message
-        $feedMessage = $user->feed_messages()
-            ->create([
-                'parent_feed_message_id' => $data['parent_id'] ?? null,
-                'content' => $request->input('content') ?? $request->input('body'),
-                'is_nsfw' => $data['is_nsfw'] ?? false,
-                'is_pinned' => false, // Always false by default
-                'is_reply' => $data['is_reply'] ?? false,
-                'is_reshare' => $data['is_reshare'] ?? false,
-                'is_spoiler' => $data['is_spoiler'] ?? false,
-            ]);
-
-        if ($data['is_reply'] ?? false) {
-            // Get parent message
-            $parentMessage = FeedMessage::firstWhere('id', '=', $data['parent_id']);
-
-            // Notify user of the reply if the message doesn't belong to the current user
-            if ($parentMessage->user->id != $user->id) {
-                $parentMessage->user->notify(new NewFeedMessageReply($feedMessage));
-            }
-        } else if ($data['is_reshare'] ?? false) {
-            // Get parent message
-            $parentMessage = FeedMessage::firstWhere('id', '=', $data['parent_id']);
-
-            // // Notify user of the re-share if the message doesn't belong to the current user
-            if ($parentMessage->user->id != $user->id) {
-                $parentMessage->user->notify(new NewFeedMessageReShare($feedMessage));
-            }
-        }
+        $feedMessage = FeedMessage::createFor($user, [
+            'parent_id' => $data['parent_id'] ?? null,
+            'content' => $request->input('content') ?? $request->input('body'),
+            'is_nsfw' => $data['is_nsfw'] ?? false,
+            'is_reply' => $data['is_reply'] ?? false,
+            'is_reshare' => $data['is_reshare'] ?? false,
+            'is_spoiler' => $data['is_spoiler'] ?? false,
+        ]);
 
         $feedMessage->load([
             'user' => fn($query) => $this->eagerLoadUser($query),
@@ -107,17 +61,31 @@ class FeedController extends Controller
                     }
                 ])
                     ->withCount(['replies', 'reShares'])
-                    ->when(auth()->user(), function ($query, $user) {
-                        $query->withExists(['reShares as isReShared' => function ($query) use ($user) {
-                            $query->where('user_id', '=', $user->id);
-                        }]);
-                    });
+                    ->when(auth()->user(), $this->authReShareState());
             }
         ]);
 
         return JSONResult::success([
             'data' => FeedMessageResource::collection([$feedMessage]),
         ]);
+    }
+
+    /**
+     * Returns the closure for eager loading the auth user's re-share state.
+     *
+     * @return callable
+     */
+    private function authReShareState(): callable
+    {
+        return function ($query, $user) {
+            $query
+                ->withExists(['simpleReShares as isReShared' => function ($query) use ($user) {
+                    $query->where('user_id', '=', $user->id);
+                }])
+                ->withMax(['simpleReShares as my_reshare_id' => function ($query) use ($user) {
+                    $query->where('user_id', '=', $user->id);
+                }], 'id');
+        };
     }
 
     /**
@@ -195,19 +163,11 @@ class FeedController extends Controller
                         }
                     ])
                         ->withCount(['replies', 'reShares'])
-                        ->when(auth()->user(), function ($query, $user) {
-                            $query->withExists(['reShares as isReShared' => function ($query) use ($user) {
-                                $query->where('user_id', '=', $user->id);
-                            }]);
-                        });
+                        ->when(auth()->user(), $this->authReShareState());
                 }
             ])
             ->withCount(['replies', 'reShares'])
-            ->when(auth()->user(), function ($query, $user) {
-                $query->withExists(['reShares as isReShared' => function ($query) use ($user) {
-                    $query->where('user_id', '=', $user->id);
-                }]);
-            })
+            ->when(auth()->user(), $this->authReShareState())
             ->whereIn('user_id', $userIDs)
             ->orderByDesc('created_at')
             ->cursorPaginate($data['limit'] ?? 25);
@@ -257,19 +217,11 @@ class FeedController extends Controller
                         }
                     ])
                         ->withCount(['replies', 'reShares'])
-                        ->when(auth()->user(), function ($query, $user) {
-                            $query->withExists(['reShares as isReShared' => function ($query) use ($user) {
-                                $query->where('user_id', '=', $user->id);
-                            }]);
-                        });
+                        ->when(auth()->user(), $this->authReShareState());
                 }
             ])
             ->withCount(['replies', 'reShares'])
-            ->when(auth()->user(), function ($query, $user) {
-                $query->withExists(['reShares as isReShared' => function ($query) use ($user) {
-                    $query->where('user_id', '=', $user->id);
-                }]);
-            })
+            ->when(auth()->user(), $this->authReShareState())
             ->orderByDesc('created_at')
             ->cursorPaginate($data['limit'] ?? 25);
 

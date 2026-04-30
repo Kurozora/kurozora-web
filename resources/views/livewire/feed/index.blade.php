@@ -180,10 +180,10 @@
                                 {{ __('Delete') }}
                             </x-button>
                         </div>
-                    @elseif ($selectedPopupType === 'reShare')
-                        <h2 class="text-lg font-bold mb-2">{{ __('Re-share Message') }}</h2>
+                    @elseif ($selectedPopupType === 'quote')
+                        <h2 class="text-lg font-bold mb-2">{{ __('Quote Message') }}</h2>
 
-                        <p class="mb-4">{{ __('Do you want to re-share this message?') }}</p>
+                        <textarea wire:model.defer="message" class="w-full border rounded p-2 mb-4" rows="4" placeholder="{{ __('Add a comment') }}"></textarea>
 
                         <div class="flex justify-end gap-2">
                             <x-outlined-button wire:click="closePopup" wire:loading.attr="disabled">
@@ -191,7 +191,7 @@
                             </x-outlined-button>
 
                             <x-button color="orange" wire:click="confirmReShare" wire:loading.attr="disabled">
-                                {{ __('Re-share') }}
+                                {{ __('Quote') }}
                             </x-button>
                         </div>
                     @elseif ($selectedPopupType === 'report')

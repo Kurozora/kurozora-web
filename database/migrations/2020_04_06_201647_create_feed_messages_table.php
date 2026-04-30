@@ -29,10 +29,15 @@ return new class extends Migration
             $table->boolean('is_reply')->default(false);
             $table->boolean('is_reshare')->default(false);
             $table->boolean('is_spoiler')->default(false);
+            $table->double('ranking_score')->default(0);
             $table->timestamps();
         });
 
         Schema::table(FeedMessage::TABLE_NAME, function (Blueprint $table) {
+            // Set index key constraints
+            $table->index('ranking_score');
+            $table->index(['parent_feed_message_id', 'user_id', 'is_reshare'], 'feed_messages_parent_user_reshare_index');
+
             // Set foreign key constraints
             $table->foreign('love_reactant_id')
                 ->references('id')

@@ -219,19 +219,11 @@ class UserController extends Controller
                         }
                     ])
                         ->withCount(['replies', 'reShares'])
-                        ->when(auth()->user(), function ($query, $user) {
-                            $query->withExists(['reShares as isReShared' => function ($query) use ($user) {
-                                $query->where('user_id', '=', $user->id);
-                            }]);
-                        });
+                        ->when(auth()->user(), $this->authReShareState());
                 }
             ])
             ->withCount(['replies', 'reShares'])
-            ->when(auth()->user(), function ($query, $user) {
-                $query->withExists(['reShares as isReShared' => function ($query) use ($user) {
-                    $query->where('user_id', '=', $user->id);
-                }]);
-            })
+            ->when(auth()->user(), $this->authReShareState())
             ->orderBy('is_pinned', 'desc')
             ->orderBy('created_at', 'desc')
             ->cursorPaginate($data['limit'] ?? 25);
@@ -271,6 +263,24 @@ class UserController extends Controller
             'data' => MediaRatingResource::collection($mediaRatings),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
+    }
+
+    /**
+     * Returns the closure for eager loading the auth user's re-share state.
+     *
+     * @return callable
+     */
+    private function authReShareState(): callable
+    {
+        return function ($query, $user) {
+            $query
+                ->withExists(['simpleReShares as isReShared' => function ($query) use ($user) {
+                    $query->where('user_id', '=', $user->id);
+                }])
+                ->withMax(['simpleReShares as my_reshare_id' => function ($query) use ($user) {
+                    $query->where('user_id', '=', $user->id);
+                }], 'id');
+        };
     }
 
     /**

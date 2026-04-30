@@ -2,14 +2,18 @@
 
 namespace App\Models;
 
+use App\Notifications\NewFeedMessageReply;
+use App\Notifications\NewFeedMessageReShare;
 use App\Parsers\MentionParser;
 use Cog\Contracts\Love\Reactable\Models\Reactable as ReactableContract;
 use Cog\Laravel\Love\Reactable\Models\Traits\Reactable;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Markdown;
 use Xetaio\Mentions\Models\Traits\HasMentionsTrait;
 
@@ -78,6 +82,106 @@ class FeedMessage extends KModel implements ReactableContract
     }
 
     /**
+     * Creates a feed message for the given user.
+     *
+     * @param User  $user
+     * @param array $attributes
+     *
+     * @return FeedMessage
+     * @throws AuthorizationException
+     */
+    static function createFor(User $user, array $attributes): FeedMessage
+    {
+        $parentID = $attributes['parent_id'] ?? null;
+        $content = $attributes['content'] ?? null;
+        $isReply = (bool) ($attributes['is_reply'] ?? false);
+        $isReShare = (bool) ($attributes['is_reshare'] ?? false);
+        $isSimpleReShare = $isReShare && trim((string) $content) === '';
+        $parentMessage = null;
+
+        if ($parentID !== null && ($isReply || $isReShare)) {
+            $parentMessage = FeedMessage::with('user')->find($parentID);
+
+            if ($parentMessage !== null && !$user->canInteractWith($parentMessage->user)) {
+                throw new AuthorizationException(__('You are not allowed to engage with this user.'));
+            }
+        }
+
+        if ($isSimpleReShare && $parentMessage !== null) {
+            $alreadyReShared = $parentMessage->simpleReShares()
+                ->where('user_id', '=', $user->id)
+                ->exists();
+
+            if ($alreadyReShared) {
+                throw new AuthorizationException(__('You are not allowed to re-share a message more than once.'));
+            }
+        }
+
+        $feedMessage = $user->feed_messages()->create([
+            'parent_feed_message_id' => $parentID,
+            'content' => $isSimpleReShare ? '' : $content,
+            'is_nsfw' => (bool) ($attributes['is_nsfw'] ?? false),
+            'is_pinned' => false,
+            'is_reply' => $isReply,
+            'is_reshare' => $isReShare,
+            'is_spoiler' => (bool) ($attributes['is_spoiler'] ?? false),
+        ]);
+
+        if ($parentMessage !== null && $parentMessage->user->id !== $user->id) {
+            if ($isReply) {
+                $parentMessage->user->notify(new NewFeedMessageReply($feedMessage));
+            } else if ($isReShare) {
+                $parentMessage->user->notify(new NewFeedMessageReShare($feedMessage));
+            }
+        }
+
+        return $feedMessage;
+    }
+
+    /**
+     * Returns the eager-load tree used by the message lockup template.
+     *
+     * @param ?User $authUser
+     *
+     * @return array
+     */
+    static function lockupEagerLoads(?User $authUser): array
+    {
+        $loveReactantLoader = function (BelongsTo $query) {
+            $query->with([
+                'reactionCounters',
+                'reactions' => function (HasMany $hasMany) {
+                    $hasMany->with(['reacter', 'type']);
+                },
+            ]);
+        };
+
+        $userLoader = function (BelongsTo $belongsTo) {
+            $belongsTo->with(['media']);
+        };
+
+        return [
+            'user' => $userLoader,
+            'loveReactant' => $loveReactantLoader,
+            'linkPreview',
+            'parentMessage' => function ($query) use ($userLoader, $loveReactantLoader, $authUser) {
+                $query->with([
+                    'user' => $userLoader,
+                    'loveReactant' => $loveReactantLoader,
+                    'linkPreview',
+                ])
+                    ->withCount(['replies', 'reShares']);
+
+                if ($authUser !== null) {
+                    $query->withExists(['simpleReShares as isReShared' => function ($query) use ($authUser) {
+                        $query->where('user_id', '=', $authUser->id);
+                    }]);
+                }
+            },
+        ];
+    }
+
+    /**
      * Returns the allowed max content length of a feed message.
      *
      * @return int
@@ -139,6 +243,44 @@ class FeedMessage extends KModel implements ReactableContract
     {
         return $this->hasMany(FeedMessage::class, 'parent_feed_message_id')
             ->where('is_reshare', '=', true);
+    }
+
+    /**
+     * Returns the simple re-shares of this feed message.
+     *
+     * @return HasMany
+     */
+    function simpleReShares(): HasMany
+    {
+        return $this->hasMany(FeedMessage::class, 'parent_feed_message_id')
+            ->where('is_reshare', '=', true)
+            ->where(function ($query) {
+                $query->whereNull('content')
+                    ->orWhere('content', '=', '');
+            });
+    }
+
+    /**
+     * Returns the quote re-shares of this feed message.
+     *
+     * @return HasMany
+     */
+    function quoteReShares(): HasMany
+    {
+        return $this->hasMany(FeedMessage::class, 'parent_feed_message_id')
+            ->where('is_reshare', '=', true)
+            ->whereNotNull('content')
+            ->where('content', '!=', '');
+    }
+
+    /**
+     * Returns the feed message hashtags the current feed message has.
+     *
+     * @return HasMany
+     */
+    public function feedMessageHashtags(): HasMany
+    {
+        return $this->hasMany(FeedMessageHashtag::class, 'feed_message_id');
     }
 
     /**

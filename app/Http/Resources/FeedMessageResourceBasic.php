@@ -70,9 +70,11 @@ class FeedMessageResourceBasic extends JsonResource
     protected function getUserSpecificDetails(): array
     {
         $user = auth()->user();
+        $myReshareID = $this->resource->my_reshare_id;
 
         return [
-            'isHearted' => $user->getCurrentHeartValueFor($this->resource) == FeedVoteType::Heart
+            'isHearted' => $user->getCurrentHeartValueFor($this->resource) == FeedVoteType::Heart,
+            'myReShareID' => $myReshareID !== null ? (string) $myReshareID : null,
         ];
     }
 
