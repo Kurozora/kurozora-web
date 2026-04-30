@@ -7,8 +7,6 @@ use App\Enums\DayOfWeek;
 use App\Enums\MediaCollection;
 use App\Enums\SeasonOfYear;
 use App\Enums\UserLibraryStatus;
-use App\Scopes\IgnoreListScope;
-use App\Scopes\TvRatingScope;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\Actionable;
 use App\Traits\Model\Favorable;
@@ -432,7 +430,8 @@ class Anime extends KModel implements HasMedia, Sitemapable
      */
     public function episodes(): HasManyThrough
     {
-        return $this->hasManyThrough(Episode::class, Season::class, 'anime_id', 'season_id');
+        return $this->hasManyThrough(Episode::class, Season::class, 'anime_id', 'season_id')
+            ->withoutGlobalScopes();
     }
 
     /**
@@ -442,7 +441,8 @@ class Anime extends KModel implements HasMedia, Sitemapable
      */
     public function seasons(): HasMany
     {
-        return $this->hasMany(Season::class, 'anime_id');
+        return $this->hasMany(Season::class, 'anime_id')
+            ->withoutGlobalScopes();
     }
 
     /**
@@ -466,7 +466,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
     public function resolveRouteBindingQuery($query, $value, $field = null): \Illuminate\Contracts\Database\Eloquent\Builder
     {
         return parent::resolveRouteBindingQuery($query, $value, $field)
-            ->withoutGlobalScopes([TvRatingScope::class, IgnoreListScope::class]);
+            ->withoutGlobalScopes();
     }
 
     /**

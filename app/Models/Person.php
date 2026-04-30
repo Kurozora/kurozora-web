@@ -290,6 +290,7 @@ class Person extends KModel implements HasMedia, Sitemapable
     {
         /** @var Builder $union */ // To silence IDE warning for not matching type
         $union = $this->hasManyThrough(Anime::class, MediaStaff::class, 'person_id', 'id', 'id', 'model_id')
+            ->withoutGlobalScopes()
             ->where('model_type', '=', Anime::class)
             ->select(Anime::TABLE_NAME . '.*', MediaStaff::TABLE_NAME . '.person_id as laravel_through_key');
         // Second select above isn't used, but SQL will
@@ -301,6 +302,7 @@ class Person extends KModel implements HasMedia, Sitemapable
         // penalties, but it would be nice to improve this.
 
         return $this->hasManyThrough(Anime::class, AnimeCast::class, 'person_id', 'id', 'id', 'anime_id')
+            ->withoutGlobalScopes()
             ->union($union);
     }
 
@@ -312,6 +314,7 @@ class Person extends KModel implements HasMedia, Sitemapable
     function manga(): HasManyThrough
     {
         return $this->hasManyThrough(Manga::class, MediaStaff::class, 'person_id', 'id', 'id', 'model_id')
+            ->withoutGlobalScopes()
             ->where('model_type', '=', Manga::class);
     }
 
@@ -324,6 +327,7 @@ class Person extends KModel implements HasMedia, Sitemapable
     {
         /** @var Builder $union */ // To silence IDE warning for not matching type
         $union = $this->hasManyThrough(Game::class, MediaStaff::class, 'person_id', 'id', 'id', 'model_id')
+            ->withoutGlobalScopes()
             ->where('model_type', '=', Game::class)
             ->select(Game::TABLE_NAME . '.*', MediaStaff::TABLE_NAME . '.person_id as laravel_through_key');
         // Second select above isn't used, but SQL will
@@ -335,6 +339,7 @@ class Person extends KModel implements HasMedia, Sitemapable
         // penalties, but it would be nice to improve this.
 
         return $this->hasManyThrough(Game::class, GameCast::class, 'person_id', 'id', 'id', 'game_id')
+            ->withoutGlobalScopes()
             ->union($union);
     }
 

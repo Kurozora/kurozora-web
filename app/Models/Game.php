@@ -7,8 +7,6 @@ use App\Enums\DayOfWeek;
 use App\Enums\MediaCollection;
 use App\Enums\SeasonOfYear;
 use App\Enums\UserLibraryStatus;
-use App\Scopes\IgnoreListScope;
-use App\Scopes\TvRatingScope;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\Actionable;
 use App\Traits\Model\Favorable;
@@ -557,7 +555,8 @@ class Game extends KModel implements HasMedia, Sitemapable
      */
     public function parent(): BelongsTo
     {
-        return $this->belongsTo(Game::class, 'parent_id');
+        return $this->belongsTo(Game::class, 'parent_id')
+            ->withoutGlobalScopes();
     }
 
     /**
@@ -686,7 +685,7 @@ class Game extends KModel implements HasMedia, Sitemapable
     public function resolveRouteBindingQuery($query, $value, $field = null): \Illuminate\Contracts\Database\Eloquent\Builder
     {
         return parent::resolveRouteBindingQuery($query, $value, $field)
-            ->withoutGlobalScopes([TvRatingScope::class, IgnoreListScope::class]);
+            ->withoutGlobalScopes();
     }
 
     /**

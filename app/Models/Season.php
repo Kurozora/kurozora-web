@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Enums\MediaCollection;
-use App\Scopes\TvRatingScope;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\HasPublicID;
 use App\Traits\Model\HasViews;
@@ -81,7 +80,7 @@ class Season extends KModel implements HasMedia, Sitemapable
 
             $anime = $season->relationLoaded('anime')
                 ? $season->anime
-                : $season->anime()->withoutGlobalScopes()->first(['tv_rating_id', 'is_nsfw']);
+                : $season->anime()->first(['tv_rating_id', 'is_nsfw']);
 
             if (!$anime) {
                 return;
@@ -149,7 +148,8 @@ class Season extends KModel implements HasMedia, Sitemapable
      */
     public function anime(): BelongsTo
     {
-        return $this->belongsTo(Anime::class);
+        return $this->belongsTo(Anime::class)
+            ->withoutGlobalScopes();
     }
 
     /**
@@ -159,7 +159,8 @@ class Season extends KModel implements HasMedia, Sitemapable
      */
     public function episodes(): HasMany
     {
-        return $this->hasMany(Episode::class);
+        return $this->hasMany(Episode::class)
+            ->withoutGlobalScopes();
     }
 
     /**
@@ -214,7 +215,7 @@ class Season extends KModel implements HasMedia, Sitemapable
     public function resolveRouteBindingQuery($query, $value, $field = null): Builder
     {
         return parent::resolveRouteBindingQuery($query, $value, $field)
-            ->withoutGlobalScopes([TvRatingScope::class]);
+            ->withoutGlobalScopes();
     }
 
     /**

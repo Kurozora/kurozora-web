@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Casts\AsArrayObject;
 use App\Enums\MediaCollection;
 use App\Enums\StudioType;
-use App\Scopes\TvRatingScope;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\HasMediaRatings;
 use App\Traits\Model\HasMediaStat;
@@ -97,7 +96,8 @@ class Studio extends KModel implements HasMedia, Sitemapable
      */
     public function predecessors(): HasMany
     {
-        return $this->hasMany(Studio::class, 'successor_id');
+        return $this->hasMany(Studio::class, 'successor_id')
+            ->withoutGlobalScopes();
     }
 
     /**
@@ -107,7 +107,8 @@ class Studio extends KModel implements HasMedia, Sitemapable
      */
     public function successor(): BelongsTo
     {
-        return $this->belongsTo(Studio::class);
+        return $this->belongsTo(Studio::class)
+            ->withoutGlobalScopes();
     }
 
     /**
@@ -318,6 +319,7 @@ class Studio extends KModel implements HasMedia, Sitemapable
     public function anime(): BelongsToMany
     {
         return $this->belongsToMany(Anime::class, MediaStudio::class, 'studio_id', 'model_id')
+            ->withoutGlobalScopes()
             ->where('model_type', '=', Anime::class)
             ->withTimestamps();
     }
@@ -330,6 +332,7 @@ class Studio extends KModel implements HasMedia, Sitemapable
     public function manga(): BelongsToMany
     {
         return $this->belongsToMany(Manga::class, MediaStudio::class, 'studio_id', 'model_id')
+            ->withoutGlobalScopes()
             ->where('model_type', '=', Manga::class)
             ->withTimestamps();
     }
@@ -342,6 +345,7 @@ class Studio extends KModel implements HasMedia, Sitemapable
     public function games(): BelongsToMany
     {
         return $this->belongsToMany(Game::class, MediaStudio::class, 'studio_id', 'model_id')
+            ->withoutGlobalScopes()
             ->where('model_type', '=', Game::class)
             ->withTimestamps();
     }
@@ -367,7 +371,7 @@ class Studio extends KModel implements HasMedia, Sitemapable
     public function resolveRouteBindingQuery($query, $value, $field = null): \Illuminate\Contracts\Database\Eloquent\Builder
     {
         return parent::resolveRouteBindingQuery($query, $value, $field)
-            ->withoutGlobalScopes([TvRatingScope::class]);
+            ->withoutGlobalScopes();
     }
 
     /**

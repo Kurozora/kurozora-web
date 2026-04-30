@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Enums\MediaCollection;
-use App\Scopes\TvRatingScope;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\Actionable;
 use App\Traits\Model\HasComments;
@@ -155,7 +154,7 @@ class Episode extends KModel implements HasMedia, Sitemapable
 
             $season = $episode->relationLoaded('season')
                 ? $episode->season
-                : $episode->season()->withoutGlobalScopes()->first(['tv_rating_id', 'is_nsfw']);
+                : $episode->season()->first(['tv_rating_id', 'is_nsfw']);
 
             if (!$season) {
                 return;
@@ -389,7 +388,8 @@ class Episode extends KModel implements HasMedia, Sitemapable
      */
     function anime(): HasOneThrough
     {
-        return $this->hasOneThrough(Anime::class, Season::class, 'id', 'id', 'season_id', 'anime_id');
+        return $this->hasOneThrough(Anime::class, Season::class, 'id', 'id', 'season_id', 'anime_id')
+            ->withoutGlobalScopes();
     }
 
     /**
@@ -399,7 +399,8 @@ class Episode extends KModel implements HasMedia, Sitemapable
      */
     function season(): BelongsTo
     {
-        return $this->belongsTo(Season::class);
+        return $this->belongsTo(Season::class)
+            ->withoutGlobalScopes();
     }
 
     /**
@@ -419,7 +420,8 @@ class Episode extends KModel implements HasMedia, Sitemapable
      */
     function next_episode(): BelongsTo
     {
-        return $this->belongsTo(Episode::class);
+        return $this->belongsTo(Episode::class)
+            ->withoutGlobalScopes();
     }
 
     /**
@@ -429,7 +431,8 @@ class Episode extends KModel implements HasMedia, Sitemapable
      */
     function previous_episode(): BelongsTo
     {
-        return $this->belongsTo(Episode::class);
+        return $this->belongsTo(Episode::class)
+            ->withoutGlobalScopes();
     }
 
     /**
@@ -484,7 +487,7 @@ class Episode extends KModel implements HasMedia, Sitemapable
     public function resolveRouteBindingQuery($query, $value, $field = null): \Illuminate\Contracts\Database\Eloquent\Builder
     {
         return parent::resolveRouteBindingQuery($query, $value, $field)
-            ->withoutGlobalScopes([TvRatingScope::class]);
+            ->withoutGlobalScopes();
     }
 
     /**

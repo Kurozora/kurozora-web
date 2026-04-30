@@ -199,6 +199,7 @@ class Song extends KModel implements HasMedia, Sitemapable
     public function anime(): BelongsToMany
     {
         return $this->belongsToMany(Anime::class, MediaSong::class, 'song_id', 'model_id')
+            ->withoutGlobalScopes()
             ->where('model_type', '=', Anime::class)
             ->withTimestamps();
     }
@@ -211,6 +212,7 @@ class Song extends KModel implements HasMedia, Sitemapable
     public function games(): BelongsToMany
     {
         return $this->belongsToMany(Game::class, MediaSong::class, 'song_id', 'model_id')
+            ->withoutGlobalScopes()
             ->where('model_type', '=', Game::class)
             ->withTimestamps();
     }
