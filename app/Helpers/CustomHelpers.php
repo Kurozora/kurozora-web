@@ -408,6 +408,11 @@ if (!function_exists('appStoreVerifier')) {
 
         if ($env) {
             $environment = Environment::from($env);
+
+            // Overwrite Xcode env receipts in production
+            if ($environment === Environment::XCODE && app()->isProduction()) {
+                $environment = Environment::PRODUCTION;
+            }
         } else {
             $environment = app()->isProduction() ? Environment::PRODUCTION : Environment::SANDBOX;
         }

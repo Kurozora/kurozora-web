@@ -30,7 +30,7 @@ class VerifyReceiptRequest extends FormRequest
             'password' => ['bail', 'nullable', new ValidateHexadecimal()],
             'transactions' => ['bail', 'required_without:receipt', 'array', 'min:1', 'max:50'],
             'transactions.*' => ['required', 'string'],
-            'environment' => ['nullable', 'string', 'in:Production,Sandbox,production,sandbox'],
+            'environment' => ['nullable', 'string', 'in:Production,Sandbox,Xcode,production,sandbox,xcode'],
         ];
     }
 }
