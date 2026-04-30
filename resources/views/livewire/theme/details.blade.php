@@ -51,7 +51,7 @@
                     </section>
                     @break
                 @default
-                    <livewire:components.explore-category-section :index="$index" :exploreCategory="$exploreCategory" :theme="$theme" />
+                    <livewire:components.explore-category-section :index="$index" :exploreCategory="$exploreCategory" :theme="$theme" :key="'explore-section-' . $exploreCategory->id . '-theme-' . $theme->id" />
                 @endswitch
             @endforeach
         </section>

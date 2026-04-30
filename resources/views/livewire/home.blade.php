@@ -166,7 +166,7 @@
                     @break
                 @default
                     <section>
-                        <livewire:components.explore-category-section :index="$index" :exploreCategory="$exploreCategory" />
+                        <livewire:components.explore-category-section :index="$index" :exploreCategory="$exploreCategory" :key="'explore-section-' . $exploreCategory->id" />
                     </section>
                 @endswitch
             @endforeach
