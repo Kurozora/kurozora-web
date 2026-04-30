@@ -20,7 +20,8 @@ class EpisodePolicy
      */
     public function mark_as_watched(User $user, Episode $episode): bool
     {
-        return $user->hasTracked($episode->anime);
+        $anime = $episode->anime;
+        return $anime !== null && $user->hasTracked($anime);
     }
 
     /**

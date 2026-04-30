@@ -20,7 +20,8 @@ class SeasonPolicy
      */
     public function mark_as_watched(User $user, Season $season): bool
     {
-        return $user->hasTracked($season->anime);
+        $anime = $season->anime;
+        return $anime !== null && $user->hasTracked($anime);
     }
 
     /**
