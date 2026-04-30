@@ -52,6 +52,7 @@ class Details extends Component
         'followers_count' => 0,
         'following_count' => 0,
         'media_ratings_count' => 0,
+        'reputation_count' => 0,
     ];
 
     /**
@@ -113,6 +114,7 @@ class Details extends Component
             'followers_count' => $user->followers_count,
             'following_count' => $user->following_count,
             'media_ratings_count' => $user->media_ratings_count,
+            'reputation_count' => $user->reputation_count,
         ];
     }
 

@@ -108,6 +108,11 @@
                 <div class="mt-2 pt-2 pb-2 px-3">{!! $user->biography_html !!}</div>
 
                 <div class="flex justify-between">
+                    <x-profile-information-badge href="{{ route('leaderboards.reputation') }}" wire:navigate>
+                        <x-slot:title>{{ __('Reputation') }}</x-slot:title>
+                        <x-slot:description>{{ number_shorten($counts['reputation_count'], 0, true) }}</x-slot:description>
+                    </x-profile-information-badge>
+
                     <x-profile-information-badge href="{{ route('profile.achievements', $user) }}" wire:navigate>
                         <x-slot:title>{{ __('Achievements') }}</x-slot:title>
                         <x-slot:description>{{ number_shorten($counts['achievements_count'], 0, true) }}</x-slot:description>

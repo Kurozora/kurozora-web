@@ -1,4 +1,4 @@
-@props(['user', 'isRow' => true, 'trailingAction' => null])
+@props(['user', 'isRow' => true, 'trailingAction' => null, 'leadingAccessory' => null, 'subtitle' => null, 'showFollowButton' => true])
 
 @php
     $class = $isRow ? 'pb-2 shrink-0 snap-normal snap-center' : '';
@@ -9,6 +9,12 @@
 <div {{ $attributes->merge(['class' => 'relative flex-grow w-64 md:w-80 ' . $class]) }}>
     <div class="flex flex-nowrap justify-between">
         <div class="flex items-center">
+            @isset($leadingAccessory)
+                <div class="z-10 shrink-0 mr-2">
+                    {{ $leadingAccessory }}
+                </div>
+            @endisset
+
             <picture
                 class="relative shrink-0 w-16 aspect-square rounded-full overflow-hidden"
                 style="background-color: {{ $user->getFirstMedia(\App\Enums\MediaCollection::Profile)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
@@ -29,43 +35,47 @@
             <div class="pl-2 pr-2">
                 <p class="leading-tight line-clamp-2" title="{{ $user->username }}">{{ $user->username }}</p>
                 <p class="text-xs leading-tight opacity-75">
-                    @auth
-                        @if ($followersCount === 0)
-                            @if ($user->id === auth()->user()->id)
-                                {{ __('You, followed by you!') }}
+                    @isset($subtitle)
+                        {{ $subtitle }}
+                    @else
+                        @auth
+                            @if ($followersCount === 0)
+                                @if ($user->id === auth()->user()->id)
+                                    {{ __('You, followed by you!') }}
+                                @else
+                                    {{ __('Be the first to follow!') }}
+                                @endif
+                            @elseif ($followersCount === 1)
+                                @if ($user->id == auth()->user()->id)
+                                    {{ __('Followed by you… and one fan!') }}
+                                @else
+                                    {{ $isFollowed ? __('Followed by you.') : __('Followed by one fan.') }}
+                                @endif
+                            @elseif ($followersCount >= 2 && $followersCount <= 999)
+                                @if ($user->id == auth()->user()->id)
+                                    {{ __('Followed by you and :x fans.', ['x' => $followersCount]) }}
+                                @else
+                                    {{
+                                        $isFollowed ?
+                                        trans_choice('{1}Followed by you and one fan.|[2,*] Followed by you and :x fans.', $followersCount - 1, ['x' => $followersCount - 1]) :
+                                        __('Followed by :x fans.', ['x' => $followersCount])
+                                    }}
+                                @endif
                             @else
-                                {{ __('Be the first to follow!') }}
-                            @endif
-                        @elseif ($followersCount === 1)
-                            @if ($user->id == auth()->user()->id)
-                                {{ __('Followed by you… and one fan!') }}
-                            @else
-                                {{ $isFollowed ? __('Followed by you.') : __('Followed by one fan.') }}
-                            @endif
-                        @elseif ($followersCount >= 2 && $followersCount <= 999)
-                            @if ($user->id == auth()->user()->id)
-                                {{ __('Followed by you and :x fans.', ['x' => $followersCount]) }}
-                            @else
-                                {{
-                                    $isFollowed ?
-                                    trans_choice('{1}Followed by you and one fan.|[2,*] Followed by you and :x fans.', $followersCount - 1, ['x' => $followersCount - 1]) :
-                                    __('Followed by :x fans.', ['x' => $followersCount])
-                                }}
+                                @if ($user->id == auth()->user()->id)
+                                    {{ __('Followed by :x fans.', ['x' => number_shorten($followersCount)]) }}
+                                @else
+                                    {{
+                                        $isFollowed ?
+                                        trans_choice('{1}Followed by you and one fan.|[2,*] Followed by you and :x fans.',$followersCount - 1, ['x' => number_shorten($followersCount - 1)]) :
+                                        __('Followed by :x fans.', ['x' => number_shorten($followersCount)])
+                                    }}
+                                @endif
                             @endif
                         @else
-                            @if ($user->id == auth()->user()->id)
-                                {{ __('Followed by :x fans.', ['x' => number_shorten($followersCount)]) }}
-                            @else
-                                {{
-                                    $isFollowed ?
-                                    trans_choice('{1}Followed by you and one fan.|[2,*] Followed by you and :x fans.',$followersCount - 1, ['x' => number_shorten($followersCount - 1)]) :
-                                    __('Followed by :x fans.', ['x' => number_shorten($followersCount)])
-                                }}
-                            @endif
-                        @endif
-                    @else
-                        {{ __('Be the first to follow!') }}
-                    @endauth
+                            {{ __('Be the first to follow!') }}
+                        @endauth
+                    @endisset
                 </p>
             </div>
         </div>
@@ -75,7 +85,7 @@
         <div class="flex flex-row flex-nowrap items-center justify-between z-10 whitespace-nowrap">
             @if ($trailingAction)
                 {{ $trailingAction }}
-            @elseif ($user->id != auth()->user()?->id)
+            @elseif ($showFollowButton && $user->id != auth()->user()?->id)
                 <livewire:components.follow-button :user="$user" :is-followed="$isFollowed" wire:key="{{ uniqid(more_entropy: true) }}" />
             @endif
         </div>

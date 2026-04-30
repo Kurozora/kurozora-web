@@ -60,6 +60,7 @@ require 'Web/Games.php';
 require 'Web/Genres.php';
 require 'Web/IMDB.php';
 require 'Web/Kitsu.php';
+require 'Web/Leaderboards.php';
 require 'Web/Library.php';
 require 'Web/LiveChart.php';
 require 'Web/Manga.php';
