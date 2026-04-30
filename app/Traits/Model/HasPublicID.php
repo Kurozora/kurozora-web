@@ -53,4 +53,34 @@ trait HasPublicID
             '='
         );
     }
+
+    /**
+     * Retrieve the model for a bound value.
+     *
+     * @param mixed       $value
+     * @param string|null $field
+     *
+     * @return Model|null
+     */
+    public function resolveRouteBinding($value, $field = null): ?Model
+    {
+        if (ctype_digit($value)) {
+            $instance = $this->resolveRouteBindingQuery($this->newQuery(), $value, $this->getKeyName())->first();
+
+            if ($instance !== null) {
+                $segments = request()->segments();
+
+                foreach ($segments as $i => $segment) {
+                    if ($segment === $value) {
+                        $segments[$i] = $instance->public_id;
+                        break;
+                    }
+                }
+
+                abort(redirect('/' . implode('/', $segments), 301));
+            }
+        }
+
+        return $this->resolveRouteBindingQuery($this->newQuery(), $value, $field ?? $this->getRouteKeyName())->first();
+    }
 }
