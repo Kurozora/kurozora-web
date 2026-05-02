@@ -8,6 +8,7 @@ use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RestoreOrderRequest;
 use App\Http\Requests\VerifyReceiptRequest;
+use App\Http\Resources\StoreTransactionResource;
 use App\Models\ConsumablePurchase;
 use App\Models\StoreProduct;
 use App\Models\User;
@@ -111,6 +112,23 @@ class StoreController extends Controller
                     'isValid' => $entitlements['pro'] || $entitlements['plus'],
                 ],
             ],
+        ]);
+    }
+
+    /**
+     * Returns the user's StoreKit transactions ordered by purchase date.
+     */
+    public function transactions(): JsonResponse
+    {
+        $user = auth()->user();
+
+        $transactions = UserReceiptTransaction::with('storeProduct')
+            ->where('user_id', $user->uuid)
+            ->orderByDesc('purchased_at')
+            ->get();
+
+        return JSONResult::success([
+            'data' => StoreTransactionResource::collection($transactions),
         ]);
     }
 

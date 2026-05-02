@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class UserReceiptTransaction extends KModel
@@ -25,6 +26,16 @@ class UserReceiptTransaction extends KModel
             'expires_at' => 'datetime',
             'revoked_at' => 'datetime',
         ];
+    }
+
+    /**
+     * Whether the transaction can be refunded.
+     */
+    protected function isRefundable(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->revoked_at === null,
+        );
     }
 
     /**

@@ -25,4 +25,8 @@ Route::prefix('/store')
         Route::post('/verify', [StoreController::class, 'verifyReceipt'])
             ->middleware('auth.kurozora')
             ->name('.verify');
+
+        Route::get('/transactions', [StoreController::class, 'transactions'])
+            ->middleware('auth.kurozora')
+            ->name('.transactions');
     });
