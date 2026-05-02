@@ -4,12 +4,11 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\DeleteNotificationsRequest;
 use App\Http\Requests\UpdateNotificationsRequest;
 use App\Http\Resources\NotificationResource;
 use App\Models\Notification;
-use App\Models\User;
 use Exception;
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
@@ -43,61 +42,71 @@ class NotificationController extends Controller
     }
 
     /**
-     * Deletes the authenticated user's notification.
+     * Deletes a single notification belonging to the authenticated user.
      *
      * @param Notification $notification
      * @return JsonResponse
      * @throws Exception
      */
-    public function delete(Notification $notification): JsonResponse
+    public function deleteOne(Notification $notification): JsonResponse
     {
-        // Delete the notification
         $notification->delete();
 
         return JSONResult::success();
     }
 
     /**
-     * Updates a single, multiple or all notifications' status of the authenticated user.
+     * Deletes a single, multiple, or all notifications of the authenticated user.
+     *
+     * @param DeleteNotificationsRequest $request
+     *
+     * @return JsonResponse
+     * @throws ConflictHttpException
+     * @throws Exception
+     */
+    public function delete(DeleteNotificationsRequest $request): JsonResponse
+    {
+        $targetedNotification = $request->get('notification');
+        $notificationQuery = $request->user()->notifications();
+
+        if ($targetedNotification != 'all') {
+            $notificationIDs = explode(',', $targetedNotification);
+
+            if (!count($notificationIDs)) {
+                throw new ConflictHttpException('No notifications were specified.');
+            }
+
+            $notificationQuery->whereIn('id', $notificationIDs);
+        }
+
+        $notificationQuery->delete();
+
+        return JSONResult::success();
+    }
+
+    /**
+     * Updates a single, multiple, or all notifications' status of the authenticated user.
      *
      * @param UpdateNotificationsRequest $request
      * @return JsonResponse
-     * @throws AuthorizationException
      * @throws ConflictHttpException
      */
     public function update(UpdateNotificationsRequest $request): JsonResponse
     {
-        /** @var User $user */
-        $user = $request->user();
-
         $markAsRead = (bool) $request->input('read');
-
-        // Get the notification(s) the user is targeting to update
         $targetedNotification = $request->get('notification');
-
-        // User wants to update all of their notifications
         $notificationQuery = $request->user()->notifications();
 
         if ($targetedNotification != 'all') {
-            // Explode the string. This leaves an array of IDs
             $notificationIDs = explode(',', $targetedNotification);
 
-            // Make sure there are items in the array
-            if (!count($notificationIDs))
+            if (!count($notificationIDs)) {
                 throw new ConflictHttpException('No notifications were specified.');
-
-            // Make sure the notifications belong to the currently authenticated user
-            foreach ($notificationIDs as $notificationID) {
-                if (!$user->notifications->contains($notificationID)) {
-                    throw new AuthorizationException(__('The request wasn’t accepted due to an issue with the notifications or because it’s using incorrect authentication.'));
-                }
             }
 
-            // Get the notifications to be updated
             $notificationQuery->whereIn('id', $notificationIDs);
         }
 
-        // Update the notifications
         $notificationQuery->update([
             'read_at' => $markAsRead ? now() : null
         ]);
