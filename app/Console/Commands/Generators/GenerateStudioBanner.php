@@ -3,9 +3,10 @@
 namespace App\Console\Commands\Generators;
 
 use App\Enums\MediaCollection;
-use App\Models\MediaStat;
+use App\Enums\StudioType;
 use App\Models\Studio;
 use Illuminate\Console\Command;
+use Illuminate\Support\Collection;
 
 class GenerateStudioBanner extends Command
 {
@@ -56,78 +57,124 @@ class GenerateStudioBanner extends Command
             return Command::INVALID;
         }
 
-        foreach ($studioIDs as $studioID) {
-            $studio = Studio::withoutGlobalScopes()
-                ->firstWhere('id', '=', $studioID);
+        Studio::withoutGlobalScopes()
+            ->with([
+                'media',
+                'anime' => function ($query) {
+                    $query->whereHas('media')
+                        ->with([
+                            'media',
+                            'mediaStat'
+                        ])
+                        ->orderBy('rating_average', 'desc')
+                        ->limit(10); // Max limit we're interested in
+                },
+                'games' => function ($query) {
+                    $query->whereHas('media')
+                        ->with([
+                            'media',
+                            'mediaStat'
+                        ])
+                        ->orderBy('rating_average', 'desc')
+                        ->limit(10); // Max limit we're interested in
+                },
+                'manga' => function ($query) {
+                    $query->whereHas('media')
+                        ->with([
+                            'media',
+                            'mediaStat'
+                        ])
+                        ->orderBy('rating_average', 'desc')
+                        ->limit(10); // Max limit we're interested in
+                },
+            ])
+            ->withCount([
+                'anime',
+                'games',
+                'manga',
+            ])
+            ->when(!$force, function ($query) {
+                $query->whereDoesntHave('media', function ($query) {
+                    $query->where('collection_name', '=', MediaCollection::Banner);
+                });
+            })
+            ->whereIn('id', $studioIDs)
+            ->chunkById(100, function (Collection $studios) {
+                $studios->each(function (Studio $studio) {
+                    // Determine the number of anime the studio has.
+                    $modelCount = match ($studio->type) {
+                        StudioType::Anime() => $this->allowedCount($studio->anime_count),
+                        StudioType::Game() => $this->allowedCount($studio->games_count),
+                        StudioType::Manga() => $this->allowedCount($studio->manga_count),
+                        default => $this->fail('Incorrect studio type'),
+                    };
 
-            if (empty($studio)) {
-                $this->info('Studio not found. Exiting...');
-                return Command::INVALID;
-            }
-
-            if (empty($studio->getFirstMediaFullUrl(MediaCollection::Banner())) || $force) {
-                // Determine the number of anime the studio has.
-                $animeCount = $studio->anime()->count();
-
-                if ($animeCount >= 10) {
-                    $animeCount = 10;
-                } else if ($animeCount >= 7) {
-                    $animeCount = 7;
-                } else if ($animeCount >= 4) {
-                    $animeCount = 4;
-                } else {
-                    continue;
-                }
-
-                if (empty($animeCount)) {
-                    $this->info('Studio has no anime. Exiting...');
-                    continue;
-                }
-
-                // Get anime belonging to the studio
-                // Sort by highest average rating
-                // Grab the top `n` anime
-                $studio->load(['anime.mediaStat' => function ($q) use ($animeCount, $studio) {
-                    /** @var MediaStat[] $stats */
-                    $stats = $q->orderBy('rating_average', 'desc')->limit($animeCount)->get();
-                    $anime = [];
-
-                    foreach ($stats as $stat) {
-                        $anime[] = $stat->model;
+                    if (empty($modelCount)) {
+                        $this->info('Studio doesn’t have enough ' . $studio->type->key . '. Exiting...');
+                        return;
                     }
 
-                    // Get the image urls from the anime
-                    $images = collect($anime)->pluck('poster_image_url')
+                    // Get the image urls from the models
+                    $models = match ($studio->type) {
+                        StudioType::Anime() => $studio->anime,
+                        StudioType::Game() => $studio->games,
+                        StudioType::Manga() => $studio->manga,
+                        default => $this->fail('Incorrect studio type'),
+                    };
+                    $images = collect($models)->pluck('poster_image_url')
                         ->filter(function ($value) {
                             return !empty($value);
                         });
+                    $imagesCount = $this->allowedCount($images->count());
+
+                    if (empty($imagesCount)) {
+                        $this->info('Not enough images. Exiting...');
+                        return;
+                    }
 
                     // Create the image
-                    if ($images->count() == $animeCount) {
-                        $absoluteFilePath = getcwd() . '/storage/app/banners/' . $studio->id . '.webp';
+                    $absoluteFilePath = getcwd() . '/storage/app/banners/' . $studio->id . '.webp';
 
-                        $this->info('Creating file...');
-                        $imageURL = create_studio_banner_from($images, $absoluteFilePath);
+                    $this->info('Creating file...');
+                    $imageURL = create_studio_banner_from($images, $absoluteFilePath);
 
-                        $this->info('Updating studio banner...');
-                        $studio->updateImageMedia(MediaCollection::Banner(), $imageURL, null, [], 'webp');
+                    $this->info('Updating studio banner...');
+                    $studio->updateImageMedia(MediaCollection::Banner(), $imageURL, null, [], 'webp');
 
-                        if (file_exists($absoluteFilePath)) {
-                            $this->info('Cleaning up files.');
+                    if (file_exists($absoluteFilePath)) {
+                        $this->info('Cleaning up files.');
 
-                            if (unlink($absoluteFilePath)) {
-                                $this->info('File has been deleted.');
-                            } else {
-                                $this->info('There was an error deleting the file: ' . $absoluteFilePath);
-                            }
+                        if (unlink($absoluteFilePath)) {
+                            $this->info('File has been deleted.');
                         } else {
-                            $this->info('Original file has ben deleted.');
+                            $this->info('There was an error deleting the file: ' . $absoluteFilePath);
                         }
+                    } else {
+                        $this->info('Original file has ben deleted.');
                     }
-                }]);
-            }
-        }
+                });
+            });
 
         return Command::SUCCESS;
+    }
+
+    /**
+     * Return an allowed count based on the given model count.
+     *
+     * @param null|int $modelCount
+     *
+     * @return null|int
+     */
+    private function allowedCount(?int $modelCount): ?int
+    {
+        if ($modelCount >= 10) {
+            return 10;
+        } else if ($modelCount >= 7) {
+            return 7;
+        } else if ($modelCount >= 4) {
+            return 4;
+        }
+
+        return null;
     }
 }

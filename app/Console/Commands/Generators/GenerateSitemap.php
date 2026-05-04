@@ -256,7 +256,7 @@ class GenerateSitemap extends Command
                 $this->generateSitemapFor(Season::TABLE_NAME, $page, $seasons, $sitemapIndex);
             });
 
-        //========== Studios sitemap ==========//
+        //========== Songs sitemap ==========//
         $this->info('- Generating songs...');
         Song::withoutGlobalScopes()
             ->withoutEagerLoads()
