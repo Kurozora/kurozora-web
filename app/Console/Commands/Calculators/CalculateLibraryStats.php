@@ -11,6 +11,8 @@ use App\Models\UserLibrary;
 use DB;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
+use Laravel\Telescope\Telescope;
+use Pulse;
 
 class CalculateLibraryStats extends Command
 {
@@ -46,7 +48,10 @@ class CalculateLibraryStats extends Command
      */
     public function handle(): int
     {
-        $chunkSize = 100;
+        Pulse::stopRecording();
+        Telescope::stopRecording();
+
+        $chunkSize = 2000;
         $class = $this->argument('model');
 
         if ($class === 'all') {
@@ -81,9 +86,6 @@ class CalculateLibraryStats extends Command
         $bar = $this->output->createProgressBar($modelsInLibraryCount);
 
         $model->whereHas('library')
-            ->with([
-                'mediaStat'
-            ])
             ->withCount([
                 'library as in_progress_count' => function ($query) {
                     $query->where('status', '=', UserLibraryStatus::InProgress);
@@ -109,50 +111,39 @@ class CalculateLibraryStats extends Command
             ])
             ->chunkById($chunkSize, function (Collection $models) use ($bar) {
                 DB::transaction(function () use ($models, $bar) {
-                    $models->each(function ($model) use ($bar) {
-                        // Find or create media stat for the model
-                        $mediaStat = $model->mediaStat;
+                    $rows = $models->map(function ($model) {
+                        $modelCount = $model->planning_count + $model->in_progress_count
+                            + $model->completed_count + $model->on_hold_count
+                            + $model->dropped_count + $model->interested_count
+                            + $model->ignored_count;
 
-                        if (empty($mediaStat)) {
-                            $mediaStat = MediaStat::create([
-                                'model_type' => $model->getMorphClass(),
-                                'model_id' => $model->id,
-                            ]);
-                        }
-
-                        // Get library count per status
-                        $planningCount = $model->planning_count;
-                        $inProgressCount = $model->in_progress_count;
-                        $completedCount = $model->completed_count;
-                        $onHoldCount = $model->on_hold_count;
-                        $droppedCount = $model->dropped_count;
-                        $interestedCount = $model->interested_count;
-                        $ignoredCount = $model->ignored_count;
-
-                        // Sum library count of all statuses
-                        $modelCount = $planningCount + $inProgressCount
-                            + $completedCount + $onHoldCount
-                            + $droppedCount + $interestedCount
-                            + $ignoredCount;
-
-                        // Update media stat
-                        $mediaStat->updateQuietly([
+                        return [
+                            'model_type' => $model->getMorphClass(),
+                            'model_id' => $model->id,
                             'model_count' => $modelCount,
-                            'planning_count' => $planningCount,
-                            'in_progress_count' => $inProgressCount,
-                            'completed_count' => $completedCount,
-                            'on_hold_count' => $onHoldCount,
-                            'dropped_count' => $droppedCount,
-                            'interested_count' => $interestedCount,
-                            'ignored_count' => $ignoredCount,
-                        ]);
+                            'planning_count' => $model->planning_count,
+                            'in_progress_count' => $model->in_progress_count,
+                            'completed_count' => $model->completed_count,
+                            'on_hold_count' => $model->on_hold_count,
+                            'dropped_count' => $model->dropped_count,
+                            'interested_count' => $model->interested_count,
+                            'ignored_count' => $model->ignored_count,
+                        ];
+                    })->all();
 
-                        $bar->advance();
-                    });
+                    MediaStat::upsert($rows, ['model_type', 'model_id'], [
+                        'model_count', 'planning_count', 'in_progress_count', 'completed_count',
+                        'on_hold_count', 'dropped_count', 'interested_count', 'ignored_count',
+                    ]);
+
+                    $bar->advance($models->count());
                 });
             });
 
         $bar->finish();
+
+        Pulse::startRecording();
+        Telescope::startRecording();
 
         return Command::SUCCESS;
     }

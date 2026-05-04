@@ -15,6 +15,8 @@ use App\Models\Studio;
 use DB;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
+use Laravel\Telescope\Telescope;
+use Pulse;
 
 class CalculateRatings extends Command
 {
@@ -50,13 +52,11 @@ class CalculateRatings extends Command
      */
     public function handle(): int
     {
-        $chunkSize = 1000;
-        $class = $this->argument('model');
+        Pulse::stopRecording();
+        Telescope::stopRecording();
 
-        // Mean score of all Model
-        $meanRating = MediaRating::withoutGlobalScopes()
-            ->where('model_type', '=', $class)
-            ->avg('rating');
+        $chunkSize = 2000;
+        $class = $this->argument('model');
 
         if ($class === 'all') {
             MediaStat::withoutGlobalScopes()
@@ -96,6 +96,11 @@ class CalculateRatings extends Command
 
         $this->info('Calculating ratings for: ' . $class);
 
+        // Mean rating across all instances of this model class — corpus prior for the Bayesian formula.
+        $meanRating = MediaRating::withoutGlobalScopes()
+            ->where('model_type', '=', $class)
+            ->avg('rating');
+
         $modelsInLibraryCount = $model->count();
         $bar = $this->output->createProgressBar($modelsInLibraryCount);
 
@@ -132,24 +137,12 @@ class CalculateRatings extends Command
                     $query->where('rating', '=', 5.0);
                 }
             ])
-            ->with([
-                'mediaStat'
-            ])
             ->withAvg('mediaRatings', 'rating')
             ->chunkById($chunkSize, function (Collection $models) use ($class, $meanRating, $bar) {
                 DB::transaction(function () use ($class, $models, $meanRating, $bar) {
-                    $models->each(function ($model) use ($class, $meanRating, $bar) {
-                        // Find or create media stat for the model
-                        $mediaStat = $model->mediaStat;
+                    $minimum = $class::minimumRatingsRequired();
 
-                        if (empty($mediaStat)) {
-                            $mediaStat = MediaStat::create([
-                                'model_type' => $model->getMorphClass(),
-                                'model_id' => $model->id,
-                            ]);
-                        }
-
-                        // Total amount of ratings this Model has
+                    $rows = $models->map(function ($model) use ($minimum, $meanRating) {
                         $totalRatingCount = $model->rating_0_5_count
                             + $model->rating_1_0_count + $model->rating_1_5_count
                             + $model->rating_2_0_count + $model->rating_2_5_count
@@ -157,15 +150,13 @@ class CalculateRatings extends Command
                             + $model->rating_4_0_count + $model->rating_4_5_count
                             + $model->rating_5_0_count;
 
-                        // Average score for this Model
                         $basicAverageRating = $model->media_ratings_avg_rating;
+                        $weightedRating = ($totalRatingCount / ($totalRatingCount + $minimum)) * $basicAverageRating
+                            + ($minimum / ($totalRatingCount + $minimum)) * $meanRating;
 
-                        // Calculate weighted rating
-                        $weightedRating = ($totalRatingCount / ($totalRatingCount + $class::minimumRatingsRequired())) * $basicAverageRating
-                            + ($class::minimumRatingsRequired() / ($totalRatingCount + $class::minimumRatingsRequired())) * $meanRating;
-
-                        // Update media stat
-                        $mediaStat->updateQuietly([
+                        return [
+                            'model_type' => $model->getMorphClass(),
+                            'model_id' => $model->id,
                             'rating_1' => $model->rating_0_5_count,
                             'rating_2' => $model->rating_1_0_count,
                             'rating_3' => $model->rating_1_5_count,
@@ -178,12 +169,21 @@ class CalculateRatings extends Command
                             'rating_10' => $model->rating_5_0_count,
                             'rating_average' => $weightedRating,
                             'rating_count' => $totalRatingCount,
-                        ]);
+                        ];
+                    })->all();
 
-                        $bar->advance();
-                    });
+                    MediaStat::upsert($rows, ['model_type', 'model_id'], [
+                        'rating_1', 'rating_2', 'rating_3', 'rating_4', 'rating_5',
+                        'rating_6', 'rating_7', 'rating_8', 'rating_9', 'rating_10',
+                        'rating_average', 'rating_count',
+                    ]);
+
+                    $bar->advance($models->count());
                 });
             });
+
+        Pulse::startRecording();
+        Telescope::startRecording();
 
         return Command::SUCCESS;
     }

@@ -7,6 +7,8 @@ use App\Models\MediaStat;
 use DB;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
+use Laravel\Telescope\Telescope;
+use Pulse;
 
 class CalculateEpisodeStats extends Command
 {
@@ -41,7 +43,10 @@ class CalculateEpisodeStats extends Command
      */
     public function handle(): int
     {
-        $chunkSize = 100;
+        Pulse::stopRecording();
+        Telescope::stopRecording();
+
+        $chunkSize = 2000;
 
         $this->info('Calculating stats for: ' . Episode::class);
 
@@ -51,39 +56,27 @@ class CalculateEpisodeStats extends Command
         $totalCount = (clone $base)->count();
         $bar = $this->output->createProgressBar($totalCount);
 
-        $base->with([
-                'mediaStat'
-            ])
-            ->withCount([
+        $base->withCount([
                 'user_watched_episodes as watch_count',
             ])
             ->chunkById($chunkSize, function (Collection $models) use ($bar) {
                 DB::transaction(function () use ($models, $bar) {
-                    $models->each(function ($model) use ($bar) {
-                        // Find or create media stat for the episode
-                        $mediaStat = $model->mediaStat;
+                    $rows = $models->map(fn ($model) => [
+                        'model_type' => $model->getMorphClass(),
+                        'model_id' => $model->id,
+                        'model_count' => (int) $model->watch_count,
+                    ])->all();
 
-                        if (empty($mediaStat)) {
-                            $mediaStat = MediaStat::create([
-                                'model_type' => $model->getMorphClass(),
-                                'model_id' => $model->id,
-                            ]);
-                        }
+                    MediaStat::upsert($rows, ['model_type', 'model_id'], ['model_count']);
 
-                        // Get all current episode records from user watched episode
-                        $watchCount = $model->watch_count;
-
-                        // Update media stat
-                        $mediaStat->updateQuietly([
-                            'model_count' => $watchCount,
-                        ]);
-
-                        $bar->advance();
-                    });
+                    $bar->advance($models->count());
                 });
             });
 
         $bar->finish();
+
+        Pulse::startRecording();
+        Telescope::startRecording();
 
         return Command::SUCCESS;
     }

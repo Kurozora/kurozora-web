@@ -25,6 +25,8 @@ use DateTimeInterface;
 use DB;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Collection;
+use Laravel\Telescope\Telescope;
+use Pulse;
 use Spatie\Sitemap\SitemapIndex;
 
 class GenerateSitemap extends Command
@@ -50,6 +52,9 @@ class GenerateSitemap extends Command
      */
     public function handle(): int
     {
+        Pulse::stopRecording();
+        Telescope::stopRecording();
+
         // Prepare sitemap index
         $sitemapIndex = SitemapIndex::create();
 
@@ -283,6 +288,10 @@ class GenerateSitemap extends Command
         $sitemapIndex->writeToFile(public_path('sitemaps/sitemap_index.xml'));
 
         $this->info('- Done -');
+
+        Pulse::startRecording();
+        Telescope::startRecording();
+
         return Command::SUCCESS;
     }
 

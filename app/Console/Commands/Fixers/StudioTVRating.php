@@ -6,6 +6,8 @@ use App\Models\Studio;
 use DB;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Collection;
+use Laravel\Telescope\Telescope;
+use Pulse;
 
 class StudioTVRating extends Command
 {
@@ -30,6 +32,11 @@ class StudioTVRating extends Command
      */
     public function handle(): int
     {
+        Pulse::stopRecording();
+        Telescope::stopRecording();
+
+        $chunkSize = 2000;
+
         Studio::withoutGlobalScopes()
             ->withMin([
                 'anime as min_anime_tv_rating_id' => function ($query) {
@@ -59,7 +66,11 @@ class StudioTVRating extends Command
             ])
             ->where('tv_rating_id', '=', null)
             ->with(['mediaStat', 'tv_rating', 'predecessors', 'successor'])
-            ->chunkById(1000, function (Collection $studios) {
+            ->chunkById($chunkSize, function (Collection $studios) {
+                $tvRatingUpdates = [];
+                $nsfwUpdates = [];
+                $logs = [];
+
                 /** @var Studio $studio */
                 foreach ($studios as $studio) {
                     // Determine tv_rating_id: smallest non-null min_* across relations
@@ -120,21 +131,60 @@ class StudioTVRating extends Command
                         continue;
                     }
 
-                    // Do update in transaction to be safe
-                    DB::transaction(function () use ($studio, $updates, $newTvRatingId, $newIsNsfw) {
-                        $studio->update($updates);
-                    });
+                    if (array_key_exists('tv_rating_id', $updates)) {
+                        $tvRatingUpdates[(int) $studio->id] = (int) $updates['tv_rating_id'];
+                    }
 
-                    $this->info(sprintf(
+                    if (array_key_exists('is_nsfw', $updates)) {
+                        $nsfwUpdates[(int) $studio->id] = (bool) $updates['is_nsfw'];
+                    }
+
+                    $logs[] = sprintf(
                         'Updated Studio(id=%d, name="%s"): is_nsfw: %s -> %s, tv_rating_id: %s',
                         $studio->id,
                         $studio->name,
                         $studio->is_nsfw ? 'true' : 'false',
                         $updates['is_nsfw'] ?? ($studio->is_nsfw ? 'true' : 'false'),
                         $updates['tv_rating_id'] ?? $studio->tv_rating_id
-                    ));
+                    );
+                }
+
+                if (empty($tvRatingUpdates) && empty($nsfwUpdates)) {
+                    return;
+                }
+
+                DB::transaction(function () use ($tvRatingUpdates, $nsfwUpdates) {
+                    $changedIDs = array_unique(array_merge(array_keys($tvRatingUpdates), array_keys($nsfwUpdates)));
+                    $columns = [];
+
+                    if (!empty($tvRatingUpdates)) {
+                        $cases = '';
+                        foreach ($tvRatingUpdates as $id => $value) {
+                            $cases .= ' WHEN ' . $id . ' THEN ' . $value;
+                        }
+                        $columns['tv_rating_id'] = DB::raw('CASE id' . $cases . ' ELSE tv_rating_id END');
+                    }
+
+                    if (!empty($nsfwUpdates)) {
+                        $cases = '';
+                        foreach ($nsfwUpdates as $id => $value) {
+                            $cases .= ' WHEN ' . $id . ' THEN ' . ($value ? '1' : '0');
+                        }
+                        $columns['is_nsfw'] = DB::raw('CASE id' . $cases . ' ELSE is_nsfw END');
+                    }
+
+                    Studio::withoutGlobalScopes()
+                        ->whereIn('id', $changedIDs)
+                        ->update($columns);
+                });
+
+                foreach ($logs as $log) {
+                    $this->info($log);
                 }
             });
+
+        Pulse::startRecording();
+        Telescope::startRecording();
 
         return Command::SUCCESS;
     }

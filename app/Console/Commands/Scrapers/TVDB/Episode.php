@@ -5,6 +5,8 @@ namespace App\Console\Commands\Scrapers\TVDB;
 use App\Models\Anime;
 use App\Spiders\TVDB\EpisodeSpider;
 use Illuminate\Console\Command;
+use Laravel\Telescope\Telescope;
+use Pulse;
 use RoachPHP\Roach;
 use RoachPHP\Spider\Configuration\Overrides;
 
@@ -31,6 +33,9 @@ class Episode extends Command
      */
     public function handle(): int
     {
+        Pulse::stopRecording();
+        Telescope::stopRecording();
+
         $tvdbIDs = $this->argument('tvdbID');
 
         if (empty($tvdbIDs)) {
@@ -41,6 +46,10 @@ class Episode extends Command
 
         if (empty($tvdbIDs)) {
             $this->info('ID is empty. Exiting...');
+
+            Pulse::startRecording();
+            Telescope::startRecording();
+
             return Command::INVALID;
         }
 
@@ -70,6 +79,10 @@ class Episode extends Command
             ]);
 
             // Chain episodes
+            $episodeIDs = [];
+            $nextCases = '';
+            $previousCases = '';
+
             foreach ($episodes as $key => $episode) {
                 $nextEpisode = null;
                 $previousEpisode = null;
@@ -82,12 +95,23 @@ class Episode extends Command
                     $previousEpisode = $episodes[$key - 1]->id;
                 }
 
-                $episode->update([
-                    'next_episode_id' => $nextEpisode,
-                    'previous_episode_id' => $previousEpisode,
-                ]);
+                $episodeIDs[] = (int) $episode->id;
+                $nextCases .= ' WHEN ' . (int) $episode->id . ' THEN ' . ($nextEpisode === null ? 'NULL' : (int) $nextEpisode);
+                $previousCases .= ' WHEN ' . (int) $episode->id . ' THEN ' . ($previousEpisode === null ? 'NULL' : (int) $previousEpisode);
+            }
+
+            if (!empty($episodeIDs)) {
+                \App\Models\Episode::withoutGlobalScopes()
+                    ->whereIn('id', $episodeIDs)
+                    ->update([
+                        'next_episode_id' => DB::raw('CASE id' . $nextCases . ' END'),
+                        'previous_episode_id' => DB::raw('CASE id' . $previousCases . ' END'),
+                    ]);
             }
         }
+
+        Pulse::startRecording();
+        Telescope::startRecording();
 
         return Command::SUCCESS;
     }

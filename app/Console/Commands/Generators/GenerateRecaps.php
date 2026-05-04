@@ -22,6 +22,8 @@ use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Laravel\Telescope\Telescope;
+use Pulse;
 use Throwable;
 
 class GenerateRecaps extends Command
@@ -51,6 +53,9 @@ class GenerateRecaps extends Command
      */
     public function handle(): int
     {
+        Pulse::stopRecording();
+        Telescope::stopRecording();
+
         $user = $this->argument('userID');
         $year = $this->argument('year') ?? now()->year;
         $month = $this->argument('month');
@@ -442,6 +447,9 @@ class GenerateRecaps extends Command
                     });
                 });
         });
+
+        Pulse::startRecording();
+        Telescope::startRecording();
 
         return Command::SUCCESS;
     }

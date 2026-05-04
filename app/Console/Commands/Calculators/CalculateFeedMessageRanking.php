@@ -7,6 +7,8 @@ use App\Models\FeedMessage;
 use DB;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
+use Laravel\Telescope\Telescope;
+use Pulse;
 use Throwable;
 
 class CalculateFeedMessageRanking extends Command
@@ -58,7 +60,10 @@ class CalculateFeedMessageRanking extends Command
      */
     public function handle(): int
     {
-        $chunkSize = 1000;
+        Pulse::stopRecording();
+        Telescope::stopRecording();
+
+        $chunkSize = 2000;
         $heartType = FeedVoteType::Heart()->description;
         $cutoff = now()->subDays(self::ACTIVITY_WINDOW_DAYS);
 
@@ -82,18 +87,33 @@ class CalculateFeedMessageRanking extends Command
 
         $query->chunkById($chunkSize, function (Collection $feedMessages) use ($heartType, $bar) {
             DB::transaction(function () use ($feedMessages, $heartType, $bar) {
-                $feedMessages->each(function (FeedMessage $feedMessage) use ($heartType, $bar) {
-                    $feedMessage->updateQuietly([
-                        'ranking_score' => $this->scoreFor($feedMessage, $heartType),
-                    ]);
+                $scoresByFeedMessageId = [];
 
+                foreach ($feedMessages as $feedMessage) {
+                    $scoresByFeedMessageId[(int) $feedMessage->id] = $this->scoreFor($feedMessage, $heartType);
                     $bar->advance();
-                });
+                }
+
+                if (empty($scoresByFeedMessageId)) {
+                    return;
+                }
+
+                $cases = '';
+                foreach ($scoresByFeedMessageId as $id => $score) {
+                    $cases .= ' WHEN ' . $id . ' THEN ' . (string) (float) $score;
+                }
+
+                FeedMessage::withoutGlobalScopes()
+                    ->whereIn('id', array_keys($scoresByFeedMessageId))
+                    ->update(['ranking_score' => DB::raw('CASE id' . $cases . ' END')]);
             });
         });
 
         $bar->finish();
         $this->newLine();
+
+        Pulse::startRecording();
+        Telescope::startRecording();
 
         return Command::SUCCESS;
     }

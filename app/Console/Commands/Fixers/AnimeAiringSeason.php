@@ -6,7 +6,8 @@ use App\Models\Anime;
 use DB;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Collection;
-use Throwable;
+use Laravel\Telescope\Telescope;
+use Pulse;
 
 class AnimeAiringSeason extends Command
 {
@@ -31,27 +32,38 @@ class AnimeAiringSeason extends Command
      */
     public function handle(): int
     {
+        Pulse::stopRecording();
+        Telescope::stopRecording();
+
+        $chunkSize = 2000;
         $year = $this->argument('year') ?? now()->year;
 
         Anime::where([
             ['started_at', '!=', null],
         ])
             ->whereYear('started_at', '=', $year)
-            ->chunkById(1000, function (Collection $animes) {
-                try {
-                    DB::beginTransaction();
+            ->chunkById($chunkSize, function (Collection $animes) {
+                DB::transaction(function () use ($animes) {
+                    $ids = [];
+                    $cases = '';
 
-                    $animes->each(function (Anime $anime) {
-                        $anime->update([
-                            'air_day' => $anime->started_at->dayOfWeek
-                        ]);
-                    });
+                    foreach ($animes as $anime) {
+                        $ids[] = (int) $anime->id;
+                        $cases .= ' WHEN ' . (int) $anime->id . ' THEN ' . (int) $anime->started_at->dayOfWeek;
+                    }
 
-                    DB::commit();
-                } catch (Throwable $e) {
-                    DB::rollBack();
-                }
+                    if (empty($ids)) {
+                        return;
+                    }
+
+                    Anime::withoutGlobalScopes()
+                        ->whereIn('id', $ids)
+                        ->update(['air_day' => DB::raw('CASE id' . $cases . ' END')]);
+                });
             });
+
+        Pulse::startRecording();
+        Telescope::startRecording();
 
         return Command::SUCCESS;
     }

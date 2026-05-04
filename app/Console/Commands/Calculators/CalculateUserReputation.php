@@ -8,6 +8,8 @@ use Closure;
 use DB;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
+use Laravel\Telescope\Telescope;
+use Pulse;
 use Symfony\Component\Console\Helper\ProgressBar;
 
 class CalculateUserReputation extends Command
@@ -34,6 +36,10 @@ class CalculateUserReputation extends Command
      */
     public function handle(): int
     {
+        Pulse::stopRecording();
+        Telescope::stopRecording();
+
+        $chunkSize = 2000;
         $userIDs = $this->argument('id');
 
         if (empty($userIDs)) {
@@ -50,28 +56,26 @@ class CalculateUserReputation extends Command
             // Track progress
             $bar = $this->output->createProgressBar($count);
 
-            User::withoutSyncingToSearch(function () use ($bar, $userQuery) {
-                // Calculate reputation
-                $userQuery->groupBy([User::TABLE_NAME . '.id', User::TABLE_NAME . '.view_count'])
-                    ->withCount([
-                        'library_completed as library_completed_count',
-                        'library_in_progress',
-                        'library_planning',
-                        'library_dropped',
-                        'user_watched_episodes',
-                        'user_rewatched_episodes',
-                        'library',
-                        'feed_messages',
-                        'reshares_received',
-                        'replies_received',
-                        'hearts_received',
-                        'media_ratings_without_description',
-                        'media_ratings_with_description',
-                        'followers',
-                        'blocked',
-                    ])
-                    ->chunkById(500, $this->chunkById($bar), 'id');
-            });
+            // Calculate reputation
+            $userQuery->groupBy([User::TABLE_NAME . '.id', User::TABLE_NAME . '.view_count'])
+                ->withCount([
+                    'library_completed as library_completed_count',
+                    'library_in_progress',
+                    'library_planning',
+                    'library_dropped',
+                    'user_watched_episodes',
+                    'user_rewatched_episodes',
+                    'library',
+                    'feed_messages',
+                    'reshares_received',
+                    'replies_received',
+                    'hearts_received',
+                    'media_ratings_without_description',
+                    'media_ratings_with_description',
+                    'followers',
+                    'blocked',
+                ])
+                ->chunkById($chunkSize, $this->chunkById($bar), 'id');
         } else {
             $userIDs = is_array($userIDs) ? $userIDs : explode(',', $userIDs);
 
@@ -79,30 +83,31 @@ class CalculateUserReputation extends Command
             $bar = $this->output->createProgressBar(count($userIDs));
 
             // Calculate reputation
-            User::withoutSyncingToSearch(function () use ($bar, $userIDs) {
-                User::select([User::TABLE_NAME . '.id', User::TABLE_NAME . '.view_count'])
-                    ->whereIn('id', $userIDs)
-                    ->groupBy([User::TABLE_NAME . '.id', User::TABLE_NAME . '.view_count'])
-                    ->withCount([
-                        'library_completed',
-                        'library_in_progress',
-                        'library_planning',
-                        'library_dropped',
-                        'user_watched_episodes',
-                        'user_rewatched_episodes',
-                        'library',
-                        'feed_messages',
-                        'reshares_received',
-                        'replies_received',
-                        'hearts_received',
-                        'media_ratings_without_description',
-                        'media_ratings_with_description',
-                        'followers',
-                        'blocked_by',
-                    ])
-                    ->chunkById(500, $this->chunkById($bar), 'id');
-            });
+            User::select([User::TABLE_NAME . '.id', User::TABLE_NAME . '.view_count'])
+                ->whereIn('id', $userIDs)
+                ->groupBy([User::TABLE_NAME . '.id', User::TABLE_NAME . '.view_count'])
+                ->withCount([
+                    'library_completed',
+                    'library_in_progress',
+                    'library_planning',
+                    'library_dropped',
+                    'user_watched_episodes',
+                    'user_rewatched_episodes',
+                    'library',
+                    'feed_messages',
+                    'reshares_received',
+                    'replies_received',
+                    'hearts_received',
+                    'media_ratings_without_description',
+                    'media_ratings_with_description',
+                    'followers',
+                    'blocked_by',
+                ])
+                ->chunkById($chunkSize, $this->chunkById($bar), 'id');
         }
+
+        Pulse::startRecording();
+        Telescope::startRecording();
 
         return Command::SUCCESS;
     }
@@ -118,16 +123,28 @@ class CalculateUserReputation extends Command
     {
         return function (Collection $users) use ($bar) {
             DB::transaction(function () use ($bar, $users) {
+                $reputationByUserId = [];
+
                 foreach ($users as $user) {
                     $score = app(ReputationService::class)
                         ->calculate($user);
 
-                    $user->updateQuietly([
-                        'reputation_count' => (int) round($score),
-                    ]);
-
+                    $reputationByUserId[(int) $user->id] = (int) round($score);
                     $bar->advance();
                 }
+
+                if (empty($reputationByUserId)) {
+                    return;
+                }
+
+                $cases = '';
+                foreach ($reputationByUserId as $userId => $reputation) {
+                    $cases .= sprintf(' WHEN %d THEN %d', $userId, $reputation);
+                }
+
+                User::withoutGlobalScopes()
+                    ->whereIn('id', array_keys($reputationByUserId))
+                    ->update(['reputation_count' => DB::raw('CASE id' . $cases . ' END')]);
             });
         };
     }

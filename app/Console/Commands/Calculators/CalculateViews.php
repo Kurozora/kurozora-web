@@ -14,6 +14,8 @@ use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Laravel\Telescope\Telescope;
+use Pulse;
 
 class CalculateViews extends Command
 {
@@ -39,7 +41,10 @@ class CalculateViews extends Command
      */
     public function handle(): int
     {
-        $chunkSize = 50;
+        Pulse::stopRecording();
+        Telescope::stopRecording();
+
+        $chunkSize = 2000;
         $class = $this->argument('model');
 
         if ($class === 'all') {
@@ -90,18 +95,30 @@ class CalculateViews extends Command
             }])
             ->chunkById($chunkSize, function (Collection $views) use ($class, $bar) {
                 DB::transaction(function () use ($class, $bar, $views) {
-                    $views->each(function (View $view) use ($bar) {
+                    $idValues = [];
+
+                    foreach ($views as $view) {
                         $model = $view->viewable;
 
-                        if (!empty($model)) {
-                            // Update the view_count property
-                            $model->updateQuietly([
-                                'view_count' => $model->view_count + $view->views_count,
-                            ]);
+                        if (empty($model)) {
+                            $bar->advance();
+                            continue;
                         }
 
+                        $idValues[(int) $model->id] = (int) $model->view_count + (int) $view->views_count;
                         $bar->advance();
-                    });
+                    }
+
+                    if (!empty($idValues)) {
+                        $cases = '';
+                        foreach ($idValues as $id => $count) {
+                            $cases .= sprintf(' WHEN %d THEN %d', $id, $count);
+                        }
+
+                        $class::withoutGlobalScopes()
+                            ->whereIn('id', array_keys($idValues))
+                            ->update(['view_count' => DB::raw('CASE id' . $cases . ' END')]);
+                    }
 
                     // Delete the calculated views
                     $viewableIDs = $views->pluck('viewable_id')
@@ -114,6 +131,9 @@ class CalculateViews extends Command
             }, 'viewable_id');
 
         $bar->finish();
+
+        Pulse::startRecording();
+        Telescope::startRecording();
 
         return Command::SUCCESS;
     }
