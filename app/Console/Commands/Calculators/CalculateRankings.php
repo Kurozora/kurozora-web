@@ -5,6 +5,8 @@ namespace App\Console\Commands\Calculators;
 use App\Models\MediaStat;
 use DB;
 use Illuminate\Console\Command;
+use Laravel\Telescope\Telescope;
+use Pulse;
 
 class CalculateRankings extends Command
 {
@@ -41,8 +43,12 @@ class CalculateRankings extends Command
      */
     public function handle(): int
     {
+        Pulse::stopRecording();
+        Telescope::stopRecording();
+
         $page = 1;
-        $perPage = 500;
+        $perPage = 2000;
+        $byesianPrior = 500; // Bayesian smoothing weight applied against the rating average.
         $class = $this->argument('model');
         $isGlobal = $this->option('global');
 
@@ -60,36 +66,67 @@ class CalculateRankings extends Command
                     $this->call('calculate:rankings', ['model' => $modelType]);
                 });
 
+            Pulse::startRecording();
+            Telescope::startRecording();
+
             return Command::SUCCESS;
         }
 
         $this->info('Calculating rankings for: ' . $class);
 
+        $globalAverage = MediaStat::withoutGlobalScopes()
+            ->where('rating_count', '>', 0)
+            ->when(!empty($class), fn ($query) => $query->where('model_type', '=', $class))
+            ->avg('rating_average') ?? 0;
+
+        $bayesianScoreSql = sprintf(
+            '((rating_count / (rating_count + %1$d)) * rating_average
+              + (%1$d / (rating_count + %1$d)) * ?)
+              * LOG10(GREATEST(rating_count, 10)) DESC',
+            $byesianPrior
+        );
+
+        $rankColumn = $isGlobal ? 'rank_global' : 'rank_total';
+
         $mediaStat = MediaStat::withoutGlobalScopes()
-            ->orderBy('in_progress_count', 'desc')
-            ->orderBy('rating_average', 'desc')
+            ->orderByRaw($bayesianScoreSql, [$globalAverage])
             ->orderBy('rating_count', 'desc');
 
         if (!empty($class)) {
             $mediaStat->where('model_type', '=', $class);
         }
 
-        $mediaStat->chunk($perPage, function ($mediaStats) use ($class, $isGlobal, $perPage, &$page) {
-            DB::transaction(function () use ($mediaStats, $class, $isGlobal, $perPage, &$page) {
+        $mediaStat->chunk($perPage, function ($mediaStats) use ($class, $isGlobal, $rankColumn, $perPage, &$page) {
+            DB::transaction(function () use ($mediaStats, $class, $isGlobal, $rankColumn, $perPage, &$page) {
+                $statRows = [];
+                $modelGroups = [];
+
                 foreach ($mediaStats as $index => $mediaStat) {
                     $rank = ($page - 1) * $perPage + $index + 1;
 
-                    if ($isGlobal) {
-                        $mediaStat->rank_global = $rank;
-                    } else {
-                        $mediaStat->rank_total = $rank;
-                        $mediaStat->model_type::withoutGlobalScopes()
-                            ->where('id', '=', $mediaStat->model_id)
-                            ->update([
-                                'rank_total' => $rank
-                            ]);
+                    $statRows[] = [
+                        'id' => $mediaStat->id,
+                        'model_id' => $mediaStat->model_id,
+                        'model_type' => $mediaStat->model_type,
+                        $rankColumn => $rank,
+                    ];
+
+                    if (!$isGlobal) {
+                        $modelGroups[$mediaStat->model_type][(int) $mediaStat->model_id] = $rank;
                     }
-                    $mediaStat->save();
+                }
+
+                MediaStat::upsert($statRows, ['id'], [$rankColumn]);
+
+                foreach ($modelGroups as $modelType => $idRanks) {
+                    $cases = '';
+                    foreach ($idRanks as $modelId => $rank) {
+                        $cases .= sprintf(' WHEN %d THEN %d', $modelId, $rank);
+                    }
+
+                    $modelType::withoutGlobalScopes()
+                        ->whereIn('id', array_keys($idRanks))
+                        ->update(['rank_total' => DB::raw('CASE id' . $cases . ' END')]);
                 }
 
                 $key = $mediaStats->last()->id;
@@ -98,6 +135,9 @@ class CalculateRankings extends Command
                 $page++;
             });
         });
+
+        Pulse::startRecording();
+        Telescope::startRecording();
 
         return Command::SUCCESS;
     }
