@@ -898,7 +898,8 @@ class AnimeProcessor extends CustomItemProcessor
             }
 
             // Try to find the song by identifiers
-            $song = Song::when($malSong['mal_id'], fn($q) => $q->orWhere('mal_id', $malSong['mal_id']))
+            $song = Song::with(['translations', 'mediaStat'])
+                ->when($malSong['mal_id'], fn($q) => $q->orWhere('mal_id', $malSong['mal_id']))
                 ->when($malSong['amazon_id'], fn($q) => $q->orWhere('amazon_id', '=', $malSong['amazon_id']))
                 ->when($malSong['am_id'], fn($q) => $q->orWhere('am_id', '=', $malSong['am_id']))
                 ->when($malSong['spotify_id'], fn($q) => $q->orWhere('spotify_id', '=', $malSong['spotify_id']))
@@ -911,7 +912,8 @@ class AnimeProcessor extends CustomItemProcessor
                 $normalizedArtist = str($malSong['artist'])
                     ->trim()->lower();
 
-                $possibleSongs = Song::whereRaw('LOWER(artist) = ?', [$normalizedArtist])
+                $possibleSongs = Song::with(['translations', 'mediaStat'])
+                    ->whereRaw('LOWER(artist) = ?', [$normalizedArtist])
                     ->get();
 
                 foreach ($possibleSongs as $candidate) {
