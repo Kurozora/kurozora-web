@@ -32,6 +32,8 @@ class MediaResource extends JsonResource
             'textColor2'        => $this->resource->getCustomProperty('text_color_2'),
             'textColor3'        => $this->resource->getCustomProperty('text_color_3'),
             'textColor4'        => $this->resource->getCustomProperty('text_color_4'),
+            'focalX'            => $this->resource->getCustomProperty('focal_x'),
+            'focalY'            => $this->resource->getCustomProperty('focal_y'),
         ];
     }
 }

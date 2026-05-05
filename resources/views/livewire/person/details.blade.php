@@ -20,10 +20,14 @@
         people/{{ $person->id }}
     </x-slot:appArgument>
 
+    @php
+        $profileMedia = $person->getFirstMedia(\App\Enums\MediaCollection::Profile);
+    @endphp
+
     <div class="pb-6" wire:init="loadPage">
         <section
             class="flex items-center justify-center relative pt-10 pb-10 pl-4 pr-4"
-            style="height: 24rem; background-color: {{ $person->getFirstMedia(\App\Enums\MediaCollection::Profile)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }}"
+            style="height: 24rem; background-color: {{ $profileMedia?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }}"
         >
             <x-edge-blur edge="bottom" />
 
@@ -31,9 +35,9 @@
                 <div class="flex flex-col flex-wrap text-center items-center">
                     <picture
                         class="relative aspect-square rounded-full overflow-hidden"
-                        style="height: 176px; background-color: {{ $person->getFirstMedia(\App\Enums\MediaCollection::Profile)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
+                        style="height: 176px; background-color: {{ $profileMedia?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
                     >
-                        <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $person->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/person_poster.webp') }}" alt="{{ $person->full_name }} Profile Image" title="{{ $person->full_name }}">
+                        <img class="w-full h-full object-cover lazyload" style="object-position: {{ $profileMedia?->objectPositionStyle() ?? 'center' }};" data-sizes="auto" data-src="{{ $person->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/person_poster.webp') }}" alt="{{ $person->full_name }} Profile Image" title="{{ $person->full_name }}">
 
                         <div class="absolute top-0 left-0 h-full w-full border-2 border-solid border-black/20 rounded-full"></div>
                     </picture>
