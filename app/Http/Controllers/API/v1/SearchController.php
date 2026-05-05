@@ -31,6 +31,7 @@ use Illuminate\Auth\AuthenticationException;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Pagination\LengthAwarePaginator as ConcreteLengthAwarePaginator;
 use Laravel\Scout\Builder;
 use Uri;
 
@@ -63,7 +64,6 @@ class SearchController extends Controller
                     $resource = $resource->paginate($data['limit'] ?? 20)
                         ->appends($data);
 
-                    // Get next page url minus domain
                     $nextPageURL = $this->nextPageUrlFor($request, $resource, $type);
 
                     $response[$type] = [
@@ -77,7 +77,6 @@ class SearchController extends Controller
                     $resource = $resource->paginate($data['limit'] ?? 20)
                         ->appends($data);
 
-                    // Get next page url minus domain
                     $nextPageURL = $this->nextPageUrlFor($request, $resource, $type);
 
                     $response[$type] = [
@@ -87,35 +86,15 @@ class SearchController extends Controller
                     break;
                 case SearchType::Games:
                     if ($scope == SearchScope::Library) {
-                        $resource = UserLibrary::search($data['query'] ?? '')
-                            ->where('user_id', auth()->id())
-                            ->where('trackable_type', addslashes(Game::class))
-                            ->query(function ($query) {
-                                $query->with([
-                                    'trackable' => function ($query) {
-                                        $query->withoutGlobalScopes([IgnoreListScope::class]);
-                                    },
-                                    'user'
-                                ]);
-                            });
-                        $this->filter(Game::class, $request, $resource);
-                        $resource->where('trackable.tv_rating_id', ['<=', config('app.tv_rating')]);
-                        $resource = $resource->paginate($data['limit'] ?? 5)
-                            ->appends($data);
-
-                        // Get next page url minus domain
-                        $nextPageURL = $this->nextPageUrlFor($request, $resource, $type);
-
-                        $resource = collect($resource->items())->pluck('trackable');
+                        $resource = $this->libraryScopedSearch(Game::class, $data['query'] ?? '', $request, $data['limit'] ?? 5);
                     } else {
                         $resource = Game::search($data['query'] ?? '');
                         $this->filter(Game::class, $request, $resource);
                         $resource = $resource->paginate($data['limit'] ?? 5)
                             ->appends($data);
-
-                        // Get next page url minus domain
-                        $nextPageURL = $this->nextPageUrlFor($request, $resource, $type);
                     }
+
+                    $nextPageURL = $this->nextPageUrlFor($request, $resource, $type);
 
                     $response[$type] = [
                         'data' => GameResourceIdentity::collection($resource),
@@ -124,35 +103,15 @@ class SearchController extends Controller
                     break;
                 case SearchType::Literatures:
                     if ($scope == SearchScope::Library) {
-                        $resource = UserLibrary::search($data['query'] ?? '')
-                            ->where('user_id', auth()->id())
-                            ->where('trackable_type', addslashes(Manga::class))
-                            ->query(function ($query) {
-                                $query->with([
-                                    'trackable' => function ($query) {
-                                        $query->withoutGlobalScopes([IgnoreListScope::class]);
-                                    },
-                                    'user'
-                                ]);
-                            });
-                        $this->filter(Manga::class, $request, $resource);
-                        $resource->where('trackable.tv_rating_id', ['<=', config('app.tv_rating')]);
-                        $resource = $resource->paginate($data['limit'] ?? 5)
-                            ->appends($data);
-
-                        // Get next page url minus domain
-                        $nextPageURL = $this->nextPageUrlFor($request, $resource, $type);
-
-                        $resource = collect($resource->items())->pluck('trackable');
+                        $resource = $this->libraryScopedSearch(Manga::class, $data['query'] ?? '', $request, $data['limit'] ?? 5);
                     } else {
                         $resource = Manga::search($data['query'] ?? '');
                         $this->filter(Manga::class, $request, $resource);
                         $resource = $resource->paginate($data['limit'] ?? 5)
                             ->appends($data);
-
-                        // Get next page url minus domain
-                        $nextPageURL = $this->nextPageUrlFor($request, $resource, $type);
                     }
+
+                    $nextPageURL = $this->nextPageUrlFor($request, $resource, $type);
 
                     $response[$type] = [
                         'data' => LiteratureResourceIdentity::collection($resource),
@@ -165,7 +124,6 @@ class SearchController extends Controller
                     $resource = $resource->paginate($data['limit'] ?? 5)
                         ->appends($data);
 
-                    // Get next page url minus domain
                     $nextPageURL = $this->nextPageUrlFor($request, $resource, $type);
 
                     $response[$type] = [
@@ -175,35 +133,15 @@ class SearchController extends Controller
                     break;
                 case SearchType::Shows:
                     if ($scope == SearchScope::Library) {
-                        $resource = UserLibrary::search($data['query'] ?? '')
-                            ->where('user_id', auth()->id())
-                            ->where('trackable_type', addslashes(Anime::class))
-                            ->query(function ($query) {
-                                $query->with([
-                                    'trackable' => function ($query) {
-                                        $query->withoutGlobalScopes([IgnoreListScope::class]);
-                                    },
-                                    'user'
-                                ]);
-                            });
-                        $this->filter(Anime::class, $request, $resource);
-                        $resource->where('trackable.tv_rating_id', ['<=', config('app.tv_rating')]);
-                        $resource = $resource->paginate($data['limit'] ?? 5)
-                            ->appends($data);
-
-                        // Get next page url minus domain
-                        $nextPageURL = $this->nextPageUrlFor($request, $resource, $type);
-
-                        $resource = collect($resource->items())->pluck('trackable');
+                        $resource = $this->libraryScopedSearch(Anime::class, $data['query'] ?? '', $request, $data['limit'] ?? 5);
                     } else {
                         $resource = Anime::search($data['query'] ?? '');
                         $this->filter(Anime::class, $request, $resource);
                         $resource = $resource->simplePaginate($data['limit'] ?? 5)
                             ->appends($data);
-
-                        // Get next page url minus domain
-                        $nextPageURL = $this->nextPageUrlFor($request, $resource, $type);
                     }
+
+                    $nextPageURL = $this->nextPageUrlFor($request, $resource, $type);
 
                     $response[$type] = [
                         'data' => AnimeResourceIdentity::collection($resource),
@@ -216,7 +154,6 @@ class SearchController extends Controller
                     $resource = $resource->paginate($data['limit'] ?? 5)
                         ->appends($data);
 
-                    // Get next page url minus domain
                     $nextPageURL = $this->nextPageUrlFor($request, $resource, $type);
 
                     $response[$type] = [
@@ -230,7 +167,6 @@ class SearchController extends Controller
                     $resource = $resource->paginate($data['limit'] ?? 5)
                         ->appends($data);
 
-                    // Get next page url minus domain
                     $nextPageURL = $this->nextPageUrlFor($request, $resource, $type);
 
                     $response[$type] = [
@@ -247,7 +183,6 @@ class SearchController extends Controller
                     $resource = $resource->paginate($data['limit'] ?? 5)
                         ->appends($data);
 
-                    // Get next page url minus domain
                     $nextPageURL = $this->nextPageUrlFor($request, $resource, $type);
 
                     $response[$type] = [
@@ -371,16 +306,7 @@ class SearchController extends Controller
                     break;
                 case SearchType::Games:
                     if ($scope == SearchScope::Library) {
-                        $resource = collect(UserLibrary::search($data['query'] ?? '')
-                            ->where('user_id', auth()->id())
-                            ->where('trackable_type', addslashes(Game::class))
-                            ->where('trackable.tv_rating_id', ['<=', config('app.tv_rating')])
-                            ->take($data['limit'] ?? 5)
-                            ->raw()['hits'])
-                            ->map(function ($item) {
-                                return $item['trackable']['title'];
-                            })
-                            ->toArray();
+                        $resource = $this->libraryScopedSuggestions(Game::class, $data['query'] ?? '', $data['limit'] ?? 5);
                     } else {
                         $resource = collect(Game::search($query)
                             ->take($data['limit'] ?? 5)
@@ -395,16 +321,7 @@ class SearchController extends Controller
                     break;
                 case SearchType::Literatures:
                     if ($scope == SearchScope::Library) {
-                        $resource = collect(UserLibrary::search($data['query'] ?? '')
-                            ->where('user_id', auth()->id())
-                            ->where('trackable_type', addslashes(Manga::class))
-                            ->where('trackable.tv_rating_id', ['<=', config('app.tv_rating')])
-                            ->take($data['limit'] ?? 5)
-                            ->raw()['hits'])
-                            ->map(function ($item) {
-                                return $item['trackable']['title'];
-                            })
-                            ->toArray();
+                        $resource = $this->libraryScopedSuggestions(Manga::class, $data['query'] ?? '', $data['limit'] ?? 5);
                     } else {
                         $resource = collect(Manga::search($query)
                             ->take($data['limit'] ?? 5)
@@ -428,16 +345,7 @@ class SearchController extends Controller
                     break;
                 case SearchType::Shows:
                     if ($scope == SearchScope::Library) {
-                        $resource = collect(UserLibrary::search($query)
-                            ->where('user_id', auth()->id())
-                            ->where('trackable_type', addslashes(Anime::class))
-                            ->where('trackable.tv_rating_id', ['<=', config('app.tv_rating')])
-                            ->take($data['limit'] ?? 5)
-                            ->raw()['hits'])
-                            ->map(function ($item) {
-                                return $item['trackable']['title'];
-                            })
-                            ->toArray();
+                        $resource = $this->libraryScopedSuggestions(Anime::class, $query, $data['limit'] ?? 5);
                     } else {
                         $resource = collect(Anime::search($query)
                             ->take($data['limit'] ?? 5)
@@ -523,5 +431,120 @@ class SearchController extends Controller
         $path = $uri->path();
         $query = $uri->query()->value();
         return '/' . $path . '?' . $query;
+    }
+
+    /** Searches the user's library for the given trackable class. */
+    protected function libraryScopedSearch(string $modelClass, string $query, SearchRequest $request, int $limit): LengthAwarePaginator
+    {
+        $page = max(1, (int) $request->input('page', 1));
+        $tvRating = config('app.tv_rating');
+
+        $libraryIds = UserLibrary::query()
+            ->where('user_id', auth()->id())
+            ->where('trackable_type', $modelClass)
+            ->pluck('trackable_id')
+            ->all();
+
+        if (empty($libraryIds)) {
+            return $this->makeEmptyPaginator($request, $limit, $page);
+        }
+
+        $librarySet = array_flip($libraryIds);
+        $cap = 10000;
+
+        $search = $modelClass::search($query)->options(['attributesToRetrieve' => ['id']]);
+        $this->filter($modelClass, $request, $search);
+        $search->where('tv_rating_id', ['<=', $tvRating]);
+
+        $hits = $search->take($cap)->raw()['hits'] ?? [];
+
+        $matchedIds = [];
+        foreach ($hits as $hit) {
+            $id = $hit['id'] ?? null;
+
+            if ($id !== null && isset($librarySet[$id])) {
+                $matchedIds[] = $id;
+            }
+        }
+
+        $total = count($matchedIds);
+        $pageIds = array_slice($matchedIds, ($page - 1) * $limit, $limit);
+
+        $items = collect();
+        if (!empty($pageIds)) {
+            $models = $modelClass::query()
+                ->withoutGlobalScopes([IgnoreListScope::class])
+                ->whereIn('id', $pageIds)
+                ->get()
+                ->keyBy('id');
+
+            $items = collect($pageIds)
+                ->map(fn ($id) => $models->get($id))
+                ->filter()
+                ->values();
+        }
+
+        $paginator = new ConcreteLengthAwarePaginator(
+            $items,
+            $total,
+            $limit,
+            $page,
+            ['path' => $request->url()],
+        );
+
+        return $paginator->appends($request->validated());
+    }
+
+    /** Returns an empty paginator. */
+    protected function makeEmptyPaginator(SearchRequest $request, int $limit, int $page): LengthAwarePaginator
+    {
+        $paginator = new ConcreteLengthAwarePaginator(
+            [],
+            0,
+            $limit,
+            $page,
+            ['path' => $request->url()],
+        );
+
+        return $paginator->appends($request->validated());
+    }
+
+    /** Returns suggestion titles for the user's library. */
+    protected function libraryScopedSuggestions(string $modelClass, string $query, int $limit): array
+    {
+        $libraryIds = UserLibrary::query()
+            ->where('user_id', auth()->id())
+            ->where('trackable_type', $modelClass)
+            ->pluck('trackable_id')
+            ->all();
+
+        if (empty($libraryIds)) {
+            return [];
+        }
+
+        $librarySet = array_flip($libraryIds);
+        $cap = 10000;
+
+        $hits = $modelClass::search($query)
+            ->options(['attributesToRetrieve' => ['id', 'title']])
+            ->where('tv_rating_id', ['<=', config('app.tv_rating')])
+            ->take($cap)
+            ->raw()['hits'] ?? [];
+
+        $titles = [];
+        foreach ($hits as $hit) {
+            $id = $hit['id'] ?? null;
+            if ($id !== null && isset($librarySet[$id])) {
+                $title = $hit['title'] ?? '';
+                if ($title !== '') {
+                    $titles[] = $title;
+                    if (count($titles) >= $limit) {
+                        break;
+                    }
+                }
+            }
+        }
+
+        return $titles;
     }
 }
