@@ -2,7 +2,8 @@
 
 namespace App\Http\Requests;
 
-use App\Contracts\Reportable;
+use App\Enums\ParentalGuideReportReason;
+use BenSampo\Enum\Rules\EnumValue;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ReportRequest extends FormRequest
@@ -25,24 +26,8 @@ class ReportRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'reason_key' => ['bail', 'required', 'string', 'in:' . implode(',', $this->allowedReasonKeys())],
+            'reason_key' => ['bail', 'required', 'string', new EnumValue(ParentalGuideReportReason::class, false)],
             'details' => ['bail', 'nullable', 'string', 'max:1000', 'required_if:reason_key,other'],
         ];
-    }
-
-    /**
-     * Resolves the list of valid reason keys for the bound reportable model.
-     *
-     * @return array<int, string>
-     */
-    protected function allowedReasonKeys(): array
-    {
-        foreach ($this->route()?->parameters() ?? [] as $parameter) {
-            if ($parameter instanceof Reportable) {
-                return $parameter::availableReportReasons();
-            }
-        }
-
-        return ['other'];
     }
 }
