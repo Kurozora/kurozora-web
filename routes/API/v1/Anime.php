@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\v1\AnimeController;
+use App\Http\Controllers\API\v1\ParentalGuideController;
 
 Route::prefix('/anime')
     ->name('.anime')
@@ -76,5 +77,17 @@ Route::prefix('/anime')
                 Route::get('/reviews', [AnimeController::class, 'reviews'])
                     ->middleware('auth.kurozora:optional')
                     ->name('.reviews');
+
+                Route::prefix('parentalguide')
+                    ->name('.parentalguide')
+                    ->group(function () {
+                        Route::get('/', [ParentalGuideController::class, 'indexForAnime'])
+                            ->middleware('auth.kurozora:optional')
+                            ->name('.index');
+
+                        Route::post('/', [ParentalGuideController::class, 'storeForAnime'])
+                            ->middleware('auth.kurozora')
+                            ->name('.store');
+                    });
             });
     });

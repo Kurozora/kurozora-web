@@ -12,6 +12,7 @@ use App\Notifications\ResetPassword as ResetPasswordNotification;
 use App\Notifications\VerifyEmail as VerifyEmailNotification;
 use App\Parsers\MentionParser;
 use App\Traits\HeartActionTrait;
+use App\Traits\HelpfulnessActionTrait;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\Favoriter;
 use App\Traits\Model\Followable;
@@ -80,6 +81,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         HasUuids,
         HasViews,
         HeartActionTrait,
+        HelpfulnessActionTrait,
         Impersonatable,
         InteractsWithMedia,
         InteractsWithMediaExtension,

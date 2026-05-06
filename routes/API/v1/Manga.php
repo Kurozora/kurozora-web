@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\v1\MangaController;
+use App\Http\Controllers\API\v1\ParentalGuideController;
 
 Route::prefix('/manga')
     ->name('.manga')
@@ -69,5 +70,17 @@ Route::prefix('/manga')
                 Route::get('/reviews', [MangaController::class, 'reviews'])
                     ->middleware('auth.kurozora:optional')
                     ->name('.reviews');
+
+                Route::prefix('parentalguide')
+                    ->name('.parentalguide')
+                    ->group(function () {
+                        Route::get('/', [ParentalGuideController::class, 'indexForManga'])
+                            ->middleware('auth.kurozora:optional')
+                            ->name('.index');
+
+                        Route::post('/', [ParentalGuideController::class, 'storeForManga'])
+                            ->middleware('auth.kurozora')
+                            ->name('.store');
+                    });
             });
     });

@@ -30,9 +30,7 @@
                     </div>
 
                     <div class="flex flex-wrap flex-1 justify-end items-center w-full">
-                        @hasrole('superAdmin')
-                        <x-button wire:click="">{{ __('Vote') }}</x-button>
-                        @endhasrole
+                        <x-button wire:click="openSubmitForm">{{ __('Add') }}</x-button>
                     </div>
                 </div>
             </div>
@@ -54,7 +52,7 @@
 
                         @foreach (App\Enums\ParentalGuideCategory::getInstances() as $category)
                             <li>
-                                <a href="#{{ str($category->key)->slug() }}" class="flex gap-1 items-center">
+                                <a href="#{{ $category->urlSlug() }}" class="flex gap-1 items-center">
                                     <h4 class="font-bold">{{ $category->description }}:</h4>
                                     <p class="text-secondary">{{ $game->parental_guide_stat->getAverageRating($category)->description }}</p>
                                 </a>
@@ -66,76 +64,51 @@
         </section>
 
         <section class="mb-4 xl:safe-area-inset">
-            <div class="flex flex-col gap-6 pl-4 pr-4">
+            <div class="flex flex-col gap-6">
                 @foreach (App\Enums\ParentalGuideCategory::getInstances() as $category)
-                    <div class="flex flex-col gap-4 pb-6">
-                        <div class="flex flex-col">
-                            <h3 id="{{ str($category->key)->slug() }}" class="text-xl font-bold" style="scroll-margin-top: 4rem;">
-                                <a href="#{{ str($category->key)->slug() }}">{{ $category->description }}</a>
-                            </h3>
+                    @php
+                        $categorySlug = $category->urlSlug();
+                        $averageRating = $game->parental_guide_stat->getAverageRating($category);
+                        [$averageRatingCount, $totalRatingCount] = $game->parental_guide_stat->getAverageRatingCount($category);
+                    @endphp
 
-                            @php
-                                $averageRating = $game->parental_guide_stat->getAverageRating($category);
-                                [$averageRatingCount, $totalRatingCount] = $game->parental_guide_stat->getAverageRatingCount($category);
-                            @endphp
+                    <div id="{{ $categorySlug }}" class="flex flex-col gap-4 pb-6" style="scroll-margin-top: 4rem;">
+                        <x-section-nav class="!mb-0">
+                            <x-slot:title>
+                                <a href="#{{ $categorySlug }}">{{ $category->description }}</a>
+                            </x-slot:title>
 
                             @if($averageRatingCount !== 0 && $totalRatingCount !== 0)
-                                <p class="text-secondary">{{ trans_choice('{0} :x of :y found this to have :z|[1,*] :x of :y found this :z', $averageRating->value, ['x' => $averageRatingCount, 'y' => $totalRatingCount, 'z' => strtolower($averageRating->description)]) }}</p>
+                                <x-slot:description>
+                                    {{ trans_choice('{0} :x of :y found this to have :z|[1,*] :x of :y found this :z', $averageRating->value, ['x' => $averageRatingCount, 'y' => $totalRatingCount, 'z' => strtolower($averageRating->description)]) }}
+                                </x-slot:description>
                             @endif
-                        </div>
+
+                            <x-slot:action>
+                                <x-section-nav-link href="{{ route('games.parentalguide.category', ['game' => $game, 'category' => $categorySlug]) }}">{{ __('See All') }}</x-section-nav-link>
+                            </x-slot:action>
+                        </x-section-nav>
 
                         @if ($this->parentalGuideEntries->has($category->value))
-                            <div class="flex flex-wrap gap-4">
-                                @foreach ($this->parentalGuideEntries->get($category->value) as $entry)
-                                    <div
-                                        class="relative w-full max-w-prose bg-secondary rounded-md"
-                                        x-data="{
-                                            isDisabled: @js($entry->is_spoiler),
-                                            hideBlur(el) {
-                                                el.classList.add('hidden')
-                                                this.isDisabled = false
-                                                this.configureHeight()
-                                            },
-                                            configureHeight() {
-                                                if ($refs.button.offsetHeight) {
-                                                    $refs.button.style.height = $refs.content.offsetHeight + 'px'
-                                                } else {
-                                                    $refs.button.style.height = null
-                                                }
-                                            },
-                                        }"
-                                        x-init="configureHeight()"
-                                        x-resize="configureHeight()"
-                                    >
-                                        <button
-                                            class="absolute w-full pl-2 pr-2 pt-2 pb-2 backdrop-blur bg-tertiary text-sm rounded-md text-center {{ $entry->is_spoiler ? '' : 'hidden' }}"
-                                            x-on:click="hideBlur($el)"
-                                            x-ref="button"
-                                        >
-                                            @if ($entry->is_spoiler)
-                                                <p>{{ __('This reason contains spoilers — click to view') }}</p>
-                                            @endif
-                                        </button>
-
-                                        <div
-                                            class="pt-4 pb-4 pl-4 pr-4"
-                                            x-bind:class="{'invisible' : isDisabled}"
-                                            x-ref="content"
-                                        >
-                                            <p style="white-space: pre-wrap; overflow-wrap: break-word;">{{ $entry->reason }}</p>
-                                        </div>
-                                    </div>
+                            <div class="flex flex-wrap gap-4 pl-4 pr-4">
+                                @foreach ($this->parentalGuideEntries->get($category->value)->take(5) as $entry)
+                                    @include('livewire.components.parental-guide.entry-lockup', [
+                                        'entry' => $entry,
+                                    ])
                                 @endforeach
                             </div>
                         @else
-                            <div class="bg-secondary rounded-md p-4">
-{{--                                <x-link href="#">{{ __('Be the first to evaluate this category.') }}</x-link>--}}
-                                <x-link href="#">{{ __('It looks like we don’t have an evaluation for this category yet.') }}</x-link>
-                            </div>
+                            <button type="button" class="bg-secondary rounded-md p-4 ml-4 mr-4 text-left w-full max-w-prose" wire:click="openSubmitForm({{ $category->value }})">
+                                <span class="text-tint underline">{{ __('It looks like we don’t have an evaluation for this category yet.') }}</span>
+                            </button>
                         @endif
                     </div>
                 @endforeach
             </div>
         </section>
     </div>
+
+    @include('livewire.components.parental-guide.submit-form')
+    @include('livewire.components.parental-guide.report-form')
+
 </main>

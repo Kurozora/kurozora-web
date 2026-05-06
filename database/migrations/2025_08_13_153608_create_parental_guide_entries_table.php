@@ -17,6 +17,7 @@ return new class extends Migration
     {
         Schema::create(ParentalGuideEntry::TABLE_NAME, function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('love_reactant_id')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->morphs('model');
             $table->unsignedTinyInteger('category');
@@ -35,6 +36,11 @@ return new class extends Migration
             $table->index(['model_type', 'model_id', 'category', 'is_hidden'], 'parental_guide_model_type_model_id_category_is_hidden_index');
 
             // Set foreign key constraints
+            $table->foreign('love_reactant_id')
+                ->references('id')
+                ->on('love_reactants')
+                ->nullOnDelete()
+                ->cascadeOnUpdate();
             $table->foreign('user_id')
                 ->references('id')
                 ->on(User::TABLE_NAME)

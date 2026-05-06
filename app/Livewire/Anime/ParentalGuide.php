@@ -3,14 +3,21 @@
 namespace App\Livewire\Anime;
 
 use App\Models\Anime;
+use App\Models\ParentalGuideEntry;
+use App\Traits\Livewire\ParentalGuideEntryActions;
+use App\Traits\Livewire\ParentalGuideSubmission;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Livewire\Component;
 
 class ParentalGuide extends Component
 {
+    use ParentalGuideEntryActions;
+    use ParentalGuideSubmission;
+
     /**
      * The object containing the anime data.
      *
@@ -34,11 +41,15 @@ class ParentalGuide extends Component
      */
     public function mount(Anime $anime): void
     {
+        $authUser = auth()->user();
+
         $this->anime = $anime->load([
             'media',
             'translation',
-            'parental_guide_entries' => function ($query) {
-                $query->visible();
+            'parental_guide_entries' => function ($query) use ($authUser) {
+                $query->visible()
+                    ->withReason()
+                    ->with(ParentalGuideEntry::lockupEagerLoads($authUser));
             },
             'parental_guide_stat'
         ]);
@@ -55,14 +66,33 @@ class ParentalGuide extends Component
     }
 
     /**
-     * Get the list of studios.
+     * Get the entries grouped by category.
      *
      * @return Collection
      */
     public function getParentalGuideEntriesProperty(): Collection
     {
-        return $this->anime->parental_guide_entries
+        $authUser = auth()->user();
+
+        return ParentalGuideEntry::query()
+            ->visible()
+            ->withReason()
+            ->where('model_type', '=', $this->anime->getMorphClass())
+            ->where('model_id', '=', $this->anime->getKey())
+            ->with(ParentalGuideEntry::lockupEagerLoads($authUser))
+            ->orderByDesc('created_at')
+            ->get()
             ->groupBy('category');
+    }
+
+    /**
+     * Map each category to the total number of (visible, non-empty) entries it has.
+     *
+     * @return Collection
+     */
+    public function getCategoryEntryCountsProperty(): Collection
+    {
+        return $this->parentalGuideEntries->map->count();
     }
 
     /**
@@ -73,5 +103,36 @@ class ParentalGuide extends Component
     public function render(): Application|Factory|View
     {
         return view('livewire.anime.parental-guide');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function submissionTargetModel(): Model
+    {
+        return $this->anime;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function afterSubmit(): void
+    {
+        $authUser = auth()->user();
+
+        $this->anime->load([
+            'parental_guide_entries' => function ($query) use ($authUser) {
+                $query->visible()->withReason()->with(ParentalGuideEntry::lockupEagerLoads($authUser));
+            },
+            'parental_guide_stat',
+        ]);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function afterEntryDeleted(): void
+    {
+        $this->afterSubmit();
     }
 }

@@ -3,7 +3,9 @@
 use App\Livewire\Anime\Cast as AnimeCast;
 use App\Livewire\Anime\Details as AnimeDetails;
 use App\Livewire\Anime\Index as AnimeIndex;
+use App\Enums\ParentalGuideCategory;
 use App\Livewire\Anime\ParentalGuide;
+use App\Livewire\Anime\ParentalGuideCategoryEntries;
 use App\Livewire\Anime\RelatedGames;
 use App\Livewire\Anime\RelatedMangas;
 use App\Livewire\Anime\RelatedShows;
@@ -78,6 +80,10 @@ Route::prefix('/anime')
 
                 Route::get('/parentalguide', ParentalGuide::class)
                     ->name('.parentalguide');
+
+                Route::get('/parentalguide/{category}', ParentalGuideCategoryEntries::class)
+                    ->whereIn('category', ParentalGuideCategory::slugs())
+                    ->name('.parentalguide.category');
 
                 Route::get('/related-games', RelatedGames::class)
                     ->name('.related-games');
