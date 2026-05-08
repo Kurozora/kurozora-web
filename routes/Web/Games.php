@@ -1,33 +1,36 @@
 <?php
 
-use App\Livewire\Browse\Game\Seasons\Archive as BrowseGameSeasonsArchive;
-use App\Livewire\Browse\Game\Seasons\Index as BrowseGameSeasons;
-use App\Livewire\Browse\Game\Upcoming\Index as BrowseGameUpcomingIndex;
-use App\Livewire\Game\Cast as GameCast;
-use App\Livewire\Game\Details as GameDetails;
-use App\Livewire\Game\Index as GameIndex;
 use App\Enums\ParentalGuideCategory;
-use App\Livewire\Game\ParentalGuide;
-use App\Livewire\Game\ParentalGuideCategoryEntries;
-use App\Livewire\Game\RelatedGames;
-use App\Livewire\Game\RelatedMangas;
-use App\Livewire\Game\RelatedShows;
-use App\Livewire\Game\Reviews as GameReviews;
-use App\Livewire\Game\Songs as GameSongs;
-use App\Livewire\Game\Staff as GameStaff;
-use App\Livewire\Game\Studios as GameStudios;
+use App\Enums\UserLibraryKind;
+use App\Livewire\Browse\Seasons\Archive as BrowseSeasonsArchive;
+use App\Livewire\Browse\Seasons\Index as BrowseSeasonsIndex;
+use App\Livewire\Browse\Upcoming\Index as BrowseUpcomingIndex;
+use App\Livewire\Cast;
+use App\Livewire\Catalog;
+use App\Livewire\Game\Details as GameDetails;
+use App\Livewire\ParentalGuide;
+use App\Livewire\ParentalGuideCategoryEntries;
+use App\Livewire\RelatedGames;
+use App\Livewire\RelatedMangas;
+use App\Livewire\RelatedShows;
+use App\Livewire\Reviews;
+use App\Livewire\Songs;
+use App\Livewire\Staff;
+use App\Livewire\Studios;
 use App\Models\Game;
 
 Route::prefix('/games')
     ->name('games')
     ->group(function () {
-        Route::get('/', GameIndex::class)
+        Route::get('/', Catalog::class)
+            ->defaults('kind', UserLibraryKind::Game)
             ->name('.index');
 
         Route::prefix('/upcoming')
             ->name('.upcoming')
             ->group(function () {
-                Route::get('/', BrowseGameUpcomingIndex::class)
+                Route::get('/', BrowseUpcomingIndex::class)
+                    ->defaults('kind', UserLibraryKind::Game)
                     ->name('.index');
             });
 
@@ -39,7 +42,8 @@ Route::prefix('/games')
                 })
                     ->name('.index');
 
-                Route::get('/archive', BrowseGameSeasonsArchive::class)
+                Route::get('/archive', BrowseSeasonsArchive::class)
+                    ->defaults('kind', UserLibraryKind::Game)
                     ->name('.archive');
 
                 Route::prefix('/{year}')
@@ -50,7 +54,8 @@ Route::prefix('/games')
                         })
                             ->name('.index');
 
-                        Route::get('/{season}', BrowseGameSeasons::class)
+                        Route::get('/{season}', BrowseSeasonsIndex::class)
+                            ->defaults('kind', UserLibraryKind::Game)
                             ->name('.season');
                     });
             });
@@ -60,7 +65,8 @@ Route::prefix('/games')
                 Route::get('/', GameDetails::class)
                     ->name('.details');
 
-                Route::get('/cast', GameCast::class)
+                Route::get('/cast', Cast::class)
+                    ->defaults('kind', UserLibraryKind::Game)
                     ->name('.cast');
 
                 Route::get('/edit', function (Game $game) {
@@ -70,31 +76,45 @@ Route::prefix('/games')
                     ->name('.edit');
 
                 Route::get('/parentalguide', ParentalGuide::class)
+                    ->defaults('kind', UserLibraryKind::Game)
                     ->name('.parentalguide');
 
                 Route::get('/parentalguide/{category}', ParentalGuideCategoryEntries::class)
+                    ->defaults('kind', UserLibraryKind::Game)
                     ->whereIn('category', ParentalGuideCategory::slugs())
                     ->name('.parentalguide.category');
 
                 Route::get('/related-games', RelatedGames::class)
+                    ->defaults('kind', UserLibraryKind::Game)
                     ->name('.related-games');
 
                 Route::get('/related-mangas', RelatedMangas::class)
+                    ->defaults('kind', UserLibraryKind::Game)
                     ->name('.related-literatures');
 
-                Route::get('/related-shows', RelatedShows::class)
-                    ->name('.related-shows');
+                Route::get('/related-anime', RelatedShows::class)
+                    ->defaults('kind', UserLibraryKind::Game)
+                    ->name('.related-anime');
 
-                Route::get('/reviews', GameReviews::class)
+                Route::get('/related-shows', function (Game $game) {
+                    return redirect()->route('games.related-anime', $game, 301);
+                })
+                    ->name('.related-shows');;
+
+                Route::get('/reviews', Reviews::class)
+                    ->defaults('kind', UserLibraryKind::Game)
                     ->name('.reviews');
 
-                Route::get('/songs', GameSongs::class)
+                Route::get('/songs', Songs::class)
+                    ->defaults('kind', UserLibraryKind::Game)
                     ->name('.songs');
 
-                Route::get('/staff', GameStaff::class)
+                Route::get('/staff', Staff::class)
+                    ->defaults('kind', UserLibraryKind::Game)
                     ->name('.staff');
 
-                Route::get('/studios', GameStudios::class)
+                Route::get('/studios', Studios::class)
+                    ->defaults('kind', UserLibraryKind::Game)
                     ->name('.studios');
             });
     });

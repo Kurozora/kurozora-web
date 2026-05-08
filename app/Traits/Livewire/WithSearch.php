@@ -6,8 +6,11 @@ use App\Models\Character;
 use App\Models\Episode;
 use App\Models\UserLibrary;
 use Carbon\Carbon;
+use Closure;
 use Illuminate\Contracts\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\LengthAwarePaginator as ConcreteLengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
 use Laravel\Scout\Builder as ScoutBuilder;
 
@@ -294,26 +297,22 @@ trait WithSearch
 
         // Search
         if ($userLibraryStatuses) {
-            $modelIDs = collect(UserLibrary::search($this->search)
-                ->when(!empty($this->letter), function (ScoutBuilder $query) {
-                    $query->where('trackable.letter', $this->letter);
-                })
-                ->where('user_id', $user->id)
-                ->where('trackable_type', addslashes(static::$searchModel))
-                ->whereIn('status', $userLibraryStatuses)
-                ->simplePaginateRaw(perPage: 2000, page: 1)
-                ->items()['hits'] ?? [])
-                ->pluck('trackable_id')
-                ->toArray();
-            $whereIns['id'] = $modelIDs;
-        } else {
-            if (!empty($this->letter)) {
-                $wheres['letter'] = $this->letter;
-            }
+            return $this->paginateLibraryScopedSearch(
+                modelClass: static::$searchModel,
+                userId: $user->id,
+                statuses: $userLibraryStatuses,
+                wheres: $wheres,
+                whereIns: $whereIns,
+                orders: $orders,
+            );
+        }
 
-            if (!empty($this->typeValue)) {
-                $wheres[$this->typeColumn()] = $this->typeValue;
-            }
+        if (!empty($this->letter)) {
+            $wheres['letter'] = $this->letter;
+        }
+
+        if (!empty($this->typeValue)) {
+            $wheres[$this->typeColumn()] = $this->typeValue;
         }
 
         $models = static::$searchModel::search($this->search);
@@ -330,6 +329,7 @@ trait WithSearch
      * Build a 'search index' query for the given resource.
      *
      * @param EloquentBuilder $query
+     *
      * @return EloquentBuilder
      */
     public function searchIndexQuery(EloquentBuilder $query): EloquentBuilder
@@ -341,6 +341,7 @@ trait WithSearch
      * Build a 'search' query for the given resource.
      *
      * @param ScoutBuilder $query
+     *
      * @return ScoutBuilder
      */
     public function searchQuery(ScoutBuilder $query): ScoutBuilder
@@ -417,5 +418,138 @@ trait WithSearch
         return collect($keys)
             ->combine($values)
             ->prepend('.', '#');
+    }
+
+    /**
+     * Searches the user's library for the given trackable class.
+     *
+     * @param string       $modelClass
+     * @param int          $userId
+     * @param array        $statuses
+     * @param bool         $excludeHidden
+     * @param array        $wheres
+     * @param array        $whereIns
+     * @param array        $orders
+     * @param null|Closure $hydrate
+     *
+     * @return LengthAwarePaginator
+     */
+    protected function paginateLibraryScopedSearch(
+        string   $modelClass,
+        int      $userId,
+        array    $statuses = [],
+        bool     $excludeHidden = false,
+        array    $wheres = [],
+        array    $whereIns = [],
+        array    $orders = [],
+        ?Closure $hydrate = null,
+    ): LengthAwarePaginator
+    {
+        if (!empty($this->letter)) {
+            $wheres['letter'] = $this->letter;
+        }
+
+        if (!empty($this->typeValue)) {
+            $wheres[$this->typeColumn()] = $this->typeValue;
+        }
+
+        $libraryQuery = UserLibrary::query()
+            ->where('user_id', $userId)
+            ->where('trackable_type', $modelClass);
+
+        if (!empty($statuses)) {
+            $libraryQuery->whereIn('status', $statuses);
+        }
+
+        if ($excludeHidden) {
+            $libraryQuery->where('is_hidden', false);
+        }
+
+        $libraryIds = $libraryQuery->pluck('trackable_id')->all();
+
+        if (empty($libraryIds)) {
+            return $this->emptyLibraryPaginator();
+        }
+
+        if ($this->search === '') {
+            $matchedIds = $libraryIds;
+        } else {
+            $librarySet = array_flip($libraryIds);
+            $cap = (int) config('scout.library_search_relevance_cap', 10000);
+
+            $search = $modelClass::search($this->search)
+                ->options(['attributesToRetrieve' => ['id']]);
+            $search->wheres = $wheres;
+            $search->whereIns = $whereIns;
+
+            $hits = $search->take($cap)->raw()['hits'] ?? [];
+
+            $matchedIds = [];
+            foreach ($hits as $hit) {
+                $id = $hit['id'] ?? null;
+
+                if ($id !== null && isset($librarySet[$id])) {
+                    $matchedIds[] = $id;
+                }
+            }
+
+            if (empty($matchedIds)) {
+                return $this->emptyLibraryPaginator();
+            }
+        }
+
+        $modelQuery = $modelClass::whereIn('id', $matchedIds);
+
+        if ($hydrate !== null) {
+            $hydrate($modelQuery);
+        }
+
+        $models = $modelQuery->get()->keyBy('id');
+
+        if (empty($orders)) {
+            $sorted = collect($matchedIds)
+                ->map(fn($id) => $models->get($id))
+                ->filter()
+                ->values();
+        } else {
+            $sorted = $models->values();
+
+            foreach (array_reverse($orders) as $order) {
+                $sorted = $order['direction'] === 'asc'
+                    ? $sorted->sortBy($order['column'])
+                    : $sorted->sortByDesc($order['column']);
+            }
+
+            $sorted = $sorted->values();
+        }
+
+        $page = max(1, Paginator::resolveCurrentPage());
+        $perPage = $this->perPage;
+        $total = $sorted->count();
+        $items = $sorted->slice(($page - 1) * $perPage, $perPage)->values();
+
+        return new ConcreteLengthAwarePaginator(
+            $items,
+            $total,
+            $perPage,
+            $page,
+            ['path' => Paginator::resolveCurrentPath()],
+        );
+    }
+
+    /**
+     * Returns an empty paginator.
+     *
+     * @return LengthAwarePaginator
+     */
+    protected function emptyLibraryPaginator(): LengthAwarePaginator
+    {
+        return new ConcreteLengthAwarePaginator(
+            [],
+            0,
+            $this->perPage,
+            max(1, Paginator::resolveCurrentPage()),
+            ['path' => Paginator::resolveCurrentPath()],
+        );
     }
 }

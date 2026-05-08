@@ -1,22 +1,17 @@
 <?php
 
+use App\Enums\UserLibraryKind;
 use App\Http\Controllers\Web\MeController;
-use App\Http\Controllers\Web\Profile\AnimeLibraryController;
-use App\Http\Controllers\Web\Profile\GameLibraryController;
-use App\Http\Controllers\Web\Profile\MangaLibraryController;
+use App\Http\Controllers\Web\Profile\LibraryController;
 use App\Http\Controllers\Web\UserProfileController;
 use App\Livewire\Profile\Achievements\Index as AchievementsIndex;
 use App\Livewire\Profile\Blocked\Index as BlockedIndex;
 use App\Livewire\Profile\Details;
 use App\Livewire\Profile\Followers\Index as FollowersIndex;
 use App\Livewire\Profile\Following\Index as FollowingIndex;
-use App\Livewire\Profile\Library\Anime\Favorites as FavoriteAnime;
-use App\Livewire\Profile\Library\Anime\Index as AnimeLibrary;
-use App\Livewire\Profile\Library\Anime\Reminders as AnimeReminders;
-use App\Livewire\Profile\Library\Game\Favorites as FavoriteGame;
-use App\Livewire\Profile\Library\Game\Index as GameLibrary;
-use App\Livewire\Profile\Library\Manga\Favorites as FavoriteManga;
-use App\Livewire\Profile\Library\Manga\Index as MangaLibrary;
+use App\Livewire\Profile\Library\Favorites;
+use App\Livewire\Profile\Library\Index as LibraryIndex;
+use App\Livewire\Profile\Library\Reminders;
 use App\Livewire\Profile\Ratings\Index as RatingsIndex;
 
 Route::prefix('/profile')
@@ -45,39 +40,48 @@ Route::prefix('/profile')
                 Route::prefix('/anime')
                     ->name('.anime')
                     ->group(function () {
-                        Route::get('/', AnimeLibrary::class)
+                        Route::get('/', LibraryIndex::class)
+                            ->defaults('kind', UserLibraryKind::Anime)
                             ->name('.library');
 
-                        Route::get('/favorites', FavoriteAnime::class)
+                        Route::get('/favorites', Favorites::class)
+                            ->defaults('kind', UserLibraryKind::Anime)
                             ->name('.favorites');
 
-                        Route::get('/reminders', AnimeReminders::class)
+                        Route::get('/reminders', Reminders::class)
+                            ->defaults('kind', UserLibraryKind::Anime)
                             ->name('.reminders');
                     });
 
                 Route::prefix('/games')
                     ->name('.games')
                     ->group(function () {
-                        Route::get('/', GameLibrary::class)
+                        Route::get('/', LibraryIndex::class)
+                            ->defaults('kind', UserLibraryKind::Game)
                             ->name('.library');
 
-                        Route::get('/favorites', FavoriteGame::class)
+                        Route::get('/favorites', Favorites::class)
+                            ->defaults('kind', UserLibraryKind::Game)
                             ->name('.favorites');
 
-//                        Route::get('/reminders', GameReminders::class)
+//                        Route::get('/reminders', Reminders::class)
+//                            ->defaults('kind', UserLibraryKind::Game)
 //                            ->name('.reminders');
                     });
 
                 Route::prefix('/manga')
                     ->name('.manga')
                     ->group(function () {
-                        Route::get('/', MangaLibrary::class)
+                        Route::get('/', LibraryIndex::class)
+                            ->defaults('kind', UserLibraryKind::Manga)
                             ->name('.library');
 
-                        Route::get('/favorites', FavoriteManga::class)
+                        Route::get('/favorites', Favorites::class)
+                            ->defaults('kind', UserLibraryKind::Manga)
                             ->name('.favorites');
 
-//                        Route::get('/reminders', MangaReminders::class)
+//                        Route::get('/reminders', Reminders::class)
+//                            ->defaults('kind', UserLibraryKind::Manga)
 //                            ->name('.reminders');
                     });
 
@@ -99,11 +103,14 @@ Route::prefix('/profile')
             });
     });
 
- Route::get('/animelist/{user?}', [AnimeLibraryController::class, 'index'])
+ Route::get('/animelist/{user?}', [LibraryController::class, 'index'])
+    ->defaults('kind', UserLibraryKind::Anime)
     ->name('animelist');
 
- Route::get('/mangalist/{user?}', [MangaLibraryController::class, 'index'])
+ Route::get('/mangalist/{user?}', [LibraryController::class, 'index'])
+    ->defaults('kind', UserLibraryKind::Manga)
     ->name('mangalist');
 
- Route::get('/gamelist/{user?}', [GameLibraryController::class, 'index'])
+ Route::get('/gamelist/{user?}', [LibraryController::class, 'index'])
+    ->defaults('kind', UserLibraryKind::Game)
     ->name('gamelist');

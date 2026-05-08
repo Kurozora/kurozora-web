@@ -488,24 +488,24 @@
             @if ($readyToLoad)
                 <livewire:components.anime-seasons-section :anime="$anime" />
 
-                <livewire:components.anime-cast-section :anime="$anime" />
+                <livewire:components.cast-section :kind="\App\Enums\UserLibraryKind::Anime" :anime="$anime" />
 
-                <livewire:components.anime-staff-section :anime="$anime" />
+                <livewire:components.staff-section :kind="\App\Enums\UserLibraryKind::Anime" :anime="$anime" />
 
-                <livewire:components.anime-songs-section :anime="$anime" />
+                <livewire:components.songs-section :kind="\App\Enums\UserLibraryKind::Anime" :anime="$anime" />
 
-                <livewire:components.anime-studios-section :anime="$anime" />
+                <livewire:components.studios-section :kind="\App\Enums\UserLibraryKind::Anime" :anime="$anime" />
 
                 <div class="bg-tinted">
                     @if (!empty($this->studio))
-                        <livewire:components.anime-more-by-studio-section :anime="$anime" :studio="$this->studio" />
+                        <livewire:components.more-by-studio-section :kind="\App\Enums\UserLibraryKind::Anime" :anime="$anime" :studio="$this->studio" />
                     @endif
 
-                    <livewire:components.anime.anime-relations-section :anime="$anime" />
+                    <livewire:components.relations-section :kind="\App\Enums\UserLibraryKind::Anime" :related-kind="\App\Enums\UserLibraryKind::Anime" :anime="$anime" />
 
-                    <livewire:components.anime.manga-relations-section :anime="$anime" />
+                    <livewire:components.relations-section :kind="\App\Enums\UserLibraryKind::Anime" :related-kind="\App\Enums\UserLibraryKind::Manga" :anime="$anime" />
 
-                    <livewire:components.anime.game-relations-section :anime="$anime" />
+                    <livewire:components.relations-section :kind="\App\Enums\UserLibraryKind::Anime" :related-kind="\App\Enums\UserLibraryKind::Game" :anime="$anime" />
 
                     @if (!empty($anime->copyright))
                         <section class="border-t border-primary xl:safe-area-inset">

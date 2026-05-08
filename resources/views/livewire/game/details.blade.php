@@ -465,24 +465,24 @@
             </section>
 
             @if ($readyToLoad)
-                <livewire:components.game-cast-section :game="$game" />
+                <livewire:components.cast-section :kind="\App\Enums\UserLibraryKind::Game" :game="$game" />
 
-                <livewire:components.game-staff-section :game="$game" />
+                <livewire:components.staff-section :kind="\App\Enums\UserLibraryKind::Game" :game="$game" />
 
-                <livewire:components.game-songs-section :game="$game" />
+                <livewire:components.songs-section :kind="\App\Enums\UserLibraryKind::Game" :game="$game" />
 
-                <livewire:components.game-studios-section :game="$game" />
+                <livewire:components.studios-section :kind="\App\Enums\UserLibraryKind::Game" :game="$game" />
 
                 <div class="bg-tinted">
                     @if (!empty($this->studio))
-                        <livewire:components.game-more-by-studio-section :game="$game" :studio="$this->studio" />
+                        <livewire:components.more-by-studio-section :kind="\App\Enums\UserLibraryKind::Game" :game="$game" :studio="$this->studio" />
                     @endif
 
-                    <livewire:components.game.game-relations-section :game="$game" />
+                    <livewire:components.relations-section :kind="\App\Enums\UserLibraryKind::Game" :related-kind="\App\Enums\UserLibraryKind::Game" :game="$game" />
 
-                    <livewire:components.game.anime-relations-section :game="$game" />
+                    <livewire:components.relations-section :kind="\App\Enums\UserLibraryKind::Game" :related-kind="\App\Enums\UserLibraryKind::Anime" :game="$game" />
 
-                    <livewire:components.game.manga-relations-section :game="$game" />
+                    <livewire:components.relations-section :kind="\App\Enums\UserLibraryKind::Game" :related-kind="\App\Enums\UserLibraryKind::Manga" :game="$game" />
 
                     @if (!empty($game->copyright))
                         <section class="border-t border-primary xl:safe-area-inset">

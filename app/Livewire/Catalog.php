@@ -1,0 +1,410 @@
+<?php
+
+namespace App\Livewire;
+
+use App\Enums\UserLibraryKind;
+use App\Models\Anime;
+use App\Models\Game;
+use App\Models\Manga;
+use App\Models\MediaType;
+use App\Traits\Livewire\WithSearch;
+use Illuminate\Contracts\Database\Eloquent\Builder as EloquentBuilder;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Laravel\Scout\Builder as ScoutBuilder;
+use Livewire\Component;
+
+class Catalog extends Component
+{
+    use WithSearch;
+
+    /**
+     * The library kind being viewed.
+     *
+     * @var int $kind
+     */
+    public int $kind = UserLibraryKind::Anime;
+
+    /**
+     * Whether the component is ready to load.
+     *
+     * @var bool $readyToLoad
+     */
+    public bool $readyToLoad = false;
+
+    /**
+     * Prepare the component.
+     *
+     * @param int $kind
+     *
+     * @return void
+     */
+    public function mount(int $kind): void
+    {
+        $this->kind = $kind;
+    }
+
+    /**
+     * Sets the property to load the page.
+     *
+     * @return void
+     */
+    public function loadPage(): void
+    {
+        $this->readyToLoad = true;
+    }
+
+    /**
+     * Redirects the user to a random item of the active kind.
+     *
+     * @return void
+     */
+    public function randomItem(): void
+    {
+        $modelClass = $this->modelClass();
+        $item = $modelClass::randomFirst();
+
+        match ($this->kind) {
+            UserLibraryKind::Anime => $this->redirectRoute('anime.details', $item),
+            UserLibraryKind::Manga => $this->redirectRoute('manga.details', $item),
+            UserLibraryKind::Game  => $this->redirectRoute('games.details', $item),
+        };
+    }
+
+    /**
+     * The computed search results property.
+     *
+     * @return ?LengthAwarePaginator
+     */
+    public function getSearchResultsProperty(): ?LengthAwarePaginator
+    {
+        if (!$this->readyToLoad) {
+            return null;
+        }
+
+        $orders = [];
+        foreach ($this->order as $attribute => $order) {
+            $attribute = str_replace(':', '.', $attribute);
+            $selected = $order['selected'];
+
+            if (!empty($selected)) {
+                $orders[] = [
+                    'column' => $attribute,
+                    'direction' => $selected,
+                ];
+            }
+        }
+
+        $wheres = [];
+        $whereIns = [];
+        foreach ($this->filter as $attribute => $filter) {
+            if ($attribute == 'library_status') {
+                continue;
+            }
+
+            $attribute = str_replace(':', '.', $attribute);
+            $selected = $filter['selected'];
+            $type = $filter['type'];
+
+            if ((is_numeric($selected) && $selected >= 0) || !empty($selected)) {
+                if ($type === 'multiselect') {
+                    $whereIns[$attribute] = $selected;
+                } else {
+                    $wheres[$attribute] = match ($type) {
+                        'date' => \Carbon\Carbon::createFromFormat('Y-m-d', $selected)
+                            ?->setTime(0, 0)
+                            ->timestamp,
+                        'time' => $selected . ':00',
+                        'double' => number_format($selected, 2, '.', ''),
+                        default => $selected,
+                    };
+                }
+            }
+        }
+
+        $modelClass = $this->modelClass();
+        $userLibraryStatuses = $this->filter['library_status']['selected'] ?? null;
+        $user = auth()->user();
+
+        if (empty($this->search) && empty($wheres) && empty($whereIns) && empty($orders)) {
+            if ($userLibraryStatuses) {
+                $models = $user
+                    ->whereTracked($modelClass)
+                    ->withoutIgnoreList()
+                    ->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating'])
+                    ->with(['library' => function ($query) use ($user) {
+                        $query->where('user_id', '=', $user->id);
+                    }])
+                    ->wherePivotIn('status', $userLibraryStatuses);
+            } else {
+                $models = $modelClass::query();
+            }
+
+            $models = $models
+                ->when(!empty($this->typeValue), function (EloquentBuilder $query) {
+                    $query->where($this->typeColumn(), '=', $this->typeValue);
+                })
+                ->when(!empty($this->letter), function (EloquentBuilder $query) {
+                    if ($this->letter == '.') {
+                        $query->whereRaw($this->letterIndexColumn() . ' REGEXP \'^[^a-zA-Z]*$\'');
+                    } else {
+                        $query->whereLike($this->letterIndexColumn(), $this->letter . '%');
+                    }
+                });
+
+            return $this->searchIndexQuery($models)
+                ->paginate($this->perPage);
+        }
+
+        if ($userLibraryStatuses) {
+            return $this->paginateLibraryScopedSearch(
+                modelClass: $modelClass,
+                userId: $user->id,
+                statuses: $userLibraryStatuses,
+                wheres: $wheres,
+                whereIns: $whereIns,
+                orders: $orders,
+            );
+        }
+
+        if (!empty($this->letter)) {
+            $wheres['letter'] = $this->letter;
+        }
+
+        if (!empty($this->typeValue)) {
+            $wheres[$this->typeColumn()] = $this->typeValue;
+        }
+
+        $models = $modelClass::search($this->search);
+        $models->wheres = $wheres;
+        $models->whereIns = $whereIns;
+        $models->orders = $orders;
+        $models = $this->searchQuery($models);
+
+        return $models->paginate($this->perPage);
+    }
+
+    /**
+     * Build a 'search index' query for the given resource.
+     *
+     * @param EloquentBuilder $query
+     *
+     * @return EloquentBuilder
+     */
+    public function searchIndexQuery(EloquentBuilder $query): EloquentBuilder
+    {
+        return $query->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating'])
+            ->when(auth()->user(), function ($query, $user) {
+                $query->with(['library' => function ($query) use ($user) {
+                    $query->where('user_id', '=', $user->id);
+                }]);
+            });
+    }
+
+    /**
+     * Build a 'search' query for the given resource.
+     *
+     * @param ScoutBuilder $query
+     *
+     * @return ScoutBuilder
+     */
+    public function searchQuery(ScoutBuilder $query): ScoutBuilder
+    {
+        return $query->query(function (EloquentBuilder $query) {
+            $query->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating'])
+                ->when(auth()->user(), function ($query, $user) {
+                    $query->with(['library' => function ($query) use ($user) {
+                        $query->where('user_id', '=', $user->id);
+                    }]);
+                });
+        });
+    }
+
+    /**
+     * Set the orderable attributes of the model.
+     *
+     * @return array
+     */
+    public function setOrderableAttributes(): array
+    {
+        $modelClass = $this->modelClass();
+        return $modelClass::webSearchOrders();
+    }
+
+    /**
+     * Set the filterable attributes of the model.
+     *
+     * @return array
+     */
+    public function setFilterableAttributes(): array
+    {
+        $modelClass = $this->modelClass();
+        return $modelClass::webSearchFilters();
+    }
+
+    /**
+     * Set the search types of the model.
+     *
+     * @return array
+     */
+    public function setSearchTypes(): array
+    {
+        return MediaType::where('type', '=', $this->kindSlug())
+            ->orderBy('name')
+            ->pluck('name', 'id')
+            ->prepend(__('All'), 'all')
+            ->toArray();
+    }
+
+    /**
+     * Returns the model class for the active library kind.
+     *
+     * @return string
+     */
+    protected function modelClass(): string
+    {
+        return match ($this->kind) {
+            UserLibraryKind::Anime => Anime::class,
+            UserLibraryKind::Manga => Manga::class,
+            UserLibraryKind::Game  => Game::class,
+        };
+    }
+
+    /**
+     * Returns the media-type slug used to scope MediaType lookups.
+     *
+     * @return string
+     */
+    protected function kindSlug(): string
+    {
+        return match ($this->kind) {
+            UserLibraryKind::Anime => 'anime',
+            UserLibraryKind::Manga => 'manga',
+            UserLibraryKind::Game  => 'game',
+        };
+    }
+
+    /**
+     * Returns the localized noun used in og:title and document title.
+     *
+     * @return string
+     */
+    public function getOgTitleNounProperty(): string
+    {
+        return match ($this->kind) {
+            UserLibraryKind::Anime => __('Anime'),
+            UserLibraryKind::Manga => __('Manga'),
+            UserLibraryKind::Game  => __('Games'),
+        };
+    }
+
+    /**
+     * Returns the og:description and meta description for the active kind.
+     *
+     * @return string
+     */
+    public function getOgDescriptionProperty(): string
+    {
+        return match ($this->kind) {
+            UserLibraryKind::Anime => __('Browse all anime on :x. Join the :x community and create your anime, manga and game list. Discover songs, episodes and read reviews and news!', ['x' => config('app.name')]),
+            UserLibraryKind::Manga => __('Browse all manga on :x. Join the :x community and create your anime, manga and game list. Discover songs, episodes and read reviews and news!', ['x' => config('app.name')]),
+            UserLibraryKind::Game  => __('Browse all games on :x. Join the :x community and create your anime, manga and game list. Discover songs, episodes and read reviews and news!', ['x' => config('app.name')]),
+        };
+    }
+
+    /**
+     * Returns the canonical URL for the active kind's catalog index.
+     *
+     * @return string
+     */
+    public function getCanonicalUrlProperty(): string
+    {
+        return match ($this->kind) {
+            UserLibraryKind::Anime => route('anime.index'),
+            UserLibraryKind::Manga => route('manga.index'),
+            UserLibraryKind::Game  => route('games.index'),
+        };
+    }
+
+    /**
+     * Returns the heading shown above the list.
+     *
+     * @return string
+     */
+    public function getHeadingProperty(): string
+    {
+        return match ($this->kind) {
+            UserLibraryKind::Anime => __('Anime'),
+            UserLibraryKind::Manga => __('Manga'),
+            UserLibraryKind::Game  => __('Games'),
+        };
+    }
+
+    /**
+     * Returns the empty-state placeholder image filename.
+     *
+     * @return string
+     */
+    public function getEmptyImageProperty(): string
+    {
+        return match ($this->kind) {
+            UserLibraryKind::Anime => 'empty_anime_library.webp',
+            UserLibraryKind::Manga => 'empty_manga_library.webp',
+            UserLibraryKind::Game  => 'empty_game_library.webp',
+        };
+    }
+
+    /**
+     * Returns the empty-state heading.
+     *
+     * @return string
+     */
+    public function getEmptyHeadingProperty(): string
+    {
+        return match ($this->kind) {
+            UserLibraryKind::Anime => __('Anime Not Found'),
+            UserLibraryKind::Manga => __('Manga Not Found'),
+            UserLibraryKind::Game  => __('Games Not Found'),
+        };
+    }
+
+    /**
+     * Returns the empty-state body copy.
+     *
+     * @return string
+     */
+    public function getEmptyDescriptionProperty(): string
+    {
+        return match ($this->kind) {
+            UserLibraryKind::Anime => __('No anime found with the selected criteria.'),
+            UserLibraryKind::Manga => __('No manga found with the selected criteria.'),
+            UserLibraryKind::Game  => __('No games found with the selected criteria.'),
+        };
+    }
+
+    /**
+     * Returns the aria-label for the random-item dice button.
+     *
+     * @return string
+     */
+    public function getRandomLabelProperty(): string
+    {
+        return match ($this->kind) {
+            UserLibraryKind::Anime => 'random anime',
+            UserLibraryKind::Manga => 'random manga',
+            UserLibraryKind::Game  => 'random game',
+        };
+    }
+
+    /**
+     * Render the component.
+     *
+     * @return Application|Factory|View
+     */
+    public function render(): Application|Factory|View
+    {
+        return view('livewire.catalog');
+    }
+}

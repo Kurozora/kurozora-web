@@ -1,40 +1,44 @@
 <?php
 
-use App\Livewire\Browse\Manga\Continuing\Index as BrowseMangaContinuingIndex;
-use App\Livewire\Browse\Manga\Seasons\Archive as BrowseMangaSeasonsArchive;
-use App\Livewire\Browse\Manga\Seasons\Index as BrowseMangaSeasons;
-use App\Livewire\Browse\Manga\Upcoming\Index as BrowseMangaUpcomingIndex;
-use App\Livewire\Manga\Cast as MangaCast;
-use App\Livewire\Manga\Details as MangaDetails;
-use App\Livewire\Manga\Index as MangaIndex;
 use App\Enums\ParentalGuideCategory;
-use App\Livewire\Manga\ParentalGuide;
-use App\Livewire\Manga\ParentalGuideCategoryEntries;
-use App\Livewire\Manga\RelatedGames;
-use App\Livewire\Manga\RelatedMangas;
-use App\Livewire\Manga\RelatedShows;
-use App\Livewire\Manga\Reviews as MangaReviews;
-use App\Livewire\Manga\Staff as MangaStaff;
-use App\Livewire\Manga\Studios as MangaStudios;
+use App\Enums\UserLibraryKind;
+use App\Livewire\Browse\Continuing\Index as BrowseContinuingIndex;
+use App\Livewire\Browse\Seasons\Archive as BrowseSeasonsArchive;
+use App\Livewire\Browse\Seasons\Index as BrowseSeasonsIndex;
+use App\Livewire\Browse\Upcoming\Index as BrowseUpcomingIndex;
+use App\Livewire\Cast;
+use App\Livewire\Catalog;
+use App\Livewire\Manga\Details as MangaDetails;
+use App\Livewire\ParentalGuide;
+use App\Livewire\ParentalGuideCategoryEntries;
+use App\Livewire\RelatedGames;
+use App\Livewire\RelatedMangas;
+use App\Livewire\RelatedShows;
+use App\Livewire\Reviews;
+use App\Livewire\Staff;
+use App\Livewire\Studios;
 use App\Models\Manga;
 
 Route::prefix('/manga')
     ->name('manga')
     ->group(function () {
-        Route::get('/', MangaIndex::class)
+        Route::get('/', Catalog::class)
+            ->defaults('kind', UserLibraryKind::Manga)
             ->name('.index');
 
         Route::prefix('/upcoming')
             ->name('.upcoming')
             ->group(function () {
-                Route::get('/', BrowseMangaUpcomingIndex::class)
+                Route::get('/', BrowseUpcomingIndex::class)
+                    ->defaults('kind', UserLibraryKind::Manga)
                     ->name('.index');
             });
 
         Route::prefix('/continuing')
             ->name('.continuing')
             ->group(function () {
-                Route::get('/', BrowseMangaContinuingIndex::class)
+                Route::get('/', BrowseContinuingIndex::class)
+                    ->defaults('kind', UserLibraryKind::Manga)
                     ->name('.index');
             });
 
@@ -46,7 +50,8 @@ Route::prefix('/manga')
                 })
                     ->name('.index');
 
-                Route::get('/archive', BrowseMangaSeasonsArchive::class)
+                Route::get('/archive', BrowseSeasonsArchive::class)
+                    ->defaults('kind', UserLibraryKind::Manga)
                     ->name('.archive');
 
                 Route::prefix('/{year}')
@@ -57,7 +62,8 @@ Route::prefix('/manga')
                         })
                             ->name('.index');
 
-                        Route::get('/{season}', BrowseMangaSeasons::class)
+                        Route::get('/{season}', BrowseSeasonsIndex::class)
+                            ->defaults('kind', UserLibraryKind::Manga)
                             ->name('.season');
                     });
             });
@@ -67,7 +73,8 @@ Route::prefix('/manga')
                 Route::get('/', MangaDetails::class)
                     ->name('.details');
 
-                Route::get('/cast', MangaCast::class)
+                Route::get('/cast', Cast::class)
+                    ->defaults('kind', UserLibraryKind::Manga)
                     ->name('.cast');
 
                 Route::get('/edit', function (Manga $manga) {
@@ -77,28 +84,41 @@ Route::prefix('/manga')
                     ->name('.edit');
 
                 Route::get('/parentalguide', ParentalGuide::class)
+                    ->defaults('kind', UserLibraryKind::Manga)
                     ->name('.parentalguide');
 
                 Route::get('/parentalguide/{category}', ParentalGuideCategoryEntries::class)
+                    ->defaults('kind', UserLibraryKind::Manga)
                     ->whereIn('category', ParentalGuideCategory::slugs())
                     ->name('.parentalguide.category');
 
                 Route::get('/related-games', RelatedGames::class)
+                    ->defaults('kind', UserLibraryKind::Manga)
                     ->name('.related-games');
 
                 Route::get('/related-mangas', RelatedMangas::class)
+                    ->defaults('kind', UserLibraryKind::Manga)
                     ->name('.related-mangas');
 
-                Route::get('/related-shows', RelatedShows::class)
-                    ->name('.related-shows');
+                Route::get('/related-anime', RelatedShows::class)
+                    ->defaults('kind', UserLibraryKind::Manga)
+                    ->name('.related-anime');
 
-                Route::get('/reviews', MangaReviews::class)
+                Route::get('/related-shows', function (Manga $manga) {
+                    return redirect()->route('manga.related-anime', $manga, 301);
+                })
+                    ->name('.related-shows');;
+
+                Route::get('/reviews', Reviews::class)
+                    ->defaults('kind', UserLibraryKind::Manga)
                     ->name('.reviews');
 
-                Route::get('/staff', MangaStaff::class)
+                Route::get('/staff', Staff::class)
+                    ->defaults('kind', UserLibraryKind::Manga)
                     ->name('.staff');
 
-                Route::get('/studios', MangaStudios::class)
+                Route::get('/studios', Studios::class)
+                    ->defaults('kind', UserLibraryKind::Manga)
                     ->name('.studios');
             });
     });

@@ -1,42 +1,46 @@
 <?php
 
-use App\Livewire\Anime\Cast as AnimeCast;
-use App\Livewire\Anime\Details as AnimeDetails;
-use App\Livewire\Anime\Index as AnimeIndex;
 use App\Enums\ParentalGuideCategory;
-use App\Livewire\Anime\ParentalGuide;
-use App\Livewire\Anime\ParentalGuideCategoryEntries;
-use App\Livewire\Anime\RelatedGames;
-use App\Livewire\Anime\RelatedMangas;
-use App\Livewire\Anime\RelatedShows;
-use App\Livewire\Anime\Reviews as AnimeReviews;
-use App\Livewire\Anime\Songs as AnimeSongs;
-use App\Livewire\Anime\Staff as AnimeStaff;
-use App\Livewire\Anime\Studios as AnimeStudios;
-use App\Livewire\Browse\Anime\Continuing\Index as BrowseAnimeContinuingIndex;
-use App\Livewire\Browse\Anime\Seasons\Archive as BrowseAnimeSeasonsArchive;
-use App\Livewire\Browse\Anime\Seasons\Index as BrowseAnimeSeasons;
-use App\Livewire\Browse\Anime\Upcoming\Index as BrowseAnimeUpcomingIndex;
+use App\Enums\UserLibraryKind;
+use App\Livewire\Anime\Details as AnimeDetails;
+use App\Livewire\Browse\Continuing\Index as BrowseContinuingIndex;
+use App\Livewire\Browse\Seasons\Archive as BrowseSeasonsArchive;
+use App\Livewire\Browse\Seasons\Index as BrowseSeasonsIndex;
+use App\Livewire\Browse\Upcoming\Index as BrowseUpcomingIndex;
+use App\Livewire\Cast;
+use App\Livewire\Catalog;
+use App\Livewire\ParentalGuide;
+use App\Livewire\ParentalGuideCategoryEntries;
+use App\Livewire\RelatedGames;
+use App\Livewire\RelatedMangas;
+use App\Livewire\RelatedShows;
+use App\Livewire\Reviews;
 use App\Livewire\Season\Details as SeasonDetails;
+use App\Livewire\Songs;
+use App\Livewire\Staff;
+use App\Livewire\Studios;
 use App\Models\Anime;
 
 Route::prefix('/anime')
     ->name('anime')
     ->group(function () {
-        Route::get('/', AnimeIndex::class)
+        Route::get('/', Catalog::class)
+            ->defaults('kind', UserLibraryKind::Anime)
             ->name('.index');
 
         Route::prefix('/upcoming')
             ->name('.upcoming')
             ->group(function () {
-                Route::get('/', BrowseAnimeUpcomingIndex::class)
+                Route::get('/', BrowseUpcomingIndex::class)
+                    ->defaults('kind', UserLibraryKind::Anime)
                     ->name('.index');
             });
 
         Route::prefix('/continuing')
             ->name('.continuing')
             ->group(function () {
-                Route::get('/', BrowseAnimeContinuingIndex::class)
+                Route::get('/', BrowseContinuingIndex::class)
+                    ->defaults('kind', UserLibraryKind::Anime)
                     ->name('.index');
             });
 
@@ -48,7 +52,8 @@ Route::prefix('/anime')
                 })
                     ->name('.index');
 
-                Route::get('/archive', BrowseAnimeSeasonsArchive::class)
+                Route::get('/archive', BrowseSeasonsArchive::class)
+                    ->defaults('kind', UserLibraryKind::Anime)
                     ->name('.archive');
 
                 Route::prefix('/{year}')
@@ -59,7 +64,8 @@ Route::prefix('/anime')
                         })
                             ->name('.index');
 
-                        Route::get('/{season}', BrowseAnimeSeasons::class)
+                        Route::get('/{season}', BrowseSeasonsIndex::class)
+                            ->defaults('kind', UserLibraryKind::Anime)
                             ->name('.season');
                     });
             });
@@ -69,7 +75,8 @@ Route::prefix('/anime')
                 Route::get('/', AnimeDetails::class)
                     ->name('.details');
 
-                Route::get('/cast', AnimeCast::class)
+                Route::get('/cast', Cast::class)
+                    ->defaults('kind', UserLibraryKind::Anime)
                     ->name('.cast');
 
                 Route::get('/edit', function (Anime $anime) {
@@ -79,34 +86,48 @@ Route::prefix('/anime')
                     ->name('.edit');
 
                 Route::get('/parentalguide', ParentalGuide::class)
+                    ->defaults('kind', UserLibraryKind::Anime)
                     ->name('.parentalguide');
 
                 Route::get('/parentalguide/{category}', ParentalGuideCategoryEntries::class)
+                    ->defaults('kind', UserLibraryKind::Anime)
                     ->whereIn('category', ParentalGuideCategory::slugs())
                     ->name('.parentalguide.category');
 
                 Route::get('/related-games', RelatedGames::class)
+                    ->defaults('kind', UserLibraryKind::Anime)
                     ->name('.related-games');
 
                 Route::get('/related-mangas', RelatedMangas::class)
+                    ->defaults('kind', UserLibraryKind::Anime)
                     ->name('.related-mangas');
 
-                Route::get('/related-shows', RelatedShows::class)
-                    ->name('.related-shows');
+                Route::get('/related-anime', RelatedShows::class)
+                    ->defaults('kind', UserLibraryKind::Anime)
+                    ->name('.related-anime');
 
-                Route::get('/reviews', AnimeReviews::class)
+                Route::get('/related-shows', function (Anime $anime) {
+                    return redirect()->route('anime.related-anime', $anime, 301);
+                })
+                    ->name('.related-shows');;
+
+                Route::get('/reviews', Reviews::class)
+                    ->defaults('kind', UserLibraryKind::Anime)
                     ->name('.reviews');
 
                 Route::get('/seasons', SeasonDetails::class)
                     ->name('.seasons');
 
-                Route::get('/songs', AnimeSongs::class)
+                Route::get('/songs', Songs::class)
+                    ->defaults('kind', UserLibraryKind::Anime)
                     ->name('.songs');
 
-                Route::get('/staff', AnimeStaff::class)
+                Route::get('/staff', Staff::class)
+                    ->defaults('kind', UserLibraryKind::Anime)
                     ->name('.staff');
 
-                Route::get('/studios', AnimeStudios::class)
+                Route::get('/studios', Studios::class)
+                    ->defaults('kind', UserLibraryKind::Anime)
                     ->name('.studios');
             });
     });
