@@ -1,7 +1,6 @@
 <x-base-layout>
     <x-slot:styles>
-        <link rel="preload" href="{{ url(mix('css/chat.css')) }}" as="style">
-        <link rel="stylesheet" href="{{ url(mix('css/chat.css')) }}">
+        @vite(['resources/css/chat.css'])
     </x-slot:styles>
 
     <main
@@ -365,7 +364,7 @@
     </main>
 
     <x-slot:scripts>
-        <script src="{{ url(mix('js/chat.js')) }}"></script>
+        @vite(['resources/js/chat.js'])
 
         <script>
             function isImage(url) {

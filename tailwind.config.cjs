@@ -1,10 +1,6 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
 
 module.exports = {
-    experimental: {
-        optimizeUniversalDefaults: true,
-    },
-
     content: [
         './app/**/*.php',
         './public/**/*.html',

@@ -8,6 +8,17 @@ html, body {
   @apply h-full
   w-full
   scroll-smooth;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: contain;
+}
+
+/* Kill 300ms double-tap zoom on interactive surfaces */
+button, a, [role="button"], label, summary {
+  touch-action: manipulation;
+}
+
+img {
+  -webkit-user-drag: none;
 }
 
 code {

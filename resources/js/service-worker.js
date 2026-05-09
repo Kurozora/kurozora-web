@@ -1,24 +1,12 @@
-importScripts('https://storage.googleapis.com/workbox-cdn/releases/7.0.0/workbox-sw.js')
+import {matchPrecache, precacheAndRoute} from 'workbox-precaching'
+import {registerRoute, setCatchHandler} from 'workbox-routing'
+import {NetworkFirst, NetworkOnly} from 'workbox-strategies'
 
 const CACHE_VERSION = 'v1'
 const CACHE_NAME = 'general-cache-' + CACHE_VERSION
-const OFFLINE_URL = 'offline.html'
+const OFFLINE_URL = '/offline.html'
 
-// Cache important files by default
-const defaultCaches = [
-    OFFLINE_URL,
-    'css/app.css',
-    'css/chat.css',
-    'css/watch.css',
-    'js/app.js',
-    'js/vendor.js',
-    'js/db.js',
-    'js/chat.js',
-    'js/listen.js',
-    'js/theme.js',
-    'js/watch.js',
-    'images/static/icon/app_icon.webp',
-]
+precacheAndRoute(self.__WB_MANIFEST)
 
 // Don't cache these endpoints
 const noCacheEndpoints = [
@@ -29,63 +17,46 @@ const noCacheEndpoints = [
     '/sign-out',
     '/sign-up',
     '/siwa',
-    '/two-factor-authentication'
-];
+    '/two-factor-authentication',
+]
 
-self.addEventListener("message", (event) => {
-    if (event.data && event.data.type === "SKIP_WAITING") {
+registerRoute(
+    ({ url }) =>
+        url.origin === self.location.origin
+        && noCacheEndpoints.some(path => url.pathname.includes(path)),
+    new NetworkOnly()
+)
+
+// Network-first, fall back to runtime cache when the network is unavailable
+registerRoute(
+    ({ url }) => url.origin === self.location.origin,
+    new NetworkFirst({ cacheName: CACHE_NAME })
+)
+
+// When network and cache both miss, serve the precached offline page for navigations
+setCatchHandler(async ({ request }) => {
+    if (request.destination === 'document') {
+        const offline = await matchPrecache(OFFLINE_URL)
+        if (offline) return offline
+    }
+    return Response.error()
+})
+
+// Activate the new worker as soon as it is installed, replacing the previous version
+self.addEventListener('install', () => {
+    self.skipWaiting()
+})
+
+self.addEventListener('activate', (event) => {
+    event.waitUntil(self.clients.claim())
+})
+
+self.addEventListener('message', (event) => {
+    if (event.data && event.data.type === 'SKIP_WAITING') {
         self.skipWaiting()
     }
 })
 
-// Open a cache and add the default files during installation
-self.addEventListener('install', (event) => {
-    event.waitUntil(
-        caches.open(CACHE_NAME).then((cache) => {
-            return cache.addAll(defaultCaches)
-        })
-    )
-})
-
-// Activate the new service worker and clean up old caches
-self.addEventListener('activate', (event) => {
-    event.waitUntil(
-        caches.keys().then((cacheNames) => {
-            return Promise.all(
-                cacheNames.map((name) => {
-                    if (name !== CACHE_NAME) {
-                        return caches.delete(name)
-                    }
-                })
-            )
-        })
-    )
-})
-
-// Cache pages as the user browses
-self.addEventListener('fetch', (event) => {
-    const requestUrl = new URL(event.request.url);
-
-    // Check if the request URL matches any endpoint that should not be cached
-    if (noCacheEndpoints.some(endpoint => requestUrl.pathname.includes(endpoint))) {
-        event.respondWith(fetch(event.request));
-    } else {
-        event.respondWith(
-            caches.match(event.request).then((response) => {
-                return response || fetch(event.request).then((fetchResponse) => {
-                    return caches.open(CACHE_NAME).then((cache) => {
-                        cache.put(event.request, fetchResponse.clone())
-                        return fetchResponse
-                    })
-                })
-            }).catch(() => {
-                return caches.match(OFFLINE_URL)
-            })
-        )
-    }
-})
-
-// Background Sync - periodic sync
 self.addEventListener('sync', (event) => {
     if (event.tag === 'background-sync') {
         event.waitUntil(doBackgroundSync())
@@ -98,13 +69,13 @@ async function doBackgroundSync() {
 
 // Notifications API
 self.addEventListener('push', (event) => {
-    const data = event.data.json();
+    const data = event.data.json()
 
     self.registration.showNotification(data.title, {
         body: data.body,
-        icon: 'images/static/icon/app_icon.webp'
-    });
-});
+        icon: '/images/static/icon/app_icon.webp',
+    })
+})
 
 self.addEventListener('notificationclick', (event) => {
     // Handle notification click event
@@ -116,10 +87,9 @@ self.addEventListener('notificationclick', (event) => {
     //     clients.openWindow('https://kurozora.app')
     // }
 
-    notification.close()
+    event.notification.close()
 })
 
 self.addEventListener('notificationclose', (event) => {
-    const dismissedNotification = event.notification
-    console.log('Notification closed:', dismissedNotification)
+    console.log('Notification closed:', event.notification)
 })

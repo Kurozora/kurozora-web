@@ -74,10 +74,7 @@
     </x-slot:meta>
 
     <x-slot:styles>
-        <link rel="preload" href="{{ url(mix('css/watch.css')) }}" as="style">
-        <link rel="stylesheet" href="{{ url(mix('css/watch.css')) }}">
-        <link rel="preload" href="{{ url(mix('css/chat.css')) }}" as="style">
-        <link rel="stylesheet" href="{{ url(mix('css/chat.css')) }}">
+        @vite(['resources/css/watch.css', 'resources/css/chat.css'])
     </x-slot:styles>
 
     <x-slot:appArgument>
@@ -85,8 +82,7 @@
     </x-slot:appArgument>
 
     <x-slot:scripts>
-        <script src="{{ url(mix('js/watch.js')) }}"></script>
-        <script src="{{ url(mix('js/chat.js')) }}"></script>
+        @vite(['resources/js/watch.js', 'resources/js/chat.js'])
     </x-slot:scripts>
 
     <div

@@ -10,6 +10,9 @@
 # Laravel
 /public/build
 /public/hot
+/public/offline.html
+/public/service-worker.js
+/public/service-worker.js.map
 /public/storage
 /public/images/user_uploads
 /public/img/user_uploads

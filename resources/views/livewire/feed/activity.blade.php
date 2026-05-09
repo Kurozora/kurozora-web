@@ -16,8 +16,7 @@
     </x-slot:meta>
 
     <x-slot:styles>
-        <link rel="preload" href="{{ url(mix('css/watch.css')) }}" as="style">
-        <link rel="stylesheet" href="{{ url(mix('css/watch.css')) }}">
+        @vite(['resources/css/watch.css'])
     </x-slot:styles>
 
     <div class="pb-6 xl:safe-area-inset">

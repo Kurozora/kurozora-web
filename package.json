@@ -1,23 +1,26 @@
 {
     "private": true,
+    "type": "module",
     "scripts": {
-        "dev": "npm run development",
-        "development": "mix",
-        "watch": "mix watch",
-        "watch-poll": "mix watch -- --watch-options-poll=1000",
-        "hot": "mix watch --hot",
-        "prod": "npm run production",
-        "production": "mix --production"
+        "dev": "vite",
+        "build": "vite build",
+        "watch": "vite build --watch",
+        "prod": "vite build",
+        "production": "vite build"
     },
     "devDependencies": {
         "@tailwindcss/forms": "^0.5.0",
         "@tailwindcss/typography": "^0.5.0",
         "autoprefixer": "^10.2.4",
-        "cross-env": "^7.0.3",
-        "laravel-mix": "^6.0",
+        "laravel-vite-plugin": "^3.1",
         "postcss": "^8.4.4",
         "postcss-import": "^14.0",
-        "tailwindcss": "^3.0.0"
+        "tailwindcss": "^3.0.0",
+        "vite": "^8.0",
+        "vite-plugin-pwa": "^1.3",
+        "workbox-precaching": "^7.4",
+        "workbox-routing": "^7.4",
+        "workbox-strategies": "^7.4"
     },
     "dependencies": {
         "@jaames/iro": "^5.3",
@@ -27,6 +30,5 @@
         "lazysizes": "^5.3.2",
         "picmo": "^5.6.0",
         "plyr": "3.7.8"
-    },
-    "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
+    }
 }

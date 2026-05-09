@@ -2,7 +2,9 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta id="app-viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta property="og:url" content="{{ url()->current() }}" />
         <meta property="og:site_name" content="{{ config('app.name') }}" />
         <meta property="twitter:site" content="{{ '@' . config('social.twitter.username') }}" />
@@ -34,23 +36,20 @@
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=inter:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet" />
 
-        <!-- Styles -->
-        <link rel="preload" href="{{ url(mix('css/app.css')) }}" as="style">
-        <link rel="stylesheet" href="{{ url(mix('css/app.css')) }}" />
+        <!-- Styles & Scripts -->
+        @vite([
+            'resources/css/app.css',
+            'resources/js/settings.js',
+            'resources/js/app.js',
+        ])
+        @if (app()->isLocal())
+            @vite(['resources/js/debug.js'])
+        @endif
         @livewireStyles
         {{ $styles ?? '' }}
 
         {{-- Search --}}
         <link rel="search" type="application/opensearchdescription+xml" title="{{ config('app.name') }}" href="{{ asset('opensearch.xml') }}">
-
-        <!-- Scripts -->
-        <script src="{{ url(mix('js/manifest.js')) }}" defer data-navigate-track></script>
-        <script src="{{ url(mix('js/vendor.js')) }}" defer data-navigate-track></script>
-        <script src="{{ url(mix('js/settings.js')) }}" defer data-navigate-track></script>
-        <script src="{{ url(mix('js/app.js')) }}" defer data-navigate-track></script>
-        @if (app()->isLocal())
-            <script src="{{ url(mix('js/debug.js')) }}" defer data-navigate-track></script>
-        @endif
 
         <!-- CSRF Token -->
         <meta name="csrf-token" content="{{ csrf_token() }}" />

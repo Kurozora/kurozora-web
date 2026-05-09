@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta id="app-viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="color-scheme" content="dark light">
+        <meta name="theme-color" content="#F3F4F6">
+        <meta name="theme-color" content="#F3F4F6" media="(prefers-color-scheme: light)">
+        <meta name="theme-color" content="#353A50" media="(prefers-color-scheme: dark)">
+
+        <title>Offline</title>
+
+        <!-- Favicon -->
+        <link rel="shortcut icon" href="/favicon.ico" />
+
+        <!-- Styles -->
+        <link rel="preload" href="__APP_CSS__" as="style">
+        <link rel="stylesheet" href="__APP_CSS__" />
+    </head>
+
+    <body class="app-theme bg-primary text-primary">
+        <main class="flex flex-col gap-4 max-w-7xl mx-auto pl-4 pr-4 pb-6 h-full w-full justify-center items-center text-center sm:px-6">
+            <img class="w-48 pointer-events-none" src="/images/static/icon/no_signal.webp" alt="" />
+            <h1 class="text-lg font-bold">Network Unavailable</h1>
+            <p>You must connect to a Wi-Fi network or have a cellular data plan to use Kurozora.</p>
+        </main>
+
+        <script>
+            window.addEventListener('online', () => location.reload());
+        </script>
+    </body>
+</html>

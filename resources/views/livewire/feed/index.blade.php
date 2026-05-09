@@ -16,14 +16,11 @@
     </x-slot:meta>
 
     <x-slot:styles>
-        <link rel="preload" href="{{ url(mix('css/watch.css')) }}" as="style">
-        <link rel="stylesheet" href="{{ url(mix('css/watch.css')) }}">
+        @vite(['resources/css/watch.css'])
     </x-slot:styles>
 
     <x-slot:scripts>
-        <script src="{{ url(mix('js/gif.js')) }}"></script>
-        <script src="{{ url(mix('js/markdown.js')) }}"></script>
-        <script src="{{ url(mix('js/watch.js')) }}"></script>
+        @vite(['resources/js/gif.js', 'resources/js/markdown.js', 'resources/js/watch.js'])
     </x-slot:scripts>
 
     <x-slot:appArgument>

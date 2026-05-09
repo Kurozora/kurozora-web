@@ -28,7 +28,7 @@
     </x-slot:appArgument>
 
     <x-slot:scripts>
-        <script src="{{ url(mix('js/listen.js')) }}"></script>
+        @vite(['resources/js/listen.js'])
     </x-slot:scripts>
 
     <div
