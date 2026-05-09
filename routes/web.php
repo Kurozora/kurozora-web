@@ -18,9 +18,6 @@ Route::get('/', Home::class)
 Route::get('welcome', Welcome::class)
     ->name('welcome');
 
-Route::get('health-check', [HealthCheckController::class, 'index'])
-    ->name('misc.health-check');
-
 Route::delete('impersonation', [ImpersonateController::class, 'stopImpersonating'])
     ->name('impersonation.stop');
 

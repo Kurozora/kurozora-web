@@ -1,6 +1,7 @@
 <?php
 
 use App\Helpers\JSONResult;
+use App\Http\Controllers\Web\Misc\HealthCheckController;
 use App\Http\Middleware\AuthenticateAPIClient;
 use App\Http\Middleware\AuthenticateSession;
 use App\Http\Middleware\CheckKurozoraUserAuthentication;
@@ -61,6 +62,9 @@ use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         using: function () {
+            Route::get('health-check', [HealthCheckController::class, 'index'])
+                ->name('misc.health-check');
+
             if (app()->isLocal()) {
                 Route::prefix('api')
                     ->middleware(['api'])
@@ -79,7 +83,6 @@ return Application::configure(basePath: dirname(__DIR__))
             }
         },
         commands: __DIR__.'/../routes/console.php',
-        health: '/up'
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware

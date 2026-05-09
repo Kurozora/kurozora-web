@@ -23,9 +23,7 @@
 /storage/framework/testing/*
 /storage/framework/views/*
 /storage/logs/*.log
-.env
-.env.backup
-.env.production
+.env*
 
 # AWS
 .ebextensions

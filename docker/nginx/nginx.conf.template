@@ -35,7 +35,7 @@ http {
 
         root /var/www/html/public;
 
-        server_name kurozora.app www.kurozora.app;
+        server_name ${DOMAIN_NAME} www.${DOMAIN_NAME};
 
         access_log /var/log/nginx/access.log main;
 
@@ -81,6 +81,13 @@ http {
         }
 
         location = /robots.txt {
+            access_log off;
+            log_not_found off;
+        }
+
+        location = /service-worker.js {
+            expires off;
+            add_header Cache-Control "no-cache" always;
             access_log off;
             log_not_found off;
         }
