@@ -17,9 +17,9 @@
 /public/images/user_uploads
 /public/img/user_uploads
 /storage/*.key
-.env
-.env.backup
-.env.production
+.env*
+!.env*.example
+!.env.testing
 
 # Docker
 docker-compose.override.yml

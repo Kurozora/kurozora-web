@@ -1,0 +1,51 @@
+name: Build and push image to ECR
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  build-and-push:
+    name: Build and push (linux/arm64)
+    runs-on: ubuntu-24.04-arm
+    if: github.repository_owner == 'Kurozora'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Fetch Nova source (private)
+        uses: actions/checkout@v4
+        with:
+          repository: Kurozora/nova-vendor
+          ssh-key: ${{ secrets.NOVA_DEPLOY_KEY }}
+          path: nova
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.IAM_ROLE }}
+          role-session-name: gha-ecr-push
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: linux/arm64
+          push: true
+          tags: |
+            ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:arm64-${{ github.sha }}
+            ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:arm64-latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

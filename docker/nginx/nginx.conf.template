@@ -35,7 +35,7 @@ http {
 
         root /var/www/html/public;
 
-        server_name kurozora.app www.kurozora.app;
+        server_name ${DOMAIN_NAME} www.${DOMAIN_NAME};
 
         access_log /var/log/nginx/access.log main;
 
