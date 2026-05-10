@@ -44,7 +44,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Cache;
 use Laravel\Scout\Searchable;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -87,9 +86,6 @@ class Anime extends KModel implements HasMedia, Sitemapable
 
     // Maximum relationships fetch limit
     const int MAXIMUM_RELATIONSHIPS_LIMIT = 10;
-
-    // How long to cache certain responses
-    const int|float CACHE_KEY_EPISODES_SECONDS = 60 * 60 * 2;
 
     // Table name
     const string TABLE_NAME = 'animes';
@@ -396,30 +392,6 @@ class Anime extends KModel implements HasMedia, Sitemapable
     public function cast(): HasMany
     {
         return $this->hasMany(AnimeCast::class);
-    }
-
-    /**
-     * Retrieves the episodes for an Anime item in an array
-     *
-     * @param array $whereBetween Array containing start and end date. [$startDate, $endDate]
-     * @param int|null $limit The number of resources to fetch.
-     * @return mixed
-     */
-    public function getEpisodes(array $whereBetween = [], ?int $limit = null): mixed
-    {
-        // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'anime.episodes', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit, 'whereBetween' => $whereBetween]);
-
-        // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_EPISODES_SECONDS, function () use ($whereBetween, $limit) {
-            $episodes = $this->episodes();
-
-            if (!empty($whereBetween)) {
-                $episodes->whereBetween('episodes.started_at', $whereBetween);
-            }
-
-            return $episodes->limit($limit)->get();
-        });
     }
 
     /**
