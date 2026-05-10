@@ -21,6 +21,7 @@ use App\Traits\Model\HasMediaTags;
 use App\Traits\Model\HasMediaThemes;
 use App\Traits\Model\HasParentalGuideStat;
 use App\Traits\Model\HasSlug;
+use App\Traits\Model\HasTranslations;
 use App\Traits\Model\HasVideos;
 use App\Traits\Model\HasViews;
 use App\Traits\Model\Ignored;
@@ -28,7 +29,6 @@ use App\Traits\Model\MediaRelated;
 use App\Traits\Model\Trackable;
 use App\Traits\Model\TvRated;
 use App\Traits\SearchFilterable;
-use Astrotomic\Translatable\Translatable;
 use Carbon\Carbon;
 use Carbon\CarbonInterface;
 use Carbon\CarbonInterval;
@@ -40,7 +40,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Scout\Searchable;
 use Spatie\Activitylog\LogOptions;
@@ -67,6 +66,7 @@ class Game extends KModel implements HasMedia, Sitemapable
         HasMediaThemes,
         HasParentalGuideStat,
         HasSlug,
+        HasTranslations,
         HasVideos,
         HasViews,
         Ignored,
@@ -77,7 +77,6 @@ class Game extends KModel implements HasMedia, Sitemapable
         Searchable,
         SearchFilterable,
         SoftDeletes,
-        Translatable,
         Trackable,
         TvRated;
 
@@ -588,26 +587,6 @@ class Game extends KModel implements HasMedia, Sitemapable
     public function languages(): HasManyThrough
     {
         return $this->hasManyThrough(Language::class, GameTranslation::class, 'game_id', 'code', 'id', 'locale');
-    }
-
-    /**
-     * The model's translation relationship.
-     *
-     * @return HasOne
-     */
-    public function translation(): HasOne
-    {
-        $locale = $this->getLocaleKey();
-        if ($this->useFallback()) {
-            $countryFallbackLocale = $this->getFallbackLocale($locale);
-            $locales = array_unique([$locale, $countryFallbackLocale, $this->getFallbackLocale()]);
-
-            return $this->hasOne(GameTranslation::class)
-                ->whereIn($this->getTranslationsTable().'.'.$this->getLocaleKey(), $locales);
-        }
-
-        return $this->hasOne(GameTranslation::class)
-            ->where($this->getTranslationsTable().'.'.$this->getLocaleKey(), $locale);
     }
 
     /**

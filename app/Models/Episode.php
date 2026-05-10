@@ -9,11 +9,11 @@ use App\Traits\Model\HasComments;
 use App\Traits\Model\HasMediaRatings;
 use App\Traits\Model\HasMediaStat;
 use App\Traits\Model\HasPublicID;
+use App\Traits\Model\HasTranslations;
 use App\Traits\Model\HasVideos;
 use App\Traits\Model\HasViews;
 use App\Traits\Model\TvRated;
 use App\Traits\SearchFilterable;
-use Astrotomic\Translatable\Translatable;
 use Carbon\CarbonInterval;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
@@ -22,7 +22,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -42,6 +41,7 @@ class Episode extends KModel implements HasMedia, Sitemapable
         HasMediaRatings,
         HasMediaStat,
         HasPublicID,
+        HasTranslations,
         HasVideos,
         HasViews,
         InteractsWithMedia,
@@ -50,7 +50,6 @@ class Episode extends KModel implements HasMedia, Sitemapable
         Searchable,
         SearchFilterable,
         SoftDeletes,
-        Translatable,
         TvRated;
 
     // Table name
@@ -433,26 +432,6 @@ class Episode extends KModel implements HasMedia, Sitemapable
     {
         return $this->belongsTo(Episode::class)
             ->withoutGlobalScopes();
-    }
-
-    /**
-     * The model's translation relationship.
-     *
-     * @return HasOne
-     */
-    public function translation(): HasOne
-    {
-        $locale = $this->getLocaleKey();
-        if ($this->useFallback()) {
-            $countryFallbackLocale = $this->getFallbackLocale($locale);
-            $locales = array_unique([$locale, $countryFallbackLocale, $this->getFallbackLocale()]);
-
-            return $this->hasOne(EpisodeTranslation::class)
-                ->whereIn($this->getTranslationsTable().'.'.$this->getLocaleKey(), $locales);
-        }
-
-        return $this->hasOne(EpisodeTranslation::class)
-            ->where($this->getTranslationsTable().'.'.$this->getLocaleKey(), $locale);
     }
 
     /**

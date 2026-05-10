@@ -11,14 +11,13 @@ use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\HasMediaRatings;
 use App\Traits\Model\HasMediaStat;
 use App\Traits\Model\HasTranslatableSlug;
+use App\Traits\Model\HasTranslations;
 use App\Traits\Model\HasViews;
 use App\Traits\SearchFilterable;
-use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Scout\Searchable;
@@ -33,13 +32,13 @@ class Character extends KModel implements HasMedia, Sitemapable
     use HasFactory,
         HasMediaStat,
         HasTranslatableSlug,
+        HasTranslations,
         HasViews,
         InteractsWithMedia,
         InteractsWithMediaExtension,
         Searchable,
         SearchFilterable,
-        SoftDeletes,
-        Translatable;
+        SoftDeletes;
     use HasMediaRatings {
         mediaRatings as protected parentMediaRatings;
     }
@@ -426,26 +425,6 @@ class Character extends KModel implements HasMedia, Sitemapable
     public function cast(): HasMany
     {
         return $this->hasMany(AnimeCast::class);
-    }
-
-    /**
-     * The model's translation relationship.
-     *
-     * @return HasOne
-     */
-    public function translation(): HasOne
-    {
-        $locale = $this->getLocaleKey();
-        if ($this->useFallback()) {
-            $countryFallbackLocale = $this->getFallbackLocale($locale);
-            $locales = array_unique([$locale, $countryFallbackLocale, $this->getFallbackLocale()]);
-
-            return $this->hasOne(CharacterTranslation::class)
-                ->whereIn($this->getTranslationsTable().'.'.$this->getLocaleKey(), $locales);
-        }
-
-        return $this->hasOne(CharacterTranslation::class)
-            ->where($this->getTranslationsTable().'.'.$this->getLocaleKey(), $locale);
     }
 
     /**
