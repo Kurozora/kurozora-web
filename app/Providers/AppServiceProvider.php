@@ -7,6 +7,7 @@ use App\Models\PersonalAccessToken;
 use App\Models\User;
 use App\Observers\AnimeObserver;
 use App\Policies\NotificationPolicy;
+use App\Providers\SocialiteProviders\AppleProvider;
 use App\Services\AppStoreService;
 use App\Services\LinkPreviewService;
 use App\Services\ReputationService;
@@ -26,8 +27,8 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Sanctum\Sanctum;
 use RoachPHP\Roach;
-use SocialiteProviders\Apple\AppleExtendSocialite;
 use SocialiteProviders\Manager\SocialiteWasCalled;
+use Throwable;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -76,7 +77,9 @@ class AppServiceProvider extends ServiceProvider
         Anime::observe(AnimeObserver::class);
 
         // Register events
-        Event::listen(SocialiteWasCalled::class, AppleExtendSocialite::class.'@handle');
+        Event::listen(SocialiteWasCalled::class, function (SocialiteWasCalled $event): void {
+            $event->extendSocialite('apple', AppleProvider::class);
+        });
 
         /// Register gates
         Gate::define('viewPulse', function (User $user) {

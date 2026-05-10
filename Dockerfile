@@ -50,6 +50,7 @@ RUN curl -fsSL https://github.com/mlocati/docker-php-extension-installer/release
     intl \
     opcache \
     pdo_mysql \
+    redis \
     zip
 
 ###
