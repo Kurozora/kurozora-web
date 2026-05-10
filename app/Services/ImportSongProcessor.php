@@ -26,15 +26,17 @@ class ImportSongProcessor
                 $songArtist = $kSong->getArtist();
 
                 $duplicateSong = Song::where([
-                    ['title', $songTitle],
+                    ['original_title', $songTitle],
                     ['artist', $songArtist],
                 ])->first();
 
                 if (!empty($songTitle) && empty($duplicateSong)) {
                     Song::create([
                         'mal_id' => $kSong->id,
-                        'title' => $songTitle,
+                        'original_title' => $songTitle,
                         'artist' => $songArtist,
+                        'en' => ['title' => $songTitle],
+                        'ja' => ['title' => $songTitle],
                     ]);
                 }
             }
