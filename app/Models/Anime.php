@@ -271,7 +271,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
         return now('Asia/Tokyo')
             ->next((int) $airDay)
             ->setTimeFromTimeString($airTime ?? '00:00')
-            ->setTimezone(config('app.format_timezone'));
+            ->inUserTimezone();
     }
 
     /**
@@ -297,7 +297,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
     {
         if ($broadcastDate = $this->broadcast_date) {
             $broadcast = $broadcastDate->englishDayOfWeek . ' at ' . $broadcastDate->format('H:i e');
-            return now(config('app.format_timezone'))
+            return Carbon::now()->inUserTimezone()
                 ->until($broadcast, CarbonInterface::DIFF_RELATIVE_TO_NOW, true, 3);
         }
 
@@ -824,7 +824,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
      */
     public static function webSearchFilters(): array
     {
-        $preferredTvRating = config('app.tv_rating');
+        $preferredTvRating = request()->tvRating();
         if ($preferredTvRating <= 0) {
             $preferredTvRating = 4;
         }
@@ -930,7 +930,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
             ];
         }
 
-        if (config('app.tv_rating') >= 4) {
+        if (request()->tvRating() >= 4) {
             $filter['is_nsfw'] = [
                 'title' => __('NSFW'),
                 'type' => 'bool',

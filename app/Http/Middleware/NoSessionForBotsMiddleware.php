@@ -18,7 +18,7 @@ class NoSessionForBotsMiddleware
     public function handle(Request $request, Closure $next): mixed
     {
         if ((new CrawlerDetect)->isCrawler()) {
-            config()->set('session.driver', 'array');
+            $request->attributes->set('bot', true);
         }
 
         return $next($request);

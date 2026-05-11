@@ -437,7 +437,7 @@ class SearchController extends Controller
     protected function libraryScopedSearch(string $modelClass, string $query, SearchRequest $request, int $limit): LengthAwarePaginator
     {
         $page = max(1, (int) $request->input('page', 1));
-        $tvRating = config('app.tv_rating');
+        $tvRating = $request->tvRating();
 
         $libraryIds = UserLibrary::query()
             ->where('user_id', auth()->id())
@@ -527,7 +527,7 @@ class SearchController extends Controller
 
         $hits = $modelClass::search($query)
             ->options(['attributesToRetrieve' => ['id', 'title']])
-            ->where('tv_rating_id', ['<=', config('app.tv_rating')])
+            ->where('tv_rating_id', ['<=', request()->tvRating()])
             ->take($cap)
             ->raw()['hits'] ?? [];
 

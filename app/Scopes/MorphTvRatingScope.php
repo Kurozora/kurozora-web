@@ -18,7 +18,7 @@ class MorphTvRatingScope extends TvRatingScope
      */
     public function apply(Builder $builder, Model $model): void
     {
-        $preferredTvRating = config('app.tv_rating');
+        $preferredTvRating = request()->tvRating();
 
         // Basically if Tv Rating exists
         if ($preferredTvRating > 0) {

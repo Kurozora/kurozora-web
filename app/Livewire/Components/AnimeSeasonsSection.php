@@ -64,7 +64,7 @@ class AnimeSeasonsSection extends Component
         }
 
         return $this->anime->seasons()
-            ->when($this->anime->tv_rating_id > config('app.tv_rating'), function ($query) {
+            ->when($this->anime->tv_rating_id > request()->tvRating(), function ($query) {
                 $query->withoutGlobalScopes();
             })
             ->with(['media', 'translation'])

@@ -299,10 +299,15 @@ class User extends Resource
                 ->options(function () {
                     $timestamp = time();
                     $timezone = [];
+                    $originalTimezone = date_default_timezone_get();
 
-                    foreach (timezone_identifiers_list(DateTimeZone::ALL) as $key => $value) {
-                        date_default_timezone_set($value);
-                        $timezone[$value] = $value . ' (UTC ' . date('P', $timestamp) . ')';
+                    try {
+                        foreach (timezone_identifiers_list(DateTimeZone::ALL) as $key => $value) {
+                            date_default_timezone_set($value);
+                            $timezone[$value] = $value . ' (UTC ' . date('P', $timestamp) . ')';
+                        }
+                    } finally {
+                        date_default_timezone_set($originalTimezone);
                     }
 
                     return collect($timezone)->sortKeys();

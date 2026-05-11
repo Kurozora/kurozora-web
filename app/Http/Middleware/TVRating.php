@@ -29,8 +29,8 @@ class TVRating
             $tvRating = 4;
         }
 
-        // Set TVRating in config
-        config()->set('app.tv_rating', $tvRating);
+        // Set TV rating on the request
+        $request->attributes->set('tvRating', $tvRating);
 
         // Continue request
         return $next($request);

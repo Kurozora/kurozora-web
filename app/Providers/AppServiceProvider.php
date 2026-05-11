@@ -19,7 +19,7 @@ use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\DatabaseNotification;
-use Illuminate\Support\Facades\Config;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
@@ -42,6 +42,18 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Returns the receiver shifted into the requesting user's preferred timezone.
+        Carbon::macro('inUserTimezone', function () {
+            /** @var Carbon $this */
+            return $this->setTimezone(request()?->attributes->get('formatTimezone', 'UTC'));
+        });
+
+        // Returns the requesting user's preferred TV rating, or 4 by default.
+        Request::macro('tvRating', function (): int {
+            /** @var Request $this */
+            return (int) $this->attributes->get('tvRating', 4);
+        });
+
         // Prevent dangerous actions
         DB::prohibitDestructiveCommands(app()->isProduction());
         SeedCommand::prohibit(app()->isProduction());

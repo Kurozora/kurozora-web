@@ -104,7 +104,7 @@ class Season extends KModel implements HasMedia, Sitemapable
                 }
 
                 $value = $this->asDateTime($value);
-                $value->setTimezone(config('app.format_timezone'));
+                $value->inUserTimezone();
                 return $value;
             }
         );
@@ -124,7 +124,7 @@ class Season extends KModel implements HasMedia, Sitemapable
                 }
 
                 $value = $this->asDateTime($value);
-                $value->setTimezone(config('app.format_timezone'));
+                $value->inUserTimezone();
                 return $value;
             }
         );

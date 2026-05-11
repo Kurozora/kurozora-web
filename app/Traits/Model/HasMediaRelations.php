@@ -60,7 +60,7 @@ trait HasMediaRelations
             ->join(Anime::TABLE_NAME, function ($join) {
                 $join->on(Anime::TABLE_NAME . '.id', '=', MediaRelation::TABLE_NAME . '.related_id');
 
-                $preferredTvRating = config('app.tv_rating');
+                $preferredTvRating = request()->tvRating();
                 if ($preferredTvRating > 0) {
                     $join->where('tv_rating_id', '<=', $preferredTvRating);
                 }
@@ -79,7 +79,7 @@ trait HasMediaRelations
             ->join(Manga::TABLE_NAME, function ($join) {
                 $join->on(Manga::TABLE_NAME . '.id', '=', MediaRelation::TABLE_NAME . '.related_id');
 
-                $preferredTvRating = config('app.tv_rating');
+                $preferredTvRating = request()->tvRating();
                 if ($preferredTvRating > 0) {
                     $join->where('tv_rating_id', '<=', $preferredTvRating);
                 }
@@ -98,7 +98,7 @@ trait HasMediaRelations
             ->join(Game::TABLE_NAME, function ($join) {
                 $join->on(Game::TABLE_NAME . '.id', '=', MediaRelation::TABLE_NAME . '.related_id');
 
-                $preferredTvRating = config('app.tv_rating');
+                $preferredTvRating = request()->tvRating();
 
                 if ($preferredTvRating > 0) {
                     $join->where('tv_rating_id', '<=', $preferredTvRating);

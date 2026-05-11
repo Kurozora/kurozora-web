@@ -113,7 +113,7 @@ class StudiosSection extends Component
         $parent = $this->parent;
 
         return $parent->studios()
-            ->when($parent->tv_rating_id > config('app.tv_rating'), function ($query) {
+            ->when($parent->tv_rating_id > request()->tvRating(), function ($query) {
                 $query->withoutGlobalScopes();
             })
             ->with('media')

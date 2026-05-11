@@ -99,7 +99,7 @@ class Episode extends KModel implements HasMedia, Sitemapable
                 }
 
                 $value = $this->asDateTime($value);
-                $value->setTimezone(config('app.format_timezone'));
+                $value->inUserTimezone();
                 return $value;
             }
         );
@@ -119,7 +119,7 @@ class Episode extends KModel implements HasMedia, Sitemapable
                 }
 
                 $value = $this->asDateTime($value);
-                $value->setTimezone(config('app.format_timezone'));
+                $value->inUserTimezone();
                 return $value;
             }
         );
@@ -333,7 +333,7 @@ class Episode extends KModel implements HasMedia, Sitemapable
             ],
         ];
 
-        if (config('app.tv_rating') >= 4) {
+        if (request()->tvRating() >= 4) {
             $filter['is_nsfw'] = [
                 'title' => __('NSFW'),
                 'type' => 'bool',

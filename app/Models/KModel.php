@@ -39,7 +39,7 @@ class KModel extends Model
      */
     static function getTvRatingSettings(): int
     {
-        return (int) config('app.tv_rating') ?? 4;
+        return request()->tvRating();
     }
 
     /**

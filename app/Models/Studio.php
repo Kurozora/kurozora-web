@@ -200,7 +200,7 @@ class Studio extends KModel implements HasMedia, Sitemapable
      */
     public static function webSearchFilters(): array
     {
-        $preferredTvRating = config('app.tv_rating');
+        $preferredTvRating = request()->tvRating();
         if ($preferredTvRating <= 0) {
             $preferredTvRating = 4;
         }
@@ -235,7 +235,7 @@ class Studio extends KModel implements HasMedia, Sitemapable
             ],
         ];
 
-        if (config('app.tv_rating') >= 4) {
+        if (request()->tvRating() >= 4) {
             $filter['is_nsfw'] = [
                 'title' => __('NSFW'),
                 'type' => 'bool',

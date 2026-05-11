@@ -124,7 +124,7 @@ class MoreByStudioSection extends Component
             UserLibraryKind::Game  => $this->studio->games(),
         };
 
-        $relation->when($this->studio->tv_rating_id > config('app.tv_rating'), function ($query) {
+        $relation->when($this->studio->tv_rating_id > request()->tvRating(), function ($query) {
             $query->withoutGlobalScopes();
         })
             ->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating'])

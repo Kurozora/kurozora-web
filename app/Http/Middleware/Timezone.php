@@ -29,8 +29,8 @@ class Timezone
             $timezone = 'UTC';
         }
 
-        // Set TVRating in config
-        config()->set('app.format_timezone', $timezone);
+        // Set the timezone on the request
+        $request->attributes->set('formatTimezone', $timezone);
 
         // Continue request
         return $next($request);
