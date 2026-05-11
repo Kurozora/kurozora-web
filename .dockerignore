@@ -37,6 +37,9 @@
 docker-compose.yml
 docker-compose.override.yml
 
+# Octane (FrankenPHP local binary)
+/frankenphp
+
 # Homestead
 Homestead.json
 Homestead.yaml

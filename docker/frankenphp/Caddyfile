@@ -1,0 +1,47 @@
+{
+	{$CADDY_GLOBAL_OPTIONS}
+
+	frankenphp {
+		worker {
+			file /var/www/html/public/frankenphp-worker.php
+			env MAX_REQUESTS {$OCTANE_MAX_REQUESTS:500}
+		}
+	}
+
+	order php_server before file_server
+}
+
+{$SERVER_NAME::80} {
+	log {
+		format console
+	}
+
+	root * /var/www/html/public
+
+	encode zstd br gzip
+
+	header {
+		X-Frame-Options "SAMEORIGIN"
+		X-XSS-Protection "1; mode=block"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		-Server
+		-X-Powered-By
+	}
+
+	# HTTPS-only headers and HTTP→HTTPS redirect, gated on the exact value
+	# the upstream load balancer sets. Avoids loops and HSTS poisoning when
+	# running plain HTTP locally (no proxy in front).
+	@https header_regexp X-Forwarded-Proto ^https$
+	header @https Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+	header @https Content-Security-Policy "upgrade-insecure-requests"
+
+	@http header_regexp X-Forwarded-Proto ^http$
+	redir @http https://{host}{uri} 301
+
+	php_server {
+		index frankenphp-worker.php
+		try_files {path} frankenphp-worker.php
+		resolve_root_symlink
+	}
+}

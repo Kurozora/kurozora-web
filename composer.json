@@ -55,6 +55,7 @@
         "kiritokatklian/laravel-sort-request": "^2.0",
         "laravel-notification-channels/apn": "^v5.0",
         "laravel/framework": "^12.0",
+        "laravel/octane": "^2.5",
         "laravel/pulse": "^1.4",
         "laravel/sanctum": "^4.0",
         "laravel/scout": "^10.0",
@@ -159,6 +160,7 @@
             "php -r \"exec('php artisan nova:publish');\"",
             "@php artisan vendor:publish --tag=laravel-assets --ansi --force",
             "@php artisan vendor:publish --tag=livewire:assets --ansi --force",
+            "@php artisan livewire:discover --ansi",
             "@php artisan ide-helper:generate",
             "@php artisan ide-helper:models -N",
             "@php artisan ide-helper:meta"
@@ -168,7 +170,17 @@
         "lint": "vendor/bin/duster lint",
         "format": "vendor/bin/duster fix",
         "duster": "vendor/bin/duster",
-        "test": "vendor/bin/phpunit"
+        "test": "vendor/bin/phpunit",
+        "octane:up": "valet unlink kurozora 2>/dev/null; valet proxy kurozora http://127.0.0.1:8000 --secure",
+        "octane:down": "valet unproxy kurozora 2>/dev/null; valet link kurozora",
+        "octane:dev": [
+            "Composer\\Config::disableProcessTimeout",
+            "@php artisan octane:start --server=frankenphp --watch"
+        ],
+        "octane:share": [
+            "Composer\\Config::disableProcessTimeout",
+            "ngrok http --url=$(grep -E '^NGROK_DOMAIN=' .env | head -1 | cut -d= -f2-) --host-header=kurozora.test 8000"
+        ]
     },
     "extra": {
         "laravel": {

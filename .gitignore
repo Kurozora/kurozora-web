@@ -24,6 +24,11 @@
 # Docker
 docker-compose.override.yml
 
+# Octane
+/frankenphp
+**/caddy
+frankenphp-worker.php
+
 # Homestead
 Homestead.json
 Homestead.yaml
