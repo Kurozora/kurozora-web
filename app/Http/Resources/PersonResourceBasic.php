@@ -61,7 +61,7 @@ class PersonResourceBasic extends JsonResource
 
         // Return the array
         return [
-            'givenRating' => (double) $givenRating?->rating,
+            'givenRating' => (float) $givenRating?->rating,
             'givenReview' => $givenRating?->description,
         ];
     }

@@ -94,7 +94,7 @@ class LiteratureResourceBasic extends JsonResource
         // Return the array
         return [
             'library' => [
-                'rating' => (double) $givenRating?->rating,
+                'rating' => (float) $givenRating?->rating,
                 'review' => $givenRating?->description,
                 'status' => $library?->status,
                 'rewatchCount' => $library?->rewatch_count,

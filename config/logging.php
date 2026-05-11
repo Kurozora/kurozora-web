@@ -133,6 +133,11 @@ return [
             'handler' => NullHandler::class,
         ],
 
+        'deprecations' => [
+            'driver' => 'stack',
+            'channels' => ['null'],
+        ],
+
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
         ],

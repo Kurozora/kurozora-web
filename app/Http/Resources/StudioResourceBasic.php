@@ -79,7 +79,7 @@ class StudioResourceBasic extends JsonResource
         // Return the array
         return [
             'library' => [
-                'rating' => (double) $givenRating?->rating,
+                'rating' => (float) $givenRating?->rating,
                 'review' => $givenRating?->description,
                 'isFavorited' => (bool) $this->resource->isFavorited,
             ]

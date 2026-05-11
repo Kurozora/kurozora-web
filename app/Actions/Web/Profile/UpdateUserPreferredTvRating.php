@@ -32,7 +32,7 @@ class UpdateUserPreferredTvRating implements UpdatesUserPreferredTvRating
         ])->validateWithBag('updatePreferredTvRating');
 
         $user->update([
-            'tv_rating' => (integer) $input['tv_rating']
+            'tv_rating' => (int) $input['tv_rating']
         ]);
     }
 }
