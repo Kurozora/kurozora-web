@@ -11,6 +11,7 @@ use App\Providers\SocialiteProviders\AppleProvider;
 use App\Services\AppStoreService;
 use App\Services\LinkPreviewService;
 use App\Services\ReputationService;
+use Carbon\Carbon;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Console\Seeds\SeedCommand;
@@ -19,7 +20,6 @@ use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\DatabaseNotification;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
@@ -32,8 +32,12 @@ use Throwable;
 
 class AppServiceProvider extends ServiceProvider
 {
-    // The global query count is logged to this config key
-    public static string $queryCountConfigKey = 'kurozora.query_count';
+    /**
+     * The running total of database queries executed during the current request.
+     *
+     * @var int
+     */
+    public static int $queryCount = 0;
 
     /**
      * Bootstrap any application services.
@@ -121,20 +125,13 @@ class AppServiceProvider extends ServiceProvider
         }
 
         if ($this->app->hasDebugModeEnabled()) {
-            /// This snippet logs the number of executed queries per request
-            /// to the config.
+            /// This snippet logs the number of executed queries per request.
             DB::listen(function (QueryExecuted $query) {
-                $currentConfigValue = Config::get(self::$queryCountConfigKey);
-
-                if ($currentConfigValue == null) {
-                    Config::set(self::$queryCountConfigKey, 1);
-                } else {
-                    // - NOTE: For local debug purposes
-//                    logger()->warning('==== Start ====');
-//                    logger()->info($query->sql);
-//                    logger()->warning('==== End ====');
-                    Config::set(self::$queryCountConfigKey, $currentConfigValue + 1);
-                }
+                // - NOTE: For local debug purposes
+//                logger()->warning('==== Start ====');
+//                logger()->info($query->sql);
+//                logger()->warning('==== End ====');
+                self::$queryCount++;
             });
         }
 

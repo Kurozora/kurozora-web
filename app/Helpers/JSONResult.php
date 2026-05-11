@@ -66,7 +66,7 @@ class JSONResult
         if (app()->isLocal()) {
             $meta['isUserAuthenticated'] = auth()->check();
             $meta['authenticatedUserID'] = (string) auth()->id();
-            $meta['queryCount'] = (int) config(AppServiceProvider::$queryCountConfigKey);
+            $meta['queryCount'] = AppServiceProvider::$queryCount;
         }
 
         return [
