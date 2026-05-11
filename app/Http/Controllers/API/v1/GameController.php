@@ -36,7 +36,7 @@ use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\CursorPaginator;
 use Illuminate\Routing\Redirector;
 
 class GameController extends Controller
@@ -356,7 +356,7 @@ class GameController extends Controller
 
         // Get the characters
         $characters = $game->characters()
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $characters->nextPageUrl() ?? '');
@@ -381,7 +381,7 @@ class GameController extends Controller
 
         // Get the anime cast
         $cast = $game->cast()
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $cast->nextPageUrl() ?? '');
@@ -560,7 +560,7 @@ class GameController extends Controller
                     ]);
                 },
             ])
-            ->paginate($limit, page: $data['page'] ?? 1);
+            ->cursorPaginate($limit);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $mediaSongs->nextPageUrl() ?? '');
@@ -596,7 +596,7 @@ class GameController extends Controller
                 },
                 'staff_role'
             ])
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $staff->nextPageUrl() ?? '');
@@ -633,7 +633,7 @@ class GameController extends Controller
                 'predecessors',
                 'tv_rating',
             ])
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $mediaStudios->nextPageUrl() ?? '');
@@ -655,17 +655,17 @@ class GameController extends Controller
     public function moreByStudio(GetPaginatedRequest $request, game $game): JsonResponse
     {
         $data = $request->validated();
-        $studioGames = new LengthAwarePaginator([], 0, 1);
+        $studioGames = new CursorPaginator(collect(), $data['limit'] ?? 25);
 
         // Get the anime studios
         if ($mediaStudio = $game->studios()->firstWhere('is_studio', '=', true)) {
             $studioGames = $mediaStudio->games()
                 ->where('model_id', '!=', $game->id)
-                ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+                ->cursorPaginate($data['limit'] ?? 25);
         } else if ($mediaStudio = $game->studios()->first()) {
             $studioGames = $mediaStudio->games()
                 ->where('model_id', '!=', $game->id)
-                ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+                ->cursorPaginate($data['limit'] ?? 25);
         }
 
         // Get next page url minus domain
@@ -791,6 +791,8 @@ class GameController extends Controller
      */
     public function reviews(GetPaginatedRequest $request, Game $game): JsonResponse
     {
+        $data = $request->validated();
+
         $reviews = $game->mediaRatings()
             ->withoutTvRatings()
             ->with([
@@ -815,7 +817,7 @@ class GameController extends Controller
                 }
             ])
             ->where('description', '!=', null)
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $reviews->nextPageUrl() ?? '');

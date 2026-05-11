@@ -25,8 +25,7 @@ class GetUpNextEpisodesRequest extends FormRequest
     {
         return [
             'model_id' => ['bail', 'nullable', 'string'],
-            'limit' => ['bail', 'integer', 'min:1', 'max:100'],
-            'page' => ['bail', 'integer', 'min:1']
+            'limit' => ['bail', 'integer', 'min:1', 'max:100']
         ];
     }
 }

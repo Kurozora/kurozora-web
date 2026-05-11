@@ -25,7 +25,6 @@ class GetSortedPaginatedRequest extends FormRequest
     {
         return [
             'limit' => ['bail', 'integer', 'min:1', 'max:100'],
-            'page' => ['bail', 'integer', 'min:1'],
             'sort' => ['bail', 'nullable', 'string', 'in:top,recent'],
         ];
     }

@@ -24,9 +24,8 @@ class GetAnimeSeasonsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'reversed'  => ['bail', 'boolean'],
-            'limit'     => ['bail', 'integer', 'min:1', 'max:100'],
-            'page'      => ['bail', 'integer', 'min:1']
+            'reversed' => ['bail', 'boolean'],
+            'limit' => ['bail', 'integer', 'min:1', 'max:100']
         ];
     }
 }

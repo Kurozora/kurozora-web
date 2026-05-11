@@ -34,7 +34,7 @@ use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\CursorPaginator;
 use Illuminate\Routing\Redirector;
 
 class MangaController extends Controller
@@ -329,7 +329,7 @@ class MangaController extends Controller
 
         // Get the characters
         $characters = $manga->characters()
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $characters->nextPageUrl() ?? '');
@@ -354,7 +354,7 @@ class MangaController extends Controller
 
         // Get the anime cast
         $cast = $manga->cast()
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $cast->nextPageUrl() ?? '');
@@ -529,7 +529,7 @@ class MangaController extends Controller
                 },
                 'staff_role'
             ])
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $staff->nextPageUrl() ?? '');
@@ -566,7 +566,7 @@ class MangaController extends Controller
                 'predecessors',
                 'tv_rating',
             ])
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $mangaStudios->nextPageUrl() ?? '');
@@ -588,17 +588,17 @@ class MangaController extends Controller
     public function moreByStudio(GetPaginatedRequest $request, Manga $manga): JsonResponse
     {
         $data = $request->validated();
-        $studioMangas = new LengthAwarePaginator([], 0, 1);
+        $studioMangas = new CursorPaginator(collect(), $data['limit'] ?? 25);
 
         // Get the manga studios
         if ($mangaStudio = $manga->studios()->firstWhere('is_studio', '=', true)) {
             $studioMangas = $mangaStudio->manga()
                 ->where('model_id', '!=', $manga->id)
-                ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+                ->cursorPaginate($data['limit'] ?? 25);
         } else if ($mangaStudio = $manga->studios()->first()) {
             $studioMangas = $mangaStudio->manga()
                 ->where('model_id', '!=', $manga->id)
-                ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+                ->cursorPaginate($data['limit'] ?? 25);
         }
 
         // Get next page url minus domain
@@ -724,6 +724,8 @@ class MangaController extends Controller
      */
     public function reviews(GetPaginatedRequest $request, Manga $manga): JsonResponse
     {
+        $data = $request->validated();
+
         $reviews = $manga->mediaRatings()
             ->withoutTvRatings()
             ->with([
@@ -748,7 +750,7 @@ class MangaController extends Controller
                 }
             ])
             ->where('description', '!=', null)
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $reviews->nextPageUrl() ?? '');

@@ -67,8 +67,14 @@ class LibraryController extends Controller
             default => Anime::class,
         };
 
-        // Retrieve the model from the user's library with the correct status
-        $model = $user->whereTracked($morphClass)
+        $limit = (int) ($data['limit'] ?? 25);
+        $page = max(1, (int) ($data['page'] ?? 1));
+
+        $offset = isset($data['offset'])
+            ? max(0, (int) $data['offset'])
+            : ($page - 1) * $limit;
+
+        $query = $user->whereTracked($morphClass)
             ->withoutGlobalScopes([IgnoreListScope::class])
             ->when(auth()->id() !== $user->id, function (Builder $query) {
                 $query->where(UserLibrary::TABLE_NAME . '.is_hidden', '=', false);
@@ -89,30 +95,38 @@ class LibraryController extends Controller
                 },
             ])
             ->when(in_array(Remindable::class, class_uses_recursive($morphClass)), function ($query) use ($morphClass, $user) {
-                // Add your logic here if the trait is used
                 $query->withExists([
                     'reminderers as isReminded' => function ($query) use ($morphClass, $user) {
                         $query->where('remindable_type', '=', $morphClass)
                             ->where('user_id', '=', $user->id);
                     },
                 ]);
-            })
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            });
 
-        // Get next page url minus domain
-        $nextPageURL = str_replace($request->root(), '', $model->nextPageUrl() ?? '');
+        $total = (clone $query)->count();
+        $items = (clone $query)->skip($offset)->take($limit)->get();
+
+        $nextOffset = $offset + $items->count();
+        $nextPageURL = null;
+        if ($items->count() === $limit && $nextOffset < $total) {
+            $nextQuery = array_merge($request->query(), [
+                'offset' => $nextOffset,
+                'page' => $page + 1,
+            ]);
+            $nextPageURL = $request->getPathInfo() . '?' . http_build_query($nextQuery);
+        }
 
         // Get data collection
-        $data = match ($library) {
-            UserLibraryKind::Manga => ['literatures' => LiteratureResourceBasic::collection($model)],
-            UserLibraryKind::Game => ['games' => GameResourceBasic::collection($model)],
-            default => ['shows' => AnimeResourceBasic::collection($model)],
+        $resourceData = match ($library) {
+            UserLibraryKind::Manga => ['literatures' => LiteratureResourceBasic::collection($items)],
+            UserLibraryKind::Game => ['games' => GameResourceBasic::collection($items)],
+            default => ['shows' => AnimeResourceBasic::collection($items)],
         };
 
         return JSONResult::success([
-            'data' => $data,
-            'next' => empty($nextPageURL) ? null : $nextPageURL,
-            'total' => $model->total()
+            'data' => $resourceData,
+            'next' => $nextPageURL,
+            'total' => $total,
         ]);
     }
 

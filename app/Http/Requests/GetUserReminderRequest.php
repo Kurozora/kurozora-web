@@ -26,8 +26,7 @@ class GetUserReminderRequest extends FormRequest
     {
         return [
             'library' => ['bail', 'integer', 'in:' . implode(',', UserLibraryKind::getValues())],
-            'limit' => ['bail', 'integer', 'min:1', 'max:100'],
-            'page' => ['bail', 'integer', 'min:1']
+            'limit' => ['bail', 'integer', 'min:1', 'max:100']
         ];
     }
 }

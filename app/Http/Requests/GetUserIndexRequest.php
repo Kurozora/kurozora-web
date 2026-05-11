@@ -47,7 +47,6 @@ class GetUserIndexRequest extends FormRequest
             'ids' => ['bail', 'nullable', 'array', 'max:25'],
             'ids.*' => ['bail', new ValidateIntegerOrPublicID()],
             'limit' => ['bail', 'integer', 'min:1', 'max:100'],
-            'page' => ['bail', 'integer', 'min:1'],
         ], $this->sortingRules());
     }
 

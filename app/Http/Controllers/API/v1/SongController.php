@@ -149,7 +149,7 @@ class SongController extends Controller
                         },
                     ]);
             })
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $animes->nextPageUrl() ?? '');
@@ -192,7 +192,7 @@ class SongController extends Controller
                         },
                     ]);
             })
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $games->nextPageUrl() ?? '');
@@ -289,6 +289,8 @@ class SongController extends Controller
      */
     public function reviews(GetPaginatedRequest $request, Song $song): JsonResponse
     {
+        $data = $request->validated();
+
         $reviews = $song->mediaRatings()
             ->withoutTvRatings()
             ->with([
@@ -313,7 +315,7 @@ class SongController extends Controller
                 }
             ])
             ->where('description', '!=', null)
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $reviews->nextPageUrl() ?? '');

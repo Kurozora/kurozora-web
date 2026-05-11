@@ -38,7 +38,7 @@ use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\CursorPaginator;
 use Illuminate\Routing\Redirector;
 
 class AnimeController extends Controller
@@ -374,7 +374,7 @@ class AnimeController extends Controller
 
         // Get the characters
         $characters = $anime->characters()
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $characters->nextPageUrl() ?? '');
@@ -399,7 +399,7 @@ class AnimeController extends Controller
 
         // Get the anime cast
         $animeCast = $anime->cast()
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $animeCast->nextPageUrl() ?? '');
@@ -570,7 +570,8 @@ class AnimeController extends Controller
         // Get the seasons
         $seasons = $anime->seasons()
             ->orderBy('number', $reversed ? 'desc' : 'asc')
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->orderBy('id')
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $seasons->nextPageUrl() ?? '');
@@ -606,7 +607,7 @@ class AnimeController extends Controller
                     ]);
                 },
             ])
-            ->paginate($limit, page: $data['page'] ?? 1);
+            ->cursorPaginate($limit);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $mediaSongs->nextPageUrl() ?? '');
@@ -642,7 +643,7 @@ class AnimeController extends Controller
                 },
                 'staff_role',
             ])
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $staff->nextPageUrl() ?? '');
@@ -680,7 +681,7 @@ class AnimeController extends Controller
                 'predecessors',
                 'tv_rating',
             ])
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $mediaStudios->nextPageUrl() ?? '');
@@ -702,17 +703,17 @@ class AnimeController extends Controller
     public function moreByStudio(GetPaginatedRequest $request, Anime $anime): JsonResponse
     {
         $data = $request->validated();
-        $studioAnimes = new LengthAwarePaginator([], 0, 1);
+        $studioAnimes = new CursorPaginator(collect(), $data['limit'] ?? 25);
 
         // Get the anime studios
         if ($mediaStudio = $anime->studios()->firstWhere('is_studio', '=', true)) {
             $studioAnimes = $mediaStudio->anime()
                 ->where('model_id', '!=', $anime->id)
-                ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+                ->cursorPaginate($data['limit'] ?? 25);
         } else if ($mediaStudio = $anime->studios()->first()) {
             $studioAnimes = $mediaStudio->anime()
                 ->where('model_id', '!=', $anime->id)
-                ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+                ->cursorPaginate($data['limit'] ?? 25);
         }
 
         // Get next page url minus domain
@@ -838,6 +839,8 @@ class AnimeController extends Controller
      */
     public function reviews(GetPaginatedRequest $request, Anime $anime): JsonResponse
     {
+        $data = $request->validated();
+
         $reviews = $anime->mediaRatings()
             ->withoutTvRatings()
             ->with([
@@ -862,7 +865,7 @@ class AnimeController extends Controller
                 },
             ])
             ->where('description', '!=', null)
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $reviews->nextPageUrl() ?? '');

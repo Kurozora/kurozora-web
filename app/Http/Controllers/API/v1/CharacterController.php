@@ -212,7 +212,7 @@ class CharacterController extends Controller
 
         // Get the people
         $people = $character->people()
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $people->nextPageUrl() ?? '');
@@ -238,7 +238,7 @@ class CharacterController extends Controller
 
         // Get the anime
         $anime = $character->anime()
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $anime->nextPageUrl() ?? '');
@@ -264,7 +264,7 @@ class CharacterController extends Controller
 
         // Get the literatures
         $literatures = $character->manga()
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $literatures->nextPageUrl() ?? '');
@@ -290,7 +290,7 @@ class CharacterController extends Controller
 
         // Get the games
         $games = $character->games()
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $games->nextPageUrl() ?? '');
@@ -388,6 +388,8 @@ class CharacterController extends Controller
      */
     public function reviews(GetPaginatedRequest $request, Character $character): JsonResponse
     {
+        $data = $request->validated();
+
         $reviews = $character->mediaRatings()
             ->withoutTvRatings()
             ->with([
@@ -412,7 +414,7 @@ class CharacterController extends Controller
                 },
             ])
             ->where('description', '!=', null)
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $reviews->nextPageUrl() ?? '');

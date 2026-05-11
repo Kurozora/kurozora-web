@@ -17,6 +17,9 @@ use App\Http\Resources\LiteratureResourceIdentity;
 use App\Http\Resources\MediaRatingResource;
 use App\Http\Resources\StudioResource;
 use App\Http\Resources\StudioResourceIdentity;
+use App\Models\Anime;
+use App\Models\Game;
+use App\Models\Manga;
 use App\Models\MediaRating;
 use App\Models\Studio;
 use Illuminate\Auth\AuthenticationException;
@@ -174,7 +177,7 @@ class StudioController extends Controller
 
         // Get the anime
         $anime = $studio->predecessors()
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $anime->nextPageUrl() ?? '');
@@ -198,7 +201,7 @@ class StudioController extends Controller
 
         // Get the anime
         $anime = $studio->successor()
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $anime->nextPageUrl() ?? '');
@@ -223,7 +226,8 @@ class StudioController extends Controller
         // Get the anime
         $anime = $studio->anime()
             ->orderBy('started_at')
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->orderBy(Anime::TABLE_NAME . '.id')
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $anime->nextPageUrl() ?? '');
@@ -248,7 +252,8 @@ class StudioController extends Controller
         // Get the literatures
         $literatures = $studio->manga()
             ->orderBy('started_at')
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->orderBy(Manga::TABLE_NAME . '.id')
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $literatures->nextPageUrl() ?? '');
@@ -273,7 +278,8 @@ class StudioController extends Controller
         // Get the games
         $games = $studio->games()
             ->orderBy('published_at')
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->orderBy(Game::TABLE_NAME . '.id')
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $games->nextPageUrl() ?? '');
@@ -368,6 +374,8 @@ class StudioController extends Controller
      */
     public function reviews(GetPaginatedRequest $request, Studio $studio): JsonResponse
     {
+        $data = $request->validated();
+
         $reviews = $studio->mediaRatings()
             ->withoutTvRatings()
             ->with([
@@ -392,7 +400,7 @@ class StudioController extends Controller
                 },
             ])
             ->where('description', '!=', null)
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $reviews->nextPageUrl() ?? '');

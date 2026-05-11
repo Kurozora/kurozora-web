@@ -37,7 +37,8 @@ class GetLibraryRequest extends FormRequest
             'library' => ['bail', 'nullable', 'integer', 'in:' . implode(',', UserLibraryKind::getValues())],
             'status' => ['bail', 'required', new ValidateLibraryStatus],
             'limit' => ['bail', 'integer', 'min:1', 'max:100'],
-            'page' => ['bail', 'integer', 'min:1']
+            'page' => ['bail', 'integer', 'min:1'],
+            'offset' => ['bail', 'integer', 'min:0'],
         ], $this->sortingRules());
     }
 

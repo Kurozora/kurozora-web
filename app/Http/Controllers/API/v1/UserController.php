@@ -65,7 +65,8 @@ class UserController extends Controller
                 }]);
             })
             ->sortViaRequest($request)
-            ->paginate($data['limit'] ?? 25);
+            ->orderBy('id')
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $users->nextPageUrl() ?? '');

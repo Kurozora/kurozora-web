@@ -345,6 +345,8 @@ class EpisodeController extends Controller
      */
     public function reviews(GetPaginatedRequest $request, Episode $episode): JsonResponse
     {
+        $data = $request->validated();
+
         $reviews = $episode->mediaRatings()
             ->withoutTvRatings()
             ->with([
@@ -353,7 +355,7 @@ class EpisodeController extends Controller
                         ->withCount(['followers', 'followedModels as following_count', 'mediaRatings']);
                 }
             ])
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $reviews->nextPageUrl() ?? '');

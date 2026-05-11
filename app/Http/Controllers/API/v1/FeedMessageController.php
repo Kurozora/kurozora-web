@@ -144,7 +144,7 @@ class FeedMessageController extends Controller
             ->withCount(['replies', 'reShares'])
             ->when(auth()->user(), $this->authReShareState())
             ->orderByDesc('created_at')
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $feedMessageReplies->nextPageUrl() ?? '');
@@ -230,7 +230,7 @@ class FeedMessageController extends Controller
             default => $query->orderByDesc('created_at'),
         };
 
-        $paginator = $query->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+        $paginator = $query->cursorPaginate($data['limit'] ?? 25);
 
         $nextPageURL = str_replace($request->root(), '', $paginator->nextPageUrl() ?? '');
 
