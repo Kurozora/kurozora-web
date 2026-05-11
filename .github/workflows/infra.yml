@@ -1,0 +1,70 @@
+name: Infra (Kurozora Search EC2)
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        type: choice
+        description: OpenTofu action to run
+        required: true
+        options:
+          - plan
+          - apply
+        default: plan
+      confirm:
+        type: string
+        description: "Type 'apply' to confirm an apply run"
+        required: false
+
+permissions:
+  id-token: write
+  contents: read
+
+concurrency:
+  group: infra-search
+  cancel-in-progress: false
+
+jobs:
+  tofu:
+    name: ${{ inputs.action }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: infra
+    env:
+      TF_IN_AUTOMATION: 1
+      TF_VAR_aws_account_id:        ${{ secrets.TF_VAR_AWS_ACCOUNT_ID }}
+      TF_VAR_ssh_key_name:          ${{ secrets.TF_VAR_SSH_KEY_NAME }}
+      TF_VAR_domain_name:           ${{ secrets.TF_VAR_DOMAIN_NAME }}
+      TF_VAR_certbot_email:         ${{ secrets.TF_VAR_CERTBOT_EMAIL }}
+      TF_VAR_ecs_security_group_id: ${{ secrets.TF_VAR_ECS_SECURITY_GROUP_ID }}
+      TF_VAR_meilisearch_version:   ${{ secrets.TF_VAR_MEILISEARCH_VERSION }}
+
+    steps:
+      - name: Reject unconfirmed apply
+        if: inputs.action == 'apply' && inputs.confirm != 'apply'
+        run: |
+          echo "Confirm field must equal 'apply' to run an apply."
+          exit 1
+
+      - uses: actions/checkout@v4
+
+      - uses: opentofu/setup-opentofu@v1
+        with:
+          tofu_version: 1.8.5
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_ARN }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: tofu init
+        run: tofu init
+
+      - name: tofu plan
+        if: inputs.action == 'plan'
+        run: tofu plan -no-color
+
+      - name: tofu apply
+        if: inputs.action == 'apply'
+        run: tofu apply -auto-approve -no-color
