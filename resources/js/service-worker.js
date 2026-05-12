@@ -1,6 +1,6 @@
 import {matchPrecache, precacheAndRoute} from 'workbox-precaching'
 import {registerRoute, setCatchHandler} from 'workbox-routing'
-import {NetworkFirst, NetworkOnly} from 'workbox-strategies'
+import {NetworkFirst} from 'workbox-strategies'
 
 const CACHE_VERSION = 'v1'
 const CACHE_NAME = 'general-cache-' + CACHE_VERSION
@@ -8,8 +8,8 @@ const OFFLINE_URL = '/offline.html'
 
 precacheAndRoute(self.__WB_MANIFEST)
 
-// Don't cache these endpoints
-const noCacheEndpoints = [
+// Don't intercept these endpoints
+const exemptEndpoints = [
     '/forgot-password',
     '/merge-library',
     '/reset-password',
@@ -20,16 +20,11 @@ const noCacheEndpoints = [
     '/two-factor-authentication',
 ]
 
+// Network-first, fall back to runtime cache when the network is unavailable
 registerRoute(
     ({ url }) =>
         url.origin === self.location.origin
-        && noCacheEndpoints.some(path => url.pathname.includes(path)),
-    new NetworkOnly()
-)
-
-// Network-first, fall back to runtime cache when the network is unavailable
-registerRoute(
-    ({ url }) => url.origin === self.location.origin,
+        && !exemptEndpoints.some(path => url.pathname.includes(path)),
     new NetworkFirst({ cacheName: CACHE_NAME })
 )
 
