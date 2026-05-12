@@ -4,11 +4,12 @@ namespace App\Console\Commands\Calculators;
 
 use App\Models\Episode;
 use App\Models\MediaStat;
+use App\Models\UserWatchedEpisode;
 use DB;
 use Illuminate\Console\Command;
-use Illuminate\Support\Collection;
 use Laravel\Telescope\Telescope;
 use Pulse;
+use Throwable;
 
 class CalculateEpisodeStats extends Command
 {
@@ -40,40 +41,75 @@ class CalculateEpisodeStats extends Command
      * Execute the console command.
      *
      * @return int
+     * @throws Throwable
      */
     public function handle(): int
     {
         Pulse::stopRecording();
         Telescope::stopRecording();
 
-        $chunkSize = 2000;
+        $watchRowsPerBatch = 50_000;
+        $lastEpisodeId = 0;
+        $batchNumber = 0;
+        $totalEpisodes = 0;
+        $modelType = new Episode()->getMorphClass();
+        $mediaStatTable = MediaStat::TABLE_NAME;
+        $watchedTable = UserWatchedEpisode::TABLE_NAME;
 
-        $this->info('Calculating stats for: ' . Episode::class);
+        $this->info('Aggregating watch counts for: ' . Episode::class);
 
-        $base = Episode::withoutGlobalScopes()
-            ->whereHas('user_watched_episodes');
+        while (true) {
+            $upperEpisodeId = DB::table($watchedTable)
+                ->where('episode_id', '>', $lastEpisodeId)
+                ->orderBy('episode_id')
+                ->offset($watchRowsPerBatch - 1)
+                ->limit(1)
+                ->value('episode_id');
 
-        $totalCount = (clone $base)->count();
-        $bar = $this->output->createProgressBar($totalCount);
+            $isFinalBatch = $upperEpisodeId === null;
 
-        $base->withCount([
-                'user_watched_episodes as watch_count',
-            ])
-            ->chunkById($chunkSize, function (Collection $models) use ($bar) {
-                DB::transaction(function () use ($models, $bar) {
-                    $rows = $models->map(fn ($model) => [
-                        'model_type' => $model->getMorphClass(),
-                        'model_id' => $model->id,
-                        'model_count' => (int) $model->watch_count,
-                    ])->all();
+            $sql = sprintf(
+                'INSERT INTO `%s` (`model_type`, `model_id`, `model_count`, `created_at`, `updated_at`)
+                 SELECT ?, `episode_id`, COUNT(*), NOW(), NOW()
+                 FROM `%s`
+                 WHERE `episode_id` > ?%s
+                 GROUP BY `episode_id`
+                 ON DUPLICATE KEY UPDATE
+                     `model_count` = VALUES(`model_count`),
+                     `updated_at` = VALUES(`updated_at`)',
+                $mediaStatTable,
+                $watchedTable,
+                $isFinalBatch ? '' : ' AND `episode_id` <= ?'
+            );
 
-                    MediaStat::upsert($rows, ['model_type', 'model_id'], ['model_count']);
+            $bindings = $isFinalBatch
+                ? [$modelType, $lastEpisodeId]
+                : [$modelType, $lastEpisodeId, $upperEpisodeId];
 
-                    $bar->advance($models->count());
-                });
-            });
+            $affected = DB::transaction(fn () => DB::affectingStatement($sql, $bindings));
 
-        $bar->finish();
+            $batchNumber++;
+            $totalEpisodes += $affected;
+            $this->info(sprintf(
+                'Batch %d: episode_id %d → %s (%d rows affected)',
+                $batchNumber,
+                $lastEpisodeId,
+                $isFinalBatch ? 'end' : (string) $upperEpisodeId,
+                $affected
+            ));
+
+            if ($isFinalBatch) {
+                break;
+            }
+
+            $lastEpisodeId = $upperEpisodeId;
+        }
+
+        $this->info(sprintf(
+            'Done. %d episode rows affected across %d batches.',
+            $totalEpisodes,
+            $batchNumber
+        ));
 
         Pulse::startRecording();
         Telescope::startRecording();
