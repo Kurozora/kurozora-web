@@ -5,6 +5,7 @@ namespace App\Notifications;
 use App\Models\SessionAttribute;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Notification;
 
 class NewSession extends Notification implements ShouldQueue
@@ -31,18 +32,20 @@ class NewSession extends Notification implements ShouldQueue
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function via(mixed $notifiable): array
     {
-        return ['database'];
+        return ['database', 'broadcast'];
     }
 
     /**
      * Get the database representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function toDatabase(mixed $notifiable): array
@@ -51,5 +54,20 @@ class NewSession extends Notification implements ShouldQueue
             'sessionID' => (string) $this->sessionAttribute->id,
             'ipAddress' => $this->sessionAttribute->ip_address,
         ];
+    }
+
+    /**
+     * Get the broadcast representation of the notification.
+     *
+     * @param mixed $notifiable
+     *
+     * @return BroadcastMessage
+     */
+    public function toBroadcast(mixed $notifiable): BroadcastMessage
+    {
+        return new BroadcastMessage([
+            'sessionID' => (string) $this->sessionAttribute->id,
+            'ipAddress' => $this->sessionAttribute->ip_address,
+        ]);
     }
 }

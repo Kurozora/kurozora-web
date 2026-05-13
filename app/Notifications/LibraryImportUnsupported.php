@@ -8,6 +8,7 @@ use App\Enums\UserLibraryKind;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Notification;
 use NotificationChannels\Apn\ApnChannel;
 use NotificationChannels\Apn\ApnMessage;
@@ -47,10 +48,10 @@ class LibraryImportUnsupported extends Notification implements ShouldQueue
     /**
      * Create a new notification instance.
      *
-     * @param array $results
+     * @param array           $results
      * @param UserLibraryKind $libraryKind
-     * @param ImportService $service
-     * @param ImportBehavior $behavior
+     * @param ImportService   $service
+     * @param ImportBehavior  $behavior
      */
     public function __construct(array $results, UserLibraryKind $libraryKind, ImportService $service, ImportBehavior $behavior)
     {
@@ -63,35 +64,56 @@ class LibraryImportUnsupported extends Notification implements ShouldQueue
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function via(mixed $notifiable): array
     {
-        return ['database', ApnChannel::class];
+        return ['database', 'broadcast', ApnChannel::class];
     }
 
     /**
      * Get the database representation of the notification.
      *
-     * @param  mixed $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function toDatabase(mixed $notifiable): array
     {
         return [
-            'successful_count'  => count($this->results['successful']),
-            'failure_count'     => count($this->results['failure']),
-            'library'           => $this->libraryKind->description,
-            'behavior'          => $this->behavior->description,
-            'service'           => $this->service->description,
+            'successful_count' => count($this->results['successful']),
+            'failure_count' => count($this->results['failure']),
+            'library' => $this->libraryKind->description,
+            'behavior' => $this->behavior->description,
+            'service' => $this->service->description,
         ];
+    }
+
+    /**
+     * Get the broadcast representation of the notification.
+     *
+     * @param mixed $notifiable
+     *
+     * @return BroadcastMessage
+     */
+    public function toBroadcast(mixed $notifiable): BroadcastMessage
+    {
+        return new BroadcastMessage([
+            'successful_count' => count($this->results['successful']),
+            'failure_count' => count($this->results['failure']),
+            'library' => $this->libraryKind->description,
+            'behavior' => $this->behavior->description,
+            'service' => $this->service->description,
+        ]);
     }
 
     /**
      * Get the APN representation of the notification.
      *
      * @param User $notifiable
+     *
      * @return ApnMessage
      */
     public function toApn(User $notifiable): ApnMessage

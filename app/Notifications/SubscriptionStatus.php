@@ -6,6 +6,7 @@ use App\Models\StoreProduct;
 use App\Models\User;
 use App\Models\UserReceipt;
 use Illuminate\Bus\Queueable;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Notification;
 use NotificationChannels\Apn\ApnChannel;
 use NotificationChannels\Apn\ApnMessage;
@@ -45,9 +46,9 @@ class SubscriptionStatus extends Notification
     /**
      * Create a new notification instance.
      *
-     * @param string $notificationType
-     * @param string|null $subtype
-     * @param StoreProduct $product
+     * @param string           $notificationType
+     * @param string|null      $subtype
+     * @param StoreProduct     $product
      * @param UserReceipt|null $receipt
      */
     public function __construct(string $notificationType, ?string $subtype, StoreProduct $product, ?UserReceipt $receipt = null)
@@ -61,18 +62,20 @@ class SubscriptionStatus extends Notification
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function via(mixed $notifiable): array
     {
-        return ['database', ApnChannel::class];
+        return ['database', 'broadcast', ApnChannel::class];
     }
 
     /**
      * Get the database representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function toDatabase(mixed $notifiable): array
@@ -80,6 +83,20 @@ class SubscriptionStatus extends Notification
         return [
             'message' => $this->getDescription(),
         ];
+    }
+
+    /**
+     * Get the broadcast representation of the notification.
+     *
+     * @param mixed $notifiable
+     *
+     * @return BroadcastMessage
+     */
+    public function toBroadcast(mixed $notifiable): BroadcastMessage
+    {
+        return new BroadcastMessage([
+            'message' => $this->getDescription(),
+        ]);
     }
 
     public function toApn(User $notifiable): ApnMessage

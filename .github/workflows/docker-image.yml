@@ -79,6 +79,12 @@ jobs:
           push: true
           provenance: false
           sbom: false
+          build-args: |
+            VITE_REVERB_HOST=${{ vars.VITE_REVERB_HOST }}
+            VITE_REVERB_PORT=${{ vars.VITE_REVERB_PORT }}
+            VITE_REVERB_SCHEME=${{ vars.VITE_REVERB_SCHEME }}
+          secrets: |
+            vite_reverb_app_key=${{ secrets.VITE_REVERB_APP_KEY }}
           tags: |
             ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:${{ matrix.tag_prefix }}-${{ github.sha }}
             ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:${{ matrix.tag_prefix }}-latest

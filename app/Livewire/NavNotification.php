@@ -6,6 +6,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
+use Livewire\Attributes\Computed;
 use Livewire\Component;
 
 class NavNotification extends Component
@@ -18,47 +19,42 @@ class NavNotification extends Component
     public bool $isNotificationOpen = false;
 
     /**
-     * The latest notification id.
+     * Register the Echo notification listener for the authenticated user.
      *
-     * @var string|null
+     * @return array
      */
-    public ?string $latestNotificationId = null;
-
-    /**
-     * Whether there are new notifications.
-     *
-     * @var bool
-     */
-    public bool $newNotifications = false;
-
-    /**
-     * The component's listeners.
-     *
-     * @var array
-     */
-    protected $listeners = [
-        'is-notifications-open' => 'handleIsNotificationOpen',
-    ];
-
-    /**
-     * Prepare the component.
-     *
-     * @return void
-     */
-    public function mount(): void
-    {}
-
-    /**
-     * Handle the `is-notifications-open` event.
-     *
-     * @param bool $isOpen
-     *
-     * @return void
-     */
-    public function handleIsNotificationOpen(bool $isOpen): void
+    public function getListeners(): array
     {
-        $this->isNotificationOpen = $isOpen;
-        $this->newNotifications = false;
+        if (!auth()->check()) {
+            return [];
+        }
+
+        return [
+            'echo-notification:App.Models.User.' . auth()->id() => 'onNotificationReceived',
+        ];
+    }
+
+    /**
+     * Refresh notification state when a new push arrives.
+     *
+     * @return void
+     */
+    public function onNotificationReceived(): void
+    {
+        unset($this->notifications);
+        unset($this->hasUnreadNotifications);
+    }
+
+    /**
+     * Open the dropdown and mark unread notifications as read.
+     *
+     * @return void
+     */
+    public function openDropdown(): void
+    {
+        $this->isNotificationOpen = true;
+        auth()->user()?->unreadNotifications()->update(['read_at' => now()]);
+        unset($this->notifications, $this->hasUnreadNotifications);
     }
 
     /**
@@ -66,51 +62,32 @@ class NavNotification extends Component
      *
      * @return Collection
      */
-    public function getNotificationsProperty(): Collection
+    #[Computed]
+    public function notifications(): Collection
     {
         if (!auth()->check()) {
             return collect();
         }
 
-        $notifications = auth()->user()
+        return auth()->user()
             ->notifications()
             ->with(['notifier'])
             ->get();
-        $this->latestNotificationId = $notifications->last->id;
-        return $notifications;
     }
 
     /**
-     * Polls for new notifications.
+     * Returns whether the user has any unread notifications.
      *
-     * @return void
+     * @return bool
      */
-    public function pollForNewNotifications(): void
+    #[Computed]
+    public function hasUnreadNotifications(): bool
     {
-        $notifications = auth()->user()
-            ->notifications()
-            ->when($this->latestNotificationId, function ($query) {
-                return $query->where('id', '>', $this->latestNotificationId);
-            })
-            ->orderBy('id')
-            ->exists();
-
-        if ($notifications) {
-            $this->newNotifications = $notifications;
-            $this->setLatestNotificationId();
+        if (!auth()->check()) {
+            return false;
         }
-    }
 
-    /**
-     * Sets the latest notification id.
-     *
-     * @return void
-     */
-    function setLatestNotificationId(): void
-    {
-        $this->latestNotificationId = auth()->user()
-            ->notifications()
-            ->max('id');
+        return auth()->user()->unreadNotifications()->exists();
     }
 
     /**

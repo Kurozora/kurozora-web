@@ -7,6 +7,7 @@ use App\Models\FeedMessage;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Notification;
 use NotificationChannels\Apn\ApnChannel;
 use NotificationChannels\Apn\ApnMessage;
@@ -41,7 +42,7 @@ class NewFeedMessageReShare extends Notification implements ShouldQueue
      */
     public function via(mixed $notifiable): array
     {
-        return ['database', ApnChannel::class];
+        return ['database', 'broadcast', ApnChannel::class];
     }
 
     /**
@@ -72,6 +73,23 @@ class NewFeedMessageReShare extends Notification implements ShouldQueue
             'profileImageURL' => $this->feedMessage->user->getFirstMediaFullUrl(MediaCollection::Profile()),
             'feedMessageID' => (string) $this->feedMessage->id,
         ];
+    }
+
+    /**
+     * Get the broadcast representation of the notification.
+     *
+     * @param mixed $notifiable
+     *
+     * @return BroadcastMessage
+     */
+    public function toBroadcast(mixed $notifiable): BroadcastMessage
+    {
+        return new BroadcastMessage([
+            'userID' => (string) $this->feedMessage->user->id,
+            'username' => $this->feedMessage->user->username,
+            'profileImageURL' => $this->feedMessage->user->getFirstMediaFullUrl(MediaCollection::Profile()),
+            'feedMessageID' => (string) $this->feedMessage->id,
+        ]);
     }
 
     /**

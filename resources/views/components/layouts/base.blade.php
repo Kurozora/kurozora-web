@@ -119,7 +119,7 @@
         <div class="flex flex-col w-full">
             <livewire:navigation-sidebar :user="auth()->user()" />
 
-            <livewire:navigation-dropdown :user="auth()->user()" />
+            <livewire:navigation-dropdown :user="auth()->user()" wire:key="navigation-dropdown" />
 
             <div>
                 @if (!(auth()->user()?->hasVerifiedEmail() ?? true))

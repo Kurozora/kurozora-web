@@ -5,6 +5,7 @@ use App\Models\Comment;
 use App\Models\FeedMessage;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Notification;
 use NotificationChannels\Apn\ApnChannel;
 use NotificationChannels\Apn\ApnMessage;
@@ -39,13 +40,13 @@ class NewUserMention extends Notification
      */
     public function via(mixed $notifiable): array
     {
-        return ['database', ApnChannel::class];
+        return ['database', 'broadcast', ApnChannel::class];
     }
 
     /**
      * Suppresses delivery when block-related conditions apply.
      *
-     * @param mixed $notifiable
+     * @param mixed  $notifiable
      * @param string $channel
      *
      * @return bool
@@ -127,9 +128,35 @@ class NewUserMention extends Notification
     }
 
     /**
+     * Get the broadcast representation of the notification.
+     *
+     * @param mixed $notifiable
+     *
+     * @return BroadcastMessage
+     */
+    public function toBroadcast(mixed $notifiable): BroadcastMessage
+    {
+        $modelID = $this->model->getKey();
+
+        if ($this->model instanceof Comment) {
+            $link = route('comment', $modelID);
+        } else {
+            $link = route('api.feed.messages.details', $modelID);
+        }
+
+        return new BroadcastMessage([
+            'title' => $this->model->user->username . ' mentioned you',
+            'message' => $this->model->content,
+            'link' => $link,
+            'type' => 'mention',
+        ]);
+    }
+
+    /**
      * Get the APN representation of the notification.
      *
      * @param User $notifiable
+     *
      * @return ApnMessage
      */
     public function toApn(User $notifiable): ApnMessage

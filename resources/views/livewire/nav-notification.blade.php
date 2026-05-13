@@ -7,30 +7,15 @@
         <button
             class="relative inline-flex h-8 w-8 items-center justify-center text-secondary cursor-pointer transition duration-150 ease-in-out hover:text-primary focus:text-primary"
             x-show="! isSearchEnabled"
-            wire:click="$dispatch('is-notifications-open', { 'isOpen': true })"
+            wire:click="openDropdown"
             x-transition:enter="ease-out duration-150 delay-[350ms] transform"
             x-transition:enter-start="opacity-0 scale-75"
             x-transition:enter-end="opacity-100 scale-100"
             x-transition:leave="ease-in duration-200 transform"
             x-transition:leave-start="opacity-100 scale-100"
             x-transition:leave-end="opacity-0 scale-75"
-            @auth
-            x-data="{
-                onFocus() {
-                    $el.setAttribute('wire:poll.5s', 'pollForNewNotifications')
-                    console.log('Polling for new notifications every 5 seconds')
-                },
-                onBlur() {
-                    $el.removeAttribute('wire:poll.5s')
-                    console.log('Stopped polling for new notifications')
-                }
-            }"
-            x-on:focus.window="onFocus()"
-            x-on:blur.window="onBlur()"
-            x-init="onFocus()"
-            @endauth
         >
-            @if($newNotifications)
+            @if ($this->hasUnreadNotifications)
                 <span class="absolut bg-tint aspect-square rounded-full z-1" style="top: 0.45rem;right: 0.45rem;width: 0.40rem;"></span>
             @endif
             @svg('app_badge', 'fill-current', ['width' => '18'])

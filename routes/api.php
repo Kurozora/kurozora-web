@@ -21,6 +21,7 @@ Route::prefix('/v1')
             ->name('.test');
 
         require 'API/v1/Anime.php';
+        require 'API/v1/Broadcasting.php';
         require 'API/v1/Cast.php';
         require 'API/v1/Characters.php';
         require 'API/v1/Episodes.php';

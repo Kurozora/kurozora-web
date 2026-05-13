@@ -6,6 +6,7 @@ use App\Enums\MediaCollection;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Notification;
 use NotificationChannels\Apn\ApnChannel;
 use NotificationChannels\Apn\ApnMessage;
@@ -40,13 +41,13 @@ class NewFollower extends Notification implements ShouldQueue
      */
     public function via(mixed $notifiable): array
     {
-        return ['database', ApnChannel::class];
+        return ['database', 'broadcast', ApnChannel::class];
     }
 
     /**
      * Suppress delivery if the notifiable user has blocked the actor.
      *
-     * @param mixed $notifiable
+     * @param mixed  $notifiable
      * @param string $channel
      *
      * @return bool
@@ -70,6 +71,22 @@ class NewFollower extends Notification implements ShouldQueue
             'username' => $this->follower->username,
             'profileImageURL' => $this->follower->getFirstMediaFullUrl(MediaCollection::Profile())
         ];
+    }
+
+    /**
+     * Get the broadcast representation of the notification.
+     *
+     * @param mixed $notifiable
+     *
+     * @return BroadcastMessage
+     */
+    public function toBroadcast(mixed $notifiable): BroadcastMessage
+    {
+        return new BroadcastMessage([
+            'userID' => (string) $this->follower->id,
+            'username' => $this->follower->username,
+            'profileImageURL' => $this->follower->getFirstMediaFullUrl(MediaCollection::Profile()),
+        ]);
     }
 
     /**

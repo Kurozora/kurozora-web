@@ -2,6 +2,12 @@
 FROM node:22-alpine AS assets
 
 ARG WORKDIR=/var/www/html
+ARG VITE_REVERB_HOST
+ARG VITE_REVERB_PORT
+ARG VITE_REVERB_SCHEME
+ENV VITE_REVERB_HOST=$VITE_REVERB_HOST \
+    VITE_REVERB_PORT=$VITE_REVERB_PORT \
+    VITE_REVERB_SCHEME=$VITE_REVERB_SCHEME
 
 WORKDIR $WORKDIR
 
@@ -14,7 +20,8 @@ COPY resources ./resources
 COPY public ./public
 COPY vite.config.js postcss.config.cjs tailwind.config.cjs ./
 
-RUN npm run build
+RUN --mount=type=secret,id=vite_reverb_app_key,env=VITE_REVERB_APP_KEY \
+    npm run build
 
 ###
 

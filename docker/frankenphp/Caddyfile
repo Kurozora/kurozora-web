@@ -45,3 +45,19 @@
 		resolve_root_symlink
 	}
 }
+
+ws.{$DOMAIN_NAME:kurozora.app}:80 {
+	log {
+		format console
+	}
+
+	@http header_regexp X-Forwarded-Proto ^http$
+	redir @http https://{host}{uri} 301
+
+	reverse_proxy localhost:8080 {
+		header_up Host {host}
+		header_up X-Real-IP {remote}
+		header_up X-Forwarded-For {remote}
+		header_up X-Forwarded-Proto {scheme}
+	}
+}

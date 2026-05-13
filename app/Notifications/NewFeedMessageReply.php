@@ -7,6 +7,7 @@ use App\Models\FeedMessage;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Notification;
 use NotificationChannels\Apn\ApnChannel;
 use NotificationChannels\Apn\ApnMessage;
@@ -35,18 +36,19 @@ class NewFeedMessageReply extends Notification implements ShouldQueue
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function via(mixed $notifiable): array
     {
-        return ['database', ApnChannel::class];
+        return ['database', 'broadcast', ApnChannel::class];
     }
 
     /**
      * Suppress delivery if the notifiable user has blocked the message author.
      *
-     * @param mixed $notifiable
+     * @param mixed  $notifiable
      * @param string $channel
      *
      * @return bool
@@ -59,23 +61,42 @@ class NewFeedMessageReply extends Notification implements ShouldQueue
     /**
      * Get the database representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function toDatabase(mixed $notifiable): array
     {
         return [
-            'userID'            => (string) $this->feedMessage->user->id,
-            'username'          => $this->feedMessage->user->username,
-            'profileImageURL'   => $this->feedMessage->user->getFirstMediaFullUrl(MediaCollection::Profile()),
-            'feedMessageID'     => (string) $this->feedMessage->id,
+            'userID' => (string) $this->feedMessage->user->id,
+            'username' => $this->feedMessage->user->username,
+            'profileImageURL' => $this->feedMessage->user->getFirstMediaFullUrl(MediaCollection::Profile()),
+            'feedMessageID' => (string) $this->feedMessage->id,
         ];
+    }
+
+    /**
+     * Get the broadcast representation of the notification.
+     *
+     * @param mixed $notifiable
+     *
+     * @return BroadcastMessage
+     */
+    public function toBroadcast(mixed $notifiable): BroadcastMessage
+    {
+        return new BroadcastMessage([
+            'userID' => (string) $this->feedMessage->user->id,
+            'username' => $this->feedMessage->user->username,
+            'profileImageURL' => $this->feedMessage->user->getFirstMediaFullUrl(MediaCollection::Profile()),
+            'feedMessageID' => (string) $this->feedMessage->id,
+        ]);
     }
 
     /**
      * Get the APN representation of the notification.
      *
      * @param User $notifiable
+     *
      * @return ApnMessage
      */
     public function toApn(User $notifiable): ApnMessage
