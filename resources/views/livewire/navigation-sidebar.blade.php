@@ -217,7 +217,7 @@
                 <x-slot:trigger>
                     <button class="flex items-center w-full pl-4 pt-4 pr-4 pb-4">
                         @auth
-                            <div class="shrink-0">
+                            <div class="relative shrink-0">
                                 <x-picture>
                                     <img
                                         class="w-10 h-10 object-cover rounded-full lazyload"
@@ -229,6 +229,10 @@
 
                                     <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-full"></div>
                                 </x-picture>
+
+                                @if ($this->hasUnreadNotifications)
+                                    <span class="absolute bg-tint aspect-square rounded-full z-1" style="top: -0.1rem; right: -0.1rem; width: 0.40rem;"></span>
+                                @endif
                             </div>
 
                             <div class="ml-3">
@@ -257,6 +261,17 @@
                         <x-dropdown-link href="{{ route('me') }}" wire:navigate>
                             {{ __('Profile') }}
                         </x-dropdown-link>
+
+                        @auth
+                            <x-dropdown-link href="{{ route('notifications.index') }}" wire:navigate>
+                                <span class="flex items-center justify-between w-full">
+                                    {{ __('Notifications') }}
+                                    @if ($this->hasUnreadNotifications)
+                                        <span class="bg-tint aspect-square rounded-full" style="width: 0.40rem;"></span>
+                                    @endif
+                                </span>
+                            </x-dropdown-link>
+                        @endauth
 
                         {{-- More Pages --}}
                         <div class="block pl-2 pr-2 pt-4 pb-2 text-xs text-secondary font-semibold">

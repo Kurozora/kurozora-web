@@ -11,7 +11,7 @@
         @if ($this->blockedCount > 0)
             <div class="space-y-4">
                 @foreach ($this->blockedUsers as $blockedUser)
-                    <a class="flex items-center gap-3" href="{{ route('profile.details', $blockedUser) }}" wire:navigate>
+                    <a class="flex items-center gap-2" href="{{ route('profile.details', $blockedUser) }}" wire:navigate>
                         <picture
                             class="relative shrink-0 w-10 h-10 rounded-full overflow-hidden"
                             style="background-color: {{ $blockedUser->getFirstMedia(\App\Enums\MediaCollection::Profile)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"

@@ -68,6 +68,7 @@ require 'Web/LiveChart.php';
 require 'Web/Manga.php';
 require 'Web/Me.php';
 require 'Web/MyAnimeList.php';
+require 'Web/Notifications.php';
 require 'Web/Notify.php';
 require 'Web/People.php';
 require 'Web/Platforms.php';

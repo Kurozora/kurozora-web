@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Livewire\Attributes\Computed;
 use Livewire\Component;
 
 class NavigationSidebar extends Component
@@ -30,13 +31,47 @@ class NavigationSidebar extends Component
     }
 
     /**
-     * The component's listeners.
+     * Register listeners for the component.
      *
-     * @var array
+     * @return array
      */
-    protected $listeners = [
-        'refresh-navigation-dropdown' => '$refresh',
-    ];
+    public function getListeners(): array
+    {
+        $listeners = [
+            'refresh-navigation-dropdown' => '$refresh',
+        ];
+
+        if (auth()->check()) {
+            $listeners['echo-notification:App.Models.User.' . auth()->id()] = 'onNotificationReceived';
+        }
+
+        return $listeners;
+    }
+
+    /**
+     * Refresh notification state when a new push arrives.
+     *
+     * @return void
+     */
+    public function onNotificationReceived(): void
+    {
+        unset($this->hasUnreadNotifications);
+    }
+
+    /**
+     * Returns whether the user has any unread notifications.
+     *
+     * @return bool
+     */
+    #[Computed]
+    public function hasUnreadNotifications(): bool
+    {
+        if (!auth()->check()) {
+            return false;
+        }
+
+        return auth()->user()->unreadNotifications()->exists();
+    }
 
     /**
      * Render the component.

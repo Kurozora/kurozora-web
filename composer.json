@@ -161,7 +161,6 @@
             "php -r \"exec('php artisan nova:publish');\"",
             "@php artisan vendor:publish --tag=laravel-assets --ansi --force",
             "@php artisan vendor:publish --tag=livewire:assets --ansi --force",
-            "@php artisan livewire:discover --ansi",
             "@php artisan ide-helper:generate",
             "@php artisan ide-helper:models -N",
             "@php artisan ide-helper:meta"
