@@ -25,7 +25,7 @@
                     },
                     {
                         "/": "/characters/*",
-                        "comment": "Matches any URL whose path starts with /character/"
+                        "comment": "Matches any URL whose path starts with /characters/"
                     },
                     {
                         "/": "/songs/*",
@@ -42,6 +42,14 @@
                     {
                         "/": "/platforms/*",
                         "comment": "Matches any URL whose path starts with /platforms/"
+                    },
+                    {
+                        "/": "/episodes/*",
+                        "comment": "Matches any URL whose path starts with /episodes/"
+                    },
+                    {
+                        "/": "/seasons/*",
+                        "comment": "Matches any URL whose path starts with /seasons/"
                     }
                 ],
                 "defaults": {
