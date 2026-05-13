@@ -26,6 +26,11 @@ Route::prefix('.well-known')
     ->group(function () {
         Route::get('apple-app-site-association', [MiscController::class, 'appleAppSiteAssociation'])
             ->name('.apple-app-site-association');
+
+        Route::get('change-password', function () {
+            return redirect()->route('profile.settings');
+        })
+            ->name('.change-password');
     });
 
 Route::get('schedule', ScheduleIndex::class)
