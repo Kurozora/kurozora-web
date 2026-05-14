@@ -38,7 +38,9 @@ use Illuminate\Database\Eloquent\MassPrunable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -518,17 +520,8 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      */
     public function getActivityStatusAttribute(): UserActivityStatus
     {
-        // The token relation is eager loaded elsewhere with
-        // the following constraints: orderBy('last_used_at', 'desc'),
-        // limit(1), and select('last_used_at').
-        $personalAccessToken = $this->tokens->first();
-        $personalAccessTokenLastUsedAt = $personalAccessToken?->last_used_at;
-
-        // The session relation is eager loaded elsewhere with
-        // the following constraints: orderBy('last_activity', 'desc'),
-        // limit(1), and select('last_activity').
-        $session = $this->sessions->first();
-        $sessionLastActivity = Carbon::createFromTimestamp($session?->last_activity ?? 0);
+        $personalAccessTokenLastUsedAt = $this->latestToken?->last_used_at;
+        $sessionLastActivity = Carbon::createFromTimestamp($this->latestSession?->last_activity ?? 0);
 
         $activity = max($sessionLastActivity, $personalAccessTokenLastUsedAt);
 
@@ -551,6 +544,85 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     function sessions(): HasMany
     {
         return $this->hasMany(Session::class);
+    }
+
+    /**
+     * Returns the most recently used personal access token for the user.
+     *
+     * @return MorphOne
+     */
+    public function latestToken(): MorphOne
+    {
+        return $this->morphOne(PersonalAccessToken::class, 'tokenable')
+            ->ofMany('last_used_at', 'max');
+    }
+
+    /**
+     * Returns the most recently active session for the user.
+     *
+     * @return HasOne
+     */
+    public function latestSession(): HasOne
+    {
+        return $this->hasOne(Session::class)
+            ->ofMany('last_activity', 'max');
+    }
+
+    /**
+     * Eager-loads the standard profile relations onto a user query.
+     *
+     * @param Builder $query
+     * @param ?User   $authUser
+     *
+     * @return Builder
+     */
+    public function scopeWithProfileEagerLoad(Builder $query, ?User $authUser = null): Builder
+    {
+        $query->with([
+            'badges' => function ($query) {
+                $query->with(['media']);
+            },
+            'media',
+            'latestToken',
+            'latestSession',
+        ])
+            ->withCount(['followers', 'followedModels as following_count', 'mediaRatings']);
+
+        if ($authUser !== null) {
+            $query->withExists(['followers as isFollowed' => function ($query) use ($authUser) {
+                $query->where('user_id', '=', $authUser->id);
+            }]);
+        }
+
+        return $query;
+    }
+
+    /**
+     * Loads the standard profile relations onto a hydrated user model.
+     *
+     * @param ?User $authUser
+     *
+     * @return self
+     */
+    public function loadProfileEagerLoad(?User $authUser = null): self
+    {
+        $this->load([
+            'badges' => function ($query) {
+                $query->with(['media']);
+            },
+            'media',
+            'latestToken',
+            'latestSession',
+        ])
+            ->loadCount(['followers', 'followedModels as following_count', 'mediaRatings']);
+
+        if ($authUser !== null) {
+            $this->loadExists(['followers as isFollowed' => function ($query) use ($authUser) {
+                $query->where('user_id', '=', $authUser->id);
+            }]);
+        }
+
+        return $this;
     }
 
     /**

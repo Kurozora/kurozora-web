@@ -45,18 +45,7 @@ class ProfileImageView extends Component
         $this->onProfile = $onProfile;
 
         if ($onProfile) {
-            $this->user = $user->load([
-                'tokens' => function ($query) {
-                    $query
-                        ->orderBy('last_used_at', 'desc')
-                        ->limit(1);
-                },
-                'sessions' => function ($query) {
-                    $query
-                        ->orderBy('last_activity', 'desc')
-                        ->limit(1);
-                },
-            ]);
+            $this->user = $user->load(['latestToken', 'latestSession']);
         } else {
             $this->user = $user;
         }

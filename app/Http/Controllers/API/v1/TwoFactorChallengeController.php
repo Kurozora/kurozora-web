@@ -48,21 +48,7 @@ class TwoFactorChallengeController
         // the response shape is identical between the 2FA and non-2FA paths.
         $user = User::query()
             ->where('uuid', $challenge->user_id)
-            ->with([
-                'badges' => function ($query) {
-                    $query->with(['media']);
-                },
-                'media',
-                'tokens' => function ($query) {
-                    $query->orderBy('last_used_at', 'desc')
-                        ->limit(1);
-                },
-                'sessions' => function ($query) {
-                    $query->orderBy('last_activity', 'desc')
-                        ->limit(1);
-                },
-            ])
-            ->withCount(['followers', 'followedModels as following_count', 'mediaRatings'])
+            ->withProfileEagerLoad()
             ->first();
 
         if ($user === null) {

@@ -40,30 +40,11 @@ class UserController extends Controller
             return $this->views($request);
         }
 
+        $authUser = auth()->user();
+
         $users = User::query()
-            ->visibleTo(auth()->user())
-            ->with([
-                'badges' => function ($query) {
-                    $query->with(['media']);
-                },
-                'media',
-                'tokens' => function ($query) {
-                    $query
-                        ->orderBy('last_used_at', 'desc')
-                        ->limit(1);
-                },
-                'sessions' => function ($query) {
-                    $query
-                        ->orderBy('last_activity', 'desc')
-                        ->limit(1);
-                },
-            ])
-            ->withCount(['followers', 'followedModels as following_count', 'mediaRatings'])
-            ->when(auth()->user(), function ($query, $user) {
-                $query->withExists(['followers as isFollowed' => function ($query) {
-                    $query->where('user_id', '=', auth()->user()->id);
-                }]);
-            })
+            ->visibleTo($authUser)
+            ->withProfileEagerLoad($authUser)
             ->sortViaRequest($request)
             ->orderBy('id')
             ->cursorPaginate($data['limit'] ?? 25);
@@ -90,30 +71,7 @@ class UserController extends Controller
         // Call the ModelViewed event
         ModelViewed::dispatch($user, $request->ip());
 
-        $user->load([
-            'badges' => function ($query) {
-                $query->with(['media']);
-            },
-            'media',
-            'tokens' => function ($query) {
-                $query
-                    ->orderBy('last_used_at', 'desc')
-                    ->limit(1);
-            },
-            'sessions' => function ($query) {
-                $query
-                    ->orderBy('last_activity', 'desc')
-                    ->limit(1);
-            },
-        ])
-            ->loadCount(['followers', 'followedModels as following_count', 'mediaRatings'])
-            ->when(auth()->check(), function ($query) use ($user) {
-                $user->loadExists(['followers as isFollowed' => function ($query) {
-                    $query->where('user_id', '=', auth()->user()->id);
-                }]);
-            }, function () use ($user) {
-                return $user;
-            });
+        $user->loadProfileEagerLoad(auth()->user());
 
         // Show profile response
         return JSONResult::success([
@@ -131,30 +89,10 @@ class UserController extends Controller
     public function views(GetUserIndexRequest $request): JsonResponse
     {
         $data = $request->validated();
+        $authUser = auth()->user();
 
-        $users = User::whereIn('id', $data['ids'] ?? []);
-        $users->with([
-            'badges' => function ($query) {
-                $query->with(['media']);
-            },
-            'media',
-            'tokens' => function ($query) {
-                $query
-                    ->orderBy('last_used_at', 'desc')
-                    ->limit(1);
-            },
-            'sessions' => function ($query) {
-                $query
-                    ->orderBy('last_activity', 'desc')
-                    ->limit(1);
-            },
-        ])
-            ->withCount(['followers', 'followedModels as following_count', 'mediaRatings'])
-            ->when(auth()->user(), function ($query, $user) use ($users) {
-                $query->withExists(['followers as isFollowed' => function ($query) {
-                    $query->where('user_id', '=', auth()->user()->id);
-                }]);
-            });
+        $users = User::whereIn('id', $data['ids'] ?? [])
+            ->withProfileEagerLoad($authUser);
 
         // Show the character details response
         return JSONResult::success([
@@ -291,28 +229,7 @@ class UserController extends Controller
      */
     private function eagerLoadUser(BelongsTo $belongsTo)
     {
-        $belongsTo->with([
-            'badges' => function ($query) {
-                $query->with(['media']);
-            },
-            'media',
-            'tokens' => function ($query) {
-                $query
-                    ->orderBy('last_used_at', 'desc')
-                    ->limit(1);
-            },
-            'sessions' => function ($query) {
-                $query
-                    ->orderBy('last_activity', 'desc')
-                    ->limit(1);
-            },
-        ])
-            ->withCount(['followers', 'followedModels as following_count', 'mediaRatings'])
-            ->when(auth()->check(), function ($query) {
-                $query->withExists(['followers as isFollowed' => function ($query) {
-                    $query->where('user_id', '=', auth()->user()->id);
-                }]);
-            });
+        $belongsTo->withProfileEagerLoad(auth()->user());
     }
 
     /**

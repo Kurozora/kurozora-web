@@ -44,17 +44,13 @@ class MeController extends Controller
                     $query->with(['media']);
                 },
                 'media',
-                'sessions' => function ($query) {
-                    $query
-                        ->orderBy('last_activity', 'desc')
-                        ->limit(1);
-                },
+                'latestSession',
             ])
             ->loadCount(['followers', 'followedModels as following_count', 'mediaRatings'])
             // Since we already have the latest access token, we
             // simply set the relation here instead of loading
             // the same relation on the user again.
-            ->setRelation('tokens', collect([$personalAccessToken]));
+            ->setRelation('latestToken', $personalAccessToken);
 
         return JSONResult::success([
             'data' => [

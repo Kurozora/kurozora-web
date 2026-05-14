@@ -95,28 +95,7 @@ class FeedController extends Controller
      */
     private function eagerLoadUser(BelongsTo $belongsTo)
     {
-        $belongsTo->with([
-            'badges' => function ($query) {
-                $query->with(['media']);
-            },
-            'media',
-            'tokens' => function ($query) {
-                $query
-                    ->orderBy('last_used_at', 'desc')
-                    ->limit(1);
-            },
-            'sessions' => function ($query) {
-                $query
-                    ->orderBy('last_activity', 'desc')
-                    ->limit(1);
-            },
-        ])
-            ->withCount(['followers', 'followedModels as following_count', 'mediaRatings'])
-            ->when(auth()->check(), function ($query) {
-                $query->withExists(['followers as isFollowed' => function ($query) {
-                    $query->where('user_id', '=', auth()->user()->id);
-                }]);
-            });
+        $belongsTo->withProfileEagerLoad(auth()->user());
     }
 
     /**

@@ -83,21 +83,7 @@ class AccessTokenController
 
         // Find the user
         $user = User::where('email', $data['email'])
-            ->with([
-                'badges' => function ($query) {
-                    $query->with(['media']);
-                },
-                'media',
-                'tokens' => function ($query) {
-                    $query->orderBy('last_used_at', 'desc')
-                        ->limit(1);
-                },
-                'sessions' => function ($query) {
-                    $query->orderBy('last_activity', 'desc')
-                        ->limit(1);
-                },
-            ])
-            ->withCount(['followers', 'followedModels as following_count', 'mediaRatings'])
+            ->withProfileEagerLoad()
             ->first();
 
         // Compare the passwords

@@ -14,9 +14,9 @@ use App\Http\Requests\GetPaginatedRequest;
 use App\Http\Requests\RateModelRequest;
 use App\Http\Requests\SearchRequest;
 use App\Http\Resources\CharacterResourceIdentity;
+use App\Http\Resources\LiteratureCastResourceIdentity;
 use App\Http\Resources\LiteratureResource;
 use App\Http\Resources\LiteratureResourceIdentity;
-use App\Http\Resources\LiteratureCastResourceIdentity;
 use App\Http\Resources\MediaRatingResource;
 use App\Http\Resources\MediaRelatedResource;
 use App\Http\Resources\MediaStaffResource;
@@ -730,23 +730,7 @@ class MangaController extends Controller
             ->withoutTvRatings()
             ->with([
                 'user' => function ($query) {
-                    $query->with([
-                        'badges' => function ($query) {
-                            $query->with(['media']);
-                        },
-                        'media',
-                        'tokens' => function ($query) {
-                            $query
-                                ->orderBy('last_used_at', 'desc')
-                                ->limit(1);
-                        },
-                        'sessions' => function ($query) {
-                            $query
-                                ->orderBy('last_activity', 'desc')
-                                ->limit(1);
-                        },
-                    ])
-                        ->withCount(['followers', 'followedModels as following_count', 'mediaRatings']);
+                    $query->withProfileEagerLoad(auth()->user());
                 }
             ])
             ->where('description', '!=', null)
