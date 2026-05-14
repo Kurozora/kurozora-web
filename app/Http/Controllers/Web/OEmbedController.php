@@ -33,6 +33,9 @@ class OEmbedController extends Controller
             ->filter()
             ->values();
 
+        $identifier = (string) ($modelAttributes[1] ?? '');
+        $lookupColumn = ctype_digit($identifier) ? 'id' : 'public_id';
+
         $model = match ($modelAttributes[0] ?? '') {
             'episodes' => Episode::withoutGlobalScopes()
                 ->with([
@@ -43,10 +46,12 @@ class OEmbedController extends Controller
                     },
                     'translation'
                 ])
-                ->firstWhere('id', '=', $modelAttributes[1] ?? ''),
+                ->where($lookupColumn, '=', $identifier)
+                ->firstOrFail(),
             'songs' => Song::withoutGlobalScopes()
                 ->with(['translation'])
-                ->firstWhere('id', '=', $modelAttributes[1] ?? ''),
+                ->where($lookupColumn, '=', $identifier)
+                ->firstOrFail(),
             default => throw new ModelNotFoundException()
         };
 
