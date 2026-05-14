@@ -62,7 +62,7 @@ trait ParentalGuideEntryActions
     public function openReportForm(int $entryID): void
     {
         if (auth()->user() === null) {
-            $this->redirect(route('login'));
+            $this->redirect(route('sign-in'));
             return;
         }
 
@@ -83,7 +83,7 @@ trait ParentalGuideEntryActions
         $user = auth()->user();
 
         if ($user === null) {
-            $this->redirect(route('login'));
+            $this->redirect(route('sign-in'));
             return;
         }
 
@@ -128,7 +128,7 @@ trait ParentalGuideEntryActions
         $user = auth()->user();
 
         if ($user === null) {
-            $this->redirect(route('login'));
+            $this->redirect(route('sign-in'));
             return;
         }
 
@@ -196,7 +196,7 @@ trait ParentalGuideEntryActions
         $user = auth()->user();
 
         if ($user === null) {
-            $this->redirect(route('login'));
+            $this->redirect(route('sign-in'));
             return;
         }
 
