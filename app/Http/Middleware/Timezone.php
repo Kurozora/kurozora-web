@@ -18,9 +18,11 @@ class Timezone
      */
     public function handle(Request $request, Closure $next): mixed
     {
-        // Check header request and determine localization
-        if (auth()->check()) {
-            $timezone = auth()->user()->timezone;
+        $user = auth()->user();
+
+        // Check header request and determine timezone
+        if ($user !== null) {
+            $timezone = $user->timezone;
         } else if ($request->hasHeader('X-Timezone')) {
             $timezone = $request->header('X-Timezone');
         } else if (session()->has('timezone')) {
@@ -29,7 +31,7 @@ class Timezone
             $timezone = 'UTC';
         }
 
-        // Set the timezone on the request
+        // Set timezone on the request
         $request->attributes->set('formatTimezone', $timezone);
 
         // Continue request

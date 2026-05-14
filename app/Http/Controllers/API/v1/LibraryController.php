@@ -202,7 +202,7 @@ class LibraryController extends Controller
         );
 
         // Fetch upserted models
-        $userLibraries = auth()->user()->library()
+        $userLibraries = $user->library()
             ->where('trackable_type', '=', $modelType)
             ->whereIn('trackable_id', $models->pluck('id'))
             ->get();

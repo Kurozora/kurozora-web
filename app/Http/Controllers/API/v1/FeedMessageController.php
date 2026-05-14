@@ -27,6 +27,8 @@ class FeedMessageController extends Controller
      */
     function details(FeedMessage $feedMessage): JsonResponse
     {
+        $authUser = auth()->user();
+
         $feedMessage->load([
             'user' => fn($query) => $this->eagerLoadUser($query),
             'loveReactant' => function (BelongsTo $query) {
@@ -50,17 +52,17 @@ class FeedMessageController extends Controller
                     }
                 ])
                     ->withCount(['replies', 'reShares'])
-                    ->when(auth()->user(), $this->authReShareState());
+                    ->when($authUser, $this->authReShareState());
             }
         ])
             ->loadCount(['replies', 'reShares']);
 
-        if ($user = auth()->user()) {
-            $feedMessage->loadExists(['simpleReShares as isReShared' => function ($query) use ($user) {
-                $query->where('user_id', '=', $user->id);
+        if ($authUser !== null) {
+            $feedMessage->loadExists(['simpleReShares as isReShared' => function ($query) use ($authUser) {
+                $query->where('user_id', '=', $authUser->id);
             }])
-                ->loadMax(['simpleReShares as my_reshare_id' => function ($query) use ($user) {
-                    $query->where('user_id', '=', $user->id);
+                ->loadMax(['simpleReShares as my_reshare_id' => function ($query) use ($authUser) {
+                    $query->where('user_id', '=', $authUser->id);
                 }], 'id');
         }
 
@@ -112,6 +114,7 @@ class FeedMessageController extends Controller
     function replies(GetPaginatedRequest $request, FeedMessage $feedMessage): JsonResponse
     {
         $data = $request->validated();
+        $authUser = auth()->user();
 
         // Get the feed message replies
         $feedMessageReplies = $feedMessage->replies()
@@ -138,11 +141,10 @@ class FeedMessageController extends Controller
                         }
                     ])
                         ->withCount(['replies', 'reShares'])
-                        ->when(auth()->user(), $this->authReShareState());
+                        ->when($authUser, $this->authReShareState());
                 }
             ])
-            ->withCount(['replies', 'reShares'])
-            ->when(auth()->user(), $this->authReShareState())
+            ->when($authUser, $this->authReShareState())
             ->orderByDesc('created_at')
             ->cursorPaginate($data['limit'] ?? 25);
 
@@ -194,6 +196,7 @@ class FeedMessageController extends Controller
     {
         $data = $request->validated();
         $sort = $data['sort'] ?? 'recent';
+        $authUser = auth()->user();
 
         $query = ($simple ? $feedMessage->simpleReShares() : $feedMessage->quoteReShares())
             ->with([
@@ -219,11 +222,11 @@ class FeedMessageController extends Controller
                         }
                     ])
                         ->withCount(['replies', 'reShares'])
-                        ->when(auth()->user(), $this->authReShareState());
+                        ->when($authUser, $this->authReShareState());
                 }
             ])
             ->withCount(['replies', 'reShares'])
-            ->when(auth()->user(), $this->authReShareState());
+            ->when($authUser, $this->authReShareState());
 
         match ($sort) {
             'top' => $query->orderByDesc('ranking_score')->orderByDesc('created_at'),

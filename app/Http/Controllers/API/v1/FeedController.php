@@ -61,7 +61,7 @@ class FeedController extends Controller
                     }
                 ])
                     ->withCount(['replies', 'reShares'])
-                    ->when(auth()->user(), $this->authReShareState());
+                    ->when($user, $this->authReShareState());
             }
         ]);
 
@@ -142,11 +142,11 @@ class FeedController extends Controller
                         }
                     ])
                         ->withCount(['replies', 'reShares'])
-                        ->when(auth()->user(), $this->authReShareState());
+                        ->when($user, $this->authReShareState());
                 }
             ])
             ->withCount(['replies', 'reShares'])
-            ->when(auth()->user(), $this->authReShareState())
+            ->when($user, $this->authReShareState())
             ->whereIn('user_id', $userIDs)
             ->orderByDesc('created_at')
             ->cursorPaginate($data['limit'] ?? 25);
@@ -170,6 +170,7 @@ class FeedController extends Controller
     function explore(GetPaginatedRequest $request): JsonResponse
     {
         $data = $request->validated();
+        $user = auth()->user();
 
         // Get paginated global feed messages that are not a reply
         $feed = FeedMessage::noReplies()
@@ -196,11 +197,11 @@ class FeedController extends Controller
                         }
                     ])
                         ->withCount(['replies', 'reShares'])
-                        ->when(auth()->user(), $this->authReShareState());
+                        ->when($user, $this->authReShareState());
                 }
             ])
             ->withCount(['replies', 'reShares'])
-            ->when(auth()->user(), $this->authReShareState())
+            ->when($user, $this->authReShareState())
             ->orderByDesc('created_at')
             ->cursorPaginate($data['limit'] ?? 25);
 

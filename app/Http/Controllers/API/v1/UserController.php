@@ -132,6 +132,7 @@ class UserController extends Controller
     public function getFeedMessages(GetPaginatedRequest $request, User $user): JsonResponse
     {
         $data = $request->validated();
+        $authUser = auth()->user();
 
         // Get the feed messages
         $feedMessages = $user->feed_messages()
@@ -157,12 +158,11 @@ class UserController extends Controller
                             ]);
                         }
                     ])
-                        ->withCount(['replies', 'reShares'])
-                        ->when(auth()->user(), $this->authReShareState());
+                        ->when($authUser, $this->authReShareState());
                 }
             ])
             ->withCount(['replies', 'reShares'])
-            ->when(auth()->user(), $this->authReShareState())
+            ->when($authUser, $this->authReShareState())
             ->orderBy('is_pinned', 'desc')
             ->orderBy('created_at', 'desc')
             ->cursorPaginate($data['limit'] ?? 25);
@@ -262,14 +262,15 @@ class UserController extends Controller
     public function delete(DeleteUserRequest $request, DeletesUsers $deleter): JsonResponse
     {
         $data = $request->validated();
+        $authUser = auth()->user();
 
         // Validate the password
-        if (!Hash::check($data['password'], auth()->user()->password)) {
+        if (!Hash::check($data['password'], $authUser->password)) {
             throw new AuthorizationException(__('This password does not match our records.'));
         }
 
         // Delete the user and any relevant records
-        $deleter->delete(auth()->user()->fresh());
+        $deleter->delete($authUser->fresh());
 
         // Logout the user
         auth()->logout();

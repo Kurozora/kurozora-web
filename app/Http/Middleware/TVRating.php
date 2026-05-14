@@ -18,9 +18,11 @@ class TVRating
      */
     public function handle(Request $request, Closure $next): mixed
     {
-        // Check header request and determine localization
-        if (auth()->check()) {
-            $tvRating = auth()->user()->tv_rating;
+        $user = auth()->user();
+
+        // Check header request and determine TV rating
+        if ($user !== null) {
+            $tvRating = $user->tv_rating;
         } else if ($request->hasHeader('X-TV-Rating')) {
             $tvRating = $request->header('X-TV-Rating');
         } else if (session()->has('tv_rating')) {
