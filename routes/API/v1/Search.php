@@ -4,6 +4,7 @@ use App\Http\Controllers\API\v1\SearchController;
 
 Route::prefix('/search')
     ->name('.search')
+    ->middleware('throttle:api.search')
     ->group(function () {
         Route::get('/', [SearchController::class, 'index'])
             ->middleware('auth.kurozora:optional')

@@ -4,6 +4,7 @@ use App\Http\Controllers\API\v1\SongController;
 
 Route::prefix('/songs')
     ->name('.songs')
+    ->middleware('cache.headers:private;no_cache;etag')
     ->group(function () {
         Route::get('/', [SongController::class, 'index'])
             ->middleware('auth.kurozora:optional')

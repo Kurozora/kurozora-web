@@ -4,6 +4,7 @@ use App\Http\Controllers\API\v1\LanguageController;
 
 Route::prefix('/languages')
     ->name('.languages')
+    ->middleware('cache.headers:private;max_age=3600;etag')
     ->group(function () {
         Route::get('/', [LanguageController::class, 'index'])
             ->name('.index');

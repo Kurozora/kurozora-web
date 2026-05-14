@@ -51,7 +51,7 @@ Route::prefix('/users')
                     ->name('.block');
 
                 Route::get('/library', [LibraryController::class, 'index'])
-                    ->middleware('auth.kurozora:optional')
+                    ->middleware(['auth.kurozora:optional', 'throttle:api.library'])
                     ->name('.library');
 
                 Route::get('/favorites', [UserFavoriteController::class, 'index'])

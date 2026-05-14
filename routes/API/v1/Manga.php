@@ -5,6 +5,7 @@ use App\Http\Controllers\API\v1\ParentalGuideController;
 
 Route::prefix('/manga')
     ->name('.manga')
+    ->middleware('cache.headers:private;no_cache;etag')
     ->group(function () {
         Route::get('/', [MangaController::class, 'index'])
             ->middleware('auth.kurozora:optional')

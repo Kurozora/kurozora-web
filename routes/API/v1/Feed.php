@@ -4,6 +4,7 @@ use App\Http\Controllers\API\v1\FeedController;
 
 Route::prefix('/feed')
     ->name('.feed')
+    ->middleware('throttle:api.feed')
     ->group(function () {
         Route::post('/', [FeedController::class, 'post'])
             ->middleware('auth.kurozora');

@@ -5,6 +5,7 @@ use App\Http\Controllers\API\v1\ParentalGuideController;
 
 Route::prefix('/games')
     ->name('.games')
+    ->middleware('cache.headers:private;no_cache;etag')
     ->group(function () {
         Route::get('/', [GameController::class, 'index'])
             ->middleware('auth.kurozora:optional')

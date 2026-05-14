@@ -89,6 +89,18 @@ class AppServiceProvider extends ServiceProvider
             };
         });
 
+        RateLimiter::for('api.feed', function (Request $request) {
+            return Limit::perMinute(120)->by('feed:' . ($request->user()?->id ?: $request->ip()));
+        });
+
+        RateLimiter::for('api.search', function (Request $request) {
+            return Limit::perMinute(60)->by('search:' . ($request->user()?->id ?: $request->ip()));
+        });
+
+        RateLimiter::for('api.library', function (Request $request) {
+            return Limit::perMinute(120)->by('library:' . ($request->user()?->id ?: $request->ip()));
+        });
+
         // Register observers
         Anime::observe(AnimeObserver::class);
 

@@ -4,6 +4,7 @@ use App\Http\Controllers\API\v1\SeasonController;
 
 Route::prefix('/seasons')
     ->name('.seasons')
+    ->middleware('cache.headers:private;no_cache;etag')
     ->group(function () {
         Route::get('/', [SeasonController::class, 'views'])
             ->middleware('auth.kurozora:optional')

@@ -4,7 +4,7 @@ use App\Http\Controllers\API\v1\ExploreCategoryController;
 
 Route::prefix('/explore')
     ->name('.explore')
-    ->middleware('auth.kurozora:optional')
+    ->middleware(['auth.kurozora:optional', 'cache.headers:private;no_cache;etag'])
     ->group(function () {
         Route::get('/', [ExploreCategoryController::class, 'index'])
             ->name('.index');

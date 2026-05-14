@@ -4,6 +4,7 @@ use App\Http\Controllers\API\v1\CharacterController;
 
 Route::prefix('/characters')
     ->name('.characters')
+    ->middleware('cache.headers:private;no_cache;etag')
     ->group(function () {
         Route::get('/', [CharacterController::class, 'index'])
             ->middleware('auth.kurozora:optional')

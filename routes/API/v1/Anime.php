@@ -5,6 +5,7 @@ use App\Http\Controllers\API\v1\ParentalGuideController;
 
 Route::prefix('/anime')
     ->name('.anime')
+    ->middleware('cache.headers:private;no_cache;etag')
     ->group(function () {
         Route::get('/', [AnimeController::class, 'index'])
             ->middleware('auth.kurozora:optional')

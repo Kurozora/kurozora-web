@@ -12,9 +12,11 @@ Route::prefix('/v1')
         Route::get('/', ApiIndex::class);
 
         Route::get('/info', [APIController::class, 'info'])
+            ->middleware('cache.headers:private;max_age=3600;etag')
             ->name('.info');
 
         Route::get('/settings', [APIController::class, 'settings'])
+            ->middleware('cache.headers:private;max_age=3600;etag')
             ->name('.settings');
 
         Route::get('/test', [APIController::class, 'test'])

@@ -4,6 +4,7 @@ use App\Http\Controllers\API\v1\EpisodeController;
 
 Route::prefix('/episodes')
     ->name('.episodes')
+    ->middleware('cache.headers:private;no_cache;etag')
     ->group(function () {
         Route::get('/', [EpisodeController::class, 'views'])
             ->middleware('auth.kurozora:optional')
