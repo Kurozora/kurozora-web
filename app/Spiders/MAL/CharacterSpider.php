@@ -3,6 +3,7 @@
 namespace App\Spiders\MAL;
 
 use App\Processors\MAL\CharacterProcessor;
+use App\Spiders\MAL\Middleware\CircuitBreakerMiddleware;
 use App\Spiders\MAL\Models\CharacterItem;
 use Generator;
 use InvalidArgumentException;
@@ -23,6 +24,7 @@ class CharacterSpider extends BasicSpider
 
     public array $downloaderMiddleware = [
         RequestDeduplicationMiddleware::class,
+        CircuitBreakerMiddleware::class,
         [
             UserAgentMiddleware::class,
             ['userAgent' => 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'],
@@ -73,8 +75,14 @@ class CharacterSpider extends BasicSpider
 
         logger()->channel('stderr')->info('🕷 [MAL_ID:CHARACTER:' . $id . '] Parsing response');
 
-        $name = $response->filter('h2[class="normal_header"]')
-            ->innerText();
+        $nameNode = $response->filter('h2[class="normal_header"]');
+
+        if (!$nameNode->count()) {
+            logger()->error('Character: ' . $id . ';status:' . $response->getStatus() . ';missing-title-node');
+            return $this->item([]);
+        }
+
+        $name = $nameNode->innerText();
         $japaneseName = str($response
             ->filter('h2[class="normal_header"] > span > small')
             ->text())

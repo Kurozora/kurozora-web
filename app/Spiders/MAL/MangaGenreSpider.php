@@ -4,6 +4,7 @@ namespace App\Spiders\MAL;
 
 use App\Models\Manga;
 use App\Processors\MAL\MangaGenreProcessor;
+use App\Spiders\MAL\Middleware\CircuitBreakerMiddleware;
 use Generator;
 use RoachPHP\Downloader\DownloaderMiddlewareInterface;
 use RoachPHP\Downloader\Middleware\RequestDeduplicationMiddleware;
@@ -39,6 +40,7 @@ class MangaGenreSpider extends BasicSpider
      */
     public array $downloaderMiddleware = [
         RequestDeduplicationMiddleware::class,
+        CircuitBreakerMiddleware::class,
         [
             UserAgentMiddleware::class,
             ['userAgent' => 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'],
@@ -97,6 +99,11 @@ class MangaGenreSpider extends BasicSpider
      */
     public function parse(Response $response): Generator
     {
+        if ($response->getStatus() >= 400) {
+            logger()->error('Manga Genre;status:' . $response->getStatus());
+            return $this->item([]);
+        }
+
         $ids = $response->filter('.link-title')
             ->each(function (Crawler $item) {
                 $regex = '/\/manga\/(\d+)\//';

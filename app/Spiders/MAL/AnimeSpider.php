@@ -4,6 +4,7 @@ namespace App\Spiders\MAL;
 
 use App\Processors\MAL\AnimeProcessor;
 use App\Processors\MAL\AnimeStatsProcessor;
+use App\Spiders\MAL\Middleware\CircuitBreakerMiddleware;
 use App\Spiders\MAL\Models\AnimeItem;
 use App\Spiders\MAL\Models\AnimeStatItem;
 use Arr;
@@ -42,6 +43,7 @@ class AnimeSpider extends BasicSpider
      */
     public array $downloaderMiddleware = [
         RequestDeduplicationMiddleware::class,
+        CircuitBreakerMiddleware::class,
         [
             UserAgentMiddleware::class,
             ['userAgent' => 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'],
@@ -109,8 +111,14 @@ class AnimeSpider extends BasicSpider
         }
 
         logger()->channel('stderr')->info('🕷 [MAL_ID:ANIME:' . $id . '] Parsing response');
-        $originalTitle = $response->filter('h1.title-name')
-            ->text();
+        $nameNode = $response->filter('h1.title-name');
+
+        if (!$nameNode->count()) {
+            logger()->error('Anime: ' . $id . ';status:' . $response->getStatus() . ';missing-title-node');
+            return $this->item([]);
+        }
+
+        $originalTitle = $nameNode->text();
         $attributes = $response->filter('div.leftside')
             ->filter('.spaceit_pad')
             ->each(function ($item) {

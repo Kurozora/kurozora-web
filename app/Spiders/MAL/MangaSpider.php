@@ -4,6 +4,7 @@ namespace App\Spiders\MAL;
 
 use App\Processors\MAL\MangaProcessor;
 use App\Processors\MAL\MangaStatsProcessor;
+use App\Spiders\MAL\Middleware\CircuitBreakerMiddleware;
 use App\Spiders\MAL\Models\MangaItem;
 use App\Spiders\MAL\Models\MangaStatItem;
 use Arr;
@@ -42,6 +43,7 @@ class MangaSpider extends BasicSpider
      */
     public array $downloaderMiddleware = [
         RequestDeduplicationMiddleware::class,
+        CircuitBreakerMiddleware::class,
         [
             UserAgentMiddleware::class,
             ['userAgent' => 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'],
@@ -109,8 +111,14 @@ class MangaSpider extends BasicSpider
         }
 
         logger()->channel('stderr')->info('🕷 [MAL_ID:MANGA:' . $id . '] Parsing response');
-        $originalTitle = $response->filter('[itemprop="name"]')
-            ->innerText();
+        $nameNode = $response->filter('[itemprop="name"]');
+
+        if (!$nameNode->count()) {
+            logger()->error('Manga: ' . $id . ';status:' . $response->getStatus() . ';missing-title-node');
+            return $this->item([]);
+        }
+
+        $originalTitle = $nameNode->innerText();
         $attributes = $response->filter('div.leftside')
             ->filter('.spaceit_pad')
             ->each(function ($item) {

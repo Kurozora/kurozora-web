@@ -3,6 +3,7 @@
 namespace App\Spiders\MAL;
 
 use App\Processors\MAL\ProducerProcessor;
+use App\Spiders\MAL\Middleware\CircuitBreakerMiddleware;
 use App\Spiders\MAL\Models\ProducerItem;
 use Exception;
 use Generator;
@@ -39,6 +40,7 @@ class ProducerSpider extends BasicSpider
      */
     public array $downloaderMiddleware = [
         RequestDeduplicationMiddleware::class,
+        CircuitBreakerMiddleware::class,
         [
             UserAgentMiddleware::class,
             ['userAgent' => 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'],
@@ -106,8 +108,14 @@ class ProducerSpider extends BasicSpider
         }
 
         logger()->channel('stderr')->info('🕷 [MAL_ID:PRODUCER:' . $id . '] Parsing response');
-        $name = $response->filter('h1.title-name')
-            ->text();
+        $nameNode = $response->filter('h1.title-name');
+
+        if (!$nameNode->count()) {
+            logger()->error('Producer: ' . $id . ';status:' . $response->getStatus() . ';missing-title-node');
+            return $this->item([]);
+        }
+
+        $name = $nameNode->text();
 
         $imageURL = $this->cleanImageURL($response, '.logo img[data-src*=\'company_logos\']');
 
