@@ -180,6 +180,10 @@
         "octane:share": [
             "Composer\\Config::disableProcessTimeout",
             "ngrok http --url=$(grep -E '^NGROK_DOMAIN=' .env | head -1 | cut -d= -f2-) --host-header=kurozora.test 8000"
+        ],
+        "docker:build": [
+            "Composer\\Config::disableProcessTimeout",
+            "docker/build-image.sh"
         ]
     },
     "extra": {
