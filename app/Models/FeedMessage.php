@@ -147,14 +147,7 @@ class FeedMessage extends KModel implements ReactableContract
      */
     static function lockupEagerLoads(?User $authUser): array
     {
-        $loveReactantLoader = function (BelongsTo $query) {
-            $query->with([
-                'reactionCounters',
-                'reactions' => function (HasMany $hasMany) {
-                    $hasMany->with(['reacter', 'type']);
-                },
-            ]);
-        };
+        $loveReactantLoader = static::loveReactantLoader($authUser);
 
         $userLoader = function (BelongsTo $belongsTo) {
             $belongsTo->with(['media']);
@@ -169,8 +162,7 @@ class FeedMessage extends KModel implements ReactableContract
                     'user' => $userLoader,
                     'loveReactant' => $loveReactantLoader,
                     'linkPreview',
-                ])
-                    ->withCount(['replies', 'reShares']);
+                ]);
 
                 if ($authUser !== null) {
                     $query->withExists(['simpleReShares as isReShared' => function ($query) use ($authUser) {
@@ -179,6 +171,33 @@ class FeedMessage extends KModel implements ReactableContract
                 }
             },
         ];
+    }
+
+    /**
+     * Returns the closure that eager-loads the love reactant with counters,
+     * and only the auth user's reactions when present.
+     *
+     * @param ?User $authUser
+     *
+     * @return callable
+     */
+    public static function loveReactantLoader(?User $authUser): callable
+    {
+        $reacterId = $authUser?->love_reacter_id;
+
+        return function (BelongsTo $query) use ($reacterId) {
+            $relations = ['reactionCounters'];
+
+            if ($reacterId !== null) {
+                $relations['reactions'] = function (HasMany $hasMany) use ($reacterId) {
+                    $hasMany
+                        ->where('reacter_id', '=', $reacterId)
+                        ->with(['reacter', 'type']);
+                };
+            }
+
+            $query->with($relations);
+        };
     }
 
     /**

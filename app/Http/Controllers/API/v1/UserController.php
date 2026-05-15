@@ -14,10 +14,10 @@ use App\Http\Resources\FeedMessageResource;
 use App\Http\Resources\MediaRatingResource;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\UserResourceIdentity;
+use App\Models\FeedMessage;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -42,8 +42,7 @@ class UserController extends Controller
 
         $authUser = auth()->user();
 
-        $users = User::query()
-            ->visibleTo($authUser)
+        $users = User::visibleTo($authUser)
             ->withProfileEagerLoad($authUser)
             ->sortViaRequest($request)
             ->orderBy('id')
@@ -133,35 +132,21 @@ class UserController extends Controller
     {
         $data = $request->validated();
         $authUser = auth()->user();
+        $loveReactantLoader = FeedMessage::loveReactantLoader($authUser);
 
         // Get the feed messages
         $feedMessages = $user->feed_messages()
             ->with([
                 'user' => fn($query) => $this->eagerLoadUser($query),
-                'loveReactant' => function (BelongsTo $query) {
-                    $query->with([
-                        'reactionCounters',
-                        'reactions' => function (HasMany $hasMany) {
-                            $hasMany->with(['reacter', 'type']);
-                        }
-                    ]);
-                },
-                'parentMessage' => function ($query) {
+                'loveReactant' => $loveReactantLoader,
+                'parentMessage' => function ($query) use ($loveReactantLoader, $authUser) {
                     $query->with([
                         'user' => fn($query) => $this->eagerLoadUser($query),
-                        'loveReactant' => function (BelongsTo $query) {
-                            $query->with([
-                                'reactionCounters',
-                                'reactions' => function (HasMany $hasMany) {
-                                    $hasMany->with(['reacter', 'type']);
-                                }
-                            ]);
-                        }
+                        'loveReactant' => $loveReactantLoader,
                     ])
                         ->when($authUser, $this->authReShareState());
                 }
             ])
-            ->withCount(['replies', 'reShares'])
             ->when($authUser, $this->authReShareState())
             ->orderBy('is_pinned', 'desc')
             ->orderBy('created_at', 'desc')

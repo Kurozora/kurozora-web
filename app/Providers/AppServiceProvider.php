@@ -3,9 +3,11 @@
 namespace App\Providers;
 
 use App\Models\Anime;
+use App\Models\FeedMessage;
 use App\Models\PersonalAccessToken;
 use App\Models\User;
 use App\Observers\AnimeObserver;
+use App\Observers\FeedMessageObserver;
 use App\Policies\NotificationPolicy;
 use App\Providers\SocialiteProviders\AppleProvider;
 use App\Services\AppStoreService;
@@ -103,6 +105,7 @@ class AppServiceProvider extends ServiceProvider
 
         // Register observers
         Anime::observe(AnimeObserver::class);
+        FeedMessage::observe(FeedMessageObserver::class);
 
         // Register events
         Event::listen(SocialiteWasCalled::class, function (SocialiteWasCalled $event): void {

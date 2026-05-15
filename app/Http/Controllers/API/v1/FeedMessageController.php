@@ -12,7 +12,6 @@ use App\Http\Resources\FeedMessageResource;
 use App\Models\FeedMessage;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\JsonResponse;
 use Throwable;
 
@@ -28,34 +27,19 @@ class FeedMessageController extends Controller
     function details(FeedMessage $feedMessage): JsonResponse
     {
         $authUser = auth()->user();
+        $loveReactantLoader = FeedMessage::loveReactantLoader($authUser);
 
         $feedMessage->load([
             'user' => fn($query) => $this->eagerLoadUser($query),
-            'loveReactant' => function (BelongsTo $query) {
-                $query->with([
-                    'reactionCounters',
-                    'reactions' => function (HasMany $hasMany) {
-                        $hasMany->with(['reacter', 'type']);
-                    }
-                ]);
-            },
-            'parentMessage' => function ($query) {
+            'loveReactant' => $loveReactantLoader,
+            'parentMessage' => function ($query) use ($loveReactantLoader, $authUser) {
                 $query->with([
                     'user' => fn($query) => $this->eagerLoadUser($query),
-                    'loveReactant' => function (BelongsTo $query) {
-                        $query->with([
-                            'reactionCounters',
-                            'reactions' => function (HasMany $hasMany) {
-                                $hasMany->with(['reacter', 'type']);
-                            }
-                        ]);
-                    }
+                    'loveReactant' => $loveReactantLoader,
                 ])
-                    ->withCount(['replies', 'reShares'])
                     ->when($authUser, $this->authReShareState());
             }
-        ])
-            ->loadCount(['replies', 'reShares']);
+        ]);
 
         if ($authUser !== null) {
             $feedMessage->loadExists(['simpleReShares as isReShared' => function ($query) use ($authUser) {
@@ -115,32 +99,18 @@ class FeedMessageController extends Controller
     {
         $data = $request->validated();
         $authUser = auth()->user();
+        $loveReactantLoader = FeedMessage::loveReactantLoader($authUser);
 
         // Get the feed message replies
         $feedMessageReplies = $feedMessage->replies()
             ->with([
                 'user' => fn($query) => $this->eagerLoadUser($query),
-                'loveReactant' => function (BelongsTo $query) {
-                    $query->with([
-                        'reactionCounters',
-                        'reactions' => function (HasMany $hasMany) {
-                            $hasMany->with(['reacter', 'type']);
-                        }
-                    ]);
-                },
-                'parentMessage' => function ($query) {
+                'loveReactant' => $loveReactantLoader,
+                'parentMessage' => function ($query) use ($loveReactantLoader, $authUser) {
                     $query->with([
                         'user' => fn($query) => $this->eagerLoadUser($query),
-                        'loveReactant' => function (BelongsTo $query) {
-                            $query->with([
-                                'reactionCounters',
-                                'reactions' => function (HasMany $hasMany) {
-                                    $hasMany->with(['reacter', 'type']);
-                                }
-                            ]);
-                        }
+                        'loveReactant' => $loveReactantLoader,
                     ])
-                        ->withCount(['replies', 'reShares'])
                         ->when($authUser, $this->authReShareState());
                 }
             ])
@@ -197,35 +167,20 @@ class FeedMessageController extends Controller
         $data = $request->validated();
         $sort = $data['sort'] ?? 'recent';
         $authUser = auth()->user();
+        $loveReactantLoader = FeedMessage::loveReactantLoader($authUser);
 
         $query = ($simple ? $feedMessage->simpleReShares() : $feedMessage->quoteReShares())
             ->with([
                 'user' => fn($query) => $this->eagerLoadUser($query),
-                'loveReactant' => function (BelongsTo $query) {
-                    $query->with([
-                        'reactionCounters',
-                        'reactions' => function (HasMany $hasMany) {
-                            $hasMany->with(['reacter', 'type']);
-                        }
-                    ]);
-                },
-                'parentMessage' => function ($query) {
+                'loveReactant' => $loveReactantLoader,
+                'parentMessage' => function ($query) use ($loveReactantLoader, $authUser) {
                     $query->with([
                         'user' => fn($query) => $this->eagerLoadUser($query),
-                        'loveReactant' => function (BelongsTo $query) {
-                            $query->with([
-                                'reactionCounters',
-                                'reactions' => function (HasMany $hasMany) {
-                                    $hasMany->with(['reacter', 'type']);
-                                }
-                            ]);
-                        }
+                        'loveReactant' => $loveReactantLoader,
                     ])
-                        ->withCount(['replies', 'reShares'])
                         ->when($authUser, $this->authReShareState());
                 }
             ])
-            ->withCount(['replies', 'reShares'])
             ->when($authUser, $this->authReShareState());
 
         match ($sort) {

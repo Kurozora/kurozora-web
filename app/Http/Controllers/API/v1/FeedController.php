@@ -11,7 +11,6 @@ use App\Models\FeedMessage;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\JsonResponse;
 
 class FeedController extends Controller
@@ -28,6 +27,7 @@ class FeedController extends Controller
     {
         $data = $request->validated();
         $user = auth()->user();
+        $loveReactantLoader = FeedMessage::loveReactantLoader($user);
 
         $feedMessage = FeedMessage::createFor($user, [
             'parent_id' => $data['parent_id'] ?? null,
@@ -40,27 +40,12 @@ class FeedController extends Controller
 
         $feedMessage->load([
             'user' => fn($query) => $this->eagerLoadUser($query),
-            'loveReactant' => function (BelongsTo $query) {
-                $query->with([
-                    'reactionCounters',
-                    'reactions' => function (HasMany $hasMany) {
-                        $hasMany->with(['reacter', 'type']);
-                    }
-                ]);
-            },
-            'parentMessage' => function ($query) {
+            'loveReactant' => $loveReactantLoader,
+            'parentMessage' => function ($query) use ($loveReactantLoader, $user) {
                 $query->with([
                     'user' => fn($query) => $this->eagerLoadUser($query),
-                    'loveReactant' => function (BelongsTo $query) {
-                        $query->with([
-                            'reactionCounters',
-                            'reactions' => function (HasMany $hasMany) {
-                                $hasMany->with(['reacter', 'type']);
-                            }
-                        ]);
-                    }
+                    'loveReactant' => $loveReactantLoader,
                 ])
-                    ->withCount(['replies', 'reShares'])
                     ->when($user, $this->authReShareState());
             }
         ]);
@@ -111,6 +96,7 @@ class FeedController extends Controller
 
         // Get the auth user
         $user = auth()->user();
+        $loveReactantLoader = FeedMessage::loveReactantLoader($user);
 
         // Get the user IDs of all the users that should appear on the user's personal feed.
         $userIDs = $user->followedModels()
@@ -121,31 +107,15 @@ class FeedController extends Controller
         $feed = FeedMessage::noReplies()
             ->with([
                 'user' => fn($query) => $this->eagerLoadUser($query),
-                'loveReactant' => function (BelongsTo $query) {
-                    $query->with([
-                        'reactionCounters',
-                        'reactions' => function (HasMany $hasMany) {
-                            $hasMany->with(['reacter', 'type']);
-                        }
-                    ]);
-                },
-                'parentMessage' => function ($query) {
+                'loveReactant' => $loveReactantLoader,
+                'parentMessage' => function ($query) use ($loveReactantLoader, $user) {
                     $query->with([
                         'user' => fn($query) => $this->eagerLoadUser($query),
-                        'loveReactant' => function (BelongsTo $query) {
-                            $query->with([
-                                'reactionCounters',
-                                'reactions' => function (HasMany $hasMany) {
-                                    $hasMany->with(['reacter', 'type']);
-                                }
-                            ]);
-                        }
+                        'loveReactant' => $loveReactantLoader,
                     ])
-                        ->withCount(['replies', 'reShares'])
                         ->when($user, $this->authReShareState());
                 }
             ])
-            ->withCount(['replies', 'reShares'])
             ->when($user, $this->authReShareState())
             ->whereIn('user_id', $userIDs)
             ->orderByDesc('created_at')
@@ -171,36 +141,21 @@ class FeedController extends Controller
     {
         $data = $request->validated();
         $user = auth()->user();
+        $loveReactantLoader = FeedMessage::loveReactantLoader($user);
 
         // Get paginated global feed messages that are not a reply
         $feed = FeedMessage::noReplies()
             ->with([
                 'user' => fn($query) => $this->eagerLoadUser($query),
-                'loveReactant' => function (BelongsTo $query) {
-                    $query->with([
-                        'reactionCounters',
-                        'reactions' => function (HasMany $hasMany) {
-                            $hasMany->with(['reacter', 'type']);
-                        }
-                    ]);
-                },
-                'parentMessage' => function ($query) {
+                'loveReactant' => $loveReactantLoader,
+                'parentMessage' => function ($query) use ($loveReactantLoader, $user) {
                     $query->with([
                         'user' => fn($query) => $this->eagerLoadUser($query),
-                        'loveReactant' => function (BelongsTo $query) {
-                            $query->with([
-                                'reactionCounters',
-                                'reactions' => function (HasMany $hasMany) {
-                                    $hasMany->with(['reacter', 'type']);
-                                }
-                            ]);
-                        }
+                        'loveReactant' => $loveReactantLoader,
                     ])
-                        ->withCount(['replies', 'reShares'])
                         ->when($user, $this->authReShareState());
                 }
             ])
-            ->withCount(['replies', 'reShares'])
             ->when($user, $this->authReShareState())
             ->orderByDesc('created_at')
             ->cursorPaginate($data['limit'] ?? 25);
