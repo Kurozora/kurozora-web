@@ -825,8 +825,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      */
     function watched_episodes(?string $modelId = null): Builder
     {
-        return Episode::query()
-            ->select(Episode::TABLE_NAME . '.*')
+        return Episode::select(Episode::TABLE_NAME . '.*')
             ->join(UserWatchedEpisode::TABLE_NAME, function ($join) {
                 $join->on(UserWatchedEpisode::TABLE_NAME . '.episode_id', '=', Episode::TABLE_NAME . '.id')
                     ->where(UserWatchedEpisode::TABLE_NAME . '.user_id', $this->id);

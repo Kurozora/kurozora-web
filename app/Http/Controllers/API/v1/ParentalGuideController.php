@@ -109,8 +109,7 @@ class ParentalGuideController extends Controller
     {
         $authUser = auth()->user();
 
-        $entries = ParentalGuideEntry::query()
-            ->visible()
+        $entries = ParentalGuideEntry::visible()
             ->withReason()
             ->where('model_type', '=', $model->getMorphClass())
             ->where('model_id', '=', $model->id)

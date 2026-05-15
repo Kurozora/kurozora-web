@@ -43,8 +43,7 @@ class Reputation extends Component
             return collect();
         }
 
-        return User::query()
-            ->with(['media'])
+        return User::with(['media'])
             ->withCount(['followers'])
             ->when(auth()->user(), function ($query, $user) {
                 $query->withExists(['followers as isFollowed' => function ($query) use ($user) {

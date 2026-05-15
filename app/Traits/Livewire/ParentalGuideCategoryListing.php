@@ -91,8 +91,7 @@ trait ParentalGuideCategoryListing
         $authUser = auth()->user();
         $model = $this->listingTargetModel();
 
-        return ParentalGuideEntry::query()
-            ->visible()
+        return ParentalGuideEntry::visible()
             ->withReason()
             ->where('model_type', '=', $model->getMorphClass())
             ->where('model_id', '=', $model->getKey())

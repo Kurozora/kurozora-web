@@ -439,8 +439,7 @@ class SearchController extends Controller
         $page = max(1, (int) $request->input('page', 1));
         $tvRating = $request->tvRating();
 
-        $libraryIds = UserLibrary::query()
-            ->where('user_id', auth()->id())
+        $libraryIds = UserLibrary::where('user_id', auth()->id())
             ->where('trackable_type', $modelClass)
             ->pluck('trackable_id')
             ->all();
@@ -472,8 +471,7 @@ class SearchController extends Controller
 
         $items = collect();
         if (!empty($pageIds)) {
-            $models = $modelClass::query()
-                ->withoutGlobalScopes([IgnoreListScope::class])
+            $models = $modelClass::withoutGlobalScopes([IgnoreListScope::class])
                 ->whereIn('id', $pageIds)
                 ->get()
                 ->keyBy('id');
@@ -512,8 +510,7 @@ class SearchController extends Controller
     /** Returns suggestion titles for the user's library. */
     protected function libraryScopedSuggestions(string $modelClass, string $query, int $limit): array
     {
-        $libraryIds = UserLibrary::query()
-            ->where('user_id', auth()->id())
+        $libraryIds = UserLibrary::where('user_id', auth()->id())
             ->where('trackable_type', $modelClass)
             ->pluck('trackable_id')
             ->all();

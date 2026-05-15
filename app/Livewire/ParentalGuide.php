@@ -115,8 +115,7 @@ class ParentalGuide extends Component
         $authUser = auth()->user();
         $parent = $this->parent;
 
-        return ParentalGuideEntry::query()
-            ->visible()
+        return ParentalGuideEntry::visible()
             ->withReason()
             ->where('model_type', '=', $parent->getMorphClass())
             ->where('model_id', '=', $parent->getKey())

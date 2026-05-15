@@ -453,8 +453,7 @@ trait WithSearch
             $wheres[$this->typeColumn()] = $this->typeValue;
         }
 
-        $libraryQuery = UserLibrary::query()
-            ->where('user_id', $userId)
+        $libraryQuery = UserLibrary::where('user_id', $userId)
             ->where('trackable_type', $modelClass);
 
         if (!empty($statuses)) {

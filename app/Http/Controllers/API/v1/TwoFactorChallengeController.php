@@ -46,8 +46,7 @@ class TwoFactorChallengeController
 
         // Eager-load the same relations as `AccessTokenController::create` so
         // the response shape is identical between the 2FA and non-2FA paths.
-        $user = User::query()
-            ->where('uuid', $challenge->user_id)
+        $user = User::where('uuid', $challenge->user_id)
             ->withProfileEagerLoad()
             ->first();
 
