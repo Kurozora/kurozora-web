@@ -9,10 +9,16 @@ use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Symfony\Component\HttpFoundation\Response;
 
 class AuthenticateAPIClient
 {
+    /**
+     * The validity cache TTL for an API client token, in seconds.
+     */
+    const int VALIDITY_CACHE_TTL = 300;
+
     /**
      * Handle an incoming request.
      *
@@ -38,10 +44,7 @@ class AuthenticateAPIClient
         }
 
         // TODO: - Replace with JWT validation
-        if (APIClientToken::where([
-            ['identifier', '=', $userAgent['bundle']],
-            ['token', '=', $jwt],
-        ])->exists()) {
+        if ($this->tokenIsValid($userAgent['bundle'], $jwt)) {
             return $next($request);
         } else {
             throw new AuthenticationException('The request wasn’t accepted due to an issue with the credentials.');
@@ -93,5 +96,33 @@ class AuthenticateAPIClient
         } catch (Exception) {
             throw new AuthenticationException('Invalid API key: ' . '8');
         }
+    }
+
+    /**
+     * Returns whether the given identifier and JWT pair matches a known API client token.
+     *
+     * @param string $identifier
+     * @param string $jwt
+     *
+     * @return bool
+     */
+    private function tokenIsValid(string $identifier, string $jwt): bool
+    {
+        $cacheKey = 'api-client-token:' . sha1($identifier . '|' . $jwt);
+
+        if (Cache::get($cacheKey) === true) {
+            return true;
+        }
+
+        $exists = APIClientToken::where([
+            ['identifier', '=', $identifier],
+            ['token', '=', $jwt],
+        ])->exists();
+
+        if ($exists) {
+            Cache::put($cacheKey, true, self::VALIDITY_CACHE_TTL);
+        }
+
+        return $exists;
     }
 }
