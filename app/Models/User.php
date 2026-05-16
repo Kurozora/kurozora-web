@@ -179,6 +179,14 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     }
 
     /**
+     * The broadcast channel name the user receives notifications on.
+     */
+    public function receivesBroadcastNotificationsOn(): string
+    {
+        return 'users.' . $this->getKey();
+    }
+
+    /**
      * Registers the media collections for the model.
      */
     public function registerMediaCollections(): void
@@ -200,6 +208,11 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         return SlugOptions::create()
             ->generateSlugsFrom('username')
             ->skipGenerateWhen(function () {
+//                dd(!isset($this->slug), !isset($this->can_change_username));
+//                if (!isset($this->slug) || !isset($this->can_change_username)) {
+//                    return true;
+//                }
+
                 return !(empty($this->slug) || $this->can_change_username);
             })
             ->usingSeparator('_')

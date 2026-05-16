@@ -42,7 +42,7 @@ class NavigationSidebar extends Component
         ];
 
         if (auth()->check()) {
-            $listeners['echo-notification:App.Models.User.' . auth()->id()] = 'onNotificationReceived';
+            $listeners['echo-private:users.' . auth()->id() . ',.notification.created'] = 'onNotificationReceived';
         }
 
         return $listeners;

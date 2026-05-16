@@ -4,6 +4,7 @@ namespace App\Notifications;
 use App\Models\Comment;
 use App\Models\FeedMessage;
 use App\Models\User;
+use App\Notifications\Concerns\BroadcastsAsNotification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Notification;
@@ -12,7 +13,8 @@ use NotificationChannels\Apn\ApnMessage;
 
 class NewUserMention extends Notification
 {
-    use Queueable;
+    use BroadcastsAsNotification,
+        Queueable;
 
     /**
      * The model instance.

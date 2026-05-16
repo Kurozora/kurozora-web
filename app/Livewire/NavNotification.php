@@ -22,7 +22,7 @@ class NavNotification extends Component
         }
 
         return [
-            'echo-notification:App.Models.User.' . auth()->id() => 'onNotificationReceived',
+            'echo-private:users.' . auth()->id() . ',.notification.created' => 'onNotificationReceived',
         ];
     }
 

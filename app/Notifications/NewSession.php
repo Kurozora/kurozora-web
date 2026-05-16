@@ -3,6 +3,7 @@
 namespace App\Notifications;
 
 use App\Models\SessionAttribute;
+use App\Notifications\Concerns\BroadcastsAsNotification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
@@ -10,7 +11,8 @@ use Illuminate\Notifications\Notification;
 
 class NewSession extends Notification implements ShouldQueue
 {
-    use Queueable;
+    use BroadcastsAsNotification,
+        Queueable;
 
     /**
      * The session object.

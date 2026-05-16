@@ -4,6 +4,7 @@ namespace App\Notifications;
 
 use App\Enums\MediaCollection;
 use App\Models\User;
+use App\Notifications\Concerns\BroadcastsAsNotification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
@@ -13,7 +14,8 @@ use NotificationChannels\Apn\ApnMessage;
 
 class NewFollower extends Notification implements ShouldQueue
 {
-    use Queueable;
+    use BroadcastsAsNotification,
+        Queueable;
 
     /**
      * The new user following the user receiving this notification.

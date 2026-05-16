@@ -5,6 +5,7 @@ namespace App\Notifications;
 use App\Models\StoreProduct;
 use App\Models\User;
 use App\Models\UserReceipt;
+use App\Notifications\Concerns\BroadcastsAsNotification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Notification;
@@ -13,7 +14,8 @@ use NotificationChannels\Apn\ApnMessage;
 
 class SubscriptionStatus extends Notification
 {
-    use Queueable;
+    use BroadcastsAsNotification,
+        Queueable;
 
     /**
      * The App Store Server notification type.

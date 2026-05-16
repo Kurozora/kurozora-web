@@ -5,6 +5,7 @@ namespace App\Notifications;
 use App\Enums\MediaCollection;
 use App\Models\FeedMessage;
 use App\Models\User;
+use App\Notifications\Concerns\BroadcastsAsNotification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
@@ -14,7 +15,8 @@ use NotificationChannels\Apn\ApnMessage;
 
 class NewFeedMessageReply extends Notification implements ShouldQueue
 {
-    use Queueable;
+    use BroadcastsAsNotification,
+        Queueable;
 
     /**
      * The message that was replied to.

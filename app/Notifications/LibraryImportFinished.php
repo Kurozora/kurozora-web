@@ -6,6 +6,7 @@ use App\Enums\ImportBehavior;
 use App\Enums\ImportService;
 use App\Enums\UserLibraryKind;
 use App\Models\User;
+use App\Notifications\Concerns\BroadcastsAsNotification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
@@ -15,7 +16,8 @@ use NotificationChannels\Apn\ApnMessage;
 
 class LibraryImportFinished extends Notification implements ShouldQueue
 {
-    use Queueable;
+    use BroadcastsAsNotification,
+        Queueable;
 
     /**
      * The results of the import action.
