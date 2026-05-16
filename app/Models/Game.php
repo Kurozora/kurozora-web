@@ -297,12 +297,6 @@ class Game extends KModel implements HasMedia, Sitemapable
                 'options' => Status::where('type', 'game')->pluck('name', 'id'),
                 'selected' => null,
             ],
-            'library_status' => [
-                'title' => __('Library Status'),
-                'type' => 'multiselect',
-                'options' => UserLibraryStatus::asGameSelectArray(),
-                'selected' => null,
-            ],
             'genres:id' => [
                 'title' => __('Genres'),
                 'type' => 'multiselect',
@@ -342,6 +336,15 @@ class Game extends KModel implements HasMedia, Sitemapable
                     __('Shown'),
                     __('Hidden'),
                 ],
+                'selected' => null,
+            ];
+        }
+
+        if (auth()->check()) {
+            $filter['library_status'] = [
+                'title' => __('Library Status'),
+                'type' => 'multiselect',
+                'options' => UserLibraryStatus::asGameSelectArray(),
                 'selected' => null,
             ];
         }

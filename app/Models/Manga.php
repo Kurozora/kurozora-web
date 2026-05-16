@@ -312,12 +312,6 @@ class Manga extends KModel implements HasMedia, Sitemapable
                 'options' => Status::where('type', 'manga')->pluck('name', 'id'),
                 'selected' => null,
             ],
-            'library_status' => [
-                'title' => __('Library Status'),
-                'type' => 'multiselect',
-                'options' => UserLibraryStatus::asMangaSelectArray(),
-                'selected' => null,
-            ],
             'genres:id' => [
                 'title' => __('Genres'),
                 'type' => 'multiselect',
@@ -372,6 +366,15 @@ class Manga extends KModel implements HasMedia, Sitemapable
                     __('Shown'),
                     __('Hidden'),
                 ],
+                'selected' => null,
+            ];
+        }
+
+        if (auth()->check()) {
+            $filter['library_status'] = [
+                'title' => __('Library Status'),
+                'type' => 'multiselect',
+                'options' => UserLibraryStatus::asMangaSelectArray(),
                 'selected' => null,
             ];
         }
