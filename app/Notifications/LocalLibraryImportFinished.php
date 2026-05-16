@@ -99,6 +99,7 @@ class LocalLibraryImportFinished extends Notification implements ShouldQueue
         return ApnMessage::create()
             ->title('🤩 Local Library import finished')
             ->badge($notifiable->unreadNotifications()->count())
-            ->body('Your Local Library import was processed. Come check it out!');
+            ->body('Your Local Library import was processed. Come check it out!')
+            ->custom('notification_id', $this->id);
     }
 }

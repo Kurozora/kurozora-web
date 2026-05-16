@@ -109,6 +109,7 @@ class NewFeedMessageReShare extends Notification implements ShouldQueue
         return ApnMessage::create()
             ->title($isQuote ? $username . ' quoted your message' : $username . ' re-shared your message')
             ->badge($notifiable->unreadNotifications()->count())
-            ->body($isQuote ? $this->feedMessage->content : '');
+            ->body($isQuote ? $this->feedMessage->content : '')
+            ->custom('notification_id', $this->id);
     }
 }

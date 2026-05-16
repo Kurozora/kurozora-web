@@ -166,6 +166,7 @@ class NewUserMention extends Notification
         return ApnMessage::create()
             ->title($this->model->user->username . ' mentioned you')
             ->badge($notifiable->unreadNotifications()->count())
-            ->body($this->model->content);
+            ->body($this->model->content)
+            ->custom('notification_id', $this->id);
     }
 }

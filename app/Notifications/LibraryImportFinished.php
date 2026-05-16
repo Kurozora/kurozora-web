@@ -126,6 +126,7 @@ class LibraryImportFinished extends Notification implements ShouldQueue
         return ApnMessage::create()
             ->title('🤩 ' . $serviceName . ' import finished')
             ->badge($notifiable->unreadNotifications()->count())
-            ->body('Your ' . $serviceName . ' ' . $libraryName . ' import was processed. Come check it out!');
+            ->body('Your ' . $serviceName . ' ' . $libraryName . ' import was processed. Come check it out!')
+            ->custom('notification_id', $this->id);
     }
 }

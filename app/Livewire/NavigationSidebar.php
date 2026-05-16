@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\User;
+use App\Traits\Livewire\ListensForUserNotifications;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -11,6 +12,9 @@ use Livewire\Component;
 
 class NavigationSidebar extends Component
 {
+    use ListensForUserNotifications;
+
+
     /**
      * The object containing the user data.
      *
@@ -37,19 +41,13 @@ class NavigationSidebar extends Component
      */
     public function getListeners(): array
     {
-        $listeners = [
+        return [
             'refresh-navigation-dropdown' => '$refresh',
-        ];
-
-        if (auth()->check()) {
-            $listeners['echo-private:users.' . auth()->id() . ',.notification.created'] = 'onNotificationReceived';
-        }
-
-        return $listeners;
+        ] + $this->userNotificationListeners('onNotificationReceived');
     }
 
     /**
-     * Refresh notification state when a new push arrives.
+     * Refresh notification state when a sibling client mutates notifications.
      *
      * @return void
      */

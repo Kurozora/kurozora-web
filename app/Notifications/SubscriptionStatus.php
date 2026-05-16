@@ -106,7 +106,8 @@ class SubscriptionStatus extends Notification
         return ApnMessage::create()
             ->title($this->getTitle())
             ->body($this->getDescription())
-            ->badge($notifiable->unreadNotifications()->count());
+            ->badge($notifiable->unreadNotifications()->count())
+            ->custom('notification_id', $this->id);
     }
 
     /**

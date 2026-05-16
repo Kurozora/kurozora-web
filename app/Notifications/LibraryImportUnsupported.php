@@ -125,6 +125,7 @@ class LibraryImportUnsupported extends Notification implements ShouldQueue
         return ApnMessage::create()
             ->title('😥 ' . $serviceName . ' import unsupported')
             ->badge($notifiable->unreadNotifications()->count())
-            ->body('The file structure you submitted is not supported. Please reach out so we can fix this for you.');
+            ->body('The file structure you submitted is not supported. Please reach out so we can fix this for you.')
+            ->custom('notification_id', $this->id);
     }
 }

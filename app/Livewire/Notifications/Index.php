@@ -2,6 +2,9 @@
 
 namespace App\Livewire\Notifications;
 
+use App\Events\Notifications\NotificationDeleted;
+use App\Events\Notifications\NotificationRead;
+use App\Traits\Livewire\ListensForUserNotifications;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -10,10 +13,12 @@ use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Throwable;
 
 class Index extends Component
 {
-    use WithPagination;
+    use ListensForUserNotifications,
+        WithPagination;
 
     /**
      * Register listeners for the component.
@@ -22,13 +27,11 @@ class Index extends Component
      */
     public function getListeners(): array
     {
-        if (!auth()->check()) {
-            return [];
-        }
-
-        return [
-            'echo-notification:App.Models.User.' . auth()->id() => 'onNotificationReceived',
-        ];
+        return $this->userNotificationListeners([
+            'created' => 'onNotificationReceived',
+            'read' => 'onNotificationRead',
+            'deleted' => 'onNotificationDeleted',
+        ]);
     }
 
     /**
@@ -37,6 +40,27 @@ class Index extends Component
      * @return void
      */
     public function onNotificationReceived(): void
+    {
+        $this->resetPage();
+        unset($this->notifications);
+    }
+
+    /**
+     * Refresh notification state when a sibling client marks notifications read.
+     *
+     * @return void
+     */
+    public function onNotificationRead(): void
+    {
+        unset($this->notifications);
+    }
+
+    /**
+     * Refresh notification state when a sibling client deletes notifications.
+     *
+     * @return void
+     */
+    public function onNotificationDeleted(): void
     {
         $this->resetPage();
         unset($this->notifications);
@@ -64,6 +88,7 @@ class Index extends Component
      * @param bool  $read
      *
      * @return void
+     * @throws Throwable
      */
     public function setReadStatus(array $ids, bool $read): void
     {
@@ -83,6 +108,9 @@ class Index extends Component
             }
         });
 
+        broadcast(new NotificationRead((int) auth()->id(), array_values($ids), $read))
+            ->toOthers();
+
         unset($this->notifications);
     }
 
@@ -92,6 +120,7 @@ class Index extends Component
      * @param array $ids
      *
      * @return void
+     * @throws Throwable
      */
     public function deleteMany(array $ids): void
     {
@@ -106,6 +135,9 @@ class Index extends Component
                 ->delete();
         });
 
+        broadcast(new NotificationDeleted((int) auth()->id(), array_values($ids)))
+            ->toOthers();
+
         unset($this->notifications);
     }
 
@@ -115,6 +147,7 @@ class Index extends Component
      * @param string $id
      *
      * @return void
+     * @throws Throwable
      */
     public function markRead(string $id): void
     {
@@ -127,6 +160,7 @@ class Index extends Component
      * @param string $id
      *
      * @return void
+     * @throws Throwable
      */
     public function markUnread(string $id): void
     {
@@ -139,6 +173,7 @@ class Index extends Component
      * @param string $id
      *
      * @return void
+     * @throws Throwable
      */
     public function deleteSingle(string $id): void
     {

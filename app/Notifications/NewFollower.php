@@ -103,6 +103,7 @@ class NewFollower extends Notification implements ShouldQueue
         return ApnMessage::create()
             ->title(__('New follower'))
             ->badge($notifiable->unreadNotifications()->count())
-            ->body(__(':x followed you.', ['x' => $this->follower->username]));
+            ->body(__(':x followed you.', ['x' => $this->follower->username]))
+            ->custom('notification_id', $this->id);
     }
 }

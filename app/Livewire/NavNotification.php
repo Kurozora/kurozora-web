@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Traits\Livewire\ListensForUserNotifications;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -10,6 +11,8 @@ use Livewire\Component;
 
 class NavNotification extends Component
 {
+    use ListensForUserNotifications;
+
     /**
      * Register listeners for the component.
      *
@@ -17,17 +20,11 @@ class NavNotification extends Component
      */
     public function getListeners(): array
     {
-        if (!auth()->check()) {
-            return [];
-        }
-
-        return [
-            'echo-private:users.' . auth()->id() . ',.notification.created' => 'onNotificationReceived',
-        ];
+        return $this->userNotificationListeners('onNotificationReceived');
     }
 
     /**
-     * Refresh the unread indicator when a new push arrives.
+     * Refresh the unread indicator when a sibling client mutates notifications.
      *
      * @return void
      */
