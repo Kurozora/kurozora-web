@@ -57,17 +57,9 @@
 		{$CADDY_SERVER_EXTRA_DIRECTIVES}
 
 		# Pusher-protocol traffic forwarded to Reverb...
-		@reverb path /v1/app/* /v1/apps/*
+		@reverb path /api/v1/app/* /api/v1/apps/*
 		handle @reverb {
-			rate_limit {
-				zone reverb_ws_upgrades {
-					key {remote_host}
-					events 10
-					window 1m
-				}
-			}
-
-			uri strip_prefix /v1
+			uri strip_prefix /api/v1
 			reverse_proxy localhost:{$REVERB_SERVER_PORT:8080} {
 				header_up Host {host}
 				header_up X-Real-IP {remote}
@@ -80,29 +72,5 @@
 			# Required for the public/storage/ directory...
 			resolve_root_symlink
 		}
-	}
-}
-
-# Dedicated WebSocket subdomain...
-http://ws.{$DOMAIN_NAME:kurozora.app}:80 {
-	log {
-		level {$CADDY_SERVER_LOG_LEVEL}
-
-		format filter {
-			wrap {$CADDY_SERVER_LOGGER}
-			fields {
-				uri query {
-					replace authorization REDACTED
-				}
-			}
-		}
-	}
-
-	@http header_regexp X-Forwarded-Proto ^http$
-	redir @http https://{host}{uri} 301
-
-	reverse_proxy localhost:{$REVERB_SERVER_PORT:8080} {
-		header_up Host {host}
-		header_up X-Real-IP {remote}
 	}
 }
