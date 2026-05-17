@@ -1,6 +1,5 @@
 #!/bin/sh
 Red='\033[0;31m'
-Green='\033[0;32m'
 
 ROLE="${CONTAINER_ROLE:-all}"
 
@@ -12,13 +11,9 @@ echo "***********************************"
 
 set -e
 
-## Pre-boot: cache config/views/routes/events. Idempotent, runs for every role.
 if [ -f /var/www/html/artisan ]; then
     php /var/www/html/artisan config:cache
-    php /var/www/html/artisan view:cache
     php /var/www/html/artisan route:cache
-    php /var/www/html/artisan event:cache
-    php /var/www/html/artisan storage:link --force
 
     ## Web-only side-effects
     if [ "$ROLE" = "web" ] || [ "$ROLE" = "all" ]; then
@@ -36,7 +31,13 @@ case "$ROLE" in
         echo "***********************************"
         echo "        Starting FrankenPHP...     "
         echo "***********************************"
-        exec frankenphp run --config /etc/caddy/Caddyfile
+        exec php /var/www/html/artisan octane:frankenphp \
+            --host=0.0.0.0 \
+            --port=80 \
+            --workers="${OCTANE_WORKERS:-auto}" \
+            --max-requests="${OCTANE_MAX_REQUESTS:-500}" \
+            --caddyfile=/etc/caddy/Caddyfile \
+            --log-level="${CADDY_LOG_LEVEL:-INFO}"
         ;;
 
     worker)
@@ -81,7 +82,13 @@ case "$ROLE" in
         echo "***********************************"
         echo "        Starting FrankenPHP...     "
         echo "***********************************"
-        exec frankenphp run --config /etc/caddy/Caddyfile
+        exec php /var/www/html/artisan octane:frankenphp \
+            --host=0.0.0.0 \
+            --port=80 \
+            --workers="${OCTANE_WORKERS:-auto}" \
+            --max-requests="${OCTANE_MAX_REQUESTS:-500}" \
+            --caddyfile=/etc/caddy/Caddyfile \
+            --log-level="${CADDY_LOG_LEVEL:-INFO}"
         ;;
 
     *)

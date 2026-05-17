@@ -25,8 +25,28 @@ RUN --mount=type=secret,id=vite_reverb_app_key,env=VITE_REVERB_APP_KEY \
 
 ###
 
+### Custom FrankenPHP build with caddy-ratelimit
+FROM dunglas/frankenphp:1-builder-php8.4-alpine AS frankenphp-builder
+
+COPY --from=caddy:builder-alpine /usr/bin/xcaddy /usr/bin/xcaddy
+
+RUN CGO_ENABLED=1 \
+    XCADDY_SETCAP=1 \
+    XCADDY_GO_BUILD_FLAGS="-ldflags='-w -s' -tags=nobadger,nomysql,nopgx" \
+    CGO_CFLAGS=$(php-config --includes) \
+    CGO_LDFLAGS="$(php-config --ldflags) $(php-config --libs)" \
+    xcaddy build \
+        --output /usr/local/bin/frankenphp \
+        --with github.com/dunglas/frankenphp/caddy \
+        --with github.com/mholt/caddy-ratelimit
+
+###
+
 ### Shared PHP base stage with system deps and PHP extensions installed once
 FROM dunglas/frankenphp:1-php8.4-alpine AS php-base
+
+# Override the stock FrankenPHP binary with the caddy-ratelimit build
+COPY --from=frankenphp-builder /usr/local/bin/frankenphp /usr/local/bin/frankenphp
 
 # Set labels
 LABEL app.kurozora.authors="Kiritokatklian"
@@ -87,6 +107,13 @@ COPY --from=assets --chown=www-data ${WORKDIR}/public/service-worker.js.map ./pu
 
 # Run post-install scripts and dump optimized autoloader now that the full source is present
 RUN composer install --no-interaction --prefer-dist --no-dev --no-cache --optimize-autoloader
+
+# Pre-cache env-independent artefacts so cold container starts skip them
+RUN APP_KEY="base64:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=" \
+    php artisan event:cache && \
+    APP_KEY="base64:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=" \
+    php artisan view:cache && \
+    php artisan storage:link --force
 
 ###
 

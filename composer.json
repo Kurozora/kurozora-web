@@ -175,7 +175,7 @@
         "octane:down": "valet unproxy kurozora 2>/dev/null; valet link kurozora",
         "octane:dev": [
             "Composer\\Config::disableProcessTimeout",
-            "@php artisan octane:start --server=frankenphp --watch"
+            "@php artisan octane:start --server=frankenphp --watch --caddyfile=config/octane/Caddyfile"
         ],
         "octane:share": [
             "Composer\\Config::disableProcessTimeout",
@@ -184,6 +184,10 @@
         "docker:build": [
             "Composer\\Config::disableProcessTimeout",
             "docker/build-image.sh"
+        ],
+        "docker:build:frankenphp": [
+            "Composer\\Config::disableProcessTimeout",
+            "docker/build-image.frankenphp.sh"
         ]
     },
     "extra": {
