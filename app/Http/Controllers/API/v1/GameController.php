@@ -315,16 +315,14 @@ class GameController extends Controller
     }
 
     /**
-     * Returns anime season.
+     * Returns game season.
      *
      * @param GetBrowseSeasonRequest $request
-     * @param int                    $year
-     * @param string                 $season
      *
      * @return JsonResponse
      * @throws InvalidEnumKeyException|BindingResolutionException|ConnectionException
      */
-    public function browseSeason(GetBrowseSeasonRequest $request, int $year, string $season)
+    public function browseSeason(GetBrowseSeasonRequest $request)
     {
         // Override parameters
         $request->merge([
@@ -339,7 +337,7 @@ class GameController extends Controller
         $getBrowseSeasonRequest->validateResolved(); // Necessary for preparing for validation
 
         return (new BrowseSeasonController())
-            ->view($getBrowseSeasonRequest, $year, $season);
+            ->view($getBrowseSeasonRequest);
     }
 
     /**

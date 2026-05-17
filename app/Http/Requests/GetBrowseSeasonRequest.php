@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Enums\BrowseSeasonKind;
+use App\Enums\SeasonOfYear;
 use App\Models\MediaType;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -26,6 +27,8 @@ class GetBrowseSeasonRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'year' => ['bail', 'required', 'integer', 'min:1917', 'max:' . (now()->year + 2)],
+            'season' => ['bail', 'required', 'integer', 'in:' . implode(',', SeasonOfYear::getValues())],
             'kind' => ['bail', 'nullable', 'integer', 'in:' . implode(',', BrowseSeasonKind::getValues())],
             'mediaTypes' => ['bail', 'nullable', 'array'],
             'mediaTypes.*' => ['bail', 'integer', 'exists:' . MediaType::TABLE_NAME . ',id'],

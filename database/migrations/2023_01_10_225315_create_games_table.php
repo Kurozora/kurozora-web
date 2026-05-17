@@ -52,6 +52,7 @@ return new class extends Migration
             $table->index(['deleted_at', 'tv_rating_id']);
             $table->index(['deleted_at', 'rank_total']);
             $table->index(['deleted_at', 'published_at']);
+            $table->index(['deleted_at', 'publication_season', 'published_at']);
             $table->index('created_at');
             $table->index('updated_at');
 

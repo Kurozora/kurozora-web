@@ -38,6 +38,7 @@ final class SeasonOfYear extends Enum
      * Returns the next SeasonOfYear type.
      *
      * @param int $steps
+     *
      * @return SeasonOfYear
      */
     public function next(int $steps = 1): SeasonOfYear
@@ -60,6 +61,7 @@ final class SeasonOfYear extends Enum
      * Returns the previous SeasonOfYear type.
      *
      * @param int $steps
+     *
      * @return SeasonOfYear
      */
     public function previous(int $steps = 1): SeasonOfYear

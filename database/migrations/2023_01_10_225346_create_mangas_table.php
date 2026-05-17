@@ -58,6 +58,7 @@ return new class extends Migration
             $table->index(['deleted_at', 'rank_total']);
             $table->index(['deleted_at', 'started_at']);
             $table->index(['deleted_at', 'ended_at']);
+            $table->index(['deleted_at', 'publication_season', 'started_at']);
             $table->index('created_at');
             $table->index('updated_at');
 

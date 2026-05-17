@@ -15,13 +15,9 @@ Route::prefix('/anime')
             ->middleware('auth.kurozora:optional')
             ->name('.upcoming');
 
-        Route::prefix('/seasons')
-            ->name('.seasons')
-            ->group(function () {
-                Route::get('/{year}/{season}', [AnimeController::class, 'browseSeason'])
-                    ->middleware('auth.kurozora:optional')
-                    ->name('.view');
-            });
+        Route::get('/seasons', [AnimeController::class, 'browseSeason'])
+            ->middleware('auth.kurozora:optional')
+            ->name('.seasons');
 
         Route::prefix('{anime}')
             ->group(function () {
