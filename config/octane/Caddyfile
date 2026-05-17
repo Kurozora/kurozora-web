@@ -12,6 +12,14 @@
 		}
 	}
 
+	servers {
+		timeouts {
+			read_body 60s
+			read_header 60s
+			idle 60s
+		}
+	}
+
 	order php_server before file_server
 }
 
@@ -36,13 +44,20 @@
 		root * "{$APP_PUBLIC_PATH}"
 		encode zstd br gzip
 
+		request_body {
+			max_size 10MB
+		}
+
 		header {
 			X-Frame-Options "SAMEORIGIN"
 			X-XSS-Protection "1; mode=block"
 			X-Content-Type-Options "nosniff"
 			Referrer-Policy "strict-origin-when-cross-origin"
+			Permissions-Policy "accelerometer=*, ambient-light-sensor=(), autoplay=*, battery=(), camera=*, cross-origin-isolated=*, display-capture=*, document-domain=*, encrypted-media=*, execution-while-not-rendered=(), execution-while-out-of-viewport=(), fullscreen=*, geolocation=*, gyroscope=*, keyboard-map=(), magnetometer=(), microphone=*, midi=(), navigation-override=(), payment=(), picture-in-picture=*, publickey-credentials-get=(), screen-wake-lock=(), sync-xhr=(), usb=(), web-share=*, xr-spatial-tracking=(), clipboard-read=*, clipboard-write=*, gamepad=*, speaker-selection=*"
 			-Server
 			-X-Powered-By
+			-X-CF-Powered-By
+			-X-Runtime
 		}
 
 		# HSTS and HTTPS redirect, gated on upstream-set X-Forwarded-Proto...
@@ -65,6 +80,30 @@
 				header_up X-Real-IP {remote}
 			}
 		}
+
+		# Deny dotfile access...
+		@dotfile {
+			path_regexp /\.
+			not path /.well-known /.well-known/*
+		}
+		handle @dotfile {
+			respond 403
+		}
+
+		# Cache static assets...
+		@static {
+			path *.css *.js *.jpg *.jpeg *.png *.gif *.svg *.webp *.ico *.pdf
+			not path /service-worker.js
+		}
+		header @static Cache-Control "public, max-age=10368000"
+
+		# Exclude ServiceWorker from cache...
+		@sw path /service-worker.js
+		header @sw Cache-Control "no-cache"
+
+		# Skip access log...
+		@quiet path /favicon.ico /robots.txt /humans.txt /manifest.json /opensearch.xml /service-worker.js
+		log_skip @quiet
 
 		php_server {
 			index frankenphp-worker.php
