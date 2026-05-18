@@ -44,6 +44,7 @@ return [
         'bundle_id' => env('APP_BUNDLE_ID', 'app.kurozora.tracker'),
         'protocol'  => 'kurozora://',
         'store_url' => 'https://apps.apple.com/us/app/kurozora/id1476153872',
+        'messages_store_url' => 'https://apps.apple.com/us/app/kurozora/id1476153872?app=messages',
         'beta_url'  => 'https://testflight.apple.com/join/Bzr2TrDi',
     ],
 

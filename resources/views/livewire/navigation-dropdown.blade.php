@@ -362,6 +362,10 @@
                                         {{ __('Theme Store') }}
                                     </x-dropdown-link>
 
+                                    <x-dropdown-link href="{{ route('stickers.index') }}" wire:navigate>
+                                        {{ __('Kuro-chan Stickers') }}
+                                    </x-dropdown-link>
+
                                     @auth
                                         {{-- Manage Account --}}
                                         <div class="block pl-2 pr-2 pt-4 pb-2 text-xs text-secondary font-semibold">
@@ -608,6 +612,12 @@
                                                wire:navigate
                                                :active="request()->routeIs('theme-store.index')">
                             {{ __('Theme Store') }}
+                        </x-sidebar-nav-link>
+
+                        <x-sidebar-nav-link href="{{ route('stickers.index') }}"
+                                               wire:navigate
+                                               :active="request()->routeIs('stickers.index')">
+                            {{ __('Kuro-chan Stickers') }}
                         </x-sidebar-nav-link>
                     </div>
 

@@ -44,6 +44,7 @@ Route::prefix('/v1')
         require 'API/v1/Search.php';
         require 'API/v1/Seasons.php';
         require 'API/v1/Songs.php';
+        require 'API/v1/Stickers.php';
         require 'API/v1/Studios.php';
         require 'API/v1/Store.php';
         require 'API/v1/Themes.php';
