@@ -4,7 +4,7 @@
 
 <div class="relative flex">
     @if ($onProfile)
-        <span title="{{ $this->user->activityStatus->description }}">
+        <span title="{{ $this->activityStatus->description }}">
             <svg class="relative overflow-hidden" width="96" height="96" viewBox="0 0 96 96">
                 <foreignObject height="96" width="96" mask="url(#svg-mask-avatar-status-round-80)">
                     <x-picture
@@ -23,7 +23,7 @@
                     <div class="absolute top-0 left-0 h-full w-full"></div>
                 </foreignObject>
 
-                @switch($this->user->activityStatus->value)
+                @switch($this->activityStatus->value)
                     @case(\App\Enums\UserActivityStatus::SeenRecently)
                         <rect width="18" height="18" x="72" y="72" mask="url(#svg-mask-status-online)" class="text-yellow-500 fill-current"></rect>
                         @break

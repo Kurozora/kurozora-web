@@ -63,6 +63,10 @@
 
         <!-- CSRF Token -->
         <meta name="csrf-token" content="{{ csrf_token() }}" />
+
+        @auth
+            <meta name="is-authenticated" />
+        @endauth
     </head>
 
     <body class="app-theme bg-primary text-primary">

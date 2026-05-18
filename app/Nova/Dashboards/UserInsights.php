@@ -2,6 +2,7 @@
 
 namespace App\Nova\Dashboards;
 
+use App\Nova\Cards\OnlineUsersCard;
 use App\Nova\Metrics\ActivityLogCount;
 use App\Nova\Metrics\NewUsers;
 use App\Nova\Metrics\ProUsers;
@@ -20,6 +21,7 @@ class UserInsights extends Dashboard
     public function cards(): array
     {
         return [
+            OnlineUsersCard::make(),
             NewUsers::make(),
             UsersPerDay::make(),
             UsersPerPlan::make(),

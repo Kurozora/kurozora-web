@@ -51,6 +51,8 @@ return [
             ],
             'client_options' => [
                 // Guzzle client options: https://docs.guzzlephp.org/en/stable/request-options.html
+                'timeout' => (int) env('REVERB_HTTP_TIMEOUT', 5),
+                'connect_timeout' => (int) env('REVERB_HTTP_CONNECT_TIMEOUT', 2),
             ],
         ],
 

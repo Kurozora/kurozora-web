@@ -72,6 +72,7 @@ require 'Web/Notifications.php';
 require 'Web/Notify.php';
 require 'Web/People.php';
 require 'Web/Platforms.php';
+require 'Web/Presence.php';
 require 'Web/Profile.php';
 require 'Web/Recap.php';
 require 'Web/Syoboi.php';

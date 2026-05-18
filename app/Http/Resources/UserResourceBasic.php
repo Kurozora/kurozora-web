@@ -3,7 +3,9 @@
 namespace App\Http\Resources;
 
 use App\Enums\MediaCollection;
+use App\Enums\UserActivityStatus;
 use App\Models\User;
+use App\Services\Presence\PresenceTracker;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -43,7 +45,7 @@ class UserResourceBasic extends JsonResource
                 'biography' => $this->resource->biography,
                 'biographyHTML' => $this->resource->biography_html,
                 'biographyMarkdown' => $this->resource->biography_markdown,
-                'activityStatus' => $this->resource->activityStatus->description,
+                'activityStatus' => $this->liveActivityStatus()->description,
                 'followerCount' => $this->resource->followers_count,
                 'followingCount' => $this->resource->following_count,
                 'ratingsCount' => $this->resource->media_ratings_count,
@@ -68,6 +70,27 @@ class UserResourceBasic extends JsonResource
         }
 
         return $resource;
+    }
+
+    /**
+     * Returns the user's activity status derived solely from the live presence tracker.
+     *
+     * @return UserActivityStatus
+     */
+    protected function liveActivityStatus(): UserActivityStatus
+    {
+        $tracker = app(PresenceTracker::class);
+        $userId = (int) $this->resource->id;
+
+        if ($tracker->isUserGloballyOnline($userId)) {
+            return UserActivityStatus::Online();
+        }
+
+        if ($tracker->isSeenRecently($userId)) {
+            return UserActivityStatus::SeenRecently();
+        }
+
+        return UserActivityStatus::Offline();
     }
 
     /**

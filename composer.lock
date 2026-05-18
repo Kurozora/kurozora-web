@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2b5bdca84be338e3a1821c78d0ee2287",
+    "content-hash": "e24f295e4073f1a2ab2b702cd22d74a6",
     "packages": [
         {
             "name": "abbasudo/pulse-users",
@@ -4009,6 +4009,36 @@
                 "source": "https://github.com/ksubileau/color-thief-php/tree/v2.0.2"
             },
             "time": "2025-07-17T15:26:54+00:00"
+        },
+        {
+            "name": "kurozora/online-users-card",
+            "version": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "./nova-components/online-users-card",
+                "reference": "866aec15d3b59b3b60a50d54ad3950be5aaf4a8e"
+            },
+            "require": {
+                "laravel/nova": "^5.0",
+                "php": "^8.4"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Kurozora\\OnlineUsersCard\\CardServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Kurozora\\OnlineUsersCard\\": "src/"
+                }
+            },
+            "description": "Nova dashboard card showing the live count of users with an active WebSocket presence.",
+            "transport-options": {
+                "relative": true
+            }
         },
         {
             "name": "laminas/laminas-code",
