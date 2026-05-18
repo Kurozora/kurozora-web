@@ -17,8 +17,8 @@
                         {{ __('Go to Twitter') }}
                     </x-link-button>
                 @else
-                    @if (isset($exception) && $exception instanceof \Illuminate\Database\QueryException)
-                        <p class="text-secondary text-2xl md:text-3xl font-light mb-8 leading-normal max-w-prose">{{ implode(' ', $exception->errorInfo ?? []) }}</p>
+                    @if (!app()->isProduction() && isset($exception) && $exception instanceof PDOException)
+                        <p class="text-secondary text-2xl md:text-3xl font-light mb-8 leading-normal max-w-prose">{{ implode(' ', $exception->errorInfo ?? [$exception->getCode(), $exception->getMessage()]) }}</p>
                     @endif
 
                     <p class="text-secondary text-2xl md:text-3xl font-light mb-8 leading-normal max-w-prose">{{ __('Our crack team is on the ca… couch. O-oh dear…') }}</p>
