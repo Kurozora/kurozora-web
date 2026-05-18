@@ -20,6 +20,16 @@
         nextFocusableIndex() { return (this.focusables().indexOf(document.activeElement) + 1) % (this.focusables().length + 1) },
         prevFocusableIndex() { return Math.max(0, this.focusables().indexOf(document.activeElement)) -1 },
         focusOnSearch() { isSearchEnabled = true; setTimeout(() => $refs.search.focus(), 0) },
+        handleSlashShortcut(event) {
+            const target = event.target
+
+            if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.tagName === 'SELECT' || target.isContentEditable)) {
+                return
+            }
+
+            event.preventDefault()
+            this.focusOnSearch()
+        },
         submit() {
             let search = document.getElementById('search');
             search.submit();
@@ -28,7 +38,7 @@
     x-on:close.stop="resetAndClose()"
     x-on:keydown.escape.window="resetAndClose()"
     x-on:keydown.meta.k.window.prevent="focusOnSearch()"
-    x-on:keydown.slash.window.prevent="focusOnSearch()"
+    x-on:keydown.slash.window="handleSlashShortcut($event)"
     x-on:keydown.tab.prevent="$event.shiftKey || nextFocusable().focus()"
     x-on:keydown.shift.tab.prevent="prevFocusable().focus()"
     x-init="$watch('isSearchEnabled', function(value) {
