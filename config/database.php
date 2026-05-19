@@ -113,21 +113,6 @@ return [
             // 'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'false'),
         ],
 
-        'KDashboard' => [
-            'driver' => 'pgsql',
-            'url' => env('K_DB_URL'),
-            'host' => env('K_DB_HOST', '127.0.0.1'),
-            'port' => env('K_DB_PORT', '5432'),
-            'database' => env('K_DB_DATABASE', 'laravel'),
-            'username' => env('K_DB_USERNAME', 'root'),
-            'password' => env('K_DB_PASSWORD', ''),
-            'charset' => env('DB_CHARSET', 'utf8'),
-            'prefix' => '',
-            'prefix_indexes' => true,
-            'schema' => 'public',
-            'sslmode' => 'prefer',
-        ],
-
     ],
 
     /*

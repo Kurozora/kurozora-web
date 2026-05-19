@@ -4,9 +4,6 @@
 # Composer
 /vendor
 
-# Kurozora
-/app/Models/KDashboard
-
 # Laravel
 /public/build
 /public/hot
