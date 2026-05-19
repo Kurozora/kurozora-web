@@ -36,13 +36,13 @@ final class ReconciliationSimulator
 
         $products = StoreProduct::all()->keyBy('product_id');
 
-        foreach ($missingByUser as $userId => $rows) {
-            $user = User::where('uuid', $userId)->first();
+        foreach ($missingByUser as $userID => $rows) {
+            $user = User::where('uuid', $userID)->first();
 
             if (!$user) {
                 ReconciliationUserImpact::updateOrCreate([
                     'reconciliation_run_id' => $run->id,
-                    'user_id' => $userId,
+                    'user_id' => $userID,
                 ], [
                     'missing_transactions' => $rows->count(),
                     'error' => 'User not found.',
@@ -55,13 +55,13 @@ final class ReconciliationSimulator
             } catch (Throwable $e) {
                 logger()->warning('ReconciliationSimulator failed for a user.', [
                     'run_id' => $run->id,
-                    'user_id' => $userId,
+                    'user_id' => $userID,
                     'error' => $e->getMessage(),
                 ]);
 
                 ReconciliationUserImpact::updateOrCreate([
                     'reconciliation_run_id' => $run->id,
-                    'user_id' => $userId,
+                    'user_id' => $userID,
                 ], [
                     'missing_transactions' => $rows->count(),
                     'error' => mb_substr($e->getMessage(), 0, 255),
@@ -71,7 +71,7 @@ final class ReconciliationSimulator
 
             ReconciliationUserImpact::updateOrCreate([
                 'reconciliation_run_id' => $run->id,
-                'user_id' => $userId,
+                'user_id' => $userID,
             ], $impact);
         }
     }
@@ -136,41 +136,41 @@ final class ReconciliationSimulator
      *
      * @param  Collection<int, ReconciliationRow>  $missingRows
      * @param  Collection<string, StoreProduct>  $products
-     * @param  Collection<string, mixed>  $existingReceiptOriginalIds
-     * @param  Collection<string, mixed>  $existingTransactionIds
-     * @param  Collection<string, mixed>  $existingConsumableTransactionIds
+     * @param  Collection<string, mixed>  $existingReceiptOriginalIDs
+     * @param  Collection<string, mixed>  $existingTransactionIDs
+     * @param  Collection<string, mixed>  $existingConsumableTransactionIDs
      * @return array{0: Collection<int, UserReceipt>, 1: Collection<int, UserReceiptTransaction>, 2: Collection<int, ConsumablePurchase>}
      */
     private static function buildExtras(
         Collection $missingRows,
         Collection $products,
         User $user,
-        Collection $existingReceiptOriginalIds,
-        Collection $existingTransactionIds,
-        Collection $existingConsumableTransactionIds,
+        Collection $existingReceiptOriginalIDs,
+        Collection $existingTransactionIDs,
+        Collection $existingConsumableTransactionIDs,
     ): array {
         $receipts = collect();
         $transactions = collect();
         $consumables = collect();
-        $addedReceiptOriginalIds = [];
-        $addedTransactionIds = [];
+        $addedReceiptOriginalIDs = [];
+        $addedTransactionIDs = [];
 
         foreach ($missingRows as $row) {
             $payload = $row->payload ?? [];
-            $productId = $row->product_id ?: ($payload['productId'] ?? null);
-            $txId = $row->transaction_id ?: ($payload['transactionId'] ?? null);
-            $oti = $row->original_transaction_id ?: ($payload['originalTransactionId'] ?? null);
+            $productID = $row->product_id ?: ($payload['productID'] ?? null);
+            $txID = $row->transaction_id ?: ($payload['transactionID'] ?? null);
+            $oti = $row->original_transaction_id ?: ($payload['originalTransactionID'] ?? null);
 
-            if (!$productId || !$txId || !$oti) {
+            if (!$productID || !$txID || !$oti) {
                 continue;
             }
 
-            if (isset($existingTransactionIds[$txId]) || isset($addedTransactionIds[$txId])) {
+            if (isset($existingTransactionIDs[$txID]) || isset($addedTransactionIDs[$txID])) {
                 continue;
             }
 
             /** @var StoreProduct|null $product */
-            $product = $products->get($productId);
+            $product = $products->get($productID);
             if (!$product) {
                 continue;
             }
@@ -181,7 +181,7 @@ final class ReconciliationSimulator
 
             $transaction = new UserReceiptTransaction([
                 'user_id' => $user->uuid,
-                'transaction_id' => $txId,
+                'transaction_id' => $txID,
                 'original_transaction_id' => $oti,
                 'product_id' => $product->product_id,
                 'expires_at' => $expiresDate,
@@ -190,16 +190,16 @@ final class ReconciliationSimulator
             ]);
             $transaction->setRelation('storeProduct', $product);
             $transactions->push($transaction);
-            $addedTransactionIds[$txId] = true;
+            $addedTransactionIDs[$txID] = true;
 
             if ($product->type->is(StoreProductType::Consumable)) {
-                if (isset($existingConsumableTransactionIds[$txId])) {
+                if (isset($existingConsumableTransactionIDs[$txID])) {
                     continue;
                 }
 
                 $consumable = new ConsumablePurchase([
                     'user_id' => $user->uuid,
-                    'transaction_id' => $txId,
+                    'transaction_id' => $txID,
                     'product_id' => $product->product_id,
                     'purchased_at' => $purchaseDate,
                 ]);
@@ -208,7 +208,7 @@ final class ReconciliationSimulator
                 continue;
             }
 
-            if (isset($existingReceiptOriginalIds[$oti]) || isset($addedReceiptOriginalIds[$oti])) {
+            if (isset($existingReceiptOriginalIDs[$oti]) || isset($addedReceiptOriginalIDs[$oti])) {
                 continue;
             }
 
@@ -219,7 +219,7 @@ final class ReconciliationSimulator
             ]);
             $receipt->setRelation('storeProduct', $product);
             $receipts->push($receipt);
-            $addedReceiptOriginalIds[$oti] = true;
+            $addedReceiptOriginalIDs[$oti] = true;
         }
 
         return [$receipts, $transactions, $consumables];

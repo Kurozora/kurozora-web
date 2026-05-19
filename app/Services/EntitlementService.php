@@ -55,14 +55,14 @@ final class EntitlementService
             ->where('user_id', $user->uuid)
             ->get();
 
-        $revokedTransactionIds = $userReceiptTransactions
+        $revokedTransactionIDs = $userReceiptTransactions
             ->whereNotNull('revoked_at')
             ->pluck('transaction_id')
             ->flip();
 
         $consumablePurchases = $consumablePurchases->filter(
             fn (ConsumablePurchase $p) => $p->revoked_at === null
-                && !isset($revokedTransactionIds[$p->transaction_id])
+                && !isset($revokedTransactionIDs[$p->transaction_id])
         );
 
         $transactionsByOriginal = $userReceiptTransactions->groupBy('original_transaction_id');
@@ -173,9 +173,9 @@ final class EntitlementService
      */
     public static function persist(User $user, array $computed): void
     {
-        foreach ($computed['receipt_states'] as $originalTransactionId => $state) {
+        foreach ($computed['receipt_states'] as $originalTransactionID => $state) {
             UserReceipt::where('user_id', $user->uuid)
-                ->where('original_transaction_id', $originalTransactionId)
+                ->where('original_transaction_id', $originalTransactionID)
                 ->update([
                     'expires_at' => $state['expires_at'],
                     'is_subscribed' => $state['is_subscribed'],
