@@ -92,7 +92,6 @@
         "beyondcode/laravel-query-detector": "^2.0",
         "brianium/paratest": "^7.0",
         "fakerphp/faker": "^1.19",
-        "larastan/larastan": "^3.0",
         "laravel/sail": "^1.41",
         "mockery/mockery": "^1.5",
         "nunomaduro/collision": "^8.6",
@@ -165,8 +164,6 @@
             "@php artisan ide-helper:models -N",
             "@php artisan ide-helper:meta"
         ],
-        "analyse": "vendor/bin/phpstan analyse",
-        "baseline": "vendor/bin/phpstan analyse --generate-baseline",
         "lint": "vendor/bin/duster lint",
         "format": "vendor/bin/duster fix",
         "duster": "vendor/bin/duster",
