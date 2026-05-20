@@ -109,7 +109,7 @@ class AnimeStatSpider extends BasicSpider
             return $this->item([]);
         }
 
-        logger()->channel('stderr')->info('🕷 [MAL_ID:ANIME:' . $id . '] Parsing stats response');
+        logger()->channel('stderr')->debug('🕷 [MAL_ID:ANIME:' . $id . '] Parsing stats response');
 
         $scores = $response->filter('table.score-stats tr')
             ->each(function (Crawler $item) {

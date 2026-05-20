@@ -42,7 +42,7 @@ class MagazineProcessor extends CustomItemProcessor
         $mangas = $item->get('mangas') ?? [];
 
         if (empty($studio)) {
-            logger()->channel('stderr')->info('🖨 [MAL_ID:MAGAZINE:' . $malID . '] Creating magazine');
+            logger()->channel('stderr')->debug('🖨 [MAL_ID:MAGAZINE:' . $malID . '] Creating magazine');
 
             Studio::withoutGlobalScopes()
                 ->create([
@@ -50,23 +50,23 @@ class MagazineProcessor extends CustomItemProcessor
                     'type' => StudioType::Manga,
                     'name' => $name,
                 ]);
-            logger()->channel('stderr')->info('✅️ [MAL_ID:MAGAZINE:' . $malID . '] Done creating magazine');
+            logger()->channel('stderr')->debug('✅️ [MAL_ID:MAGAZINE:' . $malID . '] Done creating magazine');
         } else {
-            logger()->channel('stderr')->info('🛠 [MAL_ID:MAGAZINE:' . $malID . '] Updating attributes');
+            logger()->channel('stderr')->debug('🛠 [MAL_ID:MAGAZINE:' . $malID . '] Updating attributes');
             $newName = empty($name) ? $studio->name : $name;
 
             $studio->update([
                 'mal_id' => $malID,
                 'name' => $newName,
             ]);
-            logger()->channel('stderr')->info('✅️ [MAL_ID:MAGAZINE:' . $malID . '] Done updating attributes');
+            logger()->channel('stderr')->debug('✅️ [MAL_ID:MAGAZINE:' . $malID . '] Done updating attributes');
         }
 
         // Add mangas
         try {
-            logger()->channel('stderr')->info('↔️ [MAL_ID:MAGAZINE:' . $malID . '] Adding mangas');
+            logger()->channel('stderr')->debug('↔️ [MAL_ID:MAGAZINE:' . $malID . '] Adding mangas');
             $this->addMangas($mangas);
-            logger()->channel('stderr')->info('✅️ [MAL_ID:MAGAZINE:' . $malID . '] Done adding mangas');
+            logger()->channel('stderr')->debug('✅️ [MAL_ID:MAGAZINE:' . $malID . '] Done adding mangas');
         } catch (Throwable $e) {
             logger()->channel('stderr')->error('❌ [MAL_ID:MAGAZINE:' . $studio->mal_id . '] Failed adding mangas: ' . $e->getMessage());
         }

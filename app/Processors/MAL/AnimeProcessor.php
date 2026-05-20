@@ -193,7 +193,7 @@ class AnimeProcessor extends CustomItemProcessor
 //        ], $attributes));
 
         if (empty($anime)) {
-            logger()->channel('stderr')->info('🖨 [MAL_ID:ANIME:' . $malID . '] Creating anime');
+            logger()->channel('stderr')->debug('🖨 [MAL_ID:ANIME:' . $malID . '] Creating anime');
             $anime = Anime::withoutGlobalScopes()
                 ->create(array_merge([
                     'mal_id' => $malID,
@@ -216,9 +216,9 @@ class AnimeProcessor extends CustomItemProcessor
                     'tv_rating_id' => $tvRating->id,
                     'is_nsfw' => $isNSFW,
                 ], $attributes));
-            logger()->channel('stderr')->info('✅️ [MAL_ID:ANIME:' . $malID . '] Done creating anime');
+            logger()->channel('stderr')->debug('✅️ [MAL_ID:ANIME:' . $malID . '] Done creating anime');
         } else {
-            logger()->channel('stderr')->info('🛠 [MAL_ID:ANIME:' . $malID . '] Updating attributes');
+            logger()->channel('stderr')->debug('🛠 [MAL_ID:ANIME:' . $malID . '] Updating attributes');
             $newTitle = $title ?? $originalTitle;
             $newEpisodeCount = empty($episodeCount) ? $anime->episode_count : $episodeCount;
             $newDuration = empty($anime->duration) ? $duration : $anime->duration;
@@ -251,38 +251,38 @@ class AnimeProcessor extends CustomItemProcessor
                 'tv_rating_id' => $tvRating->id,
                 'is_nsfw' => $isNSFW,
             ], $attributes));
-            logger()->channel('stderr')->info('✅️ [MAL_ID:ANIME:' . $malID . '] Done updating attributes');
+            logger()->channel('stderr')->debug('✅️ [MAL_ID:ANIME:' . $malID . '] Done updating attributes');
         }
 
         // Add poster image
-        logger()->channel('stderr')->info('🌄 [MAL_ID:ANIME:' . $malID . '] Adding poster');
+        logger()->channel('stderr')->debug('🌄 [MAL_ID:ANIME:' . $malID . '] Adding poster');
         $this->addPosterImage($imageURL, $anime);
-        logger()->channel('stderr')->info('✅️ [MAL_ID:ANIME:' . $malID . '] Done adding poster');
+        logger()->channel('stderr')->debug('✅️ [MAL_ID:ANIME:' . $malID . '] Done adding poster');
 
         // Add different studio relations
-        logger()->channel('stderr')->info('🏢 [MAL_ID:ANIME:' . $malID . '] Adding studios');
+        logger()->channel('stderr')->debug('🏢 [MAL_ID:ANIME:' . $malID . '] Adding studios');
         $this->addStudios($producers, $anime, 'is_producer');
         $this->addStudios($licensors, $anime, 'is_licensor');
         $this->addStudios($studios, $anime, 'is_studio');
-        logger()->channel('stderr')->info('✅️ [MAL_ID:ANIME:' . $malID . '] Done adding studios');
+        logger()->channel('stderr')->debug('✅️ [MAL_ID:ANIME:' . $malID . '] Done adding studios');
 
         // Add genre and theme relations
-        logger()->channel('stderr')->info('🎭 [MAL_ID:ANIME:' . $malID . '] Adding genres and themes');
+        logger()->channel('stderr')->debug('🎭 [MAL_ID:ANIME:' . $malID . '] Adding genres and themes');
         $this->addGenres($genres, $anime);
         $this->addGenres($demographics, $anime);
         $this->addThemes($themes, $anime);
-        logger()->channel('stderr')->info('✅️ [MAL_ID:ANIME:' . $malID . '] Done adding genres');
+        logger()->channel('stderr')->debug('✅️ [MAL_ID:ANIME:' . $malID . '] Done adding genres');
 
         // Add relations
-        logger()->channel('stderr')->info('↔️ [MAL_ID:ANIME:' . $malID . '] Adding relations');
+        logger()->channel('stderr')->debug('↔️ [MAL_ID:ANIME:' . $malID . '] Adding relations');
         $this->addRelations($relations, $anime);
-        logger()->channel('stderr')->info('✅️ [MAL_ID:ANIME:' . $malID . '] Done adding relations');
+        logger()->channel('stderr')->debug('✅️ [MAL_ID:ANIME:' . $malID . '] Done adding relations');
 
         // Add songs
-        logger()->channel('stderr')->info('🎸 [MAL_ID:ANIME:' . $malID . '] Adding songs');
+        logger()->channel('stderr')->debug('🎸 [MAL_ID:ANIME:' . $malID . '] Adding songs');
         $this->addSongs(SongType::Opening(), $openingSongs, $anime);
         $this->addSongs(SongType::Ending(), $endingSongs, $anime);
-        logger()->channel('stderr')->info('✅️ [MAL_ID:ANIME:' . $malID . '] Done adding songs');
+        logger()->channel('stderr')->debug('✅️ [MAL_ID:ANIME:' . $malID . '] Done adding songs');
 
         logger()->channel('stderr')->info('✅️ [MAL_ID:ANIME:' . $malID . '] Done processing anime');
         return $item;

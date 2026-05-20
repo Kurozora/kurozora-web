@@ -73,7 +73,7 @@ class CharacterSpider extends BasicSpider
             return $this->item([]);
         }
 
-        logger()->channel('stderr')->info('🕷 [MAL_ID:CHARACTER:' . $id . '] Parsing response');
+        logger()->channel('stderr')->debug('🕷 [MAL_ID:CHARACTER:' . $id . '] Parsing response');
 
         $nameNode = $response->filter('h2[class="normal_header"]');
 

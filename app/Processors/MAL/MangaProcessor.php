@@ -199,7 +199,7 @@ class MangaProcessor extends CustomItemProcessor
 //        ], $attributes));
 
         if (empty($manga)) {
-            logger()->channel('stderr')->info('🖨 [MAL_ID:MANGA:' . $malID . '] Creating manga');
+            logger()->channel('stderr')->debug('🖨 [MAL_ID:MANGA:' . $malID . '] Creating manga');
             $manga = Manga::withoutGlobalScopes()
                 ->create(array_merge([
                     'mal_id' => $malID,
@@ -222,9 +222,9 @@ class MangaProcessor extends CustomItemProcessor
                     'tv_rating_id' => $tvRating->id,
                     'is_nsfw' => $isNSFW,
                 ], $attributes));
-            logger()->channel('stderr')->info('✅️ [MAL_ID:MANGA:' . $malID . '] Done creating manga');
+            logger()->channel('stderr')->debug('✅️ [MAL_ID:MANGA:' . $malID . '] Done creating manga');
         } else {
-            logger()->channel('stderr')->info('🛠 [MAL_ID:MANGA:' . $malID . '] Updating attributes');
+            logger()->channel('stderr')->debug('🛠 [MAL_ID:MANGA:' . $malID . '] Updating attributes');
             $newTitle = $title ?? $originalTitle;
             $newVolumeCount = empty($volumeCount) ? $manga->volume_count : $volumeCount;
             $newChapterCount = empty($chapterCount) ? $manga->chapter_count : $chapterCount;
@@ -253,35 +253,35 @@ class MangaProcessor extends CustomItemProcessor
                 'tv_rating_id' => $tvRating->id,
                 'is_nsfw' => $isNSFW,
             ], $attributes));
-            logger()->channel('stderr')->info('✅️ [MAL_ID:MANGA:' . $malID . '] Done updating attributes');
+            logger()->channel('stderr')->debug('✅️ [MAL_ID:MANGA:' . $malID . '] Done updating attributes');
         }
 
         // Add poster image
-        logger()->channel('stderr')->info('🌄 [MAL_ID:MANGA:' . $malID . '] Adding poster');
+        logger()->channel('stderr')->debug('🌄 [MAL_ID:MANGA:' . $malID . '] Adding poster');
         $this->addPosterImage($imageURL, $manga);
-        logger()->channel('stderr')->info('✅️ [MAL_ID:MANGA:' . $malID . '] Done adding poster');
+        logger()->channel('stderr')->debug('✅️ [MAL_ID:MANGA:' . $malID . '] Done adding poster');
 
         // Add different studio relations
-        logger()->channel('stderr')->info('🏢 [MAL_ID:MANGA:' . $malID . '] Adding studios');
+        logger()->channel('stderr')->debug('🏢 [MAL_ID:MANGA:' . $malID . '] Adding studios');
         $this->addStudios($studios, $manga, 'is_publisher');
-        logger()->channel('stderr')->info('✅️ [MAL_ID:MANGA:' . $malID . '] Done adding studios');
+        logger()->channel('stderr')->debug('✅️ [MAL_ID:MANGA:' . $malID . '] Done adding studios');
 
         // Add genre and theme relations
-        logger()->channel('stderr')->info('🎭 [MAL_ID:MANGA:' . $malID . '] Adding genres and themes');
+        logger()->channel('stderr')->debug('🎭 [MAL_ID:MANGA:' . $malID . '] Adding genres and themes');
         $this->addGenres($genres, $manga);
         $this->addGenres($demographics, $manga);
         $this->addThemes($themes, $manga);
-        logger()->channel('stderr')->info('✅️ [MAL_ID:MANGA:' . $malID . '] Done adding genres');
+        logger()->channel('stderr')->debug('✅️ [MAL_ID:MANGA:' . $malID . '] Done adding genres');
 
         // Add author relations
-        logger()->channel('stderr')->info('🧑 [MAL_ID:MANGA:' . $malID . '] Adding authors');
+        logger()->channel('stderr')->debug('🧑 [MAL_ID:MANGA:' . $malID . '] Adding authors');
         $this->addAuthors($authors, $manga);
-        logger()->channel('stderr')->info('✅️ [MAL_ID:MANGA:' . $malID . '] Done adding authors');
+        logger()->channel('stderr')->debug('✅️ [MAL_ID:MANGA:' . $malID . '] Done adding authors');
 
         // Add relations
-        logger()->channel('stderr')->info('↔️ [MAL_ID:MANGA:' . $malID . '] Adding relations');
+        logger()->channel('stderr')->debug('↔️ [MAL_ID:MANGA:' . $malID . '] Adding relations');
         $this->addRelations($relations, $manga);
-        logger()->channel('stderr')->info('✅️ [MAL_ID:MANGA:' . $malID . '] Done adding relations');
+        logger()->channel('stderr')->debug('✅️ [MAL_ID:MANGA:' . $malID . '] Done adding relations');
 
         logger()->channel('stderr')->info('✅️ [MAL_ID:MANGA:' . $malID . '] Done processing manga');
         return $item;

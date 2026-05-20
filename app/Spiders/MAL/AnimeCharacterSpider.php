@@ -74,7 +74,7 @@ class AnimeCharacterSpider extends BasicSpider
             return $this->item([]);
         }
 
-        logger()->channel('stderr')->info('🕷 [MAL_ID:ANIME:' . $id . '] Parsing character response');
+        logger()->channel('stderr')->debug('🕷 [MAL_ID:ANIME:' . $id . '] Parsing character response');
 
         $cast = $response->filter('table[class*="anime-character-table"]')
             ->each(function (Crawler $item) {

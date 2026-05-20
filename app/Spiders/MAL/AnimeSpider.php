@@ -110,7 +110,7 @@ class AnimeSpider extends BasicSpider
             return $this->item([]);
         }
 
-        logger()->channel('stderr')->info('🕷 [MAL_ID:ANIME:' . $id . '] Parsing response');
+        logger()->channel('stderr')->debug('🕷 [MAL_ID:ANIME:' . $id . '] Parsing response');
         $nameNode = $response->filter('h1.title-name');
 
         if (!$nameNode->count()) {
@@ -157,7 +157,7 @@ class AnimeSpider extends BasicSpider
         $openings = $this->cleanSongs($response, 'div[class*="theme-songs opnening"] table'); // typo on the website
         $endings = $this->cleanSongs($response, 'div[class*="theme-songs ending"] table');
 
-        logger()->channel('stderr')->info('✅️ [MAL_ID:ANIME:' . $id . '] Done parsing');
+        logger()->channel('stderr')->debug('✅️ [MAL_ID:ANIME:' . $id . '] Done parsing');
 
         yield $this->item(new AnimeItem(
             $id,
@@ -189,7 +189,7 @@ class AnimeSpider extends BasicSpider
         $regex = '/anime\/(\d*)/';
         $uri = str($response->getUri());
         $id = $uri->match($regex)->remove('/anime/')->value();
-        logger()->channel('stderr')->info('🕷 [MAL_ID:ANIME:' . $id . '] Parsing stats response');
+        logger()->channel('stderr')->debug('🕷 [MAL_ID:ANIME:' . $id . '] Parsing stats response');
 
         $scores = $response->filter('table.score-stats tr')
             ->each(function (Crawler $item) {

@@ -109,7 +109,7 @@ class MagazineSpider extends BasicSpider
             return $this->item([]);
         }
 
-        logger()->channel('stderr')->info('🕷 [MAL_ID:MAGAZINE:' . $id . '] Parsing response');
+        logger()->channel('stderr')->debug('🕷 [MAL_ID:MAGAZINE:' . $id . '] Parsing response');
         $nameNode = $response->filter('h1.h1');
 
         if (!$nameNode->count()) {

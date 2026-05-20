@@ -107,7 +107,7 @@ class ProducerSpider extends BasicSpider
             return $this->item([]);
         }
 
-        logger()->channel('stderr')->info('🕷 [MAL_ID:PRODUCER:' . $id . '] Parsing response');
+        logger()->channel('stderr')->debug('🕷 [MAL_ID:PRODUCER:' . $id . '] Parsing response');
         $nameNode = $response->filter('h1.title-name');
 
         if (!$nameNode->count()) {
