@@ -4,6 +4,7 @@ namespace App\Spiders\MAL;
 
 use App\Processors\MAL\CharacterProcessor;
 use App\Spiders\MAL\Middleware\CircuitBreakerMiddleware;
+use App\Spiders\MAL\Middleware\RateLimitMiddleware;
 use App\Spiders\MAL\Models\CharacterItem;
 use Generator;
 use InvalidArgumentException;
@@ -25,6 +26,7 @@ class CharacterSpider extends BasicSpider
     public array $downloaderMiddleware = [
         RequestDeduplicationMiddleware::class,
         CircuitBreakerMiddleware::class,
+        RateLimitMiddleware::class,
         [
             UserAgentMiddleware::class,
             ['userAgent' => 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'],
