@@ -22,18 +22,17 @@ set +a
 
 ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
 REGISTRY="${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
-ECR_TAG="${REGISTRY}/${ECR_REPOSITORY}:frankenphp"
+ECR_TAG="${REGISTRY}/${ECR_REPOSITORY}:latest"
 
 docker build \
     --file Dockerfile.frankenphp \
-    --platform linux/amd64 \
     --provenance=false \
     --sbom=false \
     --secret id=vite_reverb_app_key,env=VITE_REVERB_APP_KEY \
     --build-arg VITE_REVERB_HOST \
     --build-arg VITE_REVERB_PORT \
     --build-arg VITE_REVERB_SCHEME \
-    -t kurozora:frankenphp \
+    -t kurozora:latest \
     -t "$ECR_TAG" \
     .
 

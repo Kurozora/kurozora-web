@@ -26,7 +26,7 @@ RUN --mount=type=secret,id=vite_reverb_app_key,env=VITE_REVERB_APP_KEY \
 ###
 
 ### Custom FrankenPHP build with caddy-ratelimit
-FROM dunglas/frankenphp:1-builder-php8.4-alpine AS frankenphp-builder
+FROM dunglas/frankenphp:1.12-builder-php8.5-alpine AS frankenphp-builder
 
 COPY --from=caddy:builder-alpine /usr/bin/xcaddy /usr/bin/xcaddy
 
@@ -38,12 +38,13 @@ RUN CGO_ENABLED=1 \
     xcaddy build \
         --output /usr/local/bin/frankenphp \
         --with github.com/dunglas/frankenphp/caddy \
+        --with github.com/dunglas/caddy-cbrotli \
         --with github.com/mholt/caddy-ratelimit
 
 ###
 
 ### Shared PHP base stage with system deps and PHP extensions installed once
-FROM dunglas/frankenphp:1-php8.4-alpine AS php-base
+FROM dunglas/frankenphp:1.12-php8.5-alpine AS php-base
 
 # Override the stock FrankenPHP binary with the caddy-ratelimit build
 COPY --from=frankenphp-builder /usr/local/bin/frankenphp /usr/local/bin/frankenphp
@@ -75,6 +76,7 @@ RUN install-php-extensions exif \
     gd imagick/imagick@master \
     intl \
     opcache \
+    pcntl \
     pdo_mysql \
     redis \
     zip
@@ -94,6 +96,7 @@ RUN curl -s https://getcomposer.org/installer | php -- --install-dir=/usr/local/
 # Install vendor dependencies
 COPY composer.json composer.lock ./
 COPY nova ./nova
+COPY nova-components ./nova-components
 RUN composer install --no-interaction --prefer-dist --no-dev --no-cache --no-scripts --no-autoloader
 
 # Copy the rest of the project files
@@ -121,6 +124,12 @@ RUN APP_KEY="base64:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=" \
 FROM php-base AS app
 
 ARG WORKDIR=/var/www/html
+ARG VITE_REVERB_HOST
+ARG VITE_REVERB_PORT
+ARG VITE_REVERB_SCHEME
+ENV VITE_REVERB_HOST=$VITE_REVERB_HOST \
+    VITE_REVERB_PORT=$VITE_REVERB_PORT \
+    VITE_REVERB_SCHEME=$VITE_REVERB_SCHEME
 
 WORKDIR $WORKDIR
 

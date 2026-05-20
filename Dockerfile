@@ -75,6 +75,7 @@ RUN curl -s https://getcomposer.org/installer | php -- --install-dir=/usr/local/
 # Install vendor dependencies
 COPY composer.json composer.lock ./
 COPY nova ./nova
+COPY nova-components ./nova-components
 RUN composer install --no-interaction --prefer-dist --no-dev --no-cache --no-scripts --no-autoloader
 
 # Copy the rest of the project files
