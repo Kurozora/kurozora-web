@@ -9,6 +9,7 @@ use App\Traits\Model\TvRated;
 use File;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Jaybizzle\CrawlerDetect\CrawlerDetect;
 use ReflectionClass;
 
 class MorphTvRatingScope extends TvRatingScope
@@ -18,6 +19,10 @@ class MorphTvRatingScope extends TvRatingScope
      */
     public function apply(Builder $builder, Model $model): void
     {
+        if ((new CrawlerDetect)->isCrawler()) {
+            return;
+        }
+
         $preferredTvRating = request()->tvRating();
 
         // Basically if Tv Rating exists

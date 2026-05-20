@@ -4,7 +4,6 @@ namespace App\Traits\Model;
 
 use App\Scopes\IgnoreListScope;
 use Illuminate\Database\Query\Builder;
-use Jaybizzle\CrawlerDetect\CrawlerDetect;
 
 /**
  * @method static \Illuminate\Database\Eloquent\Builder|Builder withIgnoreList(bool $withTrashed = true)
@@ -19,10 +18,6 @@ trait Ignored
      */
     public static function bootIgnored(): void
     {
-        if ((new CrawlerDetect)->isCrawler()) {
-            return;
-        }
-
         static::addGlobalScope(new IgnoreListScope());
     }
 

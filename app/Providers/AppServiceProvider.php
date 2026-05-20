@@ -163,11 +163,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        // Register explore category scope. This makes sure only enabled categories are included.
-        $this->app->bind('explore.only_enabled', function () {
-            return true;
-        });
-
         // Register App Store service.
         $this->app->bind(AppStoreService::class, function () {
             return new AppStoreService();

@@ -42,9 +42,7 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
     {
         parent::boot();
 
-        if (app('explore.only_enabled')) {
-            static::addGlobalScope(new ExploreCategoryIsEnabledScope);
-        }
+        static::addGlobalScope(new ExploreCategoryIsEnabledScope);
     }
 
     /**

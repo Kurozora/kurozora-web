@@ -19,9 +19,7 @@ class ExploreCategoryAlwaysEnabled
     public function handle(Request $request, Closure $next): Response|RedirectResponse
     {
         // Turn off only enabled explore categories, so all categories are included.
-        app()->bind('explore.only_enabled', function () {
-            return false;
-        });
+        $request->attributes->set('exploreOnlyEnabled', false);
 
         return $next($request);
     }
