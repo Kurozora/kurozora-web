@@ -13,6 +13,11 @@ class ProcessBareBonesCharacterAdded implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    /**
+     * The id to process.
+     *
+     * @var string $malID
+     */
     protected string $malID;
 
     /**
@@ -22,6 +27,7 @@ class ProcessBareBonesCharacterAdded implements ShouldQueue
      */
     public function __construct(string $malID)
     {
+        $this->queue = 'scrape';
         $this->malID = $malID;
     }
 
