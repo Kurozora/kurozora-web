@@ -833,9 +833,10 @@ class AnimeProcessor extends CustomItemProcessor
 
                 switch ($relation['type']) {
                     case 'anime':
-                        if ($foundAnime = Anime::firstWhere([
-                            'mal_id' => $malID,
-                        ])) {
+                        if ($foundAnime = Anime::withoutGlobalScopes()
+                            ->firstWhere([
+                                'mal_id' => $malID,
+                            ])) {
                             $relatedModel = $foundAnime;
                         } else {
                             $relatedModel = Anime::create([
@@ -847,9 +848,10 @@ class AnimeProcessor extends CustomItemProcessor
                         }
                         break;
                     case 'manga':
-                        if ($foundManga = Manga::firstWhere([
-                            'mal_id' => $malID,
-                        ])) {
+                        if ($foundManga = Manga::withoutGlobalScopes()
+                            ->firstWhere([
+                                'mal_id' => $malID,
+                            ])) {
                             $relatedModel = $foundManga;
                         } else {
                             $relatedModel = Manga::create([
