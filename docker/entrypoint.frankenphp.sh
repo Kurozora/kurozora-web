@@ -52,6 +52,19 @@ case "$ROLE" in
             --max-time=3600
         ;;
 
+    scrape-worker)
+        echo ""
+        echo "***********************************"
+        echo "    Starting scrape worker...      "
+        echo "***********************************"
+        exec php /var/www/html/artisan queue:work redis \
+            --queue=scrape \
+            --sleep=3 \
+            --tries=3 \
+            --backoff=60 \
+            --max-time=3600
+        ;;
+
     scheduler)
         echo ""
         echo "***********************************"
@@ -93,7 +106,7 @@ case "$ROLE" in
 
     *)
         echo "${Red}Unknown CONTAINER_ROLE: ${ROLE}"
-        echo "${Red}Valid roles: web, worker, scheduler, reverb, all"
+        echo "${Red}Valid roles: web, worker, scrape-worker, scheduler, reverb, all"
         exit 1
         ;;
 esac
