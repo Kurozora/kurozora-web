@@ -4,6 +4,7 @@ namespace App\Spiders\MAL;
 
 use App\Processors\MAL\ProducerProcessor;
 use App\Spiders\MAL\Middleware\CircuitBreakerMiddleware;
+use App\Spiders\MAL\Middleware\BackoffMiddleware;
 use App\Spiders\MAL\Middleware\RateLimitMiddleware;
 use App\Spiders\MAL\Models\ProducerItem;
 use Exception;
@@ -42,6 +43,7 @@ class ProducerSpider extends BasicSpider
     public array $downloaderMiddleware = [
         RequestDeduplicationMiddleware::class,
         CircuitBreakerMiddleware::class,
+        BackoffMiddleware::class,
         RateLimitMiddleware::class,
         [
             UserAgentMiddleware::class,

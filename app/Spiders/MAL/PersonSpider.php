@@ -4,6 +4,7 @@ namespace App\Spiders\MAL;
 
 use App\Processors\MAL\PersonProcessor;
 use App\Spiders\MAL\Middleware\CircuitBreakerMiddleware;
+use App\Spiders\MAL\Middleware\BackoffMiddleware;
 use App\Spiders\MAL\Middleware\RateLimitMiddleware;
 use App\Spiders\MAL\Models\PersonItem;
 use Exception;
@@ -27,6 +28,7 @@ class PersonSpider extends BasicSpider
     public array $downloaderMiddleware = [
         RequestDeduplicationMiddleware::class,
         CircuitBreakerMiddleware::class,
+        BackoffMiddleware::class,
         RateLimitMiddleware::class,
         [
             UserAgentMiddleware::class,

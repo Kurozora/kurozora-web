@@ -6,6 +6,7 @@ use App\Enums\StudioType;
 use App\Models\Studio;
 use App\Processors\MAL\CompanyProcessor;
 use App\Spiders\MAL\Middleware\CircuitBreakerMiddleware;
+use App\Spiders\MAL\Middleware\BackoffMiddleware;
 use App\Spiders\MAL\Middleware\RateLimitMiddleware;
 use App\Spiders\MAL\Models\CompanyItem;
 use Generator;
@@ -43,6 +44,7 @@ class CompanySpider extends BasicSpider
     public array $downloaderMiddleware = [
         RequestDeduplicationMiddleware::class,
         CircuitBreakerMiddleware::class,
+        BackoffMiddleware::class,
         RateLimitMiddleware::class,
         [
             UserAgentMiddleware::class,

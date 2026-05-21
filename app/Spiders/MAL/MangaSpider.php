@@ -5,6 +5,7 @@ namespace App\Spiders\MAL;
 use App\Processors\MAL\MangaProcessor;
 use App\Processors\MAL\MangaStatsProcessor;
 use App\Spiders\MAL\Middleware\CircuitBreakerMiddleware;
+use App\Spiders\MAL\Middleware\BackoffMiddleware;
 use App\Spiders\MAL\Middleware\RateLimitMiddleware;
 use App\Spiders\MAL\Models\MangaItem;
 use App\Spiders\MAL\Models\MangaStatItem;
@@ -45,6 +46,7 @@ class MangaSpider extends BasicSpider
     public array $downloaderMiddleware = [
         RequestDeduplicationMiddleware::class,
         CircuitBreakerMiddleware::class,
+        BackoffMiddleware::class,
         RateLimitMiddleware::class,
         [
             UserAgentMiddleware::class,

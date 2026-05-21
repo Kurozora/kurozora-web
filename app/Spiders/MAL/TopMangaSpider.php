@@ -5,6 +5,7 @@ namespace App\Spiders\MAL;
 use App\Models\Manga;
 use App\Processors\MAL\TopMangaProcessor;
 use App\Spiders\MAL\Middleware\CircuitBreakerMiddleware;
+use App\Spiders\MAL\Middleware\BackoffMiddleware;
 use App\Spiders\MAL\Middleware\RateLimitMiddleware;
 use Generator;
 use RoachPHP\Downloader\DownloaderMiddlewareInterface;
@@ -42,6 +43,7 @@ class TopMangaSpider extends BasicSpider
     public array $downloaderMiddleware = [
         RequestDeduplicationMiddleware::class,
         CircuitBreakerMiddleware::class,
+        BackoffMiddleware::class,
         RateLimitMiddleware::class,
         [
             UserAgentMiddleware::class,
