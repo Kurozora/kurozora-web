@@ -56,7 +56,8 @@ trait HasMediaGenres
     {
         return $this->belongsToMany(Genre::class, MediaGenre::class, 'model_id')
             ->where('model_type', '=', $this->getMorphClass())
-            ->withTimestamps();
+            ->withTimestamps()
+            ->withoutGlobalScopes();
     }
 
     /**

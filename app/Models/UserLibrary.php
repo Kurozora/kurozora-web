@@ -93,8 +93,7 @@ class UserLibrary extends Pivot
     {
         return $query->withoutGlobalScopes()
             ->with(['trackable' => function($query) {
-                $query->withoutGlobalScopes()
-                    ->with('translations');
+                $query->with('translations');
             }]);
     }
 
@@ -140,7 +139,7 @@ class UserLibrary extends Pivot
      */
     public function trackable(): MorphTo
     {
-        return $this->morphTo();
+        return $this->morphTo()->withoutGlobalScopes();
     }
 
     /**

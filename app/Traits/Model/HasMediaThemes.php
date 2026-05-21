@@ -56,7 +56,8 @@ trait HasMediaThemes
     {
         return $this->belongsToMany(Theme::class, MediaTheme::class, 'model_id')
             ->where('model_type', '=', $this->getMorphClass())
-            ->withTimestamps();
+            ->withTimestamps()
+            ->withoutGlobalScopes();
     }
 
     /**
