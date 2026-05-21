@@ -8,6 +8,8 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Redis;
+use Throwable;
 
 class ProcessBareBonesAnimeAdded implements ShouldQueue
 {
@@ -37,5 +39,17 @@ class ProcessBareBonesAnimeAdded implements ShouldQueue
     public function handle(): void
     {
         Artisan::call('scrape:mal_anime', ['malID' => $this->malID]);
+    }
+
+    /**
+     * Clears the dedupe key on permanent failure.
+     *
+     * @param Throwable $exception
+     *
+     * @return void
+     */
+    public function failed(Throwable $exception): void
+    {
+        Redis::del('mal:bb:anime:' . $this->malID);
     }
 }

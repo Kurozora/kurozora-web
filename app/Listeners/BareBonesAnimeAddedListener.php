@@ -5,6 +5,7 @@ namespace App\Listeners;
 use App\Events\BareBonesAnimeAdded;
 use App\Jobs\ProcessBareBonesAnimeAdded;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Facades\Redis;
 
 class BareBonesAnimeAddedListener implements ShouldQueue
 {
@@ -23,8 +24,10 @@ class BareBonesAnimeAddedListener implements ShouldQueue
      */
     public function handle(BareBonesAnimeAdded $event): void
     {
-        // Dispatch the job, but delay it with 5 minutes to
-        // lessen the load on the server.
+        if (!Redis::set('mal:bb:anime:' . $event->malID, 1, 'EX', 86400, 'NX')) {
+            return;
+        }
+
         dispatch(new ProcessBareBonesAnimeAdded($event->malID))
             ->delay(now()->addMinutes(5));
     }
