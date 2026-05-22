@@ -13,7 +13,6 @@ use App\Http\Resources\EpisodeResource;
 use App\Http\Resources\MediaRatingResource;
 use App\Models\Anime;
 use App\Models\Episode;
-use App\Models\MediaRating;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
@@ -273,45 +272,8 @@ class EpisodeController extends Controller
             throw new AuthorizationException(__('Please watch ":x" first.', ['x' => $episode->title]));
         }
 
-        // Validate the request
         $data = $request->validated();
-
-        // Fetch the variables
-        $givenRating = $data['rating'];
-        $description = $data['description'] ?? null;
-
-        // Modify the rating if it already exists
-        /** @var MediaRating $foundRating */
-        $foundRating = $user->episodeRatings()
-            ->withoutTvRatings()
-            ->where('model_id', '=', $episode->id)
-            ->first();
-
-        // The rating exists
-        if ($foundRating) {
-            // If the given rating is 0
-            if ($givenRating <= 0) {
-                // Delete the rating
-                $foundRating->delete();
-            } else {
-                // Update the current rating
-                $foundRating->update([
-                    'rating' => $givenRating,
-                    'description' => $description
-                ]);
-            }
-        } else {
-            // Only insert the rating if it's rated higher than 0
-            if ($givenRating > 0) {
-                MediaRating::create([
-                    'user_id' => $user->id,
-                    'model_id' => $episode->id,
-                    'model_type' => $episode->getMorphClass(),
-                    'rating' => $givenRating,
-                    'description' => $description,
-                ]);
-            }
-        }
+        $user->rateMediaModel($episode, $data['rating'], $data['description'] ?? null);
 
         return JSONResult::success();
     }

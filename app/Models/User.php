@@ -21,6 +21,7 @@ use App\Traits\Model\HasBlocking;
 use App\Traits\Model\HasSlug;
 use App\Traits\Model\HasViews;
 use App\Traits\Model\Impersonatable;
+use App\Traits\Model\MediaRater;
 use App\Traits\Model\Reminder;
 use App\Traits\Model\Tracker;
 use App\Traits\Model\UserBlockable;
@@ -90,6 +91,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         LogsActivity,
         Notifiable,
         MassPrunable,
+        MediaRater,
         Reacterable,
         Reminder,
         Searchable,
@@ -364,120 +366,6 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     public function language(): BelongsTo
     {
         return $this->belongsTo(Language::class, 'language_id', 'code');
-    }
-
-    /**
-     * Returns the anime ratings the user has.
-     *
-     * @return HasMany
-     */
-    public function mediaRatings(): HasMany
-    {
-        return $this->hasMany(MediaRating::class);
-    }
-
-    /**
-     * Returns the anime ratings the user has.
-     *
-     * @param null|string $type
-     *
-     * @return bool
-     */
-    public function clearRatings(?string $type = null): bool
-    {
-        return $this->mediaRatings()
-            ->when($type != null, function ($query) use ($type) {
-                $query->where('model_type', '=', $type);
-            })
-            ->forceDelete();
-    }
-
-    /**
-     * Returns the anime ratings the user has.
-     *
-     * @return HasMany
-     */
-    public function animeRatings(): HasMany
-    {
-        return $this->mediaRatings()
-            ->where('model_type', '=', Anime::class);
-    }
-
-    /**
-     * Returns the character ratings the user has.
-     *
-     * @return HasMany
-     */
-    public function characterRatings(): HasMany
-    {
-        return $this->mediaRatings()
-            ->where('model_type', '=', Character::class);
-    }
-
-    /**
-     * Returns the game ratings the user has.
-     *
-     * @return HasMany
-     */
-    public function gameRatings(): HasMany
-    {
-        return $this->mediaRatings()
-            ->where('model_type', '=', Game::class);
-    }
-
-    /**
-     * Returns the manga ratings the user has.
-     *
-     * @return HasMany
-     */
-    public function mangaRatings(): HasMany
-    {
-        return $this->mediaRatings()
-            ->where('model_type', '=', Manga::class);
-    }
-
-    /**
-     * Returns the episode ratings the user has.
-     *
-     * @return HasMany
-     */
-    public function episodeRatings(): HasMany
-    {
-        return $this->mediaRatings()
-            ->where('model_type', '=', Episode::class);
-    }
-
-    /**
-     * Returns the person ratings the user has.
-     *
-     * @return HasMany
-     */
-    public function personRatings(): HasMany
-    {
-        return $this->mediaRatings()
-            ->where('model_type', '=', Person::class);
-    }
-
-    /**
-     * Returns the song ratings the user has.
-     *
-     * @return HasMany
-     */
-    public function songRatings(): HasMany
-    {
-        return $this->mediaRatings()
-            ->where('model_type', '=', Song::class);
-    }
-
-    /**
-     * Returns the studio ratings the user has.
-     *
-     * @return HasMany
-     */
-    public function studioRatings(): HasMany
-    {
-        return $this->mediaRatings()
-            ->where('model_type', '=', Studio::class);
     }
 
     /**
@@ -1076,18 +964,6 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
             ->whereHas('loveReactant.reactionTotal', function (Builder $query) {
                 $query->where('count', '>', 0);
             });
-    }
-
-    public function media_ratings_without_description(): HasMany
-    {
-        return $this->mediaRatings()
-            ->whereNull('description');
-    }
-
-    public function media_ratings_with_description(): HasMany
-    {
-        return $this->mediaRatings()
-            ->whereNotNull('description');
     }
 
     public function library_completed(): HasMany

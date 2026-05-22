@@ -70,8 +70,8 @@ class CalculateUserReputation extends Command
                     'reshares_received',
                     'replies_received',
                     'hearts_received',
-                    'media_ratings_without_description',
-                    'media_ratings_with_description',
+                    'mediaRatingsWithoutDescription',
+                    'mediaRatingsWithDescription',
                     'followers',
                     'blocked',
                 ])
@@ -98,8 +98,8 @@ class CalculateUserReputation extends Command
                     'reshares_received',
                     'replies_received',
                     'hearts_received',
-                    'media_ratings_without_description',
-                    'media_ratings_with_description',
+                    'mediaRatingsWithoutDescription',
+                    'mediaRatingsWithDescription',
                     'followers',
                     'blocked_by',
                 ])

@@ -129,7 +129,7 @@ class ReviewBox extends Component
         $reviewText = empty($reviewText) ? null : $reviewText;
         $noteText = empty($noteText) ? null : $noteText;
 
-        auth()->user()->mediaRatings()
+        auth()->user()->mediaRatings()->withoutGlobalScopes()
             ->updateOrCreate([
                 'model_type' => $this->modelType,
                 'model_id' => $this->modelID,

@@ -28,7 +28,6 @@ use App\Http\Resources\StudioResource;
 use App\Models\Anime;
 use App\Models\Game;
 use App\Models\Manga;
-use App\Models\MediaRating;
 use App\Scopes\TvRatingScope;
 use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
 use Exception;
@@ -742,45 +741,8 @@ class AnimeController extends Controller
             throw new AuthorizationException(__('Please add ":x" to your library first.', ['x' => $anime->title]));
         }
 
-        // Validate the request
         $data = $request->validated();
-
-        // Fetch the variables
-        $givenRating = $data['rating'];
-        $description = $data['description'] ?? null;
-
-        // Modify the rating if it already exists
-        /** @var MediaRating $foundRating */
-        $foundRating = $user->animeRatings()
-            ->withoutTvRatings()
-            ->where('model_id', '=', $anime->id)
-            ->first();
-
-        // The rating exists
-        if ($foundRating) {
-            // If the given rating is 0
-            if ($givenRating <= 0) {
-                // Delete the rating
-                $foundRating->delete();
-            } else {
-                // Update the current rating
-                $foundRating->update([
-                    'rating' => $givenRating,
-                    'description' => $description ?? $foundRating->description,
-                ]);
-            }
-        } else {
-            // Only insert the rating if it's rated higher than 0
-            if ($givenRating > 0) {
-                MediaRating::create([
-                    'user_id' => $user->id,
-                    'model_id' => $anime->id,
-                    'model_type' => $anime->getMorphClass(),
-                    'rating' => $givenRating,
-                    'description' => $description,
-                ]);
-            }
-        }
+        $user->rateMediaModel($anime, $data['rating'], $data['description'] ?? null);
 
         return JSONResult::success();
     }

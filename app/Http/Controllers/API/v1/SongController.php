@@ -15,7 +15,6 @@ use App\Http\Resources\AnimeResource;
 use App\Http\Resources\GameResource;
 use App\Http\Resources\MediaRatingResource;
 use App\Http\Resources\SongResource;
-use App\Models\MediaRating;
 use App\Models\Song;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -217,45 +216,8 @@ class SongController extends Controller
     {
         $user = auth()->user();
 
-        // Validate the request
         $data = $request->validated();
-
-        // Fetch the variables
-        $givenRating = $data['rating'] ?? null;
-        $description = $data['description'] ?? null;
-
-        // Modify the rating if it already exists
-        /** @var MediaRating $foundRating */
-        $foundRating = $user->songRatings()
-            ->withoutTvRatings()
-            ->where('model_id', '=', $song->id)
-            ->first();
-
-        // The rating exists
-        if ($foundRating) {
-            // If the given rating is 0
-            if ($givenRating <= 0) {
-                // Delete the rating
-                $foundRating->delete();
-            } else {
-                // Update the current rating
-                $foundRating->update([
-                    'rating' => $givenRating,
-                    'description' => $description ?? $foundRating->description,
-                ]);
-            }
-        } else {
-            // Only insert the rating if it's rated higher than 0
-            if ($givenRating > 0) {
-                MediaRating::create([
-                    'user_id' => $user->id,
-                    'model_id' => $song->id,
-                    'model_type' => $song->getMorphClass(),
-                    'rating' => $givenRating,
-                    'description' => $description
-                ]);
-            }
-        }
+        $user->rateMediaModel($song, $data['rating'] ?? 0, $data['description'] ?? null);
 
         return JSONResult::success();
     }

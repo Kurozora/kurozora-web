@@ -20,7 +20,6 @@ use App\Http\Resources\StudioResourceIdentity;
 use App\Models\Anime;
 use App\Models\Game;
 use App\Models\Manga;
-use App\Models\MediaRating;
 use App\Models\Studio;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Contracts\Container\BindingResolutionException;
@@ -302,45 +301,8 @@ class StudioController extends Controller
     {
         $user = auth()->user();
 
-        // Validate the request
         $data = $request->validated();
-
-        // Fetch the variables
-        $givenRating = $data['rating'];
-        $description = $data['description'] ?? null;
-
-        // Modify the rating if it already exists
-        /** @var MediaRating $foundRating */
-        $foundRating = $user->studioRatings()
-            ->withoutTvRatings()
-            ->where('model_id', '=', $studio->id)
-            ->first();
-
-        // The rating exists
-        if ($foundRating) {
-            // If the given rating is 0
-            if ($givenRating <= 0) {
-                // Delete the rating
-                $foundRating->delete();
-            } else {
-                // Update the current rating
-                $foundRating->update([
-                    'rating' => $givenRating,
-                    'description' => $description ?? $foundRating->description,
-                ]);
-            }
-        } else {
-            // Only insert the rating if it's rated higher than 0
-            if ($givenRating > 0) {
-                MediaRating::create([
-                    'user_id' => $user->id,
-                    'model_id' => $studio->id,
-                    'model_type' => $studio->getMorphClass(),
-                    'rating' => $givenRating,
-                    'description' => $description,
-                ]);
-            }
-        }
+        $user->rateMediaModel($studio, $data['rating'], $data['description'] ?? null);
 
         return JSONResult::success();
     }
