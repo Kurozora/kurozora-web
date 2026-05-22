@@ -91,7 +91,7 @@ class GameController extends Controller
 
         $user = auth()->user();
 
-        $game->load(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
+        $game->load(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'countryOfOrigin'])
             ->when($user, function ($query, $user) use ($game) {
                 $game->load(['mediaRatings' => function ($query) use ($user) {
                     $query->where([
@@ -132,7 +132,7 @@ class GameController extends Controller
                             $query->with([
                                 'related' => function ($query) {
                                     $query->withoutGlobalScopes([TvRatingScope::class])
-                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin']);
+                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'countryOfOrigin']);
                                 },
                                 'relation'
                             ])
@@ -144,7 +144,7 @@ class GameController extends Controller
                             $query->with([
                                 'related' => function ($query) {
                                     $query->withoutGlobalScopes([TvRatingScope::class])
-                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin']);
+                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'countryOfOrigin']);
                                 },
                                 'relation'
                             ])
@@ -156,7 +156,7 @@ class GameController extends Controller
                             $query->with([
                                 'related' => function ($query) {
                                     $query->withoutGlobalScopes([TvRatingScope::class])
-                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin']);
+                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'countryOfOrigin']);
                                 },
                                 'relation'
                             ])
@@ -176,7 +176,7 @@ class GameController extends Controller
                         break;
                     case 'staff':
                         $includeArray['mediaStaff'] = function ($query) {
-                            $query->with(['model', 'staff_role', 'person.media'])
+                            $query->with(['model', 'staffRole', 'person.media'])
                                 ->limit(Game::MAXIMUM_RELATIONSHIPS_LIMIT);
                         };
                         break;
@@ -208,7 +208,7 @@ class GameController extends Controller
         $data = $request->validated();
 
         $game = Game::whereIn('id', $data['ids'] ?? []);
-        $game->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
+        $game->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'countryOfOrigin'])
             ->when(auth()->user(), function ($query, $user) use ($game) {
                 $game->with(['mediaRatings' => function ($query) use ($user) {
                     $query->where([
@@ -249,7 +249,7 @@ class GameController extends Controller
                             $query->with([
                                 'related' => function ($query) {
                                     $query->withoutGlobalScopes([TvRatingScope::class])
-                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin']);
+                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'countryOfOrigin']);
                                 },
                                 'relation'
                             ])
@@ -261,7 +261,7 @@ class GameController extends Controller
                             $query->with([
                                 'related' => function ($query) {
                                     $query->withoutGlobalScopes([TvRatingScope::class])
-                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin']);
+                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'countryOfOrigin']);
                                 },
                                 'relation'
                             ])
@@ -273,7 +273,7 @@ class GameController extends Controller
                             $query->with([
                                 'related' => function ($query) {
                                     $query->withoutGlobalScopes([TvRatingScope::class])
-                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin']);
+                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'countryOfOrigin']);
                                 },
                                 'relation'
                             ])
@@ -293,7 +293,7 @@ class GameController extends Controller
                         break;
                     case 'staff':
                         $includeArray['mediaStaff'] = function ($query) {
-                            $query->with(['model', 'staff_role', 'person.media'])
+                            $query->with(['model', 'staffRole', 'person.media'])
                                 ->limit(Game::MAXIMUM_RELATIONSHIPS_LIMIT);
                         };
                         break;
@@ -406,7 +406,7 @@ class GameController extends Controller
             ->with([
                 'related' => function ($query) {
                     $query->withoutGlobalScopes([TvRatingScope::class])
-                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
+                        ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'countryOfOrigin'])
                         ->when(auth()->user(), function ($query, $user) {
                             $query->with(['mediaRatings' => function ($query) use ($user) {
                                 $query->where([
@@ -456,7 +456,7 @@ class GameController extends Controller
             ->with([
                 'related' => function ($query) {
                     $query->withoutGlobalScopes([TvRatingScope::class])
-                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
+                        ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'countryOfOrigin'])
                         ->when(auth()->user(), function ($query, $user) {
                             $query->with(['mediaRatings' => function ($query) use ($user) {
                                 $query->where([
@@ -503,7 +503,7 @@ class GameController extends Controller
             ->with([
                 'related' => function ($query) {
                     $query->withoutGlobalScopes([TvRatingScope::class])
-                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
+                        ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'countryOfOrigin'])
                         ->when(auth()->user(), function ($query, $user) {
                             $query->with(['mediaRatings' => function ($query) use ($user) {
                                 $query->where([
@@ -591,7 +591,7 @@ class GameController extends Controller
                 'person' => function ($query) {
                     $query->with(['media']);
                 },
-                'staff_role'
+                'staffRole'
             ])
             ->cursorPaginate($data['limit'] ?? 25);
 

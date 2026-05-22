@@ -133,10 +133,10 @@ class Details extends Component
         ModelViewed::dispatch($episode, request()->ip());
 
         $this->episode = $episode->loadMissing([
-            'previous_episode' => function (BelongsTo $belongsTo) {
+            'previousEpisode' => function (BelongsTo $belongsTo) {
                 $belongsTo->withoutGlobalScopes();
             },
-            'next_episode' => function (BelongsTo $belongsTo) {
+            'nextEpisode' => function (BelongsTo $belongsTo) {
                 $belongsTo->withoutGlobalScopes()
                     ->with(['translation']);
             },
@@ -168,7 +168,7 @@ class Details extends Component
                     }
                 ])
                     ->loadExists([
-                        'user_watched_episodes as isWatched' => function ($query) use ($user) {
+                        'userWatchedEpisodes as isWatched' => function ($query) use ($user) {
                             $query->where('user_id', $user->id);
                         }
                     ]);
@@ -177,8 +177,8 @@ class Details extends Component
             });
         $episode->season->setRelation('anime', $episode->anime);
 
-        $this->previousEpisode = $episode->previous_episode;
-        $this->nextEpisode = $episode->next_episode;
+        $this->previousEpisode = $episode->previousEpisode;
+        $this->nextEpisode = $episode->nextEpisode;
         $this->season = $episode->season;
         $this->anime = $episode->season->anime;
 
@@ -194,7 +194,7 @@ class Details extends Component
     {
         $this->episode->when(auth()->user(), function ($query, $user) {
             $this->episode->loadExists([
-                'user_watched_episodes as isWatched' => function ($query) use ($user) {
+                'userWatchedEpisodes as isWatched' => function ($query) use ($user) {
                     $query->where('user_id', $user->id);
                 }
             ]);

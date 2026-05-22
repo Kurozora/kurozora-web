@@ -85,7 +85,7 @@ class ExploreCategoryItem extends Resource
      * @var array
      */
     public static $with = [
-        'explore_category'
+        'exploreCategory'
     ];
 
     /**
@@ -118,7 +118,7 @@ class ExploreCategoryItem extends Resource
                 ->hideWhenUpdating()
                 ->help('This determines the position on the item. Generated automatically!'),
 
-            BelongsTo::make('Explore Category', 'explore_category'),
+            BelongsTo::make('Explore Category'),
 
             MorphTo::make('Model')
                 ->types([
@@ -147,7 +147,7 @@ class ExploreCategoryItem extends Resource
      */
     public function title(): string
     {
-        $exploreCategory = $this->resource->explore_category;
+        $exploreCategory = $this->resource->exploreCategory;
 
         return $exploreCategory->title . ' Items';
     }

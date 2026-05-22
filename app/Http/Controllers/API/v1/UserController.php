@@ -135,7 +135,7 @@ class UserController extends Controller
         $loveReactantLoader = FeedMessage::loveReactantLoader($authUser);
 
         // Get the feed messages
-        $feedMessages = $user->feed_messages()
+        $feedMessages = $user->feedMessages()
             ->with([
                 'user' => fn($query) => $this->eagerLoadUser($query),
                 'loveReactant' => $loveReactantLoader,

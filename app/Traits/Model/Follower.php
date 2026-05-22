@@ -15,7 +15,7 @@ trait Follower
      *
      * @return HasMany
      */
-    public function follower_follows(): HasMany
+    public function followerFollows(): HasMany
     {
         return $this->hasMany(UserFollow::class);
     }
@@ -40,7 +40,7 @@ trait Follower
      */
     public function hasFollowed(Model $model): bool
     {
-        return ($this->relationLoaded('follower_follows') ? $this->follower_follows : $this->follower_follows())
+        return ($this->relationLoaded('followerFollows') ? $this->followerFollows : $this->followerFollows())
             ->where('following_user_id', $model->getKey())
             ->exists();
     }
@@ -68,16 +68,16 @@ trait Follower
             'following_user_id' => $model->getKey(),
         ];
 
-        return $this->follower_follows()
+        return $this->followerFollows()
             ->where($attributes)
             ->firstOr(function () use ($attributes) {
-                $userFollowsLoaded = $this->relationLoaded('follower_follows');
+                $userFollowsLoaded = $this->relationLoaded('followerFollows');
 
                 if ($userFollowsLoaded) {
-                    $this->unsetRelation('follower_follows');
+                    $this->unsetRelation('followerFollows');
                 }
 
-                return $this->follower_follows()
+                return $this->followerFollows()
                     ->create($attributes);
             });
     }
@@ -96,9 +96,9 @@ trait Follower
             return true;
         }
 
-        $userFollowsLoaded = $this->relationLoaded('follower_follows');
+        $userFollowsLoaded = $this->relationLoaded('followerFollows');
         if ($userFollowsLoaded) {
-            $this->unsetRelation('follower_follows');
+            $this->unsetRelation('followerFollows');
         }
 
         return (bool) $this->followedModels($model::class)
@@ -112,7 +112,7 @@ trait Follower
      */
     public function clearFollows(): bool
     {
-        return $this->follower_follows()
+        return $this->followerFollows()
             ->forceDelete();
     }
 

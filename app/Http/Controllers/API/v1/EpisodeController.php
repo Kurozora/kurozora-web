@@ -41,7 +41,7 @@ class EpisodeController extends Controller
                     ]);
                 }])
                     ->loadExists([
-                        'user_watched_episodes as isWatched' => function ($query) use ($user) {
+                        'userWatchedEpisodes as isWatched' => function ($query) use ($user) {
                             $query->where('user_id', '=', $user->id);
                         }
                     ]);
@@ -110,7 +110,7 @@ class EpisodeController extends Controller
                     ]);
                 }])
                     ->withExists([
-                        'user_watched_episodes as isWatched' => function ($query) use ($user) {
+                        'userWatchedEpisodes as isWatched' => function ($query) use ($user) {
                             $query->where('user_id', '=', $user->id);
                         }
                     ]);
@@ -199,7 +199,7 @@ class EpisodeController extends Controller
                             ]);
                         }])
                             ->withExists([
-                                'user_watched_episodes as isWatched' => function ($query) use ($user) {
+                                'userWatchedEpisodes as isWatched' => function ($query) use ($user) {
                                     $query->where('user_id', $user->id);
                                 },
                             ]);

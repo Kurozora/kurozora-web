@@ -47,7 +47,7 @@ class Session extends KModel
      *
      * @return morphOne
      */
-    public function session_attribute(): MorphOne
+    public function sessionAttribute(): MorphOne
     {
         return $this->morphOne(SessionAttribute::class, 'model');
     }

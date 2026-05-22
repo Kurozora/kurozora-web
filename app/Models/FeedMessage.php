@@ -117,7 +117,7 @@ class FeedMessage extends KModel implements ReactableContract
             }
         }
 
-        $feedMessage = $user->feed_messages()->create([
+        $feedMessage = $user->feedMessages()->create([
             'parent_feed_message_id' => $parentID,
             'content' => $isSimpleReShare ? '' : $content,
             'is_nsfw' => (bool) ($attributes['is_nsfw'] ?? false),

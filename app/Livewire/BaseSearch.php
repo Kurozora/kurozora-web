@@ -123,7 +123,7 @@ class BaseSearch extends Component
                                 ])
                                     ->when(auth()->user(), function ($query, $user) {
                                         $query->withExists([
-                                            'user_watched_episodes as isWatched' => function ($query) use ($user) {
+                                            'userWatchedEpisodes as isWatched' => function ($query) use ($user) {
                                                 $query->where('user_id', $user->id);
                                             },
                                         ]);

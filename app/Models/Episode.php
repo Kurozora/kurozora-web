@@ -417,7 +417,7 @@ class Episode extends KModel implements HasMedia, Sitemapable
      *
      * @return BelongsTo
      */
-    function next_episode(): BelongsTo
+    function nextEpisode(): BelongsTo
     {
         return $this->belongsTo(Episode::class)
             ->withoutGlobalScopes();
@@ -428,7 +428,7 @@ class Episode extends KModel implements HasMedia, Sitemapable
      *
      * @return BelongsTo
      */
-    function previous_episode(): BelongsTo
+    function previousEpisode(): BelongsTo
     {
         return $this->belongsTo(Episode::class)
             ->withoutGlobalScopes();
@@ -439,7 +439,7 @@ class Episode extends KModel implements HasMedia, Sitemapable
      *
      * @return HasMany
      */
-    function user_watched_episodes(): HasMany
+    function userWatchedEpisodes(): HasMany
     {
         return $this->hasMany(UserWatchedEpisode::class);
     }

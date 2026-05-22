@@ -21,22 +21,22 @@ trait HasParentalGuideStat
         static::deleting(function (Model $model) {
             if (in_array(SoftDeletes::class, class_uses_recursive($model))) {
                 if ($model->forceDeleting) {
-                    $model->parental_guide_stat()->forceDelete();
+                    $model->parentalGuideStat()->forceDelete();
                     return;
                 }
             }
 
-            $model->parental_guide_stat()->delete();
+            $model->parentalGuideStat()->delete();
         });
 
         if (in_array(SoftDeletes::class, class_uses_recursive(static::class))) {
             static::restoring(function (Model $model) {
-                $model->parental_guide_stat()->restore();
+                $model->parentalGuideStat()->restore();
             });
         }
 
         static::created(function (Model $model) {
-            $model->parental_guide_stat()->create();
+            $model->parentalGuideStat()->create();
         });
     }
 
@@ -45,7 +45,7 @@ trait HasParentalGuideStat
      *
      * @return MorphOne
      */
-    public function parental_guide_stat(): MorphOne
+    public function parentalGuideStat(): MorphOne
     {
         return $this->morphOne(ParentalGuideStat::class, 'model');
     }
@@ -55,7 +55,7 @@ trait HasParentalGuideStat
      *
      * @return MorphMany
      */
-    public function parental_guide_entries(): MorphMany
+    public function parentalGuideEntries(): MorphMany
     {
         return $this->morphMany(ParentalGuideEntry::class, 'model');
     }

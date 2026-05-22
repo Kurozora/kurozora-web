@@ -500,7 +500,7 @@ class Manga extends KModel implements HasMedia, Sitemapable
      */
     public function getInformationSummaryAttribute(): string
     {
-        $informationSummary = $this->media_type->name . ' · ' . $this->tv_rating->name;
+        $informationSummary = $this->mediaType->name . ' · ' . $this->tv_rating->name;
         $volumeCount = $this->volume_count ?? null;
         $duration = $this->duration_string;
         $startedAt = $this->started_at;
@@ -586,7 +586,7 @@ class Manga extends KModel implements HasMedia, Sitemapable
      *
      * @return BelongsTo
      */
-    public function country_of_origin(): BelongsTo
+    public function countryOfOrigin(): BelongsTo
     {
         return $this->belongsTo(Country::class, 'country_id', 'code');
     }
@@ -606,7 +606,7 @@ class Manga extends KModel implements HasMedia, Sitemapable
      *
      * @return BelongsTo
      */
-    public function media_type(): BelongsTo
+    public function mediaType(): BelongsTo
     {
         return $this->belongsTo(MediaType::class)
             ->where('type', '=', 'manga');
@@ -674,7 +674,7 @@ class Manga extends KModel implements HasMedia, Sitemapable
     protected function makeAllSearchableUsing(Builder $query): Builder
     {
         return $query->withoutGlobalScopes()
-            ->with(['genres', 'languages', 'mediaStat', 'media_type', 'source', 'status', 'themes', 'translations', 'tv_rating', 'country_of_origin']);
+            ->with(['genres', 'languages', 'mediaStat', 'mediaType', 'source', 'status', 'themes', 'translations', 'tv_rating', 'countryOfOrigin']);
     }
 
     /**
@@ -694,9 +694,9 @@ class Manga extends KModel implements HasMedia, Sitemapable
         $manga['media_stat'] = $this->mediaStat?->toSearchableArray();
         $manga['translations'] = $this->translations
             ->select(['locale', 'title', 'synopsis', 'tagline']);
-        $manga['country_of_origin'] = $this->country_of_origin?->toSearchableArray();
+        $manga['country_of_origin'] = $this->countryOfOrigin?->toSearchableArray();
         $manga['tv_rating'] = $this->tv_rating?->toSearchableArray();
-        $manga['media_type'] = $this->media_type?->toSearchableArray();
+        $manga['media_type'] = $this->mediaType?->toSearchableArray();
         $manga['source'] = $this->source?->toSearchableArray();
         $manga['status'] = $this->status?->toSearchableArray();
         $manga['genres'] = $this->genres

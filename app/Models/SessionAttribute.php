@@ -39,7 +39,7 @@ class SessionAttribute extends KModel
      *
      * @return BelongsTo
      */
-    public function personal_access_token(): BelongsTo
+    public function personalAccessToken(): BelongsTo
     {
         return $this->belongsTo(PersonalAccessToken::class, 'model_id', 'token');
     }

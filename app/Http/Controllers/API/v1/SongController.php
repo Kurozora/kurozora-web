@@ -130,7 +130,7 @@ class SongController extends Controller
 
         // Get the anime
         $animes = $song->anime()
-            ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
+            ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'countryOfOrigin'])
             ->when(auth()->user(), function ($query, $user) {
                 $query->with(['mediaRatings' => function ($query) use ($user) {
                     $query->where([
@@ -173,7 +173,7 @@ class SongController extends Controller
 
         // Get the games
         $games = $song->games()
-            ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
+            ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'countryOfOrigin'])
             ->when(auth()->user(), function ($query, $user) {
                 $query->with(['mediaRatings' => function ($query) use ($user) {
                     $query->where([

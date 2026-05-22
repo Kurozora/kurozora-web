@@ -117,11 +117,11 @@ class ParentalGuideController extends Controller
             ->orderByDesc('created_at')
             ->get();
 
-        $model->loadMissing('parental_guide_stat');
+        $model->loadMissing('parentalGuideStat');
 
         return JSONResult::success([
             'data' => [
-                'stats' => ParentalGuideStatsResource::make($model->parental_guide_stat),
+                'stats' => ParentalGuideStatsResource::make($model->parentalGuideStat),
                 'entries' => ParentalGuideEntryResource::collection($entries),
             ],
         ]);

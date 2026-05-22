@@ -90,7 +90,7 @@ class FeedMessagesSection extends Component
 
         $authUser = auth()->user();
 
-        return $this->user->feed_messages()
+        return $this->user->feedMessages()
             ->with(FeedMessage::lockupEagerLoads($authUser))
             ->withCount(['replies', 'reShares'])
             ->when($authUser, function ($query, $user) {

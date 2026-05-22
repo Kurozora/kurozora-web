@@ -115,7 +115,7 @@ class StaffSection extends Component
                 'person' => function ($query) {
                     $query->with(['media']);
                 },
-                'staff_role'
+                'staffRole'
             ])
             ->limit($this->maximumLimit())
             ->get();

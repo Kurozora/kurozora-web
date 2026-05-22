@@ -16,7 +16,7 @@ trait Followable
      *
      * @return HasMany
      */
-    function followable_follows(): HasMany
+    function followableFollows(): HasMany
     {
         return $this->hasMany(UserFollow::class);
     }
@@ -40,10 +40,10 @@ trait Followable
      */
     public function isFollowedBy(User $user): bool
     {
-        $followsLoaded = $this->relationLoaded('followable_follows');
+        $followsLoaded = $this->relationLoaded('followableFollows');
 
         if ($followsLoaded) {
-            return $this->followable_follows->contains($user);
+            return $this->followableFollows->contains($user);
         }
 
         return (

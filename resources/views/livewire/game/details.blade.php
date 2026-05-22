@@ -46,11 +46,11 @@
                 "ratingValue": {{ $game->mediaStat->rating_average ?? 2.5 }}
             },
             "contentRating": "{{ $game->tv_rating->name }}",
-            @if (!empty($game->country_of_origin))
+            @if (!empty($game->countryOfOrigin))
                 "countryOfOrigin": {
                     "@type": "Country",
-                    "name": "{{ $game->country_of_origin->name }}",
-                    "alternateName": "{{ $game->country_of_origin->code }}"
+                    "name": "{{ $game->countryOfOrigin->name }}",
+                    "alternateName": "{{ $game->countryOfOrigin->code }}"
                 },
             @endif
             "genre": {!! $game->genres()->pluck('name') !!},
@@ -225,10 +225,10 @@
                     </div>
                 @endif
 
-                @if (!empty($game->country_of_origin))
+                @if (!empty($game->countryOfOrigin))
                     <div id="countryBadge" class="flex-grow px-12 border-l border-primary">
                         <a class="flex flex-col items-center no-external-icon" href="#country">
-                            <p class="font-bold">{{ strtoupper($game->country_of_origin->code) }}</p>
+                            <p class="font-bold">{{ strtoupper($game->countryOfOrigin->code) }}</p>
                             <p class="text-tint">
                                 @svg('globe', 'fill-current', ['width' => '20'])
                             </p>
@@ -332,11 +332,11 @@
                 <div class="grid grid-cols-2 gap-4 pl-4 pr-4 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
                     <x-information-list id="type" title="{{ __('Type') }}" icon="{{ asset('images/symbols/tv_and_mediabox.svg') }}">
                         <x-slot:information>
-                            {{ $game->media_type->name }}
+                            {{ $game->mediaType->name }}
                         </x-slot:information>
 
                         <x-slot:footer>
-                            <p class="text-sm">{{ $game->media_type->description }}</p>
+                            <p class="text-sm">{{ $game->mediaType->description }}</p>
                         </x-slot:footer>
                     </x-information-list>
 
@@ -362,7 +362,7 @@
                         </x-slot:information>
                     </x-information-list>
 
-                    @if (in_array($game->media_type->name, ['Unknown', 'TV', 'ONA']))
+                    @if (in_array($game->mediaType->name, ['Unknown', 'TV', 'ONA']))
                         <x-information-list id="episodes" title="{{ __('Episodes') }}" icon="{{ asset('images/symbols/film.svg') }}">
                             <x-slot:information>
                                 {{ $game->episode_count }}
@@ -452,7 +452,7 @@
 
                     <x-information-list id="country" title="{{ __('Country') }}" icon="{{ asset('images/symbols/globe.svg') }}">
                         <x-slot:information>
-                            {{ $game->country_of_origin?->name ?: '-' }}
+                            {{ $game->countryOfOrigin?->name ?: '-' }}
                         </x-slot:information>
                     </x-information-list>
 

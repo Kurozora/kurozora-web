@@ -68,7 +68,7 @@
                             <li>
                                 <a href="#{{ $category->urlSlug() }}" class="flex gap-1 items-center">
                                     <h4 class="font-bold">{{ $category->description }}:</h4>
-                                    <p class="text-secondary">{{ $this->parent->parental_guide_stat->getAverageRating($category)->description }}</p>
+                                    <p class="text-secondary">{{ $this->parent->parentalGuideStat->getAverageRating($category)->description }}</p>
                                 </a>
                             </li>
                         @endforeach
@@ -82,8 +82,8 @@
                 @foreach (App\Enums\ParentalGuideCategory::getInstances() as $category)
                     @php
                         $categorySlug = $category->urlSlug();
-                        $averageRating = $this->parent->parental_guide_stat->getAverageRating($category);
-                        [$averageRatingCount, $totalRatingCount] = $this->parent->parental_guide_stat->getAverageRatingCount($category);
+                        $averageRating = $this->parent->parentalGuideStat->getAverageRating($category);
+                        [$averageRatingCount, $totalRatingCount] = $this->parent->parentalGuideStat->getAverageRatingCount($category);
                     @endphp
 
                     <div id="{{ $categorySlug }}" class="flex flex-col gap-4 pb-6" style="scroll-margin-top: 4rem;">

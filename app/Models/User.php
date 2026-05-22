@@ -373,7 +373,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      *
      * @return HasMany
      */
-    function feed_messages(): HasMany
+    function feedMessages(): HasMany
     {
         return $this->hasMany(FeedMessage::class);
     }
@@ -399,7 +399,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
             }
 
             // Unpin any currently pinned message
-            $this->feed_messages()
+            $this->feedMessages()
                 ->where('is_pinned', true)
                 ->update([
                     'is_pinned' => false,
@@ -656,7 +656,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      *
      * @return HasMany
      */
-    function user_watched_episodes(): HasMany
+    function userWatchedEpisodes(): HasMany
     {
         return $this->hasMany(UserWatchedEpisode::class);
     }
@@ -666,7 +666,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      *
      * @return HasMany
      */
-    function user_rewatched_episodes(): HasMany
+    function userRewatchedEpisodes(): HasMany
     {
         return $this->hasMany(UserWatchedEpisode::class)
             ->where('rewatch_count', '>', 0);
@@ -762,7 +762,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      *
      * @return HasMany
      */
-    public function user_badges(): HasMany
+    public function userBadges(): HasMany
     {
         return $this->hasMany(UserBadge::class);
     }
@@ -796,7 +796,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
             $ipAddress = request()->ip();
         }
 
-        $sessionAttribute = $model->session_attribute()->create([
+        $sessionAttribute = $model->sessionAttribute()->create([
             'ip_address' => $ipAddress,
             'platform' => $options->get('platform'),
             'platform_version' => $options->get('platform_version'),
@@ -946,45 +946,45 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
             ->setLastModificationDate($this->updated_at);
     }
 
-    public function reshares_received(): HasMany
+    public function resharesReceived(): HasMany
     {
-        return $this->feed_messages()
+        return $this->feedMessages()
             ->whereHas('reShares');
     }
 
-    public function replies_received(): HasMany
+    public function repliesReceived(): HasMany
     {
-        return $this->feed_messages()
+        return $this->feedMessages()
             ->whereHas('replies');
     }
 
-    public function hearts_received(): HasMany
+    public function heartsReceived(): HasMany
     {
-        return $this->feed_messages()
+        return $this->feedMessages()
             ->whereHas('loveReactant.reactionTotal', function (Builder $query) {
                 $query->where('count', '>', 0);
             });
     }
 
-    public function library_completed(): HasMany
+    public function libraryCompleted(): HasMany
     {
         return $this->library()
             ->where('status', '=', UserLibraryStatus::Completed);
     }
 
-    public function library_in_progress(): HasMany
+    public function libraryInProgress(): HasMany
     {
         return $this->library()
             ->where('status', '=', UserLibraryStatus::InProgress);
     }
 
-    public function library_planning(): HasMany
+    public function libraryPlanning(): HasMany
     {
         return $this->library()
             ->where('status', '=', UserLibraryStatus::Planning);
     }
 
-    public function library_dropped(): HasMany
+    public function libraryDropped(): HasMany
     {
         return $this->library()
             ->where('status', '=', UserLibraryStatus::Dropped);

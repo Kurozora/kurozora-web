@@ -52,11 +52,11 @@ class Badge extends KModel implements HasMedia
     }
 
     /**
-     * Returns the associated user_badges
+     * Returns the associated user badges.
      *
      * @return HasMany
      */
-    public function user_badges(): HasMany
+    public function userBadges(): HasMany
     {
         return $this->hasMany(UserBadge::class);
     }

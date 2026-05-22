@@ -36,7 +36,7 @@ class AccessTokenController
 
         // Get paginated sessions except current session
         $tokens = $user->tokens()
-            ->with(['session_attribute'])
+            ->with(['sessionAttribute'])
             ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
@@ -56,7 +56,7 @@ class AccessTokenController
      */
     public function details(PersonalAccessToken $personalAccessToken): JsonResponse
     {
-        $personalAccessToken->load(['session_attribute']);
+        $personalAccessToken->load(['sessionAttribute']);
 
         return JSONResult::success([
             'data' => AccessTokenResource::collection([$personalAccessToken])
@@ -181,7 +181,7 @@ class AccessTokenController
 
         // Update APN device token
         if ($request->has('apn_device_token')) {
-            $personalAccessToken->session_attribute->apn_device_token = $data['apn_device_token'];
+            $personalAccessToken->sessionAttribute->apn_device_token = $data['apn_device_token'];
             $changedFields[] = 'APN device token';
         }
 
@@ -190,7 +190,7 @@ class AccessTokenController
 
         if (count($changedFields)) {
             $displayMessage .= 'You have updated: ' . join(', ', $changedFields) . '.';
-            $personalAccessToken->session_attribute->save();
+            $personalAccessToken->sessionAttribute->save();
         } else {
             $displayMessage .= 'No information was updated.';
         }

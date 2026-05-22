@@ -82,9 +82,9 @@ class Anime extends Resource
      */
     public static $with = [
         'media',
-        'media_type',
+        'mediaType',
         'tv_rating',
-        'country_of_origin',
+        'countryOfOrigin',
         'status',
         'source',
         'translation'
@@ -296,7 +296,7 @@ class Anime extends Resource
                 ->required()
                 ->help('The adaptation source of the anime. For example Manga, Game, Original, etc. If no source is available, especially for older anime, then choose Unknown.'),
 
-            BelongsTo::make('Media Type', 'media_type')
+            BelongsTo::make('Media Type')
                 ->sortable()
                 ->required()
                 ->help('The general type of the anime. For example TV, Movie, Music, etc.'),
@@ -306,7 +306,7 @@ class Anime extends Resource
                 ->required()
                 ->help('The TV rating of the anime. For example NR, G, PG-12, etc.'),
 
-            BelongsTo::make('Country of Origin', 'country_of_origin', Country::class)
+            BelongsTo::make('Country of Origin', 'countryOfOrigin', Country::class)
                 ->sortable()
                 ->required()
                 ->help('The country the anime originated from. For example Japan, Korea, China and the US.'),

@@ -36,7 +36,7 @@ class MeController extends Controller
         // Get authenticated session
         $personalAccessToken = auth()->user()
             ->currentAccessToken()
-            ->load(['session_attribute']);
+            ->load(['sessionAttribute']);
 
         $user = $request->user()
             ->load([

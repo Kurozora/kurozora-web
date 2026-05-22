@@ -99,7 +99,7 @@ class GenerateRecaps extends Command
                             'trackable.themes',
                         ]);
                 },
-                'user_watched_episodes' => function (HasMany $query) use ($startedAt, $endedAt, $year) {
+                'userWatchedEpisodes' => function (HasMany $query) use ($startedAt, $endedAt, $year) {
                     $query->where([
                         [UserWatchedEpisode::TABLE_NAME . '.created_at', '>=', $startedAt],
                         [UserWatchedEpisode::TABLE_NAME . '.created_at', '<=', $endedAt],
@@ -222,12 +222,12 @@ class GenerateRecaps extends Command
                         switch ($type) {
                             case Anime::class:
                                 // Sum total parts duration
-                                $totalEpisodesDuration = $user->user_watched_episodes
+                                $totalEpisodesDuration = $user->userWatchedEpisodes
                                     ->sum('episode.duration');
                                 $totalPartsDurations[$type] = $totalEpisodesDuration;
 
                                 // Get total completed parts count
-                                $totalPartsCount[$type] = $user->user_watched_episodes->count();
+                                $totalPartsCount[$type] = $user->userWatchedEpisodes->count();
                                 break;
                             case Manga::class:
                                 $totalPartsCount[$type] = $user->library

@@ -123,12 +123,12 @@ class Details extends Component
             'languages',
             'media',
             'mediaStat',
-            'media_type',
+            'mediaType',
             'themes',
             'translation',
             'status',
             'tv_rating',
-            'country_of_origin',
+            'countryOfOrigin',
             'studios' => function (BelongsToMany $query) {
                 $query->withoutGlobalScopes()
                     ->orderByRaw('CASE WHEN is_studio = true THEN 0 ELSE 1 END')

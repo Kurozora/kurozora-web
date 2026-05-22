@@ -50,7 +50,7 @@ class BrowseSeasonController extends Controller
             default => 'started_at'
         };
 
-        $items = $model::with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
+        $items = $model::with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'countryOfOrigin'])
             ->when(auth()->user(), function ($query, $user) use ($model) {
                 $query->with([
                     'mediaRatings' => fn($q) => $q->where('user_id', $user->id),
@@ -102,7 +102,7 @@ class BrowseSeasonController extends Controller
                 return $position === false ? PHP_INT_MAX : $position;
             })
             ->map(fn($models) => [
-                'mediaType' => $models->first()->media_type,
+                'mediaType' => $models->first()->mediaType,
                 'type' => $model,
                 'models' => $models,
             ])

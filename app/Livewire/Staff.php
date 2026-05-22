@@ -106,7 +106,7 @@ class Staff extends Component
                 'person' => function ($query) {
                     $query->with(['media']);
                 },
-                'staff_role',
+                'staffRole',
             ])
             ->paginate(25);
     }

@@ -94,7 +94,7 @@ class PersonalAccessToken extends Resource
                 ])
                 ->searchable(),
 
-            MorphOne::make('Session Attribute', 'session_attribute'),
+            MorphOne::make('Session Attribute'),
         ];
     }
 

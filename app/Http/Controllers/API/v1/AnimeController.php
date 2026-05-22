@@ -91,7 +91,7 @@ class AnimeController extends Controller
         // Call the ModelViewed event
         ModelViewed::dispatch($anime, $request->ip());
 
-        $anime->load(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
+        $anime->load(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'countryOfOrigin'])
             ->when(auth()->user(), function ($query, $user) use ($anime) {
                 $anime->load(['mediaRatings' => function ($query) use ($user) {
                     $query->where([
@@ -135,7 +135,7 @@ class AnimeController extends Controller
                             $query->with([
                                 'related' => function ($query) {
                                     $query->withoutGlobalScopes([TvRatingScope::class])
-                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin']);
+                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'countryOfOrigin']);
                                 },
                                 'relation',
                             ])
@@ -147,7 +147,7 @@ class AnimeController extends Controller
                             $query->with([
                                 'related' => function ($query) {
                                     $query->withoutGlobalScopes([TvRatingScope::class])
-                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin']);
+                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'countryOfOrigin']);
                                 },
                                 'relation',
                             ])
@@ -159,7 +159,7 @@ class AnimeController extends Controller
                             $query->with([
                                 'related' => function ($query) {
                                     $query->withoutGlobalScopes([TvRatingScope::class])
-                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin']);
+                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'countryOfOrigin']);
                                 },
                                 'relation',
                             ])
@@ -185,7 +185,7 @@ class AnimeController extends Controller
                         break;
                     case 'staff':
                         $includeArray['mediaStaff'] = function ($query) {
-                            $query->with(['model', 'staff_role', 'person.media'])
+                            $query->with(['model', 'staffRole', 'person.media'])
                                 ->limit(Anime::MAXIMUM_RELATIONSHIPS_LIMIT);
                         };
                         break;
@@ -217,7 +217,7 @@ class AnimeController extends Controller
         $data = $request->validated();
 
         $anime = Anime::whereIn('id', $data['ids'] ?? []);
-        $anime->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
+        $anime->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'countryOfOrigin'])
             ->when(auth()->user(), function ($query, $user) use ($anime) {
                 $anime->with(['mediaRatings' => function ($query) use ($user) {
                     $query->where([
@@ -261,7 +261,7 @@ class AnimeController extends Controller
                             $query->with([
                                 'related' => function ($query) {
                                     $query->withoutGlobalScopes([TvRatingScope::class])
-                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin']);
+                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'countryOfOrigin']);
                                 },
                                 'relation',
                             ])
@@ -273,7 +273,7 @@ class AnimeController extends Controller
                             $query->with([
                                 'related' => function ($query) {
                                     $query->withoutGlobalScopes([TvRatingScope::class])
-                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin']);
+                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'countryOfOrigin']);
                                 },
                                 'relation',
                             ])
@@ -285,7 +285,7 @@ class AnimeController extends Controller
                             $query->with([
                                 'related' => function ($query) {
                                     $query->withoutGlobalScopes([TvRatingScope::class])
-                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin']);
+                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'countryOfOrigin']);
                                 },
                                 'relation',
                             ])
@@ -311,7 +311,7 @@ class AnimeController extends Controller
                         break;
                     case 'staff':
                         $includeArray['mediaStaff'] = function ($query) {
-                            $query->with(['model', 'staff_role', 'person.media'])
+                            $query->with(['model', 'staffRole', 'person.media'])
                                 ->limit(Anime::MAXIMUM_RELATIONSHIPS_LIMIT);
                         };
                         break;
@@ -424,7 +424,7 @@ class AnimeController extends Controller
             ->with([
                 'related' => function ($query) {
                     $query->withoutGlobalScopes([TvRatingScope::class])
-                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
+                        ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'countryOfOrigin'])
                         ->when(auth()->user(), function ($query, $user) {
                             $query->with(['mediaRatings' => function ($query) use ($user) {
                                 $query->where([
@@ -474,7 +474,7 @@ class AnimeController extends Controller
             ->with([
                 'related' => function ($query) {
                     $query->withoutGlobalScopes([TvRatingScope::class])
-                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
+                        ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'countryOfOrigin'])
                         ->when(auth()->user(), function ($query, $user) {
                             $query->with(['mediaRatings' => function ($query) use ($user) {
                                 $query->where([
@@ -521,7 +521,7 @@ class AnimeController extends Controller
             ->with([
                 'related' => function ($query) {
                     $query->withoutGlobalScopes([TvRatingScope::class])
-                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
+                        ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'countryOfOrigin'])
                         ->when(auth()->user(), function ($query, $user) {
                             $query->with(['mediaRatings' => function ($query) use ($user) {
                                 $query->where([
@@ -638,7 +638,7 @@ class AnimeController extends Controller
                 'person' => function ($query) {
                     $query->with(['media']);
                 },
-                'staff_role',
+                'staffRole',
             ])
             ->cursorPaginate($data['limit'] ?? 25);
 

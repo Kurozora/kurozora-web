@@ -14,7 +14,7 @@
     @endforeach
 
     @foreach ($mediaStaff as $index => $staff)
-        <x-lockups.person-lockup :person="$staff->person" :staff-role="$staff->staff_role->name" :rank="($page - 1) * $perPage + $index + 1" :is-ranked="$isRanked" :is-row="$isRow" />
+        <x-lockups.person-lockup :person="$staff->person" :staff-role="$staff->staffRole->name" :rank="($page - 1) * $perPage + $index + 1" :is-ranked="$isRanked" :is-row="$isRow" />
     @endforeach
 
     <div class="w-28 flex-grow"></div>

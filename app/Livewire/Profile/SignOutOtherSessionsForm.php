@@ -126,7 +126,7 @@ class SignOutOtherSessionsForm extends Component
             return collect();
         }
 
-        $otherSessions = Session::with(['session_attribute'])
+        $otherSessions = Session::with(['sessionAttribute'])
             ->where([
                 ['id', '!=', request()->session()->getId()],
                 ['user_id', '=', auth()->user()->getAuthIdentifier()],
@@ -134,7 +134,7 @@ class SignOutOtherSessionsForm extends Component
             ->orderBy('last_activity', 'desc')
             ->get();
 
-        $currentSession = Session::with(['session_attribute'])
+        $currentSession = Session::with(['sessionAttribute'])
             ->where([
                 ['id', '=', request()->session()->getId()],
                 ['user_id', '=', auth()->user()->getAuthIdentifier()],
@@ -144,7 +144,7 @@ class SignOutOtherSessionsForm extends Component
         return $otherSessions->prepend($currentSession)
             ->where('id', '!=', null)
             ->map(function (Session $session) {
-                $sessionAttribute = $session->session_attribute;
+                $sessionAttribute = $session->sessionAttribute;
 
                 return (object) [
                     'browser'           => Browser::detect(),

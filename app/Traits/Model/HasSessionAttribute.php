@@ -19,17 +19,17 @@ trait HasSessionAttribute
         static::deleting(function (Model $model) {
             if (in_array(SoftDeletes::class, class_uses_recursive($model))) {
                 if ($model->forceDeleting) {
-                    $model->session_attribute()->forceDelete();
+                    $model->sessionAttribute()->forceDelete();
                     return;
                 }
             }
 
-            $model->session_attribute()->delete();
+            $model->sessionAttribute()->delete();
         });
 
         if (in_array(SoftDeletes::class, class_uses_recursive(static::class))) {
             static::restoring(function (Model $model) {
-                $model->session_attribute()->restore();
+                $model->sessionAttribute()->restore();
             });
         }
     }
@@ -39,7 +39,7 @@ trait HasSessionAttribute
      *
      * @return MorphOne
      */
-    function session_attribute(): MorphOne
+    function sessionAttribute(): MorphOne
     {
         return $this->morphOne(SessionAttribute::class, 'model');
     }

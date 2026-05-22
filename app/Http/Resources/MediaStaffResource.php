@@ -34,7 +34,7 @@ class MediaStaffResource extends JsonResource
             'type' => 'staff',
             'href' => route($routeName, $this->resource->model, false),
             'attributes' => [
-                'role' => $this->resource->staff_role->only(['name', 'description']),
+                'role' => $this->resource->staffRole->only(['name', 'description']),
             ]
         ];
 

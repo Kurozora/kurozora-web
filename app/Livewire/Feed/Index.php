@@ -226,7 +226,7 @@ class Index extends Component
     function confirmDelete(): void
     {
         if ($this->selectedMessageID) {
-            $this->user->feed_messages()
+            $this->user->feedMessages()
                 ->where('id', '=', $this->selectedMessageID)
                 ->delete();
         }
@@ -279,7 +279,7 @@ class Index extends Component
             return;
         }
 
-        $authUser->feed_messages()
+        $authUser->feedMessages()
             ->where('parent_feed_message_id', '=', $id)
             ->where('is_reshare', '=', true)
             ->where(function ($query) {

@@ -26,7 +26,7 @@ trait HasBlocking
      *
      * @return HasMany
      */
-    public function blocked_by(): HasMany
+    public function blockedBy(): HasMany
     {
         return $this->hasMany(UserBlock::class, 'blocked_user_id', 'id');
     }
@@ -163,7 +163,7 @@ trait HasBlocking
      */
     public function scopeWhereNotBlocking(Builder $query, Model $user): Builder
     {
-        return $query->whereDoesntHave('blocked_by', function (Builder $query) use ($user): Builder {
+        return $query->whereDoesntHave('blockedBy', function (Builder $query) use ($user): Builder {
             return $query->where('user_id', '=', $user->getKey());
         });
     }

@@ -72,12 +72,12 @@ class ParentalGuide extends Component
         $this->parent->loadMissing([
             'media',
             'translation',
-            'parental_guide_entries' => function ($query) use ($authUser) {
+            'parentalGuideEntries' => function ($query) use ($authUser) {
                 $query->visible()
                     ->withReason()
                     ->with(ParentalGuideEntry::lockupEagerLoads($authUser));
             },
-            'parental_guide_stat',
+            'parentalGuideStat',
         ]);
     }
 
@@ -231,10 +231,10 @@ class ParentalGuide extends Component
         $authUser = auth()->user();
 
         $this->parent->load([
-            'parental_guide_entries' => function ($query) use ($authUser) {
+            'parentalGuideEntries' => function ($query) use ($authUser) {
                 $query->visible()->withReason()->with(ParentalGuideEntry::lockupEagerLoads($authUser));
             },
-            'parental_guide_stat',
+            'parentalGuideStat',
         ]);
     }
 
