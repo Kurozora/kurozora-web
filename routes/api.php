@@ -28,6 +28,7 @@ Route::prefix('/v1')
         require 'API/v1/Characters.php';
         require 'API/v1/Episodes.php';
         require 'API/v1/Explore.php';
+        require 'API/v1/FaceDetections.php';
         require 'API/v1/Games.php';
         require 'API/v1/Genres.php';
         require 'API/v1/Images.php';
