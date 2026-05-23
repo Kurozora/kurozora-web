@@ -47,9 +47,9 @@ trait UserBlockable
         }
 
         return (
-        $this->relationLoaded('blockers')
-            ? $this->blockers
-            : $this->blockers()
+            $this->relationLoaded('blockers')
+                ? $this->blockers
+                : $this->blockers()
         )
             ->where('user_id', '=', $user->id)
             ->exists();

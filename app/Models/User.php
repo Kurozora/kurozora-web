@@ -487,7 +487,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
             'latestToken',
             'latestSession',
         ])
-            ->withCount(['followers', 'followedModels as following_count', 'mediaRatings']);
+            ->withCount(['followers', 'following', 'mediaRatings']);
 
         if ($authUser !== null) {
             $query->withExists(['followers as isFollowed' => function ($query) use ($authUser) {
@@ -515,7 +515,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
             'latestToken',
             'latestSession',
         ])
-            ->loadCount(['followers', 'followedModels as following_count', 'mediaRatings']);
+            ->loadCount(['followers', 'following', 'mediaRatings']);
 
         if ($authUser !== null) {
             $this->loadExists(['followers as isFollowed' => function ($query) use ($authUser) {

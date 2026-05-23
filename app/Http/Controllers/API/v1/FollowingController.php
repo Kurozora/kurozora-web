@@ -81,7 +81,7 @@ class FollowingController extends Controller
         $data = $request->validated();
 
         // Get the following
-        $following = $user->followedModels()
+        $following = $user->following()
             ->visibleTo(auth()->user())
             ->orderBy(UserFollow::TABLE_NAME . '.created_at', 'desc')
             ->cursorPaginate($data['limit'] ?? 25);

@@ -16,8 +16,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Scout\Searchable;
 use Spatie\MediaLibrary\HasMedia;
@@ -314,39 +314,36 @@ class Studio extends KModel implements HasMedia, Sitemapable
     /**
      * Returns the anime that belongs to the studio
      *
-     * @return BelongsToMany
+     * @return MorphToMany
      */
-    public function anime(): BelongsToMany
+    public function anime(): MorphToMany
     {
-        return $this->belongsToMany(Anime::class, MediaStudio::class, 'studio_id', 'model_id')
+        return $this->morphedByMany(Anime::class, 'model', MediaStudio::class)
             ->withoutGlobalScopes()
-            ->where('model_type', '=', Anime::class)
             ->withTimestamps();
     }
 
     /**
      * Returns the manga that belongs to the studio
      *
-     * @return BelongsToMany
+     * @return MorphToMany
      */
-    public function manga(): BelongsToMany
+    public function manga(): MorphToMany
     {
-        return $this->belongsToMany(Manga::class, MediaStudio::class, 'studio_id', 'model_id')
+        return $this->morphedByMany(Manga::class, 'model', MediaStudio::class)
             ->withoutGlobalScopes()
-            ->where('model_type', '=', Manga::class)
             ->withTimestamps();
     }
 
     /**
      * Returns the games that belongs to the studio
      *
-     * @return BelongsToMany
+     * @return MorphToMany
      */
-    public function games(): BelongsToMany
+    public function games(): MorphToMany
     {
-        return $this->belongsToMany(Game::class, MediaStudio::class, 'studio_id', 'model_id')
+        return $this->morphedByMany(Game::class, 'model', MediaStudio::class)
             ->withoutGlobalScopes()
-            ->where('model_type', '=', Game::class)
             ->withTimestamps();
     }
 

@@ -5,8 +5,8 @@ namespace App\Traits\Model;
 use App\Models\MediaStudio;
 use App\Models\Studio;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 trait HasMediaStudios
@@ -49,13 +49,11 @@ trait HasMediaStudios
     /**
      * Get the model's studios.
      *
-     * @return BelongsToMany
+     * @return MorphToMany
      */
-    public function studios(): BelongsToMany
+    public function studios(): MorphToMany
     {
-        return $this->belongsToMany(Studio::class, MediaStudio::class, 'model_id')
-            ->where('model_type', '=', $this->getMorphClass())
-            ->using(MediaStudio::class)
+        return $this->morphToMany(Studio::class, 'model', MediaStudio::class)
             ->withPivot('is_licensor', 'is_producer', 'is_studio', 'is_publisher')
             ->withTimestamps();
     }

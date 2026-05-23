@@ -46,7 +46,7 @@ class MeController extends Controller
                 'media',
                 'latestSession',
             ])
-            ->loadCount(['followers', 'followedModels as following_count', 'mediaRatings'])
+            ->loadCount(['followers', 'following', 'mediaRatings'])
             // Since we already have the latest access token, we
             // simply set the relation here instead of loading
             // the same relation on the user again.

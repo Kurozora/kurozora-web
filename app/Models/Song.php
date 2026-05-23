@@ -12,9 +12,9 @@ use App\Traits\Model\HasViews;
 use App\Traits\SearchFilterable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Scout\Searchable;
 use Spatie\Activitylog\LogOptions;
@@ -193,26 +193,24 @@ class Song extends KModel implements HasMedia, Sitemapable
     /**
      * Get the anime-songs relationship.
      *
-     * @return BelongsToMany
+     * @return MorphToMany
      */
-    public function anime(): BelongsToMany
+    public function anime(): MorphToMany
     {
-        return $this->belongsToMany(Anime::class, MediaSong::class, 'song_id', 'model_id')
+        return $this->morphedByMany(Anime::class, 'model', MediaSong::class)
             ->withoutGlobalScopes()
-            ->where('model_type', '=', Anime::class)
             ->withTimestamps();
     }
 
     /**
      * Get the game-songs relationship.
      *
-     * @return BelongsToMany
+     * @return MorphToMany
      */
-    public function games(): BelongsToMany
+    public function games(): MorphToMany
     {
-        return $this->belongsToMany(Game::class, MediaSong::class, 'song_id', 'model_id')
+        return $this->morphedByMany(Game::class, 'model', MediaSong::class)
             ->withoutGlobalScopes()
-            ->where('model_type', '=', Game::class)
             ->withTimestamps();
     }
 

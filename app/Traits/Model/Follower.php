@@ -4,14 +4,16 @@ namespace App\Traits\Model;
 
 use App\Models\User;
 use App\Models\UserFollow;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 trait Follower
 {
     /**
-     * The user's followed models.
+     * The user's followed entries.
      *
      * @return HasMany
      */
@@ -24,120 +26,170 @@ trait Follower
      * The models followed by the user.
      *
      * @param string $type
-     * @return BelongsToMany
+     *
+     * @return MorphToMany
      */
-    public function followedModels(string $type = User::class): BelongsToMany
+    protected function followedModels(string $type): MorphToMany
     {
-        return $this->belongsToMany($type, UserFollow::class, 'user_id', 'following_user_id')
+        return $this->morphedByMany($type, 'followable', UserFollow::TABLE_NAME)
             ->withTimestamps();
     }
 
     /**
-     * Whether the user has followed the given model.
+     * The users followed by the user.
      *
-     * @param Model $model
-     * @return bool
+     * @return MorphToMany
      */
-    public function hasFollowed(Model $model): bool
+    public function following(): MorphToMany
     {
-        return ($this->relationLoaded('followerFollows') ? $this->followerFollows : $this->followerFollows())
-            ->where('following_user_id', $model->getKey())
-            ->exists();
+        return $this->followedModels(User::class);
     }
 
     /**
-     * Whether the user has not followed the given model.
+     * Whether the user has followed the given models.
      *
-     * @param Model $model
+     * @param Model|Model[] $models
+     *
      * @return bool
      */
-    public function hasNotFollowed(Model $model): bool
+    public function hasFollowed(Model|array|Collection $models): bool
     {
-        return !$this->hasFollowed($model);
-    }
-
-    /**
-     * Follow the given model.
-     *
-     * @param Model $model
-     * @return UserFollow
-     */
-    public function follow(Model $model): UserFollow
-    {
-        $attributes = [
-            'following_user_id' => $model->getKey(),
-        ];
-
-        return $this->followerFollows()
-            ->where($attributes)
-            ->firstOr(function () use ($attributes) {
-                $userFollowsLoaded = $this->relationLoaded('followerFollows');
-
-                if ($userFollowsLoaded) {
-                    $this->unsetRelation('followerFollows');
-                }
-
-                return $this->followerFollows()
-                    ->create($attributes);
-            });
-    }
-
-    /**
-     * Unfollow the given model
-     *
-     * @param Model $model
-     * @return bool
-     */
-    public function unfollow(Model $model): bool
-    {
-        $hasNotFollowed = $this->hasNotFollowed($model);
-
-        if ($hasNotFollowed) {
-            return true;
+        if ($models instanceof Model) {
+            $models = collect([$models]);
+        } else {
+            $models = collect($models);
         }
 
-        $userFollowsLoaded = $this->relationLoaded('followerFollows');
-        if ($userFollowsLoaded) {
+        if ($models->isEmpty()) {
+            return false;
+        }
+
+        $modelType = $models->first()->getMorphClass();
+        $modelIDs = $models->pluck('id')->all();
+
+        return ($this->relationLoaded('followerFollows') ? $this->followerFollows : $this->followerFollows())
+                ->where('followable_type', '=', $modelType)
+                ->whereIn('followable_id', $modelIDs)
+                ->count() === count($modelIDs);
+    }
+
+    /**
+     * Whether the user has not followed the given models.
+     *
+     * @param Model|Model[] $models
+     *
+     * @return bool
+     */
+    public function hasNotFollowed(Model|array|Collection $models): bool
+    {
+        return !$this->hasFollowed($models);
+    }
+
+    /**
+     * Follow the given models.
+     *
+     * @param Model|Model[] $models
+     *
+     * @return void
+     */
+    public function follow(Model|array|Collection $models): void
+    {
+        if ($models instanceof Model) {
+            $models = collect([$models]);
+        } else {
+            $models = collect($models);
+        }
+
+        if ($models->isEmpty()) {
+            return;
+        }
+
+        if ($this->relationLoaded('followerFollows')) {
             $this->unsetRelation('followerFollows');
         }
 
-        return (bool) $this->followedModels($model::class)
-            ->detach($model->getKey());
+        $modelType = $models->first()->getMorphClass();
+        $modelKeys = $models->map(fn($model) => $model->getKey());
+
+        $this->followedModels($modelType)
+            ->attach($modelKeys);
+    }
+
+    /**
+     * Unfollow the given models.
+     *
+     * @param Model|Model[] $models
+     *
+     * @return bool
+     */
+    public function unfollow(Model|array|Collection $models): bool
+    {
+        if ($models instanceof Model) {
+            $models = collect([$models]);
+        } else {
+            $models = collect($models);
+        }
+
+        if ($models->isEmpty()) {
+            return true;
+        }
+
+        if ($this->relationLoaded('followerFollows')) {
+            $this->unsetRelation('followerFollows');
+        }
+
+        $modelType = $models->first()->getMorphClass();
+        $modelKeys = $models->map(fn($model) => $model->getKey());
+
+        return (bool) $this->followedModels($modelType)
+            ->detach($modelKeys);
     }
 
     /**
      * Clears the follows of the given type.
      *
+     * @param string|null $type
+     *
      * @return bool
      */
-    public function clearFollows(): bool
+    public function clearFollows(?string $type = null): bool
     {
         return $this->followerFollows()
+            ->when($type != null, function ($query) use ($type) {
+                $query->where('followable_type', '=', $type);
+            })
             ->forceDelete();
     }
 
     /**
-     * Toggle follow status of the given model.
+     * Toggle follow status of the given models.
      *
-     * @param Model $model
-     * @return UserFollow|bool
+     * @param Model|Model[] $models
+     *
+     * @return bool
      */
-    public function toggleFollow(Model $model): bool|UserFollow
+    public function toggleFollow(Model|array|Collection $models): bool
     {
-        return $this->hasFollowed($model)
-            ? $this->unfollow($model)
-            : $this->follow($model);
+        if ($this->hasFollowed($models)) {
+            $this->unfollow($models);
+            return false;
+        } else {
+            $this->follow($models);
+            return true;
+        }
     }
 
     /**
      * Eloquent builder scope that limits the query to the models of the specified type.
      *
      * @param string $type
+     *
      * @return BelongsToMany
      */
     public function whereFollowed(string $type): BelongsToMany
     {
-        return $this->belongsToMany($type, UserFollow::class, 'id', 'following_user_id')
+        return $this->belongsToMany($type, UserFollow::class, 'user_id', 'followable_id')
+            ->where('followable_type', '=', $type)
             ->withTimestamps();
     }
 }

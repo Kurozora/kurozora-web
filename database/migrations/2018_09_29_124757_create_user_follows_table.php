@@ -18,21 +18,16 @@ return new class extends Migration
         Schema::create(UserFollow::TABLE_NAME, function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('following_user_id');
+            $table->morphs('followable');
             $table->timestamps();
         });
 
         Schema::table(UserFollow::TABLE_NAME, function (Blueprint $table) {
             // Set unique key constraints
-            $table->unique(['user_id', 'following_user_id']);
+            $table->unique(['user_id', 'followable_type', 'followable_id'], 'user_follows_user_followable_unique');
 
             // Set foreign key constraints
             $table->foreign('user_id')
-                ->references('id')
-                ->on(User::TABLE_NAME)
-                ->cascadeOnDelete()
-                ->cascadeOnUpdate();
-            $table->foreign('following_user_id')
                 ->references('id')
                 ->on(User::TABLE_NAME)
                 ->cascadeOnDelete()

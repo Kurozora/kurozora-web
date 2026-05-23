@@ -5,8 +5,8 @@ namespace App\Traits\Model;
 use App\Models\MediaStaff;
 use App\Models\Person;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 trait HasMediaStaff
@@ -49,12 +49,11 @@ trait HasMediaStaff
     /**
      * Get the model's people.
      *
-     * @return BelongsToMany
+     * @return MorphToMany
      */
-    public function people(): BelongsToMany
+    public function people(): MorphToMany
     {
-        return $this->belongsToMany(Person::class, MediaStaff::class, 'model_id')
-            ->where('model_type', '=', $this->getMorphClass())
+        return $this->morphToMany(Person::class, 'model', MediaStaff::class)
             ->withTimestamps();
     }
 }

@@ -6,8 +6,8 @@ use App\Models\User;
 use App\Models\UserLibrary;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 trait Trackable
@@ -50,11 +50,11 @@ trait Trackable
     /**
      * The users who tracked the model.
      *
-     * @return BelongsToMany
+     * @return MorphToMany
      */
-    public function trackers(): BelongsToMany
+    public function trackers(): MorphToMany
     {
-        return $this->belongsToMany(User::class)
+        return $this->morphToMany(User::class, 'trackable', UserLibrary::TABLE_NAME)
             ->withTimestamps();
     }
 
@@ -73,9 +73,9 @@ trait Trackable
         }
 
         return (
-        $this->relationLoaded('trackers')
-            ? $this->trackers
-            : $this->trackers()
+            $this->relationLoaded('trackers')
+                ? $this->trackers
+                : $this->trackers()
         )
             ->where('user_id', '=', $user->id)
             ->exists();
@@ -90,34 +90,6 @@ trait Trackable
     public function isNotTrackedBy(User $user): bool
     {
         return !$this->isTrackedBy($user);
-    }
-
-    /**
-     * The number of users who tracked the model.
-     *
-     * @return int
-     */
-    public function trackersCount(): int
-    {
-        if ($this->trackers_count !== null) {
-            return (int) $this->trackers_count;
-        }
-
-        $this->loadCount('trackers');
-
-        return (int) $this->trackers_count;
-    }
-
-    /**
-     * The formatted number of users who tracked the model.
-     *
-     * @param int $precision
-     * @param bool $abbreviated
-     * @return string
-     */
-    public function trackersCountForHumans(int $precision = 1, bool $abbreviated = false): string
-    {
-        return number_shorten($this->trackersCount(), $precision, $abbreviated);
     }
 
     /**

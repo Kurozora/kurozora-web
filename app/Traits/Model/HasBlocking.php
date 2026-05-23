@@ -94,11 +94,11 @@ trait HasBlocking
                     ->create($attributes);
 
                 // Unfollow if following
-                if (method_exists($this, 'followedModels')) {
-                    $this->followedModels()->detach($model->getKey());
+                if (method_exists($this, 'following')) {
+                    $this->following()->detach($model->getKey());
                 }
-                if (method_exists($model, 'followedModels')) {
-                    $model->followedModels()->detach($this->getKey());
+                if (method_exists($model, 'following')) {
+                    $model->following()->detach($this->getKey());
                 }
 
                 return $userBlock;
@@ -158,7 +158,8 @@ trait HasBlocking
      * Eloquent builder scope that limits the query to models the given user has not blocked.
      *
      * @param Builder $query
-     * @param Model $user
+     * @param Model   $user
+     *
      * @return Builder
      */
     public function scopeWhereNotBlocking(Builder $query, Model $user): Builder

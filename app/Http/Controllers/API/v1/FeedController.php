@@ -99,7 +99,7 @@ class FeedController extends Controller
         $loveReactantLoader = FeedMessage::loveReactantLoader($user);
 
         // Get the user IDs of all the users that should appear on the user's personal feed.
-        $userIDs = $user->followedModels()
+        $userIDs = $user->following()
             ->pluck(User::TABLE_NAME . '.id')
             ->add($user->id);
 
