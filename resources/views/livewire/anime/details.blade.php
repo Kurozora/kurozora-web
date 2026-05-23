@@ -180,7 +180,17 @@
                     </a>
                 </div>
 
-                @if ($anime->air_season)
+                @if ($anime->started_at && $anime->air_season)
+                    <div id="seasonBadge" class="flex-grow px-12 border-l border-primary">
+                        <a class="flex flex-col items-center" href="{{ route('anime.seasons.year.season', [$anime->started_at->year, $anime->air_season->key]) }}" wire:navigate>
+                            <p class="font-bold">{{ $anime->air_season->description }}</p>
+                            <p class="text-tint">
+                                {{ $anime->air_season->symbol() }}
+                            </p>
+                            <p class="text-sm text-secondary">{{ $anime->started_at->year }}</p>
+                        </a>
+                    </div>
+                @elseif ($anime->air_season)
                     <div id="seasonBadge" class="flex-grow px-12 border-l border-primary">
                         <a class="flex flex-col items-center no-external-icon" href="#aired">
                             <p class="font-bold">{{ $anime->air_season->description }}</p>

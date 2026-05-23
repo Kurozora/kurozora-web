@@ -181,12 +181,22 @@
                     </a>
                 </div>
 
-                @if ($game->publish_season)
+                @if ($game->published_at && $game->publication_season)
+                    <div id="seasonBadge" class="flex-grow px-12 border-l border-primary">
+                        <a class="flex flex-col items-center" href="{{ route('games.seasons.year.season', [$game->published_at->year, $game->publication_season->key]) }}" wire:navigate>
+                            <p class="font-bold">{{ $game->publication_season->description }}</p>
+                            <p class="text-tint">
+                                {{ $game->publication_season->symbol() }}
+                            </p>
+                            <p class="text-sm text-secondary">{{ $game->published_at->year }}</p>
+                        </a>
+                    </div>
+                @elseif ($game->publication_season)
                     <div id="seasonBadge" class="flex-grow px-12 border-l border-primary">
                         <a class="flex flex-col items-center no-external-icon" href="#published">
-                            <p class="font-bold">{{ $game->publish_season->description }}</p>
+                            <p class="font-bold">{{ $game->publication_season->description }}</p>
                             <p class="text-tint">
-                                {{ $game->publish_season->symbol() }}
+                                {{ $game->publication_season->symbol() }}
                             </p>
                             <p class="text-sm text-secondary">{{ __('Season') }}</p>
                         </a>

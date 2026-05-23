@@ -177,7 +177,17 @@
                     </a>
                 </div>
 
-                @if ($manga->publication_season)
+                @if ($manga->started_at && $manga->publication_season)
+                    <div id="seasonBadge" class="flex-grow px-12 border-l border-primary">
+                        <a class="flex flex-col items-center" href="{{ route('manga.seasons.year.season', [$manga->started_at->year, $manga->publication_season->key]) }}" wire:navigate>
+                            <p class="font-bold">{{ $manga->publication_season->description }}</p>
+                            <p class="text-tint">
+                                {{ $manga->publication_season->symbol() }}
+                            </p>
+                            <p class="text-sm text-secondary">{{ $manga->started_at->year }}</p>
+                        </a>
+                    </div>
+                @elseif ($manga->publication_season)
                     <div id="seasonBadge" class="flex-grow px-12 border-l border-primary">
                         <a class="flex flex-col items-center no-external-icon" href="#published">
                             <p class="font-bold">{{ $manga->publication_season->description }}</p>
