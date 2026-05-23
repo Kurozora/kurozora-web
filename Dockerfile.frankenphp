@@ -25,6 +25,11 @@ RUN --mount=type=secret,id=vite_reverb_app_key,env=VITE_REVERB_APP_KEY \
 
 ###
 
+### Anubis PoW binary
+FROM ghcr.io/techarohq/anubis:v1.25.0 AS anubis-binary
+
+###
+
 ### Custom FrankenPHP build with caddy-ratelimit
 FROM dunglas/frankenphp:1.12-builder-php8.5-alpine AS frankenphp-builder
 
@@ -136,6 +141,10 @@ WORKDIR $WORKDIR
 # Install runtime-only dependencies for the queue worker and scheduler
 RUN apk add --no-cache supervisor
 
+# Copy Anubis PoW reverse-proxy binary
+COPY --from=anubis-binary /ko-app/anubis /usr/local/bin/anubis
+COPY ./docker/anubis/policy.yaml /etc/anubis/policy.yaml
+
 # Copy built app from previous stage
 COPY --from=build --chown=www-data /var/www/html /var/www/html
 
@@ -159,8 +168,8 @@ RUN chmod +x /usr/local/bin/entrypoint.sh && \
 
 ENTRYPOINT [ "entrypoint.sh" ]
 
-# Expose port
-EXPOSE 80
+# Expose ports: 80 = FrankenPHP/Caddy (internal target for Anubis), 8923 = Anubis (ALB-facing)
+EXPOSE 80 8923
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
     CMD wget -qO- http://localhost/health-check || exit 1

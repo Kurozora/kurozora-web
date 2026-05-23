@@ -2,6 +2,7 @@
 Red='\033[0;31m'
 
 ROLE="${CONTAINER_ROLE:-all}"
+ANUBIS_ENABLED="${ANUBIS_ENABLED:-true}"
 
 echo ""
 echo "***********************************"
@@ -10,6 +11,32 @@ echo "  Role: ${ROLE}                    "
 echo "***********************************"
 
 set -e
+
+# Launches Anubis as a background process for web-facing roles.
+start_anubis() {
+    if [ "$ANUBIS_ENABLED" != "true" ]; then
+        echo "Anubis disabled (ANUBIS_ENABLED!=true)"
+        return
+    fi
+    if [ -z "${ED25519_PRIVATE_KEY_HEX}" ]; then
+        echo "${Red}Anubis requires the ED25519_PRIVATE_KEY_HEX env var"
+        exit 1
+    fi
+
+    echo ""
+    echo "***********************************"
+    echo "        Starting Anubis...         "
+    echo "***********************************"
+
+    BIND="${BIND:-:8923}" \
+    TARGET="${TARGET:-http://127.0.0.1:80}" \
+    COOKIE_DOMAIN="${COOKIE_DOMAIN:-${DOMAIN_NAME}}" \
+    POLICY_FNAME="${POLICY_FNAME:-/etc/anubis/policy.yaml}" \
+    DIFFICULTY="${DIFFICULTY:-4}" \
+    OG_PASSTHROUGH="${OG_PASSTHROUGH:-true}" \
+    USE_REMOTE_ADDRESS="${USE_REMOTE_ADDRESS:-true}" \
+        /usr/local/bin/anubis &
+}
 
 if [ -f /var/www/html/artisan ]; then
     php /var/www/html/artisan config:cache
@@ -27,6 +54,8 @@ fi
 
 case "$ROLE" in
     web)
+        start_anubis
+
         echo ""
         echo "***********************************"
         echo "        Starting FrankenPHP...     "
@@ -90,6 +119,8 @@ case "$ROLE" in
         echo "      (queue worker + scheduler)   "
         echo "***********************************"
         supervisord -c /etc/supervisor/supervisord.conf
+
+        start_anubis
 
         echo ""
         echo "***********************************"
