@@ -284,26 +284,30 @@ class Person extends KModel implements HasMedia, Sitemapable
     /**
      * Returns the anime the person belongs to.
      *
-     * @return HasManyThrough
+     * @return Builder
      */
-    function anime(): HasManyThrough
+    function anime(): Builder
     {
-        /** @var Builder $union */ // To silence IDE warning for not matching type
-        $union = $this->hasManyThrough(Anime::class, MediaStaff::class, 'person_id', 'id', 'id', 'model_id')
-            ->withoutGlobalScopes()
-            ->where('model_type', '=', Anime::class)
-            ->select(Anime::TABLE_NAME . '.*', MediaStaff::TABLE_NAME . '.person_id as laravel_through_key');
-        // Second select above isn't used, but SQL will
-        // complain if number of selected columns in a union
-        // don't match. So since hasManyThrough for a non-morphic
-        // relation uses a similar select structure, we fake
-        // the number of columns in the morphic one using
-        // an unnecessary select. It should have no performance
-        // penalties, but it would be nice to improve this.
+        $personKey = $this->getKey();
 
-        return $this->hasManyThrough(Anime::class, AnimeCast::class, 'person_id', 'id', 'id', 'anime_id')
-            ->withoutGlobalScopes()
-            ->union($union);
+        return Anime::withoutGlobalScopes()
+            ->where(function (Builder $query) use ($personKey) {
+                $query->whereIn(
+                    'id',
+                    AnimeCast::query()
+                        ->withoutGlobalScopes()
+                        ->select('anime_id')
+                        ->where('person_id', $personKey)
+                )
+                    ->orWhereIn(
+                        'id',
+                        MediaStaff::query()
+                            ->withoutGlobalScopes()
+                            ->select('model_id')
+                            ->where('person_id', $personKey)
+                            ->where('model_type', Anime::class)
+                    );
+            });
     }
 
     /**
@@ -321,26 +325,30 @@ class Person extends KModel implements HasMedia, Sitemapable
     /**
      * Returns the game the person belongs to.
      *
-     * @return HasManyThrough
+     * @return Builder
      */
-    function games(): HasManyThrough
+    function games(): Builder
     {
-        /** @var Builder $union */ // To silence IDE warning for not matching type
-        $union = $this->hasManyThrough(Game::class, MediaStaff::class, 'person_id', 'id', 'id', 'model_id')
-            ->withoutGlobalScopes()
-            ->where('model_type', '=', Game::class)
-            ->select(Game::TABLE_NAME . '.*', MediaStaff::TABLE_NAME . '.person_id as laravel_through_key');
-        // Second select above isn't used, but SQL will
-        // complain if number of selected columns in a union
-        // don't match. So since hasManyThrough for a non-morphic
-        // relation uses a similar select structure, we fake
-        // the number of columns in the morphic one using
-        // an unnecessary select. It should have no performance
-        // penalties, but it would be nice to improve this.
+        $personKey = $this->getKey();
 
-        return $this->hasManyThrough(Game::class, GameCast::class, 'person_id', 'id', 'id', 'game_id')
-            ->withoutGlobalScopes()
-            ->union($union);
+        return Game::withoutGlobalScopes()
+            ->where(function (Builder $query) use ($personKey) {
+                $query->whereIn(
+                    'id',
+                    GameCast::query()
+                        ->withoutGlobalScopes()
+                        ->select('game_id')
+                        ->where('person_id', $personKey)
+                )
+                    ->orWhereIn(
+                        'id',
+                        MediaStaff::query()
+                            ->withoutGlobalScopes()
+                            ->select('model_id')
+                            ->where('person_id', $personKey)
+                            ->where('model_type', Game::class)
+                    );
+            });
     }
 
     /**
