@@ -10,6 +10,7 @@ use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\HasMediaRatings;
 use App\Traits\Model\HasMediaStat;
 use App\Traits\Model\HasSlug;
+use App\Traits\Model\HasTvRatedRelations;
 use App\Traits\Model\HasViews;
 use App\Traits\SearchFilterable;
 use Illuminate\Database\Eloquent\Builder;
@@ -31,6 +32,7 @@ class Person extends KModel implements HasMedia, Sitemapable
     use HasFactory,
         HasMediaStat,
         HasSlug,
+        HasTvRatedRelations,
         HasViews,
         InteractsWithMedia,
         InteractsWithMediaExtension,
@@ -290,8 +292,8 @@ class Person extends KModel implements HasMedia, Sitemapable
     {
         $personKey = $this->getKey();
 
-        return Anime::withoutGlobalScopes()
-            ->where(function (Builder $query) use ($personKey) {
+        return $this->viewableViaParent(
+            Anime::where(function (Builder $query) use ($personKey) {
                 $query->whereIn(
                     'id',
                     AnimeCast::query()
@@ -307,7 +309,8 @@ class Person extends KModel implements HasMedia, Sitemapable
                             ->where('person_id', $personKey)
                             ->where('model_type', Anime::class)
                     );
-            });
+            })
+        );
     }
 
     /**
@@ -317,9 +320,10 @@ class Person extends KModel implements HasMedia, Sitemapable
      */
     function manga(): HasManyThrough
     {
-        return $this->hasManyThrough(Manga::class, MediaStaff::class, 'person_id', 'id', 'id', 'model_id')
-            ->withoutGlobalScopes()
-            ->where('model_type', '=', Manga::class);
+        return $this->viewableViaParent(
+            $this->hasManyThrough(Manga::class, MediaStaff::class, 'person_id', 'id', 'id', 'model_id')
+                ->where('model_type', '=', Manga::class)
+        );
     }
 
     /**
@@ -331,8 +335,8 @@ class Person extends KModel implements HasMedia, Sitemapable
     {
         $personKey = $this->getKey();
 
-        return Game::withoutGlobalScopes()
-            ->where(function (Builder $query) use ($personKey) {
+        return $this->viewableViaParent(
+            Game::where(function (Builder $query) use ($personKey) {
                 $query->whereIn(
                     'id',
                     GameCast::query()
@@ -348,7 +352,8 @@ class Person extends KModel implements HasMedia, Sitemapable
                             ->where('person_id', $personKey)
                             ->where('model_type', Game::class)
                     );
-            });
+            })
+        );
     }
 
     /**

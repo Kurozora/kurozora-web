@@ -54,9 +54,10 @@ trait HasMediaGenres
      */
     public function genres(): MorphToMany
     {
-        return $this->morphToMany(Genre::class, 'model', MediaGenre::class)
-            ->withTimestamps()
-            ->withoutGlobalScopes();
+        return $this->viewableViaParent(
+            $this->morphToMany(Genre::class, 'model', MediaGenre::class)
+                ->withTimestamps(),
+        );
     }
 
     /**

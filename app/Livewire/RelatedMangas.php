@@ -101,10 +101,13 @@ class RelatedMangas extends Component
             return collect();
         }
 
-        return $this->parent->mangaRelations()
+        $parent = $this->parent;
+
+        return $parent->mangaRelations()
             ->with([
-                'related' => function ($query) {
-                    $query->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tvRating'])
+                'related' => function ($query) use ($parent) {
+                    $parent->viewableViaParent($query)
+                        ->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tvRating'])
                         ->when(auth()->user(), function ($query, $user) {
                             $query->with(['library' => function ($query) use ($user) {
                                 $query->where('user_id', '=', $user->id);

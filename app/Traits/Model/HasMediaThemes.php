@@ -54,9 +54,10 @@ trait HasMediaThemes
      */
     public function themes(): MorphToMany
     {
-        return $this->morphToMany(Theme::class, 'model', MediaTheme::class)
-            ->withTimestamps()
-            ->withoutGlobalScopes();
+        return $this->viewableViaParent(
+            $this->morphToMany(Theme::class, 'model', MediaTheme::class)
+                ->withTimestamps(),
+        );
     }
 
     /**

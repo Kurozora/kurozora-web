@@ -21,10 +21,8 @@ use App\Http\Resources\MediaRatingResource;
 use App\Http\Resources\MediaRelatedResource;
 use App\Http\Resources\MediaStaffResource;
 use App\Http\Resources\StudioResource;
-use App\Models\Anime;
-use App\Models\Game;
 use App\Models\Manga;
-use App\Scopes\TvRatingScope;
+use App\Models\MediaRelation;
 use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -123,10 +121,10 @@ class MangaController extends Controller
                         };
                         break;
                     case 'related-shows':
-                        $includeArray['animeRelations'] = function ($query) {
+                        $includeArray['animeRelations'] = function ($query) use ($manga) {
                             $query->with([
-                                'related' => function ($query) {
-                                    $query->withoutGlobalScopes([TvRatingScope::class])
+                                'related' => function ($query) use ($manga) {
+                                    $manga->viewableViaParent($query)
                                         ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin']);
                                 },
                                 'relation'
@@ -135,10 +133,10 @@ class MangaController extends Controller
                         };
                         break;
                     case 'related-literatures':
-                        $includeArray['mangaRelations'] = function ($query) {
+                        $includeArray['mangaRelations'] = function ($query) use ($manga) {
                             $query->with([
-                                'related' => function ($query) {
-                                    $query->withoutGlobalScopes([TvRatingScope::class])
+                                'related' => function ($query) use ($manga) {
+                                    $manga->viewableViaParent($query)
                                         ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin']);
                                 },
                                 'relation'
@@ -147,10 +145,10 @@ class MangaController extends Controller
                         };
                         break;
                     case 'related-games':
-                        $includeArray['gameRelations'] = function ($query) {
+                        $includeArray['gameRelations'] = function ($query) use ($manga) {
                             $query->with([
-                                'related' => function ($query) {
-                                    $query->withoutGlobalScopes([TvRatingScope::class])
+                                'related' => function ($query) use ($manga) {
+                                    $manga->viewableViaParent($query)
                                         ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin']);
                                 },
                                 'relation'
@@ -229,10 +227,10 @@ class MangaController extends Controller
                         };
                         break;
                     case 'related-shows':
-                        $includeArray['animeRelations'] = function ($query) {
+                        $includeArray['animeRelations'] = function ($query) use ($manga) {
                             $query->with([
-                                'related' => function ($query) {
-                                    $query->withoutGlobalScopes([TvRatingScope::class])
+                                'related' => function ($query) use ($manga) {
+                                    $manga->viewableViaParent($query)
                                         ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin']);
                                 },
                                 'relation'
@@ -241,10 +239,10 @@ class MangaController extends Controller
                         };
                         break;
                     case 'related-literatures':
-                        $includeArray['mangaRelations'] = function ($query) {
+                        $includeArray['mangaRelations'] = function ($query) use ($manga) {
                             $query->with([
-                                'related' => function ($query) {
-                                    $query->withoutGlobalScopes([TvRatingScope::class])
+                                'related' => function ($query) use ($manga) {
+                                    $manga->viewableViaParent($query)
                                         ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin']);
                                 },
                                 'relation'
@@ -253,10 +251,10 @@ class MangaController extends Controller
                         };
                         break;
                     case 'related-games':
-                        $includeArray['gameRelations'] = function ($query) {
+                        $includeArray['gameRelations'] = function ($query) use ($manga) {
                             $query->with([
-                                'related' => function ($query) {
-                                    $query->withoutGlobalScopes([TvRatingScope::class])
+                                'related' => function ($query) use ($manga) {
+                                    $manga->viewableViaParent($query)
                                         ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin']);
                                 },
                                 'relation'
@@ -377,8 +375,8 @@ class MangaController extends Controller
         // Get the related shows
         $relatedShows = $manga->animeRelations()
             ->with([
-                'related' => function ($query) {
-                    $query->withoutGlobalScopes([TvRatingScope::class])
+                'related' => function ($query) use ($manga) {
+                    $manga->viewableViaParent($query)
                         ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
                         ->when(auth()->user(), function ($query, $user) {
                             $query->with(['mediaRatings' => function ($query) use ($user) {
@@ -400,7 +398,7 @@ class MangaController extends Controller
                 },
                 'relation'
             ])
-            ->orderBy(Anime::TABLE_NAME . '.id')
+            ->orderBy(MediaRelation::TABLE_NAME . '.id')
             ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
@@ -427,8 +425,8 @@ class MangaController extends Controller
         // Get the related mangas
         $relatedLiteratures = $manga->mangaRelations()
             ->with([
-                'related' => function ($query) {
-                    $query->withoutGlobalScopes([TvRatingScope::class])
+                'related' => function ($query) use ($manga) {
+                    $manga->viewableViaParent($query)
                         ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
                         ->when(auth()->useR(), function ($query, $user) {
                             $query->with(['mediaRatings' => function ($query) use ($user) {
@@ -447,7 +445,7 @@ class MangaController extends Controller
                 },
                 'relation'
             ])
-            ->orderBy(Manga::TABLE_NAME . '.id')
+            ->orderBy(MediaRelation::TABLE_NAME . '.id')
             ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
@@ -474,8 +472,8 @@ class MangaController extends Controller
         // Get the related mangas
         $relatedGames = $manga->gameRelations()
             ->with([
-                'related' => function ($query) {
-                    $query->withoutGlobalScopes([TvRatingScope::class])
+                'related' => function ($query) use ($manga) {
+                    $manga->viewableViaParent($query)
                         ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
                         ->when(auth()->user(), function ($query, $user) {
                             $query->with(['mediaRatings' => function ($query) use ($user) {
@@ -494,7 +492,7 @@ class MangaController extends Controller
                 },
                 'relation'
             ])
-            ->orderBy(Game::TABLE_NAME . '.id')
+            ->orderBy(MediaRelation::TABLE_NAME . '.id')
             ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain

@@ -119,16 +119,19 @@ class RelationsSection extends Component
             return collect();
         }
 
+        $parent = $this->parent;
+
         $relation = match ($this->relatedKind) {
-            UserLibraryKind::Anime => $this->parent->animeRelations(),
-            UserLibraryKind::Manga => $this->parent->mangaRelations(),
-            UserLibraryKind::Game  => $this->parent->gameRelations(),
+            UserLibraryKind::Anime => $parent->animeRelations(),
+            UserLibraryKind::Manga => $parent->mangaRelations(),
+            UserLibraryKind::Game  => $parent->gameRelations(),
         };
 
         return $relation
             ->with([
-                'related' => function ($query) {
-                    $query->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tvRating'])
+                'related' => function ($query) use ($parent) {
+                    $parent->viewableViaParent($query)
+                        ->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tvRating'])
                         ->when(auth()->user(), function ($query, $user) {
                             $query->with(['library' => function ($query) use ($user) {
                                 $query->where('user_id', '=', $user->id);

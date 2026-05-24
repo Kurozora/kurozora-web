@@ -23,10 +23,8 @@ use App\Http\Resources\MediaRelatedResource;
 use App\Http\Resources\MediaSongResource;
 use App\Http\Resources\MediaStaffResource;
 use App\Http\Resources\StudioResource;
-use App\Models\Anime;
 use App\Models\Game;
-use App\Models\Manga;
-use App\Scopes\TvRatingScope;
+use App\Models\MediaRelation;
 use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -128,10 +126,10 @@ class GameController extends Controller
                         };
                         break;
                     case 'related-shows':
-                        $includeArray['animeRelations'] = function ($query) {
+                        $includeArray['animeRelations'] = function ($query) use ($game) {
                             $query->with([
-                                'related' => function ($query) {
-                                    $query->withoutGlobalScopes([TvRatingScope::class])
+                                'related' => function ($query) use ($game) {
+                                    $game->viewableViaParent($query)
                                         ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin']);
                                 },
                                 'relation'
@@ -140,10 +138,10 @@ class GameController extends Controller
                         };
                         break;
                     case 'related-literatures':
-                        $includeArray['mangaRelations'] = function ($query) {
+                        $includeArray['mangaRelations'] = function ($query) use ($game) {
                             $query->with([
-                                'related' => function ($query) {
-                                    $query->withoutGlobalScopes([TvRatingScope::class])
+                                'related' => function ($query) use ($game) {
+                                    $game->viewableViaParent($query)
                                         ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin']);
                                 },
                                 'relation'
@@ -152,10 +150,10 @@ class GameController extends Controller
                         };
                         break;
                     case 'related-games':
-                        $includeArray['gameRelations'] = function ($query) {
+                        $includeArray['gameRelations'] = function ($query) use ($game) {
                             $query->with([
-                                'related' => function ($query) {
-                                    $query->withoutGlobalScopes([TvRatingScope::class])
+                                'related' => function ($query) use ($game) {
+                                    $game->viewableViaParent($query)
                                         ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin']);
                                 },
                                 'relation'
@@ -245,10 +243,10 @@ class GameController extends Controller
                         };
                         break;
                     case 'related-shows':
-                        $includeArray['animeRelations'] = function ($query) {
+                        $includeArray['animeRelations'] = function ($query) use ($game) {
                             $query->with([
-                                'related' => function ($query) {
-                                    $query->withoutGlobalScopes([TvRatingScope::class])
+                                'related' => function ($query) use ($game) {
+                                    $game->viewableViaParent($query)
                                         ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin']);
                                 },
                                 'relation'
@@ -257,10 +255,10 @@ class GameController extends Controller
                         };
                         break;
                     case 'related-literatures':
-                        $includeArray['mangaRelations'] = function ($query) {
+                        $includeArray['mangaRelations'] = function ($query) use ($game) {
                             $query->with([
-                                'related' => function ($query) {
-                                    $query->withoutGlobalScopes([TvRatingScope::class])
+                                'related' => function ($query) use ($game) {
+                                    $game->viewableViaParent($query)
                                         ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin']);
                                 },
                                 'relation'
@@ -269,10 +267,10 @@ class GameController extends Controller
                         };
                         break;
                     case 'related-games':
-                        $includeArray['gameRelations'] = function ($query) {
+                        $includeArray['gameRelations'] = function ($query) use ($game) {
                             $query->with([
-                                'related' => function ($query) {
-                                    $query->withoutGlobalScopes([TvRatingScope::class])
+                                'related' => function ($query) use ($game) {
+                                    $game->viewableViaParent($query)
                                         ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin']);
                                 },
                                 'relation'
@@ -404,8 +402,8 @@ class GameController extends Controller
         // Get the related shows
         $relatedShows = $game->animeRelations()
             ->with([
-                'related' => function ($query) {
-                    $query->withoutGlobalScopes([TvRatingScope::class])
+                'related' => function ($query) use ($game) {
+                    $game->viewableViaParent($query)
                         ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
                         ->when(auth()->user(), function ($query, $user) {
                             $query->with(['mediaRatings' => function ($query) use ($user) {
@@ -427,7 +425,7 @@ class GameController extends Controller
                 },
                 'relation'
             ])
-            ->orderBy(Anime::TABLE_NAME . '.id')
+            ->orderBy(MediaRelation::TABLE_NAME . '.id')
             ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
@@ -454,8 +452,8 @@ class GameController extends Controller
         // Get the related literatures
         $relatedLiterature = $game->mangaRelations()
             ->with([
-                'related' => function ($query) {
-                    $query->withoutGlobalScopes([TvRatingScope::class])
+                'related' => function ($query) use ($game) {
+                    $game->viewableViaParent($query)
                         ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
                         ->when(auth()->user(), function ($query, $user) {
                             $query->with(['mediaRatings' => function ($query) use ($user) {
@@ -474,7 +472,7 @@ class GameController extends Controller
                 },
                 'relation'
             ])
-            ->orderBy(Manga::TABLE_NAME . '.id')
+            ->orderBy(MediaRelation::TABLE_NAME . '.id')
             ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
@@ -501,8 +499,8 @@ class GameController extends Controller
         // Get the related games
         $relatedGame = $game->gameRelations()
             ->with([
-                'related' => function ($query) {
-                    $query->withoutGlobalScopes([TvRatingScope::class])
+                'related' => function ($query) use ($game) {
+                    $game->viewableViaParent($query)
                         ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
                         ->when(auth()->user(), function ($query, $user) {
                             $query->with(['mediaRatings' => function ($query) use ($user) {
@@ -521,7 +519,7 @@ class GameController extends Controller
                 },
                 'relation'
             ])
-            ->orderBy(Game::TABLE_NAME . '.id')
+            ->orderBy(MediaRelation::TABLE_NAME . '.id')
             ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain

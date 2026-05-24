@@ -12,6 +12,7 @@ use App\Traits\Model\HasMediaRatings;
 use App\Traits\Model\HasMediaStat;
 use App\Traits\Model\HasTranslatableSlug;
 use App\Traits\Model\HasTranslations;
+use App\Traits\Model\HasTvRatedRelations;
 use App\Traits\Model\HasViews;
 use App\Traits\SearchFilterable;
 use Illuminate\Database\Eloquent\Builder;
@@ -33,6 +34,7 @@ class Character extends KModel implements HasMedia, Sitemapable
         HasMediaStat,
         HasTranslatableSlug,
         HasTranslations,
+        HasTvRatedRelations,
         HasViews,
         InteractsWithMedia,
         InteractsWithMediaExtension,
@@ -384,9 +386,10 @@ class Character extends KModel implements HasMedia, Sitemapable
     {
         // Pagination doesn't take distinct into account if we don't specify
         // a column explicitly. Noice.
-        return $this->belongsToMany(Anime::class, AnimeCast::class)
-            ->withoutGlobalScopes()
-            ->distinct([Anime::TABLE_NAME . '.id']);
+        return $this->viewableViaParent(
+            $this->belongsToMany(Anime::class, AnimeCast::class)
+                ->distinct([Anime::TABLE_NAME . '.id']),
+        );
     }
 
     /**
@@ -398,9 +401,10 @@ class Character extends KModel implements HasMedia, Sitemapable
     {
         // Pagination doesn't take distinct into account if we don't specify
         // a column explicitly. Noice.
-        return $this->belongsToMany(Manga::class, MangaCast::class)
-            ->withoutGlobalScopes()
-            ->distinct([Manga::TABLE_NAME . '.id']);
+        return $this->viewableViaParent(
+            $this->belongsToMany(Manga::class, MangaCast::class)
+                ->distinct([Manga::TABLE_NAME . '.id']),
+        );
     }
 
     /**
@@ -412,9 +416,10 @@ class Character extends KModel implements HasMedia, Sitemapable
     {
         // Pagination doesn't take distinct into account if we don't specify
         // a column explicitly. Noice.
-        return $this->belongsToMany(Game::class, GameCast::class)
-            ->withoutGlobalScopes()
-            ->distinct([Game::TABLE_NAME . '.id']);
+        return $this->viewableViaParent(
+            $this->belongsToMany(Game::class, GameCast::class)
+                ->distinct([Game::TABLE_NAME . '.id']),
+        );
     }
 
     /**

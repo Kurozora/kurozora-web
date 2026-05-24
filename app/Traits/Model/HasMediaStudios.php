@@ -53,8 +53,10 @@ trait HasMediaStudios
      */
     public function studios(): MorphToMany
     {
-        return $this->morphToMany(Studio::class, 'model', MediaStudio::class)
-            ->withPivot('is_licensor', 'is_producer', 'is_studio', 'is_publisher')
-            ->withTimestamps();
+        return $this->viewableViaParent(
+            $this->morphToMany(Studio::class, 'model', MediaStudio::class)
+                ->withPivot('is_licensor', 'is_producer', 'is_studio', 'is_publisher')
+                ->withTimestamps(),
+        );
     }
 }

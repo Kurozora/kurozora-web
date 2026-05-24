@@ -21,6 +21,7 @@ use App\Traits\Model\HasMediaTags;
 use App\Traits\Model\HasMediaThemes;
 use App\Traits\Model\HasParentalGuideStat;
 use App\Traits\Model\HasSlug;
+use App\Traits\Model\HasTvRatedRelations;
 use App\Traits\Model\HasVideos;
 use App\Traits\Model\HasTranslations;
 use App\Traits\Model\HasViews;
@@ -71,6 +72,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
         HasParentalGuideStat,
         HasSlug,
         HasTranslations,
+        HasTvRatedRelations,
         HasVideos,
         HasViews,
         Ignored,

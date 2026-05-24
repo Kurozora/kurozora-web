@@ -9,6 +9,7 @@ use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\HasMediaRatings;
 use App\Traits\Model\HasMediaStat;
 use App\Traits\Model\HasSlug;
+use App\Traits\Model\HasTvRatedRelations;
 use App\Traits\Model\HasViews;
 use App\Traits\Model\TvRated;
 use App\Traits\SearchFilterable;
@@ -32,6 +33,7 @@ class Studio extends KModel implements HasMedia, Sitemapable
         HasMediaRatings,
         HasMediaStat,
         HasSlug,
+        HasTvRatedRelations,
         HasViews,
         InteractsWithMedia,
         InteractsWithMediaExtension,
@@ -318,33 +320,33 @@ class Studio extends KModel implements HasMedia, Sitemapable
      */
     public function anime(): MorphToMany
     {
-        return $this->morphedByMany(Anime::class, 'model', MediaStudio::class)
-            ->withoutGlobalScopes()
-            ->withTimestamps();
+        return $this->viewableViaParent(
+            $this->morphedByMany(Anime::class, 'model', MediaStudio::class),
+        )->withTimestamps();
     }
 
     /**
-     * Returns the manga that belongs to the studio
+     * Returns the manga that belong to the studio
      *
      * @return MorphToMany
      */
     public function manga(): MorphToMany
     {
-        return $this->morphedByMany(Manga::class, 'model', MediaStudio::class)
-            ->withoutGlobalScopes()
-            ->withTimestamps();
+        return $this->viewableViaParent(
+            $this->morphedByMany(Manga::class, 'model', MediaStudio::class),
+        )->withTimestamps();
     }
 
     /**
-     * Returns the games that belongs to the studio
+     * Returns the games that belong to the studio
      *
      * @return MorphToMany
      */
     public function games(): MorphToMany
     {
-        return $this->morphedByMany(Game::class, 'model', MediaStudio::class)
-            ->withoutGlobalScopes()
-            ->withTimestamps();
+        return $this->viewableViaParent(
+            $this->morphedByMany(Game::class, 'model', MediaStudio::class),
+        )->withTimestamps();
     }
 
     /**

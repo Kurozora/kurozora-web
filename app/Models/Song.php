@@ -8,6 +8,7 @@ use App\Traits\Model\Actionable;
 use App\Traits\Model\HasMediaRatings;
 use App\Traits\Model\HasMediaStat;
 use App\Traits\Model\HasTranslations;
+use App\Traits\Model\HasTvRatedRelations;
 use App\Traits\Model\HasViews;
 use App\Traits\SearchFilterable;
 use Illuminate\Database\Eloquent\Builder;
@@ -33,6 +34,7 @@ class Song extends KModel implements HasMedia, Sitemapable
         HasMediaStat,
         HasSlug,
         HasTranslations,
+        HasTvRatedRelations,
         HasViews,
         InteractsWithMedia,
         InteractsWithMediaExtension,
@@ -197,9 +199,9 @@ class Song extends KModel implements HasMedia, Sitemapable
      */
     public function anime(): MorphToMany
     {
-        return $this->morphedByMany(Anime::class, 'model', MediaSong::class)
-            ->withoutGlobalScopes()
-            ->withTimestamps();
+        return $this->viewableViaParent(
+            $this->morphedByMany(Anime::class, 'model', MediaSong::class),
+        )->withTimestamps();
     }
 
     /**
@@ -209,9 +211,9 @@ class Song extends KModel implements HasMedia, Sitemapable
      */
     public function games(): MorphToMany
     {
-        return $this->morphedByMany(Game::class, 'model', MediaSong::class)
-            ->withoutGlobalScopes()
-            ->withTimestamps();
+        return $this->viewableViaParent(
+            $this->morphedByMany(Game::class, 'model', MediaSong::class),
+        )->withTimestamps();
     }
 
     /**
