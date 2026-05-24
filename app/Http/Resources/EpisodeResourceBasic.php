@@ -44,7 +44,7 @@ class EpisodeResourceBasic extends JsonResource
                 'showTitle' => $this->resource->anime->title,
                 'title' => $this->resource->title,
                 'synopsis' => $this->resource->synopsis,
-                'tvRating' => $this->resource->tv_rating->only(['name', 'description']),
+                'tvRating' => $this->resource->tvRating->only(['name', 'description']),
                 'duration' => $this->resource->duration_string,
                 'stats' => MediaStatsResource::make($this->resource->mediaStat),
                 'videos' => VideoResource::collection($this->resource->videos),

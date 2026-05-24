@@ -403,16 +403,6 @@ class Episode extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * The episode's TV rating.
-     *
-     * @return BelongsTo
-     */
-    public function tv_rating(): BelongsTo
-    {
-        return $this->belongsTo(TvRating::class);
-    }
-
-    /**
      * Returns the next episode this episode belongs to.
      *
      * @return BelongsTo

@@ -55,7 +55,7 @@ class AnimeResourceBasic extends JsonResource
                 'studio'                => $studio?->name,
                 'languages'             => LanguageResource::collection($this->resource->languages),
                 'countryOfOrigin'       => CountryResource::make($this->resource->countryOfOrigin),
-                'tvRating'              => $this->resource->tv_rating->only(['name', 'description']),
+                'tvRating'              => $this->resource->tvRating->only(['name', 'description']),
                 'type'                  => $this->resource->mediaType->only(['name', 'description']),
                 'source'                => $this->resource->source->only(['name', 'description']),
                 'status'                => $this->resource->status->only(['name', 'description', 'color']),

@@ -104,7 +104,7 @@ class RelatedShows extends Component
         return $this->parent->animeRelations()
             ->with([
                 'related' => function ($query) {
-                    $query->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating'])
+                    $query->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tvRating'])
                         ->when(auth()->user(), function ($query, $user) {
                             $query->with(['library' => function ($query) use ($user) {
                                 $query->where('user_id', '=', $user->id);

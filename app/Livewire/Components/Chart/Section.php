@@ -68,7 +68,7 @@ class Section extends Component
         }
 
         $model = match ($this->chartKind) {
-            ChartKind::Anime => Anime::with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating'])
+            ChartKind::Anime => Anime::with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tvRating'])
                 ->when(auth()->user(), function ($query, $user) {
                     $query->with(['library' => function ($query) use ($user) {
                         $query->where('user_id', '=', $user->id);
@@ -91,13 +91,13 @@ class Section extends Component
                     }
                 ]);
             }),
-            ChartKind::Games => Game::with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating'])
+            ChartKind::Games => Game::with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tvRating'])
                 ->when(auth()->user(), function ($query, $user) {
                     $query->with(['library' => function ($query) use ($user) {
                         $query->where('user_id', '=', $user->id);
                     }]);
                 }),
-            ChartKind::Manga => Manga::with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating'])
+            ChartKind::Manga => Manga::with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tvRating'])
                 ->when(auth()->user(), function ($query, $user) {
                     $query->with(['library' => function ($query) use ($user) {
                         $query->where('user_id', '=', $user->id);

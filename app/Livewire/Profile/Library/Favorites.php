@@ -179,7 +179,7 @@ class Favorites extends Component
                             ->where(UserLibrary::TABLE_NAME . '.is_hidden', '=', false);
                     });
                 })
-                ->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating'])
+                ->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tvRating'])
                 ->when(auth()->user(), function ($query, $user) {
                     $query->with(['library' => function ($query) use ($user) {
                         $query->where('user_id', '=', $user->id);
@@ -271,7 +271,7 @@ class Favorites extends Component
     public function searchQuery(ScoutBuilder $query): ScoutBuilder
     {
         return $query->query(function (EloquentBuilder $query) {
-            $query->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating'])
+            $query->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tvRating'])
                 ->when(auth()->user(), function ($query, $user) {
                     $query->with(['library' => function ($query) use ($user) {
                         $query->where('user_id', '=', $user->id);

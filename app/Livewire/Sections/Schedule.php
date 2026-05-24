@@ -92,7 +92,7 @@ class Schedule extends Component
             ]
         ])
             ->select(Anime::TABLE_NAME . '.*')
-            ->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating'])
+            ->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tvRating'])
             ->when(auth()->user(), function ($query, $user) {
                 $query->with(['library' => function ($query) use ($user) {
                     $query->where('user_id', '=', $user->id);
@@ -104,7 +104,7 @@ class Schedule extends Component
     {
         return Manga::withSchedule([$this->date->dayOfWeek])
             ->select(Manga::TABLE_NAME . '.*')
-            ->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating'])
+            ->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tvRating'])
             ->when(auth()->user(), function ($query, $user) {
                 $query->with(['library' => function ($query) use ($user) {
                     $query->where('user_id', '=', $user->id);
@@ -116,7 +116,7 @@ class Schedule extends Component
     {
         return Game::withSchedule([$this->date->startOfDay()->toDateString()])
             ->select(Game::TABLE_NAME . '.*')
-            ->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating'])
+            ->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tvRating'])
             ->when(auth()->user(), function ($query, $user) {
                 $query->with(['library' => function ($query) use ($user) {
                     $query->where('user_id', '=', $user->id);

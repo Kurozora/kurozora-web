@@ -216,7 +216,7 @@ class Studio extends Resource
 
             Heading::make('Meta'),
 
-            BelongsTo::make('TV rating', 'tv_rating')
+            BelongsTo::make('TV rating', 'tvRating')
                 ->sortable()
                 ->help('The TV rating of the anime. For example NR, G, PG-12, etc.')
                 ->required(),
@@ -263,7 +263,7 @@ class Studio extends Resource
                 })
                 ->help('The date on which the studio went bankrupt. For example: 2015-12-03'),
 
-            BelongsTo::make('TV rating', 'tv_rating')
+            BelongsTo::make('TV rating', 'tvRating')
                 ->sortable()
                 ->help('The TV rating of the studio. For example NR, G, PG-12, etc.')
                 ->required(),

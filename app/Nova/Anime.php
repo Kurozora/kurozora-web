@@ -83,7 +83,7 @@ class Anime extends Resource
     public static $with = [
         'media',
         'mediaType',
-        'tv_rating',
+        'tvRating',
         'countryOfOrigin',
         'status',
         'source',
@@ -301,7 +301,7 @@ class Anime extends Resource
                 ->required()
                 ->help('The general type of the anime. For example TV, Movie, Music, etc.'),
 
-            BelongsTo::make('TV rating', 'tv_rating')
+            BelongsTo::make('TV rating', 'tvRating')
                 ->sortable()
                 ->required()
                 ->help('The TV rating of the anime. For example NR, G, PG-12, etc.'),

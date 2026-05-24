@@ -48,7 +48,7 @@ class AnimeTVRatingPropagator
                 ]);
 
             // Re-index
-            Episode::with(['mediaStat', 'translations', 'tv_rating'])
+            Episode::with(['mediaStat', 'translations', 'tvRating'])
                 ->whereIn('season_id', function ($query) use ($anime) {
                     $query->select('id')
                         ->from('seasons')

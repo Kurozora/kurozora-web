@@ -43,7 +43,7 @@
                 "worstRating": 0,
                 "ratingValue": {{ $manga->mediaStat->rating_average ?? 2.5 }}
             },
-            "contentRating": "{{ $manga->tv_rating->name }}",
+            "contentRating": "{{ $manga->tvRating->name }}",
             @if (!empty($manga->countryOfOrigin))
                 "countryOfOrigin": {
                     "@type": "Country",
@@ -211,7 +211,7 @@
 
                 <div id="tvRatingBadge" class="flex-grow px-12 border-l border-primary">
                     <a class="flex flex-col items-center" href="{{ route('manga.parentalguide', $manga) }}">
-                        <p class="font-bold">{{ $manga->tv_rating->name }}</p>
+                        <p class="font-bold">{{ $manga->tvRating->name }}</p>
                         <p class="text-tint">
                             @svg('tv_fill', 'fill-current', ['width' => '20'])
                         </p>
@@ -458,11 +458,11 @@
 
                     <x-information-list id="tvRating" title="{{ __('Rating') }}" icon="{{ asset('images/symbols/tv_rating.svg') }}">
                         <x-slot:information>
-                            {{ $manga->tv_rating->name }}
+                            {{ $manga->tvRating->name }}
                         </x-slot:information>
 
                         <x-slot:footer>
-                            <p class="text-sm">{{ $manga->tv_rating->description }}.</p>
+                            <p class="text-sm">{{ $manga->tvRating->description }}.</p>
                         </x-slot:footer>
                     </x-information-list>
 

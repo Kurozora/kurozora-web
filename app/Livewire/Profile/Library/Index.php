@@ -228,7 +228,7 @@ class Index extends Component
         $authUser = auth()->user();
 
         return function (EloquentBuilder $query) use ($authUser) {
-            $query->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating'])
+            $query->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tvRating'])
                 ->when($authUser !== null, function (EloquentBuilder $query) use ($authUser) {
                     $query->with(['library' => function ($query) use ($authUser) {
                         $query->where('user_id', '=', $authUser->id);

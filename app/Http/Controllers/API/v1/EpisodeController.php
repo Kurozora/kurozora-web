@@ -33,7 +33,7 @@ class EpisodeController extends Controller
         // Call the ModelViewed event
         ModelViewed::dispatch($episode, $request->ip());
 
-        $episode->load(['media', 'mediaStat', 'translation', 'tv_rating', 'videos'])
+        $episode->load(['media', 'mediaStat', 'translation', 'tvRating', 'videos'])
             ->when(auth()->user(), function ($query, $user) use ($episode) {
                 $episode->load(['mediaRatings' => function ($query) use ($user) {
                     $query->where([
@@ -102,7 +102,7 @@ class EpisodeController extends Controller
         $data = $request->validated();
 
         $episode = Episode::whereIn('public_id', $data['ids'] ?? []);
-        $episode->with(['media', 'mediaStat', 'translation', 'tv_rating', 'videos'])
+        $episode->with(['media', 'mediaStat', 'translation', 'tvRating', 'videos'])
             ->when(auth()->user(), function ($query, $user) use ($episode) {
                 $episode->with(['mediaRatings' => function ($query) use ($user) {
                     $query->where([
@@ -188,7 +188,7 @@ class EpisodeController extends Controller
                                 'translation'
                             ]);
                     },
-                    'tv_rating',
+                    'tvRating',
                     'translation',
                     'videos',
                 ])

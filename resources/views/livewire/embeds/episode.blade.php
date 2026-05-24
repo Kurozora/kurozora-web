@@ -49,7 +49,7 @@
                 "worstRating": 0,
                 "ratingValue": {{ $episode->mediaStat->rating_average ?? 2.5 }}
             },
-            "contentRating": "{{ $this->episode->tv_rating->name }}",
+            "contentRating": "{{ $this->episode->tvRating->name }}",
             "genre": {!! $this->anime?->genres->pluck('name') !!},
             "datePublished": "{{ $episode->started_at?->format('Y-m-d') }}",
             "keywords": "anime,episode{{ (',' . $this->anime?->keywords) ?? '' }}",

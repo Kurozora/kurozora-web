@@ -59,7 +59,7 @@
 
                     <div class="flex flex-col gap-1">
                         <p class="text-xs leading-tight opacity-75 line-clamp-2" title="{{ empty($anime->tagline) ? ($anime->genres?->pluck('name')->join(', ', ' and ') ?? $anime->themes?->pluck('name')->join(', ', ' and ')) : $anime->tagline }}">{{ empty($anime->tagline) ? ($anime->genres?->pluck('name')->join(', ', ' and ') ?? $anime->themes?->pluck('name')->join(', ', ' and ')) : $anime->tagline }}</p>
-                        <p class="text-xs leading-tight opacity-75 line-clamp-2" title="{{ $anime->tv_rating->name }}">{{ $anime->tv_rating->name }}</p>
+                        <p class="text-xs leading-tight opacity-75 line-clamp-2" title="{{ $anime->tvRating->name }}">{{ $anime->tvRating->name }}</p>
                     </div>
 
                     @if (!empty($anime->mediaStat?->rating_count) && $trackingEnabled)
@@ -130,7 +130,7 @@
 
                     <div class="flex flex-col gap-1">
                         <p class="text-xs leading-tight opacity-75 line-clamp-1" title="{{ empty($game->tagline) ? ($game->genres?->pluck('name')->join(', ', ' and ') ?? $game->themes?->pluck('name')->join(', ', ' and ')) : $game->tagline }}">{{ empty($game->tagline) ? ($game->genres?->pluck('name')->join(', ', ' and ') ?? $game->themes?->pluck('name')->join(', ', ' and ')) : $game->tagline }}</p>
-                        <p class="text-xs leading-tight opacity-75 line-clamp-1" title="{{ $game->tv_rating->name }}">{{ $game->tv_rating->name }}</p>
+                        <p class="text-xs leading-tight opacity-75 line-clamp-1" title="{{ $game->tvRating->name }}">{{ $game->tvRating->name }}</p>
                     </div>
 
                     @if (!empty($game->mediaStat?->rating_count) && $trackingEnabled)
@@ -212,7 +212,7 @@
 
                     <div class="flex flex-col gap-1">
                         <p class="text-xs leading-tight opacity-75 line-clamp-2" title="{{ empty($manga->tagline) ? ($manga->genres?->pluck('name')->join(', ', ' and ') ?? $manga->themes?->pluck('name')->join(', ', ' and ')) : $manga->tagline }}">{{ empty($manga->tagline) ? ($manga->genres?->pluck('name')->join(', ', ' and ') ?? $manga->themes?->pluck('name')->join(', ', ' and ')) : $manga->tagline }}</p>
-                        <p class="text-xs leading-tight opacity-75 line-clamp-2" title="{{ $manga->tv_rating->name }}">{{ $manga->tv_rating->name }}</p>
+                        <p class="text-xs leading-tight opacity-75 line-clamp-2" title="{{ $manga->tvRating->name }}">{{ $manga->tvRating->name }}</p>
                     </div>
 
                     @if (!empty($manga->mediaStat?->rating_count) && $trackingEnabled)

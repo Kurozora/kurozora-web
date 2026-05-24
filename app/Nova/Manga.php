@@ -77,7 +77,7 @@ class Manga extends Resource
     public static $with = [
         'media',
         'mediaType',
-        'tv_rating',
+        'tvRating',
         'countryOfOrigin',
         'status',
         'source',
@@ -265,7 +265,7 @@ class Manga extends Resource
                 ->help('The general type of the manga. For example Manga, Manhwa, One-shot, etc.')
                 ->required(),
 
-            BelongsTo::make('TV rating', 'tv_rating')
+            BelongsTo::make('TV rating', 'tvRating')
                 ->sortable()
                 ->help('The TV rating of the manga. For example NR, G, PG-12, etc.')
                 ->required(),

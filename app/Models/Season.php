@@ -174,16 +174,6 @@ class Season extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * The season's TV rating.
-     *
-     * @return BelongsTo
-     */
-    public function tv_rating(): BelongsTo
-    {
-        return $this->belongsTo(TvRating::class);
-    }
-
-    /**
      * Retrieve the model for a bound value.
      *
      * @param  Model|\Illuminate\Database\Eloquent\Relations\Relation  $query

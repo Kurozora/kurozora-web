@@ -158,7 +158,7 @@ class Details extends Component
                     ]);
             },
             'translation',
-            'tv_rating',
+            'tvRating',
             'videos'
         ])
             ->when(auth()->user(), function ($query, $user) use ($episode) {

@@ -80,7 +80,7 @@
 
             <div id="tvRatingBadge" class="flex-grow px-12 border-l border-primary">
                 <a class="flex flex-col items-center" href="#tvRating">
-                    <p class="font-bold">{{ $studio->tv_rating->name }}</p>
+                    <p class="font-bold">{{ $studio->tvRating->name }}</p>
                     <p class="text-tint">
                         @svg('tv_fill', 'fill-current', ['width' => '20'])
                     </p>
@@ -227,11 +227,11 @@
 
                 <x-information-list id="tvRating" title="{{ __('Rating') }}" icon="{{ asset('images/symbols/tv_rating.svg') }}">
                     <x-slot:information>
-                        {{ $studio->tv_rating->name }}
+                        {{ $studio->tvRating->name }}
                     </x-slot:information>
 
                     <x-slot:footer>
-                        <p class="text-sm">{{ $studio->tv_rating->description }}.</p>
+                        <p class="text-sm">{{ $studio->tvRating->description }}.</p>
                     </x-slot:footer>
                 </x-information-list>
 

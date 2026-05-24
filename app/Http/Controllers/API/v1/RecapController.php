@@ -89,16 +89,16 @@ class RecapController extends Controller
                     $morphTo->withoutGlobalScopes()
                         ->constrain([
                             Anime::class => function (Builder $query) {
-                                $query->with(['genres', 'mediaStat', 'media', 'translation', 'tv_rating', 'themes']);
+                                $query->with(['genres', 'mediaStat', 'media', 'translation', 'tvRating', 'themes']);
                             },
                             Game::class => function (Builder $query) {
-                                $query->with(['genres', 'mediaStat', 'media', 'translation', 'tv_rating', 'themes']);
+                                $query->with(['genres', 'mediaStat', 'media', 'translation', 'tvRating', 'themes']);
                             },
                             Genre::class => function (Builder $query) {
                                 $query->with(['media']);
                             },
                             Manga::class => function (Builder $query) {
-                                $query->with(['genres', 'mediaStat', 'media', 'translation', 'tv_rating', 'themes']);
+                                $query->with(['genres', 'mediaStat', 'media', 'translation', 'tvRating', 'themes']);
                             },
                             Theme::class => function (Builder $query) {
                                 $query->with(['media']);

@@ -133,7 +133,7 @@ class Season extends Resource
                 ->sortable()
                 ->required(),
 
-            BelongsTo::make('TV rating', 'tv_rating')
+            BelongsTo::make('TV rating', 'tvRating')
                 ->sortable()
                 ->required()
                 ->help('The TV rating of the episode. For example NR, G, PG-12, etc.'),

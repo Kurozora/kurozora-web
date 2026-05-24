@@ -75,7 +75,7 @@ class Game extends Resource
     public static $with = [
         'media',
         'mediaType',
-        'tv_rating',
+        'tvRating',
         'countryOfOrigin',
         'status',
         'source',
@@ -257,7 +257,7 @@ class Game extends Resource
                 ->required()
                 ->help('The general type of the game. For example DLC, Mod, etc.'),
 
-            BelongsTo::make('TV rating', 'tv_rating')
+            BelongsTo::make('TV rating', 'tvRating')
                 ->sortable()
                 ->required()
                 ->help('The TV rating of the game. For example NR, G, PG-12, etc.'),

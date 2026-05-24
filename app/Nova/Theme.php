@@ -164,7 +164,7 @@ class Theme extends Resource
                 ->rules('required')
                 ->sortable(),
 
-            BelongsTo::make('TV rating', 'tv_rating')
+            BelongsTo::make('TV rating', 'tvRating')
                 ->sortable()
                 ->help('The TV rating of the theme. For example NR, G, PG-12, etc.')
                 ->required(),

@@ -60,7 +60,7 @@
                             <div class="flex gap-1 items-center">
                                 <h4 class="font-bold">{{ __('Rating') }}:</h4>
 
-                                <p class="text-secondary">{{ $this->parent->tv_rating->name }} ({{ $this->parent->tv_rating->description }})</p>
+                                <p class="text-secondary">{{ $this->parent->tvRating->name }} ({{ $this->parent->tvRating->description }})</p>
                             </div>
                         </li>
 

@@ -2,7 +2,9 @@
 
 namespace App\Traits\Model;
 
+use App\Models\TvRating;
 use App\Scopes\TvRatingScope;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Query\Builder;
 
 /**
@@ -28,7 +30,7 @@ trait TvRated
      */
     public function getTvRatingColumn(): string
     {
-        return defined(static::class.'::TV_RATING_ID') ? static::TV_RATING_ID : 'tv_rating_id';
+        return defined(static::class . '::TV_RATING_ID') ? static::TV_RATING_ID : 'tv_rating_id';
     }
 
     /**
@@ -39,5 +41,15 @@ trait TvRated
     public function getQualifiedTvRatingColumn(): string
     {
         return $this->qualifyColumn($this->getTvRatingColumn());
+    }
+
+    /**
+     * The model's TV rating.
+     *
+     * @return BelongsTo
+     */
+    public function tvRating(): BelongsTo
+    {
+        return $this->belongsTo(TvRating::class);
     }
 }

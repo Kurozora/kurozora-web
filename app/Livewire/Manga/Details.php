@@ -127,7 +127,7 @@ class Details extends Component
             'themes',
             'translation',
             'status',
-            'tv_rating',
+            'tvRating',
             'countryOfOrigin',
             'studios' => function (BelongsToMany $query) {
                 $query->withoutGlobalScopes()

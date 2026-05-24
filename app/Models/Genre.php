@@ -98,16 +98,6 @@ class Genre extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * The genre's TV rating.
-     *
-     * @return BelongsTo
-     */
-    public function tv_rating(): BelongsTo
-    {
-        return $this->belongsTo(TvRating::class);
-    }
-
-    /**
      * Get the indexable data array for the model.
      *
      * @return array

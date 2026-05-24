@@ -313,7 +313,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
      */
     public function getInformationSummaryAttribute(): string
     {
-        $informationSummary = $this->mediaType->name . ' · ' . $this->tv_rating->name;
+        $informationSummary = $this->mediaType->name . ' · ' . $this->tvRating->name;
         $episodesCount = $this->episode_count ?? null;
         $duration = $this->duration_string;
         $startedAtYear = $this->started_at;
@@ -631,16 +631,6 @@ class Anime extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * The anime's TV rating.
-     *
-     * @return BelongsTo
-     */
-    public function tv_rating(): BelongsTo
-    {
-        return $this->belongsTo(TvRating::class);
-    }
-
-    /**
      * The anime's media type.
      *
      * @return BelongsTo
@@ -703,7 +693,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
     protected function makeAllSearchableUsing(Builder $query): Builder
     {
         return $query->withoutGlobalScopes()
-            ->with(['genres', 'languages', 'mediaStat', 'mediaType', 'source', 'status', 'themes', 'translations', 'tv_rating', 'countryOfOrigin']);
+            ->with(['genres', 'languages', 'mediaStat', 'mediaType', 'source', 'status', 'themes', 'translations', 'tvRating', 'countryOfOrigin']);
     }
 
     /**
@@ -724,7 +714,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
         $anime['translations'] = $this->translations
             ->select(['locale', 'title', 'synopsis', 'tagline']);
         $anime['country_of_origin'] = $this->countryOfOrigin?->toSearchableArray();
-        $anime['tv_rating'] = $this->tv_rating?->toSearchableArray();
+        $anime['tv_rating'] = $this->tvRating?->toSearchableArray();
         $anime['media_type'] = $this->mediaType?->toSearchableArray();
         $anime['source'] = $this->source?->toSearchableArray();
         $anime['status'] = $this->status?->toSearchableArray();

@@ -446,7 +446,7 @@ class Game extends KModel implements HasMedia, Sitemapable
      */
     public function getInformationSummaryAttribute(): string
     {
-        $informationSummary = $this->mediaType->name . ' · ' . $this->tv_rating->name;
+        $informationSummary = $this->mediaType->name . ' · ' . $this->tvRating->name;
         $editionCount = $this->edition_count ?? null;
         $duration = $this->duration_string;
         $publishedAt = $this->published_at;
@@ -530,16 +530,6 @@ class Game extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * The game's TV rating.
-     *
-     * @return BelongsTo
-     */
-    public function tv_rating(): BelongsTo
-    {
-        return $this->belongsTo(TvRating::class);
-    }
-
-    /**
      * The game's media type.
      *
      * @return BelongsTo
@@ -613,7 +603,7 @@ class Game extends KModel implements HasMedia, Sitemapable
     protected function makeAllSearchableUsing(Builder $query): Builder
     {
         return $query->withoutGlobalScopes()
-            ->with(['genres', 'languages', 'mediaStat', 'mediaType', 'source', 'status', 'themes', 'translations', 'tv_rating', 'countryOfOrigin']);
+            ->with(['genres', 'languages', 'mediaStat', 'mediaType', 'source', 'status', 'themes', 'translations', 'tvRating', 'countryOfOrigin']);
     }
 
     /**
@@ -634,7 +624,7 @@ class Game extends KModel implements HasMedia, Sitemapable
         $game['translations'] = $this->translations
             ->select(['locale', 'title', 'synopsis', 'tagline']);
         $game['country_of_origin'] = $this->countryOfOrigin?->toSearchableArray();
-        $game['tv_rating'] = $this->tv_rating?->toSearchableArray();
+        $game['tv_rating'] = $this->tvRating?->toSearchableArray();
         $game['media_type'] = $this->mediaType?->toSearchableArray();
         $game['source'] = $this->source?->toSearchableArray();
         $game['status'] = $this->status?->toSearchableArray();

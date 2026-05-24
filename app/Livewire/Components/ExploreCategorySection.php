@@ -139,7 +139,7 @@ class ExploreCategorySection extends Component
                 'exploreCategoryItems.model' => function (MorphTo $morphTo) {
                     $morphTo->constrain([
                         Anime::class => function (Builder $query) {
-                            $query->with(['genres', 'mediaStat', 'media', 'translation', 'tv_rating', 'themes'])
+                            $query->with(['genres', 'mediaStat', 'media', 'translation', 'tvRating', 'themes'])
                                 ->when(auth()->user(), function ($query, $user) {
                                     return $query->with(['library' => function ($query) use ($user) {
                                         $query->where('user_id', '=', $user->id);
@@ -147,7 +147,7 @@ class ExploreCategorySection extends Component
                                 });
                         },
                         Game::class => function (Builder $query) {
-                            $query->with(['genres', 'mediaStat', 'media', 'translation', 'tv_rating', 'themes'])
+                            $query->with(['genres', 'mediaStat', 'media', 'translation', 'tvRating', 'themes'])
                                 ->when(auth()->user(), function ($query, $user) {
                                     return $query->with(['library' => function ($query) use ($user) {
                                         $query->where('user_id', '=', $user->id);
@@ -158,7 +158,7 @@ class ExploreCategorySection extends Component
                             $query->with(['media']);
                         },
                         Manga::class => function (Builder $query) {
-                            $query->with(['genres', 'mediaStat', 'media', 'translation', 'tv_rating', 'themes'])
+                            $query->with(['genres', 'mediaStat', 'media', 'translation', 'tvRating', 'themes'])
                                 ->when(auth()->user(), function ($query, $user) {
                                     return $query->with(['library' => function ($query) use ($user) {
                                         $query->where('user_id', '=', $user->id);

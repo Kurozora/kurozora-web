@@ -259,7 +259,7 @@ class Studio extends KModel implements HasMedia, Sitemapable
     protected function makeAllSearchableUsing(Builder $query): Builder
     {
         return $query->withoutGlobalScopes()
-            ->with(['mediaStat', 'tv_rating', 'predecessors', 'successor']);
+            ->with(['mediaStat', 'tvRating', 'predecessors', 'successor']);
     }
 
     /**
@@ -280,7 +280,7 @@ class Studio extends KModel implements HasMedia, Sitemapable
                     });
                 $studio['successor'] = $this->successor?->toSearchableArray();
                 $studio['media_stat'] = $this->mediaStat?->toSearchableArray();
-                $studio['tv_rating'] = $this->tv_rating?->toSearchableArray();
+                $studio['tv_rating'] = $this->tvRating?->toSearchableArray();
                 $studio['founded_at'] = $this->founded_at?->timestamp;
                 $studio['defunct_at'] = $this->defunct_at?->timestamp;
                 $studio['created_at'] = $this->created_at?->timestamp;
@@ -345,16 +345,6 @@ class Studio extends KModel implements HasMedia, Sitemapable
         return $this->morphedByMany(Game::class, 'model', MediaStudio::class)
             ->withoutGlobalScopes()
             ->withTimestamps();
-    }
-
-    /**
-     * The anime's TV rating.
-     *
-     * @return BelongsTo
-     */
-    public function tv_rating(): BelongsTo
-    {
-        return $this->belongsTo(TvRating::class);
     }
 
     /**

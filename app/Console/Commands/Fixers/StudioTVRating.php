@@ -65,7 +65,7 @@ class StudioTVRating extends Command
                 },
             ])
             ->where('tv_rating_id', '=', null)
-            ->with(['mediaStat', 'tv_rating', 'predecessors', 'successor'])
+            ->with(['mediaStat', 'tvRating', 'predecessors', 'successor'])
             ->chunkById($chunkSize, function (Collection $studios) {
                 $tvRatingUpdates = [];
                 $nsfwUpdates = [];

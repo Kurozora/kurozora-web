@@ -258,7 +258,7 @@ trait WithSearch
                 $models = $user
                     ->whereTracked(static::$searchModel)
                     ->withoutIgnoreList()
-                    ->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating'])
+                    ->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tvRating'])
                     ->with(['library' => function ($query) use ($user) {
                         $query->where('user_id', '=', $user->id);
                     }])

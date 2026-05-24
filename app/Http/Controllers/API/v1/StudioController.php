@@ -77,7 +77,7 @@ class StudioController extends Controller
         // Call the ModelViewed event
         ModelViewed::dispatch($studio, $request->ip());
 
-        $studio->load(['media', 'mediaStat', 'mediaRatings', 'tv_rating', 'predecessors', 'successor']);
+        $studio->load(['media', 'mediaStat', 'mediaRatings', 'tvRating', 'predecessors', 'successor']);
 
         $includeArray = [];
         if ($includeInput = $request->input('include')) {
@@ -126,7 +126,7 @@ class StudioController extends Controller
         $data = $request->validated();
 
         $studio = Studio::whereIn('id', $data['ids'] ?? []);
-        $studio->with(['media', 'mediaStat', 'mediaRatings', 'tv_rating', 'predecessors', 'successor']);
+        $studio->with(['media', 'mediaStat', 'mediaRatings', 'tvRating', 'predecessors', 'successor']);
 
         $includeArray = [];
         if ($includeInput = $request->input('include')) {

@@ -148,7 +148,7 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
             Anime::class => $this->anime($genreOrTheme)
                 ->mostPopular($limit, 3, (bool) $genreOrTheme?->is_nsfw)
                 ->when($withRelations, function ($query) {
-                    $query->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating']);
+                    $query->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tvRating']);
 
                     if ($user = auth()->user()) {
                         $query->with(['library' => function ($query) use ($user) {
@@ -160,7 +160,7 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
             Game::class => $this->game($genreOrTheme)
                 ->mostPopular($limit, 3, (bool) $genreOrTheme?->is_nsfw)
                 ->when($withRelations, function ($query) {
-                    $query->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating']);
+                    $query->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tvRating']);
 
                     if ($user = auth()->user()) {
                         $query->with(['library' => function ($query) use ($user) {
@@ -172,7 +172,7 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
             Manga::class => $this->manga($genreOrTheme)
                 ->mostPopular($limit, 3, (bool) $genreOrTheme?->is_nsfw)
                 ->when($withRelations, function ($query) {
-                    $query->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating']);
+                    $query->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tvRating']);
 
                     if ($user = auth()->user()) {
                         $query->with(['library' => function ($query) use ($user) {
@@ -287,7 +287,7 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
             Anime::class => $this->anime($genreOrTheme)
                 ->recentlyAdded($limit, (bool) $genreOrTheme?->is_nsfw)
                 ->when($withRelations, function ($query) {
-                    $query->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating']);
+                    $query->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tvRating']);
 
                     if ($user = auth()->user()) {
                         $query->with(['library' => function ($query) use ($user) {
@@ -299,7 +299,7 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
             Game::class => $this->game($genreOrTheme)
                 ->recentlyAdded($limit, (bool) $genreOrTheme?->is_nsfw)
                 ->when($withRelations, function ($query) {
-                    $query->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating']);
+                    $query->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tvRating']);
 
                     if ($user = auth()->user()) {
                         $query->with(['library' => function ($query) use ($user) {
@@ -311,7 +311,7 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
             Manga::class => $this->manga($genreOrTheme)
                 ->recentlyAdded($limit, (bool) $genreOrTheme?->is_nsfw)
                 ->when($withRelations, function ($query) {
-                    $query->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating']);
+                    $query->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tvRating']);
 
                     if ($user = auth()->user()) {
                         $query->with(['library' => function ($query) use ($user) {
@@ -348,7 +348,7 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
             Anime::class => $this->anime($genreOrTheme)
                 ->recentlyUpdated($limit, (bool) $genreOrTheme?->is_nsfw)
                 ->when($withRelations, function ($query) {
-                    $query->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating']);
+                    $query->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tvRating']);
 
                     if ($user = auth()->user()) {
                         $query->with(['library' => function ($query) use ($user) {
@@ -360,7 +360,7 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
             Game::class => $this->game($genreOrTheme)
                 ->recentlyUpdated($limit, (bool) $genreOrTheme?->is_nsfw)
                 ->when($withRelations, function ($query) {
-                    $query->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating']);
+                    $query->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tvRating']);
 
                     if ($user = auth()->user()) {
                         $query->with(['library' => function ($query) use ($user) {
@@ -372,7 +372,7 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
             Manga::class => $this->manga($genreOrTheme)
                 ->recentlyUpdated($limit, (bool) $genreOrTheme?->is_nsfw)
                 ->when($withRelations, function ($query) {
-                    $query->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating']);
+                    $query->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tvRating']);
 
                     if ($user = auth()->user()) {
                         $query->with(['library' => function ($query) use ($user) {
@@ -409,7 +409,7 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
             Anime::class => $this->anime($genreOrTheme)
                 ->recentlyFinished($limit, (bool) $genreOrTheme?->is_nsfw)
                 ->when($withRelations, function ($query) {
-                    $query->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating']);
+                    $query->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tvRating']);
 
                     if ($user = auth()->user()) {
                         $query->with(['library' => function ($query) use ($user) {
@@ -421,7 +421,7 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
             Manga::class => $this->manga($genreOrTheme)
                 ->recentlyFinished($limit, (bool) $genreOrTheme?->is_nsfw)
                 ->when($withRelations, function ($query) {
-                    $query->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating']);
+                    $query->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tvRating']);
 
                     if ($user = auth()->user()) {
                         $query->with(['library' => function ($query) use ($user) {
@@ -458,7 +458,7 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
             Anime::class => $this->anime($genreOrTheme)
                 ->ongoing($limit, (bool) $genreOrTheme?->is_nsfw)
                 ->when($withRelations, function ($query) {
-                    $query->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating']);
+                    $query->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tvRating']);
 
                     if ($user = auth()->user()) {
                         $query->with(['library' => function ($query) use ($user) {
@@ -470,7 +470,7 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
             Manga::class => $this->manga($genreOrTheme)
                 ->ongoing($limit, (bool) $genreOrTheme?->is_nsfw)
                 ->when($withRelations, function ($query) {
-                    $query->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating']);
+                    $query->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tvRating']);
 
                     if ($user = auth()->user()) {
                         $query->with(['library' => function ($query) use ($user) {
@@ -508,7 +508,7 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
                 ->currentSeason($limit, (bool) $genreOrTheme?->is_nsfw)
                 ->where('air_day', '=', today()->dayOfWeek)
                 ->when($withRelations, function ($query) {
-                    $query->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating']);
+                    $query->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tvRating']);
 
                     if ($user = auth()->user()) {
                         $query->with(['library' => function ($query) use ($user) {
@@ -520,7 +520,7 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
             Game::class => $this->game($genreOrTheme)
                 ->currentSeason($limit, (bool) $genreOrTheme?->is_nsfw)
                 ->when($withRelations, function ($query) {
-                    $query->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating']);
+                    $query->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tvRating']);
 
                     if ($user = auth()->user()) {
                         $query->with(['library' => function ($query) use ($user) {
@@ -532,7 +532,7 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
             Manga::class => $this->manga($genreOrTheme)
                 ->currentSeason($limit, (bool) $genreOrTheme?->is_nsfw)
                 ->when($withRelations, function ($query) {
-                    $query->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating']);
+                    $query->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tvRating']);
 
                     if ($user = auth()->user()) {
                         $query->with(['library' => function ($query) use ($user) {

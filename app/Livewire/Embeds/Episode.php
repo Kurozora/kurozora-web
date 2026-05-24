@@ -56,7 +56,7 @@ class Episode extends Component
             'media',
             'mediaStat',
             'translation',
-            'tv_rating',
+            'tvRating',
             'videos',
         ]);
     }

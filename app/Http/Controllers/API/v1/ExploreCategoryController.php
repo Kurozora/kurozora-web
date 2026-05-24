@@ -47,7 +47,7 @@ class ExploreCategoryController extends Controller
                                         });
                                 },
                                 'model' => function ($query) {
-                                    $query->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'countryOfOrigin'])
+                                    $query->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
                                         ->when(auth()->user(), function ($query, $user) {
                                             $query->with(['mediaRatings' => function ($query) use ($user) {
                                                 $query->where([
@@ -117,7 +117,7 @@ class ExploreCategoryController extends Controller
                                         $query->with(['media', 'mediaStat', 'translation']);
                                     },
                                     'model' => function ($query) {
-                                        $query->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'countryOfOrigin'])
+                                        $query->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
                                             ->when(auth()->user(), function ($query, $user) {
                                                 $query->with(['mediaRatings' => function ($query) use ($user) {
                                                     $query->where([
@@ -194,16 +194,16 @@ class ExploreCategoryController extends Controller
                 'exploreCategoryItems.model' => function (MorphTo $morphTo) {
                     $morphTo->constrain([
                         Anime::class => function (Builder $query) {
-                            $query->with(['genres', 'mediaStat', 'media', 'translation', 'tv_rating', 'themes']);
+                            $query->with(['genres', 'mediaStat', 'media', 'translation', 'tvRating', 'themes']);
                         },
                         Game::class => function (Builder $query) {
-                            $query->with(['genres', 'mediaStat', 'media', 'translation', 'tv_rating', 'themes']);
+                            $query->with(['genres', 'mediaStat', 'media', 'translation', 'tvRating', 'themes']);
                         },
                         Genre::class => function (Builder $query) {
                             $query->with(['media']);
                         },
                         Manga::class => function (Builder $query) {
-                            $query->with(['genres', 'mediaStat', 'media', 'translation', 'tv_rating', 'themes']);
+                            $query->with(['genres', 'mediaStat', 'media', 'translation', 'tvRating', 'themes']);
                         },
                         MediaSong::class => function (Builder $query) {
                             $query->with([
@@ -211,7 +211,7 @@ class ExploreCategoryController extends Controller
                                     $query->with(['media', 'mediaStat', 'translation']);
                                 },
                                 'model' => function ($query) {
-                                    $query->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'countryOfOrigin'])
+                                    $query->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
                                         ->when(auth()->user(), function ($query, $user) {
                                             $query->with(['mediaRatings' => function ($query) use ($user) {
                                                 $query->where([

@@ -98,16 +98,6 @@ class Theme extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * The theme's TV rating.
-     *
-     * @return BelongsTo
-     */
-    public function tv_rating(): BelongsTo
-    {
-        return $this->belongsTo(TvRating::class);
-    }
-
-    /**
      * Modify the query used to retrieve models when making all of the models searchable.
      *
      * @param Builder $query

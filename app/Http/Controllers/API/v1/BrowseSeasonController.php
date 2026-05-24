@@ -50,7 +50,7 @@ class BrowseSeasonController extends Controller
             default => 'started_at'
         };
 
-        $items = $model::with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'countryOfOrigin'])
+        $items = $model::with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
             ->when(auth()->user(), function ($query, $user) use ($model) {
                 $query->with([
                     'mediaRatings' => fn($q) => $q->where('user_id', $user->id),
