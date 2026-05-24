@@ -56,7 +56,7 @@
         </section>
 
         @if ($platform->about)
-            <section class="pb-8">
+            <section class="pt-4 pb-8 xl:safe-area-inset">
                 <x-section-nav class="pt-4">
                     <x-slot:title>
                         {{ __('About') }}
