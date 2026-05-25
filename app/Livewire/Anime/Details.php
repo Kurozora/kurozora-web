@@ -320,6 +320,26 @@ class Details extends Component
     }
 
     /**
+     * The Schema.org JSON-LD payload for this page.
+     *
+     * @return array
+     */
+    public function getSchemaProperty(): array
+    {
+        return $this->anime->toSchemaOrg();
+    }
+
+    /**
+     * The breadcrumb chain for this page.
+     *
+     * @return array
+     */
+    public function getBreadcrumbProperty(): array
+    {
+        return $this->anime->schemaBreadcrumbChain();
+    }
+
+    /**
      * Render the component.
      *
      * @return Application|Factory|View

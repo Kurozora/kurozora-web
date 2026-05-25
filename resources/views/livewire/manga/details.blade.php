@@ -22,47 +22,7 @@
         <meta property="twitter:image" content="{{ $manga->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $manga->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="twitter:image:alt" content="{{ $manga->synopsis }}" />
         <link rel="canonical" href="{{ route('manga.details', $manga) }}">
-        <x-misc.schema>
-            "@type":"Book",
-            "url":"/manga/{{ $manga->slug }}/",
-            "name": "{{ $manga->title }}",
-            "alternateName": "{{ $manga->original_title }}",
-            "image": "{{ $manga->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $manga->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}",
-            "description": "{{ json_encode($manga->synopsis) }}",
-            "aggregateRating": {
-                "@type":"AggregateRating",
-                "itemReviewed": {
-                    "@type": "TVSeries",
-                    "image": [
-                        "{{ $manga->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $manga->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}"
-                    ],
-                    "name": "{{ $manga->title }}"
-                },
-                "ratingCount": {{ $manga->mediaStat->rating_count ?? 1 }},
-                "bestRating": 5,
-                "worstRating": 0,
-                "ratingValue": {{ $manga->mediaStat->rating_average ?? 2.5 }}
-            },
-            "contentRating": "{{ $manga->tvRating->name }}",
-            @if (!empty($manga->countryOfOrigin))
-                "countryOfOrigin": {
-                    "@type": "Country",
-                    "name": "{{ $manga->countryOfOrigin->name }}",
-                    "alternateName": "{{ $manga->countryOfOrigin->code }}"
-                },
-            @endif
-            "genre": {!! $manga->genres()->pluck('name') !!},
-            "datePublished": "{{ $manga->started_at?->format('Y-m-d') }}",
-            @if (!empty($this->studio))
-                "creator":[
-                    {
-                        "@type":"Organization",
-                        "url":"/studio/{{ $this->studio->id }}/"
-                    }
-                ],
-            @endif
-            "keywords": "manga{{ (',' . $manga->keywords) ?? '' }}"
-        </x-misc.schema>
+        <x-misc.schema :data="$this->schema" />
     </x-slot:meta>
 
     <x-slot:appArgument>

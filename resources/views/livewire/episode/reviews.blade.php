@@ -21,19 +21,12 @@
         episodes/{{ $episode->id }}/reviews
     </x-slot:appArgument>
 
-    <div class="pt-4 pb-6" wire:init="loadPage">
-        <section class="mb-4 xl:safe-area-inset">
-            <div>
-                <div class="flex gap-1 pl-4 pr-4">
-                    <div class="flex flex-wrap items-center w-full">
-                        <h1 class="text-2xl font-bold">{{ __(':x’s Ratings & Reviews', ['x' => $episode->title]) }}</h1>
-                    </div>
-
-                    <div class="flex flex-wrap flex-1 justify-end items-center w-full">
-                    </div>
-                </div>
-            </div>
-        </section>
+    <div class="pb-6" wire:init="loadPage">
+        <x-back-link
+            :url="$episode->schemaUrl()"
+            :label="$episode->title"
+            :title="__(':x’s Ratings & Reviews', ['x' => $episode->title])"
+        />
 
         <section id="ratingsAndReviews" class="pb-8 xl:safe-area-inset">
             <div class="flex flex-row flex-wrap justify-between gap-4 pl-4 pr-4">

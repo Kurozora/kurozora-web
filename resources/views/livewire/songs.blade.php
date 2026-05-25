@@ -24,19 +24,12 @@
         {{ $this->appArgumentSegment }}/{{ $this->parent->id }}/songs
     </x-slot:appArgument>
 
-    <div class="pt-4 pb-6 space-y-10" wire:init="loadPage">
-        <section class="mb-4 xl:safe-area-inset">
-            <div>
-                <div class="flex gap-1 pl-4 pr-4">
-                    <div class="flex flex-wrap items-center w-full">
-                        <h1 class="text-2xl font-bold">{{ __(':x’s Songs', ['x' => $this->parent->title]) }}</h1>
-                    </div>
-
-                    <div class="flex flex-wrap flex-1 justify-end items-center w-full">
-                    </div>
-                </div>
-            </div>
-        </section>
+    <div class="pb-6 space-y-10" wire:init="loadPage">
+        <x-back-link
+            :url="$this->parent->schemaUrl()"
+            :label="$this->parent->title"
+            :title="__(':x’s Songs', ['x' => $this->parent->title])"
+        />
 
         @if ($this->mediaSongs->count())
             @foreach ($this->mediaSongs as $mediaSongType => $mediaSongs)

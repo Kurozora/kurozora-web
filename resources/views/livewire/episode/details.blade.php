@@ -26,48 +26,7 @@
         <meta property="twitter:image" content="{{ $episode->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $season->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="twitter:image:alt" content="{{ $episode->synopsis }}" />
         <link rel="canonical" href="{{ route('episodes.details', $episode) }}">
-        <x-misc.schema>
-            "@type":"TVEpisode",
-            "url":"/episode/{{ $episode->id }}/",
-            "name": "{{ $episode->title }}",
-            "alternateName": "{{ $anime->original_title }}",
-            "image": "{{ $episode->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $season->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}",
-            "description": "{{ $episode->synopsis }}",
-            "aggregateRating": {
-                "@type":"AggregateRating",
-                "itemReviewed": {
-                    "@type": "TVEpisode",
-                    "image": [
-                        "{{ $episode->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $season->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}"
-                    ],
-                    "name": "{{ $episode->title }}"
-                },
-                "ratingCount": {{ $episode->mediaStat->rating_count ?? 1 }},
-                "bestRating": 5,
-                "worstRating": 0,
-                "ratingValue": {{ $episode->mediaStat->rating_average ?? 2.5 }}
-            },
-            "contentRating": "{{ $anime->tvRating->name }}",
-            "genre": {!! $anime->genres->pluck('name') !!},
-            "datePublished": "{{ $episode->started_at?->format('Y-m-d') }}",
-            "keywords": "anime,episode{{ (',' . $anime->keywords) ?? '' }}",
-            "creator":[
-                {
-                    "@type":"Organization",
-                    "url":"/studio/{{ $anime->studios?->firstWhere('is_studio', '=', true)?->id ?? $anime->studios?->first()?->id }}/"
-                }
-            ]
-            @if (!empty($episode->videos->first()?->getUrl()) || !empty($anime->videos->first()?->getUrl()))
-                ,"trailer": {
-                    "@type":"VideoObject",
-                    "name":"{{ $episode->title }}",
-                    "description":"Official Trailer",
-                    "embedUrl": "{{ $episode->videos->first()->getUrl() ?? $anime->videos->first()->getUrl() }}",
-                    "thumbnailUrl": "{{ $episode->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}",
-                    "uploadDate": "{{ $episode->started_at?->format('Y-m-d') }}"
-                }
-            @endif
-        </x-misc.schema>
+        <x-misc.schema :data="$this->schema" />
 
         <link rel="alternate" type="application/json+oembed" href="{{ route('oembed', ['format' => 'json', 'url' => route('episodes.details', $episode)]) }}">
         <link rel="alternate" type="application/json+oembed" href="{{ route('oembed', ['format' => 'xml', 'url' => route('episodes.details', $episode)]) }}">

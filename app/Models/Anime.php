@@ -20,10 +20,12 @@ use App\Traits\Model\HasMediaStudios;
 use App\Traits\Model\HasMediaTags;
 use App\Traits\Model\HasMediaThemes;
 use App\Traits\Model\HasParentalGuideStat;
+use App\Traits\Model\HasSchemaOrg;
 use App\Traits\Model\HasSlug;
 use App\Traits\Model\HasTvRatedRelations;
 use App\Traits\Model\HasVideos;
 use App\Traits\Model\HasTranslations;
+use App\Support\BreadcrumbNode;
 use App\Traits\Model\HasViews;
 use App\Traits\Model\Ignored;
 use App\Traits\Model\MediaRelated;
@@ -70,6 +72,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
         HasMediaTags,
         HasMediaThemes,
         HasParentalGuideStat,
+        HasSchemaOrg,
         HasSlug,
         HasTranslations,
         HasTvRatedRelations,
@@ -143,6 +146,60 @@ class Anime extends KModel implements HasMedia, Sitemapable
     public static function minimumRatingsRequired(): int
     {
         return 999999999;
+    }
+
+    /**
+     * The Schema.org type for this entity.
+     *
+     * @return string
+     */
+    public function schemaType(): string
+    {
+        return 'TVSeries';
+    }
+
+    /**
+     * The canonical URL for this entity.
+     *
+     * @return string
+     */
+    public function schemaUrl(): string
+    {
+        return route('anime.details', $this);
+    }
+
+    /**
+     * The prefix for the Schema.org keywords field.
+     *
+     * @return string
+     */
+    public function schemaKeywordsPrefix(): string
+    {
+        return 'anime';
+    }
+
+    /**
+     * The label for this entity in a breadcrumb chain.
+     *
+     * @return string
+     */
+    public function schemaBreadcrumbLabel(): string
+    {
+        return $this->title;
+    }
+
+    /**
+     * The parent node in the breadcrumb chain.
+     *
+     * @return BreadcrumbNode
+     */
+    public function schemaBreadcrumbParent(): BreadcrumbNode
+    {
+        return new BreadcrumbNode(
+            __('Anime'),
+            route('anime.index'),
+            BreadcrumbNode::home(),
+        );
     }
 
     /**

@@ -24,57 +24,7 @@
         <meta property="twitter:image" content="{{ $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="twitter:image:alt" content="{{ $anime->synopsis }}" />
         <link rel="canonical" href="{{ route('anime.details', $anime) }}">
-        <x-misc.schema>
-            "@type":"TVSeries",
-            "url":"/anime/{{ $anime->slug }}/",
-            "name": "{{ $anime->title }}",
-            "alternateName": "{{ $anime->original_title }}",
-            "image": "{{ $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}",
-            "description": "{{ json_encode($anime->synopsis) }}",
-            "aggregateRating": {
-                "@type":"AggregateRating",
-                "itemReviewed": {
-                    "@type": "TVSeries",
-                    "image": [
-                        "{{ $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}"
-                    ],
-                    "name": "{{ $anime->title }}"
-                },
-                "ratingCount": {{ $anime->mediaStat->rating_count ?? 1 }},
-                "bestRating": 5,
-                "worstRating": 0,
-                "ratingValue": {{ $anime->mediaStat->rating_average ?? 2.5 }}
-            },
-            "contentRating": "{{ $anime->tvRating->name }}",
-            @if (!empty($anime->countryOfOrigin))
-                "countryOfOrigin": {
-                    "@type": "Country",
-                    "name": "{{ $anime->countryOfOrigin->name }}",
-                    "alternateName": "{{ $anime->countryOfOrigin->code }}"
-                },
-            @endif
-            "genre": {!! $anime->genres()->pluck('name') !!},
-            "datePublished": "{{ $anime->started_at?->format('Y-m-d') }}",
-            @if (!empty($this->studio))
-                "creator":[
-                    {
-                        "@type":"Organization",
-                        "url":"/studio/{{ $this->studio->id }}/"
-                    }
-                ],
-            @endif
-            "keywords": "anime{{ (',' . $anime->keywords) ?? '' }}"
-            @if (!empty($anime->video_url))
-                ,"trailer": {
-                    "@type":"VideoObject",
-                    "name":"{{ $anime->title }}",
-                    "embedUrl": "{{ $anime->video_url }}",
-                    "description":"Official Trailer",
-                    "thumbnailUrl": "{{ $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}",
-                    "uploadDate": "{{ $anime->started_at?->format('Y-m-d') }}"
-                }
-            @endif
-        </x-misc.schema>
+        <x-misc.schema :data="$this->schema" />
     </x-slot:meta>
 
     <x-slot:appArgument>

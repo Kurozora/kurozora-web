@@ -148,9 +148,13 @@ class Details extends Component
             'anime' => function (HasOneThrough $hasOneThrough) {
                 $hasOneThrough->withoutGlobalScopes()
                     ->with([
+                        'countryOfOrigin',
+                        'genres',
                         'studios',
                         'translation',
+                        'tvRating',
                         'orderedVideos',
+                        'videos',
                     ]);
             },
             'season' => function (BelongsTo $query) {
@@ -306,6 +310,26 @@ class Details extends Component
                 message: __('Reminders are only available to pro and subscribed users 🧐'),
             );
         }
+    }
+
+    /**
+     * The Schema.org JSON-LD payload for this page.
+     *
+     * @return array
+     */
+    public function getSchemaProperty(): array
+    {
+        return $this->episode->toSchemaOrg();
+    }
+
+    /**
+     * The breadcrumb chain for this page.
+     *
+     * @return array
+     */
+    public function getBreadcrumbProperty(): array
+    {
+        return $this->episode->schemaBreadcrumbChain();
     }
 
     /**

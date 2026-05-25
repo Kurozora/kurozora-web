@@ -3,12 +3,14 @@
 namespace App\Models;
 
 use App\Enums\MediaCollection;
+use App\Support\BreadcrumbNode;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\Actionable;
 use App\Traits\Model\HasComments;
 use App\Traits\Model\HasMediaRatings;
 use App\Traits\Model\HasMediaStat;
 use App\Traits\Model\HasPublicID;
+use App\Traits\Model\HasSchemaOrg;
 use App\Traits\Model\HasTranslations;
 use App\Traits\Model\HasVideos;
 use App\Traits\Model\HasViews;
@@ -41,6 +43,7 @@ class Episode extends KModel implements HasMedia, Sitemapable
         HasMediaRatings,
         HasMediaStat,
         HasPublicID,
+        HasSchemaOrg,
         HasTranslations,
         HasVideos,
         HasViews,
@@ -469,5 +472,102 @@ class Episode extends KModel implements HasMedia, Sitemapable
         return Url::create(route('episodes.details', $this))
             ->setChangeFrequency('weekly')
             ->setLastModificationDate($this->updated_at);
+    }
+
+    /**
+     * The Schema.org type for this entity.
+     *
+     * @return string
+     */
+    public function schemaType(): string
+    {
+        return 'TVEpisode';
+    }
+
+    /**
+     * The canonical URL for this entity.
+     *
+     * @return string
+     */
+    public function schemaUrl(): string
+    {
+        return route('episodes.details', $this);
+    }
+
+    /**
+     * The prefix for the Schema.org keywords field.
+     *
+     * @return string
+     */
+    public function schemaKeywordsPrefix(): string
+    {
+        return 'anime,episode';
+    }
+
+    /**
+     * The label for this entity in a breadcrumb chain.
+     *
+     * @return string
+     */
+    public function schemaBreadcrumbLabel(): string
+    {
+        return __('Episode :n', ['n' => $this->number_total]);
+    }
+
+    /**
+     * The parent node in the breadcrumb chain.
+     *
+     * @return BreadcrumbNode
+     */
+    public function schemaBreadcrumbParent(): BreadcrumbNode
+    {
+        $anime = $this->anime;
+
+        return new BreadcrumbNode(
+            __('Season :n', ['n' => $this->season->number]),
+            route('seasons.episodes', $this->season),
+            new BreadcrumbNode(
+                __('Seasons'),
+                route('anime.seasons', $anime),
+                new BreadcrumbNode(
+                    $anime->title,
+                    route('anime.details', $anime),
+                    $anime->schemaBreadcrumbParent(),
+                ),
+            ),
+        );
+    }
+
+    /**
+     * The model whose attributes feed genre, contentRating, studios, and keywords.
+     *
+     * @return Model
+     */
+    protected function schemaSubject(): Model
+    {
+        return $this->anime;
+    }
+
+    /**
+     * The hero image URL.
+     *
+     * @return string
+     */
+    protected function schemaImage(): string
+    {
+        return $this->getFirstMediaFullUrl(MediaCollection::Banner())
+            ?? $this->season?->getFirstMediaFullUrl(MediaCollection::Poster())
+            ?? asset('images/static/promotional/social_preview_icon_only.webp');
+    }
+
+    /**
+     * The trailer embed URL.
+     *
+     * @return ?string
+     */
+    protected function schemaTrailerUrl(): ?string
+    {
+        return $this->videos->first()?->getUrl()
+            ?? $this->anime?->videos->first()?->getUrl();
     }
 }

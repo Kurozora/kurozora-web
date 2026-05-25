@@ -16,15 +16,11 @@
     </x-slot:appArgument>
 
     <div class="pb-6">
-        <section class="sticky top-0 mb-4 pt-4 pb-4 backdrop-blur bg-blur z-10 xl:safe-area-inset">
-            <div class="flex flex-col gap-1 pl-4 pr-4">
-                <a href="{{ $this->parentalGuideUrl }}" class="text-secondary text-sm">
-                    ← {{ __(':x’s Parents Guide', ['x' => $this->parent->title]) }}
-                </a>
-
-                <h1 class="text-2xl font-bold">{{ $this->category->description }}</h1>
-            </div>
-        </section>
+        <x-back-link
+            :url="$this->parentalGuideUrl"
+            :label="__(':x’s Parents Guide', ['x' => $this->parent->title])"
+            :title="$this->category->description"
+        />
 
         <section class="mb-4 xl:safe-area-inset" wire:init="loadPage">
             <div class="flex flex-col gap-4 pl-4 pr-4">

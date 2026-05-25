@@ -36,19 +36,15 @@
     </x-slot:appArgument>
 
     <div class="pb-6">
-        <section class="sticky top-0 mb-4 pt-4 pb-4 backdrop-blur bg-blur z-10 xl:safe-area-inset">
-            <div>
-                <div class="flex gap-1 pl-4 pr-4">
-                    <div class="flex flex-wrap items-center w-full">
-                        <h1 class="text-2xl font-bold">{{ __(':x’s Parents Guide', ['x' => $this->parent->title]) }}</h1>
-                    </div>
-
-                    <div class="flex flex-wrap flex-1 justify-end items-center w-full">
-                        <x-button wire:click="openSubmitForm">{{ __('Add') }}</x-button>
-                    </div>
-                </div>
-            </div>
-        </section>
+        <x-back-link
+            :url="$this->parent->schemaUrl()"
+            :label="$this->parent->title"
+            :title="__(':x’s Parents Guide', ['x' => $this->parent->title])"
+        >
+            <x-slot:actions>
+                <x-button wire:click="openSubmitForm">{{ __('Add') }}</x-button>
+            </x-slot:actions>
+        </x-back-link>
 
         <section class="mb-16 xl:safe-area-inset">
             <div class="flex flex-col gap-4 pb-6 pl-4 pr-4">

@@ -477,6 +477,27 @@ class Index extends Component
     }
 
     /**
+     * The Schema.org JSON-LD payload for this page.
+     *
+     * @return array
+     */
+    public function getSchemaProperty(): array
+    {
+        return [
+            '@type' => 'WebSite',
+            'url' => config('app.url'),
+            'potentialAction' => [
+                '@type' => 'SearchAction',
+                'target' => [
+                    '@type' => 'EntryPoint',
+                    'urlTemplate' => route('search.index') . '?q={search_term_string}&src=' . SearchSource::Google,
+                ],
+                'query-input' => 'required name=search_term_string',
+            ],
+        ];
+    }
+
+    /**
      * Render the component.
      *
      * @return Application|Factory|View

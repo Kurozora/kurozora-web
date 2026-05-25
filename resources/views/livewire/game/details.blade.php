@@ -24,57 +24,7 @@
         <meta property="twitter:image" content="{{ $game->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $game->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="twitter:image:alt" content="{{ $game->synopsis }}" />
         <link rel="canonical" href="{{ route('games.details', $game) }}">
-        <x-misc.schema>
-            "@type":"VideoGame",
-            "url":"/games/{{ $game->slug }}/",
-            "name": "{{ $game->title }}",
-            "alternateName": "{{ $game->original_title }}",
-            "image": "{{ $game->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $game->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}",
-            "description": "{{ json_encode($game->synopsis) }}",
-            "aggregateRating": {
-                "@type":"AggregateRating",
-                "itemReviewed": {
-                    "@type": "VideoGame",
-                    "image": [
-                        "{{ $game->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $game->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}"
-                    ],
-                    "name": "{{ $game->title }}"
-                },
-                "ratingCount": {{ $game->mediaStat->rating_count ?? 1 }},
-                "bestRating": 5,
-                "worstRating": 0,
-                "ratingValue": {{ $game->mediaStat->rating_average ?? 2.5 }}
-            },
-            "contentRating": "{{ $game->tvRating->name }}",
-            @if (!empty($game->countryOfOrigin))
-                "countryOfOrigin": {
-                    "@type": "Country",
-                    "name": "{{ $game->countryOfOrigin->name }}",
-                    "alternateName": "{{ $game->countryOfOrigin->code }}"
-                },
-            @endif
-            "genre": {!! $game->genres()->pluck('name') !!},
-            "datePublished": "{{ $game->published_at?->format('Y-m-d') }}",
-            @if (!empty($this->studio))
-                "creator":[
-                    {
-                        "@type":"Organization",
-                        "url":"/studio/{{ $this->studio->id }}/"
-                    }
-                ],
-            @endif
-            "keywords": "game{{ (',' . $game->keywords) ?? '' }}"
-            @if (!empty($game->video_url))
-                ,"trailer": {
-                    "@type":"VideoObject",
-                    "name":"{{ $game->title }}",
-                    "embedUrl": "{{ $game->video_url }}",
-                    "description":"Official Trailer",
-                    "thumbnailUrl": "{{ $game->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $game->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}",
-                    "uploadDate": "{{ $game->published_at?->format('Y-m-d') }}"
-                }
-            @endif
-        </x-misc.schema>
+        <x-misc.schema :data="$this->schema" />
     </x-slot:meta>
 
     <x-slot:appArgument>
