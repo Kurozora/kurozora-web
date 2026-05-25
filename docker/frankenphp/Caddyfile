@@ -13,6 +13,9 @@
 	}
 
 	servers {
+		# Trust the ALB and loopback for X-Forwarded-* headers...
+		trusted_proxies static private_ranges
+
 		timeouts {
 			read_body 60s
 			read_header 60s
@@ -24,6 +27,41 @@
 }
 
 {$CADDY_EXTRA_CONFIG}
+
+# Shared security headers...
+(security_headers) {
+	header {
+		X-Frame-Options "SAMEORIGIN"
+		X-XSS-Protection "1; mode=block"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		Cross-Origin-Opener-Policy "same-origin-allow-popups"
+		Cross-Origin-Resource-Policy "same-site"
+		Permissions-Policy "accelerometer=*, ambient-light-sensor=(), autoplay=*, battery=(), camera=*, cross-origin-isolated=*, display-capture=*, document-domain=*, encrypted-media=*, execution-while-not-rendered=(), execution-while-out-of-viewport=(), fullscreen=*, geolocation=*, gyroscope=*, keyboard-map=(), magnetometer=(), microphone=*, midi=(), navigation-override=(), payment=(), picture-in-picture=*, publickey-credentials-get=(), screen-wake-lock=(), sync-xhr=(), usb=(), web-share=*, xr-spatial-tracking=(), clipboard-read=*, clipboard-write=*, gamepad=*, speaker-selection=*"
+		-Server
+		-X-Powered-By
+		-X-CF-Powered-By
+		-X-Runtime
+	}
+
+	# HSTS and HTTPS redirect, gated on upstream-set X-Forwarded-Proto...
+	@https header_regexp X-Forwarded-Proto ^https$
+	header @https Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+	header @https Content-Security-Policy "upgrade-insecure-requests"
+
+	@http header_regexp X-Forwarded-Proto ^http$
+	redir @http https://{host}{uri} 301
+}
+
+# Public edge...
+:8923 {
+	route {
+		import security_headers
+		reverse_proxy 127.0.0.1:8924 {
+			header_up Host {host}
+		}
+	}
+}
 
 {$CADDY_SERVER_SERVER_NAME} {
 	log {
@@ -52,25 +90,8 @@
 			max_size 10MB
 		}
 
-		header {
-			X-Frame-Options "SAMEORIGIN"
-			X-XSS-Protection "1; mode=block"
-			X-Content-Type-Options "nosniff"
-			Referrer-Policy "strict-origin-when-cross-origin"
-			Permissions-Policy "accelerometer=*, ambient-light-sensor=(), autoplay=*, battery=(), camera=*, cross-origin-isolated=*, display-capture=*, document-domain=*, encrypted-media=*, execution-while-not-rendered=(), execution-while-out-of-viewport=(), fullscreen=*, geolocation=*, gyroscope=*, keyboard-map=(), magnetometer=(), microphone=*, midi=(), navigation-override=(), payment=(), picture-in-picture=*, publickey-credentials-get=(), screen-wake-lock=(), sync-xhr=(), usb=(), web-share=*, xr-spatial-tracking=(), clipboard-read=*, clipboard-write=*, gamepad=*, speaker-selection=*"
-			-Server
-			-X-Powered-By
-			-X-CF-Powered-By
-			-X-Runtime
-		}
-
-		# HSTS and HTTPS redirect, gated on upstream-set X-Forwarded-Proto...
-		@https header_regexp X-Forwarded-Proto ^https$
-		header @https Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
-		header @https Content-Security-Policy "upgrade-insecure-requests"
-
-		@http header_regexp X-Forwarded-Proto ^http$
-		redir @http https://{host}{uri} 301
+		# Also covers the :80-direct path (health check, Anubis disabled)...
+		import security_headers
 
 		# Mercure configuration is injected here...
 		{$CADDY_SERVER_EXTRA_DIRECTIVES}

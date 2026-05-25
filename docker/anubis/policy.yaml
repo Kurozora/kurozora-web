@@ -25,6 +25,7 @@ bots:
     action: ALLOW
 
   - import: (data)/common/keep-internet-working.yaml
+  - import: /etc/anubis/google-special-crawlers.yaml
   - import: (data)/crawlers/_allow-good.yaml
 
   - import: (data)/meta/ai-block-aggressive.yaml

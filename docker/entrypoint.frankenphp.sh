@@ -28,7 +28,7 @@ start_anubis() {
     echo "        Starting Anubis...         "
     echo "***********************************"
 
-    BIND="${BIND:-:8923}" \
+    BIND="${BIND:-:8924}" \
     TARGET="${TARGET:-http://127.0.0.1:80}" \
     COOKIE_DOMAIN="${COOKIE_DOMAIN:-${DOMAIN_NAME}}" \
     POLICY_FNAME="${POLICY_FNAME:-/etc/anubis/policy.yaml}" \

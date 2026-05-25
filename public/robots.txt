@@ -46,6 +46,9 @@ User-agent: YouBot
 Disallow: /
 
 User-agent: *
-Disallow:
+Disallow: /*/edit
+Disallow: /sign-in
+Disallow: /sign-up
+Disallow: /password/
 
 Sitemap: https://cdn.kurozora.app/sitemaps/sitemap_index.xml

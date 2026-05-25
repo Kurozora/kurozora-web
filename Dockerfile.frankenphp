@@ -144,6 +144,7 @@ RUN apk add --no-cache supervisor
 # Copy Anubis PoW reverse-proxy binary
 COPY --from=anubis-binary /ko-app/anubis /usr/local/bin/anubis
 COPY ./docker/anubis/policy.yaml /etc/anubis/policy.yaml
+COPY ./docker/anubis/google-special-crawlers.yaml /etc/anubis/google-special-crawlers.yaml
 
 # Copy built app from previous stage
 COPY --from=build --chown=www-data /var/www/html /var/www/html
