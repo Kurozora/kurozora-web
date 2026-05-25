@@ -13,6 +13,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
+use Livewire\Attributes\Locked;
 use Livewire\Component;
 use Livewire\Features\SupportRedirects\Redirector;
 
@@ -37,6 +38,7 @@ class MergeLibrary extends Component
      *
      * @var array|string[]
      */
+    #[Locked]
     public array $popupData = [
         'title' => '',
         'message' => '',

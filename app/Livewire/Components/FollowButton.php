@@ -9,6 +9,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;
+use Livewire\Attributes\Locked;
 use Livewire\Component;
 
 class FollowButton extends Component
@@ -25,6 +26,7 @@ class FollowButton extends Component
      *
      * @var bool $isFollowed
      */
+    #[Locked]
     public bool $isFollowed;
 
     /**

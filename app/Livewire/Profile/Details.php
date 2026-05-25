@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Livewire\Attributes\Locked;
 use Livewire\Component;
 
 class Details extends Component
@@ -30,6 +31,7 @@ class Details extends Component
      *
      * @var string $selectedPopupType
      */
+    #[Locked]
     public string $selectedPopupType = '';
 
     /**
@@ -37,6 +39,7 @@ class Details extends Component
      *
      * @var array|string[]
      */
+    #[Locked]
     public array $popupData = [
         'title' => '',
         'message' => '',
@@ -47,6 +50,7 @@ class Details extends Component
      *
      * @var array|int[]
      */
+    #[Locked]
     public array $counts = [
         'achievements_count' => 0,
         'followers_count' => 0,

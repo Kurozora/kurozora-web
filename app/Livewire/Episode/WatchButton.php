@@ -9,6 +9,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;
+use Livewire\Attributes\Locked;
 use Livewire\Component;
 
 class WatchButton extends Component
@@ -25,6 +26,7 @@ class WatchButton extends Component
      *
      * @var bool $hasWatched
      */
+    #[Locked]
     public bool $hasWatched;
 
     /**

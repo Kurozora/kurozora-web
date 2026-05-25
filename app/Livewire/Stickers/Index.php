@@ -5,6 +5,7 @@ namespace App\Livewire\Stickers;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Livewire\Attributes\Locked;
 use Livewire\Component;
 
 class Index extends Component
@@ -21,6 +22,7 @@ class Index extends Component
      *
      * @var array<int, array{image_file: string, emojis: array, accessibility_text: string}>
      */
+    #[Locked]
     public array $stickers = [];
 
     /**

@@ -11,6 +11,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Livewire\Attributes\Locked;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -89,6 +90,7 @@ class Index extends Component
      *
      * @var array
      */
+    #[Locked]
     public array $sections = [];
 
     /**
@@ -96,6 +98,7 @@ class Index extends Component
      *
      * @var array
      */
+    #[Locked]
     public array $newSections = [];
 
     /**

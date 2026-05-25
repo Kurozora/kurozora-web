@@ -16,6 +16,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Collection;
+use Livewire\Attributes\Locked;
 use Livewire\Attributes\Renderless;
 use Livewire\Component;
 
@@ -57,6 +58,7 @@ class Details extends Component
      *
      * @var bool $isFavorited
      */
+    #[Locked]
     public bool $isFavorited = false;
 
     /**
@@ -64,6 +66,7 @@ class Details extends Component
      *
      * @var bool $isReminded
      */
+    #[Locked]
     public bool $isReminded = false;
 
     /**
@@ -71,6 +74,7 @@ class Details extends Component
      *
      * @var bool $isTracking
      */
+    #[Locked]
     public bool $isTracking = false;
 
     /**

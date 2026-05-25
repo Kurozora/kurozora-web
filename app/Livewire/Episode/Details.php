@@ -18,6 +18,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Support\Collection;
+use Livewire\Attributes\Locked;
 use Livewire\Component;
 
 class Details extends Component
@@ -72,6 +73,7 @@ class Details extends Component
      *
      * @var bool $isTracking
      */
+    #[Locked]
     public bool $isTracking = false;
 
     /**
@@ -79,6 +81,7 @@ class Details extends Component
      *
      * @var bool $isReminded
      */
+    #[Locked]
     public bool $isReminded = false;
 
     /**
