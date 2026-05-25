@@ -5,10 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class UserBadge extends Pivot
+class UserAchievement extends Pivot
 {
     // Table name
-    const string TABLE_NAME = 'user_badges';
+    const string TABLE_NAME = 'user_achievements';
     protected $table = self::TABLE_NAME;
 
     /**
@@ -29,12 +29,12 @@ class UserBadge extends Pivot
     }
 
     /**
-     * Relation to Badge model
+     * Relation to Achievement model
      *
      * @return BelongsTo
      */
-    public function badge(): BelongsTo
+    public function achievement(): BelongsTo
     {
-        return $this->belongsTo(Badge::class);
+        return $this->belongsTo(Achievement::class);
     }
 }

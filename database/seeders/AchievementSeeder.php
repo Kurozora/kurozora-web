@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Badge;
+use App\Models\Achievement;
 use Illuminate\Database\Seeder;
 
 class AchievementSeeder extends Seeder
@@ -14,12 +14,12 @@ class AchievementSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create initial badges
-        Badge::create([
+        // Create initial achievement
+        Achievement::create([
             'text' => 'Founding Father',
             'textColor' => '#FFFFFF',
             'backgroundColor' => '#9e1601',
-            'description' => 'This badge is given to the Founding Fathers of Kurozora.',
+            'description' => 'This achievement is given to the Founding Fathers of Kurozora.',
             'is_unlockable' => false,
         ]);
     }

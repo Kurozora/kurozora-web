@@ -10,13 +10,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Badge extends KModel implements HasMedia
+class Achievement extends KModel implements HasMedia
 {
     use InteractsWithMedia,
         InteractsWithMediaExtension;
 
     // Table name
-    const string TABLE_NAME = 'badges';
+    const string TABLE_NAME = 'achievements';
     protected $table = self::TABLE_NAME;
 
     /**
@@ -41,37 +41,37 @@ class Badge extends KModel implements HasMedia
     }
 
     /**
-     * Returns the associated users with this badge
+     * Returns the associated users with this achievement.
      *
      * @return BelongsToMany
      */
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, UserBadge::class)
+        return $this->belongsToMany(User::class, UserAchievement::class)
             ->withTimestamps();
     }
 
     /**
-     * Returns the associated user badges.
+     * Returns the user-achievement pivot records for this achievement.
      *
      * @return HasMany
      */
-    public function userBadges(): HasMany
+    public function userAchievements(): HasMany
     {
-        return $this->hasMany(UserBadge::class);
+        return $this->hasMany(UserAchievement::class);
     }
 
     /**
-     * Scope the badges to the ones achieved by the specified user.
+     * Scope the achievements to the ones unlocked by the specified user.
      *
      * @param $query
      * @param $user
      *
      * @return void
      */
-    public function scopeAchievedUserBadges($query, $user): void
+    public function scopeAchievedByUser($query, $user): void
     {
-        $bornToday = new UserAchievementsScope($user);
-        $bornToday->apply($query, $this);
+        $scope = new UserAchievementsScope($user);
+        $scope->apply($query, $this);
     }
 }

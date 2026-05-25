@@ -21,12 +21,12 @@ class Achievement extends Resource
      *
      * @var string
      */
-    public static string $model = \App\Models\Badge::class;
+    public static string $model = \App\Models\Achievement::class;
 
     /**
      * The underlying model resource instance.
      *
-     * @var \App\Models\Badge|null
+     * @var \App\Models\Achievement|null
      */
     public $resource;
 
@@ -39,7 +39,7 @@ class Achievement extends Resource
      */
     public static function authorizedToViewAny(Request $request): bool
     {
-        return $request->user()?->can('viewBadge') ?? false;
+        return $request->user()?->can('viewAchievement') ?? false;
     }
 
     /**
@@ -127,14 +127,6 @@ class Achievement extends Resource
             Text::make('Name'),
 
             Textarea::make('Description'),
-
-            Color::make('Text Color')
-                ->slider()
-                ->rules('required'),
-
-            Color::make('Background Color')
-                ->slider()
-                ->rules('required'),
 
             Boolean::make('Is Unlockable')
                 ->default(true)

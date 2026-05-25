@@ -107,14 +107,14 @@ class Details extends Component
 
         $this->user = $user->load(['media'])
             ->loadCount([
-                'badges',
+                'achievements',
                 'followers',
                 'following',
                 'mediaRatings'
             ]);
 
         $this->counts = [
-            'achievements_count' => $user->badges_count,
+            'achievements_count' => $user->achievements_count,
             'followers_count' => $user->followers_count,
             'following_count' => $user->following_count,
             'media_ratings_count' => $user->media_ratings_count,

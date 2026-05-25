@@ -6,9 +6,9 @@ use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GetPaginatedRequest;
 use App\Http\Resources\AchievementResource;
-use App\Models\Badge;
+use App\Models\Achievement;
 use App\Models\User;
-use App\Models\UserBadge;
+use App\Models\UserAchievement;
 use Illuminate\Http\JsonResponse;
 
 class AchievementController extends Controller
@@ -25,21 +25,18 @@ class AchievementController extends Controller
     {
         $data = $request->validated();
 
-        // Get the badges
-        $badges = Badge::achievedUserBadges($user)
+        $achievements = Achievement::achievedByUser($user)
             ->with('media')
             ->orderBy('is_achieved', 'desc')
-            ->orderBy(UserBadge::TABLE_NAME . '.created_at')
-            ->orderBy(Badge::TABLE_NAME . '.name')
-            ->orderBy(Badge::TABLE_NAME . '.id')
+            ->orderBy(UserAchievement::TABLE_NAME . '.created_at')
+            ->orderBy(Achievement::TABLE_NAME . '.name')
+            ->orderBy(Achievement::TABLE_NAME . '.id')
             ->cursorPaginate($data['limit'] ?? 25);
 
-        // Get next page url minus domain
-        $nextPageURL = str_replace($request->root(), '', $badges->nextPageUrl() ?? '');
+        $nextPageURL = str_replace($request->root(), '', $achievements->nextPageUrl() ?? '');
 
-        // Show profile response
         return JSONResult::success([
-            'data' => AchievementResource::collection($badges),
+            'data' => AchievementResource::collection($achievements),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }

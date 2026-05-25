@@ -480,14 +480,14 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     public function scopeWithProfileEagerLoad(Builder $query, ?User $authUser = null): Builder
     {
         $query->with([
-            'badges' => function ($query) {
+            'achievements' => function ($query) {
                 $query->with(['media']);
             },
             'media',
             'latestToken',
             'latestSession',
         ])
-            ->withCount(['followers', 'following', 'mediaRatings']);
+            ->withCount(['followers', 'following', 'mediaRatings', 'achievements']);
 
         if ($authUser !== null) {
             $query->withExists(['followers as isFollowed' => function ($query) use ($authUser) {
@@ -508,14 +508,14 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     public function loadProfileEagerLoad(?User $authUser = null): self
     {
         $this->load([
-            'badges' => function ($query) {
+            'achievements' => function ($query) {
                 $query->with(['media']);
             },
             'media',
             'latestToken',
             'latestSession',
         ])
-            ->loadCount(['followers', 'following', 'mediaRatings']);
+            ->loadCount(['followers', 'following', 'mediaRatings', 'achievements']);
 
         if ($authUser !== null) {
             $this->loadExists(['followers as isFollowed' => function ($query) use ($authUser) {
@@ -747,24 +747,24 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     }
 
     /**
-     * Returns the associated badges for the user
+     * Returns the achievements unlocked by the user.
      *
      * @return BelongsToMany
      */
-    function badges(): BelongsToMany
+    public function achievements(): BelongsToMany
     {
-        return $this->belongsToMany(Badge::class, UserBadge::class)
+        return $this->belongsToMany(Achievement::class, UserAchievement::class)
             ->withTimestamps();
     }
 
     /**
-     * Relation to UserBadge model directly
+     * Returns the user-achievement pivot records for the user.
      *
      * @return HasMany
      */
-    public function userBadges(): HasMany
+    public function userAchievements(): HasMany
     {
-        return $this->hasMany(UserBadge::class);
+        return $this->hasMany(UserAchievement::class);
     }
 
     /**

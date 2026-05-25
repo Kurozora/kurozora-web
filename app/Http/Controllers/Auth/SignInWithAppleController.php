@@ -222,7 +222,7 @@ class SignInWithAppleController extends Controller
                 $siwaID = $payload->get('sub');
 
                 $user = $this->signUpUser($email, $siwaID)
-                    ->setRelation('badges', collect())
+                    ->setRelation('achievements', collect())
                     ->setRelation('tokens', collect())
                     ->setRelation('sessions', collect())
                     ->setAttribute('followers_count', 0)

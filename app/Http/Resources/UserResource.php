@@ -48,8 +48,6 @@ class UserResource extends JsonResource
         // Add additional data to the resource
         $relationships = [];
 
-        $relationships = array_merge($relationships, $this->getAchievementRelationship());
-
         if ($this->shouldIncludeSession) {
             $resource['attributes'] = array_merge($resource['attributes'], [
                 'email'         => $this->resource->email,
@@ -58,24 +56,11 @@ class UserResource extends JsonResource
             $relationships = array_merge($relationships, $this->getAccessTokensRelationship());
         }
 
-        $resource = array_merge($resource, ['relationships' => $relationships]);
+        if (!empty($relationships)) {
+            $resource = array_merge($resource, ['relationships' => $relationships]);
+        }
 
         return $resource;
-    }
-
-    /**
-     * Returns the achievements relationship for the resource.
-     *
-     * @return array
-     */
-    protected function getAchievementRelationship(): array
-    {
-        $achievements = AchievementResource::collection($this->resource->badges);
-        return [
-            'achievements' => [
-                'data' => $achievements
-            ]
-        ];
     }
 
     /**

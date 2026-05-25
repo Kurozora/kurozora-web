@@ -2,9 +2,9 @@
 
 namespace App\Livewire\Profile\Achievements;
 
-use App\Models\Badge;
+use App\Models\Achievement;
 use App\Models\User;
-use App\Models\UserBadge;
+use App\Models\UserAchievement;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\View\Factory;
@@ -20,7 +20,7 @@ class Index extends Component
     /**
      * The object containing the user data.
      *
-     * @var User $badges
+     * @var User $user
      */
     public User $user;
 
@@ -64,11 +64,11 @@ class Index extends Component
             return collect();
         }
 
-        return Badge::achievedUserBadges($this->user)
+        return Achievement::achievedByUser($this->user)
             ->with('media')
             ->orderBy('is_achieved', 'desc')
-            ->orderBy(UserBadge::TABLE_NAME . '.created_at')
-            ->orderBy(Badge::TABLE_NAME . '.name')
+            ->orderBy(UserAchievement::TABLE_NAME . '.created_at')
+            ->orderBy(Achievement::TABLE_NAME . '.name')
             ->paginate(25);
     }
 

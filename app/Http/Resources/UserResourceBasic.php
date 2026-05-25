@@ -50,6 +50,7 @@ class UserResourceBasic extends JsonResource
                 'followingCount' => $this->resource->following_count,
                 'ratingsCount' => $this->resource->media_ratings_count,
                 'reputationCount' => $this->resource->reputation_count,
+                'achievementsCount' => $this->resource->achievements_count,
                 'isDeveloper' => $this->resource->is_developer,
                 'isEarlySupporter' => $this->resource->is_early_supporter,
                 'isStaff' => $this->resource->is_staff,

@@ -40,13 +40,13 @@ class MeController extends Controller
 
         $user = $request->user()
             ->load([
-                'badges' => function ($query) {
+                'achievements' => function ($query) {
                     $query->with(['media']);
                 },
                 'media',
                 'latestSession',
             ])
-            ->loadCount(['followers', 'following', 'mediaRatings'])
+            ->loadCount(['followers', 'following', 'mediaRatings', 'achievements'])
             // Since we already have the latest access token, we
             // simply set the relation here instead of loading
             // the same relation on the user again.
