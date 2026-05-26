@@ -24,7 +24,7 @@ Route::prefix('/episodes')
                     ->middleware('auth.kurozora');
 
                 Route::prefix('rate')
-                    ->middleware('auth.kurozora')
+                    ->middleware(['auth.kurozora', 'user.not-timed-out'])
                     ->group(function () {
                         Route::post('/', [EpisodeController::class, 'rate'])
                             ->name('.rate');

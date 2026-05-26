@@ -7,7 +7,7 @@ Route::prefix('/feed')
     ->middleware('throttle:api.feed')
     ->group(function () {
         Route::post('/', [FeedController::class, 'post'])
-            ->middleware('auth.kurozora');
+            ->middleware(['auth.kurozora', 'user.not-timed-out']);
 
         Route::get('/home', [FeedController::class, 'home'])
             ->middleware('auth.kurozora')

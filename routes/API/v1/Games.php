@@ -59,7 +59,7 @@ Route::prefix('/games')
                     ->name('.more-by-studio');
 
                 Route::post('/rate', [GameController::class, 'rate'])
-                    ->middleware('auth.kurozora')
+                    ->middleware(['auth.kurozora', 'user.not-timed-out'])
                     ->name('.rate');
 
                 Route::get('/reviews', [GameController::class, 'reviews'])
@@ -74,7 +74,7 @@ Route::prefix('/games')
                             ->name('.index');
 
                         Route::post('/', [ParentalGuideController::class, 'storeForGame'])
-                            ->middleware('auth.kurozora')
+                            ->middleware(['auth.kurozora', 'user.not-timed-out'])
                             ->name('.store');
                     });
             });

@@ -32,7 +32,7 @@ Route::prefix('/people')
                     ->name('.characters');
 
                 Route::prefix('rate')
-                    ->middleware('auth.kurozora')
+                    ->middleware(['auth.kurozora', 'user.not-timed-out'])
                     ->group(function () {
                         Route::post('/', [PersonController::class, 'rate'])
                             ->name('.rate');

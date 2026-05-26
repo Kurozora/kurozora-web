@@ -12,7 +12,7 @@ Route::prefix('/reviews')
                     ->name('.details');
 
                 Route::delete('/delete', [MediaRatingController::class, 'delete'])
-                    ->middleware('auth.kurozora')
+                    ->middleware(['auth.kurozora', 'user.not-timed-out'])
                     ->name('.delete');
             });
     });

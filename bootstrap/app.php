@@ -1,11 +1,13 @@
 <?php
 
+use App\Exceptions\UserTimedOutException;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Web\Misc\HealthCheckController;
 use App\Http\Middleware\AuthenticateAPIClient;
 use App\Http\Middleware\AuthenticateSession;
 use App\Http\Middleware\CheckKurozoraUserAuthentication;
 use App\Http\Middleware\EnsureAPIRequestsAreStateful;
+use App\Http\Middleware\EnsureUserIsNotTimedOut;
 use App\Http\Middleware\ExploreCategoryAlwaysEnabled;
 use App\Http\Middleware\HttpAccept;
 use App\Http\Middleware\HttpContentSecurityPolicy;
@@ -50,6 +52,7 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Illuminate\View\ViewException;
 use Nette\NotImplementedException;
+use Spatie\Permission\Middleware\RoleMiddleware;
 use Symfony\Component\Console\Exception\CommandNotFoundException;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -135,6 +138,8 @@ return Application::configure(basePath: dirname(__DIR__))
                 'signed' => ValidateSignature::class,
                 'throttle' => ThrottleRequests::class,
                 'user.is-pro-or-subscribed' => UserIsProOrSubscribed::class,
+                'user.not-timed-out' => EnsureUserIsNotTimedOut::class,
+                'role' => RoleMiddleware::class,
                 'verified' => EnsureEmailIsVerified::class,
                 'explore.always-enabled' => ExploreCategoryAlwaysEnabled::class
             ])
@@ -191,6 +196,15 @@ return Application::configure(basePath: dirname(__DIR__))
                         $apiError->id = 40001;
                         $apiError->status = 401;
                         $apiError->title = 'Unauthorized';
+                        $apiError->detail = $e->getMessage();
+                        return JSONResult::error([$apiError]);
+                    }
+                    // Custom render for users currently serving a moderation timeout
+                    else if ($e instanceof UserTimedOutException) {
+                        $apiError = new APIError();
+                        $apiError->id = 40023;
+                        $apiError->status = 423;
+                        $apiError->title = 'Locked';
                         $apiError->detail = $e->getMessage();
                         return JSONResult::error([$apiError]);
                     }

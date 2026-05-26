@@ -10,7 +10,7 @@ Route::prefix('/messages')
             ->name('.details');
 
         Route::post('/{feedMessage}/update', [FeedMessageController::class, 'update'])
-            ->middleware('auth.kurozora')
+            ->middleware(['auth.kurozora', 'user.not-timed-out'])
             ->can('update', 'feedMessage')
             ->name('.update');
 
@@ -27,17 +27,17 @@ Route::prefix('/messages')
             ->name('.reShares');
 
         Route::post('/{feedMessage}/heart', [FeedMessageController::class, 'heart'])
-            ->middleware('auth.kurozora')
+            ->middleware(['auth.kurozora', 'user.not-timed-out'])
             ->can('heart', 'feedMessage')
             ->name('.heart');
 
         Route::post('/{feedMessage}/pin', [FeedMessageController::class, 'pin'])
-            ->middleware('auth.kurozora')
+            ->middleware(['auth.kurozora', 'user.not-timed-out'])
             ->can('update', 'feedMessage')
             ->name('.pin');
 
         Route::post('/{feedMessage}/delete', [FeedMessageController::class, 'delete'])
-            ->middleware('auth.kurozora')
+            ->middleware(['auth.kurozora', 'user.not-timed-out'])
             ->can('delete', 'feedMessage')
             ->name('.delete');
     });

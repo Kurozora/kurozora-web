@@ -3,6 +3,8 @@
 namespace App\Nova;
 
 use App\Enums\MediaCollection;
+use App\Nova\Actions\IssueTimeout;
+use App\Nova\Actions\RevokeTimeout;
 use App\Nova\Filters\PremiumStatus;
 use App\Nova\Filters\UserRole;
 use App\Nova\Lenses\UnconfirmedUsers;
@@ -371,6 +373,8 @@ class User extends Resource
                 ->searchable(),
 
             HasMany::make('Sessions'),
+
+            HasMany::make('Timeouts', 'timeouts', Timeout::class),
         ];
     }
 
@@ -436,7 +440,23 @@ class User extends Resource
      */
     public function actions(Request $request): array
     {
-        return [];
+        return [
+            new IssueTimeout()
+                ->canSee(function (Request $request) {
+                    return $request->user()?->hasAnyRole(['superAdmin', 'admin', 'mod']) ?? false;
+                })
+                ->canRun(function (Request $request) {
+                    return $request->user()?->hasAnyRole(['superAdmin', 'admin', 'mod']) ?? false;
+                }),
+
+            new RevokeTimeout()
+                ->canSee(function (Request $request) {
+                    return $request->user()?->hasAnyRole(['superAdmin', 'admin', 'mod']) ?? false;
+                })
+                ->canRun(function (Request $request) {
+                    return $request->user()?->hasAnyRole(['superAdmin', 'admin', 'mod']) ?? false;
+                }),
+        ];
     }
 
     /**

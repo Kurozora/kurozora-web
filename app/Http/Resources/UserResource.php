@@ -56,11 +56,55 @@ class UserResource extends JsonResource
             $relationships = array_merge($relationships, $this->getAccessTokensRelationship());
         }
 
+        if ($this->shouldIncludeTimeout()) {
+            $relationships = array_merge($relationships, $this->getTimeoutRelationship());
+        }
+
         if (!empty($relationships)) {
             $resource = array_merge($resource, ['relationships' => $relationships]);
         }
 
         return $resource;
+    }
+
+    /**
+     * Indicates whether the active timeout should be embedded.
+     *
+     * @return bool
+     */
+    protected function shouldIncludeTimeout(): bool
+    {
+        $authUser = auth()->user();
+
+        if ($authUser === null) {
+            return false;
+        }
+
+        if ($authUser->id === $this->resource->id) {
+            return true;
+        }
+
+        return $authUser->hasAnyRole(['superAdmin', 'admin', 'mod']);
+    }
+
+    /**
+     * Returns the active timeout relationship for the user.
+     *
+     * @return array
+     */
+    protected function getTimeoutRelationship(): array
+    {
+        $timeout = $this->resource->relationLoaded('activeTimeout')
+            ? $this->resource->activeTimeout
+            : $this->resource->timeouts()->active()->latest('id')->first();
+
+        return [
+            'timeout' => [
+                'data' => $timeout !== null && $timeout->isActive()
+                    ? TimeoutResource::collection([$timeout])
+                    : [],
+            ],
+        ];
     }
 
     /**

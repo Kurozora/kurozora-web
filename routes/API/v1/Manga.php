@@ -55,7 +55,7 @@ Route::prefix('/manga')
                     ->name('.more-by-studio');
 
                 Route::prefix('rate')
-                    ->middleware('auth.kurozora')
+                    ->middleware(['auth.kurozora', 'user.not-timed-out'])
                     ->group(function () {
                         Route::post('/', [MangaController::class, 'rate'])
                             ->name('.rate');
@@ -76,7 +76,7 @@ Route::prefix('/manga')
                             ->name('.index');
 
                         Route::post('/', [ParentalGuideController::class, 'storeForManga'])
-                            ->middleware('auth.kurozora')
+                            ->middleware(['auth.kurozora', 'user.not-timed-out'])
                             ->name('.store');
                     });
             });

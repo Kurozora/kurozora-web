@@ -37,7 +37,7 @@ Route::prefix('/studios')
                     ->name('.games');
 
                 Route::prefix('rate')
-                    ->middleware('auth.kurozora')
+                    ->middleware(['auth.kurozora', 'user.not-timed-out'])
                     ->group(function () {
                         Route::post('/', [StudioController::class, 'rate'])
                             ->name('.rate');

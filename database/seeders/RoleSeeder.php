@@ -20,14 +20,15 @@ class RoleSeeder extends Seeder
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
         // Create roles
-        Role::create(['name' => 'superAdmin']);
-        /** @var Role $adminRole */
-        $adminRole = Role::create(['name' => 'admin']);
+        $superAdminRole = Role::create(['name' => 'superAdmin']);
+        Role::create(['name' => 'admin']);
+        Role::create(['name' => 'mod']);
+        Role::create(['name' => 'editor']);
 
         // Create permissions
         Permission::create(['name' => '*']);
 
         // Give permissions to roles
-        $adminRole->givePermissionTo('*');
+        $superAdminRole->givePermissionTo('*');
     }
 }

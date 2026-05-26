@@ -483,6 +483,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
             'achievements' => function ($query) {
                 $query->with(['media']);
             },
+            'activeTimeout',
             'media',
             'latestToken',
             'latestSession',
@@ -511,6 +512,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
             'achievements' => function ($query) {
                 $query->with(['media']);
             },
+            'activeTimeout',
             'media',
             'latestToken',
             'latestSession',
@@ -835,6 +837,43 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     public function recaps(): HasMany
     {
         return $this->hasMany(Recap::class);
+    }
+
+    /**
+     * Returns the moderation timeouts issued against the user, latest first.
+     *
+     * @return HasMany
+     */
+    public function timeouts(): HasMany
+    {
+        return $this->hasMany(Timeout::class)
+            ->latest();
+    }
+
+    /**
+     * Returns the timeout currently in effect for the user, if any.
+     *
+     * @return HasOne
+     */
+    public function activeTimeout(): HasOne
+    {
+        return $this->hasOne(Timeout::class)
+            ->active()
+            ->latestOfMany();
+    }
+
+    /**
+     * Indicates whether the user is currently serving a moderation timeout.
+     *
+     * @return bool
+     */
+    public function isTimedOut(): bool
+    {
+        if ($this->relationLoaded('activeTimeout')) {
+            return $this->activeTimeout !== null && $this->activeTimeout->isActive();
+        }
+
+        return $this->timeouts()->active()->exists();
     }
 
     /**

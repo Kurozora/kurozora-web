@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\v1\MeController;
+use App\Http\Controllers\API\v1\MeTimeoutAppealController;
 
 Route::prefix('/me')
     ->name('.me')
@@ -9,7 +10,7 @@ Route::prefix('/me')
             ->middleware('auth.kurozora');
 
         Route::post('/', [MeController::class, 'updateProfile'])
-            ->middleware('auth.kurozora')
+            ->middleware(['auth.kurozora', 'user.not-timed-out'])
             ->name('.update');
 
         Route::get('/blocked', [MeController::class, 'getBlocked'])
@@ -27,6 +28,14 @@ Route::prefix('/me')
         Route::get('/reviews', [MeController::class, 'getRatings'])
             ->middleware('auth.kurozora')
             ->name('.reviews');
+
+        Route::post('/timeout/appeal', [MeTimeoutAppealController::class, 'store'])
+            ->middleware('auth.kurozora')
+            ->name('.timeout.appeal');
+
+        Route::post('/timeout/appeal/update', [MeTimeoutAppealController::class, 'update'])
+            ->middleware('auth.kurozora')
+            ->name('.timeout.appeal.update');
 
         require 'Me/Access-Tokens.php';
         require 'Me/Achievements.php';

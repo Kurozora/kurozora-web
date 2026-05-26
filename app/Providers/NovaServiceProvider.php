@@ -67,6 +67,8 @@ use App\Nova\Status;
 use App\Nova\Studio;
 use App\Nova\Tag;
 use App\Nova\Theme;
+use App\Nova\Timeout;
+use App\Nova\TimeoutAppeal;
 use App\Nova\TvRating;
 use App\Nova\User;
 use App\Nova\UserBlock;
@@ -302,6 +304,8 @@ if (class_exists('Laravel\Nova\NovaApplicationServiceProvider')) {
                             UserFavorite::class,
                             UserLibrary::class,
                             UserReminder::class,
+                            Timeout::class,
+                            TimeoutAppeal::class,
                             Notification::class,
                             Permission::class,
                             Role::class,

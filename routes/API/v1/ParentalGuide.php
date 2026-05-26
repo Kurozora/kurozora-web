@@ -6,7 +6,7 @@ Route::prefix('/parentalguide')
     ->name('.parentalguide')
     ->group(function () {
         Route::prefix('/entries/{parentalGuideEntry}')
-            ->middleware('auth.kurozora')
+            ->middleware(['auth.kurozora', 'user.not-timed-out'])
             ->group(function () {
                 Route::delete('/delete', [ParentalGuideEntryController::class, 'destroy'])
                     ->name('.delete');
