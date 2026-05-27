@@ -4,12 +4,12 @@ namespace App\Console\Commands\Calculators;
 
 use App\Enums\FeedVoteType;
 use App\Models\FeedMessage;
+use Cog\Laravel\Love\Reactant\ReactionCounter\Models\ReactionCounter;
+use Cog\Laravel\Love\ReactionType\Models\ReactionType;
 use DB;
 use Illuminate\Console\Command;
-use Illuminate\Support\Collection;
 use Laravel\Telescope\Telescope;
 use Pulse;
-use Throwable;
 
 class CalculateFeedMessageRanking extends Command
 {
@@ -56,89 +56,72 @@ class CalculateFeedMessageRanking extends Command
      * Execute the console command.
      *
      * @return int
-     * @throws Throwable
      */
     public function handle(): int
     {
         Pulse::stopRecording();
         Telescope::stopRecording();
 
-        $chunkSize = 2000;
         $heartType = FeedVoteType::Heart()->description;
         $cutoff = now()->subDays(self::ACTIVITY_WINDOW_DAYS);
 
-        $query = FeedMessage::withoutGlobalScopes()
-            ->where('created_at', '>=', $cutoff)
-            ->with([
-                'loveReactant.reactionCounters.reactionType',
-            ])
-            ->withCount(['replies', 'reShares']);
+        $heartReactionTypeId = ReactionType::query()
+            ->where('name', $heartType)
+            ->value('id');
 
-        $count = $query->count();
-
-        if ($count === 0) {
-            $this->info('No feed messages within the activity window.');
-            return Command::SUCCESS;
+        if ($heartReactionTypeId === null) {
+            $this->error('Heart reaction type not found: ' . $heartType);
+            Pulse::startRecording();
+            Telescope::startRecording();
+            return Command::FAILURE;
         }
 
-        $this->info('Calculating ranking for ' . $count . ' feed messages.');
+        $feedMessagesTable = FeedMessage::TABLE_NAME;
+        $counterTable = (new ReactionCounter())->getTable();
 
-        $bar = $this->output->createProgressBar($count);
+        $sql = sprintf(
+            'UPDATE `%s` fm
+             LEFT JOIN (
+                 SELECT parent_feed_message_id, COUNT(*) AS c
+                 FROM `%s`
+                 WHERE is_reply = 1
+                 GROUP BY parent_feed_message_id
+             ) replies ON replies.parent_feed_message_id = fm.id
+             LEFT JOIN (
+                 SELECT parent_feed_message_id, COUNT(*) AS c
+                 FROM `%s`
+                 WHERE is_reshare = 1
+                 GROUP BY parent_feed_message_id
+             ) reshares ON reshares.parent_feed_message_id = fm.id
+             LEFT JOIN `%s` lrc
+                 ON lrc.reactant_id = fm.love_reactant_id
+                 AND lrc.reaction_type_id = ?
+             SET fm.ranking_score = (
+                 ? * COALESCE(lrc.`count`, 0)
+                 + ? * COALESCE(replies.c, 0)
+                 + ? * COALESCE(reshares.c, 0)
+             ) * EXP(-GREATEST(0, TIMESTAMPDIFF(SECOND, fm.created_at, NOW()) / 3600.0) / ?)
+             WHERE fm.created_at >= ?',
+            $feedMessagesTable,
+            $feedMessagesTable,
+            $feedMessagesTable,
+            $counterTable
+        );
 
-        $query->chunkById($chunkSize, function (Collection $feedMessages) use ($heartType, $bar) {
-            DB::transaction(function () use ($feedMessages, $heartType, $bar) {
-                $scoresByFeedMessageId = [];
+        $affected = DB::affectingStatement($sql, [
+            $heartReactionTypeId,
+            self::HEART_WEIGHT,
+            self::REPLY_WEIGHT,
+            self::RE_SHARE_WEIGHT,
+            self::DECAY_HALF_LIFE_HOURS,
+            $cutoff,
+        ]);
 
-                foreach ($feedMessages as $feedMessage) {
-                    $scoresByFeedMessageId[(int) $feedMessage->id] = $this->scoreFor($feedMessage, $heartType);
-                    $bar->advance();
-                }
-
-                if (empty($scoresByFeedMessageId)) {
-                    return;
-                }
-
-                $cases = '';
-                foreach ($scoresByFeedMessageId as $id => $score) {
-                    $cases .= ' WHEN ' . $id . ' THEN ' . (string) (float) $score;
-                }
-
-                FeedMessage::withoutGlobalScopes()
-                    ->whereIn('id', array_keys($scoresByFeedMessageId))
-                    ->update(['ranking_score' => DB::raw('CASE id' . $cases . ' END')]);
-            });
-        });
-
-        $bar->finish();
-        $this->newLine();
+        $this->info('Calculated ranking for ' . $affected . ' feed messages.');
 
         Pulse::startRecording();
         Telescope::startRecording();
 
         return Command::SUCCESS;
-    }
-
-    /**
-     * Returns the ranking score for the given feed message.
-     *
-     * @param FeedMessage $feedMessage
-     * @param string      $heartType
-     *
-     * @return float
-     */
-    private function scoreFor(FeedMessage $feedMessage, string $heartType): float
-    {
-        $heartCount = $feedMessage->loveReactant?->reactionCounters
-            ->firstWhere('reactionType.name', $heartType)
-            ?->getCount() ?? 0;
-
-        $weighted = (self::HEART_WEIGHT * $heartCount)
-            + (self::REPLY_WEIGHT * (int) $feedMessage->replies_count)
-            + (self::RE_SHARE_WEIGHT * (int) $feedMessage->re_shares_count);
-
-        $ageHours = max(0.0, $feedMessage->created_at->diffInRealHours(now()));
-        $decay = exp(-$ageHours / self::DECAY_HALF_LIFE_HOURS);
-
-        return $weighted * $decay;
     }
 }
