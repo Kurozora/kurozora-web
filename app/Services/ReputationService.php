@@ -82,6 +82,10 @@ class ReputationService
             + ($ratingRate * 0.1)
             + ($rewatchRate * 0.05);
 
+        // Confidence: is the library substantial enough to be trusted?
+        $ratioConfidence = $completedCount / ($completedCount + 25);
+        $qualityMultiplier = 1.0 + (($qualityMultiplier - 1.0) * $ratioConfidence);
+
         // =====================================================================
         // Social tier (sqrt-compressed)
         // =====================================================================

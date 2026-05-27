@@ -73,7 +73,7 @@ class CalculateUserReputation extends Command
                     'mediaRatingsWithoutDescription',
                     'mediaRatingsWithDescription',
                     'followers',
-                    'blocked',
+                    'blockedBy',
                 ])
                 ->chunkById($chunkSize, $this->chunkById($bar), 'id');
         } else {
