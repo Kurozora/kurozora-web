@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\Manga;
 use Artisan;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -9,6 +10,7 @@ use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Redis;
+use RuntimeException;
 use Throwable;
 
 class ProcessBareBonesMangaAdded implements ShouldQueue
@@ -39,6 +41,13 @@ class ProcessBareBonesMangaAdded implements ShouldQueue
     public function handle(): void
     {
         Artisan::call('scrape:mal_manga', ['malID' => $this->malID]);
+
+        $manga = Manga::withoutGlobalScopes()
+            ->firstWhere('mal_id', '=', $this->malID);
+
+        if (empty($manga?->tv_rating_id)) {
+            throw new RuntimeException('Failed to back-fill bare-bones manga ' . $this->malID . '.');
+        }
     }
 
     /**
