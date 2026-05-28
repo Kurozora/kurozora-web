@@ -2,18 +2,10 @@
 
 namespace App\Console\Commands\Calculators;
 
-use App\Models\Anime;
-use App\Models\Character;
-use App\Models\Episode;
-use App\Models\Game;
-use App\Models\Manga;
-use App\Models\Song;
 use App\Models\View;
 use DB;
 use Illuminate\Console\Command;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Laravel\Telescope\Telescope;
 use Pulse;
 
@@ -71,28 +63,7 @@ class CalculateViews extends Command
         View::select(['viewable_type', 'viewable_id', DB::raw('COUNT(*) as views_count')])
             ->where('viewable_type', '=', $class)
             ->groupBy('viewable_type', 'viewable_id')
-            ->with(['viewable' => function (MorphTo $morphTo) {
-                $morphTo->constrain([
-                    Anime::class => function (Builder $query) {
-                        $query->with(['mediaStat']);
-                    },
-                    Character::class => function (Builder $query) {
-                        $query->with(['mediaStat']);
-                    },
-                    Episode::class => function (Builder $query) {
-                        $query->with(['mediaStat']);
-                    },
-                    Game::class => function (Builder $query) {
-                        $query->with(['mediaStat']);
-                    },
-                    Manga::class => function (Builder $query) {
-                        $query->with(['mediaStat']);
-                    },
-                    Song::class => function (Builder $query) {
-                        $query->with(['mediaStat']);
-                    },
-                ]);
-            }])
+            ->with('viewable')
             ->chunkById($chunkSize, function (Collection $views) use ($class, $bar) {
                 DB::transaction(function () use ($class, $bar, $views) {
                     $idValues = [];
@@ -102,6 +73,7 @@ class CalculateViews extends Command
 
                         if (empty($model)) {
                             $bar->advance();
+
                             continue;
                         }
 
@@ -110,14 +82,22 @@ class CalculateViews extends Command
                     }
 
                     if (!empty($idValues)) {
+                        $ids = array_keys($idValues);
                         $cases = '';
                         foreach ($idValues as $id => $count) {
                             $cases .= sprintf(' WHEN %d THEN %d', $id, $count);
                         }
 
                         $class::withoutGlobalScopes()
-                            ->whereIn('id', array_keys($idValues))
+                            ->whereIn('id', $ids)
                             ->update(['view_count' => DB::raw('CASE id' . $cases . ' END')]);
+
+                        DB::afterCommit(function () use ($class, $ids) {
+                            $class::withoutGlobalScopes()
+                                ->with('mediaStat')
+                                ->whereIn('id', $ids)
+                                ->searchable();
+                        });
                     }
 
                     // Delete the calculated views
