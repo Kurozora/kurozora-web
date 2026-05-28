@@ -174,6 +174,7 @@ class UserController extends Controller
 
         // Get the feed messages
         $mediaRatings = $user->mediaRatings()
+            ->addEpisodePublicIdSelect()
             ->with([
                 'user' => fn($query) => $this->eagerLoadUser($query)
             ])

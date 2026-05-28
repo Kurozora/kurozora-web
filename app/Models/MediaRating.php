@@ -34,6 +34,23 @@ class MediaRating extends KModel
     }
 
     /**
+     * Adds the related episode's public ID as a select column for episode ratings.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     *
+     * @return void
+     */
+    public function scopeAddEpisodePublicIdSelect(\Illuminate\Database\Eloquent\Builder $query): void
+    {
+        $query->addSelect([
+            'episode_public_id' => Episode::withoutGlobalScopes()
+                ->select('public_id')
+                ->whereColumn(Episode::TABLE_NAME . '.id', self::TABLE_NAME . '.model_id')
+                ->where(self::TABLE_NAME . '.model_type', Episode::class),
+        ]);
+    }
+
+    /**
      * Returns the model related to the media rating.
      *
      * @return BelongsTo

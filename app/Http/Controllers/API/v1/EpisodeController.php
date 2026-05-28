@@ -311,6 +311,7 @@ class EpisodeController extends Controller
 
         $reviews = $episode->mediaRatings()
             ->withoutTvRatings()
+            ->addEpisodePublicIdSelect()
             ->with([
                 'user' => function ($query) {
                     $query->with(['media'])
