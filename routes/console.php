@@ -59,12 +59,12 @@ Schedule::command('fix:manga_details')
     ->onOneServer();
 
 /**********************************************/
-// Generate sitemap every day
-//Schedule::command('sitemap:generate')
-//    ->daily()
-//    ->name('Generate sitemap')
-//    ->onOneServer()
-//    ->runInBackground();
+// Generate sitemaps every day at 02:30
+Schedule::command('generate:sitemaps')
+    ->dailyAt('2:30')
+    ->name('Generate sitemaps')
+    ->onOneServer()
+    ->runInBackground();
 
 /**********************************************/
 // Prune Telescope table
