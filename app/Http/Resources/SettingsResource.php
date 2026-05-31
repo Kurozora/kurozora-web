@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Services\AppleMusicService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -22,8 +23,11 @@ class SettingsResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $developerToken = app(AppleMusicService::class)->developerToken();
+
         return [
-            'appleMusicDeveloperToken' => config('services.apple.client_secret'),
+            'appleMusicDeveloperToken' => $developerToken['token'],
+            'appleMusicDeveloperTokenExpiresAt' => $developerToken['expiresAt'],
             'youtubeAPIKey' => config('services.youtube.api_key')
         ];
     }

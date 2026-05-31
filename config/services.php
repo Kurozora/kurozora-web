@@ -42,8 +42,14 @@ return [
             'private_key' => str_replace('#', "\n", env('SK_PRIVATE_KEY') ?? ''), // with double quote; otherwise \n isn't parsed.
         ],
         'client_id' => env('APPLE_CLIENT_ID', 'app.kurozora.web.tracker'),
-        'client_secret' => env('MIX_APPLE_CLIENT_SECRET'),
+        'client_secret' => env('APPLE_CLIENT_SECRET'),
         'redirect' => env('APPLE_REDIRECT_URI', '/siwa/callback'),
+        'music' => [
+            'team_id' => env('APPLE_MUSIC_TEAM_ID'),
+            'key_id' => env('APPLE_MUSIC_KEY_ID'),
+            'private_key' => str_replace('#', "\n", env('APPLE_MUSIC_PRIVATE_KEY') ?? ''), // with double quote; otherwise \n isn't parsed.
+            'token_ttl' => (int) env('APPLE_MUSIC_TOKEN_TTL', 43200),
+        ],
     ],
 
     'deezer' => [

@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\API\v1\MiscController;
 use App\Http\Controllers\Web\Auth\ImpersonateController;
-use App\Http\Controllers\Web\Misc\HealthCheckController;
+use App\Http\Controllers\Web\MusicKitController;
 use App\Livewire\Home;
 use App\Livewire\Schedule\Index as ScheduleIndex;
 use App\Livewire\Welcome;
@@ -40,6 +40,10 @@ Route::get('/settings', function () {
     return to_route('profile.settings');
 })
     ->name('settings');
+
+Route::get('/musickit/token', [MusicKitController::class, 'token'])
+    ->middleware(['throttle:60,1', 'cache.headers:private;max_age=300;etag'])
+    ->name('musickit.token');
 
 // Authentication routes
 require 'Web/Authentication.php';
