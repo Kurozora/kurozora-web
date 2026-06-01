@@ -166,7 +166,10 @@ trait HasSchemaOrg
             ];
         }
 
-        return $schema;
+        return array_filter(
+            $schema,
+            fn (mixed $value) => $value !== null && $value !== '' && $value !== [],
+        );
     }
 
     /**
