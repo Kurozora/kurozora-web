@@ -46,6 +46,8 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
+use IntlChar;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Scout\Searchable;
 use Markdown;
@@ -208,7 +210,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
-            ->generateSlugsFrom('username')
+            ->generateSlugsFrom(fn (self $user): string => $user->slugSourceFromUsername())
             ->skipGenerateWhen(function () {
 //                dd(!isset($this->slug), !isset($this->can_change_username));
 //                if (!isset($this->slug) || !isset($this->can_change_username)) {
@@ -218,7 +220,117 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
                 return !(empty($this->slug) || $this->can_change_username);
             })
             ->usingSeparator('_')
+            ->slugsShouldBeNoLongerThan(self::MAXIMUM_SLUG_LENGTH)
             ->saveSlugsTo('slug');
+    }
+
+    /**
+     * Get the slug source derived from the username.
+     *
+     * @return string
+     */
+    function slugSourceFromUsername(): string
+    {
+        $source = $this->romanize((string) $this->username);
+        $slug = Str::slug($this->nameSymbols($source), '_');
+
+        if ($slug === '') {
+            return self::defaultUsername();
+        }
+
+        return $this->limitSlugToWords($slug, self::MAXIMUM_SLUG_LENGTH);
+    }
+
+    /**
+     * Romanize text to ASCII.
+     *
+     * @param string $value
+     * @return string
+     */
+    protected function romanize(string $value): string
+    {
+        $latin = transliterator_transliterate('Any-Latin', $value) ?: $value;
+
+        // Seat silent glottals as vowels.
+        $latin = strtr($latin, [
+            "\u{02BC}" => 'e', // aleph, hamza
+            "\u{02BE}" => 'e', // hamza
+            "\u{02BF}" => 'a', // ayin
+        ]);
+
+        return transliterator_transliterate('Latin-ASCII', $latin) ?: $latin;
+    }
+
+    /**
+     * Replace emoji and symbol characters with their Unicode names.
+     *
+     * @param string $value
+     * @return string
+     */
+    protected function nameSymbols(string $value): string
+    {
+        $characters = preg_split('//u', $value, -1, PREG_SPLIT_NO_EMPTY) ?: [];
+        $source = '';
+        $previous = null;
+
+        foreach ($characters as $character) {
+            $isSymbol = in_array(IntlChar::charType($character), [
+                IntlChar::CHAR_CATEGORY_CURRENCY_SYMBOL,
+                IntlChar::CHAR_CATEGORY_OTHER_SYMBOL,
+            ], true);
+
+            if (!$isSymbol) {
+                $source .= $character;
+                $previous = null;
+                continue;
+            }
+
+            // Collapse repeated emoji.
+            if ($character !== $previous) {
+                $source .= ' ' . (IntlChar::charName($character) ?? '') . ' ';
+                $previous = $character;
+            }
+        }
+
+        return $source;
+    }
+
+    /**
+     * Trim a slug to the given length without splitting a word.
+     *
+     * @param string $slug
+     * @param int $limit
+     * @return string
+     */
+    protected function limitSlugToWords(string $slug, int $limit): string
+    {
+        if (strlen($slug) <= $limit) {
+            return $slug;
+        }
+
+        $trimmed = '';
+
+        foreach (explode('_', $slug) as $word) {
+            $candidate = $trimmed === '' ? $word : $trimmed . '_' . $word;
+
+            if (strlen($candidate) > $limit) {
+                break;
+            }
+
+            $trimmed = $candidate;
+        }
+
+        return $trimmed !== '' ? $trimmed : substr($slug, 0, $limit);
+    }
+
+    /**
+     * Generate a default username.
+     *
+     * @return string
+     */
+    public static function defaultUsername(): string
+    {
+        return str()->random(8);
     }
 
     /**

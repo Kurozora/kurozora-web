@@ -246,7 +246,7 @@ class SignInWithAppleController extends Controller
     protected function signUpUser(?string $email, string $siwaID): ?User
     {
         return User::create([
-            'username' => str()->random(8),
+            'username' => User::defaultUsername(),
             'email' => $email,
             'siwa_id' => $siwaID,
             'email_verified_at' => now(),
