@@ -91,13 +91,6 @@ class CalculateViews extends Command
                         $class::withoutGlobalScopes()
                             ->whereIn('id', $ids)
                             ->update(['view_count' => DB::raw('CASE id' . $cases . ' END')]);
-
-                        DB::afterCommit(function () use ($class, $ids) {
-                            $class::withoutGlobalScopes()
-                                ->with('mediaStat')
-                                ->whereIn('id', $ids)
-                                ->searchable();
-                        });
                     }
 
                     // Delete the calculated views
