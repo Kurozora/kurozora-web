@@ -93,6 +93,10 @@
 		# Also covers the :80-direct path (health check, Anubis disabled)...
 		import security_headers
 
+		# Resolve the visitor IP from Cloudflare's connecting-IP header...
+		@cloudflare header Cf-Connecting-Ip *
+		request_header @cloudflare X-Forwarded-For {http.request.header.Cf-Connecting-Ip}
+
 		# Mercure configuration is injected here...
 		{$CADDY_SERVER_EXTRA_DIRECTIVES}
 
