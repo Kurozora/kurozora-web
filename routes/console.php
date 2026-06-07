@@ -122,6 +122,13 @@ Schedule::call(function() {
     ->onOneServer();
 
 /**********************************************/
+// Delete expired spammer blocks every day at 03:45
+Schedule::command('delete:expired_spammer_blocks')
+    ->dailyAt('3:45')
+    ->name('Delete expired spammer blocks')
+    ->onOneServer();
+
+/**********************************************/
 // Calculate user reputation every week
 Schedule::command('calculate:user_reputation')
     ->weeklyOn(0)
