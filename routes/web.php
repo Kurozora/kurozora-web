@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\v1\MiscController;
 use App\Http\Controllers\Web\Auth\ImpersonateController;
+use App\Http\Controllers\Web\LinkPreviewController;
 use App\Http\Controllers\Web\MusicKitController;
 use App\Livewire\Home;
 use App\Livewire\Schedule\Index as ScheduleIndex;
@@ -40,6 +41,10 @@ Route::get('/settings', function () {
     return to_route('profile.settings');
 })
     ->name('settings');
+
+Route::get('/link-preview', [LinkPreviewController::class, 'show'])
+    ->middleware('auth')
+    ->name('link-preview');
 
 Route::get('/musickit/token', [MusicKitController::class, 'token'])
     ->middleware(['throttle:60,1', 'cache.headers:private;max_age=300;etag'])
