@@ -102,7 +102,7 @@ class Episode extends Component
     public function getSchemaProperty(): array
     {
         $schema = $this->episode->toSchemaOrg();
-        $schema['url'] = route('embed.episodes', $this->episode);
+        $schema['@graph'][0]['url'] = route('embed.episodes', $this->episode);
 
         return $schema;
     }
