@@ -59,6 +59,14 @@ Schedule::command('fix:manga_details')
     ->onOneServer();
 
 /**********************************************/
+// Notify users whose moderation timeout has just expired
+Schedule::command('timeouts:notify-expired')
+    ->everyFiveMinutes()
+    ->name('Notify expired timeouts')
+    ->withoutOverlapping()
+    ->onOneServer();
+
+/**********************************************/
 // Generate sitemaps every day at 02:30
 Schedule::command('generate:sitemaps')
     ->dailyAt('2:30')

@@ -9,6 +9,7 @@ use App\Http\Controllers\API\v1\TwoFactorChallengeController;
 use App\Http\Controllers\API\v1\UserBlockController;
 use App\Http\Controllers\API\v1\UserController;
 use App\Http\Controllers\API\v1\UserFavoriteController;
+use App\Http\Controllers\API\v1\UserTimeoutController;
 use App\Http\Controllers\Auth\SignInWithAppleController;
 
 Route::prefix('/users')
@@ -47,8 +48,20 @@ Route::prefix('/users')
                     ->name('.achievements');
 
                 Route::post('/block', [UserBlockController::class, 'blockUser'])
-                    ->middleware('auth.kurozora')
+                    ->middleware(['auth.kurozora', 'user.not-timed-out'])
                     ->name('.block');
+
+                Route::get('/timeout', [UserTimeoutController::class, 'show'])
+                    ->middleware(['auth.kurozora', 'role:superAdmin|admin|mod'])
+                    ->name('.timeout.show');
+
+                Route::post('/timeout', [UserTimeoutController::class, 'store'])
+                    ->middleware(['auth.kurozora', 'role:superAdmin|admin|mod'])
+                    ->name('.timeout.store');
+
+                Route::delete('/timeout', [UserTimeoutController::class, 'destroy'])
+                    ->middleware(['auth.kurozora', 'role:superAdmin|admin|mod'])
+                    ->name('.timeout.destroy');
 
                 Route::get('/library', [LibraryController::class, 'index'])
                     ->middleware(['auth.kurozora:optional', 'throttle:api.library'])
@@ -63,7 +76,7 @@ Route::prefix('/users')
                     ->name('.feed-messages');
 
                 Route::post('/follow', [FollowingController::class, 'followUser'])
-                    ->middleware('auth.kurozora')
+                    ->middleware(['auth.kurozora', 'user.not-timed-out'])
                     ->can('follow', 'user')
                     ->name('.follow');
 
