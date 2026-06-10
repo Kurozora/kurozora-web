@@ -2,6 +2,12 @@
 
 use App\Livewire\Episode\Details as EpisodeDetails;
 use App\Livewire\Episode\Reviews as EpisodeReviews;
+use App\Models\Episode;
+
+Route::get('/episode/{episode}', function (string $episode) {
+    return redirect("/episodes/{$episode}", 301);
+})
+    ->name('episode.details');
 
 Route::prefix('/episodes')
     ->name('episodes')
@@ -13,8 +19,8 @@ Route::prefix('/episodes')
             Route::get('/reviews', EpisodeReviews::class)
                 ->name('.reviews');
 
-            Route::get('/edit', function (\App\Models\Episode $episode) {
-                return redirect(Nova::path() . '/resources/' . \App\Nova\Episode::uriKey() . '/' . $episode->id);
+            Route::get('/edit', function (Episode $episode) {
+                return redirect(Nova::path() . '/resources/' . App\Nova\Episode::uriKey() . '/' . $episode->id);
             })
                 ->middleware('auth')
                 ->name('.edit');
