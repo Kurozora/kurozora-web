@@ -11,11 +11,14 @@ use App\Http\Requests\GetIndexRequest;
 use App\Http\Requests\GetPaginatedRequest;
 use App\Http\Requests\RateModelRequest;
 use App\Http\Requests\SearchRequest;
+use App\Http\Requests\UpdateSongAppleMusicIDRequest;
 use App\Http\Resources\AnimeResource;
 use App\Http\Resources\GameResource;
 use App\Http\Resources\MediaRatingResource;
+use App\Http\Resources\SongLyricResource;
 use App\Http\Resources\SongResource;
 use App\Models\Song;
+use App\Traits\Controller\WithCatalogCacheHeaders;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
@@ -26,6 +29,8 @@ use Illuminate\Routing\Redirector;
 
 class SongController extends Controller
 {
+    use WithCatalogCacheHeaders;
+
     /**
      * Returns the songs index.
      *
@@ -72,6 +77,24 @@ class SongController extends Controller
      */
     public function view(Request $request, Song $song): JsonResponse
     {
+        $includeInput = $request->input('include');
+        $includes = is_string($includeInput) ? explode(',', $includeInput) : (is_array($includeInput) ? $includeInput : []);
+        sort($includes);
+
+        $fingerprint = [
+            'kind' => 'song',
+            'publicId' => $song->public_id,
+            'updatedAt' => optional($song->updated_at)->toIso8601String(),
+            'locale' => app()->getLocale(),
+            'tvRating' => (int) $request->attributes->get('tvRating', 4),
+            'include' => $includes,
+        ];
+
+        $notModified = $this->returnIfNotModifiedCatalog($request, $fingerprint);
+        if ($notModified !== null) {
+            return $notModified;
+        }
+
         // Call the ModelViewed event
         ModelViewed::dispatch($song, $request->ip());
 
@@ -86,7 +109,7 @@ class SongController extends Controller
 
         return JSONResult::success([
             'data' => SongResource::collection([$song])
-        ]);
+        ])->withHeaders($this->catalogCacheHeaders($request, $fingerprint));
     }
 
     /**
@@ -242,7 +265,44 @@ class SongController extends Controller
     }
 
     /**
-     * Returns the reviews of an Song.
+     * Updates the Apple Music ID of the given song.
+     *
+     * @param UpdateSongAppleMusicIDRequest $request
+     * @param Song                          $song
+     *
+     * @return JsonResponse
+     */
+    public function updateAppleMusicID(UpdateSongAppleMusicIDRequest $request, Song $song): JsonResponse
+    {
+        $song->am_id = $request->input('am_id');
+        $song->save();
+
+        return JSONResult::success();
+    }
+
+    /**
+     * Returns the synced lyrics of the given song.
+     *
+     * @param Request $request
+     * @param Song    $song
+     *
+     * @return JsonResponse
+     */
+    public function lyrics(Request $request, Song $song): JsonResponse
+    {
+        $lyric = $song->lyrics()
+            ->where('status', 'approved')
+            ->with(['lines.words'])
+            ->orderByDesc('id')
+            ->first();
+
+        return JSONResult::success([
+            'data' => $lyric === null ? [] : [SongLyricResource::make($lyric)],
+        ]);
+    }
+
+    /**
+     * Returns the reviews of a Song.
      *
      * @param GetPaginatedRequest $request
      * @param Song                  $song

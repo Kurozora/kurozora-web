@@ -60,6 +60,9 @@ use App\Nova\SeasonTranslation;
 use App\Nova\Session;
 use App\Nova\SessionAttribute;
 use App\Nova\Song;
+use App\Nova\SongLyric;
+use App\Nova\SongLyricLine;
+use App\Nova\SongLyricWord;
 use App\Nova\SongTranslation;
 use App\Nova\Source;
 use App\Nova\StaffRole;
@@ -179,6 +182,9 @@ if (class_exists('Laravel\Nova\NovaApplicationServiceProvider')) {
                         collect([
                             Song::class,
                             SongTranslation::class,
+                            SongLyric::class,
+                            SongLyricLine::class,
+                            SongLyricWord::class
                         ])->map(fn($resource) => MenuItem::resource($resource))
                     )
                         ->collapsable()

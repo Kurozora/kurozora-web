@@ -182,6 +182,16 @@ class Song extends KModel implements HasMedia, Sitemapable
     }
 
     /**
+     * Get the song's synced lyrics across all sources.
+     *
+     * @return HasMany
+     */
+    public function lyrics(): HasMany
+    {
+        return $this->hasMany(SongLyric::class);
+    }
+
+    /**
      * Get the model's ratings.
      *
      * @return MorphMany

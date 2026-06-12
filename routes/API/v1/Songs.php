@@ -37,5 +37,13 @@ Route::prefix('/songs')
                 Route::get('/reviews', [SongController::class, 'reviews'])
                     ->middleware('auth.kurozora:optional')
                     ->name('.reviews');
+
+                Route::get('/lyrics', [SongController::class, 'lyrics'])
+                    ->middleware('auth.kurozora:optional')
+                    ->name('.lyrics');
+
+                Route::post('/apple-music-id', [SongController::class, 'updateAppleMusicID'])
+                    ->middleware(['auth.kurozora', 'role:superAdmin|admin'])
+                    ->name('.apple-music-id');
             });
     });
