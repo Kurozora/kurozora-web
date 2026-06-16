@@ -64,6 +64,6 @@
 
         @livewireScripts
         {{ $scripts ?? '' }}
-        <script src="https://js-cdn.music.apple.com/musickit/v1/musickit.js"></script>
+        <script src="https://js-cdn.music.apple.com/musickit/v3/musickit.js" async></script>
     </body>
 </html>

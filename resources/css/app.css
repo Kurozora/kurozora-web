@@ -311,6 +311,42 @@ a[href*="#"]:not([href="#"]):not(.no-external-icon):focus::after {
   opacity: 25%;
 }
 
+/* Lays two actions side by side when both fit, and stacks them otherwise. */
+.prompt-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.prompt-actions > * {
+  flex: 1 1 100%;
+  white-space: nowrap;
+}
+.prompt-actions > :first-child:nth-last-child(2),
+.prompt-actions > :first-child:nth-last-child(2) ~ * {
+  flex-basis: calc(50% - 0.25rem);
+}
+
+/* Presents a submenu as an overlay above its dimmed parent menu. */
+[data-dropdown-surface].is-dimmed {
+  transform: scale(0.95);
+  transform-origin: center;
+  transition: transform 0.2s ease;
+}
+
+[data-dropdown-surface].is-dimmed > * {
+  opacity: 0.4;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+[data-submenu-flyout].is-overlay > [data-submenu-header] {
+  display: flex;
+}
+
+[data-submenu-flyout].is-overlay > [data-overlay-divider] {
+  display: block;
+}
+
 /**
  * This injects all of Tailwind's screen classes, generated based on the
  * config file.

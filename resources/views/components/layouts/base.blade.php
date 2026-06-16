@@ -150,8 +150,17 @@
             <livewire:components.alert />
         </div>
 
-        @vite(['resources/js/listen.js'])
-        <script src="https://js-cdn.music.apple.com/musickit/v1/musickit.js"></script>
+        <x-music.connect-prompt />
+        <x-music.library-removal-prompt />
+
+        @persist('music-player')
+            <x-music.player />
+        @endpersist
+
+        <livewire:song.lyrics />
+
+        @vite(['resources/js/listen.js', 'resources/js/lyrics.js'])
+        <script src="https://js-cdn.music.apple.com/musickit/v3/musickit.js" async></script>
         {{ $scripts ?? '' }}
     </body>
 </html>

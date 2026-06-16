@@ -43,6 +43,10 @@
                 </div>
 
                 <div class="pt-10">
+                    <livewire:profile.apple-music-connection />
+                </div>
+
+                <div class="pt-10">
                     <livewire:profile.subscribe-to-reminders />
                 </div>
 
