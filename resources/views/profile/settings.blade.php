@@ -55,11 +55,7 @@
                 </div>
 
                 <div class="pt-10">
-                    <livewire:profile.sign-out-app-sessions-form />
-                </div>
-
-                <div class="pt-10">
-                    <livewire:profile.sign-out-other-sessions-form />
+                    <livewire:profile.active-sessions-form />
                 </div>
 
                 <div class="pt-10">

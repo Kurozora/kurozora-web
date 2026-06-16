@@ -19,8 +19,9 @@ return new class extends Migration
             $table->id();
             $table->uuid('key_id');
             $table->uuid('user_id');
-            $table->string('identifier');
+            $table->string('name');
             $table->string('description');
+            $table->string('identifier');
             $table->text('token');
             $table->timestamps();
             $table->softDeletes();
@@ -28,6 +29,7 @@ return new class extends Migration
 
         Schema::table(APIClientToken::TABLE_NAME, function (Blueprint $table) {
             // Set unique key constraints
+            $table->unique(['name']);
             $table->unique(['identifier']);
             $table->unique(['identifier', 'user_id']);
 

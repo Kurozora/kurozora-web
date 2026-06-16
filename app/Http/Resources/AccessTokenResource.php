@@ -31,6 +31,7 @@ class AccessTokenResource extends JsonResource
             'attributes' => [
                 'ipAddress' => $this->resource->sessionAttribute->ip_address,
                 'lastValidatedAt' => $this->resource->last_used_at?->timestamp,
+                'appSource' => $this->resource->sessionAttribute?->app_source,
             ]
         ];
 

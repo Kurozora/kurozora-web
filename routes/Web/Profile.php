@@ -13,6 +13,7 @@ use App\Livewire\Profile\Library\Favorites;
 use App\Livewire\Profile\Library\Index as LibraryIndex;
 use App\Livewire\Profile\Library\Reminders;
 use App\Livewire\Profile\Ratings\Index as RatingsIndex;
+use App\Livewire\Profile\Sessions\Index as SessionsIndex;
 
 Route::prefix('/profile')
     ->name('profile')
@@ -26,6 +27,9 @@ Route::prefix('/profile')
             ->group(function () {
                 Route::get('/', [UserProfileController::class, 'settings'])
                     ->name('.settings');
+
+                Route::get('/sessions', SessionsIndex::class)
+                    ->name('.settings.sessions');
 
                 Route::get('/{user}', [UserProfileController::class, 'settings'])
                     ->name('.settings.user');

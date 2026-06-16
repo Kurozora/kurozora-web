@@ -50,6 +50,9 @@ return [
             'private_key' => str_replace('#', "\n", env('APPLE_MUSIC_PRIVATE_KEY') ?? ''), // with double quote; otherwise \n isn't parsed.
             'token_ttl' => (int) env('APPLE_MUSIC_TOKEN_TTL', 43200),
         ],
+        'maps' => [
+            'token' => env('MAPKIT_JS_TOKEN'),
+        ],
     ],
 
     'deezer' => [

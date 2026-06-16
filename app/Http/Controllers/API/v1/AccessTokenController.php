@@ -6,6 +6,7 @@ use App\Contracts\Web\Auth\TwoFactorAuthenticationProvider;
 use App\Helpers\JSONResult;
 use App\Http\Requests\CreateSessionAttributeRequest;
 use App\Http\Requests\GetPaginatedRequest;
+use App\Http\Requests\SignOutSessionsRequest;
 use App\Http\Requests\UpdateSessionAttributeRequest;
 use App\Http\Resources\AccessTokenResource;
 use App\Http\Resources\UserResource;
@@ -17,6 +18,7 @@ use Hash;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 
 class AccessTokenController
@@ -210,6 +212,39 @@ class AccessTokenController
     {
         // Delete the token
         $personalAccessToken->delete();
+
+        return JSONResult::success();
+    }
+
+    /**
+     * Deletes multiple access tokens, or every token except the current one when `all` is set.
+     *
+     * @param SignOutSessionsRequest $request
+     * @return JsonResponse
+     * @throws ValidationException
+     */
+    public function deleteMultiple(SignOutSessionsRequest $request): JsonResponse
+    {
+        $data = $request->validated();
+        $user = auth()->user();
+
+        if (!Hash::check($data['password'], $user->password)) {
+            throw ValidationException::withMessages([
+                'password' => [__('This password does not match our records.')],
+            ]);
+        }
+
+        // Never sign out the token making this request.
+        $tokens = $user->tokens()
+            ->where('id', '!=', $user->currentAccessToken()?->id);
+
+        if ($data['identities'] !== 'all') {
+            $tokens->whereIn('id', array_filter(explode(',', $data['identities'])));
+        }
+
+        $tokens->get()
+            ->each
+            ->delete();
 
         return JSONResult::success();
     }

@@ -31,6 +31,7 @@ class SessionResource extends JsonResource
             'attributes' => [
                 'ipAddress' => $this->resource->ip_address,
                 'lastValidatedAt' => $this->resource->last_activity,
+                'appSource' => $this->resource->sessionAttribute?->app_source,
             ]
         ];
 
