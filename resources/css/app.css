@@ -275,9 +275,9 @@ img:not([src]):not([srcset]) {
   --bg-primary-color: #353A50;
   --bg-secondary-color: #454F63;
   --bg-tertiary-color: #667286;
-  --border-color: #AFAFAF;
+  --border-color: #AFAFAF26;
   --bg-blur-color: #353A50BF;
-  --bg-tint-color: #50577D;
+  --bg-tint-color: #3e435f;
   --btn-tinted-text-color: #EEEEEE;
   --primary-text-color: #EEEEEE;
   --secondary-text-color: #AFAFAF;
