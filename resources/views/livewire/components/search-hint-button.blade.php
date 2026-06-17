@@ -50,7 +50,7 @@
         </x-slot:content>
 
         <x-slot:footer>
-            <x-button wire:click="$toggle('showHelp')">{{ __('Ok') }}</x-button>
+            <x-button wire:click="$toggle('showHelp')">{{ __('OK') }}</x-button>
         </x-slot:footer>
     </x-dialog-modal>
 </span>
