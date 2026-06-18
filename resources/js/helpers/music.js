@@ -1,5 +1,5 @@
 import Marquee from './marquee'
-import {hidePrompt, showPrompt} from './prompt'
+import Prompt from './prompt'
 
 export default class MusicManager {
     // MARK: - Properties
@@ -672,7 +672,7 @@ export default class MusicManager {
 
         if (event.target.closest('[data-music-added]')) {
             event.preventDefault()
-            showPrompt('music-remove-prompt')
+            Prompt.show('music-remove-prompt')
             return
         }
 
@@ -684,7 +684,7 @@ export default class MusicManager {
         }
 
         if (event.target.closest('[data-music-connect]')) {
-            hidePrompt('music-connect-prompt')
+            Prompt.hide('music-connect-prompt')
             try {
                 await this.authorize()
             } catch (error) {
@@ -711,7 +711,7 @@ export default class MusicManager {
         if (dismissTrigger) {
             const overlay = dismissTrigger.closest('[data-prompt]')
             if (overlay) {
-                hidePrompt(overlay.id)
+                Prompt.hide(overlay.id)
             }
         }
     }
@@ -765,7 +765,7 @@ export default class MusicManager {
         }
 
         localStorage.setItem(this.#promptSeenKey, '1')
-        showPrompt('music-connect-prompt')
+        Prompt.show('music-connect-prompt')
     }
 
     /**

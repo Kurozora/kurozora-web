@@ -33,135 +33,88 @@
 
     <div
         class="flex flex-col gap-4"
-        x-data="{
-            song: null,
-            musicManager: null,
-            async fetchSongData(songID) {
-                if (!!songID) {
-                    this.song = await musicManager.fetchSong(songID)
-                    this.musicManager = window.musicManager
-                    window.song = this.song
-                }
-            }
-        }"
-        x-on:musicmanagerloaded.window="await fetchSongData('{{ $song->am_id }}')"
+        @if (!empty($song->am_id)) data-music-song data-am-id="{{ $song->am_id }}" data-music-detail data-music-colors @endif
     >
-        <template x-if="song">
-            <div
-                class="flex gap-4 pt-4 pr-5 pb-5 pl-5 rounded-lg"
-                x-bind:style="{'background-color': '#' + song.attributes.artwork.bgColor}"
-            >
-                <div>
-                    <x-picture
-                        class="aspect-square rounded-lg natural-shadow overflow-hidden"
-                        style="height: calc(100vh - 2.50rem);max-height: 200px;min-height: 164px;"
-                        x-on:click="await musicManager.playSong(song)"
+        <div
+            class="flex gap-4 pt-4 pr-5 pb-5 pl-5 rounded-lg"
+            style="background-color: var(--am-bg, #A660B2);"
+        >
+            <div>
+                <x-picture
+                    data-music-play
+                    class="aspect-square rounded-lg natural-shadow overflow-hidden cursor-pointer"
+                    style="height: calc(100vh - 2.50rem);max-height: 200px;min-height: 164px;"
+                >
+                    <img class="object-cover"
+                         data-music-artwork
+                         alt="{{ $song->original_title }}" title="{{ $song->original_title }}"
+                         width="500" height="500"
+                         src="{{ $song->getFirstMediaFullUrl(\App\Enums\MediaCollection::Artwork()) ?? asset('images/static/placeholders/music_album.webp') }}"
+                         style="background-color: var(--am-bg, #A660B2);"
                     >
-                        <img class="object-cover"
-                             alt="{{ $song->original_title }} Artwork" title="{{ $song->original_title }}"
-                             width="500" height="500"
-                             x-bind:src="musicManager.getArtworkURL(song, 500, 500)"
-                             x-bind:style="{'background-color': '#' + song.attributes.artwork.bgColor}"
-                        >
 
-                        <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-lg cursor-pointer"></div>
-                    </x-picture>
-                </div>
+                    <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-lg cursor-pointer"></div>
+                </x-picture>
+            </div>
 
-                <div class="flex flex-col gap-4 justify-between w-full">
-                    <div class="flex gap-4 justify-between items-start">
-                        <div class="flex flex-col gap-4">
-                            <div class="flex flex-col gap-1">
-                                <p
-                                    class="leading-tight line-clamp-2 font-bold"
-                                    x-bind:style="{color: '#' + song.attributes.artwork.textColor1}"
-                                    x-text="song.attributes.name"
-                                >{{ $song->original_title }}</p>
-                                <p
-                                    class="text-sm leading-tight opacity-75 line-clamp-2"
-                                    x-bind:style="{color: '#' + song.attributes.artwork.textColor2}"
-                                    x-text="song.attributes.artistName"
-                                >{{ $song->artist ?? 'Unknown' }}</p>
-                                <p
-                                    class="text-sm leading-tight opacity-75 line-clamp-2"
-                                    x-bind:style="{color: '#' + song.attributes.artwork.textColor3}"
-                                    x-text="song.attributes.albumName"
-                                ></p>
-                            </div>
-
-                            <div
-                                class="flex gap-2"
-                                x-show="song !== null"
-                            >
-                                <span
-                                    class="pt-1 pr-1 pb-1 pl-1 uppercase text-xs font-bold border rounded-md cursor-default"
-                                    x-bind:style="{color: '#' + song.attributes.artwork.bgColor, 'background-color': '#' + song.attributes.artwork.textColor1, 'border-color': '#' + song.attributes.artwork.textColor1}"
-                                >{{ __('Preview') }}</span>
-
-                                <template x-if="song.attributes.isExplicit">
-                                    <span
-                                        class="pt-1 pr-1 pb-1 pl-1 uppercase text-xs font-bold border rounded-md cursor-default"
-                                        x-bind:style="{color: '#' + song.attributes.artwork.bgColor, 'background-color': '#' + song.attributes.artwork.textColor1, 'border-color': '#' + song.attributes.artwork.textColor1}"
-                                    >E</span>
-                                </template>
-                            </div>
+            <div class="flex flex-col gap-4 justify-between w-full">
+                <div class="flex gap-4 justify-between items-start">
+                    <div class="flex flex-col gap-4">
+                        <div class="flex flex-col gap-1">
+                            <p class="leading-tight line-clamp-2 font-bold" style="color: var(--am-text-1, inherit);">{{ $song->original_title }}</p>
+                            <p class="text-sm leading-tight opacity-75 line-clamp-2" style="color: var(--am-text-2, inherit);">{{ $song->artist ?? 'Unknown' }}</p>
+                            <p class="text-sm leading-tight opacity-75 line-clamp-2" style="color: var(--am-text-3, inherit);" data-music-album></p>
                         </div>
 
-                        <a class="flex items-center gap-1" href="{{ route('home') }}">
-                            <x-logo
-                                class="block h-5 w-auto"
-                                x-bind:style="{color: '#' + song.attributes.artwork.textColor2}"
-                            />
-                            <p
-                                class="font-semibold"
-                                x-bind:style="{color: '#' + song.attributes.artwork.textColor2}"
-                            >{{ __('Music') }}</p>
-                        </a>
+                        <div class="flex gap-2">
+                            <span
+                                data-music-preview-badge
+                                class="pt-1 pr-1 pb-1 pl-1 uppercase text-xs font-bold border rounded-md cursor-default"
+                                style="color: var(--am-bg, #A660B2); background-color: var(--am-text-1, #ffffff); border-color: var(--am-text-1, #ffffff);"
+                            >{{ __('Preview') }}</span>
+
+                            <span
+                                data-music-explicit
+                                class="hidden pt-1 pr-1 pb-1 pl-1 uppercase text-xs font-bold border rounded-md cursor-default"
+                                style="color: var(--am-bg, #A660B2); background-color: var(--am-text-1, #ffffff); border-color: var(--am-text-1, #ffffff);"
+                            >{{ __('E') }}</span>
+                        </div>
                     </div>
 
-                    <div class="flex items-center gap-2">
-                        @if (!empty($song->am_id))
-                            <button
-                                class="inline-flex items-center pt-2 pr-2 pb-2 pl-2 border border-transparent rounded-full font-semibold text-xs uppercase tracking-widest shadow-md hover:bg-tint-800 hover:btn-text-tinted active:bg-tint active:btn-text-tinted focus:outline-none disabled:bg-gray-100 disabled:text-gray-300 disabled:cursor-default disabled:opacity-100 transition ease-in-out duration-150"
-                                x-on:click="await musicManager.playSong(song)"
-                                x-bind:style="{color: '#' + song.attributes.artwork.bgColor, 'background-color': '#' + song.attributes.artwork.textColor4}"
-                            >
-                                <template x-if="musicManager.isPlaying && musicManager.currentMusicID === '{{ $song->am_id }}'">
-                                    @svg('pause_fill', 'fill-current', ['width' => '24'])
-                                </template>
+                    <a class="flex items-center gap-1" href="{{ route('home') }}">
+                        <x-logo class="block h-5 w-auto" style="color: var(--am-text-2, inherit);" />
+                        <p class="font-semibold" style="color: var(--am-text-2, inherit);">{{ __('Music') }}</p>
+                    </a>
+                </div>
 
-                                <template x-if="!(musicManager.isPlaying && musicManager.currentMusicID === '{{ $song->am_id }}')">
-                                    @svg('play_fill', 'fill-current', ['width' => '24'])
-                                </template>
-                            </button>
-                        @endif
+                <div class="flex items-center gap-2">
+                    @if (!empty($song->am_id))
+                        <button
+                            type="button"
+                            data-music-play
+                            title="{{ __('Play') }}"
+                            class="inline-flex items-center pt-2 pr-2 pb-2 pl-2 border border-transparent rounded-full font-semibold text-xs uppercase tracking-widest shadow-md hover:bg-tint-800 hover:btn-text-tinted active:bg-tint active:btn-text-tinted focus:outline-none transition ease-in-out duration-150"
+                            style="color: var(--am-bg, #A660B2); background-color: var(--am-text-4, #ffffff);"
+                        >
+                            <span data-music-icon="play">@svg('play_fill', 'fill-current', ['width' => '24'])</span>
+                            <span data-music-icon="pause" class="hidden">@svg('pause_fill', 'fill-current', ['width' => '24'])</span>
+                        </button>
+                    @endif
 
-                        <input
-                            class="w-full"
-                            type="range"
-                            min="0"
-                            max="30"
-                            step="0.000001"
-                            x-bind:value="musicManager.progress"
-                            onchange="musicManager.seekTo(this.value)"
-                            x-bind:style="{'accent-color': '#' + song.attributes.artwork.textColor4 }"
-                        />
+                    <input
+                        class="w-full"
+                        type="range"
+                        min="0"
+                        max="30"
+                        step="0.000001"
+                        value="0"
+                        data-music-seek
+                        style="accent-color: var(--am-text-4, #ffffff);"
+                    />
 
-                        <div
-                            class="text-xs"
-                            style="width: 42px;"
-                            x-bind:style="{color: '#' + song.attributes.artwork.textColor4}"
-                            x-text="musicManager.currentPlaybackDuration"
-                        >00:30</div>
-                    </div>
+                    <div class="text-xs" style="width: 42px; color: var(--am-text-4, inherit);" data-music-duration>00:30</div>
                 </div>
             </div>
-        </template>
-
-        <template x-if="!song">
-            <div class="flex justify-center items-center w-screen h-screen bg-secondary">
-                @svg('music_note_fill', 'current-fill opacity-25', ['width' => '128'])
-            </div>
-        </template>
+        </div>
     </div>
 </main>

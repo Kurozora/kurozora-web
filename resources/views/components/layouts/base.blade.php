@@ -46,6 +46,8 @@
             'resources/css/app.css',
             'resources/js/settings.js',
             'resources/js/history.js',
+            'resources/js/submenu.js',
+            'resources/js/dropdown.js',
             'resources/js/app.js',
             'resources/js/db.js',
             'resources/js/worker.js',
