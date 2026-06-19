@@ -347,6 +347,165 @@ a[href*="#"]:not([href="#"]):not(.no-external-icon):focus::after {
   display: block;
 }
 
+/* Time-synced lyrics */
+@property --fill {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+
+[data-lyrics] {
+  background-color: var(--bg-primary-color);
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+[data-lyrics][data-open] {
+  opacity: 1;
+  transform: translateY(0);
+}
+body:has([data-lyrics][data-open]) {
+  overflow: hidden;
+}
+
+[data-lyrics-list] {
+  --am-sung: var(--primary-text-color);
+  --am-unsung: color-mix(in srgb, var(--primary-text-color) 35%, transparent);
+  padding-top: 16px;
+  padding-bottom: 70vh;
+  overscroll-behavior: contain;
+}
+
+.lyrics-line {
+  padding: 12px 20px;
+  font-size: 26px;
+  cursor: pointer;
+  transition: filter 0.3s ease;
+}
+[data-lyrics-list][data-scrolling] .lyrics-line {
+  filter: none !important;
+}
+
+.lyrics-main,
+.lyrics-background {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  row-gap: 0.5em;
+}
+
+.lyrics-background {
+  display: none;
+  font-size: 0.65em;
+  opacity: 0.85;
+}
+.lyrics-line[data-active] .lyrics-background,
+[data-lyrics-list][data-static] .lyrics-background {
+  display: flex;
+}
+
+.lyrics-line[data-align="right"] .lyrics-main,
+.lyrics-line[data-align="right"] .lyrics-background {
+  justify-content: flex-end;
+}
+.lyrics-line[data-align="right"] .lyrics-translation {
+  text-align: right;
+}
+
+.lyrics-tile {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-right: 4px;
+}
+.lyrics-tile[data-space] {
+  margin-right: 0.28em;
+}
+
+.lyrics-word,
+.lyrics-romaji {
+  color: var(--am-unsung);
+}
+.lyrics-word {
+  font-size: 1em;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.lyrics-romaji {
+  max-height: 0;
+  margin-top: 0;
+  overflow: hidden;
+  opacity: 0;
+  font-size: 0.615em;
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+  transition: max-height 0.3s ease, margin-top 0.3s ease, opacity 0.3s ease;
+}
+[data-lyrics-list][data-show-romaji] .lyrics-romaji {
+  max-height: 1.5em;
+  margin-top: 2px;
+  opacity: 1;
+}
+
+/* The active line fills each syllable left-to-right as it is sung, with a fixed
+   feather, driven by the browser's animation engine via --fill. */
+.lyrics-line[data-active] .lyrics-word,
+.lyrics-line[data-active] .lyrics-romaji {
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  background-image: linear-gradient(
+    to right,
+    var(--am-sung) calc(var(--fill, 0%) - 20%),
+    var(--am-unsung) var(--fill, 0%)
+  );
+}
+
+/* Reveal a line in full on hover, and reveal everything when unsynced. */
+.lyrics-line:not([data-active]):hover .lyrics-word,
+.lyrics-line:not([data-active]):hover .lyrics-romaji,
+[data-lyrics-list][data-static] .lyrics-word,
+[data-lyrics-list][data-static] .lyrics-romaji {
+  color: var(--am-sung);
+}
+
+.lyrics-translation {
+  margin-top: 6px;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.3;
+  color: var(--secondary-text-color);
+}
+
+.lyrics-interlude {
+  display: flex;
+  align-items: center;
+  height: 0;
+  padding: 0 20px;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+.lyrics-interlude[data-active] {
+  height: auto;
+  padding: 16px 20px;
+  opacity: 1;
+}
+.lyrics-dots {
+  display: flex;
+  gap: 13px;
+  transform-origin: left center;
+}
+.lyrics-dot {
+  width: 13px;
+  height: 13px;
+  border-radius: 9999px;
+  background-color: var(--primary-text-color);
+  opacity: 0.25;
+}
+
 /**
  * This injects all of Tailwind's screen classes, generated based on the
  * config file.

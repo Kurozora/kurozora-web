@@ -78,6 +78,7 @@ export default defineConfig({
                 'resources/js/gif.js',
                 'resources/js/history.js',
                 'resources/js/listen.js',
+                'resources/js/lyrics.js',
                 'resources/js/markdown.js',
                 'resources/js/settings.js',
                 'resources/js/submenu.js',
