@@ -4,6 +4,8 @@ namespace App\Console\Commands\Scrapers\MAL;
 
 use App\Spiders\MAL\AnimeStatSpider;
 use Illuminate\Console\Command;
+use Laravel\Telescope\Telescope;
+use Pulse;
 use RoachPHP\Roach;
 use RoachPHP\Spider\Configuration\Overrides;
 
@@ -53,7 +55,13 @@ class AnimeStat extends Command
         }
 
         // Scrape
+        Pulse::stopRecording();
+        Telescope::stopRecording();
+
         Roach::startSpider(AnimeStatSpider::class, new Overrides(startUrls: $urls));
+
+        Pulse::startRecording();
+        Telescope::startRecording();
 
         return Command::SUCCESS;
     }

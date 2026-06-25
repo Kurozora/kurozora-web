@@ -5,6 +5,8 @@ namespace App\Console\Commands\Scrapers\MAL;
 use App\Spiders\MAL\UpcomingMangaSpider;
 use Exception;
 use Illuminate\Console\Command;
+use Laravel\Telescope\Telescope;
+use Pulse;
 use RoachPHP\Roach;
 use RoachPHP\Spider\Configuration\Overrides;
 
@@ -54,7 +56,13 @@ class UpcomingManga extends Command
             $urls[] = config('scraper.domains.mal.upcoming_manga') . $show;
         }
 
+        Pulse::stopRecording();
+        Telescope::stopRecording();
+
         Roach::startSpider(UpcomingMangaSpider::class, new Overrides(startUrls: $urls), ['force' => $force]);
+
+        Pulse::startRecording();
+        Telescope::startRecording();
 
         return Command::SUCCESS;
     }

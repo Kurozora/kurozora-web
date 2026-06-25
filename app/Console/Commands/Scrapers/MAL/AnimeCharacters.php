@@ -4,6 +4,8 @@ namespace App\Console\Commands\Scrapers\MAL;
 
 use App\Spiders\MAL\AnimeCharacterSpider;
 use Illuminate\Console\Command;
+use Laravel\Telescope\Telescope;
+use Pulse;
 use RoachPHP\Roach;
 use RoachPHP\Spider\Configuration\Overrides;
 
@@ -53,7 +55,13 @@ class AnimeCharacters extends Command
         }
 
         // Scrape
+        Pulse::stopRecording();
+        Telescope::stopRecording();
+
         Roach::startSpider(AnimeCharacterSpider::class, new Overrides(startUrls: $urls));
+
+        Pulse::startRecording();
+        Telescope::startRecording();
 
         return Command::SUCCESS;
     }

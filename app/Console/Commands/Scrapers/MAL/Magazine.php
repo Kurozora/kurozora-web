@@ -4,6 +4,8 @@ namespace App\Console\Commands\Scrapers\MAL;
 
 use App\Spiders\MAL\MagazineSpider;
 use Illuminate\Console\Command;
+use Laravel\Telescope\Telescope;
+use Pulse;
 use RoachPHP\Roach;
 use RoachPHP\Spider\Configuration\Overrides;
 
@@ -48,7 +50,13 @@ class Magazine extends Command
         }
 
         // Scrape
+        Pulse::stopRecording();
+        Telescope::stopRecording();
+
         Roach::startSpider(MagazineSpider::class, new Overrides(startUrls: $urls));
+
+        Pulse::startRecording();
+        Telescope::startRecording();
 
         return Command::SUCCESS;
     }
