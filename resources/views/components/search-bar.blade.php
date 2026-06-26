@@ -186,13 +186,11 @@
         @foreach ($this->searchTypes as $value)
             @php($type = str($value)->slug())
             <template x-if="type === '{{ $type }}'">
-                <x-button>{{ __($value) }}</x-button>
+                <x-toggle-button :selected="true">{{ __($value) }}</x-toggle-button>
             </template>
 
             <template x-if="type !== '{{ $type }}'">
-                <x-outlined-button
-                    x-on:click="type = '{{ $type }}'"
-                >{{ __($value) }}</x-outlined-button>
+                <x-toggle-button x-on:click="type = '{{ $type }}'">{{ __($value) }}</x-toggle-button>
             </template>
         @endforeach
     </div>

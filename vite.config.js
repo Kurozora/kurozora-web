@@ -80,6 +80,7 @@ export default defineConfig({
                 'resources/js/listen.js',
                 'resources/js/lyrics.js',
                 'resources/js/markdown.js',
+                'resources/js/museum.js',
                 'resources/js/settings.js',
                 'resources/js/submenu.js',
                 'resources/js/watch.js',
