@@ -39,6 +39,7 @@ Route::prefix('/me')
 
         require 'Me/Access-Tokens.php';
         require 'Me/Achievements.php';
+        require 'Me/Digest.php';
         require 'Me/Episodes.php';
         require 'Me/Favorites.php';
         require 'Me/Feed-Messages.php';

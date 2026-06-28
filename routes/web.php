@@ -63,6 +63,7 @@ require 'Web/AniSearch.php';
 require 'Web/App Icon.php';
 require 'Web/Charts.php';
 require 'Web/Characters.php';
+require 'Web/Digest.php';
 require 'Web/Embed.php';
 require 'Web/Episodes.php';
 require 'Web/Explore.php';
