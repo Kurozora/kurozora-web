@@ -77,7 +77,13 @@ trait HasPublicID
                     }
                 }
 
-                abort(redirect('/' . implode('/', $segments), 301));
+                $target = '/' . implode('/', $segments);
+
+                if ($queryString = request()->getQueryString()) {
+                    $target .= '?' . $queryString;
+                }
+
+                abort(redirect($target, 301));
             }
         }
 
