@@ -1,14 +1,14 @@
 <main>
     <x-slot:title>
-        {!! $manga->title !!}
+        {!! __(':x — Manga, Characters & Reviews', ['x' => $manga->title]) !!}
     </x-slot:title>
 
     <x-slot:description>
-        {{ $manga->synopsis }}
+        {{ $this->metaDescription }}
     </x-slot:description>
 
     <x-slot:meta>
-        <meta property="og:title" content="{{ $manga->title }} — {{ config('app.name') }}" />
+        <meta property="og:title" content="{{ __(':x — Manga, Characters & Reviews', ['x' => $manga->title]) }} — {{ config('app.name') }}" />
         <meta property="og:description" content="{{ $manga->synopsis ?? __('app.description') }}" />
         <meta property="og:image" content="{{ $manga->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $manga->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="og:type" content="book" />
@@ -16,11 +16,14 @@
         @foreach ($manga->tags() as $tag)
             <meta property="book:tag" content="{{ $tag->name }}" />
         @endforeach
-        <meta property="twitter:title" content="{{ $manga->title }} — {{ config('app.name') }}" />
+        <meta property="twitter:title" content="{{ __(':x — Manga, Characters & Reviews', ['x' => $manga->title]) }} — {{ config('app.name') }}" />
         <meta property="twitter:description" content="{{ $manga->synopsis }}" />
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:image" content="{{ $manga->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $manga->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="twitter:image:alt" content="{{ $manga->synopsis }}" />
+        @if ($manga->is_nsfw)
+            <meta name="rating" content="adult" />
+        @endif
         <link rel="canonical" href="{{ route('manga.details', $manga) }}">
         <x-misc.schema :data="$this->schema" />
     </x-slot:meta>

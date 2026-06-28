@@ -320,6 +320,32 @@ class Details extends Component
     }
 
     /**
+     * The meta description for this page.
+     *
+     * @return string
+     */
+    public function getMetaDescriptionProperty(): string
+    {
+        $facts = [];
+
+        if ($this->anime->episode_count > 0) {
+            $facts[] = trans_choice('{1} :x episode|[2,*] :x episodes', $this->anime->episode_count, ['x' => $this->anime->episode_count]);
+        }
+
+        if ($year = $this->anime->started_at?->year) {
+            $facts[] = $year;
+        }
+
+        if ($this->anime->mediaStat?->rating_average > 0) {
+            $facts[] = __('Rated :x/5', ['x' => number_format($this->anime->mediaStat->rating_average, 1)]);
+        }
+
+        $summary = array_filter([implode(' · ', $facts), $this->anime->synopsis]);
+
+        return implode(' — ', $summary) ?: __('app.description');
+    }
+
+    /**
      * The Schema.org JSON-LD payload for this page.
      *
      * @return array

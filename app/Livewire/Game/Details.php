@@ -320,6 +320,28 @@ class Details extends Component
     }
 
     /**
+     * The meta description for this page.
+     *
+     * @return string
+     */
+    public function getMetaDescriptionProperty(): string
+    {
+        $facts = [];
+
+        if ($year = $this->game->published_at?->year) {
+            $facts[] = $year;
+        }
+
+        if ($this->game->mediaStat?->rating_average > 0) {
+            $facts[] = __('Rated :x/5', ['x' => number_format($this->game->mediaStat->rating_average, 1)]);
+        }
+
+        $summary = array_filter([implode(' · ', $facts), $this->game->synopsis]);
+
+        return implode(' — ', $summary) ?: __('app.description');
+    }
+
+    /**
      * The Schema.org JSON-LD payload for this page.
      *
      * @return array

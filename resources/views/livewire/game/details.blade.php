@@ -1,14 +1,14 @@
 <main>
     <x-slot:title>
-        {!! $game->title !!}
+        {!! __(':x — Game, Cast & Reviews', ['x' => $game->title]) !!}
     </x-slot:title>
 
     <x-slot:description>
-        {{ $game->synopsis }}
+        {{ $this->metaDescription }}
     </x-slot:description>
 
     <x-slot:meta>
-        <meta property="og:title" content="{{ $game->title }} — {{ config('app.name') }}" />
+        <meta property="og:title" content="{{ __(':x — Game, Cast & Reviews', ['x' => $game->title]) }} — {{ config('app.name') }}" />
         <meta property="og:description" content="{{ $game->synopsis ?? __('app.description') }}" />
         <meta property="og:image" content="{{ $game->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $game->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="og:video" content="{{ $game->video_url ?? '' }}" />
@@ -18,11 +18,14 @@
         @foreach ($game->tags() as $tag)
             <meta property="video:tag" content="{{ $tag->name }}" />
         @endforeach
-        <meta property="twitter:title" content="{{ $game->title }} — {{ config('app.name') }}" />
+        <meta property="twitter:title" content="{{ __(':x — Game, Cast & Reviews', ['x' => $game->title]) }} — {{ config('app.name') }}" />
         <meta property="twitter:description" content="{{ $game->synopsis }}" />
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:image" content="{{ $game->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $game->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="twitter:image:alt" content="{{ $game->synopsis }}" />
+        @if ($game->is_nsfw)
+            <meta name="rating" content="adult" />
+        @endif
         <link rel="canonical" href="{{ route('games.details', $game) }}">
         <x-misc.schema :data="$this->schema" />
     </x-slot:meta>

@@ -305,6 +305,36 @@ class Details extends Component
     }
 
     /**
+     * The meta description for this page.
+     *
+     * @return string
+     */
+    public function getMetaDescriptionProperty(): string
+    {
+        $facts = [];
+
+        if ($this->manga->chapter_count > 0) {
+            $facts[] = trans_choice('{1} :x chapter|[2,*] :x chapters', $this->manga->chapter_count, ['x' => $this->manga->chapter_count]);
+        }
+
+        if ($this->manga->volume_count > 0) {
+            $facts[] = trans_choice('{1} :x volume|[2,*] :x volumes', $this->manga->volume_count, ['x' => $this->manga->volume_count]);
+        }
+
+        if ($year = $this->manga->started_at?->year) {
+            $facts[] = $year;
+        }
+
+        if ($this->manga->mediaStat?->rating_average > 0) {
+            $facts[] = __('Rated :x/5', ['x' => number_format($this->manga->mediaStat->rating_average, 1)]);
+        }
+
+        $summary = array_filter([implode(' · ', $facts), $this->manga->synopsis]);
+
+        return implode(' — ', $summary) ?: __('app.description');
+    }
+
+    /**
      * The Schema.org JSON-LD payload for this page.
      *
      * @return array
