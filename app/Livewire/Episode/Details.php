@@ -24,7 +24,8 @@ use Livewire\Component;
 class Details extends Component
 {
     use WithReviewBox,
-        PresentsAlert;
+        PresentsAlert,
+        PresentsSubscriptionSheet;
 
     /**
      * The object containing the episode data.
@@ -305,9 +306,9 @@ class Details extends Component
                 );
             }
         } else {
-            $this->presentAlert(
-                title: __('That’s unfortunate'),
-                message: __('Reminders are only available to pro and subscribed users 🧐'),
+            $this->presentSubscriptionSheet(
+                title: __('Integrate with Calendar'),
+                message: __('Integrate your anime schedule into your calendar. Never miss an episode again with reminders for new airings.'),
             );
         }
     }

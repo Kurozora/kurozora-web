@@ -25,6 +25,6 @@ class UserIsProOrSubscribed
             return $next($request);
         }
 
-        return to_route('profile.settings');
+        return to_route('kurozora-plus');
     }
 }

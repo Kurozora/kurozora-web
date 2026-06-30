@@ -4,7 +4,7 @@ namespace App\Livewire\ThemeStore;
 
 use App\Enums\KTheme;
 use App\Models\AppTheme;
-use App\Traits\Livewire\PresentsAlert;
+use App\Traits\Livewire\PresentsSubscriptionSheet;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -13,7 +13,7 @@ use Throwable;
 
 class GetButton extends Component
 {
-    use PresentsAlert;
+    use PresentsSubscriptionSheet;
 
     /**
      * The id of the theme.
@@ -99,9 +99,10 @@ class GetButton extends Component
         }
 
         if (!($user->is_subscribed || $user->is_pro)) {
-            $this->presentAlert(
-                title: __('That’s unfortunate'),
-                message: __('Premium themes are only available to pro and subscribed users 🧐')
+            $this->presentSubscriptionSheet(
+                title: __('Dynamic Themes'),
+                message: __('Choose from a range of themes to create a look that reflects your personality and style.'),
+                tipJarEnabled: true
             );
             return;
         }

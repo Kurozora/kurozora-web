@@ -142,7 +142,11 @@
                 <h5 class="uppercase text-sm mb-2 font-semibold">{{ __('Services') }}</h5>
                 <ul class="m-0 mb-4 list-none">
                     <li class="mt-2">
-                        <x-footer-link href="#">{{ __(':x+', ['x' => config('app.name')]) }}</x-footer-link>
+                        <x-footer-link href="{{ route('kurozora-plus') }}" wire:navigate>{{ __(':x+', ['x' => config('app.name')]) }}</x-footer-link>
+                    </li>
+
+                    <li class="mt-2">
+                        <x-footer-link href="{{ route('tip-jar') }}" wire:navigate>{{ __('Tip Jar') }}</x-footer-link>
                     </li>
 
                     <li class="mt-2">

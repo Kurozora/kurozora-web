@@ -9,6 +9,7 @@ use App\Models\MediaRating;
 use App\Models\Studio;
 use App\Models\UserLibrary;
 use App\Traits\Livewire\PresentsAlert;
+use App\Traits\Livewire\PresentsSubscriptionSheet;
 use App\Traits\Livewire\WithReviewBox;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
@@ -23,6 +24,7 @@ use Livewire\Component;
 class Details extends Component
 {
     use PresentsAlert,
+        PresentsSubscriptionSheet,
         WithReviewBox;
 
     /**
@@ -297,9 +299,9 @@ class Details extends Component
                 );
             }
         } else {
-            $this->presentAlert(
-                title: __('That’s unfortunate'),
-                message: __('Reminders are only available to pro and subscribed users 🧐'),
+            $this->presentSubscriptionSheet(
+                title: __('Integrate with Calendar'),
+                message: __('Integrate your manga schedule into your calendar. Never miss a chapter again with reminders for new releases.'),
             );
         }
     }

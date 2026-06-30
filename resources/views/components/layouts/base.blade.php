@@ -150,6 +150,7 @@
             </div>
 
             <livewire:components.alert />
+            <livewire:components.subscription-sheet />
         </div>
 
         <x-music.connect-prompt />

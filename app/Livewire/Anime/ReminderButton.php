@@ -11,6 +11,8 @@ use Livewire\Component;
 
 class ReminderButton extends Component
 {
+    use PresentsSubscriptionSheet;
+
     /**
      * The object containing the anime data.
      *
@@ -59,7 +61,17 @@ class ReminderButton extends Component
 
         $user = auth()->user();
 
+        // Require user to authenticate if necessary.
+        if ($user === null) {
+            $this->redirect(route('sign-up'));
+            return;
+        }
+
         if (!$user->is_subscribed) {
+            $this->presentSubscriptionSheet(
+                title: __('Integrate with Calendar'),
+                message: __('Integrate your anime schedule into your calendar. Never miss an episode again with reminders for new airings.'),
+            );
             return;
         }
 
