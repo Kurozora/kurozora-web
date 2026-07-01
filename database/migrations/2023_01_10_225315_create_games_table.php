@@ -21,9 +21,9 @@ return new class extends Migration
     {
         Schema::create(Game::TABLE_NAME, function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('series_id')->nullable();
             $table->unsignedInteger('igdb_id')->unique()->nullable();
             $table->string('igdb_slug')->unique()->nullable();
+            $table->string('vndb_id')->unique()->nullable();
             $table->string('slug', 280);
             $table->string('original_title', 280);
             $table->json('synonym_titles')->nullable();
@@ -33,8 +33,11 @@ return new class extends Migration
             $table->unsignedBigInteger('media_type_id')->nullable();
             $table->unsignedBigInteger('source_id')->nullable();
             $table->unsignedBigInteger('status_id')->nullable();
+            $table->json('website_urls')->nullable();
             $table->string('video_url')->nullable();
             $table->unsignedMediumInteger('duration')->default(0);
+            $table->unsignedMediumInteger('time_to_beat_hastily')->default(0);
+            $table->unsignedMediumInteger('time_to_beat_completely')->default(0);
             $table->unsignedTinyInteger('publication_day')->nullable();
             $table->unsignedTinyInteger('publication_season')->nullable();
             $table->boolean('is_nsfw')->default(false);

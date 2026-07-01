@@ -11,6 +11,7 @@ use App\Traits\Model\HasTranslations;
 use App\Traits\Model\HasViews;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Scout\Searchable;
 use Spatie\Activitylog\LogOptions;
@@ -170,7 +171,7 @@ class Platform extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * The type of the studio.
+     * The type of the platform.
      *
      * @param int|null $value
      *
@@ -179,6 +180,18 @@ class Platform extends KModel implements HasMedia, Sitemapable
     public function getTypeAttribute(?int $value): ?PlatformType
     {
         return isset($value) ? PlatformType::fromValue($value) : null;
+    }
+
+    /**
+     * The games released on the platform.
+     *
+     * @return MorphToMany
+     */
+    public function games(): MorphToMany
+    {
+        return $this->morphedByMany(Game::class, 'model', MediaPlatform::class)
+            ->withPivot('region', 'release_status', 'released_at')
+            ->withTimestamps();
     }
 
     /**

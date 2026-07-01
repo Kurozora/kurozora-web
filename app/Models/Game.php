@@ -11,7 +11,12 @@ use App\Support\BreadcrumbNode;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\Actionable;
 use App\Traits\Model\Favorable;
+use App\Traits\Model\HasMediaFranchises;
+use App\Traits\Model\HasMediaGameModes;
 use App\Traits\Model\HasMediaGenres;
+use App\Traits\Model\HasMediaLanguages;
+use App\Traits\Model\HasMediaPlatforms;
+use App\Traits\Model\HasMediaPlayerPerspectives;
 use App\Traits\Model\HasMediaRatings;
 use App\Traits\Model\HasMediaRelations;
 use App\Traits\Model\HasMediaSongs;
@@ -20,6 +25,7 @@ use App\Traits\Model\HasMediaStat;
 use App\Traits\Model\HasMediaStudios;
 use App\Traits\Model\HasMediaTags;
 use App\Traits\Model\HasMediaThemes;
+use App\Traits\Model\HasMediaTools;
 use App\Traits\Model\HasParentalGuideStat;
 use App\Traits\Model\HasSchemaOrg;
 use App\Traits\Model\HasSlug;
@@ -58,7 +64,12 @@ class Game extends KModel implements HasMedia, Sitemapable
     use Actionable,
         Favorable,
         HasFactory,
+        HasMediaFranchises,
+        HasMediaGameModes,
         HasMediaGenres,
+        HasMediaLanguages,
+        HasMediaPlatforms,
+        HasMediaPlayerPerspectives,
         HasMediaRatings,
         HasMediaRelations,
         HasMediaSongs,
@@ -67,6 +78,7 @@ class Game extends KModel implements HasMedia, Sitemapable
         HasMediaStudios,
         HasMediaTags,
         HasMediaThemes,
+        HasMediaTools,
         HasParentalGuideStat,
         HasSchemaOrg,
         HasSlug,
@@ -112,6 +124,7 @@ class Game extends KModel implements HasMedia, Sitemapable
     {
         return [
             'synonym_titles' => AsArrayObject::class,
+            'website_urls' => AsArrayObject::class,
             'is_nsfw' => 'bool',
             'published_at' => 'date',
         ];

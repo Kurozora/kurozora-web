@@ -146,6 +146,10 @@ COPY --from=anubis-binary /ko-app/anubis /usr/local/bin/anubis
 COPY ./docker/anubis/policy.yaml /etc/anubis/policy.yaml
 COPY ./docker/anubis/google-special-crawlers.yaml /etc/anubis/google-special-crawlers.yaml
 
+# Copy the curl-impersonate binary
+COPY ./docker/curl-impersonate/curl-impersonate /usr/local/bin/curl-impersonate
+RUN chmod +x /usr/local/bin/curl-impersonate
+
 # Copy built app from previous stage
 COPY --from=build --chown=www-data /var/www/html /var/www/html
 

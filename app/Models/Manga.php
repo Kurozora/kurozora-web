@@ -12,6 +12,7 @@ use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\Actionable;
 use App\Traits\Model\Favorable;
 use App\Traits\Model\HasMediaGenres;
+use App\Traits\Model\HasMediaLanguages;
 use App\Traits\Model\HasMediaRatings;
 use App\Traits\Model\HasMediaRelations;
 use App\Traits\Model\HasMediaStaff;
@@ -60,6 +61,7 @@ class Manga extends KModel implements HasMedia, Sitemapable
         Favorable,
         HasFactory,
         HasMediaGenres,
+        HasMediaLanguages,
         HasMediaRatings,
         HasMediaRelations,
         HasMediaStaff,
