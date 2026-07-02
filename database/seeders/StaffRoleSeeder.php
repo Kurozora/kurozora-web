@@ -262,7 +262,7 @@ class StaffRoleSeeder extends Seeder
             'description'   => '',
         ],
         [
-            'name'          => 'Digital Colouring',
+            'name'          => 'Digital Coloring',
             'description'   => '',
         ],
         [
