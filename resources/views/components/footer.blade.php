@@ -185,6 +185,12 @@
                     <li class="mt-2">
                         <x-footer-link href="{{ route('misc.press-kit') }}" wire:navigate>{{ __('Press-Kit') }}</x-footer-link>
                     </li>
+
+                    @auth
+                        <li class="mt-2">
+                            <x-footer-link href="{{ route('compare.index') }}" wire:navigate>{{ __(':x vs. Other Services', ['x' => config('app.name')]) }}</x-footer-link>
+                        </li>
+                    @endauth
                 </ul>
             </div>
 
@@ -254,6 +260,21 @@
                     </li>
                 </ul>
             </div>
+
+            @guest
+                <div class="w-1/2 sm:w-1/3 text-center md:w-1/4 md:text-left lg:w-1/6">
+                    <h5 class="uppercase text-sm mb-2 font-semibold">{{ __('New Here?') }}</h5>
+                    <ul class="m-0 mb-4 list-none">
+                        <li class="mt-2">
+                            <p class="text-sm text-secondary">{{ __('See how :x compares to the tracker you use today.', ['x' => config('app.name')]) }}</p>
+                        </li>
+
+                        <li class="mt-2">
+                            <x-link-button href="{{ route('compare.index') }}" wire:navigate>{{ __('Compare Services') }}</x-link-button>
+                        </li>
+                    </ul>
+                </div>
+            @endguest
 
             <x-hr class="mb-2" />
 

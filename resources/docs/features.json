@@ -1,0 +1,1103 @@
+{
+    "services": [
+        {
+            "id": "kurozora",
+            "name": "Kurozora"
+        },
+        {
+            "id": "anidb",
+            "name": "AniDB"
+        },
+        {
+            "id": "myanimelist",
+            "name": "MyAnimeList"
+        },
+        {
+            "id": "anilist",
+            "name": "AniList"
+        },
+        {
+            "id": "anime-planet",
+            "name": "Anime-Planet"
+        },
+        {
+            "id": "kitsu",
+            "name": "Kitsu",
+            "note": "Maintenance (2025)"
+        },
+        {
+            "id": "notify-moe",
+            "name": "Notify.moe",
+            "note": "Discontinued (2022)"
+        },
+        {
+            "id": "livechart",
+            "name": "LiveChart"
+        },
+        {
+            "id": "imdb",
+            "name": "IMDb",
+            "note": "Metadata database"
+        },
+        {
+            "id": "thetvdb",
+            "name": "TheTVDB",
+            "note": "Metadata database"
+        },
+        {
+            "id": "tmdb",
+            "name": "TMDB",
+            "note": "Metadata database"
+        },
+        {
+            "id": "simkl",
+            "name": "Simkl"
+        },
+        {
+            "id": "trakt",
+            "name": "Trakt"
+        }
+    ],
+    "features": [
+        {
+            "id": "tracking.anime",
+            "label": "Track anime episode by episode",
+            "description": "Keep watch progress per episode, not just a status per show.",
+            "support": {
+                "kurozora": {
+                    "value": true
+                },
+                "anidb": {
+                    "value": true
+                },
+                "myanimelist": {
+                    "value": true
+                },
+                "anilist": {
+                    "value": true
+                },
+                "anime-planet": {
+                    "value": true
+                },
+                "kitsu": {
+                    "value": true
+                },
+                "notify-moe": {
+                    "value": true
+                },
+                "imdb": {
+                    "value": "partial",
+                    "note": "Episodes can be checked in and rated, but there is no watch-progress overview."
+                },
+                "livechart": {
+                    "value": true
+                },
+                "simkl": {
+                    "value": true
+                },
+                "thetvdb": {
+                    "value": false
+                },
+                "tmdb": {
+                    "value": false
+                },
+                "trakt": {
+                    "value": true,
+                    "note": "Anime is tracked as TV shows via TMDB data, so season numbering can differ from the usual anime conventions."
+                }
+            }
+        },
+        {
+            "id": "tracking.manga",
+            "label": "Track manga",
+            "description": "Track reading progress for manga.",
+            "support": {
+                "kurozora": {
+                    "value": true
+                },
+                "anidb": {
+                    "value": false
+                },
+                "myanimelist": {
+                    "value": true
+                },
+                "anilist": {
+                    "value": true
+                },
+                "anime-planet": {
+                    "value": true
+                },
+                "kitsu": {
+                    "value": true
+                },
+                "notify-moe": {
+                    "value": false
+                },
+                "imdb": {
+                    "value": false
+                },
+                "livechart": {
+                    "value": false
+                },
+                "simkl": {
+                    "value": false
+                },
+                "thetvdb": {
+                    "value": false
+                },
+                "tmdb": {
+                    "value": false
+                },
+                "trakt": {
+                    "value": false
+                }
+            }
+        },
+        {
+            "id": "tracking.games",
+            "label": "Track games",
+            "description": "Keep a library of games alongside anime and manga.",
+            "support": {
+                "kurozora": {
+                    "value": true
+                },
+                "anidb": {
+                    "value": false
+                },
+                "myanimelist": {
+                    "value": false
+                },
+                "anilist": {
+                    "value": false
+                },
+                "anime-planet": {
+                    "value": false
+                },
+                "kitsu": {
+                    "value": false
+                },
+                "notify-moe": {
+                    "value": false
+                },
+                "imdb": {
+                    "value": "partial",
+                    "note": "Game titles can be rated and added to the watchlist, but there is no games library."
+                },
+                "livechart": {
+                    "value": false
+                },
+                "simkl": {
+                    "value": false
+                },
+                "thetvdb": {
+                    "value": false
+                },
+                "tmdb": {
+                    "value": false
+                },
+                "trakt": {
+                    "value": false
+                }
+            }
+        },
+        {
+            "id": "tracking.rewatch",
+            "label": "Rewatch tracking",
+            "description": "Count how many times you have rewatched, with per-episode progress.",
+            "support": {
+                "kurozora": {
+                    "value": true
+                },
+                "anidb": {
+                    "value": "unknown"
+                },
+                "myanimelist": {
+                    "value": true
+                },
+                "anilist": {
+                    "value": true
+                },
+                "anime-planet": {
+                    "value": true
+                },
+                "kitsu": {
+                    "value": true
+                },
+                "notify-moe": {
+                    "value": "unknown"
+                },
+                "livechart": {
+                    "value": false
+                },
+                "imdb": {
+                    "value": false
+                },
+                "thetvdb": {
+                    "value": false
+                },
+                "tmdb": {
+                    "value": false
+                },
+                "simkl": {
+                    "value": "paid",
+                    "note": "Rewatch tracking requires PRO or VIP and is in beta on the website."
+                },
+                "trakt": {
+                    "value": "partial",
+                    "note": "Plays are counted automatically. Resetting rewatch progress requires VIP."
+                }
+            }
+        },
+        {
+            "id": "apps.ios",
+            "label": "Native iOS & iPadOS app",
+            "description": "An official app in the App Store, made by the service itself.",
+            "support": {
+                "kurozora": {
+                    "value": true
+                },
+                "anidb": {
+                    "value": false
+                },
+                "myanimelist": {
+                    "value": "unmaintained",
+                    "note": "The official iPhone app has not been updated since March 2024.",
+                    "since": 2024
+                },
+                "anilist": {
+                    "value": false
+                },
+                "anime-planet": {
+                    "value": false
+                },
+                "kitsu": {
+                    "value": "discontinued",
+                    "note": "The official apps were removed from the stores in 2024.",
+                    "since": 2024
+                },
+                "notify-moe": {
+                    "value": false
+                },
+                "imdb": {
+                    "value": true
+                },
+                "livechart": {
+                    "value": false,
+                    "note": "An official app exists for Android only."
+                },
+                "simkl": {
+                    "value": "unmaintained",
+                    "note": "The official iOS app was last updated in October 2022.",
+                    "since": 2022
+                },
+                "thetvdb": {
+                    "value": false
+                },
+                "tmdb": {
+                    "value": false
+                },
+                "trakt": {
+                    "value": true
+                }
+            }
+        },
+        {
+            "id": "apps.macos",
+            "label": "Native macOS app",
+            "description": "An official app for the Mac, not just a website.",
+            "support": {
+                "kurozora": {
+                    "value": true
+                },
+                "anidb": {
+                    "value": false
+                },
+                "myanimelist": {
+                    "value": false
+                },
+                "anilist": {
+                    "value": false
+                },
+                "anime-planet": {
+                    "value": false
+                },
+                "kitsu": {
+                    "value": false
+                },
+                "notify-moe": {
+                    "value": false
+                },
+                "imdb": {
+                    "value": false
+                },
+                "livechart": {
+                    "value": false
+                },
+                "simkl": {
+                    "value": false
+                },
+                "thetvdb": {
+                    "value": false
+                },
+                "tmdb": {
+                    "value": false
+                },
+                "trakt": {
+                    "value": false
+                }
+            }
+        },
+        {
+            "id": "notifications.push",
+            "label": "Push when new episodes air",
+            "description": "A notification on your device the moment a tracked show airs a new episode.",
+            "support": {
+                "kurozora": {
+                    "value": "free"
+                },
+                "anidb": {
+                    "value": false
+                },
+                "myanimelist": {
+                    "value": false
+                },
+                "anilist": {
+                    "value": "site-only",
+                    "note": "Airing notifications appear in the on-site notification bell. Nothing is sent to your device."
+                },
+                "anime-planet": {
+                    "value": false
+                },
+                "kitsu": {
+                    "value": false
+                },
+                "notify-moe": {
+                    "value": "browser",
+                    "note": "Web push in supported browsers. Reliability is unverified since development ended."
+                },
+                "imdb": {
+                    "value": false
+                },
+                "livechart": {
+                    "value": "free"
+                },
+                "simkl": {
+                    "value": "free"
+                },
+                "thetvdb": {
+                    "value": false
+                },
+                "tmdb": {
+                    "value": false
+                },
+                "trakt": {
+                    "value": "free"
+                }
+            }
+        },
+        {
+            "id": "notifications.calendar",
+            "label": "Calendar (iCal) integration",
+            "description": "Subscribe to your airing schedule from your own calendar app.",
+            "support": {
+                "kurozora": {
+                    "value": "plus"
+                },
+                "anidb": {
+                    "value": false
+                },
+                "myanimelist": {
+                    "value": false
+                },
+                "anilist": {
+                    "value": false
+                },
+                "anime-planet": {
+                    "value": false
+                },
+                "kitsu": {
+                    "value": false
+                },
+                "notify-moe": {
+                    "value": false
+                },
+                "imdb": {
+                    "value": false
+                },
+                "livechart": {
+                    "value": false
+                },
+                "simkl": {
+                    "value": "paid"
+                },
+                "thetvdb": {
+                    "value": false
+                },
+                "tmdb": {
+                    "value": false
+                },
+                "trakt": {
+                    "value": "paid"
+                }
+            }
+        },
+        {
+            "id": "database.characters",
+            "label": "Characters & voice actors",
+            "description": "Dedicated pages for characters, voice actors, and staff.",
+            "support": {
+                "kurozora": {
+                    "value": true
+                },
+                "anidb": {
+                    "value": true
+                },
+                "myanimelist": {
+                    "value": true
+                },
+                "anilist": {
+                    "value": true
+                },
+                "anime-planet": {
+                    "value": true
+                },
+                "kitsu": {
+                    "value": true
+                },
+                "notify-moe": {
+                    "value": "partial",
+                    "note": "Basic character pages."
+                },
+                "imdb": {
+                    "value": true
+                },
+                "livechart": {
+                    "value": false
+                },
+                "simkl": {
+                    "value": false
+                },
+                "thetvdb": {
+                    "value": true
+                },
+                "tmdb": {
+                    "value": "partial",
+                    "note": "Cast credits only, with no dedicated character database."
+                },
+                "trakt": {
+                    "value": "partial",
+                    "note": "Cast from TMDB, without anime-specific voice actor data."
+                }
+            }
+        },
+        {
+            "id": "database.music",
+            "label": "Theme songs & anime music",
+            "description": "Opening, ending, and insert songs catalogued per show.",
+            "support": {
+                "kurozora": {
+                    "value": true
+                },
+                "anidb": {
+                    "value": true
+                },
+                "myanimelist": {
+                    "value": true
+                },
+                "anilist": {
+                    "value": false
+                },
+                "anime-planet": {
+                    "value": false
+                },
+                "kitsu": {
+                    "value": false
+                },
+                "notify-moe": {
+                    "value": false
+                },
+                "imdb": {
+                    "value": "partial",
+                    "note": "Soundtrack listings on titles, but no anime song database."
+                },
+                "livechart": {
+                    "value": "partial",
+                    "note": "OP and ED videos on anime pages, but no song database."
+                },
+                "simkl": {
+                    "value": false
+                },
+                "thetvdb": {
+                    "value": false
+                },
+                "tmdb": {
+                    "value": false
+                },
+                "trakt": {
+                    "value": false
+                }
+            }
+        },
+        {
+            "id": "database.lyrics",
+            "label": "Synced song lyrics",
+            "description": "Lyrics that highlight word by word while the song plays.",
+            "support": {
+                "kurozora": {
+                    "value": true
+                },
+                "anidb": {
+                    "value": false
+                },
+                "myanimelist": {
+                    "value": false
+                },
+                "anilist": {
+                    "value": false
+                },
+                "anime-planet": {
+                    "value": false
+                },
+                "kitsu": {
+                    "value": false
+                },
+                "notify-moe": {
+                    "value": false
+                },
+                "imdb": {
+                    "value": false
+                },
+                "livechart": {
+                    "value": false
+                },
+                "simkl": {
+                    "value": false
+                },
+                "thetvdb": {
+                    "value": false
+                },
+                "tmdb": {
+                    "value": false
+                },
+                "trakt": {
+                    "value": false
+                }
+            }
+        },
+        {
+            "id": "database.apple-music",
+            "label": "Listen along with Apple Music",
+            "description": "Play theme songs in full with an Apple Music subscription, right from the song page.",
+            "support": {
+                "kurozora": {
+                    "value": true
+                },
+                "anidb": {
+                    "value": false
+                },
+                "myanimelist": {
+                    "value": false
+                },
+                "anilist": {
+                    "value": false
+                },
+                "anime-planet": {
+                    "value": false
+                },
+                "kitsu": {
+                    "value": false
+                },
+                "notify-moe": {
+                    "value": false
+                },
+                "imdb": {
+                    "value": false
+                },
+                "livechart": {
+                    "value": false
+                },
+                "simkl": {
+                    "value": false
+                },
+                "thetvdb": {
+                    "value": false
+                },
+                "tmdb": {
+                    "value": false
+                },
+                "trakt": {
+                    "value": false
+                }
+            }
+        },
+        {
+            "id": "discovery.seasonal",
+            "label": "Seasonal schedule & charts",
+            "description": "Browse what airs this season and when.",
+            "support": {
+                "kurozora": {
+                    "value": true
+                },
+                "anidb": {
+                    "value": true
+                },
+                "myanimelist": {
+                    "value": true
+                },
+                "anilist": {
+                    "value": true
+                },
+                "anime-planet": {
+                    "value": true
+                },
+                "kitsu": {
+                    "value": true
+                },
+                "notify-moe": {
+                    "value": true
+                },
+                "imdb": {
+                    "value": false
+                },
+                "livechart": {
+                    "value": true
+                },
+                "simkl": {
+                    "value": true
+                },
+                "thetvdb": {
+                    "value": false
+                },
+                "tmdb": {
+                    "value": false
+                },
+                "trakt": {
+                    "value": true
+                }
+            }
+        },
+        {
+            "id": "library.import",
+            "label": "Import from other services",
+            "description": "Bring an existing library over from another service.",
+            "support": {
+                "kurozora": {
+                    "value": true,
+                    "note": "Imports from MyAnimeList and Kitsu."
+                },
+                "anidb": {
+                    "value": true
+                },
+                "myanimelist": {
+                    "value": false
+                },
+                "anilist": {
+                    "value": true
+                },
+                "anime-planet": {
+                    "value": true
+                },
+                "kitsu": {
+                    "value": true
+                },
+                "notify-moe": {
+                    "value": true
+                },
+                "imdb": {
+                    "value": false
+                },
+                "livechart": {
+                    "value": true
+                },
+                "simkl": {
+                    "value": true,
+                    "note": "Imports from 14+ services. Two-way MyAnimeList sync requires VIP."
+                },
+                "thetvdb": {
+                    "value": false
+                },
+                "tmdb": {
+                    "value": true
+                },
+                "trakt": {
+                    "value": true
+                }
+            }
+        },
+        {
+            "id": "experience.title-language",
+            "label": "Titles in your preferred language",
+            "description": "Choose between English, romaji, and Japanese titles.",
+            "support": {
+                "kurozora": {
+                    "value": true
+                },
+                "anidb": {
+                    "value": "unknown"
+                },
+                "myanimelist": {
+                    "value": true
+                },
+                "anilist": {
+                    "value": true
+                },
+                "anime-planet": {
+                    "value": "unknown"
+                },
+                "kitsu": {
+                    "value": true
+                },
+                "notify-moe": {
+                    "value": "unknown"
+                },
+                "livechart": {
+                    "value": true
+                },
+                "imdb": {
+                    "value": "unknown"
+                },
+                "thetvdb": {
+                    "value": "unknown"
+                },
+                "tmdb": {
+                    "value": true
+                },
+                "simkl": {
+                    "value": "paid",
+                    "note": "Choosing between English, Romaji, and Japanese titles is a VIP setting."
+                },
+                "trakt": {
+                    "value": "unknown"
+                }
+            }
+        },
+        {
+            "id": "experience.recap",
+            "label": "Yearly recap & weekly digest",
+            "description": "A look back at what you watched, weekly and yearly.",
+            "support": {
+                "kurozora": {
+                    "value": true
+                },
+                "anidb": {
+                    "value": false
+                },
+                "myanimelist": {
+                    "value": false
+                },
+                "anilist": {
+                    "value": false
+                },
+                "anime-planet": {
+                    "value": false
+                },
+                "kitsu": {
+                    "value": false
+                },
+                "notify-moe": {
+                    "value": false
+                },
+                "imdb": {
+                    "value": false
+                },
+                "livechart": {
+                    "value": false
+                },
+                "simkl": {
+                    "value": "paid"
+                },
+                "thetvdb": {
+                    "value": false
+                },
+                "tmdb": {
+                    "value": false
+                },
+                "trakt": {
+                    "value": "paid"
+                }
+            }
+        },
+        {
+            "id": "experience.achievements",
+            "label": "Achievements",
+            "description": "Badges earned by watching, reading, and participating.",
+            "support": {
+                "kurozora": {
+                    "value": true
+                },
+                "anidb": {
+                    "value": true
+                },
+                "myanimelist": {
+                    "value": false
+                },
+                "anilist": {
+                    "value": false
+                },
+                "anime-planet": {
+                    "value": true
+                },
+                "kitsu": {
+                    "value": false
+                },
+                "notify-moe": {
+                    "value": false
+                },
+                "imdb": {
+                    "value": false
+                },
+                "livechart": {
+                    "value": false
+                },
+                "simkl": {
+                    "value": false
+                },
+                "thetvdb": {
+                    "value": false
+                },
+                "tmdb": {
+                    "value": false
+                },
+                "trakt": {
+                    "value": false
+                }
+            }
+        },
+        {
+            "id": "experience.themes",
+            "label": "Custom themes & app icons",
+            "description": "Restyle the app and its home-screen icon.",
+            "support": {
+                "kurozora": {
+                    "value": true
+                },
+                "anidb": {
+                    "value": false
+                },
+                "myanimelist": {
+                    "value": false
+                },
+                "anilist": {
+                    "value": "partial",
+                    "note": "Site color options and donor profile customization, but no custom app icons."
+                },
+                "anime-planet": {
+                    "value": false
+                },
+                "kitsu": {
+                    "value": false
+                },
+                "notify-moe": {
+                    "value": false
+                },
+                "imdb": {
+                    "value": false
+                },
+                "livechart": {
+                    "value": false
+                },
+                "simkl": {
+                    "value": false
+                },
+                "thetvdb": {
+                    "value": false
+                },
+                "tmdb": {
+                    "value": false
+                },
+                "trakt": {
+                    "value": false
+                }
+            }
+        },
+        {
+            "id": "experience.games",
+            "label": "Anime word games",
+            "description": "Daily and multiplayer word games about anime.",
+            "support": {
+                "kurozora": {
+                    "value": true
+                },
+                "anidb": {
+                    "value": false
+                },
+                "myanimelist": {
+                    "value": false
+                },
+                "anilist": {
+                    "value": false
+                },
+                "anime-planet": {
+                    "value": false
+                },
+                "kitsu": {
+                    "value": false
+                },
+                "notify-moe": {
+                    "value": false
+                },
+                "imdb": {
+                    "value": false
+                },
+                "livechart": {
+                    "value": false
+                },
+                "simkl": {
+                    "value": false
+                },
+                "thetvdb": {
+                    "value": false
+                },
+                "tmdb": {
+                    "value": false
+                },
+                "trakt": {
+                    "value": false
+                }
+            }
+        },
+        {
+            "id": "experience.parental-guides",
+            "label": "Parental guides",
+            "description": "Community-maintained content advisories per title.",
+            "support": {
+                "kurozora": {
+                    "value": true
+                },
+                "anidb": {
+                    "value": false
+                },
+                "myanimelist": {
+                    "value": false
+                },
+                "anilist": {
+                    "value": false
+                },
+                "anime-planet": {
+                    "value": false
+                },
+                "kitsu": {
+                    "value": false
+                },
+                "notify-moe": {
+                    "value": false
+                },
+                "imdb": {
+                    "value": true
+                },
+                "livechart": {
+                    "value": false
+                },
+                "simkl": {
+                    "value": false
+                },
+                "thetvdb": {
+                    "value": false
+                },
+                "tmdb": {
+                    "value": false
+                },
+                "trakt": {
+                    "value": false
+                }
+            }
+        },
+        {
+            "id": "social.feed",
+            "label": "Social feed & reviews",
+            "description": "Follow people, post updates, and write reviews.",
+            "support": {
+                "kurozora": {
+                    "value": true
+                },
+                "anidb": {
+                    "value": true
+                },
+                "myanimelist": {
+                    "value": true
+                },
+                "anilist": {
+                    "value": true
+                },
+                "anime-planet": {
+                    "value": true
+                },
+                "kitsu": {
+                    "value": true
+                },
+                "notify-moe": {
+                    "value": true
+                },
+                "imdb": {
+                    "value": "partial",
+                    "note": "User reviews only, since the message boards closed in 2017."
+                },
+                "livechart": {
+                    "value": false
+                },
+                "simkl": {
+                    "value": true
+                },
+                "thetvdb": {
+                    "value": false
+                },
+                "tmdb": {
+                    "value": "partial",
+                    "note": "Talk boards and reviews."
+                },
+                "trakt": {
+                    "value": true
+                }
+            }
+        },
+        {
+            "id": "experience.no-ads",
+            "label": "No ads",
+            "description": "No advertising at all, without paying to remove it.",
+            "support": {
+                "kurozora": {
+                    "value": true
+                },
+                "anidb": {
+                    "value": true
+                },
+                "myanimelist": {
+                    "value": "paid"
+                },
+                "anilist": {
+                    "value": "paid"
+                },
+                "anime-planet": {
+                    "value": "paid"
+                },
+                "kitsu": {
+                    "value": "unknown",
+                    "note": "Kitsu's ad-free PRO tier is no longer purchasable."
+                },
+                "notify-moe": {
+                    "value": true
+                },
+                "imdb": {
+                    "value": false
+                },
+                "livechart": {
+                    "value": false,
+                    "note": "Shows ads with no paid removal option."
+                },
+                "simkl": {
+                    "value": "paid",
+                    "note": "PRO, which removes ads, can also be earned free by visiting Simkl 20 days in a month."
+                },
+                "thetvdb": {
+                    "value": "paid"
+                },
+                "tmdb": {
+                    "value": true
+                },
+                "trakt": {
+                    "value": "paid"
+                }
+            }
+        }
+    ]
+}

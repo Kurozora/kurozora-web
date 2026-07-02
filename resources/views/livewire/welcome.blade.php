@@ -538,8 +538,19 @@
             </div>
         </section>
 
+        {{-- Compare --}}
+        <section class="pl-4 pr-4 pt-36 xl:safe-area-inset">
+            <div class="flex flex-col items-center m-auto max-w-2xl text-center">
+                <p class="my-2 text-4xl font-bold leading-tight md:text-6xl">{{ __('Coming from another tracker?') }}</p>
+
+                <p class="font-semibold md:text-xl">{{ __('See how :x holds up against MyAnimeList, AniList, Kitsu, and ten more services, feature by feature. Your library comes with you.', ['x' => config('app.name')]) }}</p>
+
+                <x-link-button class="mt-8 text-lg" href="{{ route('compare.index') }}" wire:navigate>{{ __('Compare Services') }}</x-link-button>
+            </div>
+        </section>
+
         {{-- FAQ --}}
-        <section class="mt-36 xl:safe-area-inset">
+        <section class="pl-4 pr-4 pt-36 pb-10 bg-secondary xl:safe-area-inset">
             <div class="pl-4 pr-4">
                 <div class="flex flex-col items-center m-auto max-w-2xl text-center">
                     <p class="my-2 text-4xl font-bold leading-tight md:text-6xl">{{ __('Let’s go over it one last time.') }}</p>

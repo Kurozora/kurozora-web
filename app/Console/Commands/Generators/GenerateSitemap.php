@@ -378,6 +378,7 @@ class GenerateSitemap extends Command
             route('manga.index'),
             route('games.index'),
             route('charts.index'),
+            route('compare.index'),
             route('museum.anime'),
             route('museum.manga'),
             route('museum.games'),
