@@ -15,6 +15,7 @@ use App\Http\Requests\GetMediaSongsRequest;
 use App\Http\Requests\GetPaginatedRequest;
 use App\Http\Requests\RateModelRequest;
 use App\Http\Requests\SearchRequest;
+use App\Http\Resources\AnimeMappingResource;
 use App\Http\Resources\AnimeResource;
 use App\Http\Resources\AnimeResourceIdentity;
 use App\Http\Resources\CharacterResourceIdentity;
@@ -37,9 +38,57 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\CursorPaginator;
 use Illuminate\Routing\Redirector;
+use Illuminate\Support\Facades\Cache;
 
 class AnimeController extends Controller
 {
+    /**
+     * Returns every anime's slug and the external service identifiers it maps to.
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function mapping(Request $request): JsonResponse
+    {
+        $fingerprint = [
+            'count' => Anime::count(),
+            'updatedAt' => (string) Anime::max('updated_at'),
+        ];
+        $etag = $this->catalogETag($fingerprint);
+        $cacheHeaders = [
+            'ETag' => $etag,
+            'Cache-Control' => 'public, max-age=3600, stale-while-revalidate=300',
+        ];
+
+        if ($request->header('If-None-Match') === $etag) {
+            return response()->json(null, JsonResponse::HTTP_NOT_MODIFIED, $cacheHeaders);
+        }
+
+        $mapping = Cache::remember('anime.mapping:' . $etag, now()->addDay(), function () {
+            return AnimeMappingResource::collection(
+                Anime::select([
+                    'slug',
+                    'mal_id',
+                    'anilist_id',
+                    'kitsu_id',
+                    'anidb_id',
+                    'animeplanet_id',
+                    'anisearch_id',
+                    'livechart_id',
+                    'notify_id',
+                    'syoboi_id',
+                    'trakt_id',
+                    'tvdb_id',
+                    'imdb_id',
+                ])->get()
+            )->resolve();
+        });
+
+        return JSONResult::success(['data' => $mapping])
+            ->withHeaders($cacheHeaders);
+    }
+
     /**
      * Returns the anime index.
      *

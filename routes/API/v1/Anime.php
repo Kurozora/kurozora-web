@@ -11,6 +11,10 @@ Route::prefix('/anime')
             ->middleware('auth.kurozora:optional')
             ->name('.index');
 
+        Route::get('/mapping', [AnimeController::class, 'mapping'])
+            ->withoutMiddleware('cache.headers:private;no_cache;etag')
+            ->name('.mapping');
+
         Route::get('/upcoming', [AnimeController::class, 'upcoming'])
             ->middleware('auth.kurozora:optional')
             ->name('.upcoming');

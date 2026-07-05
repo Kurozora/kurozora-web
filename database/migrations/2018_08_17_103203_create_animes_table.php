@@ -61,6 +61,8 @@ return new class extends Migration
 
         Schema::table(Anime::TABLE_NAME, function (Blueprint $table) {
             // Set index key constraints
+            $table->index(['deleted_at', 'imdb_id']);
+            $table->index(['deleted_at', 'tvdb_id']);
             $table->index(['deleted_at', 'tv_rating_id']);
             $table->index(['deleted_at', 'air_season']);
             $table->index(['deleted_at', 'rank_total']);
