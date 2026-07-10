@@ -107,6 +107,15 @@ class AppServiceProvider extends ServiceProvider
         // Register observers
         Anime::observe(AnimeObserver::class);
         FeedMessage::observe(FeedMessageObserver::class);
+        UserLibrary::observe(UserStateObserver::class);
+        MediaRating::observe(UserStateObserver::class);
+        UserFavorite::observe(UserStateObserver::class);
+        UserReminder::observe(UserStateObserver::class);
+        UserFollow::observe(UserStateObserver::class);
+        UserBlock::observe(UserStateObserver::class);
+        UserWatchedEpisode::observe(UserStateObserver::class);
+        FeedMessage::observe(UserStateObserver::class);
+        Reaction::observe(UserStateObserver::class);
 
         // Register events
         Event::listen(SocialiteWasCalled::class, function (SocialiteWasCalled $event): void {

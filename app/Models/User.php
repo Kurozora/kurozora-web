@@ -582,6 +582,18 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     }
 
     /**
+     * Increments the user's state version.
+     *
+     * @return void
+     */
+    public function bumpStateVersion(): void
+    {
+        $this->increment('state_version');
+
+        UserStateChanged::dispatch($this->getKey(), (int) $this->state_version);
+    }
+
+    /**
      * Eager-loads the standard profile relations onto a user query.
      *
      * @param Builder $query
