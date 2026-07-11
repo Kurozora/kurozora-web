@@ -10,6 +10,7 @@ use App\Models\MediaRating;
 use App\Models\Season;
 use App\Models\Video;
 use App\Traits\Livewire\PresentsAlert;
+use App\Traits\Livewire\PresentsSubscriptionSheet;
 use App\Traits\Livewire\WithReviewBox;
 use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
 use Illuminate\Contracts\Foundation\Application;
@@ -18,8 +19,10 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
+use Throwable;
 
 class Details extends Component
 {
@@ -285,6 +288,8 @@ class Details extends Component
 
     /**
      * Adds the anime to the user's reminder list.
+     *
+     * @throws Throwable
      */
     public function remindAnime(): void
     {
@@ -292,11 +297,15 @@ class Details extends Component
 
         if ($user->is_pro) {
             if ($this->isTracking) {
-                if ($this->isReminded) { // Don't remind the user
-                    $user->unremind($this->anime);
-                } else { // Remind the user
-                    $user->remind($this->anime);
-                }
+                DB::transaction(function () use ($user) {
+                    if ($this->isReminded) { // Don't remind the user
+                        $user->unremind($this->anime);
+                    } else { // Remind the user
+                        $user->remind($this->anime);
+                    }
+
+                    $user->bumpStateVersion();
+                });
 
                 $this->isReminded = !$this->isReminded;
             } else {

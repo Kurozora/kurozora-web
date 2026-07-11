@@ -17,9 +17,11 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\Renderless;
 use Livewire\Component;
+use Throwable;
 
 class Details extends Component
 {
@@ -275,17 +277,23 @@ class Details extends Component
 
     /**
      * Adds the anime to the user's favorite list.
+     *
+     * @throws Throwable
      */
     public function favoriteAnime(): void
     {
         $user = auth()->user();
 
         if ($this->isTracking) {
-            if ($this->isFavorited) { // Unfavorite the show
-                $user->unfavorite($this->anime);
-            } else { // Favorite the show
-                $user->favorite($this->anime);
-            }
+            DB::transaction(function () use ($user) {
+                if ($this->isFavorited) { // Unfavorite the show
+                    $user->unfavorite($this->anime);
+                } else { // Favorite the show
+                    $user->favorite($this->anime);
+                }
+
+                $user->bumpStateVersion();
+            });
 
             $this->isFavorited = !$this->isFavorited;
         }
@@ -293,6 +301,8 @@ class Details extends Component
 
     /**
      * Adds the anime to the user's reminder list.
+     *
+     * @throws Throwable
      */
     public function remindAnime(): void
     {
@@ -300,11 +310,15 @@ class Details extends Component
 
         if ($user->is_subscribed) {
             if ($this->isTracking) {
-                if ($this->isReminded) { // Don't remind the user
-                    $user->unremind($this->anime);
-                } else { // Remind the user
-                    $user->remind($this->anime);
-                }
+                DB::transaction(function () use ($user) {
+                    if ($this->isReminded) { // Don't remind the user
+                        $user->unremind($this->anime);
+                    } else { // Remind the user
+                        $user->remind($this->anime);
+                    }
+
+                    $user->bumpStateVersion();
+                });
 
                 $this->isReminded = !$this->isReminded;
             } else {

@@ -9,6 +9,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -87,7 +88,12 @@ class Index extends Component
             return;
         }
 
-        auth()->user()->unblock($blockedUser);
+        $authUser = auth()->user();
+
+        DB::transaction(function () use ($authUser, $blockedUser) {
+            $authUser->unblock($blockedUser);
+            $authUser->bumpStateVersion();
+        });
 
         $this->resetPage();
     }

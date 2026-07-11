@@ -9,6 +9,7 @@ use App\Http\Resources\UserResourceBasic;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class UserBlockController extends Controller
@@ -55,7 +56,11 @@ class UserBlockController extends Controller
             throw new BadRequestHttpException('You cannot block yourself.');
         }
 
-        $isBlocked = !is_bool($authUser->toggleBlock($user));
+        $isBlocked = DB::transaction(function () use ($authUser, $user) {
+            $result = !is_bool($authUser->toggleBlock($user));
+            $authUser->bumpStateVersion();
+            return $result;
+        });
 
         return JSONResult::success([
             'data' => [

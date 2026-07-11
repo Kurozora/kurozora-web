@@ -22,6 +22,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 
 class UserReminderController extends Controller
@@ -135,10 +136,16 @@ class UserReminderController extends Controller
         ])
             ->validate();
 
+        $isReminded = DB::transaction(function () use ($user, $models) {
+            $result = $user->toggleReminder($models);
+            $user->bumpStateVersion();
+            return $result;
+        });
+
         // Successful response
         return JSONResult::success([
             'data' => [
-                'isReminded' => $user->toggleReminder($models),
+                'isReminded' => $isReminded,
             ],
         ]);
     }

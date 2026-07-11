@@ -25,6 +25,8 @@ use Illuminate\Support\Facades\Password;
 
 class UserController extends Controller
 {
+    use WithStateVersionETag;
+
     /**
      * Return the user index.
      *

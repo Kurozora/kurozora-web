@@ -9,6 +9,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;
+use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
 
@@ -57,13 +58,23 @@ class FollowButton extends Component
             return redirect(route('sign-in'));
         }
 
-        if ($this->isFollowed) {
-            // Delete follow
-            $this->user->followers()->detach($authUser);
+        $wasFollowed = $this->isFollowed;
+
+        DB::transaction(function () use ($authUser, $wasFollowed) {
+            if ($wasFollowed) {
+                // Delete follow
+                $this->user->followers()->detach($authUser);
+            } else {
+                // Follow the user
+                $this->user->followers()->attach($authUser);
+            }
+
+            $authUser->bumpStateVersion();
+        });
+
+        if ($wasFollowed) {
             $followersCount--;
         } else {
-            // Follow the user
-            $this->user->followers()->attach($authUser);
             $followersCount++;
 
             // Send notification

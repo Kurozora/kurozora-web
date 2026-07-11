@@ -17,9 +17,11 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\Renderless;
 use Livewire\Component;
+use Throwable;
 
 class Details extends Component
 {
@@ -260,17 +262,23 @@ class Details extends Component
 
     /**
      * Adds the manga to the user's favorite list.
+     *
+     * @throws Throwable
      */
     public function favoriteManga(): void
     {
         $user = auth()->user();
 
         if ($this->isTracking) {
-            if ($this->isFavorited) { // Unfavorite the show
-                $user->unfavorite($this->manga);
-            } else { // Favorite the show
-                $user->favorite($this->manga);
-            }
+            DB::transaction(function () use ($user) {
+                if ($this->isFavorited) { // Unfavorite the show
+                    $user->unfavorite($this->manga);
+                } else { // Favorite the show
+                    $user->favorite($this->manga);
+                }
+
+                $user->bumpStateVersion();
+            });
 
             $this->isFavorited = !$this->isFavorited;
         }

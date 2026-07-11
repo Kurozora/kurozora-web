@@ -95,9 +95,13 @@ class LibraryButton extends Component
 
         // If user explicitly asked for removing from library, then also remove from favorites and reminders.
         if ($this->libraryStatus < 0) {
-            $user->untrack($this->model);
-            $user->unfavorite($this->model);
-            $user->unremind($this->model);
+            DB::transaction(function () use ($user) {
+                $user->untrack($this->model);
+                $user->unfavorite($this->model);
+                $user->unremind($this->model);
+
+                $user->bumpStateVersion();
+            });
 
             // Reset dropdown to "ADD".
             $this->libraryStatus = -1;

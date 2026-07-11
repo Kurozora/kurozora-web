@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
 
@@ -207,7 +208,13 @@ class Details extends Component
      */
     public function toggleBlockUser(): void
     {
-        auth()->user()->toggleBlock($this->user);
+        $authUser = auth()->user();
+
+        DB::transaction(function () use ($authUser) {
+            $authUser->toggleBlock($this->user);
+            $authUser->bumpStateVersion();
+        });
+
         $this->showBlockedPosts = false;
         $this->selectedPopupType = '';
         $this->showPopup = false;

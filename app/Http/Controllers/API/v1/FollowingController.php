@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\UserFollow;
 use App\Notifications\NewFollower;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class FollowingController extends Controller
@@ -28,7 +29,11 @@ class FollowingController extends Controller
             throw new BadRequestHttpException(__('You are not allowed to follow this user.'));
         }
 
-        $isFollowed = !is_bool($authUser->toggleFollow($user));
+        $isFollowed = DB::transaction(function () use ($authUser, $user) {
+            $result = !is_bool($authUser->toggleFollow($user));
+            $authUser->bumpStateVersion();
+            return $result;
+        });
 
         if ($isFollowed) {
             // Send notification

@@ -4,10 +4,13 @@ namespace App\Livewire\Anime;
 
 use App\Enums\UserLibraryStatus;
 use App\Models\Anime;
+use App\Traits\Livewire\PresentsSubscriptionSheet;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
+use Throwable;
 
 class ReminderButton extends Component
 {
@@ -52,6 +55,8 @@ class ReminderButton extends Component
     /**
      * Adds the anime to the user's reminder list, and Planning library list
      * if not tracked already.
+     *
+     * @throws Throwable
      */
     public function remindAnime(): void
     {
@@ -75,11 +80,15 @@ class ReminderButton extends Component
             return;
         }
 
-        if (!$this->isTracking) {
-            $user->track($this->anime, UserLibraryStatus::Planning());
-        }
+        DB::transaction(function () use ($user) {
+            if (!$this->isTracking) {
+                $user->track($this->anime, UserLibraryStatus::Planning());
+            }
 
-        $user->remind($this->anime);
+            $user->remind($this->anime);
+            $user->bumpStateVersion();
+        });
+
         $this->isReminded = true;
     }
 
