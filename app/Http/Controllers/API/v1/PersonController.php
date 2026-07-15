@@ -18,6 +18,7 @@ use App\Http\Resources\LiteratureResourceIdentity;
 use App\Http\Resources\MediaRatingResource;
 use App\Http\Resources\PersonResource;
 use App\Models\Person;
+use App\Traits\Controller\WithCatalogCacheHeaders;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
@@ -28,6 +29,8 @@ use Illuminate\Routing\Redirector;
 
 class PersonController extends Controller
 {
+    use WithCatalogCacheHeaders;
+
     /**
      * Returns the people index.
      *
@@ -73,6 +76,24 @@ class PersonController extends Controller
      */
     public function details(Request $request, Person $person): JsonResponse
     {
+        $includeInput = $request->input('include');
+        $includes = is_string($includeInput) ? explode(',', $includeInput) : (is_array($includeInput) ? $includeInput : []);
+        sort($includes);
+
+        $fingerprint = [
+            'kind' => 'person',
+            'publicId' => $person->public_id,
+            'updatedAt' => optional($person->updated_at)->toIso8601String(),
+            'locale' => app()->getLocale(),
+            'tvRating' => (int) $request->attributes->get('tvRating', 4),
+            'include' => $includes,
+        ];
+
+        $notModified = $this->returnIfNotModifiedCatalog($request, $fingerprint);
+        if ($notModified !== null) {
+            return $notModified;
+        }
+
         // Call the ModelViewed event
         ModelViewed::dispatch($person, $request->ip());
 
@@ -128,7 +149,7 @@ class PersonController extends Controller
         // Return person details
         return JSONResult::success([
             'data' => PersonResource::collection([$person])
-        ]);
+        ])->withHeaders($this->catalogCacheHeaders($request, $fingerprint));
     }
 
 

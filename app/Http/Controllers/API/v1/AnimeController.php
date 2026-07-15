@@ -28,6 +28,7 @@ use App\Http\Resources\ShowCastResourceIdentity;
 use App\Http\Resources\StudioResource;
 use App\Models\Anime;
 use App\Models\MediaRelation;
+use App\Traits\Controller\WithCatalogCacheHeaders;
 use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -42,6 +43,8 @@ use Illuminate\Support\Facades\Cache;
 
 class AnimeController extends Controller
 {
+    use WithCatalogCacheHeaders;
+
     /**
      * Returns every anime's slug and the external service identifiers it maps to.
      *
@@ -135,6 +138,24 @@ class AnimeController extends Controller
      */
     public function view(Request $request, ?Anime $anime): JsonResponse
     {
+        $includeInput = $request->input('include');
+        $includes = is_string($includeInput) ? explode(',', $includeInput) : (is_array($includeInput) ? $includeInput : []);
+        sort($includes);
+
+        $fingerprint = [
+            'kind' => 'anime',
+            'publicId' => $anime->public_id,
+            'updatedAt' => optional($anime->updated_at)->toIso8601String(),
+            'locale' => app()->getLocale(),
+            'tvRating' => (int) $request->attributes->get('tvRating', 4),
+            'include' => $includes,
+        ];
+
+        $notModified = $this->returnIfNotModifiedCatalog($request, $fingerprint);
+        if ($notModified !== null) {
+            return $notModified;
+        }
+
         // Call the ModelViewed event
         ModelViewed::dispatch($anime, $request->ip());
 
@@ -249,7 +270,7 @@ class AnimeController extends Controller
         // Show the Anime details response
         return JSONResult::success([
             'data' => AnimeResource::collection([$anime]),
-        ]);
+        ])->withHeaders($this->catalogCacheHeaders($request, $fingerprint));
     }
 
     /**

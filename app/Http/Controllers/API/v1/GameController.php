@@ -25,6 +25,7 @@ use App\Http\Resources\MediaStaffResource;
 use App\Http\Resources\StudioResource;
 use App\Models\Game;
 use App\Models\MediaRelation;
+use App\Traits\Controller\WithCatalogCacheHeaders;
 use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -38,6 +39,8 @@ use Illuminate\Routing\Redirector;
 
 class GameController extends Controller
 {
+    use WithCatalogCacheHeaders;
+
     /**
      * Returns the games index.
      *
@@ -84,6 +87,24 @@ class GameController extends Controller
      */
     public function view(Request $request, Game $game): JsonResponse
     {
+        $includeInput = $request->input('include');
+        $includes = is_string($includeInput) ? explode(',', $includeInput) : (is_array($includeInput) ? $includeInput : []);
+        sort($includes);
+
+        $fingerprint = [
+            'kind' => 'game',
+            'publicId' => $game->public_id,
+            'updatedAt' => optional($game->updated_at)->toIso8601String(),
+            'locale' => app()->getLocale(),
+            'tvRating' => (int) $request->attributes->get('tvRating', 4),
+            'include' => $includes,
+        ];
+
+        $notModified = $this->returnIfNotModifiedCatalog($request, $fingerprint);
+        if ($notModified !== null) {
+            return $notModified;
+        }
+
         // Call the ModelViewed event
         ModelViewed::dispatch($game, $request->ip());
 
@@ -191,7 +212,7 @@ class GameController extends Controller
         // Show the game details response
         return JSONResult::success([
             'data' => GameResource::collection([$game])
-        ]);
+        ])->withHeaders($this->catalogCacheHeaders($request, $fingerprint));
     }
 
     /**

@@ -21,6 +21,7 @@ use App\Models\Anime;
 use App\Models\Game;
 use App\Models\Manga;
 use App\Models\Studio;
+use App\Traits\Controller\WithCatalogCacheHeaders;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\JsonResponse;
@@ -29,6 +30,8 @@ use Illuminate\Routing\Redirector;
 
 class StudioController extends Controller
 {
+    use WithCatalogCacheHeaders;
+
     /**
      * Returns the studios index.
      *
@@ -74,6 +77,24 @@ class StudioController extends Controller
      */
     public function details(Request $request, Studio $studio): JsonResponse
     {
+        $includeInput = $request->input('include');
+        $includes = is_string($includeInput) ? explode(',', $includeInput) : (is_array($includeInput) ? $includeInput : []);
+        sort($includes);
+
+        $fingerprint = [
+            'kind' => 'studio',
+            'publicId' => $studio->public_id,
+            'updatedAt' => optional($studio->updated_at)->toIso8601String(),
+            'locale' => app()->getLocale(),
+            'tvRating' => (int) $request->attributes->get('tvRating', 4),
+            'include' => $includes,
+        ];
+
+        $notModified = $this->returnIfNotModifiedCatalog($request, $fingerprint);
+        if ($notModified !== null) {
+            return $notModified;
+        }
+
         // Call the ModelViewed event
         ModelViewed::dispatch($studio, $request->ip());
 
@@ -111,7 +132,7 @@ class StudioController extends Controller
         // Show studio details
         return JSONResult::success([
             'data' => StudioResource::collection([$studio])
-        ]);
+        ])->withHeaders($this->catalogCacheHeaders($request, $fingerprint));
     }
 
     /**

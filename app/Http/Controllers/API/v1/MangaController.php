@@ -23,6 +23,7 @@ use App\Http\Resources\MediaStaffResource;
 use App\Http\Resources\StudioResource;
 use App\Models\Manga;
 use App\Models\MediaRelation;
+use App\Traits\Controller\WithCatalogCacheHeaders;
 use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -36,6 +37,8 @@ use Illuminate\Routing\Redirector;
 
 class MangaController extends Controller
 {
+    use WithCatalogCacheHeaders;
+
     /**
      * Returns the manga index.
      *
@@ -81,6 +84,24 @@ class MangaController extends Controller
      */
     public function view(Request $request, Manga $manga): JsonResponse
     {
+        $includeInput = $request->input('include');
+        $includes = is_string($includeInput) ? explode(',', $includeInput) : (is_array($includeInput) ? $includeInput : []);
+        sort($includes);
+
+        $fingerprint = [
+            'kind' => 'manga',
+            'publicId' => $manga->public_id,
+            'updatedAt' => optional($manga->updated_at)->toIso8601String(),
+            'locale' => app()->getLocale(),
+            'tvRating' => (int) $request->attributes->get('tvRating', 4),
+            'include' => $includes,
+        ];
+
+        $notModified = $this->returnIfNotModifiedCatalog($request, $fingerprint);
+        if ($notModified !== null) {
+            return $notModified;
+        }
+
         // Call the ModelViewed event
         ModelViewed::dispatch($manga, $request->ip());
 
@@ -175,7 +196,7 @@ class MangaController extends Controller
         // Show the Manga details response
         return JSONResult::success([
             'data' => LiteratureResource::collection([$manga])
-        ]);
+        ])->withHeaders($this->catalogCacheHeaders($request, $fingerprint));
     }
 
     /**

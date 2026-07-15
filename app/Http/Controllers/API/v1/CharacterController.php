@@ -18,6 +18,7 @@ use App\Http\Resources\LiteratureResourceIdentity;
 use App\Http\Resources\MediaRatingResource;
 use App\Http\Resources\PersonResourceIdentity;
 use App\Models\Character;
+use App\Traits\Controller\WithCatalogCacheHeaders;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
@@ -28,6 +29,8 @@ use Illuminate\Routing\Redirector;
 
 class CharacterController extends Controller
 {
+    use WithCatalogCacheHeaders;
+
     /**
      * Returns the characters index.
      *
@@ -74,6 +77,24 @@ class CharacterController extends Controller
      */
     public function details(Request $request, Character $character): JsonResponse
     {
+        $includeInput = $request->input('include');
+        $includes = is_string($includeInput) ? explode(',', $includeInput) : (is_array($includeInput) ? $includeInput : []);
+        sort($includes);
+
+        $fingerprint = [
+            'kind' => 'character',
+            'publicId' => $character->public_id,
+            'updatedAt' => optional($character->updated_at)->toIso8601String(),
+            'locale' => app()->getLocale(),
+            'tvRating' => (int) $request->attributes->get('tvRating', 4),
+            'include' => $includes,
+        ];
+
+        $notModified = $this->returnIfNotModifiedCatalog($request, $fingerprint);
+        if ($notModified !== null) {
+            return $notModified;
+        }
+
         // Call the ModelViewed event
         ModelViewed::dispatch($character, $request->ip());
 
@@ -129,7 +150,7 @@ class CharacterController extends Controller
         // Return character details
         return JSONResult::success([
             'data' => CharacterResource::collection([$character])
-        ]);
+        ])->withHeaders($this->catalogCacheHeaders($request, $fingerprint));
     }
 
     /**

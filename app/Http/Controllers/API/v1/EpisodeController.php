@@ -13,6 +13,7 @@ use App\Http\Resources\EpisodeResource;
 use App\Http\Resources\MediaRatingResource;
 use App\Models\Anime;
 use App\Models\Episode;
+use App\Traits\Controller\WithCatalogCacheHeaders;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
@@ -20,6 +21,8 @@ use Illuminate\Http\Request;
 
 class EpisodeController extends Controller
 {
+    use WithCatalogCacheHeaders;
+
     /**
      * Returns the information for an episode.
      *
@@ -30,6 +33,24 @@ class EpisodeController extends Controller
      */
     public function details(Request $request, Episode $episode): JsonResponse
     {
+        $includeInput = $request->input('include');
+        $includes = is_string($includeInput) ? explode(',', $includeInput) : (is_array($includeInput) ? $includeInput : []);
+        sort($includes);
+
+        $fingerprint = [
+            'kind' => 'episode',
+            'publicId' => $episode->public_id,
+            'updatedAt' => optional($episode->updated_at)->toIso8601String(),
+            'locale' => app()->getLocale(),
+            'tvRating' => (int) $request->attributes->get('tvRating', 4),
+            'include' => $includes,
+        ];
+
+        $notModified = $this->returnIfNotModifiedCatalog($request, $fingerprint);
+        if ($notModified !== null) {
+            return $notModified;
+        }
+
         // Call the ModelViewed event
         ModelViewed::dispatch($episode, $request->ip());
 
@@ -42,7 +63,7 @@ class EpisodeController extends Controller
                 }])
                     ->loadExists([
                         'userWatchedEpisodes as isWatched' => function ($query) use ($user) {
-                            $query->where('user_id', '=', $user->id);
+                            $query->where('user_id', '=', $user->id)->completed();
                         }
                     ]);
             });
@@ -87,7 +108,7 @@ class EpisodeController extends Controller
 
         return JSONResult::success([
             'data' => EpisodeResource::collection([$episode])
-        ]);
+        ])->withHeaders($this->catalogCacheHeaders($request, $fingerprint));
     }
 
     /**
