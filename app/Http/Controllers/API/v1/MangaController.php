@@ -23,6 +23,7 @@ use App\Http\Resources\MediaStaffResource;
 use App\Http\Resources\StudioResource;
 use App\Models\Manga;
 use App\Models\MediaRelation;
+use App\Support\UserLibraryTouch;
 use App\Traits\Controller\WithCatalogCacheHeaders;
 use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
 use Exception;

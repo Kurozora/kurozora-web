@@ -3,19 +3,29 @@
 namespace App\Models;
 
 use App\Enums\UserLibraryStatus;
+use App\Scopes\SoftDeletingScopeBumpsUpdatedAt;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Scout\Searchable;
 
 class UserLibrary extends Pivot
 {
-    use Searchable;
+    use Searchable,
+        SoftDeletes;
 
     // Table name
     const string TABLE_NAME = 'user_libraries';
     protected $table = self::TABLE_NAME;
+
+    /**
+     * The storage format of the model's date columns.
+     *
+     * @var string|null
+     */
+    protected $dateFormat = 'Y-m-d H:i:s.u';
 
     /**
      * Indicates if the IDs are auto-incrementing.
@@ -50,6 +60,16 @@ class UserLibrary extends Pivot
         static::saving(function (UserLibrary $model) {
             $model->updateStatus($model->status);
         });
+    }
+
+    /**
+     * Boot the soft deleting trait for a model.
+     *
+     * @return void
+     */
+    public static function bootSoftDeletes(): void
+    {
+        static::addGlobalScope(new SoftDeletingScopeBumpsUpdatedAt);
     }
 
     /**

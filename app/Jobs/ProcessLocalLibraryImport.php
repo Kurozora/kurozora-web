@@ -145,7 +145,8 @@ class ProcessLocalLibraryImport implements ShouldQueue
         $createdAt = $this->convertDate($creationDate);
 
         // Add entry to their library
-        UserLibrary::updateOrCreate([
+        // `withTrashed()` avoids colliding with an existing tombstone on the unique key.
+        UserLibrary::withTrashed()->updateOrCreate([
             'user_id' => $this->user->id,
             'trackable_type' => $model->getMorphClass(),
             'trackable_id' => $model->id,
@@ -153,7 +154,8 @@ class ProcessLocalLibraryImport implements ShouldQueue
             'status' => $status,
             'started_at' => $startedAt,
             'ended_at' => $endedAt,
-            'created_at' => $createdAt
+            'created_at' => $createdAt,
+            'deleted_at' => null,
         ]);
 
         $this->registerSuccess($libraryKind, $model->id, $slug, $status);

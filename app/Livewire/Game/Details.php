@@ -246,12 +246,14 @@ class Details extends Component
 
         // Update or create the user library entry.
         UserLibrary::withoutSyncingToSearch(function () use($libraryStatus) {
-            $userLibrary = UserLibrary::updateOrCreate([
+            // `withTrashed()` avoids colliding with an existing tombstone on the unique key.
+            $userLibrary = UserLibrary::withTrashed()->updateOrCreate([
                 'user_id' => auth()->id(),
                 'trackable_type' => $this->game->getMorphClass(),
                 'trackable_id' => $this->game->id,
             ], [
                 'status' => $libraryStatus->value,
+                'deleted_at' => null,
             ]);
 
             $userLibrary->setRelation('trackable', $this->game);

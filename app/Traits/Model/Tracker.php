@@ -3,12 +3,15 @@
 namespace App\Traits\Model;
 
 use App\Enums\UserLibraryStatus;
+use App\Models\Anime;
+use App\Models\Episode;
+use App\Models\Season;
 use App\Models\UserLibrary;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Http\Client\ConnectionException;
 
 trait Tracker
 {
@@ -20,19 +23,6 @@ trait Tracker
     public function library(): HasMany
     {
         return $this->hasMany(UserLibrary::class);
-    }
-
-    /**
-     * The models tracked by the user.
-     *
-     * @param string $type
-     *
-     * @return MorphToMany
-     */
-    protected function trackedModels(string $type): MorphToMany
-    {
-        return $this->morphedByMany($type, 'trackable', UserLibrary::TABLE_NAME)
-            ->withTimestamps();
     }
 
     /**
@@ -100,17 +90,22 @@ trait Tracker
         }
 
         $modelType = $models->first()->getMorphClass();
-        $modelKeys = $models->map(fn($model) => $model->getKey());
-        $attributes = [
-            'status' => $status->value
-        ];
 
-        $this->trackedModels($modelType)
-            ->attach($modelKeys, $attributes);
+        // `withTrashed()` avoids colliding with an existing tombstone on the unique key.
+        foreach ($models as $model) {
+            UserLibrary::withTrashed()->updateOrCreate([
+                'user_id' => $this->id,
+                'trackable_type' => $modelType,
+                'trackable_id' => $model->getKey(),
+            ], [
+                'status' => $status->value,
+                'deleted_at' => null,
+            ]);
+        }
     }
 
     /**
-     * Un-track the given models.
+     * Soft-deletes the user's library entries for the given models.
      *
      * @param Model|Model[] $models
      *
@@ -133,26 +128,58 @@ trait Tracker
         }
 
         $modelType = $models->first()->getMorphClass();
-        $modelKeys = $models->map(fn($model) => $model->getKey());
+        $modelKeys = $models->map(fn($model) => $model->getKey())->all();
+
+        // Bulk soft-delete bypasses model events; unsearchable explicitly before deleting.
+        $this->library()
+            ->where('trackable_type', '=', $modelType)
+            ->whereIn('trackable_id', $modelKeys)
+            ->unsearchable();
 
         return (bool) $this->trackedModels($modelType)
             ->detach($modelKeys);
+        $untracked = (bool) $this->library()
+            ->where('trackable_type', '=', $modelType)
+            ->whereIn('trackable_id', $modelKeys)
+            ->delete();
+
+        // You can't have watched episodes of an anime that's no longer in the library.
+        if ($modelType === Anime::class) {
+            $episodeIDs = Episode::withoutGlobalScopes()
+                ->whereIn('season_id', Season::withoutGlobalScopes()
+                    ->whereIn('anime_id', $modelKeys)
+                    ->select('id'))
+                ->select('id');
+
+        return $untracked;
     }
 
     /**
-     * Clears the library of the given type.
+     * Soft-deletes every library entry of the given type.
      *
      * @param string|null $type
      *
      * @return bool
+     * @throws ConnectionException
      */
     public function clearLibrary(?string $type = null): bool
     {
-        return $this->library()
+        // Bulk soft-delete bypasses model events, so Scout never removes the rows on
+        // its own — unsearchable them first, while the non-trashed scope still sees them.
+        $this->library()
             ->when($type != null, function ($query) use ($type) {
                 $query->where('trackable_type', '=', $type);
             })
             ->forceDelete();
+            ->unsearchable();
+
+        $cleared = (bool) $this->library()
+            ->when($type != null, function ($query) use ($type) {
+                $query->where('trackable_type', '=', $type);
+            })
+            ->delete();
+
+        return $cleared;
     }
 
     /**
@@ -184,6 +211,7 @@ trait Tracker
     {
         return $this->belongsToMany($type, UserLibrary::class, 'user_id', 'trackable_id')
             ->where('trackable_type', '=', $type)
+            ->wherePivotNull('deleted_at')
             ->withPivot('status') // Needed for GET library API
             ->withTimestamps();
     }

@@ -22,9 +22,10 @@ return new class extends Migration
             $table->tinyInteger('status');
             $table->unsignedTinyInteger('rewatch_count')->default(0);
             $table->boolean('is_hidden')->default(false);
-            $table->timestamp('started_at')->nullable();
-            $table->timestamp('ended_at')->nullable();
-            $table->timestamps();
+            $table->timestamp('started_at', 6)->nullable();
+            $table->timestamp('ended_at', 6)->nullable();
+            $table->timestamps(6);
+            $table->softDeletes('deleted_at', 6);
         });
 
         Schema::table(UserLibrary::TABLE_NAME, function (Blueprint $table) {

@@ -16,6 +16,8 @@ use App\Http\Resources\CharacterResourceIdentity;
 use App\Http\Resources\GameResourceIdentity;
 use App\Http\Resources\LiteratureResourceIdentity;
 use App\Http\Resources\MediaRatingResource;
+use App\Http\Resources\MediaResource;
+use App\Http\Resources\PersonRelationshipResource;
 use App\Http\Resources\PersonResource;
 use App\Models\Person;
 use App\Traits\Controller\WithCatalogCacheHeaders;

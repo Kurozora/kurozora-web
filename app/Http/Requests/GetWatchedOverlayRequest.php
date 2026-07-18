@@ -2,13 +2,13 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\FavoriteKind;
+use App\Enums\WatchedKind;
 use Illuminate\Foundation\Http\FormRequest;
 
-class GetUserFavoritesRequest extends FormRequest
+class GetWatchedOverlayRequest extends FormRequest
 {
     /**
-     * The maximum number of IDs accepted on the overlay branch.
+     * The maximum number of IDs accepted per request.
      */
     const int MAX_IDS = 50;
 
@@ -23,7 +23,7 @@ class GetUserFavoritesRequest extends FormRequest
     }
 
     /**
-     * Normalises the deprecated `library` alias and splits comma-joined `ids`.
+     * Splits comma-joined `ids` into an array prior to validation.
      *
      * @return void
      */
@@ -31,10 +31,6 @@ class GetUserFavoritesRequest extends FormRequest
     {
         if ($this->ids && is_string($this->ids)) {
             $this->merge(['ids' => explode(',', $this->ids)]);
-        }
-
-        if (!$this->has('kind') && $this->has('library')) {
-            $this->merge(['kind' => $this->input('library')]);
         }
     }
 
@@ -45,13 +41,9 @@ class GetUserFavoritesRequest extends FormRequest
      */
     public function rules(): array
     {
-        $kindRule = 'in:' . implode(',', FavoriteKind::getValues());
-
         return [
-            'kind' => ['bail', 'nullable', 'integer', $kindRule],
-            'library' => ['bail', 'nullable', 'integer', $kindRule],
-            'limit' => ['bail', 'integer', 'min:1', 'max:100'],
-            'ids' => ['bail', 'nullable', 'array', 'max:' . self::MAX_IDS],
+            'kind' => ['bail', 'required', 'integer', 'in:' . implode(',', WatchedKind::getValues())],
+            'ids' => ['bail', 'required', 'array', 'max:' . self::MAX_IDS],
             'ids.*' => ['bail', 'string'],
         ];
     }

@@ -108,12 +108,14 @@ class LibraryButton extends Component
         } else {
             // Update or create the user library entry.
             UserLibrary::withoutSyncingToSearch(function () use ($user) {
-                $userLibrary = UserLibrary::updateOrCreate([
+                // `withTrashed()` avoids colliding with an existing tombstone on the unique key.
+                $userLibrary = UserLibrary::withTrashed()->updateOrCreate([
                     'user_id' => $user->id,
                     'trackable_type' => $this->model->getMorphClass(),
                     'trackable_id' => $this->model->id,
                 ], [
                     'status' => $this->libraryStatus,
+                    'deleted_at' => null,
                 ]);
 
                 $userLibrary->setRelation('trackable', $this->model);

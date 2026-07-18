@@ -137,6 +137,13 @@ Schedule::command('delete:expired_spammer_blocks')
     ->onOneServer();
 
 /**********************************************/
+// Delete stale library sync tombstones every day at 03:50
+Schedule::command('delete:stale_library_tombstones')
+    ->dailyAt('3:50')
+    ->name('Delete stale library tombstones')
+    ->onOneServer();
+
+/**********************************************/
 // Calculate user reputation every week
 Schedule::command('calculate:user_reputation')
     ->weeklyOn(0)

@@ -28,6 +28,7 @@ use App\Http\Resources\ShowCastResourceIdentity;
 use App\Http\Resources\StudioResource;
 use App\Models\Anime;
 use App\Models\MediaRelation;
+use App\Support\UserLibraryTouch;
 use App\Traits\Controller\WithCatalogCacheHeaders;
 use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
 use Exception;

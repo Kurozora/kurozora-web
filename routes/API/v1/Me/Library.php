@@ -22,6 +22,9 @@ Route::prefix('/library')
         Route::post('/import', [LibraryController::class, 'import'])
             ->name('.import');
 
+        Route::post('/sync', [LibraryController::class, 'sync'])
+            ->name('.sync');
+
         Route::post('/update', [LibraryController::class, 'update'])
             ->name('.update');
     });

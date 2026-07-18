@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\DeleteUserRequest;
 use App\Http\Requests\GetPaginatedRequest;
 use App\Http\Requests\GetUserIndexRequest;
+use App\Http\Requests\GetUserReviewsRequest;
 use App\Http\Requests\ResetPassword;
 use App\Http\Resources\FeedMessageResource;
 use App\Http\Resources\MediaRatingResource;
@@ -16,6 +17,9 @@ use App\Http\Resources\UserResource;
 use App\Http\Resources\UserResourceIdentity;
 use App\Models\FeedMessage;
 use App\Models\User;
+use App\Traits\Controller\WithStateVersionETag;
+use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
+use BenSampo\Enum\Exceptions\InvalidEnumMemberException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Http\JsonResponse;
@@ -166,13 +170,35 @@ class UserController extends Controller
     /**
      * Returns a list of the user's ratings.
      *
-     * @param GetPaginatedRequest $request
-     * @param User $user
+     * @param GetUserReviewsRequest $request
+     * @param User                  $user
+     *
      * @return JsonResponse
+     * @throws InvalidEnumKeyException
+     * @throws InvalidEnumMemberException
      */
-    public function getRatings(GetPaginatedRequest $request, User $user): JsonResponse
+    public function getRatings(GetUserReviewsRequest $request, User $user): JsonResponse
     {
         $data = $request->validated();
+
+        // Route to the overlay response when `ids` is present.
+        if (!empty($data['ids'])) {
+            return new MediaRatingController()->overlay($request, $user);
+        }
+
+        $limit = (int) ($data['limit'] ?? 25);
+
+        $fingerprint = [
+            'limit' => $limit,
+            'cursor' => $request->query('cursor'),
+            'targetUserId' => $user->id,
+            'isOwner' => auth()->id() === $user->id,
+        ];
+        $notModified = $this->returnIfNotModified($request, $user, $fingerprint);
+        if ($notModified !== null) {
+            return $notModified;
+        }
+        $etag = $this->stateVersionETag($user, $fingerprint);
 
         // Get the feed messages
         $mediaRatings = $user->mediaRatings()
@@ -181,7 +207,7 @@ class UserController extends Controller
                 'user' => fn($query) => $this->eagerLoadUser($query)
             ])
             ->orderBy('created_at', 'desc')
-            ->cursorPaginate($data['limit'] ?? 25);
+            ->cursorPaginate($limit);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $mediaRatings->nextPageUrl() ?? '');
@@ -189,7 +215,7 @@ class UserController extends Controller
         return JSONResult::success([
             'data' => MediaRatingResource::collection($mediaRatings),
             'next' => empty($nextPageURL) ? null : $nextPageURL
-        ]);
+        ])->withHeaders($this->stateVersionHeaders($etag, $user));
     }
 
     /**
