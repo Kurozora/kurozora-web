@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\MediaCollection;
 use App\Enums\UserActivityStatus;
 use App\Enums\UserLibraryStatus;
+use App\Events\UserStateChanged;
 use App\Helpers\OptionsBag;
 use App\Jobs\FetchSessionLocation;
 use App\Notifications\NewSession;

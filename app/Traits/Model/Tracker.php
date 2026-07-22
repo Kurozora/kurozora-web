@@ -136,8 +136,6 @@ trait Tracker
             ->whereIn('trackable_id', $modelKeys)
             ->unsearchable();
 
-        return (bool) $this->trackedModels($modelType)
-            ->detach($modelKeys);
         $untracked = (bool) $this->library()
             ->where('trackable_type', '=', $modelType)
             ->whereIn('trackable_id', $modelKeys)
@@ -150,6 +148,11 @@ trait Tracker
                     ->whereIn('anime_id', $modelKeys)
                     ->select('id'))
                 ->select('id');
+
+            $this->userWatchedEpisodes()
+                ->whereIn('episode_id', $episodeIDs)
+                ->delete();
+        }
 
         return $untracked;
     }
@@ -164,13 +167,11 @@ trait Tracker
      */
     public function clearLibrary(?string $type = null): bool
     {
-        // Bulk soft-delete bypasses model events, so Scout never removes the rows on
-        // its own — unsearchable them first, while the non-trashed scope still sees them.
+        // Bulk soft-delete bypasses model events; unsearchable explicitly before deleting.
         $this->library()
             ->when($type != null, function ($query) use ($type) {
                 $query->where('trackable_type', '=', $type);
             })
-            ->forceDelete();
             ->unsearchable();
 
         $cleared = (bool) $this->library()
@@ -178,6 +179,11 @@ trait Tracker
                 $query->where('trackable_type', '=', $type);
             })
             ->delete();
+
+        // You can't have watched episodes once the anime library is cleared.
+        if ($type === Anime::class || $type === null) {
+            $this->userWatchedEpisodes()->delete();
+        }
 
         return $cleared;
     }
