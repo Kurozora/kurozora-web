@@ -356,7 +356,7 @@ class CharacterController extends Controller
                 ['model_id', '=', $character->id],
                 ['model_type', '=', $character->getMorphClass()],
             ])
-            ->forceDelete();
+            ->first()?->delete();
 
         return JSONResult::success();
     }

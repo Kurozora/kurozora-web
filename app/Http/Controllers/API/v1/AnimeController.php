@@ -825,12 +825,16 @@ class AnimeController extends Controller
      */
     public function deleteRating(Anime $anime)
     {
-        auth()->user()->mediaRatings()
+        $user = auth()->user();
+
+        $user->mediaRatings()
             ->where([
                 ['model_id', '=', $anime->id],
                 ['model_type', '=', $anime->getMorphClass()],
             ])
-            ->forceDelete();
+            ->first()?->delete();
+
+        UserLibraryTouch::touch($user->id, $anime->getMorphClass(), [$anime->id]);
 
         return JSONResult::success();
     }

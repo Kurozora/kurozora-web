@@ -355,7 +355,7 @@ class PersonController extends Controller
                 ['model_id', '=', $person->id],
                 ['model_type', '=', $person->getMorphClass()],
             ])
-            ->forceDelete();
+            ->first()?->delete();
 
         return JSONResult::success();
     }

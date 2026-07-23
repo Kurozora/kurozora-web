@@ -313,7 +313,7 @@ class EpisodeController extends Controller
                 ['model_id', '=', $episode->id],
                 ['model_type', '=', $episode->getMorphClass()],
             ])
-            ->forceDelete();
+            ->first()?->delete();
 
         return JSONResult::success();
     }

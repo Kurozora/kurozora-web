@@ -259,7 +259,7 @@ class SongController extends Controller
                 ['model_id', '=', $song->id],
                 ['model_type', '=', $song->getMorphClass()],
             ])
-            ->forceDelete();
+            ->first()?->delete();
 
         return JSONResult::success();
     }

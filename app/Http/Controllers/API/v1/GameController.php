@@ -728,12 +728,16 @@ class GameController extends Controller
      */
     public function deleteRating(Game $game)
     {
-        auth()->user()->mediaRatings()
+        $user = auth()->user();
+
+        $user->mediaRatings()
             ->where([
                 ['model_id', '=', $game->id],
                 ['model_type', '=', $game->getMorphClass()],
             ])
-            ->forceDelete();
+            ->first()?->delete();
+
+        UserLibraryTouch::touch($user->id, $game->getMorphClass(), [$game->id]);
 
         return JSONResult::success();
     }

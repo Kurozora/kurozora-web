@@ -3,8 +3,10 @@
 namespace App\Traits\Model;
 
 use App\Models\MediaRating;
+use App\Support\UserLibraryTouch;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Http\Client\ConnectionException;
 
 trait MediaRater
 {
@@ -59,14 +61,19 @@ trait MediaRater
      * @param null|string $type
      *
      * @return bool
+     * @throws ConnectionException
      */
     public function clearRatings(?string $type = null): bool
     {
-        return $this->mediaRatings()
+        $affected = (bool) $this->mediaRatings()
             ->when($type != null, function ($query) use ($type) {
                 $query->where('model_type', '=', $type);
             })
-            ->forceDelete();
+            ->delete();
+
+        UserLibraryTouch::touchAll($this->id, $type);
+
+        return $affected;
     }
 
     /**
@@ -80,16 +87,19 @@ trait MediaRater
      */
     public function rateMediaModel(Model $model, float $rating, ?string $description = null): void
     {
+        $morphClass = $model->getMorphClass();
+        $modelKey = $model->getKey();
+
         /** @var MediaRating|null $existing */
         $existing = $this->mediaRatings()
-            ->withoutGlobalScopes()
-            ->where('model_type', '=', $model->getMorphClass())
-            ->where('model_id', '=', $model->getKey())
+            ->where('model_type', '=', $morphClass)
+            ->where('model_id', '=', $modelKey)
             ->first();
 
         if ($existing !== null) {
             if ($rating <= 0) {
-                $existing->forceDelete();
+                $existing->delete();
+                UserLibraryTouch::touch($this->id, $morphClass, [$modelKey]);
                 return;
             }
 
@@ -97,16 +107,18 @@ trait MediaRater
                 'rating' => $rating,
                 'description' => $description ?? $existing->description,
             ]);
+            UserLibraryTouch::touch($this->id, $morphClass, [$modelKey]);
             return;
         }
 
         if ($rating > 0) {
             $this->mediaRatings()->create([
-                'model_type' => $model->getMorphClass(),
-                'model_id' => $model->getKey(),
+                'model_type' => $morphClass,
+                'model_id' => $modelKey,
                 'rating' => $rating,
                 'description' => $description,
             ]);
+            UserLibraryTouch::touch($this->id, $morphClass, [$modelKey]);
         }
     }
 }

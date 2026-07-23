@@ -342,7 +342,7 @@ class StudioController extends Controller
                 ['model_id', '=', $studio->id],
                 ['model_type', '=', $studio->getMorphClass()],
             ])
-            ->forceDelete();
+            ->first()?->delete();
 
         return JSONResult::success();
     }

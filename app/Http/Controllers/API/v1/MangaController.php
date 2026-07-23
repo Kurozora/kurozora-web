@@ -661,12 +661,16 @@ class MangaController extends Controller
      */
     public function deleteRating(Manga $manga)
     {
-        auth()->user()->mediaRatings()
+        $user = auth()->user();
+
+        $user->mediaRatings()
             ->where([
                 ['model_id', '=', $manga->id],
                 ['model_type', '=', $manga->getMorphClass()],
             ])
-            ->forceDelete();
+            ->first()?->delete();
+
+        UserLibraryTouch::touch($user->id, $manga->getMorphClass(), [$manga->id]);
 
         return JSONResult::success();
     }
