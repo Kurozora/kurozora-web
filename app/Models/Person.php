@@ -70,8 +70,7 @@ class Person extends KModel implements HasMedia, Sitemapable
      */
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection(MediaCollection::Profile)
-            ->singleFile();
+        $this->addMediaCollection(MediaCollection::Profile);
     }
 
     /**

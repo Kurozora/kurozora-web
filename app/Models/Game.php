@@ -264,8 +264,7 @@ class Game extends KModel implements HasMedia, Sitemapable
      */
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection(MediaCollection::Poster)
-            ->singleFile();
+        $this->addMediaCollection(MediaCollection::Poster);
         $this->addMediaCollection(MediaCollection::Banner)
             ->singleFile();
         $this->addMediaCollection(MediaCollection::Logo)
