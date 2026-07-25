@@ -227,6 +227,13 @@ class Details extends Component
         $addStatus = str($this->addStatus)
             ->title()
             ->replace('-', '');
+
+        if (!UserLibraryStatus::hasKey($addStatus)) {
+            $this->dismissAddToLibrary();
+
+            return;
+        }
+
         $libraryStatus = UserLibraryStatus::fromKey($addStatus);
 
         // Update or create the user library entry.
