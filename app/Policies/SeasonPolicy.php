@@ -12,19 +12,6 @@ class SeasonPolicy
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can mark the season as watched.
-     *
-     * @param User $user
-     * @param Season $season
-     * @return bool
-     */
-    public function mark_as_watched(User $user, Season $season): bool
-    {
-        $anime = $season->anime;
-        return $anime !== null && $user->hasTracked($anime);
-    }
-
-    /**
      * Determine whether the user can view any models.
      *
      * @param User $user

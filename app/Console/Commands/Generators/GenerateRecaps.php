@@ -100,10 +100,11 @@ class GenerateRecaps extends Command
                         ]);
                 },
                 'userWatchedEpisodes' => function (HasMany $query) use ($startedAt, $endedAt, $year) {
-                    $query->where([
-                        [UserWatchedEpisode::TABLE_NAME . '.created_at', '>=', $startedAt],
-                        [UserWatchedEpisode::TABLE_NAME . '.created_at', '<=', $endedAt],
-                    ])
+                    $query->completed()
+                        ->where([
+                            [UserWatchedEpisode::TABLE_NAME . '.completed_at', '>=', $startedAt],
+                            [UserWatchedEpisode::TABLE_NAME . '.completed_at', '<=', $endedAt],
+                        ])
                         ->join(Episode::TABLE_NAME, UserWatchedEpisode::TABLE_NAME . '.episode_id', '=', Episode::TABLE_NAME . '.id')
                         ->join(Season::TABLE_NAME, Episode::TABLE_NAME . '.season_id', '=', Season::TABLE_NAME . '.id')
                         ->join(Anime::TABLE_NAME, Season::TABLE_NAME . '.anime_id', '=', Anime::TABLE_NAME . '.id')

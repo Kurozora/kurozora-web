@@ -13,7 +13,9 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
+use Throwable;
 
 class LibraryButton extends Component
 {
@@ -83,6 +85,7 @@ class LibraryButton extends Component
      * Updates the status of the model in the auth user's library.
      *
      * @return Application|RedirectResponse|Redirector|null
+     * @throws Throwable
      */
     public function updateLibraryStatus(): Application|RedirectResponse|Redirector|null
     {

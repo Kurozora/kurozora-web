@@ -63,7 +63,9 @@ class CalculateUserReputation extends Command
                     'libraryInProgress',
                     'libraryPlanning',
                     'libraryDropped',
-                    'userWatchedEpisodes',
+                    'userWatchedEpisodes' => function ($query) {
+                        $query->completed();
+                    },
                     'userRewatchedEpisodes',
                     'library',
                     'feedMessages',
@@ -91,7 +93,9 @@ class CalculateUserReputation extends Command
                     'libraryInProgress',
                     'libraryPlanning',
                     'libraryDropped',
-                    'userWatchedEpisodes',
+                    'userWatchedEpisodes' => function ($query) {
+                        $query->completed();
+                    },
                     'userRewatchedEpisodes',
                     'library',
                     'feedMessages',

@@ -5,6 +5,7 @@ namespace Tests\API;
 use App\Enums\UserLibraryStatus;
 use App\Models\Anime;
 use App\Models\Episode;
+use App\Models\UserWatchedEpisode;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
@@ -119,7 +120,7 @@ class MediaRatingTest extends TestCase
         $episode = $this->anime->episodes()->first();
 
         // Mark episode as watched
-        $this->user->episodes()->attach($episode);
+        $this->user->episodes()->attach($episode, UserWatchedEpisode::completedAttributes());
 
         // Rate the episode
         $response = $this->auth()->json('POST', 'v1/episodes/' . $episode->id . '/rate', [
@@ -145,7 +146,7 @@ class MediaRatingTest extends TestCase
         $episode = $this->anime->episodes()->first();
 
         // Add anime to library
-        $this->user->episodes()->attach($episode);
+        $this->user->episodes()->attach($episode, UserWatchedEpisode::completedAttributes());
 
         // Rate the anime
         $this->user->ratingsFor(Episode::class)->create([

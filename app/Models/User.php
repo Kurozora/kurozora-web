@@ -752,7 +752,10 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      */
     function hasWatched(Episode $episode): bool
     {
-        return $this->episodes()->withoutGlobalScopes()->where('episode_id', $episode->id)->exists();
+        return $this->userWatchedEpisodes()
+            ->completed()
+            ->where('episode_id', $episode->id)
+            ->exists();
     }
 
     /**
@@ -764,7 +767,10 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      */
     function hasWatchedSeason(Season $season): bool
     {
-        return $this->episodes()->withoutGlobalScopes()->where('season_id', $season->id)->count() === $season->episodes()->withoutGlobalScopes()->count();
+        return $this->userWatchedEpisodes()
+                ->completed()
+                ->whereIn('episode_id', $season->episodes()->withoutGlobalScopes()->select('id'))
+                ->count() === $season->episodes()->withoutGlobalScopes()->count();
     }
 
     /**
@@ -796,6 +802,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     function userRewatchedEpisodes(): HasMany
     {
         return $this->hasMany(UserWatchedEpisode::class)
+            ->completed()
             ->where('rewatch_count', '>', 0);
     }
 
@@ -821,9 +828,10 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
             })
             ->leftJoin(UserWatchedEpisode::TABLE_NAME, function ($join) {
                 $join->on(UserWatchedEpisode::TABLE_NAME . '.episode_id', '=', Episode::TABLE_NAME . '.id')
-                    ->where(UserWatchedEpisode::TABLE_NAME . '.user_id', '=', $this->id);
+                    ->where(UserWatchedEpisode::TABLE_NAME . '.user_id', '=', $this->id)
+                    ->whereNotNull(UserWatchedEpisode::TABLE_NAME . '.completed_at');
             })
-            ->whereNull(UserWatchedEpisode::TABLE_NAME . '.id') // Episode is not watched
+            ->whereNull(UserWatchedEpisode::TABLE_NAME . '.id') // Episode is not watched to completion
             ->where(Episode::TABLE_NAME . '.started_at', '<=', now()) // Episode has already aired
             ->select([DB::raw('MIN(' . Episode::TABLE_NAME . '.id) as episode_id'), Season::TABLE_NAME . '.anime_id'])
             ->groupBy(Season::TABLE_NAME . '.anime_id');
@@ -856,7 +864,8 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         return Episode::select(Episode::TABLE_NAME . '.*')
             ->join(UserWatchedEpisode::TABLE_NAME, function ($join) {
                 $join->on(UserWatchedEpisode::TABLE_NAME . '.episode_id', '=', Episode::TABLE_NAME . '.id')
-                    ->where(UserWatchedEpisode::TABLE_NAME . '.user_id', $this->id);
+                    ->where(UserWatchedEpisode::TABLE_NAME . '.user_id', $this->id)
+                    ->whereNotNull(UserWatchedEpisode::TABLE_NAME . '.completed_at');
             })
             ->when($modelId, function ($query) use ($modelId) {
                 $query->whereHas(Season::TABLE_NAME . '.anime', function ($q) use ($modelId) {
@@ -864,7 +873,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
                 });
             })
             ->where(Episode::TABLE_NAME . '.started_at', '<=', now())
-            ->orderBy(UserWatchedEpisode::TABLE_NAME . '.created_at', 'desc')
+            ->orderBy(UserWatchedEpisode::TABLE_NAME . '.completed_at', 'desc')
             ->with([
                 'anime' => fn ($q) => $q->with(['media', 'translation']),
                 'media',

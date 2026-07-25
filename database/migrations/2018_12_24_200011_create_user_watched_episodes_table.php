@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\WatchState;
 use App\Models\Episode;
 use App\Models\User;
 use App\Models\UserWatchedEpisode;
@@ -21,12 +22,16 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('episode_id');
             $table->unsignedTinyInteger('rewatch_count')->default(0);
+            $table->unsignedTinyInteger('state')->default(WatchState::Watching);
+            $table->timestamp('started_at')->nullable();
+            $table->timestamp('completed_at')->nullable();
             $table->timestamps();
         });
 
         Schema::table(UserWatchedEpisode::TABLE_NAME, function (Blueprint $table) {
             // Set index key constraints
             $table->index(['user_id', 'created_at', 'episode_id']);
+            $table->index(['user_id', 'completed_at']);
 
             // Set unique key constraints
             $table->unique(['episode_id', 'user_id']);

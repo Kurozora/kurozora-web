@@ -61,6 +61,7 @@ class CalculateEpisodeStats extends Command
         while (true) {
             $upperEpisodeId = DB::table($watchedTable)
                 ->where('episode_id', '>', $lastEpisodeId)
+                ->whereNotNull('completed_at')
                 ->orderBy('episode_id')
                 ->offset($watchRowsPerBatch - 1)
                 ->limit(1)
@@ -72,7 +73,7 @@ class CalculateEpisodeStats extends Command
                 'INSERT INTO `%s` (`model_type`, `model_id`, `model_count`, `created_at`, `updated_at`)
                  SELECT ?, `episode_id`, COUNT(*), NOW(), NOW()
                  FROM `%s`
-                 WHERE `episode_id` > ?%s
+                 WHERE `episode_id` > ? AND `completed_at` IS NOT NULL%s
                  GROUP BY `episode_id`
                  ON DUPLICATE KEY UPDATE
                      `model_count` = VALUES(`model_count`),

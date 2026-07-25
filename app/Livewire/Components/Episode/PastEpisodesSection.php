@@ -64,7 +64,8 @@ class PastEpisodesSection extends Component
             ->when(auth()->user(), function ($query, $user) {
                 $query->withExists([
                     'userWatchedEpisodes as isWatched' => function ($query) use ($user) {
-                        $query->where('user_id', $user->id);
+                        $query->where('user_id', $user->id)
+                            ->completed();
                     },
                 ]);
             })
