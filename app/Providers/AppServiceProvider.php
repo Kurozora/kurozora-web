@@ -4,17 +4,27 @@ namespace App\Providers;
 
 use App\Models\Anime;
 use App\Models\FeedMessage;
+use App\Models\MediaRating;
 use App\Models\PersonalAccessToken;
 use App\Models\User;
+use App\Models\UserBlock;
+use App\Models\UserFavorite;
+use App\Models\UserFollow;
+use App\Models\UserLibrary;
+use App\Models\UserReminder;
+use App\Models\UserWatchedEpisode;
 use App\Observers\AnimeObserver;
 use App\Observers\FeedMessageObserver;
+use App\Observers\UserStateObserver;
 use App\Policies\NotificationPolicy;
 use App\Providers\SocialiteProviders\AppleProvider;
 use App\Services\AppleMusicService;
 use App\Services\AppStoreService;
 use App\Services\LinkPreviewService;
 use App\Services\ReputationService;
+use App\Support\Media\ImageTransformingFileAdder;
 use Carbon\Carbon;
+use Cog\Laravel\Love\Reaction\Models\Reaction;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Console\Seeds\SeedCommand;
@@ -31,6 +41,7 @@ use Illuminate\Support\ServiceProvider;
 use Laravel\Sanctum\Sanctum;
 use RoachPHP\Roach;
 use SocialiteProviders\Manager\SocialiteWasCalled;
+use Spatie\MediaLibrary\MediaCollections\FileAdder;
 use Throwable;
 
 class AppServiceProvider extends ServiceProvider
@@ -195,5 +206,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(ReputationService::class, function () {
             return new ReputationService;
         });
+
+        // Register image transformer.
+        $this->app->bind(FileAdder::class, ImageTransformingFileAdder::class);
     }
 }

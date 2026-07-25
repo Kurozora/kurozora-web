@@ -73,7 +73,7 @@ ENV SERVER_NAME=:80
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # Install system dependencies
-RUN apk add --no-cache git curl unzip bash
+RUN apk add --no-cache git curl unzip bash libwebp-tools
 
 # Install PHP extensions (install-php-extensions is preinstalled in the FrankenPHP image)
 RUN install-php-extensions exif \

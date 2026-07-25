@@ -2,7 +2,6 @@
 
 namespace App\Listeners;
 
-use App\Jobs\ConvertImageToWebPJob;
 use App\Jobs\GenerateImageAttributesJob;
 use Bus;
 use Spatie\MediaLibrary\MediaCollections\Events\MediaHasBeenAddedEvent;
@@ -34,6 +33,8 @@ class MediaHasBeenAddedListener
     /**
      * Handle the event.
      *
+     * Fallback for media whose attributes weren't generated upfront during upload, e.g. remote-disk adds.
+     *
      * @param  MediaHasBeenAddedEvent  $event
      * @return void
      */
@@ -41,10 +42,9 @@ class MediaHasBeenAddedListener
     {
         $media = $event->media;
 
-        if (in_array($media->mime_type, $this->imageMimeTypes)) {
+        if (in_array($media->mime_type, $this->imageMimeTypes) && !$media->hasCustomProperty('width')) {
             Bus::chain([
                 new GenerateImageAttributesJob($media),
-                new ConvertImageToWebPJob($media),
             ])->dispatch();
         }
     }
