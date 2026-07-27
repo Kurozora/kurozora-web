@@ -4,12 +4,12 @@
     </x-slot:title>
 
     <x-slot:description>
-        {{ __('We rely on your support to develop Kurozora. If you find it to be useful to you, please consider supporting us by leaving a tip in the Kurozora Tip Jar. We would like to keep working on and improving Kurozora, so any amount is incredibly appreciated. Please know that even if you don’t tip we’re still grateful that you use this app.') }}
+        {{ __('We rely on your support to develop :x. If you find it to be useful to you, please consider supporting us by leaving a tip in the :x Tip Jar. We would like to keep working on and improving :x, so any amount is incredibly appreciated. Please know that even if you don’t tip we’re still grateful that you use this app.', ['x' => config('app.name')]) }}
     </x-slot:description>
 
     <x-slot:meta>
         <meta property="og:title" content="{{ __('Tip Jar') }} — {{ config('app.name') }}" />
-        <meta property="og:description" content="{{ __('We rely on your support to develop Kurozora. If you find it to be useful to you, please consider supporting us by leaving a tip in the Kurozora Tip Jar. We would like to keep working on and improving Kurozora, so any amount is incredibly appreciated. Please know that even if you don’t tip we’re still grateful that you use this app.') }}" />
+        <meta property="og:description" content="{{ __('We rely on your support to develop :x. If you find it to be useful to you, please consider supporting us by leaving a tip in the :x Tip Jar. We would like to keep working on and improving :x, so any amount is incredibly appreciated. Please know that even if you don’t tip we’re still grateful that you use this app.', ['x' => config('app.name')]) }}" />
         <link rel="canonical" href="{{ route('tip-jar') }}">
     </x-slot:meta>
 
@@ -21,7 +21,7 @@
         <section class="xl:safe-area-inset">
             <div class="pl-4 pr-4">
                 <x-purchase.header
-                    :primary="__('Kurozora Tip Jar')"
+                    :primary="__(':x Tip Jar', ['x' => config('app.name')])"
                     :secondary="$this->headerSecondary"
                 />
 

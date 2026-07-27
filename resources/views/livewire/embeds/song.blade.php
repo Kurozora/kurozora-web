@@ -9,7 +9,7 @@
 
     <x-slot:meta>
         <meta property="og:title" content="{{ $song->original_title }} — {{ config('app.name') }}" />
-        <meta property="og:description" content="{{ __('app.description') }}" />
+        <meta property="og:description" content="{{ __('A community for anime fans with an extensive library of anime, manga, music, games, movies, specials, OVA, and ONA. Only on :x, the largest, free online anime, manga, game & music database in the world. Track, share and discover anime with friends.', ['x' => config('app.name')]) }}" />
         <meta property="og:image" content="{{ $song->getFirstMediaFullUrl(\App\Enums\MediaCollection::Artwork()) ?? asset('images/static/placeholders/song_banner.webp') }}" />
         <meta property="og:type" content="music.song" />
         <meta property="og:url" content="{{ route('embed.songs', $song) }}">

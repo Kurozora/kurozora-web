@@ -50,8 +50,8 @@ class Index extends Component
     public function getHeaderSecondaryProperty(): string
     {
         return implode("\n\n", [
-            __('The Kurozora app is built by a small team—me and my little sister! We may be small, but we’re mighty, and we pour our hearts into making this app as useful and delightful as possible.'),
-            __('We rely on your support to develop Kurozora. If you find it to be useful to you, please consider supporting us by leaving a tip in the Kurozora Tip Jar. We would like to keep working on and improving Kurozora, so any amount is incredibly appreciated. Please know that even if you don’t tip we’re still grateful that you use this app.'),
+            __('The :x app is built by a small team—me and my little sister! We may be small, but we’re mighty, and we pour our hearts into making this app as useful and delightful as possible.', ['x' => config('app.name')]),
+            __('We rely on your support to develop :x. If you find it to be useful to you, please consider supporting us by leaving a tip in the :x Tip Jar. We would like to keep working on and improving :x, so any amount is incredibly appreciated. Please know that even if you don’t tip we’re still grateful that you use this app.', ['x' => config('app.name')]),
             __('Any amount unlocks Pro 🚀'),
         ]);
     }
@@ -92,7 +92,7 @@ class Index extends Component
             [
                 'image' => asset('images/static/in-app_purchases/pro_badge.jpg'),
                 'title' => __('Unlock Pro Badge'),
-                'description' => __('Elevate your status in the Kurozora community with the prestigious Pro badge next to your username, and show your support for Kurozora.'),
+                'description' => __('Elevate your status in the :x community with the prestigious Pro badge next to your username, and show your support for :x.', ['x' => config('app.name')]),
             ],
             [
                 'image' => asset('images/static/in-app_purchases/support.jpg'),

@@ -6,7 +6,7 @@
     <x-slot:content>
         <div class="flex flex-col gap-2 pt-4 pb-4 pl-4 pr-4">
             <p>{{ $sheetData['message'] }}</p>
-            <p class="text-sm text-secondary">{{ $sheetData['tipJarEnabled'] ? __('Available with Kurozora+ or Pro.') : __('Available with Kurozora+.') }}</p>
+            <p class="text-sm text-secondary">{{ $sheetData['tipJarEnabled'] ? __('Available with :x+ or Pro.', ['x' => config('app.name')]) : __('Available with :x+.', ['x' => config('app.name')]) }}</p>
         </div>
     </x-slot:content>
 
@@ -18,7 +18,7 @@
                 <x-link-button href="{{ route('tip-jar') }}" wire:navigate>{{ __('Tip Jar') }}</x-link-button>
             @endif
 
-            <x-link-button href="{{ route('kurozora-plus') }}" wire:navigate>{{ __('See Kurozora+') }}</x-link-button>
+            <x-link-button href="{{ route('kurozora-plus') }}" wire:navigate>{{ __('See :x+', ['x' => config('app.name')]) }}</x-link-button>
         </div>
     </x-slot:footer>
 </x-dialog-modal>

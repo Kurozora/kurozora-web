@@ -100,7 +100,7 @@ class Index extends Component
             [
                 'image' => asset('images/static/in-app_purchases/unified_anime_linking.png'),
                 'title' => __('Unified Anime Linking'),
-                'description' => __('Seamlessly transition from other services to Kurozora. Add ‘kurozora.app’ to any URL and let us bring all your anime data in one place.'),
+                'description' => __('Seamlessly transition from other services to :x. Add ‘:site’ to any URL and let us bring all your anime data in one place.', ['x' => config('app.name'), 'site' => config('app.domain')]),
             ],
             [
                 'image' => asset('images/static/in-app_purchases/reminders.png'),
@@ -140,7 +140,7 @@ class Index extends Component
             [
                 'image' => asset('images/static/in-app_purchases/subscriber_badge.jpg'),
                 'title' => __('Unlock Subscriber Badge'),
-                'description' => __('Stand out in the community with an exclusive subscription badge that evolves over time as you continue to support Kurozora!'),
+                'description' => __('Stand out in the community with an exclusive subscription badge that evolves over time as you continue to support :x!', ['x' => config('app.name')]),
             ],
             [
                 'image' => asset('images/static/in-app_purchases/support.jpg'),

@@ -113,39 +113,39 @@ class Index extends Component
         return [
             [
                 'title' => __(':x vs. AniDB', ['x' => config('app.name')]),
-                'paragraph' => __('AniDB tracks anime at a depth nobody else attempts, down to the individual file, and it’s completely free of ads. It’s built for the archival crowd: no official apps and no push notifications, on purpose. Kurozora aims at everyday watching instead, a push the moment something airs, calendar integration, and a yearly Re:CAP of it all.'),
+                'paragraph' => __('AniDB tracks anime at a depth nobody else attempts, down to the individual file, and it’s completely free of ads. It’s built for the archival crowd: no official apps and no push notifications, on purpose. :x aims at everyday watching instead, a push the moment something airs, calendar integration, and a yearly Re:CAP of it all.', ['x' => config('app.name')]),
             ],
             [
                 'title' => __(':x vs. MyAnimeList', ['x' => config('app.name')]),
-                'paragraph' => __('MyAnimeList is where most people start, and its community is by far the biggest. The site itself is showing its age though: the iPhone app hasn’t seen an update since early 2024, there are no push notifications, and removing ads costs $2.99 a month. Kurozora sends a free push the moment an episode airs, catalogs theme songs with synced lyrics, recaps your year, and imports your MyAnimeList library in one step.'),
+                'paragraph' => __('MyAnimeList is where most people start, and its community is by far the biggest. The site itself is showing its age though: the iPhone app hasn’t seen an update since early 2024, there are no push notifications, and removing ads costs $2.99 a month. :x sends a free push the moment an episode airs, catalogs theme songs with synced lyrics, recaps your year, and imports your MyAnimeList library in one step.', ['x' => config('app.name')]),
             ],
             [
                 'title' => __(':x vs. AniList', ['x' => config('app.name')]),
-                'paragraph' => __('AniList has a clean site and flexible lists, but there’s no official app, and airing notifications only show up in the on-site bell. Kurozora ships its own apps for iPhone, iPad, and Mac, notifies your device when episodes air, and covers theme songs with synced lyrics, which AniList doesn’t index at all.'),
+                'paragraph' => __('AniList has a clean site and flexible lists, but there’s no official app, and airing notifications only show up in the on-site bell. :x ships its own apps for iPhone, iPad, and Mac, notifies your device when episodes air, and covers theme songs with synced lyrics, which AniList doesn’t index at all.', ['x' => config('app.name')]),
             ],
             [
                 'title' => __(':x vs. Anime-Planet', ['x' => config('app.name')]),
-                'paragraph' => __('Anime-Planet has been around since 2001 and its hand-made recommendations are still the best reason to visit. It has no apps and no notifications, and going ad-free costs $5 a month on Patreon. Kurozora is ad-free for everyone, tells you the moment an episode airs, and lives on your phone, tablet, and Mac.'),
+                'paragraph' => __('Anime-Planet has been around since 2001 and its hand-made recommendations are still the best reason to visit. It has no apps and no notifications, and going ad-free costs $5 a month on Patreon. :x is ad-free for everyone, tells you the moment an episode airs, and lives on your phone, tablet, and Mac.', ['x' => config('app.name')]),
             ],
             [
                 'title' => __(':x vs. Kitsu', ['x' => config('app.name')]),
-                'paragraph' => __('Kitsu still runs, but its mobile apps were pulled from the stores and the website hasn’t seen real development since early 2025. If you’re on Kitsu, your library moves over to Kurozora in a single import, so nothing is lost.'),
+                'paragraph' => __('Kitsu still runs, but its mobile apps were pulled from the stores and the website hasn’t seen real development since early 2025. If you’re on Kitsu, your library moves over to :x in a single import, so nothing is lost.', ['x' => config('app.name')]),
             ],
             [
                 'title' => __(':x vs. Notify.moe', ['x' => config('app.name')]),
-                'paragraph' => __('Notify.moe is a lovely, minimal tracker, but its developer moved on in 2022 and the project has been archived since. Kurozora is actively developed and isn’t going anywhere.'),
+                'paragraph' => __('Notify.moe is a lovely, minimal tracker, but its developer moved on in 2022 and the project has been archived since. :x is actively developed and isn’t going anywhere.', ['x' => config('app.name')]),
             ],
             [
                 'title' => __(':x vs. LiveChart', ['x' => config('app.name')]),
-                'paragraph' => __('LiveChart is the best seasonal chart on the web and its episode notifications are free. Tracking on it stays light though, with no character pages and no manga, and the app is Android-only, with ads you can’t pay to remove. Kurozora pairs the same airing alerts with per-episode progress, characters and voice actors, reviews, and a yearly Re:CAP.'),
+                'paragraph' => __('LiveChart is the best seasonal chart on the web and its episode notifications are free. Tracking on it stays light though, with no character pages and no manga, and the app is Android-only, with ads you can’t pay to remove. :x pairs the same airing alerts with per-episode progress, characters and voice actors, reviews, and a yearly Re:CAP.', ['x' => config('app.name')]),
             ],
             [
                 'title' => __(':x vs. Simkl', ['x' => config('app.name')]),
-                'paragraph' => __('Simkl combines anime with TV and movies and imports from more services than anyone else. But much of the everyday experience sits behind PRO or VIP: rewatch tracking, custom lists, recommendations, calendar feeds, the Year in Review, even choosing romaji titles. It doesn’t track manga or games, and its iOS app was last updated in 2022. On Kurozora, rewatch tracking and title languages are free. So is the fan layer Simkl skips: characters, voice actors, theme songs with synced lyrics, and parental guides.'),
+                'paragraph' => __('Simkl combines anime with TV and movies and imports from more services than anyone else. But much of the everyday experience sits behind PRO or VIP: rewatch tracking, custom lists, recommendations, calendar feeds, the Year in Review, even choosing romaji titles. It doesn’t track manga or games, and its iOS app was last updated in 2022. On :x, rewatch tracking and title languages are free. So is the fan layer Simkl skips: characters, voice actors, theme songs with synced lyrics, and parental guides.', ['x' => config('app.name')]),
             ],
             [
                 'title' => __(':x vs. Trakt', ['x' => config('app.name')]),
-                'paragraph' => __('Trakt is a TV-and-movies tracker first, with a very active app. Anime is served through TMDB data, which is where the season-numbering headaches come from, and the calendar plus Year in Review live behind the $60-a-year VIP tier. Kurozora is anime-first, so numbering just works, and your yearly Re:CAP is free.'),
+                'paragraph' => __('Trakt is a TV-and-movies tracker first, with a very active app. Anime is served through TMDB data, which is where the season-numbering headaches come from, and the calendar plus Year in Review live behind the $60-a-year VIP tier. :x is anime-first, so numbering just works, and your yearly Re:CAP is free.', ['x' => config('app.name')]),
             ],
             [
                 'title' => __(':x vs. TheTVDB, IMDb & TMDB', ['x' => config('app.name')]),
@@ -164,15 +164,15 @@ class Index extends Component
         return [
             [
                 'question' => __('Which anime tracker is best?'),
-                'answer' => __('It depends on what you care about. MyAnimeList has the biggest community, AniDB has the deepest data, and Anime-Planet has the best hand-made recommendations. Kurozora is built to do the whole job in one place, from tracking and notifications to characters, music, achievements, and parental guides, with no ads on the web or in the apps.'),
+                'answer' => __('It depends on what you care about. MyAnimeList has the biggest community, AniDB has the deepest data, and Anime-Planet has the best hand-made recommendations. :x is built to do the whole job in one place, from tracking and notifications to characters, music, achievements, and parental guides, with no ads on the web or in the apps.', ['x' => config('app.name')]),
             ],
             [
                 'question' => __('Which anime trackers have no ads?'),
-                'answer' => __('Kurozora, AniDB, Notify.moe, and TMDB show no ads at all. MyAnimeList, AniList, Anime-Planet, Simkl, Trakt, and TheTVDB charge to remove theirs, and LiveChart has ads you can’t remove at any price.'),
+                'answer' => __(':x, AniDB, Notify.moe, and TMDB show no ads at all. MyAnimeList, AniList, Anime-Planet, Simkl, Trakt, and TheTVDB charge to remove theirs, and LiveChart has ads you can’t remove at any price.', ['x' => config('app.name')]),
             ],
             [
                 'question' => __('What is the best MyAnimeList alternative?'),
-                'answer' => __('AniList, if you mostly want a nicer website. Kurozora, if you want native apps, free episode notifications, synced theme-song lyrics, and a library that also covers manga and games. Your MyAnimeList export drops straight in.'),
+                'answer' => __('AniList, if you mostly want a nicer website. :x, if you want native apps, free episode notifications, synced theme-song lyrics, and a library that also covers manga and games. Your MyAnimeList export drops straight in.', ['x' => config('app.name')]),
             ],
         ];
     }
@@ -192,7 +192,7 @@ class Index extends Component
             'partial' => __('Partial'),
             'free' => __('Free'),
             'paid' => __('Paid'),
-            'plus' => __('Kurozora+'),
+            'plus' => __(':x+', ['x' => config('app.name')]),
             'site-only' => __('Site only'),
             'browser' => __('Browser'),
             'unmaintained' => __('Unmaintained'),

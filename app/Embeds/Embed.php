@@ -77,7 +77,7 @@ abstract class Embed
     {
         return match($this->resource->videoable_type) {
             Anime::class, Episode::class => $this->resource->videoable->title,
-            default => __('Anime on Kurozora')
+            default => __('Anime on :x', ['x' => config('app.name')])
         };
     }
 

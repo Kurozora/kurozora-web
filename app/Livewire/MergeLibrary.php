@@ -176,15 +176,15 @@ class MergeLibrary extends Component
         $this->popupData = match($type) {
             'local' => [
                 'title' => __('Keep Local Library'),
-                'message' => __('Selecting this option will overwrite your Kurozora Library with the data from your Local Library. Your Local Library will be erased after that.')
+                'message' => __('Selecting this option will overwrite your :x Library with the data from your Local Library. Your Local Library will be erased after that.', ['x' => config('app.name')])
             ],
             'kurozora' => [
-                'title' => __('Keep Kurozora Library'),
-                'message' => __('Selecting this option will erase your Local Library while preserving your Kurozora Library.')
+                'title' => __('Keep :x Library', ['x' => config('app.name')]),
+                'message' => __('Selecting this option will erase your Local Library while preserving your :x Library.', ['x' => config('app.name')])
             ],
             'merge' => [
                 'title' => __('Merge Both Libraries'),
-                'message' => __('Selecting this option will merge your Local Library with your Kurozora Library. Your Local Library will be erased after that.')
+                'message' => __('Selecting this option will merge your Local Library with your :x Library. Your Local Library will be erased after that.', ['x' => config('app.name')])
             ],
             default => [
                 'title' => '',

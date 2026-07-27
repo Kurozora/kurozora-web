@@ -9,7 +9,7 @@
 
     <x-slot:meta>
         <meta property="og:title" content="{{ $platform->name }} — {{ config('app.name') }}" />
-        <meta property="og:description" content="{{ $platform->synopsis ?? __('app.description') }}" />
+        <meta property="og:description" content="{{ $platform->synopsis ?? __('A community for anime fans with an extensive library of anime, manga, music, games, movies, specials, OVA, and ONA. Only on :x, the largest, free online anime, manga, game & music database in the world. Track, share and discover anime with friends.', ['x' => config('app.name')]) }}" />
         <meta property="og:image" content="{{ $platform->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/person_poster.webp') }}" />
         <meta property="og:type" content="profile" />
         <meta property="og:profile:username" content="{{ $platform->name }}" />

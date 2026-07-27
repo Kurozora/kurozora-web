@@ -83,7 +83,7 @@
 
             <div class="mt-2 pl-4 pr-4">
                 <p class="text-sm text-secondary">
-                    {{ __('Adding to WhatsApp requires the Kurozora iOS app.') }}
+                    {{ __('Adding to WhatsApp requires the :x iOS app.', ['x' => config('app.name')]) }}
                     <x-link target="_blank" href="{{ config('app.ios.store_url') }}">{{ __('Get it on the App Store') }}</x-link>
                 </p>
             </div>

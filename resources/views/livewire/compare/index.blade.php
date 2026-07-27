@@ -1,15 +1,15 @@
 <main>
     <x-slot:title>
-        {{ __('Kurozora vs. MyAnimeList, AniList, Kitsu & Other Anime Trackers') }}
+        {{ __(':x vs. MyAnimeList, AniList, Kitsu & Other Anime Trackers', ['x' => config('app.name')]) }}
     </x-slot:title>
 
     <x-slot:description>
-        {{ __('Comparing the best anime tracking apps and websites: Kurozora, MyAnimeList, AniList, Kitsu, AniDB, Simkl, Trakt, and more. Every feature side by side, including which trackers have no ads.') }}
+        {{ __('Comparing the best anime tracking apps and websites: :x, MyAnimeList, AniList, Kitsu, AniDB, Simkl, Trakt, and more. Every feature side by side, including which trackers have no ads.', ['x' => config('app.name')]) }}
     </x-slot:description>
 
     <x-slot:meta>
-        <meta property="og:title" content="{{ __('Kurozora vs. MyAnimeList, AniList, Kitsu & Other Anime Trackers') }} — {{ config('app.name') }}" />
-        <meta property="og:description" content="{{ __('Comparing the best anime tracking apps and websites: Kurozora, MyAnimeList, AniList, Kitsu, AniDB, Simkl, Trakt, and more. Every feature side by side, including which trackers have no ads.') }}" />
+        <meta property="og:title" content="{{ __(':x vs. MyAnimeList, AniList, Kitsu & Other Anime Trackers', ['x' => config('app.name')]) }} — {{ config('app.name') }}" />
+        <meta property="og:description" content="{{ __('Comparing the best anime tracking apps and websites: :x, MyAnimeList, AniList, Kitsu, AniDB, Simkl, Trakt, and more. Every feature side by side, including which trackers have no ads.', ['x' => config('app.name')]) }}" />
         <link rel="canonical" href="{{ route('compare.index') }}">
     </x-slot:meta>
 
@@ -23,7 +23,7 @@
                 <section class="m-auto max-w-4xl prose prose-theme lg:prose-lg">
                     <div class="text-center">
                         <h1>{{ __('How does :x compare?', ['x' => config('app.name')]) }}</h1>
-                        <p>{{ __('Kurozora is a free tracker without ads. It sends a push when episodes air, knows the lyrics to your favorite openings, and recaps your year in anime. Here is how it stacks up against the services people usually compare it with.') }}</p>
+                        <p>{{ __(':x is a free tracker without ads. It sends a push when episodes air, knows the lyrics to your favorite openings, and recaps your year in anime. Here is how it stacks up against the services people usually compare it with.', ['x' => config('app.name')]) }}</p>
                     </div>
 
                     <x-hr />

@@ -10,7 +10,7 @@
 
     <x-slot:meta>
         <meta property="og:title" content="{{ __(':x episode :y', ['x' => $anime->title, 'y' => $episode->number_total]) }} | {{ $episode->title }} — {{ config('app.name') }}" />
-        <meta property="og:description" content="{{ $episode->synopsis ?? __('app.description') }}" />
+        <meta property="og:description" content="{{ $episode->synopsis ?? __('A community for anime fans with an extensive library of anime, manga, music, games, movies, specials, OVA, and ONA. Only on :x, the largest, free online anime, manga, game & music database in the world. Track, share and discover anime with friends.', ['x' => config('app.name')]) }}" />
         <meta property="og:image" content="{{ $episode->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $season->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/episode_banner.webp') }}" />
         <meta property="og:type" content="video.episode" />
         <meta property="og:video:type" content="text/html">

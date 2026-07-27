@@ -5,7 +5,7 @@
 
     <x-slot:meta>
         <meta property="og:title" content="Welcome to {{ config('app.name') }}" />
-        <meta property="og:description" content="{{ __('app.description') }}" />
+        <meta property="og:description" content="{{ __('A community for anime fans with an extensive library of anime, manga, music, games, movies, specials, OVA, and ONA. Only on :x, the largest, free online anime, manga, game & music database in the world. Track, share and discover anime with friends.', ['x' => config('app.name')]) }}" />
         <meta property="og:image" content="{{ asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="og:type" content="website" />
         <link rel="canonical" href="{{ route('welcome') }}">

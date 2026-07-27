@@ -4,12 +4,12 @@
     </x-slot:title>
 
     <x-slot:description>
-        {{ __('Take your tracking to the next level with Kurozora+. Get access to exclusive features like GIF profile images, premium app icons, customizable themes, and iCal reminders to never miss an episode. Upgrade to Kurozora+ and get the ultimate experience.') }}
+        {{ __('Take your tracking to the next level with :x+. Get access to exclusive features like GIF profile images, premium app icons, customizable themes, and iCal reminders to never miss an episode. Upgrade to :x+ and get the ultimate experience.', ['x' => config('app.name')]) }}
     </x-slot:description>
 
     <x-slot:meta>
         <meta property="og:title" content="{{ __('Become a Subscriber') }} — {{ config('app.name') }}" />
-        <meta property="og:description" content="{{ __('Take your tracking to the next level with Kurozora+. Get access to exclusive features like GIF profile images, premium app icons, customizable themes, and iCal reminders to never miss an episode. Upgrade to Kurozora+ and get the ultimate experience.') }}" />
+        <meta property="og:description" content="{{ __('Take your tracking to the next level with :x+. Get access to exclusive features like GIF profile images, premium app icons, customizable themes, and iCal reminders to never miss an episode. Upgrade to :x+ and get the ultimate experience.', ['x' => config('app.name')]) }}" />
         <link rel="canonical" href="{{ route('kurozora-plus') }}">
     </x-slot:meta>
 
@@ -21,8 +21,8 @@
         <section class="xl:safe-area-inset">
             <div class="pl-4 pr-4">
                 <x-purchase.header
-                    :primary="__('Elevate your tracking with Kurozora+')"
-                    :secondary="__('Take your tracking to the next level with Kurozora+. Get access to exclusive features like GIF profile images, premium app icons, customizable themes, and iCal reminders to never miss an episode. Upgrade to Kurozora+ and get the ultimate experience.')"
+                    :primary="__('Elevate your tracking with :x+', ['x' => config('app.name')])"
+                    :secondary="__('Take your tracking to the next level with :x+. Get access to exclusive features like GIF profile images, premium app icons, customizable themes, and iCal reminders to never miss an episode. Upgrade to :x+ and get the ultimate experience.', ['x' => config('app.name')])"
                 />
 
                 <p class="pb-6 text-sm text-secondary text-center max-w-2xl mx-auto">

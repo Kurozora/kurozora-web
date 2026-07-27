@@ -72,7 +72,7 @@ final class KTheme extends Enum
     public function descriptionValue(?AppTheme $theme = null): string
     {
         return match ($this->value) {
-            self::KUROZORA => __('The official Kurozora theme.'),
+            self::KUROZORA => __('The official :x theme.', ['x' => config('app.name')]),
             self::DAY => __('Rise and shine.'),
             self::NIGHT => __('Easy on the eyes.'),
             self::GRASS => __('Get off my lawn!'),

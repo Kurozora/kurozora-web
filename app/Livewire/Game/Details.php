@@ -357,7 +357,7 @@ class Details extends Component
 
         $summary = array_filter([implode(' · ', $facts), $this->game->synopsis]);
 
-        return implode(' — ', $summary) ?: __('app.description');
+        return implode(' — ', $summary) ?: __('A community for anime fans with an extensive library of anime, manga, music, games, movies, specials, OVA, and ONA. Only on :x, the largest, free online anime, manga, game & music database in the world. Track, share and discover anime with friends.', ['x' => config('app.name')]);
     }
 
     /**
