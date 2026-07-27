@@ -20,8 +20,8 @@ return new class extends Migration
             $table->unsignedBigInteger('parent_id')->nullable();
             $table->uuid();
             $table->unsignedBigInteger('love_reacter_id')->nullable();
-            $table->bigInteger('tv_rating')->default(4);
             $table->string('siwa_id')->nullable();
+            $table->bigInteger('tv_rating')->default(4);
             $table->string('language_id', 2)->default('en')->nullable();
             $table->string('slug');
             $table->string('username', 50)->nullable();

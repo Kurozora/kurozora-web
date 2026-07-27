@@ -22,7 +22,7 @@ class AppleMusicService
      */
     public function developerToken(): array
     {
-        if (blank(config('services.apple.music.private_key')) || blank(config('services.apple.music.key_id')) || blank(config('services.apple.music.team_id'))) {
+        if (blank(config('services.apple.private_key')) || blank(config('services.apple.key_id')) || blank(config('services.apple.team_id'))) {
             return ['token' => null, 'expiresAt' => null];
         }
 
@@ -50,10 +50,10 @@ class AppleMusicService
         $expiresAt = $issuedAt + $ttl;
 
         $token = JWT::encode([
-            'iss' => config('services.apple.music.team_id'),
+            'iss' => config('services.apple.team_id'),
             'iat' => $issuedAt,
             'exp' => $expiresAt,
-        ], config('services.apple.music.private_key'), 'ES256', config('services.apple.music.key_id'));
+        ], config('services.apple.private_key'), 'ES256', config('services.apple.key_id'));
 
         return ['token' => $token, 'expiresAt' => $expiresAt];
     }
