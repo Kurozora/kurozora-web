@@ -100,6 +100,7 @@ require 'Web/Tip Jar.php';
 require 'Web/Trakt.php';
 require 'Web/TVDB.php';
 require 'Web/UpNext.php';
+require 'Web/Minigames/Kotodama.php';
 
 // Knowledge Base
 require 'Web/Knowledge Base.php';

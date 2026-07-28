@@ -44,6 +44,9 @@ use App\Nova\MediaTag;
 use App\Nova\MediaTheme;
 use App\Nova\MediaType;
 use App\Nova\Mention;
+use App\Nova\Minigames\Kotodama\DailyPuzzle;
+use App\Nova\Minigames\Kotodama\Game as KotodamaGame;
+use App\Nova\Minigames\Kotodama\Word;
 use App\Nova\Notification;
 use App\Nova\ParentalGuideEntry;
 use App\Nova\Permission;
@@ -80,10 +83,6 @@ use App\Nova\UserLibrary;
 use App\Nova\UserReminder;
 use App\Nova\Video;
 use App\Nova\View;
-use App\Nova\WordleCategory;
-use App\Nova\WordleDailyPuzzle;
-use App\Nova\WordleGame as NovaWordleGame;
-use App\Nova\WordleWord;
 use App\Policies\PermissionPolicy;
 use App\Policies\RolePolicy;
 use Illuminate\Http\Request;
@@ -344,6 +343,17 @@ if (class_exists('Laravel\Nova\NovaApplicationServiceProvider')) {
                         ->canSee(function ($request) {
                             return $request->user()->hasRole('superAdmin');
                         }),
+
+                    MenuSection::make(
+                        __('Minigames'),
+                        collect([
+                            Word::class,
+                            DailyPuzzle::class,
+                            KotodamaGame::class,
+                        ])->map(fn($resource) => MenuItem::resource($resource))
+                    )
+                        ->collapsable()
+                        ->icon('rectangle-group'),
 
                     collect($this->tools())
                         ->map(fn($tool) => $tool->menu($request)),

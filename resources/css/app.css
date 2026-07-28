@@ -376,6 +376,28 @@ body:has([data-lyrics][data-open]) {
   overscroll-behavior: contain;
 }
 
+/**
+ * Kotodama
+ */
+.kotodama-tile-hit {
+  background-color: #FF9300;
+  border-color: #FF9300;
+  color: #FFFFFF;
+}
+.kotodama-tile-present {
+  background-color: #A550CC;
+  border-color: #A550CC;
+  color: #FFFFFF;
+}
+.kotodama-tile-miss {
+  background-color: #000000;
+  border-color: #000000;
+  color: #FFFFFF;
+}
+
+/**
+ * Lyrics
+ */
 .lyrics-line {
   padding: 12px 20px;
   font-size: 26px;

@@ -51,6 +51,7 @@ Route::prefix('/v1')
         require 'API/v1/Themes.php';
         require 'API/v1/Theme Store.php';
         require 'API/v1/Users.php';
+        require 'API/v1/Minigames/Kotodama.php';
     });
 
 Route::get('/{wordpress_url}', [APIController::class, 'markSpammer'])

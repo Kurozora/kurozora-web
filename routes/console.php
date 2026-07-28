@@ -59,6 +59,28 @@ Schedule::command('fix:manga_details')
     ->onOneServer();
 
 /**********************************************/
+// Top up the Kotodama word bank from the catalog every Monday at 03:40
+Schedule::command('kotodama:generate-words')
+    ->weeklyOn(1, '3:40')
+    ->name('Generate Kotodama words')
+    ->withoutOverlapping()
+    ->onOneServer();
+
+/**********************************************/
+// Schedule tomorrow's Kotodama puzzles every day at 00:10
+Schedule::command('kotodama:schedule')
+    ->dailyAt('0:10')
+    ->name('Schedule tomorrow\'s Kotodama puzzles')
+    ->onOneServer();
+
+/**********************************************/
+// Sweep abandoned daily Kotodama games every day at 00:20
+Schedule::command('kotodama:sweep-abandoned')
+    ->dailyAt('0:20')
+    ->name('Sweep abandoned Kotodama games')
+    ->onOneServer();
+
+/**********************************************/
 // Notify users whose moderation timeout has just expired
 Schedule::command('timeouts:notify-expired')
     ->everyFiveMinutes()

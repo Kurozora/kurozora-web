@@ -1,5 +1,6 @@
 import './echo'
 import './bootstrap'
+import './minigames/kotodama'
 
 document.addEventListener('livewire:init', () => {
     Livewire.hook('request', ({ options }) => {
