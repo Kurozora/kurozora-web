@@ -11,9 +11,9 @@
 @endphp
 
 <article
-    class="relative pt-3 pr-3 pb-3"
+    class="relative pt-3 pr-3 pb-3 pl-8"
     @if ($supportsSelect)
-        :class="selectMode ? 'pl-8 cursor-pointer select-none' : ''"
+        :class="selectMode ? 'cursor-pointer select-none' : ''"
         @click="selectMode && toggleSelection('{{ $notification->id }}', {{ $isUnread ? 'true' : 'false' }})"
     @endif
 >
