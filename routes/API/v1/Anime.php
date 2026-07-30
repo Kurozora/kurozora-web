@@ -1,6 +1,8 @@
 <?php
 
+use App\Enums\UserLibraryKind;
 use App\Http\Controllers\API\v1\AnimeController;
+use App\Http\Controllers\API\v1\MuseumController;
 use App\Http\Controllers\API\v1\ParentalGuideController;
 
 Route::prefix('/anime')
@@ -22,6 +24,17 @@ Route::prefix('/anime')
         Route::get('/seasons', [AnimeController::class, 'browseSeason'])
             ->middleware('auth.kurozora:optional')
             ->name('.browse-seasons');
+
+        Route::get('/museum', [MuseumController::class, 'index'])
+            ->middleware('auth.kurozora:optional')
+            ->defaults('kind', UserLibraryKind::Anime)
+            ->name('.museum');
+
+        Route::get('/museum/{year}', [MuseumController::class, 'year'])
+            ->middleware('auth.kurozora:optional')
+            ->defaults('kind', UserLibraryKind::Anime)
+            ->whereNumber('year')
+            ->name('.museum.year');
 
         Route::prefix('{anime}')
             ->group(function () {

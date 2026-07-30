@@ -23,6 +23,10 @@
                     <li class="mt-2">
                         <x-footer-link href="{{ route('anime.seasons.archive') }}" wire:navigate>{{ __('Anime Archive') }}</x-footer-link>
                     </li>
+
+                    <li class="mt-2">
+                        <x-footer-link href="{{ route('museum.anime') }}" wire:navigate>{{ __('Anime Museum') }}</x-footer-link>
+                    </li>
                 </ul>
             </div>
 
@@ -48,6 +52,10 @@
                     <li class="mt-2">
                         <x-footer-link href="{{ route('manga.seasons.archive') }}" wire:navigate>{{ __('Manga Archive') }}</x-footer-link>
                     </li>
+
+                    <li class="mt-2">
+                        <x-footer-link href="{{ route('museum.manga') }}" wire:navigate>{{ __('Manga Museum') }}</x-footer-link>
+                    </li>
                 </ul>
             </div>
 
@@ -68,6 +76,10 @@
 
                     <li class="mt-2">
                         <x-footer-link href="{{ route('games.seasons.archive') }}" wire:navigate>{{ __('Games Archive') }}</x-footer-link>
+                    </li>
+
+                    <li class="mt-2">
+                        <x-footer-link href="{{ route('museum.games') }}" wire:navigate>{{ __('Games Museum') }}</x-footer-link>
                     </li>
                 </ul>
             </div>

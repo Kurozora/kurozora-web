@@ -1,6 +1,8 @@
 <?php
 
+use App\Enums\UserLibraryKind;
 use App\Http\Controllers\API\v1\GameController;
+use App\Http\Controllers\API\v1\MuseumController;
 use App\Http\Controllers\API\v1\ParentalGuideController;
 
 Route::prefix('/games')
@@ -18,6 +20,17 @@ Route::prefix('/games')
         Route::get('/seasons', [GameController::class, 'browseSeason'])
             ->middleware('auth.kurozora:optional')
             ->name('.seasons');
+
+        Route::get('/museum', [MuseumController::class, 'index'])
+            ->middleware('auth.kurozora:optional')
+            ->defaults('kind', UserLibraryKind::Game)
+            ->name('.museum');
+
+        Route::get('/museum/{year}', [MuseumController::class, 'year'])
+            ->middleware('auth.kurozora:optional')
+            ->defaults('kind', UserLibraryKind::Game)
+            ->whereNumber('year')
+            ->name('.museum.year');
 
         Route::prefix('{game}')
             ->group(function () {
