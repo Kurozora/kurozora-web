@@ -9,10 +9,12 @@ use App\Models\Character;
 use App\Models\Game;
 use App\Models\KModel;
 use App\Models\Manga;
+use App\Models\Media;
 use App\Models\Person;
 use App\Models\Song;
 use App\Models\Studio;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Carbon;
 
@@ -54,6 +56,16 @@ class Word extends KModel
     public function subject(): MorphTo
     {
         return $this->morphTo();
+    }
+
+    /**
+     * Returns the daily puzzle this word is scheduled for.
+     *
+     * @return HasOne
+     */
+    public function dailyPuzzle(): HasOne
+    {
+        return $this->hasOne(DailyPuzzle::class, 'word_id');
     }
 
     /**
@@ -105,6 +117,22 @@ class Word extends KModel
     }
 
     /**
+     * Returns the image of the linked subject.
+     *
+     * @return Media|null
+     */
+    public function getHintImage(): ?Media
+    {
+        $subject = $this->subject;
+
+        if (!$subject || !method_exists($subject, 'getFirstMedia')) {
+            return null;
+        }
+
+        return $subject->getFirstMedia($this->getHintImageCollection());
+    }
+
+    /**
      * Returns an image URL for the linked subject.
      *
      * @return string|null
@@ -122,6 +150,25 @@ class Word extends KModel
         }
 
         return $this->hintImageUrl = $subject->getFirstMediaFullUrl($this->getHintImageCollection()) ?: null;
+    }
+
+    /**
+     * Returns the kind of the linked subject.
+     *
+     * @return string|null
+     */
+    public function getSubjectKind(): ?string
+    {
+        return match (true) {
+            $this->subject instanceof Anime => 'shows',
+            $this->subject instanceof Manga => 'literatures',
+            $this->subject instanceof Game => 'games',
+            $this->subject instanceof Character => 'characters',
+            $this->subject instanceof Person => 'people',
+            $this->subject instanceof Studio => 'studios',
+            $this->subject instanceof Song => 'songs',
+            default => null,
+        };
     }
 
     /**
@@ -178,5 +225,19 @@ class Word extends KModel
                 $query->whereNull('released_at')
                     ->orWhere('released_at', '<=', Carbon::now());
             });
+    }
+
+    /**
+     * Scope for words whose answer is not held by a current or upcoming daily puzzle.
+     *
+     * @param Builder $query
+     *
+     * @return Builder
+     */
+    public function scopeSafeToReveal(Builder $query): Builder
+    {
+        return $query->whereDoesntHave('dailyPuzzle', function (Builder $query) {
+            $query->where('puzzle_date', '>=', Carbon::now()->toDateString());
+        });
     }
 }

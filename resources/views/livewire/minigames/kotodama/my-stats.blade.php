@@ -1,13 +1,13 @@
 <main>
     <x-slot:title>
-        {{ __('My Kotodama Stats') }}
+        {{ __('My Stats') }}
     </x-slot:title>
 
     <x-slot:appArgument>
         kotodama/me/stats
     </x-slot:appArgument>
 
-    <x-back-link :url="route('kotodama.daily')" :label="__('Kotodama')" :title="__('My Kotodama Stats')" />
+    <x-back-link :url="route('kotodama.daily')" :label="__('Kotodama')" :title="__('My Stats')" />
 
     <div class="pb-10">
 
@@ -15,27 +15,7 @@
             @if(!$stats)
                 <p class="text-secondary">{{ __('Sign in to track your streak and stats.') }}</p>
             @else
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-6">
-                    <div class="rounded border border-primary bg-secondary p-3 text-center">
-                        <div class="text-2xl font-bold text-primary">{{ $stats->games_played }}</div>
-                        <div class="text-xs text-secondary">{{ __('Games played') }}</div>
-                    </div>
-
-                    <div class="rounded border border-primary bg-secondary p-3 text-center">
-                        <div class="text-2xl font-bold text-primary">{{ $winRate }}%</div>
-                        <div class="text-xs text-secondary">{{ __('Win rate') }}</div>
-                    </div>
-
-                    <div class="rounded border border-primary bg-secondary p-3 text-center">
-                        <div class="text-2xl font-bold text-primary">{{ $stats->current_streak }}</div>
-                        <div class="text-xs text-secondary">{{ __('Current streak') }}</div>
-                    </div>
-
-                    <div class="rounded border border-primary bg-secondary p-3 text-center">
-                        <div class="text-2xl font-bold text-primary">{{ $stats->max_streak }}</div>
-                        <div class="text-xs text-secondary">{{ __('Max streak') }}</div>
-                    </div>
-                </div>
+                <x-kotodama.stat-tiles class="mb-6" :stats="$stats" :winRate="$winRate" />
 
                 <h2 class="text-lg font-semibold mb-3 text-primary">{{ __('Guess distribution') }}</h2>
 

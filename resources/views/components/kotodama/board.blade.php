@@ -1,11 +1,15 @@
 @props(['game'])
 
-<div class="flex flex-col gap-1 items-center" aria-label="{{ __('Kotodama board') }}">
+<div
+    class="kotodama-board flex flex-col gap-1 items-center"
+    x-bind:class="{ 'kotodama-differentiate': $store.kotodamaAccessibility.enabled }"
+    aria-label="{{ __('Kotodama board') }}"
+>
     @foreach($game->boardRows() as $row)
         <div class="flex gap-1">
             @foreach($row['cells'] as $column => $cell)
                 <div @class([
-                    'flex items-center justify-center w-12 h-12 border-2 rounded text-lg font-bold uppercase',
+                    'relative flex items-center justify-center w-12 h-12 border-2 rounded text-lg font-bold uppercase',
                     'kotodama-tile-hit' => $cell['feedback'] === \App\Enums\Minigames\Kotodama\Feedback::Hit,
                     'kotodama-tile-present' => $cell['feedback'] === \App\Enums\Minigames\Kotodama\Feedback::Present,
                     'kotodama-tile-miss' => $cell['feedback'] === \App\Enums\Minigames\Kotodama\Feedback::Miss,

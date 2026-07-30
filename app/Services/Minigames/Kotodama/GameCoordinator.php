@@ -20,16 +20,15 @@ class GameCoordinator
      * Start a daily game for the given puzzle.
      *
      * @param DailyPuzzle $puzzle
-     * @param User|null         $user
-     * @param string|null       $guestToken
+     * @param User        $user
      *
      * @return Game
      */
-    public static function startDaily(DailyPuzzle $puzzle, ?User $user, ?string $guestToken): Game
+    public static function startDaily(DailyPuzzle $puzzle, User $user): Game
     {
         return self::findOrCreateGame(
             $user,
-            $guestToken,
+            null,
             $puzzle->word_id,
             $puzzle->id,
             GameMode::Daily()
@@ -88,7 +87,19 @@ class GameCoordinator
      */
     public static function startArchive(DailyPuzzle $puzzle, User $user): Game
     {
-        return self::findOrCreateGame(
+        $games = Game::where('daily_puzzle_id', $puzzle->id)
+            ->where('user_id', $user->id)
+            ->whereIn('mode', [GameMode::Daily, GameMode::Archive])
+            ->get();
+
+        $existing = $games->first(fn (Game $game) => $game->shouldRevealAnswer())
+            ?? $games->first(fn (Game $game) => !$game->isFinished());
+
+        if ($existing) {
+            return $existing;
+        }
+
+        return self::createGame(
             $user,
             null,
             $puzzle->word_id,
@@ -259,6 +270,12 @@ class GameCoordinator
         if (!preg_match('/^[a-z]+$/', $guess)) {
             throw ValidationException::withMessages([
                 'guess' => [__('The guess may only contain lowercase letters a–z.')],
+            ]);
+        }
+
+        if (!GuessDictionary::contains($guess)) {
+            throw ValidationException::withMessages([
+                'guess' => [__('Not in word list.')],
             ]);
         }
 

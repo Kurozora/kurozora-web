@@ -27,6 +27,7 @@ class UserStatsResource extends JsonResource
         return [
             'id' => (string) $this->resource->user_id,
             'type' => 'kotodama-user-stats',
+            'href' => route('api.kotodama.me.stats', [], false),
             'attributes' => [
                 'currentStreak' => (int) $this->resource->current_streak,
                 'maxStreak' => (int) $this->resource->max_streak,

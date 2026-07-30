@@ -1,13 +1,13 @@
 @props(['game', 'mode', 'shareText'])
 
 <div
-    class="mt-6 w-full max-w-md rounded-xl border border-primary bg-secondary p-5"
+    class="mt-6 w-full max-w-md rounded-xl border border-primary bg-secondary pl-5 pr-5 pt-5 pb-5"
     role="dialog"
     aria-live="polite"
 >
     <h2 class="text-xl font-bold text-center mb-2 text-primary">
         @if($game->status?->is(\App\Enums\Minigames\Kotodama\GameStatus::Won))
-            {{ __('Solved in :guesses/:max!', ['guesses' => $game->guess_count, 'max' => \App\Models\Minigames\Kotodama\Game::MAX_GUESSES]) }}
+            {{ __('Solved in :guesses/:max', ['guesses' => $game->guess_count, 'max' => \App\Models\Minigames\Kotodama\Game::MAX_GUESSES]) }}
         @else
             {{ __('Out of guesses. The answer was ":answer".', ['answer' => strtoupper($game->word->answer)]) }}
         @endif
@@ -18,20 +18,13 @@
     @endif
 
     @if($game->word->getHintImageUrl())
-        <div class="flex justify-center my-3">
-            <x-picture class="shrink-0 rounded-lg overflow-hidden" :border="true">
-                <img
-                    class="h-48 w-auto"
-                    src="{{ $game->word->getHintImageUrl() }}"
-                    title="{{ $game->word->getSubjectTitle() }}"
-                    alt="{{ $game->word->getSubjectTitle() }}"
-                >
-            </x-picture>
+        <div class="flex justify-center mt-3 mb-3">
+            <x-kotodama.subject-image :word="$game->word" />
         </div>
     @endif
 
     @if($shareText)
-        <pre class="whitespace-pre-wrap text-center font-mono text-sm leading-none bg-primary text-primary rounded p-2 select-all">{{ $shareText }}</pre>
+        <pre class="whitespace-pre-wrap text-center font-mono text-sm leading-none bg-primary text-primary rounded pl-2 pr-2 pt-2 pb-2 select-all">{{ $shareText }}</pre>
 
         <div class="flex justify-center mt-3 gap-2 flex-wrap" x-data="{ copied: false }">
             <x-button

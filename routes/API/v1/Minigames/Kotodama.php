@@ -13,8 +13,13 @@ Route::prefix('/kotodama')
             ->middleware('auth.kurozora:optional')
             ->name('.unlimited');
 
+        Route::get('/archive', [KotodamaController::class, 'archiveIndex'])
+            ->middleware(['auth.kurozora', 'user.is-pro-or-subscribed'])
+            ->name('.archive.index');
+
         Route::get('/archive/{date}', [KotodamaController::class, 'archive'])
             ->middleware(['auth.kurozora', 'user.is-pro-or-subscribed'])
+            ->where('date', '\d{4}-\d{2}-\d{2}')
             ->name('.archive');
 
         Route::prefix('/versus')
@@ -32,6 +37,10 @@ Route::prefix('/kotodama')
         Route::prefix('/games/{game}')
             ->name('.games')
             ->group(function () {
+                Route::get('/', [KotodamaController::class, 'details'])
+                    ->middleware('auth.kurozora:optional')
+                    ->name('.details');
+
                 Route::post('/guess', [KotodamaController::class, 'guess'])
                     ->middleware(['auth.kurozora:optional', 'user.not-timed-out'])
                     ->name('.guess');
@@ -49,6 +58,7 @@ Route::prefix('/kotodama')
             ->name('.leaderboards')
             ->group(function () {
                 Route::get('/daily/{date?}', [KotodamaController::class, 'dailyLeaderboard'])
+                    ->where('date', '\d{4}-\d{2}-\d{2}')
                     ->name('.daily');
 
                 Route::get('/streak', [KotodamaController::class, 'streakLeaderboard'])

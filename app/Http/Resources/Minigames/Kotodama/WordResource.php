@@ -2,8 +2,23 @@
 
 namespace App\Http\Resources\Minigames\Kotodama;
 
+use App\Http\Resources\AnimeResourceIdentity;
+use App\Http\Resources\CharacterResourceIdentity;
+use App\Http\Resources\GameResourceIdentity;
+use App\Http\Resources\LiteratureResourceIdentity;
+use App\Http\Resources\MediaResource;
+use App\Http\Resources\PersonResourceIdentity;
+use App\Http\Resources\SongResourceIdentity;
+use App\Http\Resources\StudioResourceIdentity;
+use App\Models\Anime;
+use App\Models\Character;
+use App\Models\Game as GameModel;
+use App\Models\Manga;
 use App\Models\Minigames\Kotodama\Game;
 use App\Models\Minigames\Kotodama\Word;
+use App\Models\Person;
+use App\Models\Song;
+use App\Models\Studio;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -60,45 +75,54 @@ class WordResource extends JsonResource
         }
 
         if ($revealSubjectPoster) {
-            $attributes['subject'] = $this->buildSubjectPayload($revealAnswer);
+            $hintImage = $this->resource->getHintImage();
+            $attributes['poster'] = $hintImage ? MediaResource::make($hintImage) : null;
+            $attributes['subjectType'] = $this->resource->getSubjectKind();
         }
 
         if ($revealAnswer) {
             $attributes['answer'] = $this->resource->answer;
         }
 
-        return [
+        $resource = [
             'id' => (string) $this->resource->id,
             'type' => 'kotodama-words',
             'attributes' => $attributes,
         ];
+
+        if ($revealAnswer && $this->resource->subject) {
+            $resource = array_merge($resource, ['relationships' => $this->getSubjectRelationship()]);
+        }
+
+        return $resource;
     }
 
     /**
-     * The linked subject's payload.
+     * Returns the subject relationship for the resource.
      *
-     * @param bool $includeIdentifiers
-     *
-     * @return array|null
+     * @return array
      */
-    protected function buildSubjectPayload(bool $includeIdentifiers): ?array
+    protected function getSubjectRelationship(): array
     {
-        $subject = $this->resource->subject;
+        $identity = match (true) {
+            $this->resource->subject instanceof Anime => AnimeResourceIdentity::make($this->resource->subject),
+            $this->resource->subject instanceof Manga => LiteratureResourceIdentity::make($this->resource->subject),
+            $this->resource->subject instanceof GameModel => GameResourceIdentity::make($this->resource->subject),
+            $this->resource->subject instanceof Character => CharacterResourceIdentity::make($this->resource->subject),
+            $this->resource->subject instanceof Person => PersonResourceIdentity::make($this->resource->subject),
+            $this->resource->subject instanceof Studio => StudioResourceIdentity::make($this->resource->subject),
+            $this->resource->subject instanceof Song => SongResourceIdentity::make($this->resource->subject),
+            default => null,
+        };
 
-        if (!$subject) {
-            return null;
+        if ($identity === null) {
+            return [];
         }
 
-        $payload = [
-            'posterUrl' => $this->resource->getHintImageUrl(),
+        return [
+            'subjects' => [
+                'data' => [$identity],
+            ],
         ];
-
-        if ($includeIdentifiers) {
-            $payload['type'] = $this->resource->subject_type;
-            $payload['id'] = (string) $this->resource->subject_id;
-            $payload['title'] = $this->resource->getSubjectTitle();
-        }
-
-        return $payload;
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Minigames\Kotodama;
 
 use App\Models\Minigames\Kotodama\Word;
+use App\Rules\ValidateRevealableWord;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreateVersusRequest extends FormRequest
@@ -25,7 +26,13 @@ class CreateVersusRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'wordID' => ['bail', 'nullable', 'integer', 'exists:' . Word::TABLE_NAME . ',id'],
+            'wordID' => [
+                'bail',
+                'nullable',
+                'integer',
+                'exists:' . Word::TABLE_NAME . ',id',
+                new ValidateRevealableWord(),
+            ],
         ];
     }
 }

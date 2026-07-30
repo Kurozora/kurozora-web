@@ -131,6 +131,7 @@ class PlayUnlimited extends Component
     protected function startNewGame(): void
     {
         $baseQuery = Word::eligibleForSchedule()
+            ->safeToReveal()
             ->with(['subject']);
 
         $word = (clone $baseQuery)

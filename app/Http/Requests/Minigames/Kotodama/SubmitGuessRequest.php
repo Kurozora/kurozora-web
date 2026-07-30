@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Minigames\Kotodama;
 
+use App\Models\Minigames\Kotodama\Word;
 use Illuminate\Foundation\Http\FormRequest;
 
 class SubmitGuessRequest extends FormRequest
@@ -24,7 +25,7 @@ class SubmitGuessRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'guess' => ['bail', 'required', 'string', 'regex:/^[a-z]{4,8}$/'],
+            'guess' => ['bail', 'required', 'string', 'regex:/^[a-z]{' . Word::LENGTH . '}$/'],
         ];
     }
 }

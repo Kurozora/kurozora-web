@@ -40,19 +40,29 @@
                 </x-kotodama.empty>
             @else
                 <section class="pt-6 pl-4 pr-4 xl:safe-area-inset-scroll">
-                    <ol class="flex flex-col gap-2">
+                    <div class="flex flex-col gap-2">
                         @foreach($dailyEntries as $index => $entry)
-                            <li class="flex items-center justify-between rounded-lg border border-primary bg-secondary pt-2 pb-2 pl-4 pr-4">
-                                <span class="font-semibold text-primary">#{{ $index + 1 }} {{ $entry->user?->username }}</span>
+                            <div class="relative flex items-center justify-between rounded-lg border border-primary bg-secondary pt-2 pb-2 pl-4 pr-4">
+                                <div class="flex items-center gap-3 min-w-0">
+                                    <span class="shrink-0 font-bold text-primary">#{{ $index + 1 }}</span>
 
-                                <span class="text-sm text-secondary">
-                                    {{ __(':count guesses', ['count' => $entry->guess_count]) }}
+                                    <x-profile-image-view class="w-10 h-10 shrink-0" :user="$entry->user" />
+
+                                    <span class="font-semibold text-primary truncate">{{ $entry->user?->username }}</span>
+                                </div>
+
+                                <span class="shrink-0 text-sm text-secondary">
+                                    {{ $entry->guess_count }}/{{ \App\Models\Minigames\Kotodama\Game::MAX_GUESSES }}
                                     ·
                                     {{ __(':seconds s', ['seconds' => number_format(($entry->duration_ms ?? 0) / 1000, 1)]) }}
                                 </span>
-                            </li>
+
+                                @if($entry->user)
+                                    <a class="absolute top-0 left-0 h-full w-full" href="{{ route('profile.details', $entry->user) }}" wire:navigate></a>
+                                @endif
+                            </div>
                         @endforeach
-                    </ol>
+                    </div>
                 </section>
             @endif
         @else
@@ -69,15 +79,25 @@
                 </x-kotodama.empty>
             @else
                 <section class="pt-6 pl-4 pr-4 xl:safe-area-inset-scroll">
-                    <ol class="flex flex-col gap-2">
+                    <div class="flex flex-col gap-2">
                         @foreach($streakEntries as $index => $entry)
-                            <li class="flex items-center justify-between rounded-lg border border-primary bg-secondary pt-2 pb-2 pl-4 pr-4">
-                                <span class="font-semibold text-primary">#{{ $index + 1 }} {{ $entry->user?->username }}</span>
+                            <div class="relative flex items-center justify-between rounded-lg border border-primary bg-secondary pt-2 pb-2 pl-4 pr-4">
+                                <div class="flex items-center gap-3 min-w-0">
+                                    <span class="shrink-0 font-bold text-primary">#{{ $index + 1 }}</span>
 
-                                <span class="text-sm text-secondary">{{ __('Best :best · Current :current', ['best' => $entry->max_streak, 'current' => $entry->current_streak]) }}</span>
-                            </li>
+                                    <x-profile-image-view class="w-10 h-10 shrink-0" :user="$entry->user" />
+
+                                    <span class="font-semibold text-primary truncate">{{ $entry->user?->username }}</span>
+                                </div>
+
+                                <span class="shrink-0 text-sm text-secondary">{{ __('Best :best · Current :current', ['best' => $entry->max_streak, 'current' => $entry->current_streak]) }}</span>
+
+                                @if($entry->user)
+                                    <a class="absolute top-0 left-0 h-full w-full" href="{{ route('profile.details', $entry->user) }}" wire:navigate></a>
+                                @endif
+                            </div>
                         @endforeach
-                    </ol>
+                    </div>
                 </section>
             @endif
         @endif

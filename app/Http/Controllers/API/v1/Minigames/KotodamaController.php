@@ -3,16 +3,19 @@
 namespace App\Http\Controllers\API\v1\Minigames;
 
 use App\Enums\Minigames\Kotodama\GameMode;
+use App\Enums\Minigames\Kotodama\GameStatus;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Minigames\Kotodama\CreateVersusRequest;
-use App\Http\Requests\Minigames\Kotodama\GetArchivePuzzleRequest;
+use App\Http\Requests\Minigames\Kotodama\GetArchiveIndexRequest;
 use App\Http\Requests\Minigames\Kotodama\GetDailyLeaderboardRequest;
 use App\Http\Requests\Minigames\Kotodama\GetDailyPuzzleRequest;
 use App\Http\Requests\Minigames\Kotodama\SubmitGuessRequest;
-use App\Http\Resources\Minigames\Kotodama\DailyPuzzleResource;
+use App\Http\Resources\Minigames\Kotodama\ArchiveEntryResource;
 use App\Http\Resources\Minigames\Kotodama\GameResource;
 use App\Http\Resources\Minigames\Kotodama\LeaderboardEntryResource;
+use App\Http\Resources\Minigames\Kotodama\ShareGridResource;
+use App\Http\Resources\Minigames\Kotodama\StreakEntryResource;
 use App\Http\Resources\Minigames\Kotodama\UserStatsResource;
 use App\Models\Minigames\Kotodama\DailyPuzzle;
 use App\Models\Minigames\Kotodama\Game;
@@ -20,7 +23,6 @@ use App\Models\Minigames\Kotodama\UserStats;
 use App\Models\Minigames\Kotodama\Word;
 use App\Services\Minigames\Kotodama\GameCoordinator;
 use App\Services\Minigames\Kotodama\PuzzleResolver;
-use App\Services\Minigames\Kotodama\ShareGridFormatter;
 use App\Services\Minigames\Kotodama\StatsService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
@@ -40,11 +42,10 @@ class KotodamaController extends Controller
     public function daily(GetDailyPuzzleRequest $request): JsonResponse
     {
         $puzzle = PuzzleResolver::today();
-        $game = $this->resumeOrStartDaily($request, $puzzle);
+        $game = GameCoordinator::startDaily($puzzle, $request->user());
 
         return JSONResult::success([
-            'data' => [DailyPuzzleResource::make($puzzle, $game)],
-            'game' => $game ? GameResource::make($game) : null,
+            'data' => [GameResource::make($game)],
         ]);
     }
 
@@ -70,27 +71,66 @@ class KotodamaController extends Controller
     }
 
     /**
-     * Resolve an archive puzzle.
+     * Return the past puzzles available to replay.
      *
-     * @param GetArchivePuzzleRequest $request
-     * @param string                  $date
+     * @param GetArchiveIndexRequest $request
      *
      * @return JsonResponse
      */
-    public function archive(GetArchivePuzzleRequest $request, string $date): JsonResponse
+    public function archiveIndex(GetArchiveIndexRequest $request): JsonResponse
+    {
+        $data = $request->validated();
+
+        $puzzles = DailyPuzzle::where('puzzle_date', '<', Carbon::now()->toDateString())
+            ->orderByDesc('puzzle_date')
+            ->cursorPaginate($data['limit'] ?? 25);
+
+        $finishedGames = Game::whereIn('daily_puzzle_id', $puzzles->pluck('id'))
+            ->where('user_id', $request->user()->id)
+            ->whereIn('mode', [GameMode::Daily, GameMode::Archive])
+            ->whereIn('status', [GameStatus::Won, GameStatus::Lost])
+            ->get(['daily_puzzle_id', 'status']);
+
+        $solvedPuzzleIDs = $finishedGames->filter(fn (Game $game) => $game->status?->is(GameStatus::Won))
+            ->pluck('daily_puzzle_id');
+        $finishedPuzzleIDs = $finishedGames->pluck('daily_puzzle_id');
+
+        $nextPageURL = str_replace($request->root(), '', $puzzles->nextPageUrl() ?? '');
+
+        $entries = $puzzles->getCollection()
+            ->map(fn (DailyPuzzle $puzzle) => ArchiveEntryResource::make(
+                $puzzle,
+                $solvedPuzzleIDs->contains($puzzle->id),
+                $finishedPuzzleIDs->contains($puzzle->id)
+            ));
+
+        return JSONResult::success([
+            'data' => $entries,
+            'next' => empty($nextPageURL) ? null : $nextPageURL,
+        ]);
+    }
+
+    /**
+     * Resolve an archive puzzle.
+     *
+     * @param Request $request
+     * @param string  $date
+     *
+     * @return JsonResponse
+     */
+    public function archive(Request $request, string $date): JsonResponse
     {
         $parsedDate = Carbon::parse($date);
 
         if (!$parsedDate->isPast() || $parsedDate->isToday()) {
-            throw (new ModelNotFoundException)->setModel(\App\Models\Minigames\Kotodama\DailyPuzzle::class);
+            throw (new ModelNotFoundException)->setModel(DailyPuzzle::class);
         }
 
         $puzzle = PuzzleResolver::archive($parsedDate);
         $game = GameCoordinator::startArchive($puzzle, $request->user());
 
         return JSONResult::success([
-            'data' => [DailyPuzzleResource::make($puzzle, $game)],
-            'game' => GameResource::make($game),
+            'data' => [GameResource::make($game)],
         ]);
     }
 
@@ -149,8 +189,24 @@ class KotodamaController extends Controller
         }
 
         return JSONResult::success([
+            'data' => [GameResource::make($game, $originalGame)],
+        ]);
+    }
+
+    /**
+     * Return a single game.
+     *
+     * @param Request $request
+     * @param Game    $game
+     *
+     * @return JsonResponse
+     */
+    public function details(Request $request, Game $game): JsonResponse
+    {
+        $this->ensureOwner($request, $game);
+
+        return JSONResult::success([
             'data' => [GameResource::make($game)],
-            'challenger' => GameResource::make($originalGame),
         ]);
     }
 
@@ -208,13 +264,7 @@ class KotodamaController extends Controller
         }
 
         return JSONResult::success([
-            'data' => [
-                'id' => (string) $game->id,
-                'type' => 'kotodama-share-grids',
-                'attributes' => [
-                    'text' => ShareGridFormatter::format($game),
-                ],
-            ],
+            'data' => [ShareGridResource::make($game)],
         ]);
     }
 
@@ -231,7 +281,7 @@ class KotodamaController extends Controller
         $resolveDate = $date ? Carbon::parse($date) : Carbon::now();
 
         if ($resolveDate->isFuture()) {
-            throw (new ModelNotFoundException)->setModel(\App\Models\Minigames\Kotodama\DailyPuzzle::class);
+            throw (new ModelNotFoundException)->setModel(DailyPuzzle::class);
         }
 
         $puzzle = PuzzleResolver::archive($resolveDate);
@@ -262,25 +312,11 @@ class KotodamaController extends Controller
 
         $stats = StatsService::streakLeaderboard($limit);
 
-        $data = $stats->values()->map(function (UserStats $row, int $index) {
-            return [
-                'id' => (string) $row->user_id,
-                'type' => 'kotodama-streak-entries',
-                'attributes' => [
-                    'rank' => $index + 1,
-                    'currentStreak' => (int) $row->current_streak,
-                    'maxStreak' => (int) $row->max_streak,
-                    'user' => [
-                        'id' => (string) $row->user?->id,
-                        'username' => $row->user?->username,
-                        'slug' => $row->user?->slug,
-                    ],
-                ],
-            ];
-        });
+        $entries = $stats->values()
+            ->map(fn (UserStats $row, int $index) => StreakEntryResource::make($row, $index + 1));
 
         return JSONResult::success([
-            'data' => $data,
+            'data' => $entries,
         ]);
     }
 
@@ -300,26 +336,6 @@ class KotodamaController extends Controller
         return JSONResult::success([
             'data' => [UserStatsResource::make($stats)],
         ]);
-    }
-
-    /**
-     * Resolve the current user's daily game for a puzzle.
-     *
-     * @param Request           $request
-     * @param DailyPuzzle $puzzle
-     *
-     * @return Game|null
-     */
-    protected function resumeOrStartDaily(Request $request, DailyPuzzle $puzzle): ?Game
-    {
-        $user = $request->user();
-        $guestToken = $this->guestTokenForRequest($request);
-
-        if (!$user && !$guestToken) {
-            return null;
-        }
-
-        return GameCoordinator::startDaily($puzzle, $user, $guestToken);
     }
 
     /**
@@ -382,6 +398,7 @@ class KotodamaController extends Controller
     {
         $word = Word::query()
             ->eligibleForSchedule()
+            ->safeToReveal()
             ->with(['subject'])
             ->randomFirst();
 

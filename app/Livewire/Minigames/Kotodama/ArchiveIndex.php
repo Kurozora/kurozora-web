@@ -30,17 +30,23 @@ class ArchiveIndex extends Component
             ->get();
 
         $user = auth()->user();
-        $solvedPuzzleIDs = Game::whereIn('daily_puzzle_id', $puzzles->pluck('id'))
-            ->where('mode', GameMode::Archive)
-            ->where('status', GameStatus::Won)
+        $finishedGames = Game::whereIn('daily_puzzle_id', $puzzles->pluck('id'))
+            ->whereIn('mode', [GameMode::Daily, GameMode::Archive])
+            ->whereIn('status', [GameStatus::Won, GameStatus::Lost])
             ->when($user, fn ($query) => $query->where('user_id', $user->id))
-            ->pluck('daily_puzzle_id');
+            ->get(['daily_puzzle_id', 'status']);
 
-        return $puzzles->map(function (DailyPuzzle $puzzle) use ($solvedPuzzleIDs) {
+        $solvedPuzzleIDs = $finishedGames->filter(fn (Game $game) => $game->status?->is(GameStatus::Won))
+            ->pluck('daily_puzzle_id');
+        $finishedPuzzleIDs = $finishedGames->pluck('daily_puzzle_id');
+
+        return $puzzles->map(function (DailyPuzzle $puzzle) use ($solvedPuzzleIDs, $finishedPuzzleIDs) {
             return (object) [
                 'date' => $puzzle->puzzle_date?->toDateString(),
+                'formattedDate' => $puzzle->puzzle_date?->locale(app()->getLocale())->isoFormat('ll'),
                 'puzzleNumber' => $puzzle->puzzle_number,
                 'solved' => $solvedPuzzleIDs->contains($puzzle->id),
+                'finished' => $finishedPuzzleIDs->contains($puzzle->id),
             ];
         });
     }

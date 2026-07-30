@@ -14,7 +14,6 @@
                         'bg-secondary text-primary hover:bg-tertiary' => !isset($game->keyboardStates()[$key]),
                     ])
                     x-on:click="pressKey('{{ $key }}')"
-                    @disabled($game->isFinished())
                 >
                     {{ $key }}
                 </button>
@@ -27,7 +26,6 @@
             type="button"
             class="pl-4 pr-4 pt-3 pb-3 rounded font-semibold text-sm bg-secondary text-primary hover:bg-tertiary transition disabled:cursor-default"
             x-on:click="backspaceKey()"
-            @disabled($game->isFinished())
         >
             ⌫
         </button>
@@ -36,7 +34,7 @@
             type="button"
             class="pl-4 pr-4 pt-3 pb-3 rounded font-semibold text-sm bg-tint btn-text-tinted hover:bg-tint-800 transition disabled:cursor-default"
             x-on:click="submitGuess()"
-            x-bind:disabled="currentGuess.length !== {{ \App\Models\Minigames\Kotodama\Word::LENGTH }} || {{ $game->isFinished() ? 'true' : 'false' }}"
+            x-bind:disabled="currentGuess.length !== {{ \App\Models\Minigames\Kotodama\Word::LENGTH }}"
         >
             ↵
         </button>

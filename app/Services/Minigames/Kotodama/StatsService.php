@@ -75,7 +75,12 @@ class StatsService
         return Game::where('daily_puzzle_id', $puzzle->id)
             ->where('status', GameStatus::Won)
             ->whereNotNull('user_id')
-            ->with('user')
+            ->with([
+                'user' => function ($query) {
+                    $query->with(['media'])
+                        ->withCount(['followers', 'following', 'mediaRatings', 'achievements']);
+                },
+            ])
             ->orderBy('guess_count')
             ->orderBy('duration_ms')
             ->limit($limit)
@@ -92,7 +97,12 @@ class StatsService
     public static function streakLeaderboard(int $limit = 25): Collection
     {
         return UserStats::where('max_streak', '>', 0)
-            ->with('user')
+            ->with([
+                'user' => function ($query) {
+                    $query->with(['media'])
+                        ->withCount(['followers', 'following', 'mediaRatings', 'achievements']);
+                },
+            ])
             ->orderByDesc('max_streak')
             ->orderByDesc('current_streak')
             ->limit($limit)
@@ -132,7 +142,7 @@ class StatsService
             if ($previousDate === null) {
                 $currentStreak = 1;
             } else {
-                $diffInDays = $previousDate->startOfDay()->diffInDays($puzzleDate->startOfDay());
+                $diffInDays = (int) $previousDate->startOfDay()->diffInDays($puzzleDate->startOfDay());
                 $currentStreak = $diffInDays === 1 ? $currentStreak + 1 : 1;
             }
 

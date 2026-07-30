@@ -10,30 +10,28 @@
     @endguest
 
     @if($game)
-        <div class="flex h-10 items-center justify-center">
-            @if($game->revealedHint())
-                <p class="text-sm text-secondary text-center max-w-md line-clamp-2">{{ __('Hint: :text', ['text' => $game->revealedHint()]) }}</p>
-            @endif
-        </div>
-
-        <div class="flex h-32 items-center justify-center">
-            @if($game->revealedSubjectImageUrl())
-                <x-picture class="shrink-0 rounded-lg overflow-hidden" :border="true">
-                    <img
-                        class="h-32 w-auto"
-                        src="{{ $game->revealedSubjectImageUrl() }}"
-                        alt=""
-                    >
-                </x-picture>
-            @endif
-        </div>
-
         <x-kotodama.board :game="$game" />
 
-        <x-kotodama.keyboard :game="$game" />
+        <div class="flex h-10 items-center justify-center">
+            @if($flash)
+                <p class="text-sm text-red-500 text-center max-w-md line-clamp-2">{{ $flash }}</p>
+            @endif
+        </div>
 
-        @if($flash)
-            <p class="text-sm text-red-500">{{ $flash }}</p>
+        @if (!$game->isFinished())
+            <x-kotodama.keyboard :game="$game" />
+
+            <div class="flex h-10 items-center justify-center">
+                @if ($game->revealedHint())
+                    <p class="text-sm text-secondary text-center max-w-md line-clamp-2">{{ __('Hint: :text', ['text' => $game->revealedHint()]) }}</p>
+                @endif
+            </div>
+
+            <div class="flex h-40 items-center justify-center">
+                @if ($game->revealedSubjectImageUrl())
+                    <x-kotodama.subject-image :word="$game->word" />
+                @endif
+            </div>
         @endif
 
         @if($game->shouldRevealAnswer())

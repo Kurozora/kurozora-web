@@ -11,7 +11,11 @@
         {{ $appArgument }}
     </x-slot:appArgument>
 
-    <x-back-link :url="route('kotodama.daily')" :label="__('Kotodama')" :title="$title" />
+    @if($mode->is(\App\Enums\Minigames\Kotodama\GameMode::Archive))
+        <x-back-link :url="route('kotodama.archive')" :label="__('Kotodama Archive')" :title="$title" />
+    @else
+        <x-back-link :url="route('kotodama.daily')" :label="__('Kotodama')" :title="$title" />
+    @endif
 
     <div class="pb-10">
         <x-kotodama.puzzle

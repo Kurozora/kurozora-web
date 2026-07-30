@@ -4,7 +4,7 @@ namespace App\Http\Requests\Minigames\Kotodama;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class GetArchivePuzzleRequest extends FormRequest
+class GetArchiveIndexRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,7 @@ class GetArchivePuzzleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'date' => ['bail', 'required', 'date_format:Y-m-d', 'before:today'],
+            'limit' => ['bail', 'integer', 'min:1', 'max:100'],
         ];
     }
 }

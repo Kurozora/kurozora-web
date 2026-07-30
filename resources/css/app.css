@@ -395,6 +395,29 @@ body:has([data-lyrics][data-open]) {
   color: #FFFFFF;
 }
 
+/* Differentiate tile states without color (system "Increase Contrast" setting, or manual override) */
+.kotodama-board.kotodama-differentiate .kotodama-tile-hit::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background-color: #FFFFFF;
+}
+.kotodama-board.kotodama-differentiate .kotodama-tile-present::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  border: 2px solid #FFFFFF;
+  background-color: transparent;
+}
+
 /**
  * Lyrics
  */

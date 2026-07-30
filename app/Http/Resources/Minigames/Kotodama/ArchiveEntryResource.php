@@ -6,7 +6,7 @@ use App\Models\Minigames\Kotodama\DailyPuzzle;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class DailyPuzzleResource extends JsonResource
+class ArchiveEntryResource extends JsonResource
 {
     /**
      * The resource instance.
@@ -14,6 +14,34 @@ class DailyPuzzleResource extends JsonResource
      * @var DailyPuzzle $resource
      */
     public $resource;
+
+    /**
+     * Whether the current user has solved this puzzle.
+     *
+     * @var bool
+     */
+    protected bool $isSolved;
+
+    /**
+     * Whether the current user has finished a game for this puzzle.
+     *
+     * @var bool
+     */
+    protected bool $isFinished;
+
+    /**
+     * Create a new resource instance.
+     *
+     * @param DailyPuzzle $resource
+     * @param bool        $isSolved
+     * @param bool        $isFinished
+     */
+    public function __construct(DailyPuzzle $resource, bool $isSolved, bool $isFinished)
+    {
+        parent::__construct($resource);
+        $this->isSolved = $isSolved;
+        $this->isFinished = $isFinished;
+    }
 
     /**
      * Transform the resource into an array.
@@ -26,12 +54,13 @@ class DailyPuzzleResource extends JsonResource
     {
         return [
             'id' => (string) $this->resource->id,
-            'type' => 'kotodama-daily-puzzles',
+            'type' => 'kotodama-archive-entries',
             'href' => route('api.kotodama.archive', ['date' => $this->resource->puzzle_date?->toDateString()], false),
             'attributes' => [
                 'puzzleNumber' => (int) $this->resource->puzzle_number,
                 'puzzleDate' => $this->resource->puzzle_date?->toDateString(),
-                'nextPuzzleAt' => $this->resource->puzzle_date?->copy()->addDay()->startOfDay()->timestamp,
+                'isSolved' => $this->isSolved,
+                'isFinished' => $this->isFinished,
             ],
         ];
     }

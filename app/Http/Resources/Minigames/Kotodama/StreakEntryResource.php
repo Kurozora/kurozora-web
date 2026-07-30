@@ -3,16 +3,16 @@
 namespace App\Http\Resources\Minigames\Kotodama;
 
 use App\Http\Resources\UserResource;
-use App\Models\Minigames\Kotodama\Game;
+use App\Models\Minigames\Kotodama\UserStats;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class LeaderboardEntryResource extends JsonResource
+class StreakEntryResource extends JsonResource
 {
     /**
      * The resource instance.
      *
-     * @var Game $resource
+     * @var UserStats $resource
      */
     public $resource;
 
@@ -26,10 +26,10 @@ class LeaderboardEntryResource extends JsonResource
     /**
      * Create a new resource instance.
      *
-     * @param Game $resource
-     * @param int  $rank
+     * @param UserStats $resource
+     * @param int       $rank
      */
-    public function __construct(Game $resource, int $rank)
+    public function __construct(UserStats $resource, int $rank)
     {
         parent::__construct($resource);
         $this->rank = $rank;
@@ -45,14 +45,13 @@ class LeaderboardEntryResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => (string) $this->resource->id,
-            'type' => 'kotodama-leaderboard-entries',
-            'href' => route('api.kotodama.games.details', $this->resource, false),
+            'id' => (string) $this->resource->user_id,
+            'type' => 'kotodama-streak-entries',
+            'href' => route('api.users.profile', $this->resource->user, false),
             'attributes' => [
                 'rank' => $this->rank,
-                'guessCount' => (int) $this->resource->guess_count,
-                'durationMs' => $this->resource->duration_ms,
-                'finishedAt' => $this->resource->finished_at?->timestamp,
+                'currentStreak' => (int) $this->resource->current_streak,
+                'maxStreak' => (int) $this->resource->max_streak,
             ],
             'relationships' => $this->getUserRelationship(),
         ];

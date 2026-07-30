@@ -115,6 +115,18 @@ class PlayArchive extends Component
     }
 
     /**
+     * The puzzle date formatted for display.
+     *
+     * @return string
+     */
+    protected function formattedDate(): string
+    {
+        $date = $this->puzzle?->puzzle_date ?? Carbon::parse($this->date);
+
+        return $date->locale(app()->getLocale())->isoFormat('ll');
+    }
+
+    /**
      * Render the component.
      *
      * @return Application|Factory|View
@@ -124,7 +136,7 @@ class PlayArchive extends Component
         return view('livewire.minigames.kotodama.play', [
             'game' => $this->game,
             'mode' => GameMode::Archive(),
-            'title' => __('Kotodama · :date', ['date' => $this->date]),
+            'title' => __('Kotodama · :date', ['date' => $this->formattedDate()]),
             'appArgument' => 'kotodama/archive/' . $this->date,
         ]);
     }

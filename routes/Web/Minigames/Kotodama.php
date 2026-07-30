@@ -12,6 +12,7 @@ Route::prefix('/kotodama')
     ->name('kotodama')
     ->group(function () {
         Route::get('/', KotodamaPlayDaily::class)
+            ->middleware('auth')
             ->name('.daily');
 
         Route::get('/unlimited', KotodamaPlayUnlimited::class)
@@ -33,5 +34,6 @@ Route::prefix('/kotodama')
 
         Route::get('/archive/{date}', KotodamaPlayArchive::class)
             ->middleware(['auth', 'user.is-pro-or-subscribed'])
+            ->where('date', '\d{4}-\d{2}-\d{2}')
             ->name('.archive.play');
     });

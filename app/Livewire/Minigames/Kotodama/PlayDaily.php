@@ -3,7 +3,6 @@
 namespace App\Livewire\Minigames\Kotodama;
 
 use App\Enums\Minigames\Kotodama\GameMode;
-use App\Enums\Minigames\Kotodama\GameStatus;
 use App\Models\Minigames\Kotodama\DailyPuzzle;
 use App\Models\Minigames\Kotodama\Game;
 use App\Models\Minigames\Kotodama\UserStats;
@@ -16,7 +15,6 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Computed;
@@ -24,8 +22,14 @@ use Livewire\Component;
 
 class PlayDaily extends Component
 {
-    const int RECENT_DAYS = 7;
     const int PEEK_LIMIT = 3;
+
+    /**
+     * Whether to show the how-to-play modal.
+     *
+     * @var bool $showHelp
+     */
+    public bool $showHelp = false;
 
     /**
      * The current game ID.
@@ -62,11 +66,7 @@ class PlayDaily extends Component
             return;
         }
 
-        $game = GameCoordinator::startDaily(
-            $this->puzzle,
-            auth()->user(),
-            GameCoordinator::guestTokenFor(session()->getId())
-        );
+        $game = GameCoordinator::startDaily($this->puzzle, auth()->user());
 
         $this->gameId = $game->id;
     }
@@ -115,39 +115,6 @@ class PlayDaily extends Component
         }
 
         return (int) round($stats->games_won / $stats->games_played * 100);
-    }
-
-    /**
-     * The player's outcome for each recent puzzle.
-     *
-     * @return Collection
-     */
-    #[Computed]
-    public function recentResults(): Collection
-    {
-        $user = auth()->user();
-
-        if (!$user) {
-            return collect();
-        }
-
-        $puzzles = DailyPuzzle::where('puzzle_date', '<=', Carbon::now()->toDateString())
-            ->orderByDesc('puzzle_date')
-            ->limit(self::RECENT_DAYS)
-            ->get();
-
-        $wonPuzzleIDs = Game::whereIn('daily_puzzle_id', $puzzles->pluck('id'))
-            ->where('user_id', $user->id)
-            ->where('mode', GameMode::Daily)
-            ->where('status', GameStatus::Won)
-            ->pluck('daily_puzzle_id');
-
-        return $puzzles->reverse()
-            ->values()
-            ->map(fn (DailyPuzzle $puzzle) => (object) [
-                'number' => $puzzle->puzzle_number,
-                'won' => $wonPuzzleIDs->contains($puzzle->id),
-            ]);
     }
 
     /**
@@ -213,6 +180,16 @@ class PlayDaily extends Component
     }
 
     /**
+     * The epoch-ms instant when the next daily puzzle unlocks.
+     *
+     * @return int|null
+     */
+    public function nextPuzzleAt(): ?int
+    {
+        return $this->puzzle?->puzzle_date?->copy()->addDay()->startOfDay()->getTimestampMs();
+    }
+
+    /**
      * Render the component.
      *
      * @return Application|Factory|View
@@ -225,8 +202,8 @@ class PlayDaily extends Component
             'title' => __('Kotodama · Daily #:number', ['number' => $this->puzzle?->puzzle_number ?? 0]),
             'stats' => $this->stats,
             'winRate' => $this->winRate,
-            'recentResults' => $this->recentResults,
             'topEntries' => $this->topEntries,
+            'nextPuzzleAt' => $this->nextPuzzleAt(),
         ]);
     }
 }

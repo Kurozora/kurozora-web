@@ -27,19 +27,25 @@
             </x-kotodama.empty>
         @else
             <section class="pl-4 pr-4 xl:safe-area-inset-scroll">
-                <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-2">
+                <div class="flex flex-wrap gap-2">
                     @foreach($entries as $entry)
-                        <x-simple-link :href="route('kotodama.archive.play', ['date' => $entry->date])" wire:navigate>
-                            <span class="flex flex-col items-center justify-center rounded-lg border border-primary bg-secondary p-3 hover:bg-tertiary transition">
-                                <span class="text-xs text-secondary">#{{ $entry->puzzleNumber }}</span>
-                                <span class="text-sm font-semibold text-primary">{{ $entry->date }}</span>
+                        <x-link-button variant="secondary" :href="route('kotodama.archive.play', ['date' => $entry->date])" class="flex-grow w-32 md:w-48" wire:navigate>
+                            <span class="text-xs text-secondary">#{{ $entry->puzzleNumber }}</span>
+                            <span class="text-sm font-semibold text-primary">{{ $entry->formattedDate }}</span>
 
-                                @if($entry->solved)
-                                    <span class="text-xs text-tint">{{ __('Solved') }}</span>
-                                @endif
-                            </span>
-                        </x-simple-link>
+                            @if($entry->solved)
+                                <span class="text-xs text-tint">{{ __('Solved') }}</span>
+                            @elseif($entry->finished)
+                                <span class="text-xs text-secondary">{{ __('Played') }}</span>
+                            @endif
+                        </x-link-button>
                     @endforeach
+                    <div class="w-32 md:w-48 flex-grow"></div>
+                    <div class="w-32 md:w-48 flex-grow"></div>
+                    <div class="w-32 md:w-48 flex-grow"></div>
+                    <div class="w-32 md:w-48 flex-grow"></div>
+                    <div class="w-32 md:w-48 flex-grow"></div>
+                    <div class="w-32 md:w-48 flex-grow"></div>
                 </div>
             </section>
         @endif
