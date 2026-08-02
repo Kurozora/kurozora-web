@@ -26,6 +26,7 @@ Route::prefix('/v1')
         require 'API/v1/Broadcasting.php';
         require 'API/v1/Cast.php';
         require 'API/v1/Characters.php';
+        require 'API/v1/Charts.php';
         require 'API/v1/Episodes.php';
         require 'API/v1/Explore.php';
         require 'API/v1/FaceDetections.php';

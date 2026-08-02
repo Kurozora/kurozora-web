@@ -63,7 +63,10 @@
 
         <div class="ml-auto flex items-center gap-2">
             @auth
-                <x-toggle-button data-museum-library-toggle>{{ __('Dim library') }}</x-toggle-button>
+                <x-toggle-button data-museum-library-toggle title="{{ __('Dim library') }}" aria-label="{{ __('Dim library') }}">
+                    <span data-museum-library-icon-off>@svg('rectangle_stack_fill', 'fill-current', ['width' => '16'])</span>
+                    <span data-museum-library-icon-on class="hidden">@svg('rectangle_stack_slash_fill', 'fill-current', ['width' => '16'])</span>
+                </x-toggle-button>
             @endauth
 
             <x-button variant="secondary" data-museum-recenter>{{ __('Now') }}</x-button>

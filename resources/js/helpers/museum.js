@@ -800,6 +800,8 @@ export default class Museum {
         this.#libraryToggle.classList.toggle('bg-primary', !this.#dimLibrary)
         this.#libraryToggle.classList.toggle('text-tint', !this.#dimLibrary)
         this.#libraryToggle.classList.toggle('border-tint', !this.#dimLibrary)
+        this.#libraryToggle.querySelector('[data-museum-library-icon-off]')?.classList.toggle('hidden', this.#dimLibrary)
+        this.#libraryToggle.querySelector('[data-museum-library-icon-on]')?.classList.toggle('hidden', !this.#dimLibrary)
     }
 
     /**

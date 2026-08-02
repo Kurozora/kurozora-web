@@ -1,4 +1,4 @@
-<main>
+<main data-charts>
     <x-slot:title>
         {{ __(':x Top Charts on :y', ['x' => ucfirst($chartKind), 'y' => config('app.name')]) }}
     </x-slot:title>
@@ -15,6 +15,10 @@
         <link rel="canonical" href="{{ route('charts.details', ['chart' => $chartKind]) }}">
     </x-slot:meta>
 
+    <x-slot:scripts>
+        @vite(['resources/js/charts.js'])
+    </x-slot:scripts>
+
     <div class="pt-4 pb-6" wire:init="loadPage">
         <section class="mb-4 xl:safe-area-inset">
             <div>
@@ -24,6 +28,14 @@
                     </div>
 
                     <div class="flex flex-wrap flex-1 justify-end items-center w-full">
+                        @auth
+                            @if (in_array($chartKind, [App\Enums\ChartKind::Anime, App\Enums\ChartKind::Games, App\Enums\ChartKind::Manga]))
+                                <x-toggle-button data-charts-library-toggle title="{{ __('Dim library') }}" aria-label="{{ __('Dim library') }}">
+                                    <span data-charts-library-icon-off>@svg('rectangle_stack_fill', 'fill-current', ['width' => '16'])</span>
+                                    <span data-charts-library-icon-on class="hidden">@svg('rectangle_stack_slash_fill', 'fill-current', ['width' => '16'])</span>
+                                </x-toggle-button>
+                            @endif
+                        @endauth
                     </div>
                 </div>
             </div>
@@ -33,7 +45,7 @@
             <section class="mt-4 xl:safe-area-inset">
                 @switch($chartKind)
                     @case(App\Enums\ChartKind::Anime)
-                        <x-rows.small-lockup :animes="$this->chart" :page="$this->getPage()" :per-page="$perPage" :is-ranked="true" :is-row="false" />
+                        <x-rows.small-lockup :animes="$this->chart" :page="$this->getPage()" :per-page="$perPage" :is-ranked="true" :is-row="false" :marks-library="auth()->check()" />
                     @break
                     @case(App\Enums\ChartKind::Characters)
                         <x-rows.character-lockup :characters="$this->chart" :page="$this->getPage()" :per-page="$perPage" :is-ranked="true" :is-row="false" />
@@ -42,10 +54,10 @@
                         <x-rows.episode-lockup :episodes="$this->chart" :page="$this->getPage()" :per-page="$perPage" :is-ranked="true" :is-row="false" />
                     @break
                     @case(App\Enums\ChartKind::Games)
-                        <x-rows.small-lockup :games="$this->chart" :page="$this->getPage()" :per-page="$perPage" :is-ranked="true" :is-row="false" />
+                        <x-rows.small-lockup :games="$this->chart" :page="$this->getPage()" :per-page="$perPage" :is-ranked="true" :is-row="false" :marks-library="auth()->check()" />
                     @break
                     @case(App\Enums\ChartKind::Manga)
-                        <x-rows.small-lockup :mangas="$this->chart" :page="$this->getPage()" :per-page="$perPage" :is-ranked="true" :is-row="false" />
+                        <x-rows.small-lockup :mangas="$this->chart" :page="$this->getPage()" :per-page="$perPage" :is-ranked="true" :is-row="false" :marks-library="auth()->check()" />
                     @break
                     @case(App\Enums\ChartKind::People)
                         <x-rows.person-lockup :people="$this->chart" :page="$this->getPage()" :per-page="$perPage" :is-ranked="true" :is-row="false" />

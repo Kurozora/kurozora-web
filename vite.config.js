@@ -71,6 +71,7 @@ export default defineConfig({
                 'resources/css/chat.css',
                 'resources/css/watch.css',
                 'resources/js/app.js',
+                'resources/js/charts.js',
                 'resources/js/chat.js',
                 'resources/js/db.js',
                 'resources/js/debug.js',
