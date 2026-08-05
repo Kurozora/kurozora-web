@@ -150,6 +150,10 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     {
         parent::boot();
 
+        static::created(function (User $user) {
+            $user->settings()->create();
+        });
+
         static::saving(function (User $user) {
             // Strip HTML tags
             if (empty($user->biography)) {
@@ -580,6 +584,16 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     {
         return $this->hasOne(Session::class)
             ->ofMany('last_activity', 'max');
+    }
+
+    /**
+     * The user's settings.
+     *
+     * @return HasOne
+     */
+    public function settings(): HasOne
+    {
+        return $this->hasOne(UserSetting::class);
     }
 
     /**

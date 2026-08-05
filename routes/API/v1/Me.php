@@ -48,4 +48,5 @@ Route::prefix('/me')
         require 'Me/Recap.php';
         require 'Me/Reminders.php';
         require 'Me/Sessions.php';
+        require 'Me/Settings.php';
     });
