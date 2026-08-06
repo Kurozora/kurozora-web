@@ -17,6 +17,7 @@ return new class extends Migration
     {
         Schema::create(MediaRating::TABLE_NAME, function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('love_reactant_id')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->morphs('model');
             $table->double('rating')->default(MediaRating::MAX_RATING_VALUE);
@@ -31,6 +32,11 @@ return new class extends Migration
             $table->unique(['user_id', 'model_id', 'model_type']);
 
             // Set foreign key constraints
+            $table->foreign('love_reactant_id')
+                ->references('id')
+                ->on('love_reactants')
+                ->nullOnDelete()
+                ->cascadeOnUpdate();
             $table->foreign('user_id')
                 ->references('id')
                 ->on(User::TABLE_NAME)

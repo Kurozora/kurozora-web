@@ -64,7 +64,7 @@
                 <div class="flex justify-between items-center">
                     <p class="">{{ __('Click to Rate:') }}</p>
 
-                    <livewire:components.star-rating :model-id="$song->id" :model-type="$song->getMorphClass()"  :rating="$this->userRating?->rating" :star-size="'md'" />
+                    <livewire:components.rating-input :model-id="$song->id" :model-type="$song->getMorphClass()"  :rating="$this->userRating?->rating" :star-size="'md'" :review-box-id="$reviewBoxID" />
                 </div>
 
                 <div class="flex justify-between">
@@ -80,7 +80,7 @@
 
         @if ($this->mediaRatings->count())
             <section class="xl:safe-area-inset">
-                <x-rows.review-lockup :reviews="$this->mediaRatings" :is-row="false" />
+                <x-rows.review-lockup :reviews="$this->mediaRatings" :is-row="false" :vote-overrides="$voteOverrides" />
 
                 <div class="mt-4 pl-4 pr-4">
                     {{ $this->mediaRatings->links() }}

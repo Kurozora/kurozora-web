@@ -53,6 +53,10 @@ class MeSettingsController extends Controller
             $settings->discord_activity_name = (int) $data['discordActivityName'];
         }
 
+        if (array_key_exists('ratingStyle', $data)) {
+            $settings->rating_style = (int) $data['ratingStyle'];
+        }
+
         $settings->save();
 
         return JSONResult::success([

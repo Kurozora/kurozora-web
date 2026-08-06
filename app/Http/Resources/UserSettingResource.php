@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Enums\RatingStyle;
 use App\Models\UserSetting;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -33,6 +34,7 @@ class UserSettingResource extends JsonResource
                 'discordRichPresenceEnabled' => (bool) $this->resource->discord_rich_presence_enabled,
                 'discordPresenceImage' => (int) $this->resource->discord_presence_image,
                 'discordActivityName' => (int) $this->resource->discord_activity_name,
+                'ratingStyle' => (int) ($this->resource->rating_style?->value ?? RatingStyle::Standard),
             ],
         ];
     }

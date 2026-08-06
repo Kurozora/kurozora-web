@@ -1,4 +1,4 @@
-@props(['reviews' => [], 'isRow' => true, 'safeAreaInsetEnabled' => true])
+@props(['reviews' => [], 'isRow' => true, 'safeAreaInsetEnabled' => true, 'voteOverrides' => []])
 
 @php
     $class = $isRow ? 'snap-mandatory snap-x overflow-x-scroll no-scrollbar' : 'flex-wrap';
@@ -10,7 +10,7 @@
 
 <div {{ $attributes->merge(['class' => 'flex gap-4 justify-between pl-4 pr-4 ' . $class]) }}>
     @foreach ($reviews as $review)
-        <x-lockups.review-lockup :review="$review" :is-row="$isRow" />
+        <x-lockups.review-lockup :review="$review" :is-row="$isRow" :vote-overrides="$voteOverrides" />
     @endforeach
 
     <div class="w-64 sm:w-96 flex-grow"></div>

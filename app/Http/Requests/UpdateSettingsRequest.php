@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Enums\DiscordActivityName;
 use App\Enums\DiscordPresenceImage;
+use App\Enums\RatingStyle;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateSettingsRequest extends FormRequest
@@ -30,6 +31,7 @@ class UpdateSettingsRequest extends FormRequest
             'discordRichPresenceEnabled' => ['bail', 'boolean'],
             'discordPresenceImage' => ['bail', 'integer', 'in:' . implode(',', DiscordPresenceImage::getValues())],
             'discordActivityName' => ['bail', 'integer', 'in:' . implode(',', DiscordActivityName::getValues())],
+            'ratingStyle' => ['bail', 'integer', 'in:' . implode(',', RatingStyle::getValues())],
         ];
     }
 }

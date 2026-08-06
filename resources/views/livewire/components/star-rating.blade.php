@@ -1,5 +1,5 @@
 <div class="flex gap-0.5 justify-center text-tint">
-    @if (!$disabled)
+    @if ($allowsRemove)
         @php
             $star0 = uniqid('star-0');
         @endphp
@@ -34,4 +34,28 @@
             </label>
         </div>
     @endfor
+
+    @if (!$disabled)
+        <x-dialog-modal model="confirmingRemoval">
+            <x-slot:title>
+                {{ __('Remove Rating') }}
+            </x-slot:title>
+
+            <x-slot:content>
+                <div class="pt-4 pb-4 pl-4 pr-4">
+                    <p>{{ __('Removing your rating will also delete your review. Do you want to continue?') }}</p>
+                </div>
+            </x-slot:content>
+
+            <x-slot:footer>
+                <x-outlined-button wire:click="$toggle('confirmingRemoval')" wire:loading.attr="disabled">
+                    {{ __('Nevermind') }}
+                </x-outlined-button>
+
+                <x-danger-button class="ml-2" wire:click="removeRating" wire:loading.attr="disabled">
+                    {{ __('Remove') }}
+                </x-danger-button>
+            </x-slot:footer>
+        </x-dialog-modal>
+    @endif
 </div>

@@ -6,6 +6,7 @@ use App\Actions\Web\DeleteLibrary;
 use App\Actions\Web\DeleteUser;
 use App\Actions\Web\Profile\ImportUserLibrary;
 use App\Actions\Web\Profile\UpdateUserPreferredLanguage;
+use App\Actions\Web\Profile\UpdateUserPreferredRatingStyle;
 use App\Actions\Web\Profile\UpdateUserPreferredTimezone;
 use App\Actions\Web\Profile\UpdateUserPreferredTvRating;
 use App\Actions\Web\UpdateUserAccountInformation;
@@ -19,6 +20,7 @@ use App\Contracts\UpdatesUserProfileInformation;
 use App\Contracts\Web\Auth\TwoFactorAuthenticationProvider as TwoFactorAuthenticationProviderContract;
 use App\Contracts\Web\Profile\ImportsUserLibrary;
 use App\Contracts\Web\Profile\UpdatesUserPreferredLanguage;
+use App\Contracts\Web\Profile\UpdatesUserPreferredRatingStyle;
 use App\Contracts\Web\Profile\UpdatesUserPreferredTimezone;
 use App\Contracts\Web\Profile\UpdatesUserPreferredTvRating;
 use Illuminate\Support\ServiceProvider;
@@ -44,6 +46,7 @@ class ProfileServiceProvider extends ServiceProvider
     {
         $this->app->singleton(ImportsUserLibrary::class, ImportUserLibrary::class);
         $this->app->singleton(UpdatesUserPreferredLanguage::class, UpdateUserPreferredLanguage::class);
+        $this->app->singleton(UpdatesUserPreferredRatingStyle::class, UpdateUserPreferredRatingStyle::class);
         $this->app->singleton(UpdatesUserPreferredTimezone::class, UpdateUserPreferredTimezone::class);
         $this->app->singleton(UpdatesUserPreferredTvRating::class, UpdateUserPreferredTvRating::class);
         $this->app->singleton(UpdatesUserAccountInformation::class, UpdateUserAccountInformation::class);

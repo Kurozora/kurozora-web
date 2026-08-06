@@ -43,4 +43,39 @@ trait HasMediaRatings
     {
         return $this->morphMany(MediaRating::class, 'model');
     }
+
+    /**
+     * Get the model's ratings that include a written review.
+     *
+     * @return MorphMany
+     */
+    public function reviews(): MorphMany
+    {
+        return $this->mediaRatings()
+            ->whereNotNull('description');
+    }
+
+    /**
+     * Get the model's detailed ratings.
+     *
+     * @return MorphMany
+     */
+    public function detailedRatings(): MorphMany
+    {
+        return $this->mediaRatings()
+            ->whereHas('categoryScores');
+    }
+
+    /**
+     * Get the given user's rating of the model.
+     *
+     * @param int $userID
+     *
+     * @return MediaRating|null
+     */
+    public function userRating(int $userID): ?MediaRating
+    {
+        return $this->mediaRatings()
+            ->firstWhere('user_id', '=', $userID);
+    }
 }
