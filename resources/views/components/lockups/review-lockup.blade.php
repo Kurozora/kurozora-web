@@ -1,7 +1,22 @@
-@props(['review', 'isRow' => true])
+@props(['review', 'isRow' => true, 'voteOverrides' => []])
 
 @php
     $class = $isRow ? 'pb-2 shrink-0 snap-normal snap-center' : '';
+
+    $voteOverride = $voteOverrides[$review->id] ?? null;
+
+    if ($voteOverride !== null) {
+        $isHelpful = $voteOverride['helpful'] === true;
+        $isUnhelpful = $voteOverride['helpful'] === false;
+        $helpfulCount = (int) $voteOverride['helpfulCount'];
+        $unhelpfulCount = (int) $voteOverride['unhelpfulCount'];
+    } else {
+        $currentReaction = auth()->user()?->getHelpfulnessFor($review);
+        $isHelpful = $currentReaction?->is(\App\Enums\ParentalGuideReaction::Helpful) ?? false;
+        $isUnhelpful = $currentReaction?->is(\App\Enums\ParentalGuideReaction::Unhelpful) ?? false;
+        $helpfulCount = (int) $review->helpful_count;
+        $unhelpfulCount = (int) $review->unhelpful_count;
+    }
 @endphp
 
 <div {{ $attributes->merge(['class' => 'relative flex-grow w-64 sm:w-96 ' . $class]) }}>
@@ -33,6 +48,28 @@
                         {!! nl2br(e($review->description)) !!}
                     </x-slot:text>
                 </x-truncated-text>
+            </div>
+
+            <div class="flex gap-2 items-center mt-2">
+                <button
+                    type="button"
+                    class="inline-flex items-center gap-1 pl-2 pr-2 pt-1 pb-1 text-xs rounded-md bg-tertiary {{ $isHelpful ? 'text-tint font-semibold' : '' }}"
+                    title="{{ __('Helpful') }}"
+                    wire:click="voteOnReview({{ $review->id }}, 'helpful')"
+                >
+                    <span aria-hidden="true">👍</span>
+                    <span>{{ $helpfulCount }}</span>
+                </button>
+
+                <button
+                    type="button"
+                    class="inline-flex items-center gap-1 pl-2 pr-2 pt-1 pb-1 text-xs rounded-md bg-tertiary {{ $isUnhelpful ? 'text-tint font-semibold' : '' }}"
+                    title="{{ __('Unhelpful') }}"
+                    wire:click="voteOnReview({{ $review->id }}, 'unhelpful')"
+                >
+                    <span aria-hidden="true">👎</span>
+                    <span>{{ $unhelpfulCount }}</span>
+                </button>
             </div>
 
 {{--            <div class="flex gap-2 justify-between w-full">--}}

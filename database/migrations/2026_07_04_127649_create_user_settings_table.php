@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\RatingStyle;
 use App\Models\User;
 use App\Models\UserSetting;
 use Illuminate\Database\Migrations\Migration;
@@ -22,6 +23,7 @@ return new class extends Migration
             $table->boolean('discord_rich_presence_enabled')->default(true);
             $table->unsignedTinyInteger('discord_presence_image')->default(0);
             $table->unsignedTinyInteger('discord_activity_name')->default(0);
+            $table->unsignedTinyInteger('rating_style')->default(RatingStyle::Standard);
             $table->timestamps();
         });
 

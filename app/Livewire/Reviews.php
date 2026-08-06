@@ -8,6 +8,7 @@ use App\Models\Game;
 use App\Models\Manga;
 use App\Models\MediaRating;
 use App\Models\MediaStat;
+use App\Traits\Livewire\MediaRatingActions;
 use App\Traits\Livewire\WithReviewBox;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -19,7 +20,17 @@ use Livewire\Component;
 
 class Reviews extends Component
 {
-    use WithReviewBox;
+    use MediaRatingActions,
+        WithReviewBox;
+
+    /**
+     * The component's listeners.
+     *
+     * @var array
+     */
+    protected $listeners = [
+        'review-submitted' => '$refresh',
+    ];
 
     /**
      * The library kind being viewed.
@@ -115,7 +126,7 @@ class Reviews extends Component
         }
 
         return $this->parent->mediaRatings()
-            ->with(['user.media'])
+            ->with(array_merge(['user.media'], MediaRating::lockupEagerLoads(auth()->user())))
             ->where('description', '!=', null)
             ->orderBy('created_at')
             ->cursorPaginate();

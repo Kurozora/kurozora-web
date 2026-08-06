@@ -37,6 +37,10 @@
                 <livewire:profile.select-preferred-tv-rating-form :user="$user" />
             </div>
 
+            <div class="pt-10">
+                <livewire:profile.select-preferred-rating-style-form :user="$user" />
+            </div>
+
             @if ($user === auth()->user())
                 <div class="pt-10">
                     <livewire:profile.import-library-form />

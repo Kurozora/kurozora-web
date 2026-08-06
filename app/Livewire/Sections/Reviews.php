@@ -2,6 +2,8 @@
 
 namespace App\Livewire\Sections;
 
+use App\Models\MediaRating;
+use App\Traits\Livewire\MediaRatingActions;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -13,6 +15,17 @@ use Livewire\Component;
 #[Isolate]
 class Reviews extends Component
 {
+    use MediaRatingActions;
+
+    /**
+     * The component's listeners.
+     *
+     * @var array
+     */
+    protected $listeners = [
+        'review-submitted' => '$refresh',
+    ];
+
     /**
      * The model data.
      *
@@ -80,7 +93,7 @@ class Reviews extends Component
         }
 
         return $this->model->mediaRatings()
-            ->with(['user.media'])
+            ->with(array_merge(['user.media'], MediaRating::lockupEagerLoads(auth()->user())))
             ->where('description', '!=', null)
             ->orderBy('created_at')
             ->limit(6)
