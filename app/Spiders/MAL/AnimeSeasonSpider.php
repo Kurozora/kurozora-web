@@ -4,6 +4,9 @@ namespace App\Spiders\MAL;
 
 use App\Models\Anime;
 use App\Processors\MAL\AnimeSeasonProcessor;
+use App\Spiders\MAL\Middleware\CircuitBreakerMiddleware;
+use App\Spiders\MAL\Middleware\BackoffMiddleware;
+use App\Spiders\MAL\Middleware\RateLimitMiddleware;
 use Generator;
 use RoachPHP\Downloader\DownloaderMiddlewareInterface;
 use RoachPHP\Downloader\Middleware\RequestDeduplicationMiddleware;
@@ -38,6 +41,9 @@ class AnimeSeasonSpider extends BasicSpider
      */
     public array $downloaderMiddleware = [
         RequestDeduplicationMiddleware::class,
+        CircuitBreakerMiddleware::class,
+        BackoffMiddleware::class,
+        RateLimitMiddleware::class,
         [
             UserAgentMiddleware::class,
             ['userAgent' => 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'],
@@ -96,6 +102,11 @@ class AnimeSeasonSpider extends BasicSpider
      */
     public function parse(Response $response): Generator
     {
+        if ($response->getStatus() >= 400) {
+            logger()->error('Anime Season;status:' . $response->getStatus());
+            return $this->item([]);
+        }
+
         $ids = $response->filter('div.title h2.h2_anime_title a.link-title')
             ->each(function (Crawler $item) {
                 $regex = '/anime\/(\d+)\//';

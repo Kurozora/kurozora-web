@@ -5,6 +5,8 @@ namespace App\Console\Commands\Fixers;
 use App\Models\MediaSong;
 use DB;
 use Illuminate\Console\Command;
+use Laravel\Telescope\Telescope;
+use Pulse;
 use Throwable;
 
 class MediaSongOrder extends Command
@@ -31,6 +33,9 @@ class MediaSongOrder extends Command
      */
     public function handle(): int
     {
+        Pulse::stopRecording();
+        Telescope::stopRecording();
+
         // Get only groups with duplicate positions
         $groups = MediaSong::select('model_type', 'model_id', 'type')
             ->groupBy('model_type', 'model_id', 'type', 'position')
@@ -93,6 +98,9 @@ class MediaSongOrder extends Command
         $bar->finish();
         $this->newLine();
         $this->info('All duplicate positions have been fixed!');
+
+        Pulse::startRecording();
+        Telescope::startRecording();
 
         return Command::SUCCESS;
     }

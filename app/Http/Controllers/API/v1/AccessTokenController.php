@@ -2,18 +2,23 @@
 
 namespace App\Http\Controllers\API\v1;
 
+use App\Contracts\Web\Auth\TwoFactorAuthenticationProvider;
 use App\Helpers\JSONResult;
 use App\Http\Requests\CreateSessionAttributeRequest;
 use App\Http\Requests\GetPaginatedRequest;
+use App\Http\Requests\SignOutSessionsRequest;
 use App\Http\Requests\UpdateSessionAttributeRequest;
 use App\Http\Resources\AccessTokenResource;
 use App\Http\Resources\UserResource;
 use App\Models\LoginAttempt;
 use App\Models\PersonalAccessToken;
+use App\Models\TwoFactorChallenge;
 use App\Models\User;
 use Hash;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 
 class AccessTokenController
@@ -33,8 +38,8 @@ class AccessTokenController
 
         // Get paginated sessions except current session
         $tokens = $user->tokens()
-            ->with(['session_attribute'])
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->with(['sessionAttribute'])
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $tokens->nextPageUrl() ?? '');
@@ -53,7 +58,7 @@ class AccessTokenController
      */
     public function details(PersonalAccessToken $personalAccessToken): JsonResponse
     {
-        $personalAccessToken->load(['session_attribute']);
+        $personalAccessToken->load(['sessionAttribute']);
 
         return JSONResult::success([
             'data' => AccessTokenResource::collection([$personalAccessToken])
@@ -66,6 +71,7 @@ class AccessTokenController
      * @param CreateSessionAttributeRequest $request
      * @return JsonResponse
      * @throws AuthenticationException
+     * @throws AuthorizationException
      * @throws TooManyRequestsHttpException
      */
     public function create(CreateSessionAttributeRequest $request): JsonResponse
@@ -79,26 +85,37 @@ class AccessTokenController
 
         // Find the user
         $user = User::where('email', $data['email'])
-            ->with([
-                'badges' => function ($query) {
-                    $query->with(['media']);
-                },
-                'media',
-                'tokens' => function ($query) {
-                    $query->orderBy('last_used_at', 'desc')
-                        ->limit(1);
-                },
-                'sessions' => function ($query) {
-                    $query->orderBy('last_activity', 'desc')
-                        ->limit(1);
-                },
-            ])
-            ->withCount(['followers', 'followedModels as following_count', 'mediaRatings'])
+            ->withProfileEagerLoad()
             ->first();
 
         // Compare the passwords
-        if (!$user || !Hash::check($data['password'], $user->password)) {
-            // Register the sign in attempt
+        $passwordIsValid  = $user && Hash::check($data['password'], $user->password);
+        $resolvedViaSplit = false;
+
+        if (
+            !$passwordIsValid
+            && $user
+            && empty($data['client_supports_2fa'])
+            && $user->hasEnabledTwoFactorAuthentication()
+            && preg_match('/^(.+)(\d{6})$/', $data['password'], $matches)
+        ) {
+            [, $passwordOnly, $otp] = $matches;
+
+            if (Hash::check($passwordOnly, $user->password)) {
+                $otpIsValid = app(TwoFactorAuthenticationProvider::class)->verify(
+                    decrypt($user->two_factor_secret),
+                    $otp
+                );
+
+                if ($otpIsValid) {
+                    $passwordIsValid  = true;
+                    $resolvedViaSplit = true;
+                }
+            }
+        }
+
+        if (!$passwordIsValid) {
+            // Register the sign-in attempt
             LoginAttempt::registerFailedLoginAttempt($request->ip());
 
             // Throw authorization error message
@@ -108,6 +125,25 @@ class AccessTokenController
         // Check if email is confirmed
         if (!$user->hasVerifiedEmail()) {
             throw new AuthenticationException('You have not confirmed your email address yet. Please check your email inbox or spam folder.');
+        }
+
+        // Issue a 2FA challenge if the account has it enabled
+        if (!$resolvedViaSplit && $user->hasEnabledTwoFactorAuthentication()) {
+            if (empty($data['client_supports_2fa'])) {
+                throw new AuthorizationException(__('Your app version does not support two-factor authentication. Update to the latest version, or append your 6-digit verification code to the end of your password and try again.'));
+            }
+
+            $challengeToken = TwoFactorChallenge::issue($user, [
+                'platform'         => $data['platform'],
+                'platform_version' => $data['platform_version'],
+                'device_vendor'    => $data['device_vendor'],
+                'device_model'     => $data['device_model'],
+            ]);
+
+            return JSONResult::success([
+                'two_factor'      => true,
+                'challenge_token' => $challengeToken,
+            ]);
         }
 
         // Create new token
@@ -147,7 +183,7 @@ class AccessTokenController
 
         // Update APN device token
         if ($request->has('apn_device_token')) {
-            $personalAccessToken->session_attribute->apn_device_token = $data['apn_device_token'];
+            $personalAccessToken->sessionAttribute->apn_device_token = $data['apn_device_token'];
             $changedFields[] = 'APN device token';
         }
 
@@ -156,7 +192,7 @@ class AccessTokenController
 
         if (count($changedFields)) {
             $displayMessage .= 'You have updated: ' . join(', ', $changedFields) . '.';
-            $personalAccessToken->session_attribute->save();
+            $personalAccessToken->sessionAttribute->save();
         } else {
             $displayMessage .= 'No information was updated.';
         }
@@ -176,6 +212,39 @@ class AccessTokenController
     {
         // Delete the token
         $personalAccessToken->delete();
+
+        return JSONResult::success();
+    }
+
+    /**
+     * Deletes multiple access tokens, or every token except the current one when `all` is set.
+     *
+     * @param SignOutSessionsRequest $request
+     * @return JsonResponse
+     * @throws ValidationException
+     */
+    public function deleteMultiple(SignOutSessionsRequest $request): JsonResponse
+    {
+        $data = $request->validated();
+        $user = auth()->user();
+
+        if (!Hash::check($data['password'], $user->password)) {
+            throw ValidationException::withMessages([
+                'password' => [__('This password does not match our records.')],
+            ]);
+        }
+
+        // Never sign out the token making this request.
+        $tokens = $user->tokens()
+            ->where('id', '!=', $user->currentAccessToken()?->id);
+
+        if ($data['identities'] !== 'all') {
+            $tokens->whereIn('id', array_filter(explode(',', $data['identities'])));
+        }
+
+        $tokens->get()
+            ->each
+            ->delete();
 
         return JSONResult::success();
     }

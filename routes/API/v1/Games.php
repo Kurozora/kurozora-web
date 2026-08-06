@@ -1,9 +1,13 @@
 <?php
 
+use App\Enums\UserLibraryKind;
 use App\Http\Controllers\API\v1\GameController;
+use App\Http\Controllers\API\v1\MuseumController;
+use App\Http\Controllers\API\v1\ParentalGuideController;
 
 Route::prefix('/games')
     ->name('.games')
+    ->middleware('cache.headers:private;no_cache;etag')
     ->group(function () {
         Route::get('/', [GameController::class, 'index'])
             ->middleware('auth.kurozora:optional')
@@ -13,13 +17,20 @@ Route::prefix('/games')
             ->middleware('auth.kurozora:optional')
             ->name('.upcoming');
 
-        Route::prefix('/seasons')
-            ->name('.seasons')
-            ->group(function () {
-                Route::get('/{year}/{season}', [GameController::class, 'browseSeason'])
-                    ->middleware('auth.kurozora:optional')
-                    ->name('.view');
-            });
+        Route::get('/seasons', [GameController::class, 'browseSeason'])
+            ->middleware('auth.kurozora:optional')
+            ->name('.seasons');
+
+        Route::get('/museum', [MuseumController::class, 'index'])
+            ->middleware('auth.kurozora:optional')
+            ->defaults('kind', UserLibraryKind::Game)
+            ->name('.museum');
+
+        Route::get('/museum/{year}', [MuseumController::class, 'year'])
+            ->middleware('auth.kurozora:optional')
+            ->defaults('kind', UserLibraryKind::Game)
+            ->whereNumber('year')
+            ->name('.museum.year');
 
         Route::prefix('{game}')
             ->group(function () {
@@ -61,11 +72,23 @@ Route::prefix('/games')
                     ->name('.more-by-studio');
 
                 Route::post('/rate', [GameController::class, 'rate'])
-                    ->middleware('auth.kurozora')
+                    ->middleware(['auth.kurozora', 'user.not-timed-out'])
                     ->name('.rate');
 
                 Route::get('/reviews', [GameController::class, 'reviews'])
                     ->middleware('auth.kurozora:optional')
                     ->name('.reviews');
+
+                Route::prefix('parentalguide')
+                    ->name('.parentalguide')
+                    ->group(function () {
+                        Route::get('/', [ParentalGuideController::class, 'indexForGame'])
+                            ->middleware('auth.kurozora:optional')
+                            ->name('.index');
+
+                        Route::post('/', [ParentalGuideController::class, 'storeForGame'])
+                            ->middleware(['auth.kurozora', 'user.not-timed-out'])
+                            ->name('.store');
+                    });
             });
     });

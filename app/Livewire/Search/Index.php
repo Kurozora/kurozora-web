@@ -274,7 +274,7 @@ class Index extends Component
                         case Anime::class:
                         case Game::class:
                         case Manga::class:
-                            $query->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating'])
+                            $query->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tvRating'])
                                 ->when(auth()->user(), function ($query, $user) {
                                     $query->with(['library' => function ($query) use ($user) {
                                         $query->where('user_id', '=', $user->id);
@@ -298,8 +298,9 @@ class Index extends Component
                             ])
                                 ->when(auth()->user(), function ($query, $user) {
                                     $query->withExists([
-                                        'user_watched_episodes as isWatched' => function ($query) use ($user) {
-                                            $query->where('user_id', $user->id);
+                                        'userWatchedEpisodes as isWatched' => function ($query) use ($user) {
+                                            $query->where('user_id', $user->id)
+                                                ->completed();
                                         }
                                     ]);
                                 });
@@ -474,6 +475,27 @@ class Index extends Component
     public function setSearchTypes(): array
     {
         return SearchType::asWebSelectArray($this->scope);
+    }
+
+    /**
+     * The Schema.org JSON-LD payload for this page.
+     *
+     * @return array
+     */
+    public function getSchemaProperty(): array
+    {
+        return [
+            '@type' => 'WebSite',
+            'url' => config('app.url'),
+            'potentialAction' => [
+                '@type' => 'SearchAction',
+                'target' => [
+                    '@type' => 'EntryPoint',
+                    'urlTemplate' => route('search.index') . '?q={search_term_string}&src=' . SearchSource::Google,
+                ],
+                'query-input' => 'required name=search_term_string',
+            ],
+        ];
     }
 
     /**

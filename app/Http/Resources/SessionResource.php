@@ -31,6 +31,7 @@ class SessionResource extends JsonResource
             'attributes' => [
                 'ipAddress' => $this->resource->ip_address,
                 'lastValidatedAt' => $this->resource->last_activity,
+                'appSource' => $this->resource->sessionAttribute?->app_source,
             ]
         ];
 
@@ -38,10 +39,10 @@ class SessionResource extends JsonResource
         $relationships = [
             'relationships' => [
                 'platform' => [
-                    'data' => PlatformResource::collection([$this->resource->session_attribute])
+                    'data' => PlatformResource::collection([$this->resource->sessionAttribute])
                 ],
                 'location' => [
-                    'data' => LocationResource::collection([$this->resource->session_attribute])
+                    'data' => LocationResource::collection([$this->resource->sessionAttribute])
                 ]
             ]
         ];

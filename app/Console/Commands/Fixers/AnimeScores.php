@@ -31,7 +31,7 @@ class AnimeScores extends Command
     public function handle(): int
     {
         Anime::withoutGlobalScopes()
-            ->without(['genres', 'media', 'mediaStat', 'tv_rating', 'translations'])
+            ->without(['genres', 'media', 'mediaStat', 'tvRating', 'translations'])
             ->join(MediaStat::TABLE_NAME, MediaStat::TABLE_NAME . '.model_id', '=', Anime::TABLE_NAME . '.id')
             ->where([
                 [MediaStat::TABLE_NAME . '.model_type', '=', Anime::class],

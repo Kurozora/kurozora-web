@@ -221,64 +221,40 @@
         @case(\App\Models\Song::class)
             <div
                 class="flex flex-nowrap gap-2"
-                x-data="{
-                    song: null,
-                    musicManager: null,
-                    bgColor: '#A660B2',
-                    songTitle: '{{ str($mediaRating->model->title)->replace('\'', '’') }}',
-                    artistName: '{{ str($mediaRating->model->artist ?? 'Unknown')->replace('\'', '’') }}',
-                    artworkURL: '{{ $mediaRating->model->getFirstMediaFullUrl(\App\Enums\MediaCollection::Artwork()) ?? asset('images/static/placeholders/music_album.webp') }}',
-                    async fetchSongData(songID) {
-                        if (!!songID) {
-                            this.song = await musicManager.fetchSong(songID)
-                            this.musicManager = window.musicManager
-                            this.bgColor = '#' + this.song.attributes.artwork.bgColor
-                            this.songTitle = this.song.attributes.name
-                            this.artistName = this.song.attributes.artistName
-                            this.artworkURL = musicManager.getArtworkURL(this.song, 500, 500)
-                        }
-                    }
-                }"
-                x-on:musicmanagerloaded.window="await fetchSongData('{{ $mediaRating->model->am_id }}')"
-                x-init="window.musicManager !== undefined ? await fetchSongData('{{ $mediaRating->model->am_id }}') : null"
+                @if (!empty($mediaRating->model->am_id)) data-music-song data-am-id="{{ $mediaRating->model->am_id }}" @endif
             >
                 <x-picture class="relative shrink-0 w-28 aspect-square rounded-lg overflow-hidden">
-                    <img class="w-full h-full object-cover"
+                    <img class="w-full h-full object-cover bg-[#A660B2]"
                          width="320" height="320"
                          src="{{ $mediaRating->model->getFirstMediaFullUrl(\App\Enums\MediaCollection::Artwork()) ?? asset('images/static/placeholders/music_album.webp') }}"
-                         x-bind:title="songTitle"
-                         x-bind:alt="songTitle + ' Artwork'"
-                         x-bind:src="artworkURL"
-                         x-bind:style="{'background-color': bgColor}"
+                         title="{{ $mediaRating->model->title }}"
+                         alt="{{ $mediaRating->model->title }}"
                     >
 
                     <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-lg"></div>
 
-                    <div class="absolute top-0 bottom-0 left-0 right-0">
-                        <div class="flex flex-col justify-center items-center h-full">
-                            @if (!empty($mediaRating->model->am_id))
+                    @if (!empty($mediaRating->model->am_id))
+                        <div class="absolute top-0 bottom-0 left-0 right-0">
+                            <div class="flex flex-col justify-center items-center h-full">
                                 <button
-                                    class="inline-flex items-center pt-3 pr-3 pb-3 pl-3 bg-blur backdrop-blur border border-transparent rounded-full font-semibold text-xs uppercase tracking-widest shadow-md hover:bg-tint-800 hover:btn-text-tinted active:bg-tint active:btn-text-tinted focus:outline-none disabled:bg-gray-100 disabled:text-gray-300 disabled:cursor-default disabled:opacity-100 transition ease-in-out duration-150"
-                                    x-on:click="await musicManager?.playSong(song)"
+                                    type="button"
+                                    data-music-play
+                                    title="{{ __('Play') }}"
+                                    class="inline-flex items-center pt-3 pr-3 pb-3 pl-3 bg-blur backdrop-blur border border-transparent rounded-full font-semibold text-xs uppercase tracking-widest shadow-md hover:bg-tint-800 hover:btn-text-tinted active:bg-tint active:btn-text-tinted focus:outline-none transition ease-in-out duration-150"
                                 >
-                                    <template x-if="musicManager?.isPlaying && musicManager?.currentMusicID === '{{ $mediaRating->model->am_id }}'">
-                                        @svg('pause_fill', 'fill-current', ['width' => '18'])
-                                    </template>
-
-                                    <template x-if="!(musicManager?.isPlaying && musicManager?.currentMusicID === '{{ $mediaRating->model->am_id }}')">
-                                        @svg('play_fill', 'fill-current', ['width' => '18'])
-                                    </template>
+                                    <span data-music-icon="play">@svg('play_fill', 'fill-current', ['width' => '18'])</span>
+                                    <span data-music-icon="pause" class="hidden">@svg('pause_fill', 'fill-current', ['width' => '18'])</span>
                                 </button>
-                            @endif
+                            </div>
                         </div>
-                    </div>
+                    @endif
                 </x-picture>
 
                 <div class="relative flex flex-col items-baseline w-full">
                     <a class="absolute w-full h-full" href="{{ route('songs.details', $mediaRating->model) }}" wire:navigate></a>
 
                     <div class="flex justify-between gap-2 w-full">
-                        <p class="inline-flex items-center text-sm font-semibold break-all overflow-hidden" x-text="songTitle">{{ $mediaRating->model->title }}</p>
+                        <p class="inline-flex items-center text-sm font-semibold break-all overflow-hidden">{{ $mediaRating->model->title }}</p>
 
                         <p class="text-sm text-secondary whitespace-nowrap" title="{{ $mediaRating->created_at->toFormattedDateString() }}">{{ $mediaRating->created_at->toFormattedDateString() }}</p>
                     </div>

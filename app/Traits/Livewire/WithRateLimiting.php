@@ -15,7 +15,7 @@ trait WithRateLimiting
      *
      * @return void
      */
-    protected function clearRateLimiter(string $method = null, string $component = null): void
+    protected function clearRateLimiter(?string $method = null, ?string $component = null): void
     {
         $method ??= debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, limit: 2)[1]['function'];
 
@@ -34,7 +34,7 @@ trait WithRateLimiting
      *
      * @return string
      */
-    protected function getRateLimitKey(?string $method, string $component = null): string
+    protected function getRateLimitKey(?string $method, ?string $component = null): string
     {
         $method ??= debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, limit: 2)[1]['function'];
 
@@ -52,7 +52,7 @@ trait WithRateLimiting
      *
      * @return void
      */
-    protected function hitRateLimiter(string $method = null, int $decaySeconds = 60, string $component = null): void
+    protected function hitRateLimiter(?string $method = null, int $decaySeconds = 60, ?string $component = null): void
     {
         $method ??= debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, limit: 2)[1]['function'];
 
@@ -71,7 +71,7 @@ trait WithRateLimiting
      *
      * @return int
      */
-    protected function rateLimitAvailableIn(string $method = null, string $component = null): int
+    protected function rateLimitAvailableIn(?string $method = null, ?string $component = null): int
     {
         $method ??= debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, limit: 2)[1]['function'];
 
@@ -92,7 +92,7 @@ trait WithRateLimiting
      *
      * @return void
      */
-    protected function rateLimit(int $maxAttempts, int $decaySeconds = 60, string $method = null, string $component = null): void
+    protected function rateLimit(int $maxAttempts, int $decaySeconds = 60, ?string $method = null, ?string $component = null): void
     {
         $method ??= debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, limit: 2)[1]['function'];
 

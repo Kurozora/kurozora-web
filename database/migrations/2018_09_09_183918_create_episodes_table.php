@@ -22,6 +22,7 @@ return new class extends Migration
             $table->unsignedBigInteger('previous_episode_id')->nullable();
             $table->unsignedBigInteger('season_id');
             $table->unsignedBigInteger('tv_rating_id')->nullable();
+            $table->string('public_id', 16);
             $table->unsignedInteger('number');
             $table->unsignedInteger('number_total');
             $table->unsignedMediumInteger('duration')->default(0);
@@ -31,7 +32,7 @@ return new class extends Migration
             $table->boolean('is_premiere')->default(false);
             $table->boolean('is_finale')->default(false);
             $table->boolean('is_verified')->default(false);
-            $table->unsignedBigInteger('rank_total')->default(0);
+            $table->unsignedInteger('rank_total')->default(0);
             $table->integer('view_count')->default(0);
             $table->integer('watch_count')->default(0);
             $table->dateTime('started_at')->nullable();
@@ -42,18 +43,16 @@ return new class extends Migration
 
         Schema::table(Episode::TABLE_NAME, function (Blueprint $table) {
             // Set index key constraints
-            $table->index('is_filler');
-            $table->index('is_nsfw');
-            $table->index('is_premiere');
-            $table->index('is_finale');
-            $table->index('rank_total');
+            $table->index(['season_id', 'deleted_at', 'tv_rating_id', 'started_at', 'id']);
+            $table->index(['deleted_at', 'tv_rating_id', 'started_at']);
+            $table->index(['deleted_at', 'rank_total']);
             $table->index(['started_at', 'ended_at']);
             $table->index(['ended_at', 'started_at']);
             $table->index('created_at');
             $table->index('updated_at');
-            $table->index('deleted_at');
 
             // Set unique key constraints
+            $table->unique(['public_id']);
             $table->unique(['season_id', 'number']);
 
             // Set foreign key constraints

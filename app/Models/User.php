@@ -3,9 +3,9 @@
 namespace App\Models;
 
 use App\Enums\MediaCollection;
-use App\Enums\RatingStyle;
 use App\Enums\UserActivityStatus;
 use App\Enums\UserLibraryStatus;
+use App\Events\UserStateChanged;
 use App\Helpers\OptionsBag;
 use App\Jobs\FetchSessionLocation;
 use App\Notifications\NewSession;
@@ -13,6 +13,7 @@ use App\Notifications\ResetPassword as ResetPasswordNotification;
 use App\Notifications\VerifyEmail as VerifyEmailNotification;
 use App\Parsers\MentionParser;
 use App\Traits\HeartActionTrait;
+use App\Traits\HelpfulnessActionTrait;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\Favoriter;
 use App\Traits\Model\Followable;
@@ -21,6 +22,7 @@ use App\Traits\Model\HasBlocking;
 use App\Traits\Model\HasSlug;
 use App\Traits\Model\HasViews;
 use App\Traits\Model\Impersonatable;
+use App\Traits\Model\MediaRater;
 use App\Traits\Model\Reminder;
 use App\Traits\Model\Tracker;
 use App\Traits\Model\UserBlockable;
@@ -38,11 +40,15 @@ use Illuminate\Database\Eloquent\MassPrunable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
+use IntlChar;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Scout\Searchable;
 use Markdown;
@@ -81,12 +87,14 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         HasUuids,
         HasViews,
         HeartActionTrait,
+        HelpfulnessActionTrait,
         Impersonatable,
         InteractsWithMedia,
         InteractsWithMediaExtension,
         LogsActivity,
         Notifiable,
         MassPrunable,
+        MediaRater,
         Reacterable,
         Reminder,
         Searchable,
@@ -130,7 +138,6 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
             'is_subscribed' => 'bool',
             'is_verified' => 'bool',
             'can_change_username' => 'bool',
-            'rating_style' => RatingStyle::class,
         ];
     }
 
@@ -142,6 +149,10 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     protected static function boot(): void
     {
         parent::boot();
+
+        static::created(function (User $user) {
+            $user->settings()->create();
+        });
 
         static::saving(function (User $user) {
             // Strip HTML tags
@@ -177,6 +188,14 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     }
 
     /**
+     * The broadcast channel name the user receives notifications on.
+     */
+    public function receivesBroadcastNotificationsOn(): string
+    {
+        return 'users.' . $this->getKey();
+    }
+
+    /**
      * Registers the media collections for the model.
      */
     public function registerMediaCollections(): void
@@ -196,12 +215,127 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
-            ->generateSlugsFrom('username')
+            ->generateSlugsFrom(fn (self $user): string => $user->slugSourceFromUsername())
             ->skipGenerateWhen(function () {
+//                dd(!isset($this->slug), !isset($this->can_change_username));
+//                if (!isset($this->slug) || !isset($this->can_change_username)) {
+//                    return true;
+//                }
+
                 return !(empty($this->slug) || $this->can_change_username);
             })
             ->usingSeparator('_')
+            ->slugsShouldBeNoLongerThan(self::MAXIMUM_SLUG_LENGTH)
             ->saveSlugsTo('slug');
+    }
+
+    /**
+     * Get the slug source derived from the username.
+     *
+     * @return string
+     */
+    function slugSourceFromUsername(): string
+    {
+        $source = $this->romanize((string) $this->username);
+        $slug = Str::slug($this->nameSymbols($source), '_');
+
+        if ($slug === '') {
+            return self::defaultUsername();
+        }
+
+        return $this->limitSlugToWords($slug, self::MAXIMUM_SLUG_LENGTH);
+    }
+
+    /**
+     * Romanize text to ASCII.
+     *
+     * @param string $value
+     * @return string
+     */
+    protected function romanize(string $value): string
+    {
+        $latin = transliterator_transliterate('Any-Latin', $value) ?: $value;
+
+        // Seat silent glottals as vowels.
+        $latin = strtr($latin, [
+            "\u{02BC}" => 'e', // aleph, hamza
+            "\u{02BE}" => 'e', // hamza
+            "\u{02BF}" => 'a', // ayin
+        ]);
+
+        return transliterator_transliterate('Latin-ASCII', $latin) ?: $latin;
+    }
+
+    /**
+     * Replace emoji and symbol characters with their Unicode names.
+     *
+     * @param string $value
+     * @return string
+     */
+    protected function nameSymbols(string $value): string
+    {
+        $characters = preg_split('//u', $value, -1, PREG_SPLIT_NO_EMPTY) ?: [];
+        $source = '';
+        $previous = null;
+
+        foreach ($characters as $character) {
+            $isSymbol = in_array(IntlChar::charType($character), [
+                IntlChar::CHAR_CATEGORY_CURRENCY_SYMBOL,
+                IntlChar::CHAR_CATEGORY_OTHER_SYMBOL,
+            ], true);
+
+            if (!$isSymbol) {
+                $source .= $character;
+                $previous = null;
+                continue;
+            }
+
+            // Collapse repeated emoji.
+            if ($character !== $previous) {
+                $source .= ' ' . (IntlChar::charName($character) ?? '') . ' ';
+                $previous = $character;
+            }
+        }
+
+        return $source;
+    }
+
+    /**
+     * Trim a slug to the given length without splitting a word.
+     *
+     * @param string $slug
+     * @param int $limit
+     * @return string
+     */
+    protected function limitSlugToWords(string $slug, int $limit): string
+    {
+        if (strlen($slug) <= $limit) {
+            return $slug;
+        }
+
+        $trimmed = '';
+
+        foreach (explode('_', $slug) as $word) {
+            $candidate = $trimmed === '' ? $word : $trimmed . '_' . $word;
+
+            if (strlen($candidate) > $limit) {
+                break;
+            }
+
+            $trimmed = $candidate;
+        }
+
+        return $trimmed !== '' ? $trimmed : substr($slug, 0, $limit);
+    }
+
+    /**
+     * Generate a default username.
+     *
+     * @return string
+     */
+    public static function defaultUsername(): string
+    {
+        return str()->random(8);
     }
 
     /**
@@ -272,15 +406,8 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
             'letter' => str_index($this->username),
             'username' => $this->username,
             'biography' => $this->biography,
-            'is_developer' => $this->is_developer,
-            'is_staff' => $this->is_staff,
-            'is_early_supporter' => $this->is_early_supporter,
             'is_pro' => $this->is_pro,
             'is_subscribed' => $this->is_subscribed,
-            'is_verified' => $this->is_verified,
-            'subscribed_at' => $this->subscribed_at?->timestamp,
-            'anime_imported_at' => $this->anime_imported_at?->timestamp,
-            'manga_imported_at' => $this->manga_imported_at?->timestamp,
             'created_at' => $createdAt?->timestamp,
             'updated_at' => $updatedAt?->timestamp,
         ];
@@ -359,125 +486,11 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     }
 
     /**
-     * Returns the anime ratings the user has.
-     *
-     * @return HasMany
-     */
-    public function mediaRatings(): HasMany
-    {
-        return $this->hasMany(MediaRating::class);
-    }
-
-    /**
-     * Returns the anime ratings the user has.
-     *
-     * @param null|string $type
-     *
-     * @return bool
-     */
-    public function clearRatings(?string $type = null): bool
-    {
-        return $this->mediaRatings()
-            ->when($type != null, function ($query) use ($type) {
-                $query->where('model_type', '=', $type);
-            })
-            ->forceDelete();
-    }
-
-    /**
-     * Returns the anime ratings the user has.
-     *
-     * @return HasMany
-     */
-    public function animeRatings(): HasMany
-    {
-        return $this->mediaRatings()
-            ->where('model_type', '=', Anime::class);
-    }
-
-    /**
-     * Returns the character ratings the user has.
-     *
-     * @return HasMany
-     */
-    public function characterRatings(): HasMany
-    {
-        return $this->mediaRatings()
-            ->where('model_type', '=', Character::class);
-    }
-
-    /**
-     * Returns the game ratings the user has.
-     *
-     * @return HasMany
-     */
-    public function gameRatings(): HasMany
-    {
-        return $this->mediaRatings()
-            ->where('model_type', '=', Game::class);
-    }
-
-    /**
-     * Returns the manga ratings the user has.
-     *
-     * @return HasMany
-     */
-    public function mangaRatings(): HasMany
-    {
-        return $this->mediaRatings()
-            ->where('model_type', '=', Manga::class);
-    }
-
-    /**
-     * Returns the episode ratings the user has.
-     *
-     * @return HasMany
-     */
-    public function episodeRatings(): HasMany
-    {
-        return $this->mediaRatings()
-            ->where('model_type', '=', Episode::class);
-    }
-
-    /**
-     * Returns the person ratings the user has.
-     *
-     * @return HasMany
-     */
-    public function personRatings(): HasMany
-    {
-        return $this->mediaRatings()
-            ->where('model_type', '=', Person::class);
-    }
-
-    /**
-     * Returns the song ratings the user has.
-     *
-     * @return HasMany
-     */
-    public function songRatings(): HasMany
-    {
-        return $this->mediaRatings()
-            ->where('model_type', '=', Song::class);
-    }
-
-    /**
-     * Returns the studio ratings the user has.
-     *
-     * @return HasMany
-     */
-    public function studioRatings(): HasMany
-    {
-        return $this->mediaRatings()
-            ->where('model_type', '=', Studio::class);
-    }
-
-    /**
      * Returns the associated feed messages for the user.
      *
      * @return HasMany
      */
-    function feed_messages(): HasMany
+    function feedMessages(): HasMany
     {
         return $this->hasMany(FeedMessage::class);
     }
@@ -503,7 +516,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
             }
 
             // Unpin any currently pinned message
-            $this->feed_messages()
+            $this->feedMessages()
                 ->where('is_pinned', true)
                 ->update([
                     'is_pinned' => false,
@@ -525,17 +538,8 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      */
     public function getActivityStatusAttribute(): UserActivityStatus
     {
-        // The token relation is eager loaded elsewhere with
-        // the following constraints: orderBy('last_used_at', 'desc'),
-        // limit(1), and select('last_used_at').
-        $personalAccessToken = $this->tokens->first();
-        $personalAccessTokenLastUsedAt = $personalAccessToken?->last_used_at;
-
-        // The session relation is eager loaded elsewhere with
-        // the following constraints: orderBy('last_activity', 'desc'),
-        // limit(1), and select('last_activity').
-        $session = $this->sessions->first();
-        $sessionLastActivity = Carbon::createFromTimestamp($session?->last_activity ?? 0);
+        $personalAccessTokenLastUsedAt = $this->latestToken?->last_used_at;
+        $sessionLastActivity = Carbon::createFromTimestamp($this->latestSession?->last_activity ?? 0);
 
         $activity = max($sessionLastActivity, $personalAccessTokenLastUsedAt);
 
@@ -558,6 +562,109 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     function sessions(): HasMany
     {
         return $this->hasMany(Session::class);
+    }
+
+    /**
+     * Returns the most recently used personal access token for the user.
+     *
+     * @return MorphOne
+     */
+    public function latestToken(): MorphOne
+    {
+        return $this->morphOne(PersonalAccessToken::class, 'tokenable')
+            ->ofMany('last_used_at', 'max');
+    }
+
+    /**
+     * Returns the most recently active session for the user.
+     *
+     * @return HasOne
+     */
+    public function latestSession(): HasOne
+    {
+        return $this->hasOne(Session::class)
+            ->ofMany('last_activity', 'max');
+    }
+
+    /**
+     * The user's settings.
+     *
+     * @return HasOne
+     */
+    public function settings(): HasOne
+    {
+        return $this->hasOne(UserSetting::class);
+    }
+
+    /**
+     * Increments the user's state version.
+     *
+     * @return void
+     */
+    public function bumpStateVersion(): void
+    {
+        $this->increment('state_version');
+
+        UserStateChanged::dispatch($this->getKey(), (int) $this->state_version);
+    }
+
+    /**
+     * Eager-loads the standard profile relations onto a user query.
+     *
+     * @param Builder $query
+     * @param ?User   $authUser
+     *
+     * @return Builder
+     */
+    public function scopeWithProfileEagerLoad(Builder $query, ?User $authUser = null): Builder
+    {
+        $query->with([
+            'achievements' => function ($query) {
+                $query->with(['media']);
+            },
+            'activeTimeout',
+            'media',
+            'latestToken',
+            'latestSession',
+        ])
+            ->withCount(['followers', 'following', 'mediaRatings', 'achievements']);
+
+        if ($authUser !== null) {
+            $query->withExists(['followers as isFollowed' => function ($query) use ($authUser) {
+                $query->where('user_id', '=', $authUser->id);
+            }]);
+        }
+
+        return $query;
+    }
+
+    /**
+     * Loads the standard profile relations onto a hydrated user model.
+     *
+     * @param ?User $authUser
+     *
+     * @return self
+     */
+    public function loadProfileEagerLoad(?User $authUser = null): self
+    {
+        $this->load([
+            'achievements' => function ($query) {
+                $query->with(['media']);
+            },
+            'activeTimeout',
+            'media',
+            'latestToken',
+            'latestSession',
+        ])
+            ->loadCount(['followers', 'following', 'mediaRatings', 'achievements']);
+
+        if ($authUser !== null) {
+            $this->loadExists(['followers as isFollowed' => function ($query) use ($authUser) {
+                $query->where('user_id', '=', $authUser->id);
+            }]);
+        }
+
+        return $this;
     }
 
     /**
@@ -659,7 +766,10 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      */
     function hasWatched(Episode $episode): bool
     {
-        return $this->episodes()->withoutGlobalScopes()->where('episode_id', $episode->id)->exists();
+        return $this->userWatchedEpisodes()
+            ->completed()
+            ->where('episode_id', $episode->id)
+            ->exists();
     }
 
     /**
@@ -671,7 +781,10 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      */
     function hasWatchedSeason(Season $season): bool
     {
-        return $this->episodes()->withoutGlobalScopes()->where('season_id', $season->id)->count() === $season->episodes()->withoutGlobalScopes()->count();
+        return $this->userWatchedEpisodes()
+                ->completed()
+                ->whereIn('episode_id', $season->episodes()->withoutGlobalScopes()->select('id'))
+                ->count() === $season->episodes()->withoutGlobalScopes()->count();
     }
 
     /**
@@ -690,7 +803,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      *
      * @return HasMany
      */
-    function user_watched_episodes(): HasMany
+    function userWatchedEpisodes(): HasMany
     {
         return $this->hasMany(UserWatchedEpisode::class);
     }
@@ -700,37 +813,39 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      *
      * @return HasMany
      */
-    function user_rewatched_episodes(): HasMany
+    function userRewatchedEpisodes(): HasMany
     {
         return $this->hasMany(UserWatchedEpisode::class)
+            ->completed()
             ->where('rewatch_count', '>', 0);
     }
 
     /**
      * Get the user's up-next episodes.
      *
-     * @param null|Anime $anime
+     * @param null|string $modelId
      *
      * @return Builder
      */
-    function up_next_episodes(?Anime $anime = null): Builder
+    function up_next_episodes(?string $modelId = null): Builder
     {
         $subquery = Episode::join(Season::TABLE_NAME, Episode::TABLE_NAME . '.season_id', '=', Season::TABLE_NAME . '.id')
             ->join(Anime::TABLE_NAME, Season::TABLE_NAME . '.anime_id', '=', Anime::TABLE_NAME . '.id')
-            ->join(UserLibrary::TABLE_NAME, function ($join) use ($anime) {
+            ->join(UserLibrary::TABLE_NAME, function ($join) use ($modelId) {
                 $join->on(UserLibrary::TABLE_NAME . '.trackable_id', '=', Anime::TABLE_NAME . '.id')
                     ->where(UserLibrary::TABLE_NAME . '.trackable_type', '=', Anime::class)
-                    ->when($anime, function($query) use ($anime) {
-                        $query->where(UserLibrary::TABLE_NAME . '.trackable_id', '=', $anime->id);
+                    ->when($modelId, function($query) use ($modelId) {
+                        $query->where(UserLibrary::TABLE_NAME . '.trackable_id', '=', $modelId);
                     })
                     ->where(UserLibrary::TABLE_NAME . '.user_id', '=', $this->id)
                     ->where(UserLibrary::TABLE_NAME . '.status', '=', UserLibraryStatus::InProgress);
             })
             ->leftJoin(UserWatchedEpisode::TABLE_NAME, function ($join) {
                 $join->on(UserWatchedEpisode::TABLE_NAME . '.episode_id', '=', Episode::TABLE_NAME . '.id')
-                    ->where(UserWatchedEpisode::TABLE_NAME . '.user_id', '=', $this->id);
+                    ->where(UserWatchedEpisode::TABLE_NAME . '.user_id', '=', $this->id)
+                    ->whereNotNull(UserWatchedEpisode::TABLE_NAME . '.completed_at');
             })
-            ->whereNull(UserWatchedEpisode::TABLE_NAME . '.id') // Episode is not watched
+            ->whereNull(UserWatchedEpisode::TABLE_NAME . '.id') // Episode is not watched to completion
             ->where(Episode::TABLE_NAME . '.started_at', '<=', now()) // Episode has already aired
             ->select([DB::raw('MIN(' . Episode::TABLE_NAME . '.id) as episode_id'), Season::TABLE_NAME . '.anime_id'])
             ->groupBy(Season::TABLE_NAME . '.anime_id');
@@ -751,24 +866,28 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
             ->orderBy(Episode::TABLE_NAME . '.started_at');
     }
 
-    function past_episodes(?Anime $anime = null): Builder
+    /**
+     * Get the user's watched episodes.
+     *
+     * @param null|string $modelId
+     *
+     * @return Builder
+     */
+    function watched_episodes(?string $modelId = null): Builder
     {
-        return Episode::join(UserWatchedEpisode::TABLE_NAME, UserWatchedEpisode::TABLE_NAME . '.episode_id', '=', Episode::TABLE_NAME . '.id')
-            ->join(Season::TABLE_NAME, Episode::TABLE_NAME . '.season_id', '=', Season::TABLE_NAME . '.id')
-            ->join(Anime::TABLE_NAME, Season::TABLE_NAME . '.anime_id', '=', Anime::TABLE_NAME . '.id')
-            ->join(UserLibrary::TABLE_NAME, function ($join) use ($anime) {
-                $join->on(UserLibrary::TABLE_NAME . '.trackable_id', '=', Anime::TABLE_NAME . '.id')
-                    ->where(UserLibrary::TABLE_NAME . '.trackable_type', '=', Anime::class)
-                    ->where(UserLibrary::TABLE_NAME . '.user_id', '=', $this->id);
-
-                if ($anime) {
-                    $join->where(UserLibrary::TABLE_NAME . '.trackable_id', '=', $anime->id);
-                }
+        return Episode::select(Episode::TABLE_NAME . '.*')
+            ->join(UserWatchedEpisode::TABLE_NAME, function ($join) {
+                $join->on(UserWatchedEpisode::TABLE_NAME . '.episode_id', '=', Episode::TABLE_NAME . '.id')
+                    ->where(UserWatchedEpisode::TABLE_NAME . '.user_id', $this->id)
+                    ->whereNotNull(UserWatchedEpisode::TABLE_NAME . '.completed_at');
             })
-            ->where(UserWatchedEpisode::TABLE_NAME . '.user_id', '=', $this->id)
+            ->when($modelId, function ($query) use ($modelId) {
+                $query->whereHas(Season::TABLE_NAME . '.anime', function ($q) use ($modelId) {
+                    $q->where(Anime::TABLE_NAME . '.id', $modelId);
+                });
+            })
             ->where(Episode::TABLE_NAME . '.started_at', '<=', now())
-            ->orderBy(UserWatchedEpisode::TABLE_NAME . '.created_at', 'desc')
-            ->select(Episode::TABLE_NAME . '.*')
+            ->orderBy(UserWatchedEpisode::TABLE_NAME . '.completed_at', 'desc')
             ->with([
                 'anime' => fn ($q) => $q->with(['media', 'translation']),
                 'media',
@@ -778,24 +897,24 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     }
 
     /**
-     * Returns the associated badges for the user
+     * Returns the achievements unlocked by the user.
      *
      * @return BelongsToMany
      */
-    function badges(): BelongsToMany
+    public function achievements(): BelongsToMany
     {
-        return $this->belongsToMany(Badge::class, UserBadge::class)
+        return $this->belongsToMany(Achievement::class, UserAchievement::class)
             ->withTimestamps();
     }
 
     /**
-     * Relation to UserBadge model directly
+     * Returns the user-achievement pivot records for the user.
      *
      * @return HasMany
      */
-    public function user_badges(): HasMany
+    public function userAchievements(): HasMany
     {
-        return $this->hasMany(UserBadge::class);
+        return $this->hasMany(UserAchievement::class);
     }
 
     /**
@@ -827,7 +946,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
             $ipAddress = request()->ip();
         }
 
-        $sessionAttribute = $model->session_attribute()->create([
+        $sessionAttribute = $model->sessionAttribute()->create([
             'ip_address' => $ipAddress,
             'platform' => $options->get('platform'),
             'platform_version' => $options->get('platform_version'),
@@ -866,6 +985,43 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     public function recaps(): HasMany
     {
         return $this->hasMany(Recap::class);
+    }
+
+    /**
+     * Returns the moderation timeouts issued against the user, latest first.
+     *
+     * @return HasMany
+     */
+    public function timeouts(): HasMany
+    {
+        return $this->hasMany(Timeout::class)
+            ->latest();
+    }
+
+    /**
+     * Returns the timeout currently in effect for the user, if any.
+     *
+     * @return HasOne
+     */
+    public function activeTimeout(): HasOne
+    {
+        return $this->hasOne(Timeout::class)
+            ->active()
+            ->latestOfMany();
+    }
+
+    /**
+     * Indicates whether the user is currently serving a moderation timeout.
+     *
+     * @return bool
+     */
+    public function isTimedOut(): bool
+    {
+        if ($this->relationLoaded('activeTimeout')) {
+            return $this->activeTimeout !== null && $this->activeTimeout->isActive();
+        }
+
+        return $this->timeouts()->active()->exists();
     }
 
     /**
@@ -977,41 +1133,82 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
             ->setLastModificationDate($this->updated_at);
     }
 
-    public function reshares_received(): HasMany
+    public function resharesReceived(): HasMany
     {
-        return $this->feed_messages()
+        return $this->feedMessages()
             ->whereHas('reShares');
     }
 
-    public function replies_received(): HasMany
+    public function repliesReceived(): HasMany
     {
-        return $this->feed_messages()
+        return $this->feedMessages()
             ->whereHas('replies');
     }
 
-    public function hearts_received(): HasMany
+    public function heartsReceived(): HasMany
     {
-        return $this->feed_messages()
+        return $this->feedMessages()
             ->whereHas('loveReactant.reactionTotal', function (Builder $query) {
                 $query->where('count', '>', 0);
             });
     }
 
-    public function media_ratings_without_description(): HasMany
-    {
-        return $this->mediaRatings()
-            ->whereNull('description');
-    }
-
-    public function media_ratings_with_description(): HasMany
-    {
-        return $this->mediaRatings()
-            ->whereNotNull('description');
-    }
-
-    public function library_completed(): HasMany
+    public function libraryCompleted(): HasMany
     {
         return $this->library()
             ->where('status', '=', UserLibraryStatus::Completed);
+    }
+
+    public function libraryInProgress(): HasMany
+    {
+        return $this->library()
+            ->where('status', '=', UserLibraryStatus::InProgress);
+    }
+
+    public function libraryPlanning(): HasMany
+    {
+        return $this->library()
+            ->where('status', '=', UserLibraryStatus::Planning);
+    }
+
+    public function libraryDropped(): HasMany
+    {
+        return $this->library()
+            ->where('status', '=', UserLibraryStatus::Dropped);
+    }
+
+    /**
+     * Whether the user can engage with the given user (follow, heart, reply, reshare).
+     *
+     * @param User $other
+     * @return bool
+     */
+    public function canInteractWith(User $other): bool
+    {
+        if ($this->id === $other->id) {
+            return true;
+        }
+
+        return !$this->hasBlocked($other) && !$this->isBlockedBy($other);
+    }
+
+    /**
+     * Eloquent builder scope that limits the query to users mutually visible to the given user.
+     *
+     * Hides users that the given user has blocked, and users that have blocked the given user.
+     *
+     * @param Builder $query
+     * @param User|null $user
+     * @return Builder
+     */
+    public function scopeVisibleTo(Builder $query, ?User $user): Builder
+    {
+        if ($user === null) {
+            return $query;
+        }
+
+        return $query
+            ->whereNotBlockedBy($user)
+            ->whereNotBlocking($user);
     }
 }

@@ -1,10 +1,13 @@
 <?php
 
+use App\Exceptions\UserTimedOutException;
 use App\Helpers\JSONResult;
+use App\Http\Controllers\Web\Misc\HealthCheckController;
 use App\Http\Middleware\AuthenticateAPIClient;
 use App\Http\Middleware\AuthenticateSession;
 use App\Http\Middleware\CheckKurozoraUserAuthentication;
 use App\Http\Middleware\EnsureAPIRequestsAreStateful;
+use App\Http\Middleware\EnsureUserIsNotTimedOut;
 use App\Http\Middleware\ExploreCategoryAlwaysEnabled;
 use App\Http\Middleware\HttpAccept;
 use App\Http\Middleware\HttpContentSecurityPolicy;
@@ -29,7 +32,6 @@ use Illuminate\Contracts\Session\Middleware\AuthenticatesSessions;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -50,6 +52,7 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Illuminate\View\ViewException;
 use Nette\NotImplementedException;
+use Spatie\Permission\Middleware\RoleMiddleware;
 use Symfony\Component\Console\Exception\CommandNotFoundException;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -61,6 +64,9 @@ use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         using: function () {
+            Route::get('health-check', [HealthCheckController::class, 'index'])
+                ->name('misc.health-check');
+
             if (app()->isLocal()) {
                 Route::prefix('api')
                     ->middleware(['api'])
@@ -79,8 +85,10 @@ return Application::configure(basePath: dirname(__DIR__))
             }
         },
         commands: __DIR__.'/../routes/console.php',
-        health: '/up'
     )
+    ->withBroadcasting(__DIR__.'/../routes/channels.php', [
+        'middleware' => ['web'],
+    ])
     ->withMiddleware(function (Middleware $middleware) {
         $middleware
             ->redirectGuestsTo(function() {
@@ -130,6 +138,8 @@ return Application::configure(basePath: dirname(__DIR__))
                 'signed' => ValidateSignature::class,
                 'throttle' => ThrottleRequests::class,
                 'user.is-pro-or-subscribed' => UserIsProOrSubscribed::class,
+                'user.not-timed-out' => EnsureUserIsNotTimedOut::class,
+                'role' => RoleMiddleware::class,
                 'verified' => EnsureEmailIsVerified::class,
                 'explore.always-enabled' => ExploreCategoryAlwaysEnabled::class
             ])
@@ -189,6 +199,15 @@ return Application::configure(basePath: dirname(__DIR__))
                         $apiError->detail = $e->getMessage();
                         return JSONResult::error([$apiError]);
                     }
+                    // Custom render for users currently serving a moderation timeout
+                    else if ($e instanceof UserTimedOutException) {
+                        $apiError = new APIError();
+                        $apiError->id = 40023;
+                        $apiError->status = 423;
+                        $apiError->title = 'Locked';
+                        $apiError->detail = $e->getMessage();
+                        return JSONResult::error([$apiError]);
+                    }
                     // Custom render for unauthorized
                     else if ($e instanceof AuthorizationException || $e->getPrevious() instanceof AuthorizationException) {
                         $apiError = new APIError();
@@ -239,7 +258,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
                         return JSONResult::error($apiErrors);
                     }
-                    // Custom render for too many request
+                    // Custom render for too many requests
                     else if ($e instanceof TooManyRequestsHttpException) {
                         $apiError = new APIError();
                         $apiError->id = 40029;
@@ -248,7 +267,7 @@ return Application::configure(basePath: dirname(__DIR__))
                         $apiError->detail = $e->getMessage();
                         return JSONResult::error([$apiError]);
                     }
-                    // Custom render for not implemented
+                    // Custom render for not implemented routes
                     else if ($e instanceof NotImplementedException) {
                         // Log some info to catch the issue in production
                         logger()->debug($e->getMessage(), [
@@ -263,14 +282,18 @@ return Application::configure(basePath: dirname(__DIR__))
                         $apiError->title = 'Not Implemented';
                         $apiError->detail = $e->getMessage();
                         return JSONResult::error([$apiError]);
-                    }
-                    // Custom render for query exceptions
-                    else if ($e instanceof QueryException) {
+                    } // Custom render for database exceptions
+                    else if ($e instanceof PDOException) {
+                        $sqlStateClass = substr((string) ($e->errorInfo[0] ?? $e->getCode()), 0, 2);
+                        $isUnreachable = in_array($sqlStateClass, ['08', 'HY', ''], true);
+
                         $apiError = new APIError();
-                        $apiError->id = 50003;
-                        $apiError->status = 503;
-                        $apiError->title = 'Query Exception';
-                        $apiError->detail = implode(' ', $e->errorInfo ?? []);
+                        $apiError->id = $isUnreachable ? 50003 : 50000;
+                        $apiError->status = $isUnreachable ? 503 : 500;
+                        $apiError->title = $isUnreachable ? __('Service Temporarily Unavailable') : __('Internal Server Error');
+                        $apiError->detail = $isUnreachable
+                            ? __('The service is temporarily unable to handle the request. Please try again shortly.')
+                            : __('The server encountered an unexpected condition that prevented it from fulfilling the request.');
                         return JSONResult::error([$apiError]);
                     }
                     // Custom render for service unavailable
@@ -278,10 +301,12 @@ return Application::configure(basePath: dirname(__DIR__))
                         $apiError = new APIError();
                         $apiError->id = 50003;
                         $apiError->status = 503;
-                        $apiError->title = 'The service is currently unavailable to process requests.';
+                        $apiError->title = __('Service Temporarily Unavailable');
                         $apiError->detail = $e->getMessage();
                         return JSONResult::error([$apiError]);
-                    } else if (app()->isDownForMaintenance()) {
+                    }
+                    // Custom render for down for maintenance
+                    else if (app()->isDownForMaintenance()) {
                         $apiError = new APIError();
                         $apiError->id = 50003;
                         $apiError->status = 503;
@@ -298,15 +323,28 @@ return Application::configure(basePath: dirname(__DIR__))
                         'url' => $request->url(),
                         'input' => $request->all(),
                     ]);
-                } else if ($e instanceof QueryException) {
-                    logger()->emergency($e->getMessage(), [
+                } else if ($e instanceof PDOException) {
+                    $sqlStateClass = substr((string) ($e->errorInfo[0] ?? $e->getCode()), 0, 2);
+                    $isUnreachable = in_array($sqlStateClass, ['08', 'HY', ''], true);
+
+                    if ($isUnreachable) {
+                        logger()->emergency($e->getMessage(), [
+                            'url' => $request->url()
+                        ]);
+
+                        return response()->view('errors.503', [
+                            'exception' => $e
+                        ], 503);
+                    }
+
+                    logger()->error($e->getMessage(), [
                         'url' => $request->url(),
-                        'input' => $request->all(),
+                        'input' => $request->all()
                     ]);
 
-                    return response()->view('errors.503', [
+                    return response()->view('errors.500', [
                         'exception' => $e
-                    ]);
+                    ], 500);
                 } else if (str($e->getTraceAsString())->contains('ServerNotificationController') && !$request->has('provider')) {
                     logger()->channel('stack')->critical(print_r($request->all(), true));
                     Http::post(route('liap.serverNotifications', ['provider' => 'app-store']), $request->all());

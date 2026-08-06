@@ -13,6 +13,21 @@ class KDatabaseSessionHandler extends BaseDatabaseSessionHandler
      * @return bool
      */
     #[\ReturnTypeWillChange]
+    public function write($sessionId, $data): bool
+    {
+        if (request()?->attributes->get('bot', false) === true) {
+            return true;
+        }
+
+        return parent::write($sessionId, $data);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return bool
+     */
+    #[\ReturnTypeWillChange]
     public function destroy($sessionId): bool
     {
         Session::firstWhere('id', $sessionId)?->delete();

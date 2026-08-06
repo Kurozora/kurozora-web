@@ -53,56 +53,40 @@ trait HasMediaRelations
      *
      * @return morphMany
      */
-    public function animeRelations(): morphMany
+    public function animeRelations(): MorphMany
     {
         return $this->mediaRelations()
             ->where('related_type', '=', Anime::class)
-            ->join(Anime::TABLE_NAME, function ($join) {
-                $join->on(Anime::TABLE_NAME . '.id', '=', MediaRelation::TABLE_NAME . '.related_id');
-
-                $preferredTvRating = config('app.tv_rating');
-                if ($preferredTvRating > 0) {
-                    $join->where('tv_rating_id', '<=', $preferredTvRating);
-                }
+            ->whereHasMorph('related', [Anime::class], function ($query) {
+                $this->viewableViaParent($query);
             });
     }
 
     /**
      * The related manga of this model.
      *
-     * @return morphMany
+     * @return MorphMany
      */
-    public function mangaRelations(): morphMany
+    public function mangaRelations(): MorphMany
     {
         return $this->mediaRelations()
             ->where('related_type', '=', Manga::class)
-            ->join(Manga::TABLE_NAME, function ($join) {
-                $join->on(Manga::TABLE_NAME . '.id', '=', MediaRelation::TABLE_NAME . '.related_id');
-
-                $preferredTvRating = config('app.tv_rating');
-                if ($preferredTvRating > 0) {
-                    $join->where('tv_rating_id', '<=', $preferredTvRating);
-                }
+            ->whereHasMorph('related', [Manga::class], function ($query) {
+                $this->viewableViaParent($query);
             });
     }
 
     /**
      * The related game of this model.
      *
-     * @return morphMany
+     * @return MorphMany
      */
-    public function gameRelations(): morphMany
+    public function gameRelations(): MorphMany
     {
         return $this->mediaRelations()
             ->where('related_type', '=', Game::class)
-            ->join(Game::TABLE_NAME, function ($join) {
-                $join->on(Game::TABLE_NAME . '.id', '=', MediaRelation::TABLE_NAME . '.related_id');
-
-                $preferredTvRating = config('app.tv_rating');
-
-                if ($preferredTvRating > 0) {
-                    $join->where('tv_rating_id', '<=', $preferredTvRating);
-                }
+            ->whereHasMorph('related', [Game::class], function ($query) {
+                $this->viewableViaParent($query);
             });
     }
 }

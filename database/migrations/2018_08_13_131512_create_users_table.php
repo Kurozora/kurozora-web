@@ -20,12 +20,12 @@ return new class extends Migration
             $table->unsignedBigInteger('parent_id')->nullable();
             $table->uuid();
             $table->unsignedBigInteger('love_reacter_id')->nullable();
-            $table->bigInteger('tv_rating')->default(4);
             $table->string('siwa_id')->nullable();
+            $table->bigInteger('tv_rating')->default(4);
             $table->string('language_id', 2)->default('en')->nullable();
             $table->string('slug');
             $table->string('username', 50)->nullable();
-            $table->string('email');
+            $table->string('email')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->boolean('email_suspended')->default(false);
             $table->string('password')->nullable();
@@ -45,10 +45,10 @@ return new class extends Migration
             $table->boolean('can_change_username')->default(false);
             $table->integer('view_count')->default(0);
             $table->integer('reputation_count')->default(0);
+            $table->unsignedBigInteger('state_version')->default(0);
             $table->timestamp('anime_imported_at')->nullable();
             $table->timestamp('manga_imported_at')->nullable();
             $table->timestamp('subscribed_at')->nullable();
-            $table->unsignedTinyInteger("rating_style")->default(1);
             $table->timestamps();
         });
 
@@ -68,6 +68,7 @@ return new class extends Migration
             // Set unique key constraints
             $table->unique(['uuid']);
             $table->unique(['slug']);
+            $table->unique(['email']);
 
             // Set foreign key constraints
             $table->foreign('parent_id')

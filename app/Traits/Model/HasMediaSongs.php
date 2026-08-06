@@ -5,8 +5,8 @@ namespace App\Traits\Model;
 use App\Models\MediaSong;
 use App\Models\Song;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 trait HasMediaSongs
@@ -49,11 +49,11 @@ trait HasMediaSongs
     /**
      * Get the model's songs.
      *
-     * @return BelongsToMany
+     * @return MorphToMany
      */
-    public function songs(): BelongsToMany
+    public function songs(): MorphToMany
     {
-        return $this->belongsToMany(Song::class, MediaSong::class, 'model_id')
+        return $this->morphToMany(Song::class, 'model', MediaSong::class)
             ->withTimestamps();
     }
 }

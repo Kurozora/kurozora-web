@@ -50,7 +50,7 @@ class ModelViewedListener implements ShouldQueue
                             ->where('viewable_id', $modelID)
                             ->where('viewable_type', $class)
                             ->where('ip_address', $ip)
-                            ->where('created_at', '>=', DB::raw('NOW() - INTERVAL 1 DAY')); //
+                            ->where('created_at', '>=', DB::raw('NOW() - INTERVAL 1 DAY'));
                     })
             );
         }

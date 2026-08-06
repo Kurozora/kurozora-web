@@ -13,7 +13,9 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
+use Throwable;
 
 class LibraryButton extends Component
 {
@@ -83,6 +85,7 @@ class LibraryButton extends Component
      * Updates the status of the model in the auth user's library.
      *
      * @return Application|RedirectResponse|Redirector|null
+     * @throws Throwable
      */
     public function updateLibraryStatus(): Application|RedirectResponse|Redirector|null
     {
@@ -95,21 +98,27 @@ class LibraryButton extends Component
 
         // If user explicitly asked for removing from library, then also remove from favorites and reminders.
         if ($this->libraryStatus < 0) {
-            $user->untrack($this->model);
-            $user->unfavorite($this->model);
-            $user->unremind($this->model);
+            DB::transaction(function () use ($user) {
+                $user->untrack($this->model);
+                $user->unfavorite($this->model);
+                $user->unremind($this->model);
+
+                $user->bumpStateVersion();
+            });
 
             // Reset dropdown to "ADD".
             $this->libraryStatus = -1;
         } else {
             // Update or create the user library entry.
             UserLibrary::withoutSyncingToSearch(function () use ($user) {
-                $userLibrary = UserLibrary::updateOrCreate([
+                // `withTrashed()` avoids colliding with an existing tombstone on the unique key.
+                $userLibrary = UserLibrary::withTrashed()->updateOrCreate([
                     'user_id' => $user->id,
                     'trackable_type' => $this->model->getMorphClass(),
                     'trackable_id' => $this->model->id,
                 ], [
                     'status' => $this->libraryStatus,
+                    'deleted_at' => null,
                 ]);
 
                 $userLibrary->setRelation('trackable', $this->model);

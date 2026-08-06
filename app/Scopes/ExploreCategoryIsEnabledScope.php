@@ -13,6 +13,12 @@ class ExploreCategoryIsEnabledScope implements Scope
      */
     public function apply(Builder $builder, Model $model)
     {
+        $onlyEnabled = request()?->attributes->get('exploreOnlyEnabled', true) ?? true;
+
+        if (!$onlyEnabled) {
+            return;
+        }
+
         $builder->where('is_enabled', '=', true);
     }
 }

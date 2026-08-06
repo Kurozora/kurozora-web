@@ -96,7 +96,7 @@ class FeedMessageComposer extends Component
 
         $this->validate();
 
-        auth()->user()->feed_messages()
+        auth()->user()->feedMessages()
             ->create([
                 'parent_feed_message_id' => null,
                 'content' => $this->content,

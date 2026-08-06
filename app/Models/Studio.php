@@ -5,11 +5,11 @@ namespace App\Models;
 use App\Casts\AsArrayObject;
 use App\Enums\MediaCollection;
 use App\Enums\StudioType;
-use App\Scopes\TvRatingScope;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\HasMediaRatings;
 use App\Traits\Model\HasMediaStat;
 use App\Traits\Model\HasSlug;
+use App\Traits\Model\HasTvRatedRelations;
 use App\Traits\Model\HasViews;
 use App\Traits\Model\TvRated;
 use App\Traits\SearchFilterable;
@@ -17,8 +17,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Scout\Searchable;
 use Spatie\MediaLibrary\HasMedia;
@@ -33,6 +33,7 @@ class Studio extends KModel implements HasMedia, Sitemapable
         HasMediaRatings,
         HasMediaStat,
         HasSlug,
+        HasTvRatedRelations,
         HasViews,
         InteractsWithMedia,
         InteractsWithMediaExtension,
@@ -97,7 +98,8 @@ class Studio extends KModel implements HasMedia, Sitemapable
      */
     public function predecessors(): HasMany
     {
-        return $this->hasMany(Studio::class, 'successor_id');
+        return $this->hasMany(Studio::class, 'successor_id')
+            ->withoutGlobalScopes();
     }
 
     /**
@@ -107,7 +109,8 @@ class Studio extends KModel implements HasMedia, Sitemapable
      */
     public function successor(): BelongsTo
     {
-        return $this->belongsTo(Studio::class);
+        return $this->belongsTo(Studio::class)
+            ->withoutGlobalScopes();
     }
 
     /**
@@ -199,7 +202,7 @@ class Studio extends KModel implements HasMedia, Sitemapable
      */
     public static function webSearchFilters(): array
     {
-        $preferredTvRating = config('app.tv_rating');
+        $preferredTvRating = request()->tvRating();
         if ($preferredTvRating <= 0) {
             $preferredTvRating = 4;
         }
@@ -234,7 +237,7 @@ class Studio extends KModel implements HasMedia, Sitemapable
             ],
         ];
 
-        if (config('app.tv_rating') >= 4) {
+        if (request()->tvRating() >= 4) {
             $filter['is_nsfw'] = [
                 'title' => __('NSFW'),
                 'type' => 'bool',
@@ -258,7 +261,7 @@ class Studio extends KModel implements HasMedia, Sitemapable
     protected function makeAllSearchableUsing(Builder $query): Builder
     {
         return $query->withoutGlobalScopes()
-            ->with(['mediaStat', 'tv_rating', 'predecessors', 'successor']);
+            ->with(['mediaStat', 'tvRating', 'predecessors', 'successor']);
     }
 
     /**
@@ -279,7 +282,7 @@ class Studio extends KModel implements HasMedia, Sitemapable
                     });
                 $studio['successor'] = $this->successor?->toSearchableArray();
                 $studio['media_stat'] = $this->mediaStat?->toSearchableArray();
-                $studio['tv_rating'] = $this->tv_rating?->toSearchableArray();
+                $studio['tv_rating'] = $this->tvRating?->toSearchableArray();
                 $studio['founded_at'] = $this->founded_at?->timestamp;
                 $studio['defunct_at'] = $this->defunct_at?->timestamp;
                 $studio['created_at'] = $this->created_at?->timestamp;
@@ -313,47 +316,37 @@ class Studio extends KModel implements HasMedia, Sitemapable
     /**
      * Returns the anime that belongs to the studio
      *
-     * @return BelongsToMany
+     * @return MorphToMany
      */
-    public function anime(): BelongsToMany
+    public function anime(): MorphToMany
     {
-        return $this->belongsToMany(Anime::class, MediaStudio::class, 'studio_id', 'model_id')
-            ->where('model_type', '=', Anime::class)
-            ->withTimestamps();
+        return $this->viewableViaParent(
+            $this->morphedByMany(Anime::class, 'model', MediaStudio::class),
+        )->withTimestamps();
     }
 
     /**
-     * Returns the manga that belongs to the studio
+     * Returns the manga that belong to the studio
      *
-     * @return BelongsToMany
+     * @return MorphToMany
      */
-    public function manga(): BelongsToMany
+    public function manga(): MorphToMany
     {
-        return $this->belongsToMany(Manga::class, MediaStudio::class, 'studio_id', 'model_id')
-            ->where('model_type', '=', Manga::class)
-            ->withTimestamps();
+        return $this->viewableViaParent(
+            $this->morphedByMany(Manga::class, 'model', MediaStudio::class),
+        )->withTimestamps();
     }
 
     /**
-     * Returns the games that belongs to the studio
+     * Returns the games that belong to the studio
      *
-     * @return BelongsToMany
+     * @return MorphToMany
      */
-    public function games(): BelongsToMany
+    public function games(): MorphToMany
     {
-        return $this->belongsToMany(Game::class, MediaStudio::class, 'studio_id', 'model_id')
-            ->where('model_type', '=', Game::class)
-            ->withTimestamps();
-    }
-
-    /**
-     * The anime's TV rating.
-     *
-     * @return BelongsTo
-     */
-    public function tv_rating(): BelongsTo
-    {
-        return $this->belongsTo(TvRating::class);
+        return $this->viewableViaParent(
+            $this->morphedByMany(Game::class, 'model', MediaStudio::class),
+        )->withTimestamps();
     }
 
     /**
@@ -367,7 +360,7 @@ class Studio extends KModel implements HasMedia, Sitemapable
     public function resolveRouteBindingQuery($query, $value, $field = null): \Illuminate\Contracts\Database\Eloquent\Builder
     {
         return parent::resolveRouteBindingQuery($query, $value, $field)
-            ->withoutGlobalScopes([TvRatingScope::class]);
+            ->withoutGlobalScopes();
     }
 
     /**

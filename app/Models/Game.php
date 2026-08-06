@@ -7,12 +7,16 @@ use App\Enums\DayOfWeek;
 use App\Enums\MediaCollection;
 use App\Enums\SeasonOfYear;
 use App\Enums\UserLibraryStatus;
-use App\Scopes\IgnoreListScope;
-use App\Scopes\TvRatingScope;
+use App\Support\BreadcrumbNode;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\Actionable;
 use App\Traits\Model\Favorable;
+use App\Traits\Model\HasMediaFranchises;
+use App\Traits\Model\HasMediaGameModes;
 use App\Traits\Model\HasMediaGenres;
+use App\Traits\Model\HasMediaLanguages;
+use App\Traits\Model\HasMediaPlatforms;
+use App\Traits\Model\HasMediaPlayerPerspectives;
 use App\Traits\Model\HasMediaRatings;
 use App\Traits\Model\HasMediaRelations;
 use App\Traits\Model\HasMediaSongs;
@@ -21,8 +25,12 @@ use App\Traits\Model\HasMediaStat;
 use App\Traits\Model\HasMediaStudios;
 use App\Traits\Model\HasMediaTags;
 use App\Traits\Model\HasMediaThemes;
+use App\Traits\Model\HasMediaTools;
 use App\Traits\Model\HasParentalGuideStat;
+use App\Traits\Model\HasSchemaOrg;
 use App\Traits\Model\HasSlug;
+use App\Traits\Model\HasTranslations;
+use App\Traits\Model\HasTvRatedRelations;
 use App\Traits\Model\HasVideos;
 use App\Traits\Model\HasViews;
 use App\Traits\Model\Ignored;
@@ -30,7 +38,6 @@ use App\Traits\Model\MediaRelated;
 use App\Traits\Model\Trackable;
 use App\Traits\Model\TvRated;
 use App\Traits\SearchFilterable;
-use Astrotomic\Translatable\Translatable;
 use Carbon\Carbon;
 use Carbon\CarbonInterface;
 use Carbon\CarbonInterval;
@@ -42,7 +49,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Scout\Searchable;
 use Spatie\Activitylog\LogOptions;
@@ -58,7 +64,12 @@ class Game extends KModel implements HasMedia, Sitemapable
     use Actionable,
         Favorable,
         HasFactory,
+        HasMediaFranchises,
+        HasMediaGameModes,
         HasMediaGenres,
+        HasMediaLanguages,
+        HasMediaPlatforms,
+        HasMediaPlayerPerspectives,
         HasMediaRatings,
         HasMediaRelations,
         HasMediaSongs,
@@ -67,8 +78,12 @@ class Game extends KModel implements HasMedia, Sitemapable
         HasMediaStudios,
         HasMediaTags,
         HasMediaThemes,
+        HasMediaTools,
         HasParentalGuideStat,
+        HasSchemaOrg,
         HasSlug,
+        HasTranslations,
+        HasTvRatedRelations,
         HasVideos,
         HasViews,
         Ignored,
@@ -79,7 +94,6 @@ class Game extends KModel implements HasMedia, Sitemapable
         Searchable,
         SearchFilterable,
         SoftDeletes,
-        Translatable,
         Trackable,
         TvRated;
 
@@ -110,6 +124,7 @@ class Game extends KModel implements HasMedia, Sitemapable
     {
         return [
             'synonym_titles' => AsArrayObject::class,
+            'website_urls' => AsArrayObject::class,
             'is_nsfw' => 'bool',
             'published_at' => 'date',
         ];
@@ -139,6 +154,70 @@ class Game extends KModel implements HasMedia, Sitemapable
     public static function minimumRatingsRequired(): int
     {
         return 999999999;
+    }
+
+    /**
+     * The Schema.org type for this entity.
+     *
+     * @return string
+     */
+    public function schemaType(): string
+    {
+        return 'VideoGame';
+    }
+
+    /**
+     * The canonical URL for this entity.
+     *
+     * @return string
+     */
+    public function schemaUrl(): string
+    {
+        return route('games.details', $this);
+    }
+
+    /**
+     * The prefix for the Schema.org keywords field.
+     *
+     * @return string
+     */
+    public function schemaKeywordsPrefix(): string
+    {
+        return 'game';
+    }
+
+    /**
+     * The label for this entity in a breadcrumb chain.
+     *
+     * @return string
+     */
+    public function schemaBreadcrumbLabel(): string
+    {
+        return $this->title;
+    }
+
+    /**
+     * The parent node in the breadcrumb chain.
+     *
+     * @return BreadcrumbNode
+     */
+    public function schemaBreadcrumbParent(): BreadcrumbNode
+    {
+        return new BreadcrumbNode(
+            __('Games'),
+            route('games.index'),
+            BreadcrumbNode::home(),
+        );
+    }
+
+    /**
+     * The release date.
+     *
+     * @return ?CarbonInterface
+     */
+    protected function schemaDatePublished(): ?CarbonInterface
+    {
+        return $this->published_at;
     }
 
     /**
@@ -185,8 +264,7 @@ class Game extends KModel implements HasMedia, Sitemapable
      */
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection(MediaCollection::Poster)
-            ->singleFile();
+        $this->addMediaCollection(MediaCollection::Poster);
         $this->addMediaCollection(MediaCollection::Banner)
             ->singleFile();
         $this->addMediaCollection(MediaCollection::Logo)
@@ -249,7 +327,7 @@ class Game extends KModel implements HasMedia, Sitemapable
      */
     public static function webSearchFilters(): array
     {
-        $preferredTvRating = config('app.tv_rating');
+        $preferredTvRating = request()->tvRating();
         if ($preferredTvRating <= 0) {
             $preferredTvRating = 4;
         }
@@ -300,12 +378,6 @@ class Game extends KModel implements HasMedia, Sitemapable
                 'options' => Status::where('type', 'game')->pluck('name', 'id'),
                 'selected' => null,
             ],
-            'library_status' => [
-                'title' => __('Library Status'),
-                'type' => 'multiselect',
-                'options' => UserLibraryStatus::asGameSelectArray(),
-                'selected' => null,
-            ],
             'genres:id' => [
                 'title' => __('Genres'),
                 'type' => 'multiselect',
@@ -337,7 +409,7 @@ class Game extends KModel implements HasMedia, Sitemapable
             ],
         ];
 
-        if (config('app.tv_rating') >= 4) {
+        if (request()->tvRating() >= 4) {
             $filter['is_nsfw'] = [
                 'title' => __('NSFW'),
                 'type' => 'bool',
@@ -345,6 +417,15 @@ class Game extends KModel implements HasMedia, Sitemapable
                     __('Shown'),
                     __('Hidden'),
                 ],
+                'selected' => null,
+            ];
+        }
+
+        if (auth()->check()) {
+            $filter['library_status'] = [
+                'title' => __('Library Status'),
+                'type' => 'multiselect',
+                'options' => UserLibraryStatus::asGameSelectArray(),
                 'selected' => null,
             ];
         }
@@ -404,7 +485,7 @@ class Game extends KModel implements HasMedia, Sitemapable
         return now('Asia/Tokyo')
             ->next((int) $publicationDay)
             ->setTimeFromTimeString($publicationTime ?? '00:00')
-            ->setTimezone(config('app.format_timezone'));
+            ->inUserTimezone();
     }
 
     /**
@@ -430,7 +511,7 @@ class Game extends KModel implements HasMedia, Sitemapable
     {
         if ($publicationDate = $this->publication_date) {
             $publication = $publicationDate->englishDayOfWeek . ' at ' . $publicationDate->format('H:i e');
-            return now(config('app.format_timezone'))
+            return Carbon::now()->inUserTimezone()
                 ->until($publication, CarbonInterface::DIFF_RELATIVE_TO_NOW, true, 3);
         }
 
@@ -446,7 +527,7 @@ class Game extends KModel implements HasMedia, Sitemapable
      */
     public function getInformationSummaryAttribute(): string
     {
-        $informationSummary = $this->media_type->name . ' · ' . $this->tv_rating->name;
+        $informationSummary = $this->mediaType->name . ' · ' . $this->tvRating->name;
         $editionCount = $this->edition_count ?? null;
         $duration = $this->duration_string;
         $publishedAt = $this->published_at;
@@ -524,19 +605,9 @@ class Game extends KModel implements HasMedia, Sitemapable
      *
      * @return BelongsTo
      */
-    public function country_of_origin(): BelongsTo
+    public function countryOfOrigin(): BelongsTo
     {
         return $this->belongsTo(Country::class, 'country_id', 'code');
-    }
-
-    /**
-     * The game's TV rating.
-     *
-     * @return BelongsTo
-     */
-    public function tv_rating(): BelongsTo
-    {
-        return $this->belongsTo(TvRating::class);
     }
 
     /**
@@ -544,7 +615,7 @@ class Game extends KModel implements HasMedia, Sitemapable
      *
      * @return BelongsTo
      */
-    public function media_type(): BelongsTo
+    public function mediaType(): BelongsTo
     {
         return $this->belongsTo(MediaType::class)
             ->where('type', '=', 'game');
@@ -557,7 +628,8 @@ class Game extends KModel implements HasMedia, Sitemapable
      */
     public function parent(): BelongsTo
     {
-        return $this->belongsTo(Game::class, 'parent_id');
+        return $this->belongsTo(Game::class, 'parent_id')
+            ->withoutGlobalScopes();
     }
 
     /**
@@ -592,26 +664,6 @@ class Game extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * The model's translation relationship.
-     *
-     * @return HasOne
-     */
-    public function translation(): HasOne
-    {
-        $locale = $this->getLocaleKey();
-        if ($this->useFallback()) {
-            $countryFallbackLocale = $this->getFallbackLocale($locale);
-            $locales = array_unique([$locale, $countryFallbackLocale, $this->getFallbackLocale()]);
-
-            return $this->hasOne(GameTranslation::class)
-                ->whereIn($this->getTranslationsTable().'.'.$this->getLocaleKey(), $locales);
-        }
-
-        return $this->hasOne(GameTranslation::class)
-            ->where($this->getTranslationsTable().'.'.$this->getLocaleKey(), $locale);
-    }
-
-    /**
      * Get the model's tags.
      *
      * @return HasManyThrough
@@ -632,7 +684,7 @@ class Game extends KModel implements HasMedia, Sitemapable
     protected function makeAllSearchableUsing(Builder $query): Builder
     {
         return $query->withoutGlobalScopes()
-            ->with(['genres', 'languages', 'mediaStat', 'media_type', 'source', 'status', 'themes', 'translations', 'tv_rating', 'country_of_origin']);
+            ->with(['genres', 'languages', 'mediaStat', 'mediaType', 'source', 'status', 'themes', 'translations', 'tvRating', 'countryOfOrigin']);
     }
 
     /**
@@ -652,9 +704,9 @@ class Game extends KModel implements HasMedia, Sitemapable
         $game['media_stat'] = $this->mediaStat?->toSearchableArray();
         $game['translations'] = $this->translations
             ->select(['locale', 'title', 'synopsis', 'tagline']);
-        $game['country_of_origin'] = $this->country_of_origin?->toSearchableArray();
-        $game['tv_rating'] = $this->tv_rating?->toSearchableArray();
-        $game['media_type'] = $this->media_type?->toSearchableArray();
+        $game['country_of_origin'] = $this->countryOfOrigin?->toSearchableArray();
+        $game['tv_rating'] = $this->tvRating?->toSearchableArray();
+        $game['media_type'] = $this->mediaType?->toSearchableArray();
         $game['source'] = $this->source?->toSearchableArray();
         $game['status'] = $this->status?->toSearchableArray();
         $game['genres'] = $this->genres
@@ -686,7 +738,7 @@ class Game extends KModel implements HasMedia, Sitemapable
     public function resolveRouteBindingQuery($query, $value, $field = null): \Illuminate\Contracts\Database\Eloquent\Builder
     {
         return parent::resolveRouteBindingQuery($query, $value, $field)
-            ->withoutGlobalScopes([TvRatingScope::class, IgnoreListScope::class]);
+            ->withoutGlobalScopes();
     }
 
     /**

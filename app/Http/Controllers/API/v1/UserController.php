@@ -7,17 +7,21 @@ use App\Events\ModelViewed;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DeleteUserRequest;
-use App\Http\Requests\GetIndexRequest;
 use App\Http\Requests\GetPaginatedRequest;
+use App\Http\Requests\GetUserIndexRequest;
+use App\Http\Requests\GetUserReviewsRequest;
 use App\Http\Requests\ResetPassword;
 use App\Http\Resources\FeedMessageResource;
 use App\Http\Resources\MediaRatingResource;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\UserResourceIdentity;
+use App\Models\FeedMessage;
 use App\Models\User;
+use App\Traits\Controller\WithStateVersionETag;
+use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
+use BenSampo\Enum\Exceptions\InvalidEnumMemberException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -25,6 +29,40 @@ use Illuminate\Support\Facades\Password;
 
 class UserController extends Controller
 {
+    use WithStateVersionETag;
+
+    /**
+     * Return the user index.
+     *
+     * @param GetUserIndexRequest $request
+     *
+     * @return JsonResponse
+     */
+    public function index(GetUserIndexRequest $request): JsonResponse
+    {
+        $data = $request->validated();
+
+        if (isset($data['ids'])) {
+            return $this->views($request);
+        }
+
+        $authUser = auth()->user();
+
+        $users = User::visibleTo($authUser)
+            ->withProfileEagerLoad($authUser)
+            ->sortViaRequest($request)
+            ->orderBy('id')
+            ->cursorPaginate($data['limit'] ?? 25);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $users->nextPageUrl() ?? '');
+
+        return JSONResult::success([
+            'data' => UserResource::collection($users),
+            'next' => empty($nextPageURL) ? null : $nextPageURL,
+        ]);
+    }
+
     /**
      * Returns the profile details for a user
      *
@@ -38,30 +76,7 @@ class UserController extends Controller
         // Call the ModelViewed event
         ModelViewed::dispatch($user, $request->ip());
 
-        $user->load([
-            'badges' => function ($query) {
-                $query->with(['media']);
-            },
-            'media',
-            'tokens' => function ($query) {
-                $query
-                    ->orderBy('last_used_at', 'desc')
-                    ->limit(1);
-            },
-            'sessions' => function ($query) {
-                $query
-                    ->orderBy('last_activity', 'desc')
-                    ->limit(1);
-            },
-        ])
-            ->loadCount(['followers', 'followedModels as following_count', 'mediaRatings'])
-            ->when(auth()->check(), function ($query) use ($user) {
-                $user->loadExists(['followers as isFollowed' => function ($query) {
-                    $query->where('user_id', '=', auth()->user()->id);
-                }]);
-            }, function () use ($user) {
-                return $user;
-            });
+        $user->loadProfileEagerLoad(auth()->user());
 
         // Show profile response
         return JSONResult::success([
@@ -72,41 +87,21 @@ class UserController extends Controller
     /**
      * Returns the profile details for a user
      *
-     * @param GetIndexRequest $request
+     * @param GetUserIndexRequest $request
      *
      * @return JsonResponse
      */
-    public function views(GetIndexRequest $request): JsonResponse
+    public function views(GetUserIndexRequest $request): JsonResponse
     {
         $data = $request->validated();
+        $authUser = auth()->user();
 
-        $character = User::whereIn('id', $data['ids'] ?? []);
-        $character->with([
-            'badges' => function ($query) {
-                $query->with(['media']);
-            },
-            'media',
-            'tokens' => function ($query) {
-                $query
-                    ->orderBy('last_used_at', 'desc')
-                    ->limit(1);
-            },
-            'sessions' => function ($query) {
-                $query
-                    ->orderBy('last_activity', 'desc')
-                    ->limit(1);
-            },
-        ])
-            ->withCount(['followers', 'followedModels as following_count', 'mediaRatings'])
-            ->when(auth()->user(), function ($query, $user) use ($character) {
-                $user->withExists(['followers as isFollowed' => function ($query) {
-                    $query->where('user_id', '=', auth()->user()->id);
-                }]);
-            });
+        $users = User::whereIn('id', $data['ids'] ?? [])
+            ->withProfileEagerLoad($authUser);
 
         // Show the character details response
         return JSONResult::success([
-            'data' => UserResource::collection($character->get()),
+            'data' => UserResource::collection($users->get()),
         ]);
     }
 
@@ -118,6 +113,14 @@ class UserController extends Controller
      */
     public function search(User $user): JsonResponse
     {
+        $authUser = auth()->user();
+
+        if ($authUser !== null && !$authUser->canInteractWith($user)) {
+            return JSONResult::success([
+                'data' => UserResourceIdentity::collection([])
+            ]);
+        }
+
         // Show profile response
         return JSONResult::success([
             'data' => UserResourceIdentity::collection([$user])
@@ -134,45 +137,23 @@ class UserController extends Controller
     public function getFeedMessages(GetPaginatedRequest $request, User $user): JsonResponse
     {
         $data = $request->validated();
+        $authUser = auth()->user();
+        $loveReactantLoader = FeedMessage::loveReactantLoader($authUser);
 
         // Get the feed messages
-        $feedMessages = $user->feed_messages()
+        $feedMessages = $user->feedMessages()
             ->with([
                 'user' => fn($query) => $this->eagerLoadUser($query),
-                'loveReactant' => function (BelongsTo $query) {
-                    $query->with([
-                        'reactionCounters',
-                        'reactions' => function (HasMany $hasMany) {
-                            $hasMany->with(['reacter', 'type']);
-                        }
-                    ]);
-                },
-                'parentMessage' => function ($query) {
+                'loveReactant' => $loveReactantLoader,
+                'parentMessage' => function ($query) use ($loveReactantLoader, $authUser) {
                     $query->with([
                         'user' => fn($query) => $this->eagerLoadUser($query),
-                        'loveReactant' => function (BelongsTo $query) {
-                            $query->with([
-                                'reactionCounters',
-                                'reactions' => function (HasMany $hasMany) {
-                                    $hasMany->with(['reacter', 'type']);
-                                }
-                            ]);
-                        }
+                        'loveReactant' => $loveReactantLoader,
                     ])
-                        ->withCount(['replies', 'reShares'])
-                        ->when(auth()->user(), function ($query, $user) {
-                            $query->withExists(['reShares as isReShared' => function ($query) use ($user) {
-                                $query->where('user_id', '=', $user->id);
-                            }]);
-                        });
+                        ->when($authUser, $this->authReShareState());
                 }
             ])
-            ->withCount(['replies', 'reShares'])
-            ->when(auth()->user(), function ($query, $user) {
-                $query->withExists(['reShares as isReShared' => function ($query) use ($user) {
-                    $query->where('user_id', '=', $user->id);
-                }]);
-            })
+            ->when($authUser, $this->authReShareState())
             ->orderBy('is_pinned', 'desc')
             ->orderBy('created_at', 'desc')
             ->cursorPaginate($data['limit'] ?? 25);
@@ -189,21 +170,44 @@ class UserController extends Controller
     /**
      * Returns a list of the user's ratings.
      *
-     * @param GetPaginatedRequest $request
-     * @param User $user
+     * @param GetUserReviewsRequest $request
+     * @param User                  $user
+     *
      * @return JsonResponse
+     * @throws InvalidEnumKeyException
+     * @throws InvalidEnumMemberException
      */
-    public function getRatings(GetPaginatedRequest $request, User $user): JsonResponse
+    public function getRatings(GetUserReviewsRequest $request, User $user): JsonResponse
     {
         $data = $request->validated();
 
+        // Route to the overlay response when `ids` is present.
+        if (!empty($data['ids'])) {
+            return new MediaRatingController()->overlay($request, $user);
+        }
+
+        $limit = (int) ($data['limit'] ?? 25);
+
+        $fingerprint = [
+            'limit' => $limit,
+            'cursor' => $request->query('cursor'),
+            'targetUserId' => $user->id,
+            'isOwner' => auth()->id() === $user->id,
+        ];
+        $notModified = $this->returnIfNotModified($request, $user, $fingerprint);
+        if ($notModified !== null) {
+            return $notModified;
+        }
+        $etag = $this->stateVersionETag($user, $fingerprint);
+
         // Get the feed messages
         $mediaRatings = $user->mediaRatings()
+            ->addEpisodePublicIdSelect()
             ->with([
                 'user' => fn($query) => $this->eagerLoadUser($query)
             ])
             ->orderBy('created_at', 'desc')
-            ->cursorPaginate($data['limit'] ?? 25);
+            ->cursorPaginate($limit);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $mediaRatings->nextPageUrl() ?? '');
@@ -211,7 +215,25 @@ class UserController extends Controller
         return JSONResult::success([
             'data' => MediaRatingResource::collection($mediaRatings),
             'next' => empty($nextPageURL) ? null : $nextPageURL
-        ]);
+        ])->withHeaders($this->stateVersionHeaders($etag, $user));
+    }
+
+    /**
+     * Returns the closure for eager loading the auth user's re-share state.
+     *
+     * @return callable
+     */
+    private function authReShareState(): callable
+    {
+        return function ($query, $user) {
+            $query
+                ->withExists(['simpleReShares as isReShared' => function ($query) use ($user) {
+                    $query->where('user_id', '=', $user->id);
+                }])
+                ->withMax(['simpleReShares as my_reshare_id' => function ($query) use ($user) {
+                    $query->where('user_id', '=', $user->id);
+                }], 'id');
+        };
     }
 
     /**
@@ -221,28 +243,7 @@ class UserController extends Controller
      */
     private function eagerLoadUser(BelongsTo $belongsTo)
     {
-        $belongsTo->with([
-            'badges' => function ($query) {
-                $query->with(['media']);
-            },
-            'media',
-            'tokens' => function ($query) {
-                $query
-                    ->orderBy('last_used_at', 'desc')
-                    ->limit(1);
-            },
-            'sessions' => function ($query) {
-                $query
-                    ->orderBy('last_activity', 'desc')
-                    ->limit(1);
-            },
-        ])
-            ->withCount(['followers', 'followedModels as following_count', 'mediaRatings'])
-            ->when(auth()->check(), function ($query) {
-                $query->withExists(['followers as isFollowed' => function ($query) {
-                    $query->where('user_id', '=', auth()->user()->id);
-                }]);
-            });
+        $belongsTo->withProfileEagerLoad(auth()->user());
     }
 
     /**
@@ -275,14 +276,15 @@ class UserController extends Controller
     public function delete(DeleteUserRequest $request, DeletesUsers $deleter): JsonResponse
     {
         $data = $request->validated();
+        $authUser = auth()->user();
 
         // Validate the password
-        if (!Hash::check($data['password'], auth()->user()->password)) {
+        if (!Hash::check($data['password'], $authUser->password)) {
             throw new AuthorizationException(__('This password does not match our records.'));
         }
 
         // Delete the user and any relevant records
-        $deleter->delete(auth()->user()->fresh());
+        $deleter->delete($authUser->fresh());
 
         // Logout the user
         auth()->logout();

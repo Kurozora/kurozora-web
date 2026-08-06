@@ -28,26 +28,9 @@
     </x-slot:appArgument>
 
     <div
-        x-data="{
-            song: null,
-            bgColor: '#A660B2',
-            songTitle: '{{ str($song->original_title)->replace('\'', '’') }}',
-            artworkURL: '{{ $song->getFirstMediaFullUrl(\App\Enums\MediaCollection::Artwork()) ?? asset('images/static/placeholders/music_album.webp') }}',
-            songURL: null,
-            musicManager: null,
-            async fetchSongData(songID) {
-                if (!!songID) {
-                    this.song = await musicManager.fetchSong(songID)
-                    this.musicManager = window.musicManager
-                    window.song = this.song
-                    this.bgColor = '#' + this.song.attributes.artwork.bgColor
-                    this.songTitle = this.song.attributes.name
-                    this.artworkURL = musicManager.getArtworkURL(song, 500, 500)
-                    this.songURL = this.song.attributes.url
-                }
-            }
-        }"
-        x-on:musicmanagerloaded.window="await fetchSongData('{{ $song->am_id }}')"
+        data-music-song
+        data-music-song-id="{{ $song->id }}"
+        @if (!empty($song->am_id)) data-am-id="{{ $song->am_id }}" data-music-detail @endif
     >
         <div class="pt-4 pb-6">
             <section class="xl:safe-area-inset-scroll">
@@ -55,13 +38,11 @@
                     <div style="max-width: 320px">
                         <x-picture class="aspect-square rounded-lg natural-shadow overflow-hidden">
                             <img class="w-full h-full object-cover"
-                                 alt="{{ $song->original_title }} Artwork" title="{{ $song->original_title }}"
+                                 data-music-artwork
+                                 alt="{{ $song->original_title }}" title="{{ $song->original_title }}"
                                  width="500" height="500"
-                                 x-bind:title="songTitle"
-                                 x-bind:alt="songTitle + ' Artwork'"
-                                 x-bind:src="artworkURL"
-                                 x-bind:style="{'background-color': bgColor}"
-                                 style="width: 320px; height: 320px;"
+                                 src="{{ $song->getFirstMediaFullUrl(\App\Enums\MediaCollection::Artwork()) ?? asset('images/static/placeholders/music_album.webp') }}"
+                                 style="width: 320px; height: 320px; background-color: {{ $song->getFirstMedia(\App\Enums\MediaCollection::Artwork)?->custom_properties['background_color'] ?? '#A660B2' }};"
                             >
 
                             <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-lg"></div>
@@ -69,41 +50,35 @@
                     </div>
 
                     <div class="flex flex-col items-center">
-                        <p class="font-semibold">{{ $song->original_title }}</p>
+                        <p class="font-semibold" data-music-name>{{ $song->original_title }}</p>
                         <p>{{ $song->artist }}</p>
                     </div>
 
                     <div class="flex items-center gap-2">
-                    <template x-if="song">
-                        <div>
-                            <template x-if="musicManager.isPlaying && musicManager.currentMusicID === '{{ $song->am_id }}'">
-                                <x-tinted-pill-button
-                                    title="{{ __('Pause :x by :y', ['x' => $song->original_title, 'y' => $song->artist]) }}"
-                                    x-on:click="await musicManager.playSong(song)"
-                                >
-                                    @svg('pause_fill', 'fill-current', ['width' => '14'])
-                                    {{ __('Stop') }}
-                                </x-tinted-pill-button>
-                            </template>
-
-                            <template x-if="!(musicManager.isPlaying && musicManager.currentMusicID === '{{ $song->am_id }}')">
-                                <x-tinted-pill-button
-                                    :color="'orange'"
-                                    title="{{ __('Preview :x by :y', ['x' => $song->original_title, 'y' => $song->artist]) }}"
-                                    x-on:click="await musicManager.playSong(song)"
-                                >
-                                    @svg('play_fill', 'fill-current', ['width' => '14'])
-                                    {{ __('Preview') }}
-                                </x-tinted-pill-button>
-                            </template>
-                        </div>
-                    </template>
+                    @if (!empty($song->am_id))
+                        <x-tinted-pill-button
+                            :color="'orange'"
+                            data-music-play
+                            title="{{ __('Preview :x by :y', ['x' => $song->original_title, 'y' => $song->artist]) }}"
+                        >
+                            <span data-music-icon="play" class="inline-flex items-center gap-1">
+                                @svg('play_fill', 'fill-current', ['width' => '14'])
+                                <span data-music-when-preview>{{ __('Preview') }}</span>
+                                <span data-music-when-authorized class="hidden">{{ __('Play') }}</span>
+                            </span>
+                            <span data-music-icon="pause" class="hidden inline-flex items-center gap-1">
+                                @svg('pause_fill', 'fill-current', ['width' => '14'])
+                                <span data-music-when-preview>{{ __('Stop') }}</span>
+                                <span data-music-when-authorized class="hidden">{{ __('Pause') }}</span>
+                            </span>
+                        </x-tinted-pill-button>
+                    @endif
 
                     <x-nova-link :href="route('songs.edit', $song)">
                         @svg('pencil', 'fill-current', ['width' => '44'])
                     </x-nova-link>
 
-                    <x-dropdown align="right" width="48">
+                    <x-dropdown align="right" width="64" :overflow="false" contentClasses="bg-secondary p-1" :auto-placement="true">
                         <x-slot:trigger>
                             <x-circle-button
                                 title="{{ __('More Settings') }}"
@@ -113,58 +88,11 @@
                         </x-slot:trigger>
 
                         <x-slot:content>
-                            <button
-                                class="block w-full pl-4 pr-4 pt-2 pb-2 text-xs text-center font-semibold hover:bg-tertiary focus:bg-secondary"
-                                wire:click="$toggle('showSharePopup')"
-                            >
-                                {{ __('Share') }}
-                            </button>
-                            @if ($song->amazon_id)
-                                <a
-                                    class="block w-full pl-4 pr-4 pt-2 pb-2 text-xs text-center font-semibold hover:bg-tertiary focus:bg-secondary"
-                                    href="{{ config('services.amazon.music.albums') . $song->amazon_id }}"
-                                    target="_blank"
-                                >
-                                    {{ __('View on Amazon Music') }}
-                                </a>
-                            @endif
-                            @if ($song->am_id)
-                                <a
-                                    class="block w-full pl-4 pr-4 pt-2 pb-2 text-xs text-center font-semibold hover:bg-tertiary focus:bg-secondary"
-                                    x-bind:href="songURL"
-                                    target="_blank"
-                                    x-show="songURL"
-                                >
-                                    {{ __('View on Apple Music') }}
-                                </a>
-                            @endif
-                            @if ($song->deezer_id)
-                                <a
-                                    class="block w-full pl-4 pr-4 pt-2 pb-2 text-xs text-center font-semibold hover:bg-tertiary focus:bg-secondary"
-                                    href="{{ config('services.deezer.track') . $song->deezer_id }}"
-                                    target="_blank"
-                                >
-                                    {{ __('View on Deezer') }}
-                                </a>
-                            @endif
-                            @if ($song->spotify_id)
-                                <a
-                                    class="block w-full pl-4 pr-4 pt-2 pb-2 text-xs text-center font-semibold hover:bg-tertiary focus:bg-secondary"
-                                    href="{{ config('services.spotify.track') . $song->spotify_id }}"
-                                    target="_blank"
-                                >
-                                    {{ __('View on Spotify') }}
-                                </a>
-                            @endif
-                            @if ($song->youtube_id)
-                                <a
-                                    class="block w-full pl-4 pr-4 pt-2 pb-2 text-xs text-center font-semibold hover:bg-tertiary focus:bg-secondary"
-                                    href="{{ config('services.youtube.music.watch') . $song->youtube_id }}"
-                                    target="_blank"
-                                >
-                                    {{ __('View on Youtube Music') }}
-                                </a>
-                            @endif
+                            <x-menu.music :playable="!empty($song->am_id)" :links="$this->musicLinks" :title="$song->original_title" :link="route('songs.details', $song)">
+                                <x-slot:share>
+                                    <x-menu.item icon="square_and_arrow_up_fill" wire:click="$toggle('showSharePopup')">{{ __('Share') }}</x-menu.item>
+                                </x-slot:share>
+                            </x-menu.music>
                         </x-slot:content>
                     </x-dropdown>
                 </div>

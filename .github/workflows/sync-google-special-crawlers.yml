@@ -1,0 +1,36 @@
+name: Sync Google special-crawler IPs
+
+on:
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    name: Regenerate google-special-crawlers.yaml
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run sync script
+        shell: bash
+        run: ./docker/anubis/sync-google-special-crawlers.sh
+
+      - name: Open pull request on diff
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: 'chore: sync Google special-crawler IP ranges'
+          branch: chore/sync-google-special-crawlers
+          title: 'chore: sync Google special-crawler IP ranges'
+          body: |
+            Automated sync from Google's published `special-crawlers.json`.
+
+            See `docker/anubis/sync-google-special-crawlers.sh`.
+          labels: |
+            dependencies
+            automated

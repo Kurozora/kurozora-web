@@ -188,61 +188,19 @@ class SignInWithAppleController extends Controller
     {
         if (!empty($siwaID)) {
             $user = User::where('siwa_id', $siwaID)
-                ->with([
-                    'badges' => function ($query) {
-                        $query->with(['media']);
-                    },
-                    'media',
-                    'tokens' => function ($query) {
-                        $query->orderBy('last_used_at', 'desc')
-                            ->limit(1);
-                    },
-                    'sessions' => function ($query) {
-                        $query->orderBy('last_activity', 'desc')
-                            ->limit(1);
-                    },
-                ])
-                ->withCount(['followers', 'followedModels as following_count', 'mediaRatings'])
+                ->withProfileEagerLoad()
                 ->first();
         } else {
             try {
                 $email = $payload->get('email');
                 $user = User::where('email', $email)
-                    ->with([
-                        'badges' => function ($query) {
-                            $query->with(['media']);
-                        },
-                        'media',
-                        'tokens' => function ($query) {
-                            $query->orderBy('last_used_at', 'desc')
-                                ->limit(1);
-                        },
-                        'sessions' => function ($query) {
-                            $query->orderBy('last_activity', 'desc')
-                                ->limit(1);
-                        },
-                    ])
-                    ->withCount(['followers', 'followedModels as following_count', 'mediaRatings'])
+                    ->withProfileEagerLoad()
                     ->first();
             } catch (Exception $exception) {
                 try {
                     $subject = $payload->get('sub');
                     $user = User::where('siwa_id', $subject)
-                        ->with([
-                            'badges' => function ($query) {
-                                $query->with(['media']);
-                            },
-                            'media',
-                            'tokens' => function ($query) {
-                                $query->orderBy('last_used_at', 'desc')
-                                    ->limit(1);
-                            },
-                            'sessions' => function ($query) {
-                                $query->orderBy('last_activity', 'desc')
-                                    ->limit(1);
-                            },
-                        ])
-                        ->withCount(['followers', 'followedModels as following_count', 'mediaRatings'])
+                        ->withProfileEagerLoad()
                         ->first();
                 } catch (Exception $exception) {
                     return null;
@@ -264,7 +222,7 @@ class SignInWithAppleController extends Controller
                 $siwaID = $payload->get('sub');
 
                 $user = $this->signUpUser($email, $siwaID)
-                    ->setRelation('badges', collect())
+                    ->setRelation('achievements', collect())
                     ->setRelation('tokens', collect())
                     ->setRelation('sessions', collect())
                     ->setAttribute('followers_count', 0)
@@ -288,7 +246,7 @@ class SignInWithAppleController extends Controller
     protected function signUpUser(?string $email, string $siwaID): ?User
     {
         return User::create([
-            'username' => str()->random(8),
+            'username' => User::defaultUsername(),
             'email' => $email,
             'siwa_id' => $siwaID,
             'email_verified_at' => now(),

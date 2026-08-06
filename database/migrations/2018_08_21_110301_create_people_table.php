@@ -29,7 +29,7 @@ return new class extends Migration
             $table->json('website_urls')->nullable();
             $table->date('birthdate')->nullable();
             $table->date('deceased_date')->nullable();
-            $table->unsignedBigInteger('rank_total')->default(0);
+            $table->unsignedInteger('rank_total')->default(0);
             $table->integer('view_count')->default(0);
             $table->timestamps();
             $table->softDeletes();
@@ -37,9 +37,8 @@ return new class extends Migration
 
         Schema::table(Person::TABLE_NAME, function (Blueprint $table) {
             // Set index key constraints
-            $table->index('rank_total');
-            $table->index('birthdate');
-            $table->index('deleted_at');
+            $table->index(['deleted_at', 'rank_total']);
+            $table->index(['deleted_at', 'birthdate']);
 
             // Set unique key constraints
             $table->unique(['slug']);

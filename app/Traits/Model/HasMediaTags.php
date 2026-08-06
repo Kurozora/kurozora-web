@@ -6,8 +6,8 @@ use App\Models\MediaTag;
 use App\Models\Tag;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 trait HasMediaTags
@@ -50,12 +50,11 @@ trait HasMediaTags
     /**
      * Get the model's tags.
      *
-     * @return BelongsToMany
+     * @return MorphToMany
      */
-    public function tags(): BelongsToMany
+    public function tags(): MorphToMany
     {
-        return $this->belongsToMany(Tag::class, MediaTag::class, 'taggable_id')
-            ->where('taggable_type', '=', $this->getMorphClass())
+        return $this->morphToMany(Tag::class, 'taggable', MediaTag::class)
             ->withTimestamps();
     }
 

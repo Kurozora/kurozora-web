@@ -257,7 +257,7 @@
                                 @svg('magnifyingglass', 'fill-current', ['width' => '18'])
                             </button>
 
-                            <livewire:nav-notification />
+                            <livewire:nav-notification wire:key="nav-notification" />
 
                             {{-- Settings Dropdown --}}
                             <x-dropdown id="more-settings" align="right" width="48" content-classes="hidden bg-secondary md:block">
@@ -362,8 +362,12 @@
                                         {{ __('Theme Store') }}
                                     </x-dropdown-link>
 
+                                    <x-dropdown-link href="{{ route('stickers.index') }}" wire:navigate>
+                                        {{ __('Kuro-chan Stickers') }}
+                                    </x-dropdown-link>
+
                                     @auth
-                                        {{-- Account Management --}}
+                                        {{-- Manage Account --}}
                                         <div class="block pl-2 pr-2 pt-4 pb-2 text-xs text-secondary font-semibold">
                                             {{ __('Manage Account') }}
                                         </div>
@@ -485,22 +489,6 @@
                 {{-- Responsive Settings Options --}}
                 <div class="pt-4 pb-2">
                     @auth
-                        {{-- Profile --}}
-                        <x-sidebar-nav-link href="{{ route('me') }}"
-                                            wire:navigate
-                                            :active="request()->routeIs('profile.details', auth()->user())"
-                                            title="{{ __('Profile') }}"
-                        >
-                            <div class="shrink-0">
-                                <div class="h-10 w-10 bg-cover rounded-full" style="background-image: url({{ $user->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) }});" alt="{{ $user->username }}" role="img"></div>
-                            </div>
-
-                            <div>
-                                <div class="font-medium text-base">{{ $user->username }}</div>
-                                <div class="font-medium text-sm">{{ $user->email }}</div>
-                            </div>
-                        </x-sidebar-nav-link>
-
                         {{-- Library --}}
                         <div class="pt-4">
                             <div class="block pl-2 pr-2 pt-2 pb-2 text-xs text-secondary font-semibold">
@@ -582,6 +570,32 @@
                         </div>
                     @endauth
 
+                    @auth
+                        <div class="pt-4">
+                            {{-- Profile --}}
+                            <x-sidebar-nav-link href="{{ route('me') }}"
+                                                wire:navigate
+                                                :active="request()->routeIs('profile.details', auth()->user())"
+                                                title="{{ __('Profile') }}"
+                            >
+                                <div class="shrink-0">
+                                    <div class="h-10 w-10 bg-cover rounded-full" style="background-image: url({{ $user->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) }});" alt="{{ $user->username }}" role="img"></div>
+                                </div>
+
+                                <div>
+                                    <div class="font-medium text-base">{{ $user->username }}</div>
+                                    <div class="font-medium text-sm">{{ $user->email }}</div>
+                                </div>
+                            </x-sidebar-nav-link>
+
+                            <x-sidebar-nav-link href="{{ route('notifications.index') }}"
+                                                wire:navigate
+                                                :active="request()->routeIs('notifications.index')">
+                                @svg('app_badge', 'fill-current', ['width' => '18']) {{ __('Notifications') }}
+                            </x-sidebar-nav-link>
+                        </div>
+                    @endauth
+
                     {{-- More Pages --}}
                     <div class="pt-4">
                         <div class="block pl-2 pr-2 pt-2 pb-2 text-xs text-secondary font-semibold">
@@ -599,13 +613,19 @@
                                                :active="request()->routeIs('theme-store.index')">
                             {{ __('Theme Store') }}
                         </x-sidebar-nav-link>
+
+                        <x-sidebar-nav-link href="{{ route('stickers.index') }}"
+                                               wire:navigate
+                                               :active="request()->routeIs('stickers.index')">
+                            {{ __('Kuro-chan Stickers') }}
+                        </x-sidebar-nav-link>
                     </div>
 
-                    {{-- Account Management --}}
+                    {{-- Manage Account --}}
                     @auth
                         <div class="pt-4">
                             <div class="block pl-2 pr-2 pt-2 pb-2 text-xs text-secondary font-semibold">
-                                {{ __('Account Management') }}
+                                {{ __('Manage Account') }}
                             </div>
 
                             <x-sidebar-nav-link href="{{ route('profile.settings') }}"

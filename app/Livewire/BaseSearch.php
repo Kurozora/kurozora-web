@@ -59,7 +59,7 @@ class BaseSearch extends Component
      */
     public function randomAnime(): void
     {
-        $this->redirect(route('anime.details', Anime::inRandomOrder()->first()));
+        $this->redirect(route('anime.details', Anime::randomFirst()));
     }
 
     /**
@@ -69,7 +69,7 @@ class BaseSearch extends Component
      */
     public function randomManga(): void
     {
-        $this->redirect(route('manga.details', Manga::inRandomOrder()->first()));
+        $this->redirect(route('manga.details', Manga::randomFirst()));
     }
 
     /**
@@ -79,7 +79,7 @@ class BaseSearch extends Component
      */
     public function randomGame(): void
     {
-        $this->redirect(route('games.details', Game::inRandomOrder()->first()));
+        $this->redirect(route('games.details', Game::randomFirst()));
     }
 
     /**
@@ -100,7 +100,7 @@ class BaseSearch extends Component
                             case Anime::class:
                             case Game::class:
                             case Manga::class:
-                                $query->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating'])
+                                $query->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tvRating'])
                                     ->when(auth()->user(), function ($query, $user) {
                                         $query->with(['library' => function ($query) use ($user) {
                                             $query->where('user_id', '=', $user->id);
@@ -123,7 +123,7 @@ class BaseSearch extends Component
                                 ])
                                     ->when(auth()->user(), function ($query, $user) {
                                         $query->withExists([
-                                            'user_watched_episodes as isWatched' => function ($query) use ($user) {
+                                            'userWatchedEpisodes as isWatched' => function ($query) use ($user) {
                                                 $query->where('user_id', $user->id);
                                             },
                                         ]);
@@ -179,8 +179,8 @@ class BaseSearch extends Component
                     'link' => route('kb.iap'),
                 ],
                 [
-                    'title' => __('About Personalisation'),
-                    'link' => route('kb.personalisation'),
+                    'title' => __('About Personalization'),
+                    'link' => route('kb.personalization'),
                 ],
                 [
                     'title' => __('Welcome to Kurozora'),

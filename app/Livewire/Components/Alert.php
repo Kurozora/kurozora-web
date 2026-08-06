@@ -5,6 +5,7 @@ namespace App\Livewire\Components;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Livewire\Attributes\Locked;
 use Livewire\Component;
 
 class Alert extends Component
@@ -21,6 +22,7 @@ class Alert extends Component
      *
      * @var array|string[]
      */
+    #[Locked]
     public array $alertData = [
         'title' => '',
         'message' => '',

@@ -45,8 +45,9 @@ class UpNext extends Component
             ])
             ->when(auth()->user(), function ($query, $user) use ($nextEpisode) {
                 return $nextEpisode->loadExists([
-                    'user_watched_episodes as isWatched' => function ($query) use ($user) {
-                        $query->where('user_id', $user->id);
+                    'userWatchedEpisodes as isWatched' => function ($query) use ($user) {
+                        $query->where('user_id', $user->id)
+                            ->completed();
                     },
                 ]);
             }, function () use ($nextEpisode) {

@@ -1,68 +1,31 @@
 <main>
     <x-slot:title>
-        {!! $manga->title !!}
+        {!! __(':x — Manga, Characters & Reviews', ['x' => $manga->title]) !!}
     </x-slot:title>
 
     <x-slot:description>
-        {{ $manga->synopsis }}
+        {{ $this->metaDescription }}
     </x-slot:description>
 
     <x-slot:meta>
-        <meta property="og:title" content="{{ $manga->title }} — {{ config('app.name') }}" />
-        <meta property="og:description" content="{{ $manga->synopsis ?? __('app.description') }}" />
+        <meta property="og:title" content="{{ __(':x — Manga, Characters & Reviews', ['x' => $manga->title]) }} — {{ config('app.name') }}" />
+        <meta property="og:description" content="{{ $manga->synopsis ?? __('A community for anime fans with an extensive library of anime, manga, music, games, movies, specials, OVA, and ONA. Only on :x, the largest, free online anime, manga, game & music database in the world. Track, share and discover anime with friends.', ['x' => config('app.name')]) }}" />
         <meta property="og:image" content="{{ $manga->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $manga->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="og:type" content="book" />
         <meta property="book:release_date" content="{{ $manga->started_at?->toIso8601String() }}" />
         @foreach ($manga->tags() as $tag)
             <meta property="book:tag" content="{{ $tag->name }}" />
         @endforeach
-        <meta property="twitter:title" content="{{ $manga->title }} — {{ config('app.name') }}" />
+        <meta property="twitter:title" content="{{ __(':x — Manga, Characters & Reviews', ['x' => $manga->title]) }} — {{ config('app.name') }}" />
         <meta property="twitter:description" content="{{ $manga->synopsis }}" />
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:image" content="{{ $manga->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $manga->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="twitter:image:alt" content="{{ $manga->synopsis }}" />
+        @if ($manga->is_nsfw)
+            <meta name="rating" content="adult" />
+        @endif
         <link rel="canonical" href="{{ route('manga.details', $manga) }}">
-        <x-misc.schema>
-            "@type":"Book",
-            "url":"/manga/{{ $manga->slug }}/",
-            "name": "{{ $manga->title }}",
-            "alternateName": "{{ $manga->original_title }}",
-            "image": "{{ $manga->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $manga->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}",
-            "description": "{{ json_encode($manga->synopsis) }}",
-            "aggregateRating": {
-                "@type":"AggregateRating",
-                "itemReviewed": {
-                    "@type": "TVSeries",
-                    "image": [
-                        "{{ $manga->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $manga->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}"
-                    ],
-                    "name": "{{ $manga->title }}"
-                },
-                "ratingCount": {{ $manga->mediaStat->rating_count ?? 1 }},
-                "bestRating": 5,
-                "worstRating": 0,
-                "ratingValue": {{ $manga->mediaStat->rating_average ?? 2.5 }}
-            },
-            "contentRating": "{{ $manga->tv_rating->name }}",
-            @if (!empty($manga->country_of_origin))
-                "countryOfOrigin": {
-                    "@type": "Country",
-                    "name": "{{ $manga->country_of_origin->name }}",
-                    "alternateName": "{{ $manga->country_of_origin->code }}"
-                },
-            @endif
-            "genre": {!! $manga->genres()->pluck('name') !!},
-            "datePublished": "{{ $manga->started_at?->format('Y-m-d') }}",
-            @if (!empty($this->studio))
-                "creator":[
-                    {
-                        "@type":"Organization",
-                        "url":"/studio/{{ $this->studio->id }}/"
-                    }
-                ],
-            @endif
-            "keywords": "manga{{ (',' . $manga->keywords) ?? '' }}"
-        </x-misc.schema>
+        <x-misc.schema :data="$this->schema" />
     </x-slot:meta>
 
     <x-slot:appArgument>
@@ -177,7 +140,17 @@
                     </a>
                 </div>
 
-                @if ($manga->publication_season)
+                @if ($manga->started_at && $manga->publication_season)
+                    <div id="seasonBadge" class="flex-grow px-12 border-l border-primary">
+                        <a class="flex flex-col items-center" href="{{ route('manga.seasons.year.season', [$manga->started_at->year, $manga->publication_season->key]) }}" wire:navigate>
+                            <p class="font-bold">{{ $manga->publication_season->description }}</p>
+                            <p class="text-tint">
+                                {{ $manga->publication_season->symbol() }}
+                            </p>
+                            <p class="text-sm text-secondary">{{ $manga->started_at->year }}</p>
+                        </a>
+                    </div>
+                @elseif ($manga->publication_season)
                     <div id="seasonBadge" class="flex-grow px-12 border-l border-primary">
                         <a class="flex flex-col items-center no-external-icon" href="#published">
                             <p class="font-bold">{{ $manga->publication_season->description }}</p>
@@ -201,7 +174,7 @@
 
                 <div id="tvRatingBadge" class="flex-grow px-12 border-l border-primary">
                     <a class="flex flex-col items-center" href="{{ route('manga.parentalguide', $manga) }}">
-                        <p class="font-bold">{{ $manga->tv_rating->name }}</p>
+                        <p class="font-bold">{{ $manga->tvRating->name }}</p>
                         <p class="text-tint">
                             @svg('tv_fill', 'fill-current', ['width' => '20'])
                         </p>
@@ -221,10 +194,10 @@
                     </div>
                 @endif
 
-                @if (!empty($manga->country_of_origin))
+                @if (!empty($manga->countryOfOrigin))
                     <div id="countryBadge" class="flex-grow px-12 border-l border-primary">
                         <a class="flex flex-col items-center no-external-icon" href="#country">
-                            <p class="font-bold">{{ strtoupper($manga->country_of_origin->code) }}</p>
+                            <p class="font-bold">{{ strtoupper($manga->countryOfOrigin->code) }}</p>
                             <p class="text-tint">
                                 @svg('globe', 'fill-current', ['width' => '20'])
                             </p>
@@ -328,11 +301,11 @@
                 <div class="grid grid-cols-2 gap-4 pl-4 pr-4 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
                     <x-information-list id="type" title="{{ __('Type') }}" icon="{{ asset('images/symbols/tv_and_mediabox.svg') }}">
                         <x-slot:information>
-                            {{ $manga->media_type->name }}
+                            {{ $manga->mediaType->name }}
                         </x-slot:information>
 
                         <x-slot:footer>
-                            <p class="text-sm">{{ $manga->media_type->description }}</p>
+                            <p class="text-sm">{{ $manga->mediaType->description }}</p>
                         </x-slot:footer>
                     </x-information-list>
 
@@ -358,7 +331,7 @@
                         </x-slot:information>
                     </x-information-list>
 
-                    @if (in_array($manga->media_type->name, ['Unknown', 'TV', 'ONA']))
+                    @if (in_array($manga->mediaType->name, ['Unknown', 'TV', 'ONA']))
                         <x-information-list id="episodes" title="{{ __('Episodes') }}" icon="{{ asset('images/symbols/film.svg') }}">
                             <x-slot:information>
                                 {{ $manga->episode_count }}
@@ -448,17 +421,17 @@
 
                     <x-information-list id="tvRating" title="{{ __('Rating') }}" icon="{{ asset('images/symbols/tv_rating.svg') }}">
                         <x-slot:information>
-                            {{ $manga->tv_rating->name }}
+                            {{ $manga->tvRating->name }}
                         </x-slot:information>
 
                         <x-slot:footer>
-                            <p class="text-sm">{{ $manga->tv_rating->description }}.</p>
+                            <p class="text-sm">{{ $manga->tvRating->description }}.</p>
                         </x-slot:footer>
                     </x-information-list>
 
                     <x-information-list id="country" title="{{ __('Country') }}" icon="{{ asset('images/symbols/globe.svg') }}">
                         <x-slot:information>
-                            {{ $manga->country_of_origin?->name ?: '-' }}
+                            {{ $manga->countryOfOrigin?->name ?: '-' }}
                         </x-slot:information>
                     </x-information-list>
 
@@ -483,22 +456,22 @@
             </section>
 
             @if ($readyToLoad)
-                <livewire:components.manga-cast-section :manga="$manga" />
+                <livewire:components.cast-section :kind="\App\Enums\UserLibraryKind::Manga" :manga="$manga" />
 
-                <livewire:components.manga-staff-section :manga="$manga" />
+                <livewire:components.staff-section :kind="\App\Enums\UserLibraryKind::Manga" :manga="$manga" />
 
-                <livewire:components.manga-studios-section :manga="$manga" />
+                <livewire:components.studios-section :kind="\App\Enums\UserLibraryKind::Manga" :manga="$manga" />
 
                 <div class="bg-tinted">
                     @if (!empty($this->studio))
-                        <livewire:components.manga-more-by-studio-section :manga="$manga" :studio="$this->studio" />
+                        <livewire:components.more-by-studio-section :kind="\App\Enums\UserLibraryKind::Manga" :manga="$manga" :studio="$this->studio" />
                     @endif
 
-                    <livewire:components.manga.manga-relations-section :manga="$manga" />
+                    <livewire:components.relations-section :kind="\App\Enums\UserLibraryKind::Manga" :related-kind="\App\Enums\UserLibraryKind::Manga" :manga="$manga" />
 
-                    <livewire:components.manga.anime-relations-section :manga="$manga" />
+                    <livewire:components.relations-section :kind="\App\Enums\UserLibraryKind::Manga" :related-kind="\App\Enums\UserLibraryKind::Anime" :manga="$manga" />
 
-                    <livewire:components.manga.game-relations-section :manga="$manga" />
+                    <livewire:components.relations-section :kind="\App\Enums\UserLibraryKind::Manga" :related-kind="\App\Enums\UserLibraryKind::Game" :manga="$manga" />
 
                     @if (!empty($manga->copyright))
                         <section class="border-t border-primary xl:safe-area-inset">

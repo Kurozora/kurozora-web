@@ -43,7 +43,7 @@ class MediaStaff extends KModel implements Sitemapable
      *
      * @return BelongsTo
      */
-    public function staff_role(): BelongsTo
+    public function staffRole(): BelongsTo
     {
         return $this->belongsTo(StaffRole::class);
     }

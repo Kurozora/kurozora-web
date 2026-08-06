@@ -6,8 +6,8 @@ use App\Models\Genre;
 use App\Models\MediaGenre;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 trait HasMediaGenres
@@ -50,13 +50,14 @@ trait HasMediaGenres
     /**
      * Get the model's genres.
      *
-     * @return BelongsToMany
+     * @return MorphToMany
      */
-    public function genres(): BelongsToMany
+    public function genres(): MorphToMany
     {
-        return $this->belongsToMany(Genre::class, MediaGenre::class, 'model_id')
-            ->where('model_type', '=', $this->getMorphClass())
-            ->withTimestamps();
+        return $this->viewableViaParent(
+            $this->morphToMany(Genre::class, 'model', MediaGenre::class)
+                ->withTimestamps(),
+        );
     }
 
     /**

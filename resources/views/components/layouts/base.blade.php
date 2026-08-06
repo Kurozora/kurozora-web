@@ -3,7 +3,9 @@
     <head>
         <meta charset="utf-8" />
         <meta content="{{ config('app.name') }}" name="Author">
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta id="app-viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-itunes-app" content="app-id={{ config('app.ios.id') }}, app-argument={{ config('app.ios.protocol') }}{{ $appArgument ?? request()->path() }}" />
         <meta property="al:ios:url" content="{{ config('app.ios.protocol') }}{{ $appArgument ?? request()->path() }}" />
         <meta property="al:ios:app_store_id" content="{{ config('app.ios.id') }}" />
@@ -20,11 +22,11 @@
         @if (empty($title))
             <title>{{ config('app.name') }}</title>
         @else
-            <title>{{ $title . ' — ' . config('app.name') }}</title>
+            <title>{{ $title }} — {{ config('app.name') }}</title>
         @endif
 
         @if (empty($description))
-            <meta name="description" content="{{ __('app.description') }}" />
+            <meta name="description" content="{{ __('A community for anime fans with an extensive library of anime, manga, music, games, movies, specials, OVA, and ONA. Only on :x, the largest, free online anime, manga, game & music database in the world. Track, share and discover anime with friends.', ['x' => config('app.name')]) }}" />
         @else
             <meta name="description" content="{{ $description }}" />
         @endif
@@ -39,9 +41,20 @@
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=inter:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet" />
 
-        <!-- Styles -->
-        <link rel="preload" href="{{ url(mix('css/app.css')) }}" as="style" data-navigate-track>
-        <link rel="stylesheet" href="{{ url(mix('css/app.css')) }}" data-navigate-track>
+        <!-- Styles & Scripts -->
+        @vite([
+            'resources/css/app.css',
+            'resources/js/settings.js',
+            'resources/js/history.js',
+            'resources/js/submenu.js',
+            'resources/js/dropdown.js',
+            'resources/js/app.js',
+            'resources/js/db.js',
+            'resources/js/worker.js',
+        ])
+        @if (app()->isLocal())
+            @vite(['resources/js/debug.js'])
+        @endif
         {{ $styles ?? '' }}
 
         <!-- Search -->
@@ -50,20 +63,12 @@
         <!-- PWA -->
         <link rel="manifest" href="{{ url('manifest.json') }}" />
 
-        <!-- Scripts -->
-        <script src="{{ url(mix('js/manifest.js')) }}" defer data-navigate-track></script>
-        <script src="{{ url(mix('js/vendor.js')) }}" defer data-navigate-track></script>
-        <script src="{{ url(mix('js/settings.js')) }}" defer data-navigate-track></script>
-        <script src="{{ url(mix('js/history.js')) }}" defer data-navigate-track></script>
-        <script src="{{ url(mix('js/app.js')) }}" defer data-navigate-track></script>
-        <script src="{{ url(mix('js/db.js')) }}" data-navigate-track></script>
-        @if (app()->isLocal())
-            <script src="{{ url(mix('js/debug.js')) }}" defer data-navigate-track></script>
-        @endif
-        <script src="{{ url(mix(('js/worker.js'))) }}" defer data-navigate-track></script>
-
         <!-- CSRF Token -->
         <meta name="csrf-token" content="{{ csrf_token() }}" />
+
+        @auth
+            <meta name="is-authenticated" />
+        @endauth
     </head>
 
     <body class="app-theme bg-primary text-primary">
@@ -120,7 +125,7 @@
         <div class="flex flex-col w-full">
             <livewire:navigation-sidebar :user="auth()->user()" />
 
-            <livewire:navigation-dropdown :user="auth()->user()" />
+            <livewire:navigation-dropdown :user="auth()->user()" wire:key="navigation-dropdown" />
 
             <div>
                 @if (!(auth()->user()?->hasVerifiedEmail() ?? true))
@@ -145,10 +150,20 @@
             </div>
 
             <livewire:components.alert />
+            <livewire:components.subscription-sheet />
         </div>
 
-        <script src="{{ url(mix('js/listen.js')) }}"></script>
-        <script src="https://js-cdn.music.apple.com/musickit/v1/musickit.js"></script>
+        <x-music.connect-prompt />
+        <x-music.library-removal-prompt />
+
+        @persist('music-player')
+            <x-music.player />
+        @endpersist
+
+        <livewire:song.lyrics />
+
+        @vite(['resources/js/listen.js', 'resources/js/lyrics.js'])
+        <script src="https://js-cdn.music.apple.com/musickit/v3/musickit.js" async></script>
         {{ $scripts ?? '' }}
     </body>
 </html>

@@ -6,8 +6,8 @@ use App\Models\User;
 use App\Models\UserReminder;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 trait Remindable
@@ -50,11 +50,11 @@ trait Remindable
     /**
      * The users who reminded the model.
      *
-     * @return BelongsToMany
+     * @return MorphToMany
      */
-    public function reminderers(): BelongsToMany
+    public function reminderers(): MorphToMany
     {
-        return $this->belongsToMany(User::class, UserReminder::class, 'remindable_id', 'user_id')
+        return $this->morphToMany(User::class, 'remindable', UserReminder::TABLE_NAME)
             ->withTimestamps();
     }
 
@@ -92,35 +92,6 @@ trait Remindable
     public function isNotRemindedBy(User $user): bool
     {
         return !$this->isRemindedBy($user);
-    }
-
-    /**
-     * The number of users who reminded the model.
-     *
-     * @return int
-     */
-    public function remindersCount(): int
-    {
-        if ($this->reminders_count !== null) {
-            return (int) $this->reminders_count;
-        }
-
-        $this->loadCount('reminders');
-
-        return (int) $this->reminders_count;
-    }
-
-    /**
-     * The formatted number of users who reminded the model.
-     *
-     * @param int  $precision
-     * @param bool $abbreviated
-     *
-     * @return string
-     */
-    public function remindersCountForHumans(int $precision = 1, bool $abbreviated = false): string
-    {
-        return number_shorten($this->remindersCount(), $precision, $abbreviated);
     }
 
     /**

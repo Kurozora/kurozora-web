@@ -36,9 +36,9 @@ class MangaDetails extends Command
 
         $this->info('Fixing ' . $mangas->count() . ' manga');
 
-        if ($mangas->count()) {
-            $this->call('scrape:mal_manga', ['malID' => $mangas->implode(',')]);
-        }
+        $mangas->chunk(1000)->each(function ($chunk) {
+            $this->call('scrape:mal_manga', ['malID' => $chunk->implode(',')]);
+        });
 
         return Command::SUCCESS;
     }

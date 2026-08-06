@@ -87,7 +87,7 @@ class Session extends Resource
             BelongsTo::make('User')
                 ->searchable(),
 
-            MorphOne::make('Session Attribute', 'session_attribute'),
+            MorphOne::make('Session Attribute'),
         ];
     }
 

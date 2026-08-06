@@ -3,6 +3,9 @@
 namespace App\Spiders\MAL;
 
 use App\Processors\MAL\MagazineProcessor;
+use App\Spiders\MAL\Middleware\CircuitBreakerMiddleware;
+use App\Spiders\MAL\Middleware\BackoffMiddleware;
+use App\Spiders\MAL\Middleware\RateLimitMiddleware;
 use App\Spiders\MAL\Models\MagazineItem;
 use Exception;
 use Generator;
@@ -39,6 +42,9 @@ class MagazineSpider extends BasicSpider
      */
     public array $downloaderMiddleware = [
         RequestDeduplicationMiddleware::class,
+        CircuitBreakerMiddleware::class,
+        BackoffMiddleware::class,
+        RateLimitMiddleware::class,
         [
             UserAgentMiddleware::class,
             ['userAgent' => 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'],
@@ -107,9 +113,15 @@ class MagazineSpider extends BasicSpider
             return $this->item([]);
         }
 
-        logger()->channel('stderr')->info('🕷 [MAL_ID:MAGAZINE:' . $id . '] Parsing response');
-        $name = $response->filter('h1.h1')
-            ->text();
+        logger()->channel('stderr')->debug('🕷 [MAL_ID:MAGAZINE:' . $id . '] Parsing response');
+        $nameNode = $response->filter('h1.h1');
+
+        if (!$nameNode->count()) {
+            logger()->error('Magazine: ' . $id . ';status:' . $response->getStatus() . ';missing-title-node');
+            return $this->item([]);
+        }
+
+        $name = $nameNode->text();
 
         try {
             $mangas = $response->filter('.seasonal-anime')

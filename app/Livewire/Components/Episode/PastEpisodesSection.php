@@ -60,11 +60,12 @@ class PastEpisodesSection extends Component
             return collect();
         }
 
-        return auth()->user()?->past_episodes()
+        return auth()->user()?->watched_episodes()
             ->when(auth()->user(), function ($query, $user) {
                 $query->withExists([
-                    'user_watched_episodes as isWatched' => function ($query) use ($user) {
-                        $query->where('user_id', $user->id);
+                    'userWatchedEpisodes as isWatched' => function ($query) use ($user) {
+                        $query->where('user_id', $user->id)
+                            ->completed();
                     },
                 ]);
             })

@@ -24,7 +24,7 @@ class Recap extends KModel
     {
         return [
             'year' => 'int',
-            'mont' => 'int',
+            'month' => 'int',
         ];
     }
 

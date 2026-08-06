@@ -8,7 +8,7 @@
 @endphp
 
 <div class="inline-block relative">
-    <select {{ $disabled ? 'disabled' : '' }} {!! $attributes->merge(['class' => 'form-select bg-none w-full shadow-sm ' . $rounded]) !!}>
+    <select {{ $disabled ? 'disabled' : '' }} {!! $attributes->merge(['class' => 'form-select bg-none w-full border border-transparent shadow-sm ' . $rounded . ' focus:border-tint focus:ring-tint disabled:border-gray-300']) !!}>
         {{ $slot }}
     </select>
 

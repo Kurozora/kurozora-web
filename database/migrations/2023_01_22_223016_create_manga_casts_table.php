@@ -28,7 +28,7 @@ return new class extends Migration
 
         Schema::table(MangaCast::TABLE_NAME, function(Blueprint $table) {
             // Set index key constraints
-            $table->index('deleted_at');
+            $table->index(['manga_id', 'deleted_at', 'id']);
 
             // Set unique key constraints
             $table->unique(['character_id', 'manga_id', 'cast_role_id'], 'manga_cast_character_manga_role_unique');

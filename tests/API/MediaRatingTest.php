@@ -5,6 +5,7 @@ namespace Tests\API;
 use App\Enums\UserLibraryStatus;
 use App\Models\Anime;
 use App\Models\Episode;
+use App\Models\UserWatchedEpisode;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
@@ -30,7 +31,7 @@ class MediaRatingTest extends TestCase
         $response->assertUnsuccessfulAPIResponse();
 
         // Check if anime rating does not exist
-        $this->assertTrue($this->user->animeRatings()->count() === 0);
+        $this->assertTrue($this->user->ratingsFor(Anime::class)->count() === 0);
     }
 
     /**
@@ -53,7 +54,7 @@ class MediaRatingTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Check if anime rating exists
-        $this->assertTrue($this->user->animeRatings()->count() === 1);
+        $this->assertTrue($this->user->ratingsFor(Anime::class)->count() === 1);
     }
 
     /**
@@ -68,7 +69,7 @@ class MediaRatingTest extends TestCase
         $this->user->track($this->anime, UserLibraryStatus::InProgress());
 
         // Rate the anime
-        $this->user->animeRatings()->create([
+        $this->user->ratingsFor(Anime::class)->create([
             'model_type' => Anime::class,
             'model_id' => $this->anime->id,
             'rating' => 2.5,
@@ -83,7 +84,7 @@ class MediaRatingTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Check if anime rating exists
-        $this->assertTrue($this->user->animeRatings()->count() === 0);
+        $this->assertTrue($this->user->ratingsFor(Anime::class)->count() === 0);
     }
 
     /**
@@ -104,7 +105,7 @@ class MediaRatingTest extends TestCase
         $response->assertUnsuccessfulAPIResponse();
 
         // Check if episode rating does not exist
-        $this->assertTrue($this->user->episodeRatings()->count() === 0);
+        $this->assertTrue($this->user->ratingsFor(Episode::class)->count() === 0);
     }
 
     /**
@@ -119,7 +120,7 @@ class MediaRatingTest extends TestCase
         $episode = $this->anime->episodes()->first();
 
         // Mark episode as watched
-        $this->user->episodes()->attach($episode);
+        $this->user->episodes()->attach($episode, UserWatchedEpisode::completedAttributes());
 
         // Rate the episode
         $response = $this->auth()->json('POST', 'v1/episodes/' . $episode->id . '/rate', [
@@ -130,7 +131,7 @@ class MediaRatingTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Check if episode rating exists
-        $this->assertTrue($this->user->episodeRatings()->count() === 1);
+        $this->assertTrue($this->user->ratingsFor(Episode::class)->count() === 1);
     }
 
     /**
@@ -145,10 +146,10 @@ class MediaRatingTest extends TestCase
         $episode = $this->anime->episodes()->first();
 
         // Add anime to library
-        $this->user->episodes()->attach($episode);
+        $this->user->episodes()->attach($episode, UserWatchedEpisode::completedAttributes());
 
         // Rate the anime
-        $this->user->episodeRatings()->create([
+        $this->user->ratingsFor(Episode::class)->create([
             'model_type' => Episode::class,
             'model_id' => $episode->id,
             'rating' => 2.5,
@@ -163,6 +164,6 @@ class MediaRatingTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Check if anime rating exists
-        $this->assertTrue($this->user->episodeRatings()->count() === 0);
+        $this->assertTrue($this->user->ratingsFor(Episode::class)->count() === 0);
     }
 }

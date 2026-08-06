@@ -25,7 +25,7 @@ class SeasonResourceIdentity extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => (string) $this->resource->id,
+            'id' => (string) ($this->resource?->public_id ?? $this->resource),
             'type' => 'seasons',
             'href' => route('api.seasons.details', $this->resource, false),
         ];

@@ -37,7 +37,7 @@ class FeedMessageTest extends TestCase
         ])->assertSuccessfulAPIResponse();
 
         // Check whether the feed message was created
-        $this->assertEquals(1, $this->user->feed_messages()->count());
+        $this->assertEquals(1, $this->user->feedMessages()->count());
     }
 
     /**
@@ -55,7 +55,7 @@ class FeedMessageTest extends TestCase
         ])->assertSuccessfulAPIResponse();
 
         // Check whether the feed message was created
-        $this->assertEquals(1, $this->user->feed_messages()->count());
+        $this->assertEquals(1, $this->user->feedMessages()->count());
     }
 
     /**
@@ -73,7 +73,7 @@ class FeedMessageTest extends TestCase
         ])->assertSuccessfulAPIResponse();
 
         // Check whether the feed message was created
-        $this->assertEquals(1, $this->user->feed_messages()->count());
+        $this->assertEquals(1, $this->user->feedMessages()->count());
     }
 
     /**
@@ -91,7 +91,7 @@ class FeedMessageTest extends TestCase
         ])->assertSuccessfulAPIResponse();
 
         // Check whether the feed message was created
-        $this->assertEquals(1, $this->user->feed_messages()->count());
+        $this->assertEquals(1, $this->user->feedMessages()->count());
     }
 
     /**
@@ -163,7 +163,7 @@ class FeedMessageTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Check whether the feed message was created
-        $this->assertEquals(1, $this->user->feed_messages()->where('is_reply', 1)->count());
+        $this->assertEquals(1, $this->user->feedMessages()->where('is_reply', 1)->count());
     }
 
     /**
@@ -186,7 +186,7 @@ class FeedMessageTest extends TestCase
         ])->assertSuccessfulAPIResponse();
 
         // Check whether the feed message was created
-        $this->assertEquals(1, $this->user->feed_messages()->where('is_reshare', 1)->count());
+        $this->assertEquals(1, $this->user->feedMessages()->where('is_reshare', 1)->count());
 
         $this->auth()->json('POST', 'v1/feed', [
             'content' => 'Hello, Kurozora!',

@@ -35,7 +35,7 @@ return [
             'team_id' => env('APN_TEAM_ID'),
             'app_bundle_id' => env('APN_BUNDLE_ID'),
             'private_key_content' => str_replace('#', "\n", env('APN_PRIVATE_KEY_CONTENT') ?? ''), // with double quote; otherwise \n isn't parsed.
-            'production' => (bool) env('APP_ENV', 'production') == 'production',
+            'production' => env('APP_ENV', 'production') === 'production',
         ],
 
         'reverb' => [
@@ -51,6 +51,8 @@ return [
             ],
             'client_options' => [
                 // Guzzle client options: https://docs.guzzlephp.org/en/stable/request-options.html
+                'timeout' => (int) env('REVERB_HTTP_TIMEOUT', 5),
+                'connect_timeout' => (int) env('REVERB_HTTP_CONNECT_TIMEOUT', 2),
             ],
         ],
 

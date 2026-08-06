@@ -6,6 +6,7 @@ use App\Enums\UserLibraryStatus;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
+use Jaybizzle\CrawlerDetect\CrawlerDetect;
 
 class IgnoreListScope implements Scope
 {
@@ -21,6 +22,10 @@ class IgnoreListScope implements Scope
      */
     public function apply(Builder $builder, Model $model): void
     {
+        if ((new CrawlerDetect)->isCrawler()) {
+            return;
+        }
+
         if ($user = auth()->user()) {
             $builder->whereDoesntHave('library', function ($query) use ($user, $model) {
                 $query->where('status', '=', UserLibraryStatus::Ignored)

@@ -39,7 +39,7 @@ class SessionAttribute extends KModel
      *
      * @return BelongsTo
      */
-    public function personal_access_token(): BelongsTo
+    public function personalAccessToken(): BelongsTo
     {
         return $this->belongsTo(PersonalAccessToken::class, 'model_id', 'token');
     }
@@ -51,10 +51,26 @@ class SessionAttribute extends KModel
      */
     function getFullPlatformAttribute(): string
     {
-        if ($this->device_model == null || $this->platform == null || $this->platform_version == null) {
-            return 'Unknown platform';
+        $system = collect([$this->platform, $this->platform_version])
+            ->filter(fn ($part) => filled($part))
+            ->join(' ');
+
+        if (filled($this->device_model) && filled($system)) {
+            return $this->device_model . ' on ' . $system;
         }
 
-        return $this->device_model . ' on ' . $this->platform . ' ' . $this->platform_version;
+        return filled($system) ? $system : __('Unknown platform');
+    }
+
+    /**
+     * Returns the location as a single string.
+     *
+     * @return string
+     */
+    function getFullLocationAttribute(): string
+    {
+        return collect([$this->city, $this->country])
+            ->filter(fn ($part) => filled($part) && $part !== 'Unknown')
+            ->join(', ');
     }
 }

@@ -4,6 +4,9 @@ namespace App\Spiders\MAL;
 
 use App\Processors\MAL\AnimeProcessor;
 use App\Processors\MAL\AnimeStatsProcessor;
+use App\Spiders\MAL\Middleware\CircuitBreakerMiddleware;
+use App\Spiders\MAL\Middleware\BackoffMiddleware;
+use App\Spiders\MAL\Middleware\RateLimitMiddleware;
 use App\Spiders\MAL\Models\AnimeItem;
 use App\Spiders\MAL\Models\AnimeStatItem;
 use Arr;
@@ -42,6 +45,9 @@ class AnimeSpider extends BasicSpider
      */
     public array $downloaderMiddleware = [
         RequestDeduplicationMiddleware::class,
+        CircuitBreakerMiddleware::class,
+        BackoffMiddleware::class,
+        RateLimitMiddleware::class,
         [
             UserAgentMiddleware::class,
             ['userAgent' => 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'],
@@ -108,9 +114,15 @@ class AnimeSpider extends BasicSpider
             return $this->item([]);
         }
 
-        logger()->channel('stderr')->info('🕷 [MAL_ID:ANIME:' . $id . '] Parsing response');
-        $originalTitle = $response->filter('h1.title-name')
-            ->text();
+        logger()->channel('stderr')->debug('🕷 [MAL_ID:ANIME:' . $id . '] Parsing response');
+        $nameNode = $response->filter('h1.title-name');
+
+        if (!$nameNode->count()) {
+            logger()->error('Anime: ' . $id . ';status:' . $response->getStatus() . ';missing-title-node');
+            return $this->item([]);
+        }
+
+        $originalTitle = $nameNode->text();
         $attributes = $response->filter('div.leftside')
             ->filter('.spaceit_pad')
             ->each(function ($item) {
@@ -149,7 +161,7 @@ class AnimeSpider extends BasicSpider
         $openings = $this->cleanSongs($response, 'div[class*="theme-songs opnening"] table'); // typo on the website
         $endings = $this->cleanSongs($response, 'div[class*="theme-songs ending"] table');
 
-        logger()->channel('stderr')->info('✅️ [MAL_ID:ANIME:' . $id . '] Done parsing');
+        logger()->channel('stderr')->debug('✅️ [MAL_ID:ANIME:' . $id . '] Done parsing');
 
         yield $this->item(new AnimeItem(
             $id,
@@ -181,7 +193,7 @@ class AnimeSpider extends BasicSpider
         $regex = '/anime\/(\d*)/';
         $uri = str($response->getUri());
         $id = $uri->match($regex)->remove('/anime/')->value();
-        logger()->channel('stderr')->info('🕷 [MAL_ID:ANIME:' . $id . '] Parsing stats response');
+        logger()->channel('stderr')->debug('🕷 [MAL_ID:ANIME:' . $id . '] Parsing stats response');
 
         $scores = $response->filter('table.score-stats tr')
             ->each(function (Crawler $item) {

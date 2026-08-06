@@ -28,8 +28,7 @@ return new class extends Migration
 
         Schema::table(MediaSong::TABLE_NAME, function (Blueprint $table) {
             // Set index key constraints
-            $table->index('position');
-            $table->index('deleted_at');
+            $table->index(['deleted_at', 'position']);
 
             // Set unique key constraints
             $table->unique(['model_type', 'model_id', 'song_id', 'type']);

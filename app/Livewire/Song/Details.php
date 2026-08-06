@@ -74,6 +74,21 @@ class Details extends Component
     }
 
     /**
+     * The external streaming links for the song, keyed by service.
+     *
+     * @return array<string, string|null>
+     */
+    public function getMusicLinksProperty(): array
+    {
+        return [
+            'amazon' => $this->song->amazon_id ? config('services.amazon.music.albums') . $this->song->amazon_id : null,
+            'deezer' => $this->song->deezer_id ? config('services.deezer.track') . $this->song->deezer_id : null,
+            'spotify' => $this->song->spotify_id ? config('services.spotify.track') . $this->song->spotify_id : null,
+            'youtube' => $this->song->youtube_id ? config('services.youtube.music.watch') . $this->song->youtube_id : null,
+        ];
+    }
+
+    /**
      * Render the component.
      *
      * @return Application|Factory|View

@@ -9,17 +9,20 @@ Route::prefix('/notifications')
         Route::get('/', [NotificationController::class, 'index'])
             ->name('.index');
 
+        Route::post('/delete', [NotificationController::class, 'delete'])
+            ->name('.delete');
+
+        Route::post('/update', [NotificationController::class, 'update'])
+            ->name('.update');
+
         Route::prefix('{notification}')
             ->group(function () {
                 Route::get('/', [NotificationController::class, 'details'])
                     ->can('view', 'notification')
                     ->name('.details');
 
-                Route::post('/delete', [NotificationController::class, 'delete'])
+                Route::post('/delete', [NotificationController::class, 'deleteOne'])
                     ->can('delete', 'notification')
-                    ->name('.delete');
+                    ->name('.deleteOne');
             });
-
-        Route::post('/update', [NotificationController::class, 'update'])
-            ->name('.update');
     });

@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Rules\ValidatePlatformName;
+use App\Rules\ValidateDeviceString;
 use App\Rules\ValidatePlatformVersion;
 use App\Traits\Model\HasSessionAttribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -47,7 +47,7 @@ class Session extends KModel
      *
      * @return morphOne
      */
-    public function session_attribute(): MorphOne
+    public function sessionAttribute(): MorphOne
     {
         return $this->morphOne(SessionAttribute::class, 'model');
     }
@@ -60,10 +60,10 @@ class Session extends KModel
     static function platformRules(): array
     {
         return [
-            'platform'          => ['bail', 'required', new ValidatePlatformName],
+            'platform'          => ['bail', 'required', new ValidateDeviceString],
             'platform_version'  => ['bail', 'required', new ValidatePlatformVersion],
-            'device_vendor'     => ['bail', 'required', 'string', 'min:1'],
-            'device_model'      => ['bail', 'required', 'string', 'max:50']
+            'device_vendor'     => ['bail', 'required', new ValidateDeviceString],
+            'device_model'      => ['bail', 'required', new ValidateDeviceString]
         ];
     }
 }

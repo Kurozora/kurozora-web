@@ -21,9 +21,9 @@ return new class extends Migration
     {
         Schema::create(Game::TABLE_NAME, function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('series_id')->nullable();
             $table->unsignedInteger('igdb_id')->unique()->nullable();
             $table->string('igdb_slug')->unique()->nullable();
+            $table->string('vndb_id')->unique()->nullable();
             $table->string('slug', 280);
             $table->string('original_title', 280);
             $table->json('synonym_titles')->nullable();
@@ -33,13 +33,16 @@ return new class extends Migration
             $table->unsignedBigInteger('media_type_id')->nullable();
             $table->unsignedBigInteger('source_id')->nullable();
             $table->unsignedBigInteger('status_id')->nullable();
+            $table->json('website_urls')->nullable();
             $table->string('video_url')->nullable();
             $table->unsignedMediumInteger('duration')->default(0);
+            $table->unsignedMediumInteger('time_to_beat_hastily')->default(0);
+            $table->unsignedMediumInteger('time_to_beat_completely')->default(0);
             $table->unsignedTinyInteger('publication_day')->nullable();
             $table->unsignedTinyInteger('publication_season')->nullable();
             $table->boolean('is_nsfw')->default(false);
             $table->string('copyright')->nullable();
-            $table->unsignedBigInteger('rank_total')->default(0);
+            $table->unsignedInteger('rank_total')->default(0);
             $table->integer('edition_count')->default(0);
             $table->integer('view_count')->default(0);
             $table->date('published_at')->nullable();
@@ -49,12 +52,12 @@ return new class extends Migration
 
         Schema::table(Game::TABLE_NAME, function (Blueprint $table) {
             // Set index key constraints
-            $table->index('is_nsfw');
-            $table->index('rank_total');
-            $table->index('published_at');
+            $table->index(['deleted_at', 'tv_rating_id']);
+            $table->index(['deleted_at', 'rank_total']);
+            $table->index(['deleted_at', 'published_at']);
+            $table->index(['deleted_at', 'publication_season', 'published_at']);
             $table->index('created_at');
             $table->index('updated_at');
-            $table->index('deleted_at');
 
             // Set unique key constraints
             $table->unique(['slug']);

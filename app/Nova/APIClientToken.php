@@ -36,7 +36,7 @@ class APIClientToken extends Resource
      *
      * @var string
      */
-    public static $title = 'identifier';
+    public static $title = 'name';
 
     /**
      * The columns that should be searched.
@@ -44,7 +44,7 @@ class APIClientToken extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'identifier', 'description', 'token'
+        'id', 'name', 'identifier', 'description', 'token'
     ];
 
     /**
@@ -75,9 +75,16 @@ class APIClientToken extends Resource
                 })
                 ->searchable(),
 
+            Text::make('Name')
+                ->sortable()
+                ->rules('required', 'max:255')
+                ->creationRules('unique:' . \App\Models\APIClientToken::TABLE_NAME . ',name')
+                ->updateRules('unique:' . \App\Models\APIClientToken::TABLE_NAME . ',name,{{resourceId}}')
+                ->help('The identifier name is displayed as the app name to users when requesting access to ' . config('app.name') . '.'),
+
             Text::make('Description')
                 ->rules('max:255')
-                ->help('The identifier description is displayed as the app name to users when requesting access to ' . config('app.name') . '.'),
+                ->help('An internal notes field to describe the purpose, scope, or target system of this token.'),
 
             Text::make('Identifier')
                 ->readonly(function () {
@@ -101,7 +108,7 @@ class APIClientToken extends Resource
     {
         $apiClientToken = $this->resource;
 
-        return $apiClientToken->description . ' (ID: ' . $apiClientToken->id . ')';
+        return $apiClientToken->name . ' (ID: ' . $apiClientToken->id . ')';
     }
 
     /**

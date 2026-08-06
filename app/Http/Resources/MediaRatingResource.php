@@ -70,7 +70,7 @@ class MediaRatingResource extends JsonResource
             case Episode::class:
                 return [
                     'episodes' => [
-                        'data' => EpisodeResourceIdentity::collection([$this->resource->model_id])
+                        'data' => EpisodeResourceIdentity::collection([$this->resource->episode_public_id])
                     ]
                 ];
             case Game::class:

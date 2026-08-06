@@ -81,7 +81,7 @@ class MediaStaff extends Resource
                 ->sortable()
                 ->required(),
 
-            BelongsTo::make('Staff Role', 'staff_role')
+            BelongsTo::make('Staff Role')
                 ->searchable()
                 ->sortable(),
         ];

@@ -1,0 +1,276 @@
+#!/bin/bash
+# Kurozora search host bootstrap (Amazon Linux 2023, aarch64).
+# Provisions Meilisearch, Redis 6, nginx with HTTP/2 + HTTP/3, swap, and renewal timers.
+# Secrets are read from SSM Parameter Store at runtime via the instance role.
+
+set -euo pipefail
+exec > >(tee -a /var/log/kurozora-bootstrap.log) 2>&1
+
+REGION='${region}'
+DOMAIN_NAME='${domain_name}'
+CERTBOT_EMAIL='${certbot_email}'
+MEILISEARCH_VERSION='${meilisearch_version}'
+MEILISEARCH_ENV='${meilisearch_env}'
+REDIS_MAXMEMORY='${redis_maxmemory}'
+SWAP_SIZE_MB='${swap_size_mb}'
+SSM_MEILI_KEY_NAME='${ssm_meili_key_name}'
+SSM_REDIS_PASSWORD_NAME='${ssm_redis_password_name}'
+
+echo "==> Updating package index"
+dnf -y update
+
+echo "==> Installing base packages"
+dnf -y install \
+    nginx \
+    certbot \
+    python3-certbot-nginx \
+    redis6 \
+    awscli \
+    jq \
+    tar
+
+echo "==> Creating ${swap_size_mb} MB swap"
+if [ ! -f /swapfile ]; then
+    fallocate -l "$${SWAP_SIZE_MB}M" /swapfile
+    chmod 600 /swapfile
+    mkswap /swapfile
+    swapon /swapfile
+    echo '/swapfile none swap sw 0 0' >> /etc/fstab
+fi
+sysctl -w vm.swappiness=10
+echo 'vm.swappiness=10' > /etc/sysctl.d/99-swap.conf
+
+echo "==> Fetching secrets from SSM"
+MEILI_MASTER_KEY=$(aws ssm get-parameter \
+    --name "$SSM_MEILI_KEY_NAME" \
+    --with-decryption \
+    --region "$REGION" \
+    --query 'Parameter.Value' \
+    --output text)
+REDIS_PASSWORD=$(aws ssm get-parameter \
+    --name "$SSM_REDIS_PASSWORD_NAME" \
+    --with-decryption \
+    --region "$REGION" \
+    --query 'Parameter.Value' \
+    --output text)
+
+if [ -z "$MEILI_MASTER_KEY" ] || [ -z "$REDIS_PASSWORD" ]; then
+    echo "FATAL: SSM secrets returned empty values" >&2
+    exit 1
+fi
+
+echo "==> Installing Meilisearch ${meilisearch_version}"
+id meilisearch &>/dev/null || useradd -r -s /sbin/nologin meilisearch
+mkdir -p /var/lib/meilisearch /var/opt/meilisearch/dumps
+chown -R meilisearch:meilisearch /var/lib/meilisearch /var/opt/meilisearch
+
+MEILI_ARCHIVE_URL="https://github.com/meilisearch/meilisearch/releases/download/$${MEILISEARCH_VERSION}/meilisearch-linux-aarch64"
+curl -fsSL "$MEILI_ARCHIVE_URL" -o /usr/bin/meilisearch
+chmod +x /usr/bin/meilisearch
+
+cat > /etc/systemd/system/meilisearch.service <<UNIT
+[Unit]
+Description=Meilisearch
+After=systemd-user-sessions.service
+
+[Service]
+Type=simple
+WorkingDirectory=/var/lib/meilisearch
+ExecStart=/usr/bin/meilisearch --db-path /var/lib/meilisearch/data.ms --env $${MEILISEARCH_ENV} --dump-dir /var/opt/meilisearch/dumps
+Environment="MEILI_MASTER_KEY=$${MEILI_MASTER_KEY}"
+Environment="MEILI_SERVER_PROVIDER=aws"
+Environment="MEILI_NO_ANALYTICS=true"
+User=meilisearch
+Group=meilisearch
+Restart=on-failure
+
+[Install]
+WantedBy=default.target
+UNIT
+chmod 600 /etc/systemd/system/meilisearch.service
+
+echo "==> Installing Meilisearch prune timer"
+cat > /usr/local/sbin/meilisearch-prune-tasks <<'PRUNE'
+#!/bin/bash
+# Deletes succeeded/failed/canceled Meilisearch tasks older than 7 days.
+
+set -euo pipefail
+
+MEILI_MASTER_KEY=$(grep -oP 'MEILI_MASTER_KEY=\K[^"]+' /etc/systemd/system/meilisearch.service)
+BEFORE=$(date -u -d '7 days ago' '+%Y-%m-%dT%H:%M:%SZ')
+
+echo "Pruning Meilisearch tasks with finishedAt < $BEFORE"
+curl --fail-with-body --silent --show-error \
+    --max-time 30 \
+    -X DELETE \
+    "http://localhost:7700/tasks?statuses=succeeded,failed,canceled&beforeFinishedAt=$BEFORE" \
+    -H "Authorization: Bearer $MEILI_MASTER_KEY"
+echo
+PRUNE
+chmod 700 /usr/local/sbin/meilisearch-prune-tasks
+
+cat > /etc/systemd/system/meilisearch-prune-tasks.service <<'UNIT'
+[Unit]
+Description=Prune Meilisearch task history older than 7 days
+After=meilisearch.service
+Requires=meilisearch.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/meilisearch-prune-tasks
+User=root
+Nice=10
+IOSchedulingClass=best-effort
+IOSchedulingPriority=7
+UNIT
+
+cat > /etc/systemd/system/meilisearch-prune-tasks.timer <<'UNIT'
+[Unit]
+Description=Daily prune of Meilisearch task history
+
+[Timer]
+OnCalendar=daily
+RandomizedDelaySec=30min
+Persistent=true
+Unit=meilisearch-prune-tasks.service
+
+[Install]
+WantedBy=timers.target
+UNIT
+
+echo "==> Configuring Redis"
+cp /etc/redis6/redis6.conf /etc/redis6/redis6.conf.bak
+sed -i 's/^bind 127\.0\.0\.1 -::1/bind 0.0.0.0/' /etc/redis6/redis6.conf
+sed -i 's/^protected-mode no/protected-mode yes/' /etc/redis6/redis6.conf
+sed -i "s|^# requirepass foobared|requirepass $${REDIS_PASSWORD}|" /etc/redis6/redis6.conf
+sed -i "s|^# maxmemory <bytes>|maxmemory $${REDIS_MAXMEMORY}|" /etc/redis6/redis6.conf
+sed -i 's|^# maxmemory-policy noeviction|maxmemory-policy allkeys-lru|' /etc/redis6/redis6.conf
+sed -i 's|^appendonly yes|appendonly no|' /etc/redis6/redis6.conf
+{
+    echo ""
+    echo "# Disable RDB snapshots. Cache-only deployment."
+    echo 'save ""'
+} >> /etc/redis6/redis6.conf
+chown redis:redis /etc/redis6/redis6.conf
+chmod 640 /etc/redis6/redis6.conf
+
+echo "==> Writing nginx vhost (HTTP-only, for cert acquisition)"
+cat > /etc/nginx/sites-enabled/${domain_name} <<NGINX
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    server_name ${domain_name};
+
+    location /.well-known/acme-challenge/ {
+        root /var/lib/letsencrypt;
+    }
+
+    location / {
+        return 301 https://\$host\$request_uri;
+    }
+}
+NGINX
+mkdir -p /var/lib/letsencrypt
+
+echo "==> Starting services"
+systemctl daemon-reload
+systemctl enable --now meilisearch.service
+systemctl enable --now meilisearch-prune-tasks.timer
+systemctl enable --now redis6
+systemctl enable --now nginx
+systemctl enable --now certbot-renew.timer
+
+echo "==> Installing deploy hook to reload nginx after cert renewal"
+mkdir -p /etc/letsencrypt/renewal-hooks/deploy
+cat > /etc/letsencrypt/renewal-hooks/deploy/reload-nginx <<'HOOK'
+#!/bin/bash
+systemctl reload nginx
+HOOK
+chmod +x /etc/letsencrypt/renewal-hooks/deploy/reload-nginx
+
+echo "==> Acquiring TLS certificate"
+# Will only succeed if DNS for ${domain_name} already points to this instance.
+# If DNS is not yet updated, the bootstrap leaves the HTTP-only vhost in place;
+# run /usr/local/sbin/finish-tls-setup after updating DNS to enable HTTPS.
+EMAIL_ARGS=()
+if [ -n "$CERTBOT_EMAIL" ]; then
+    EMAIL_ARGS=(--email "$CERTBOT_EMAIL")
+else
+    EMAIL_ARGS=(--register-unsafely-without-email)
+fi
+
+if certbot certonly \
+    --nginx \
+    --non-interactive \
+    --agree-tos \
+    "$${EMAIL_ARGS[@]}" \
+    --domain "$DOMAIN_NAME" \
+    --key-type ecdsa \
+    --no-eff-email \
+    --keep-until-expiring; then
+
+    echo "==> Cert acquired. Installing final TLS vhost."
+    install -m 0755 /dev/stdin /usr/local/sbin/install-tls-vhost <<'INSTALL'
+#!/bin/bash
+set -euo pipefail
+DOMAIN_NAME="$1"
+cat > "/etc/nginx/sites-enabled/$DOMAIN_NAME" <<VHOST
+# Redirect HTTP to HTTPS
+server {
+    listen 80;
+    listen [::]:80;
+    server_name DOMAIN_PLACEHOLDER;
+
+    location /.well-known/acme-challenge/ {
+        root /var/lib/letsencrypt;
+    }
+
+    location / {
+        return 301 https://\$host\$request_uri;
+    }
+}
+
+# HTTPS. HTTP/2 over TCP and HTTP/3 over QUIC (UDP).
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    listen 443 quic reuseport;
+    listen [::]:443 quic reuseport;
+    http2 on;
+    http3 on;
+
+    server_name DOMAIN_PLACEHOLDER;
+
+    ssl_certificate /etc/letsencrypt/live/DOMAIN_PLACEHOLDER/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/DOMAIN_PLACEHOLDER/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+    # Advertise HTTP/3 to HTTP/2 clients
+    add_header alt-svc 'h3=":443"; ma=86400';
+
+    client_max_body_size 100M;
+
+    location / {
+        proxy_pass http://127.0.0.1:7700;
+        proxy_http_version 1.1;
+        proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto \$scheme;
+    }
+}
+VHOST
+sed -i "s|DOMAIN_PLACEHOLDER|$DOMAIN_NAME|g" "/etc/nginx/sites-enabled/$DOMAIN_NAME"
+nginx -t
+systemctl reload nginx
+INSTALL
+    /usr/local/sbin/install-tls-vhost "$DOMAIN_NAME"
+else
+    echo "==> Cert acquisition failed. DNS likely not pointing here yet."
+    echo "    After updating Cloudflare DNS, run:"
+    echo "      sudo certbot certonly --nginx --domain $DOMAIN_NAME --email $CERTBOT_EMAIL --key-type ecdsa --agree-tos --non-interactive"
+    echo "      sudo /usr/local/sbin/install-tls-vhost $DOMAIN_NAME"
+fi
+
+echo "==> Bootstrap complete"

@@ -22,7 +22,7 @@ return new class extends Migration
             $table->mediumText('about')->nullable();
             $table->unsignedTinyInteger('type');
             $table->unsignedTinyInteger('generation');
-            $table->unsignedBigInteger('rank_total')->default(0);
+            $table->unsignedInteger('rank_total')->default(0);
             $table->integer('view_count')->default(0);
             $table->date('started_at')->nullable();
             $table->date('ended_at')->nullable();
@@ -32,12 +32,11 @@ return new class extends Migration
 
         Schema::table(Platform::TABLE_NAME, function (Blueprint $table) {
             // Set index key constraints
-            $table->index('rank_total');
-            $table->index('started_at');
-            $table->index('ended_at');
+            $table->index(['deleted_at', 'rank_total']);
+            $table->index(['deleted_at', 'started_at']);
+            $table->index(['deleted_at', 'ended_at']);
             $table->index('created_at');
             $table->index('updated_at');
-            $table->index('deleted_at');
 
             // Set unique key constraints
             $table->unique(['slug']);

@@ -3,6 +3,7 @@
 namespace App\Nova\Dashboards;
 
 use App\Nova\Metrics\AnimeNSFWChart;
+use App\Nova\Metrics\AppleRootCertsStatus;
 use App\Nova\Metrics\EpisodeFillerChart;
 use App\Nova\Metrics\GameNSFWChart;
 use App\Nova\Metrics\MangaNSFWChart;
@@ -23,6 +24,10 @@ class Main extends Dashboard
     public function cards(): array
     {
         return [
+            (new AppleRootCertsStatus)
+                ->canSee(function ($request) {
+                    return $request->user()->hasRole('superAdmin');
+                }),
             new AnimeNSFWChart,
             new GameNSFWChart,
             new MangaNSFWChart,

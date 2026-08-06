@@ -6,6 +6,7 @@ use App\Http\Controllers\API\v1\ShowCastController;
 
 Route::prefix('/cast')
     ->name('.cast')
+    ->middleware('cache.headers:private;no_cache;etag')
     ->group(function () {
         Route::prefix('{cast}')
             ->group(function () {
@@ -16,6 +17,7 @@ Route::prefix('/cast')
 
 Route::prefix('/show-cast')
     ->name('.show-cast')
+    ->middleware('cache.headers:private;no_cache;etag')
     ->group(function () {
         Route::get('/', [ShowCastController::class, 'index'])
             ->name('.index');
@@ -29,6 +31,7 @@ Route::prefix('/show-cast')
 
 Route::prefix('/literature-cast')
     ->name('.literature-cast')
+    ->middleware('cache.headers:private;no_cache;etag')
     ->group(function () {
         Route::get('/', [LiteratureCastController::class, 'index'])
             ->name('.index');
@@ -42,6 +45,7 @@ Route::prefix('/literature-cast')
 
 Route::prefix('/game-cast')
     ->name('.game-cast')
+    ->middleware('cache.headers:private;no_cache;etag')
     ->group(function () {
         Route::get('/', [GameCastController::class, 'index'])
             ->name('.index');

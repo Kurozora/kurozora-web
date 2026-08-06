@@ -1,0 +1,40 @@
+bots:
+  - name: allow-health-check
+    path_regex: ^/health-check$
+    action: ALLOW
+
+  - name: allow-elb-healthcheck-ua
+    user_agent_regex: ^ELB-HealthChecker/
+    action: ALLOW
+
+  - name: allow-static-assets
+    path_regex: \.(css|js|map|png|jpg|jpeg|gif|svg|webp|ico|woff2?|ttf|otf|json|xml|txt|webmanifest)$
+    action: ALLOW
+
+  - name: allow-api-and-ws-subdomains
+    headers_regex:
+      Host: ^(api|ws)\.kurozora\.app$
+    action: ALLOW
+
+  - name: allow-api-and-ws
+    path_regex: ^/(v1/|broadcasting/|app/)
+    action: ALLOW
+
+  - name: allow-well-known
+    path_regex: ^/(robots\.txt|sitemap|humans\.txt|favicon\.ico|manifest\.json|opensearch|\.well-known/)
+    action: ALLOW
+
+  - import: (data)/common/keep-internet-working.yaml
+  - import: /etc/anubis/google-special-crawlers.yaml
+  - import: (data)/crawlers/_allow-good.yaml
+
+  - import: (data)/meta/ai-block-aggressive.yaml
+  - import: (data)/bots/aggressive-brazilian-scrapers.yaml
+  - import: (data)/clients/x-firefox-ai.yaml
+
+  - import: (data)/crawlers/huawei-cloud.yaml
+  - import: (data)/crawlers/alibaba-cloud.yaml
+
+  - name: challenge-everything-else
+    path_regex: ^/
+    action: CHALLENGE

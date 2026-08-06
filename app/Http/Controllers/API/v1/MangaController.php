@@ -14,18 +14,17 @@ use App\Http\Requests\GetPaginatedRequest;
 use App\Http\Requests\RateModelRequest;
 use App\Http\Requests\SearchRequest;
 use App\Http\Resources\CharacterResourceIdentity;
+use App\Http\Resources\LiteratureCastResourceIdentity;
 use App\Http\Resources\LiteratureResource;
 use App\Http\Resources\LiteratureResourceIdentity;
-use App\Http\Resources\LiteratureCastResourceIdentity;
 use App\Http\Resources\MediaRatingResource;
 use App\Http\Resources\MediaRelatedResource;
 use App\Http\Resources\MediaStaffResource;
 use App\Http\Resources\StudioResource;
-use App\Models\Anime;
-use App\Models\Game;
 use App\Models\Manga;
-use App\Models\MediaRating;
-use App\Scopes\TvRatingScope;
+use App\Models\MediaRelation;
+use App\Support\UserLibraryTouch;
+use App\Traits\Controller\WithCatalogCacheHeaders;
 use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -34,11 +33,13 @@ use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\CursorPaginator;
 use Illuminate\Routing\Redirector;
 
 class MangaController extends Controller
 {
+    use WithCatalogCacheHeaders;
+
     /**
      * Returns the manga index.
      *
@@ -84,10 +85,28 @@ class MangaController extends Controller
      */
     public function view(Request $request, Manga $manga): JsonResponse
     {
+        $includeInput = $request->input('include');
+        $includes = is_string($includeInput) ? explode(',', $includeInput) : (is_array($includeInput) ? $includeInput : []);
+        sort($includes);
+
+        $fingerprint = [
+            'kind' => 'manga',
+            'publicId' => $manga->public_id,
+            'updatedAt' => optional($manga->updated_at)->toIso8601String(),
+            'locale' => app()->getLocale(),
+            'tvRating' => (int) $request->attributes->get('tvRating', 4),
+            'include' => $includes,
+        ];
+
+        $notModified = $this->returnIfNotModifiedCatalog($request, $fingerprint);
+        if ($notModified !== null) {
+            return $notModified;
+        }
+
         // Call the ModelViewed event
         ModelViewed::dispatch($manga, $request->ip());
 
-        $manga->load(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
+        $manga->load(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
             ->when(auth()->user(), function ($query, $user) use ($manga) {
                 $manga->load(['mediaRatings' => function ($query) use ($user) {
                     $query->where([
@@ -124,11 +143,11 @@ class MangaController extends Controller
                         };
                         break;
                     case 'related-shows':
-                        $includeArray['animeRelations'] = function ($query) {
+                        $includeArray['animeRelations'] = function ($query) use ($manga) {
                             $query->with([
-                                'related' => function ($query) {
-                                    $query->withoutGlobalScopes([TvRatingScope::class])
-                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin']);
+                                'related' => function ($query) use ($manga) {
+                                    $manga->viewableViaParent($query)
+                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin']);
                                 },
                                 'relation'
                             ])
@@ -136,11 +155,11 @@ class MangaController extends Controller
                         };
                         break;
                     case 'related-literatures':
-                        $includeArray['mangaRelations'] = function ($query) {
+                        $includeArray['mangaRelations'] = function ($query) use ($manga) {
                             $query->with([
-                                'related' => function ($query) {
-                                    $query->withoutGlobalScopes([TvRatingScope::class])
-                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin']);
+                                'related' => function ($query) use ($manga) {
+                                    $manga->viewableViaParent($query)
+                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin']);
                                 },
                                 'relation'
                             ])
@@ -148,11 +167,11 @@ class MangaController extends Controller
                         };
                         break;
                     case 'related-games':
-                        $includeArray['gameRelations'] = function ($query) {
+                        $includeArray['gameRelations'] = function ($query) use ($manga) {
                             $query->with([
-                                'related' => function ($query) {
-                                    $query->withoutGlobalScopes([TvRatingScope::class])
-                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin']);
+                                'related' => function ($query) use ($manga) {
+                                    $manga->viewableViaParent($query)
+                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin']);
                                 },
                                 'relation'
                             ])
@@ -161,7 +180,7 @@ class MangaController extends Controller
                         break;
                     case 'staff':
                         $includeArray['mediaStaff'] = function ($query) {
-                            $query->with(['model', 'staff_role', 'person.media'])
+                            $query->with(['model', 'staffRole', 'person.media'])
                                 ->limit(Manga::MAXIMUM_RELATIONSHIPS_LIMIT);
                         };
                         break;
@@ -178,7 +197,7 @@ class MangaController extends Controller
         // Show the Manga details response
         return JSONResult::success([
             'data' => LiteratureResource::collection([$manga])
-        ]);
+        ])->withHeaders($this->catalogCacheHeaders($request, $fingerprint));
     }
 
     /**
@@ -193,7 +212,7 @@ class MangaController extends Controller
         $data = $request->validated();
 
         $manga = Manga::whereIn('id', $data['ids'] ?? []);
-        $manga->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
+        $manga->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
             ->when(auth()->user(), function ($query, $user) use ($manga) {
                 $manga->with(['mediaRatings' => function ($query) use ($user) {
                     $query->where([
@@ -230,11 +249,11 @@ class MangaController extends Controller
                         };
                         break;
                     case 'related-shows':
-                        $includeArray['animeRelations'] = function ($query) {
+                        $includeArray['animeRelations'] = function ($query) use ($manga) {
                             $query->with([
-                                'related' => function ($query) {
-                                    $query->withoutGlobalScopes([TvRatingScope::class])
-                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin']);
+                                'related' => function ($query) use ($manga) {
+                                    $manga->viewableViaParent($query)
+                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin']);
                                 },
                                 'relation'
                             ])
@@ -242,11 +261,11 @@ class MangaController extends Controller
                         };
                         break;
                     case 'related-literatures':
-                        $includeArray['mangaRelations'] = function ($query) {
+                        $includeArray['mangaRelations'] = function ($query) use ($manga) {
                             $query->with([
-                                'related' => function ($query) {
-                                    $query->withoutGlobalScopes([TvRatingScope::class])
-                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin']);
+                                'related' => function ($query) use ($manga) {
+                                    $manga->viewableViaParent($query)
+                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin']);
                                 },
                                 'relation'
                             ])
@@ -254,11 +273,11 @@ class MangaController extends Controller
                         };
                         break;
                     case 'related-games':
-                        $includeArray['gameRelations'] = function ($query) {
+                        $includeArray['gameRelations'] = function ($query) use ($manga) {
                             $query->with([
-                                'related' => function ($query) {
-                                    $query->withoutGlobalScopes([TvRatingScope::class])
-                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin']);
+                                'related' => function ($query) use ($manga) {
+                                    $manga->viewableViaParent($query)
+                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin']);
                                 },
                                 'relation'
                             ])
@@ -267,7 +286,7 @@ class MangaController extends Controller
                         break;
                     case 'staff':
                         $includeArray['mediaStaff'] = function ($query) {
-                            $query->with(['model', 'staff_role', 'person.media'])
+                            $query->with(['model', 'staffRole', 'person.media'])
                                 ->limit(Manga::MAXIMUM_RELATIONSHIPS_LIMIT);
                         };
                         break;
@@ -288,16 +307,14 @@ class MangaController extends Controller
     }
 
     /**
-     * Returns anime season.
+     * Returns manga season.
      *
      * @param GetBrowseSeasonRequest $request
-     * @param int                    $year
-     * @param string                 $season
      *
      * @return JsonResponse
      * @throws InvalidEnumKeyException|BindingResolutionException|ConnectionException
      */
-    public function browseSeason(GetBrowseSeasonRequest $request, int $year, string $season)
+    public function browseSeason(GetBrowseSeasonRequest $request)
     {
         // Override parameters
         $request->merge([
@@ -312,7 +329,7 @@ class MangaController extends Controller
         $getBrowseSeasonRequest->validateResolved(); // Necessary for preparing for validation
 
         return (new BrowseSeasonController())
-            ->view($getBrowseSeasonRequest, $year, $season);
+            ->view($getBrowseSeasonRequest);
     }
 
     /**
@@ -329,7 +346,7 @@ class MangaController extends Controller
 
         // Get the characters
         $characters = $manga->characters()
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $characters->nextPageUrl() ?? '');
@@ -354,7 +371,7 @@ class MangaController extends Controller
 
         // Get the anime cast
         $cast = $manga->cast()
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $cast->nextPageUrl() ?? '');
@@ -380,9 +397,9 @@ class MangaController extends Controller
         // Get the related shows
         $relatedShows = $manga->animeRelations()
             ->with([
-                'related' => function ($query) {
-                    $query->withoutGlobalScopes([TvRatingScope::class])
-                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
+                'related' => function ($query) use ($manga) {
+                    $manga->viewableViaParent($query)
+                        ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
                         ->when(auth()->user(), function ($query, $user) {
                             $query->with(['mediaRatings' => function ($query) use ($user) {
                                 $query->where([
@@ -403,7 +420,7 @@ class MangaController extends Controller
                 },
                 'relation'
             ])
-            ->orderBy(Anime::TABLE_NAME . '.id')
+            ->orderBy(MediaRelation::TABLE_NAME . '.id')
             ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
@@ -430,9 +447,9 @@ class MangaController extends Controller
         // Get the related mangas
         $relatedLiteratures = $manga->mangaRelations()
             ->with([
-                'related' => function ($query) {
-                    $query->withoutGlobalScopes([TvRatingScope::class])
-                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
+                'related' => function ($query) use ($manga) {
+                    $manga->viewableViaParent($query)
+                        ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
                         ->when(auth()->useR(), function ($query, $user) {
                             $query->with(['mediaRatings' => function ($query) use ($user) {
                                 $query->where([
@@ -450,7 +467,7 @@ class MangaController extends Controller
                 },
                 'relation'
             ])
-            ->orderBy(Manga::TABLE_NAME . '.id')
+            ->orderBy(MediaRelation::TABLE_NAME . '.id')
             ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
@@ -477,9 +494,9 @@ class MangaController extends Controller
         // Get the related mangas
         $relatedGames = $manga->gameRelations()
             ->with([
-                'related' => function ($query) {
-                    $query->withoutGlobalScopes([TvRatingScope::class])
-                        ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
+                'related' => function ($query) use ($manga) {
+                    $manga->viewableViaParent($query)
+                        ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
                         ->when(auth()->user(), function ($query, $user) {
                             $query->with(['mediaRatings' => function ($query) use ($user) {
                                 $query->where([
@@ -497,7 +514,7 @@ class MangaController extends Controller
                 },
                 'relation'
             ])
-            ->orderBy(Game::TABLE_NAME . '.id')
+            ->orderBy(MediaRelation::TABLE_NAME . '.id')
             ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
@@ -527,9 +544,9 @@ class MangaController extends Controller
                 'person' => function ($query) {
                     $query->with(['media']);
                 },
-                'staff_role'
+                'staffRole'
             ])
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $staff->nextPageUrl() ?? '');
@@ -564,9 +581,9 @@ class MangaController extends Controller
                 'mediaStat',
                 'successor',
                 'predecessors',
-                'tv_rating',
+                'tvRating',
             ])
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $mangaStudios->nextPageUrl() ?? '');
@@ -588,17 +605,17 @@ class MangaController extends Controller
     public function moreByStudio(GetPaginatedRequest $request, Manga $manga): JsonResponse
     {
         $data = $request->validated();
-        $studioMangas = new LengthAwarePaginator([], 0, 1);
+        $studioMangas = new CursorPaginator(collect(), $data['limit'] ?? 25);
 
         // Get the manga studios
         if ($mangaStudio = $manga->studios()->firstWhere('is_studio', '=', true)) {
             $studioMangas = $mangaStudio->manga()
                 ->where('model_id', '!=', $manga->id)
-                ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+                ->cursorPaginate($data['limit'] ?? 25);
         } else if ($mangaStudio = $manga->studios()->first()) {
             $studioMangas = $mangaStudio->manga()
                 ->where('model_id', '!=', $manga->id)
-                ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+                ->cursorPaginate($data['limit'] ?? 25);
         }
 
         // Get next page url minus domain
@@ -629,45 +646,8 @@ class MangaController extends Controller
             throw new AuthorizationException(__('Please add ":x" to your library first.', ['x' => $manga->title]));
         }
 
-        // Validate the request
         $data = $request->validated();
-
-        // Fetch the variables
-        $givenRating = $data['rating'];
-        $description = $data['description'] ?? null;
-
-        // Modify the rating if it already exists
-        /** @var MediaRating $foundRating */
-        $foundRating = $user->mangaRatings()
-            ->withoutTvRatings()
-            ->where('model_id', '=', $manga->id)
-            ->first();
-
-        // The rating exists
-        if ($foundRating) {
-            // If the given rating is 0
-            if ($givenRating <= 0) {
-                // Delete the rating
-                $foundRating->delete();
-            } else {
-                // Update the current rating
-                $foundRating->update([
-                    'rating' => $givenRating,
-                    'description' => $description ?? $foundRating->description,
-                ]);
-            }
-        } else {
-            // Only insert the rating if it's rated higher than 0
-            if ($givenRating > 0) {
-                MediaRating::create([
-                    'user_id' => $user->id,
-                    'model_id' => $manga->id,
-                    'model_type' => $manga->getMorphClass(),
-                    'rating' => $givenRating,
-                    'description' => $description,
-                ]);
-            }
-        }
+        $user->rateMediaModel($manga, $data['rating'], $data['description'] ?? null);
 
         return JSONResult::success();
     }
@@ -681,12 +661,16 @@ class MangaController extends Controller
      */
     public function deleteRating(Manga $manga)
     {
-        auth()->user()->mediaRatings()
+        $user = auth()->user();
+
+        $user->mediaRatings()
             ->where([
                 ['model_id', '=', $manga->id],
                 ['model_type', '=', $manga->getMorphClass()],
             ])
-            ->forceDelete();
+            ->first()?->delete();
+
+        UserLibraryTouch::touch($user->id, $manga->getMorphClass(), [$manga->id]);
 
         return JSONResult::success();
     }
@@ -724,31 +708,17 @@ class MangaController extends Controller
      */
     public function reviews(GetPaginatedRequest $request, Manga $manga): JsonResponse
     {
+        $data = $request->validated();
+
         $reviews = $manga->mediaRatings()
             ->withoutTvRatings()
             ->with([
                 'user' => function ($query) {
-                    $query->with([
-                        'badges' => function ($query) {
-                            $query->with(['media']);
-                        },
-                        'media',
-                        'tokens' => function ($query) {
-                            $query
-                                ->orderBy('last_used_at', 'desc')
-                                ->limit(1);
-                        },
-                        'sessions' => function ($query) {
-                            $query
-                                ->orderBy('last_activity', 'desc')
-                                ->limit(1);
-                        },
-                    ])
-                        ->withCount(['followers', 'followedModels as following_count', 'mediaRatings']);
+                    $query->withProfileEagerLoad(auth()->user());
                 }
             ])
             ->where('description', '!=', null)
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $reviews->nextPageUrl() ?? '');

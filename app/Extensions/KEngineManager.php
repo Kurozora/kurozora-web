@@ -22,7 +22,8 @@ class KEngineManager extends EngineManager
 
         return new KMeilisearchEngine(
             $this->container->make(Meilisearch::class),
-            config('scout.soft_delete', false)
+            config('scout.soft_delete', false),
+            config('scout.tolerate_outage', false)
         );
     }
 }

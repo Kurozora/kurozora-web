@@ -40,7 +40,7 @@ final class MangaStatsProcessor extends CustomItemProcessor
 //        ]);
 
 //        if ($mediaStat->rating_average <= 0) {
-            logger()->channel('stderr')->info('🛠 [MAL_ID:MANGA:' . $malID . '] Updating stats attributes');
+            logger()->channel('stderr')->debug('🛠 [MAL_ID:MANGA:' . $malID . '] Updating stats attributes');
 
             $mediaStat->updateOrInsert([
                 'model_type'        => $manga->getMorphClass(),
@@ -60,7 +60,7 @@ final class MangaStatsProcessor extends CustomItemProcessor
                 'rating_count'      => $scoreCount,
             ]);
 
-            logger()->channel('stderr')->info('✅️ [MAL_ID:MANGA:' . $malID . '] Done updating stats attributes');
+            logger()->channel('stderr')->debug('✅️ [MAL_ID:MANGA:' . $malID . '] Done updating stats attributes');
 //        }
 
         logger()->channel('stderr')->info('✅️ [MAL_ID:MANGA:' . $malID . '] Done processing stats');

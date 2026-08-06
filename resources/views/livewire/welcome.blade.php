@@ -5,7 +5,7 @@
 
     <x-slot:meta>
         <meta property="og:title" content="Welcome to {{ config('app.name') }}" />
-        <meta property="og:description" content="{{ __('app.description') }}" />
+        <meta property="og:description" content="{{ __('A community for anime fans with an extensive library of anime, manga, music, games, movies, specials, OVA, and ONA. Only on :x, the largest, free online anime, manga, game & music database in the world. Track, share and discover anime with friends.', ['x' => config('app.name')]) }}" />
         <meta property="og:image" content="{{ asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="og:type" content="website" />
         <link rel="canonical" href="{{ route('welcome') }}">
@@ -538,8 +538,19 @@
             </div>
         </section>
 
+        {{-- Compare --}}
+        <section class="pl-4 pr-4 pt-36 xl:safe-area-inset">
+            <div class="flex flex-col items-center m-auto max-w-2xl text-center">
+                <p class="my-2 text-4xl font-bold leading-tight md:text-6xl">{{ __('Coming from another tracker?') }}</p>
+
+                <p class="font-semibold md:text-xl">{{ __('See how :x holds up against MyAnimeList, AniList, Kitsu, and ten more services, feature by feature. Your library comes with you.', ['x' => config('app.name')]) }}</p>
+
+                <x-link-button class="mt-8 text-lg" href="{{ route('compare.index') }}" wire:navigate>{{ __('Compare Services') }}</x-link-button>
+            </div>
+        </section>
+
         {{-- FAQ --}}
-        <section class="mt-36 xl:safe-area-inset">
+        <section class="pl-4 pr-4 pt-36 pb-10 bg-secondary xl:safe-area-inset">
             <div class="pl-4 pr-4">
                 <div class="flex flex-col items-center m-auto max-w-2xl text-center">
                     <p class="my-2 text-4xl font-bold leading-tight md:text-6xl">{{ __('Let’s go over it one last time.') }}</p>

@@ -157,8 +157,14 @@ class ProcessMALImport implements ShouldQueue
                 $startDate = $anime['my_start_date'] ?? '0000-00-00';
                 $endDate = $anime['my_finish_date'] ?? '0000-00-00';
 
+                // Skip records where id is not numeric
+                if (!is_numeric($animeID)) {
+                    $this->registerFailure($animeID, 'MAL ID is not a valid number.');
+                    continue;
+                }
+
                 // Handle import
-                $this->importModel($animeID, $status, $rating, $startDate, $endDate);
+                $this->importModel((int) $animeID, $status, $rating, $startDate, $endDate);
             }
         } else if (isset($json['folder'])) { // 9anime export
             // Wipe current anime library if behavior is set to overwrite
@@ -177,8 +183,14 @@ class ProcessMALImport implements ShouldQueue
                 foreach ($animes as $anime) {
                     $animeID = basename($anime['link']);
 
+                    // Skip records where id is not numeric
+                    if (!is_numeric($animeID)) {
+                        $this->registerFailure($animeID, 'MAL ID is not a valid number.');
+                        continue;
+                    }
+
                     // Handle import
-                    $this->importModel($animeID, $status, 0, '0000-00-00', '0000-00-00');
+                    $this->importModel((int) $animeID, $status, 0, '0000-00-00', '0000-00-00');
                 }
             }
         } else {
@@ -208,14 +220,20 @@ class ProcessMALImport implements ShouldQueue
 
             // Loop through the manga in the export file
             foreach ($json['manga'] as $manga) {
-                $mangaId = $manga['manga_mangadb_id'];
+                $mangaID = $manga['manga_mangadb_id'];
                 $status = $manga['my_status'];
                 $rating = $manga['my_score'] ?? 0;
                 $startDate = $manga['my_start_date'] ?? '0000-00-00';
                 $endDate = $manga['my_finish_date'] ?? '0000-00-00';
 
+                // Skip records where id is not numeric
+                if (!is_numeric($mangaID)) {
+                    $this->registerFailure($mangaID, 'MAL ID is not a valid number.');
+                    continue;
+                }
+
                 // Handle import
-                $this->importModel($mangaId, $status, $rating, $startDate, $endDate);
+                $this->importModel((int) $mangaID, $status, $rating, $startDate, $endDate);
             }
         } else {
             $this->fail('Unsupported manga import file structure.');
@@ -407,10 +425,10 @@ class ProcessMALImport implements ShouldQueue
     /**
      * Registers a failure in the import process.
      *
-     * @param int    $malID
-     * @param string $reason
+     * @param int|string $malID
+     * @param string     $reason
      */
-    protected function registerFailure(int $malID, string $reason): void
+    protected function registerFailure(int|string $malID, string $reason): void
     {
         $this->results['failure'][] = [
             'library'   => $this->libraryKind->description,

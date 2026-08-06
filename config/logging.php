@@ -54,7 +54,7 @@ return [
 
         'stack' => [
             'driver' => 'stack',
-            'channels' => env('APP_ENV', 'production') == 'production' ? [
+            'channels' => env('APP_ENV', 'production') === 'production' ? [
                 'single',
                 'discord',
             ] : explode(',', env('LOG_STACK', 'single')),
@@ -131,6 +131,11 @@ return [
         'null' => [
             'driver' => 'monolog',
             'handler' => NullHandler::class,
+        ],
+
+        'deprecations' => [
+            'driver' => 'stack',
+            'channels' => ['null'],
         ],
 
         'emergency' => [

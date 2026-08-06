@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use App\Enums\FeedVoteType;
 use App\Models\FeedMessage;
+use Cog\Laravel\Love\ReactionType\Models\ReactionType;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -17,6 +18,13 @@ class FeedMessageResourceBasic extends JsonResource
     public $resource;
 
     /**
+     * The cached `Heart` reaction type id, resolved once per request.
+     *
+     * @var int|string|null $heartReactionTypeID
+     */
+    private static int|string|null $heartReactionTypeID = null;
+
+    /**
      * Transform the resource into an array.
      *
      * @param Request $request
@@ -25,8 +33,6 @@ class FeedMessageResourceBasic extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $totalHearts = $this->resource->viaLoveReactant()->getReactionCounterOfType(FeedVoteType::Heart()->description);
-
         $resource = [
             'id' => (string) $this->resource->id,
             'type' => 'feed-messages',
@@ -37,7 +43,7 @@ class FeedMessageResourceBasic extends JsonResource
                 'contentHTML' => $this->resource->content_html ?? '',
                 'contentMarkdown' => $this->resource->content_markdown ?? '',
                 'metrics' => [
-                    'heartCount' => $totalHearts->getCount(),
+                    'heartCount' => $this->getHeartCount(),
                     'replyCount' => (int) $this->resource->replies_count,
                     'reShareCount' => (int) $this->resource->re_shares_count
                 ],
@@ -70,9 +76,11 @@ class FeedMessageResourceBasic extends JsonResource
     protected function getUserSpecificDetails(): array
     {
         $user = auth()->user();
+        $myReshareID = $this->resource->my_reshare_id;
 
         return [
-            'isHearted' => $user->getCurrentHeartValueFor($this->resource) == FeedVoteType::Heart
+            'isHearted' => $user->getCurrentHeartValueFor($this->resource) == FeedVoteType::Heart,
+            'myReShareID' => $myReshareID !== null ? (string) $myReshareID : null,
         ];
     }
 
@@ -88,5 +96,28 @@ class FeedMessageResourceBasic extends JsonResource
                 'data' => UserResource::collection([$this->resource->user]),
             ]
         ];
+    }
+
+    /**
+     * Returns the `Heart` reaction count from the eager-loaded counters.
+     *
+     * @return int
+     */
+    private function getHeartCount(): int
+    {
+        $reactant = $this->resource->loveReactant;
+
+        if ($reactant === null || !$reactant->relationLoaded('reactionCounters')) {
+            return 0;
+        }
+
+        if (self::$heartReactionTypeID === null) {
+            self::$heartReactionTypeID = ReactionType::fromName(FeedVoteType::Heart()->description)->getId();
+        }
+
+        $counter = $reactant->reactionCounters
+            ->firstWhere('reaction_type_id', self::$heartReactionTypeID);
+
+        return $counter?->count ?? 0;
     }
 }

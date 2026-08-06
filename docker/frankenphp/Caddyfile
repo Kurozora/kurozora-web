@@ -1,0 +1,176 @@
+{
+	{$CADDY_GLOBAL_OPTIONS}
+
+	admin {$CADDY_SERVER_ADMIN_HOST}:{$CADDY_SERVER_ADMIN_PORT}
+
+	frankenphp {
+		worker {
+			file "{$APP_PUBLIC_PATH}/frankenphp-worker.php"
+			{$CADDY_SERVER_WORKER_DIRECTIVE}
+			{$CADDY_SERVER_WATCH_DIRECTIVES}
+			env MAX_REQUESTS {$OCTANE_MAX_REQUESTS:500}
+		}
+	}
+
+	servers {
+		# Trust the ALB and loopback for X-Forwarded-* headers...
+		trusted_proxies static private_ranges
+
+		timeouts {
+			read_body 60s
+			read_header 60s
+			idle 60s
+		}
+	}
+
+	order php_server before file_server
+}
+
+{$CADDY_EXTRA_CONFIG}
+
+# Shared security headers...
+(security_headers) {
+	header {
+		X-Frame-Options "SAMEORIGIN"
+		X-XSS-Protection "1; mode=block"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		Cross-Origin-Opener-Policy "same-origin-allow-popups"
+		Cross-Origin-Resource-Policy "same-site"
+		Permissions-Policy "accelerometer=*, ambient-light-sensor=(), autoplay=*, battery=(), camera=*, cross-origin-isolated=*, display-capture=*, document-domain=*, encrypted-media=*, execution-while-not-rendered=(), execution-while-out-of-viewport=(), fullscreen=*, geolocation=*, gyroscope=*, keyboard-map=(), magnetometer=(), microphone=*, midi=(), navigation-override=(), payment=(), picture-in-picture=*, publickey-credentials-get=(), screen-wake-lock=(), sync-xhr=(), usb=(), web-share=*, xr-spatial-tracking=(), clipboard-read=*, clipboard-write=*, gamepad=*, speaker-selection=*"
+		-Server
+		-X-Powered-By
+		-X-CF-Powered-By
+		-X-Runtime
+	}
+
+	# HSTS and HTTPS redirect, gated on upstream-set X-Forwarded-Proto...
+	@https header_regexp X-Forwarded-Proto ^https$
+	header @https Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+	header @https Content-Security-Policy "upgrade-insecure-requests"
+
+	@http header_regexp X-Forwarded-Proto ^http$
+	redir @http https://{host}{uri} 301
+}
+
+# Public edge...
+:8923 {
+	route {
+		import security_headers
+		reverse_proxy 127.0.0.1:8924 {
+			header_up Host {host}
+		}
+	}
+}
+
+{$CADDY_SERVER_SERVER_NAME} {
+	log {
+		level {$CADDY_SERVER_LOG_LEVEL}
+
+		# Redact the authorization query parameter that can be set by Mercure...
+		format filter {
+			wrap {$CADDY_SERVER_LOGGER}
+			fields {
+				uri query {
+					replace authorization REDACTED
+				}
+			}
+		}
+	}
+
+	route {
+		# Health check served by Caddy, bypassing the PHP worker queue.
+		@health path /health-check
+		respond @health "OK" 200
+
+		root * "{$APP_PUBLIC_PATH}"
+		encode zstd br gzip
+
+		request_body {
+			max_size 10MB
+		}
+
+		# Also covers the :80-direct path (health check, Anubis disabled)...
+		import security_headers
+
+		# Resolve the visitor IP from Cloudflare's connecting-IP header...
+		@cloudflare header Cf-Connecting-Ip *
+		request_header @cloudflare X-Forwarded-For {http.request.header.Cf-Connecting-Ip}
+
+		# Mercure configuration is injected here...
+		{$CADDY_SERVER_EXTRA_DIRECTIVES}
+
+		# Pusher-protocol traffic forwarded to Reverb...
+		@reverb path /v1/app/* /v1/apps/*
+		handle @reverb {
+			rate_limit {
+				zone reverb_ws_upgrades {
+					key {remote_host}
+					events 10
+					window 1m
+				}
+			}
+
+			uri strip_prefix /v1
+			reverse_proxy localhost:{$REVERB_SERVER_PORT:8080} {
+				header_up Host {host}
+				header_up X-Real-IP {remote}
+			}
+		}
+
+		# Deny dotfile access...
+		@dotfile {
+			path_regexp /\.
+			not path /.well-known /.well-known/*
+		}
+		handle @dotfile {
+			respond 403
+		}
+
+		# Cache static assets...
+		@static {
+			path *.css *.js *.jpg *.jpeg *.png *.gif *.svg *.webp *.ico *.pdf
+			not path /service-worker.js
+		}
+		header @static Cache-Control "public, max-age=10368000"
+
+		# Exclude ServiceWorker from cache...
+		@sw path /service-worker.js
+		header @sw Cache-Control "no-cache"
+
+		# Skip access log...
+		@quiet path /favicon.ico /robots.txt /humans.txt /manifest.json /opensearch.xml /service-worker.js
+		log_skip @quiet
+
+		php_server {
+			index frankenphp-worker.php
+			try_files {path} frankenphp-worker.php
+			# Required for the public/storage/ directory...
+			resolve_root_symlink
+		}
+	}
+}
+
+# Dedicated WebSocket subdomain...
+http://ws.{$DOMAIN_NAME:kurozora.app}:80 {
+	log {
+		level {$CADDY_SERVER_LOG_LEVEL}
+
+		format filter {
+			wrap {$CADDY_SERVER_LOGGER}
+			fields {
+				uri query {
+					replace authorization REDACTED
+				}
+			}
+		}
+	}
+
+	@http header_regexp X-Forwarded-Proto ^http$
+	redir @http https://{host}{uri} 301
+
+	reverse_proxy localhost:{$REVERB_SERVER_PORT:8080} {
+		header_up Host {host}
+		header_up X-Real-IP {remote}
+	}
+}

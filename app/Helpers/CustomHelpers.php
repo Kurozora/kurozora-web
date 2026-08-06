@@ -1,6 +1,12 @@
 <?php
 
 use App\Enums\SeasonOfYear;
+use App\Exceptions\AppStore\AppleRootCertificateUnavailableException;
+use App\Services\AppStoreService;
+use AppStoreServerLibrary\AppStoreServerAPIClient;
+use AppStoreServerLibrary\Models\Environment;
+use AppStoreServerLibrary\SignedDataVerifier;
+use AppStoreServerLibrary\SignedDataVerifier\VerificationException;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Date;
@@ -61,6 +67,11 @@ if (!function_exists('number_shorten')) {
      */
     function number_shorten(int|float $number, int $precision = 3, bool $abbreviated = false): string
     {
+        if ($number == 0) {
+            return '0';
+        }
+
+
         if ($abbreviated) {
             $suffixes = ['', 'K', 'M', 'B', 'T', 'Qa', 'Qi', 'Sx', 'Sp', 'Oc', 'No', 'Dc', 'Ud', 'Dd', 'Td', 'Qat', 'Qid', 'Sxd', 'Spd', 'Ocd', 'Nod', 'Vg', 'Uvg'];
         } else {
@@ -78,7 +89,7 @@ if (!function_exists('number_shorten')) {
     }
 }
 
-if (! function_exists('number_to_words')) {
+if (!function_exists('number_to_words')) {
     /**
      * Convert the given number to words.
      *
@@ -216,7 +227,7 @@ if (!function_exists('season_of_year')) {
     }
 }
 
-if (! function_exists('yesterday')) {
+if (!function_exists('yesterday')) {
     /**
      * Create a new Carbon instance for yesterday's time.
      *
@@ -229,7 +240,7 @@ if (! function_exists('yesterday')) {
     }
 }
 
-if (! function_exists('generate_random_color')) {
+if (!function_exists('generate_random_color')) {
     /**
      * Generate a random color based on a seed.
      *
@@ -255,7 +266,7 @@ if (! function_exists('generate_random_color')) {
     }
 }
 
-if (! function_exists('strip_html')) {
+if (!function_exists('strip_html')) {
     /**
      * Strips the given string from any HTML tags,
      * and convers breaks to new line among other stuff.
@@ -290,7 +301,7 @@ if (! function_exists('strip_html')) {
     }
 }
 
-if (! function_exists('str_index')) {
+if (!function_exists('str_index')) {
     /**
      * Get the index of the string based on the first character.
      * If the character is an alphabet, then the index is equivalent
@@ -324,7 +335,7 @@ if (! function_exists('str_index')) {
     }
 }
 
-if (! function_exists('parse_user_agent')) {
+if (!function_exists('parse_user_agent')) {
     /**
      * Parse the given user agent and return the components as array.
      *
@@ -334,36 +345,104 @@ if (! function_exists('parse_user_agent')) {
      */
     function parse_user_agent(?string $userAgent): array
     {
+        $parsed = [
+            'app_name' => null,
+            'app_version' => null,
+            'bundle' => null,
+            'build' => null,
+            'os' => null,
+            'client_info' => null,
+        ];
+
         if (!$userAgent) {
-            return [];
+            return $parsed;
         }
 
         // Example input:
-        // "Example App/1.0.0 (com.example.app; build:9999; iOS 18.5.0) Client/1.0.0"
+        // "Example App/1.0.0 (com.example.app; build:9999; macOS(Catalyst) 26.0.0) Client/1.0.0"
         $matches = [];
-        preg_match('/^(?<appName>[^\/]+)\/(?<version>\S+) \((?<meta>[^)].+)\) (?<clientInfo>.+)$/', $userAgent, $matches);
+        preg_match('/^(?<appName>[^\/]+)\/(?<version>\S+) \((?<meta>[^()]*(?:\([^()]*\)[^()]*)*)\) (?<clientInfo>.+)$/', $userAgent, $matches);
 
-        // Split the meta info: "com.example.app; build:9999; iOS 18.5.0"
+        // Split the meta-info: "com.example.app; build:9999; iOS 18.5.0"
         $metaParts = array_map('trim', explode(';', $matches['meta'] ?? ''));
-        $bundle = $build = $os = null;
 
         foreach ($metaParts as $part) {
             if (str_starts_with($part, 'build:')) {
-                $build = substr($part, 6);
-            } else if (str_starts_with($part, 'iOS') || str_starts_with($part, 'Android') || str_starts_with($part, 'macOS') || str_contains($part, 'Linux') || str_starts_with($part, 'Windows')) {
-                $os = $part;
-            } else {
-                $bundle = $part;
+                $parsed['build'] = substr($part, 6);
+            } else if (str_starts_with($part, 'iOS') || str_starts_with($part, 'Android') || str_starts_with($part, 'macOS') || str_contains($part, 'Linux') || str_starts_with($part, 'Windows') || str_starts_with($part, 'watchOS')) {
+                $parsed['os'] = $part;
+            } else if ($part !== '') {
+                $parsed['bundle'] = $part;
             }
         }
 
-        return [
-            'app_name' => $matches['appName'] ?? null,
-            'app_version' => $matches['version'] ?? null,
-            'bundle' => $bundle,
-            'build' => $build,
-            'os' => $os,
-            'client_info' => $matches['clientInfo'] ?? null,
-        ];
+        $parsed['app_name'] = $matches['appName'] ?? null;
+        $parsed['app_version'] = $matches['version'] ?? null;
+        $parsed['client_info'] = $matches['clientInfo'] ?? null;
+
+        return $parsed;
+    }
+}
+
+if (!function_exists('appStore')) {
+    /**
+     * Get an App Store Server API client instance for the given environment.
+     *
+     * @param string|null $env
+     *
+     * @return AppStoreServerAPIClient
+     */
+    function appStore(?string $env = null): AppStoreServerAPIClient
+    {
+        return app(AppStoreService::class)->client($env);
+    }
+}
+
+if (!function_exists('appStoreVerifier')) {
+    /**
+     * Get a StoreKit 2 signed-data verifier for the given environment.
+     *
+     * @param string|null $env
+     *
+     * @return SignedDataVerifier
+     * @throws VerificationException
+     */
+    function appStoreVerifier(?string $env = null): SignedDataVerifier
+    {
+        $config = config('services.apple.store_kit');
+
+        if ($env) {
+            $environment = Environment::from($env);
+
+            // Overwrite Xcode env receipts in production
+            if ($environment === Environment::XCODE && app()->isProduction()) {
+                $environment = Environment::PRODUCTION;
+            }
+        } else {
+            $environment = app()->isProduction() ? Environment::PRODUCTION : Environment::SANDBOX;
+        }
+
+        $rootCerts = array_map(function (string $filename): string {
+            $path = resource_path('certs/apple/' . $filename);
+            $contents = @file_get_contents($path);
+
+            if ($contents === false || $contents === '') {
+                throw new AppleRootCertificateUnavailableException(sprintf(
+                    'Apple root certificate "%s" is unreadable at %s.',
+                    $filename,
+                    $path,
+                ));
+            }
+
+            return $contents;
+        }, ['AppleRootCA-G2.cer', 'AppleRootCA-G3.cer']);
+
+        return new SignedDataVerifier(
+            rootCertificates: $rootCerts,
+            enableOnlineChecks: true,
+            environment: $environment,
+            bundleId: $config['bundle_id'],
+            appAppleId: $environment === Environment::PRODUCTION ? (int) config('app.ios.id') : null,
+        );
     }
 }

@@ -45,7 +45,7 @@ trait WithPersonSearch
      */
     public function randomPerson(): void
     {
-        $person = Person::inRandomOrder()->first();
+        $person = Person::randomFirst();
         $this->redirectRoute('people.details', $person);
     }
 

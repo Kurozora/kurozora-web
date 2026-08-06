@@ -32,8 +32,7 @@ return new class extends Migration
 
         Schema::table(Video::TABLE_NAME, function (Blueprint $table) {
             // Set index key constraints
-            $table->index('order');
-            $table->index('deleted_at');
+            $table->index(['deleted_at', 'order']);
 
             // Set foreign key constraints
             $table->foreign('language_id')

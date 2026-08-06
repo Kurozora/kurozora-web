@@ -1,0 +1,17 @@
+# Copy to terraform.tfvars (git-ignored) and fill in.
+
+aws_account_id        = "<your-aws-account-id>"
+ssh_key_name          = "<your-existing-ec2-keypair-name>"
+domain_name           = "<your-search-subdomain>"
+ecs_security_group_id = "<sg-id-of-ecs-service-that-talks-to-redis>"
+meilisearch_version   = "v1.19.0"
+
+# Optional. Leave empty to register without contact info.
+# certbot_email       = ""
+
+# Override defaults as needed:
+# region            = "eu-central-1"
+# instance_type     = "t4g.medium"
+# meilisearch_env   = "development"
+# redis_maxmemory   = "256mb"
+# ssh_ingress_cidrs = ["YOUR_IP/32"]

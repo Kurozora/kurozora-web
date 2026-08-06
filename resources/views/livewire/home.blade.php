@@ -5,22 +5,11 @@
 
     <x-slot:meta>
         <meta property="og:title" content="{{ config('app.name') }}" />
-        <meta property="og:description" content="{{ __('app.description') }}" />
+        <meta property="og:description" content="{{ __('A community for anime fans with an extensive library of anime, manga, music, games, movies, specials, OVA, and ONA. Only on :x, the largest, free online anime, manga, game & music database in the world. Track, share and discover anime with friends.', ['x' => config('app.name')]) }}" />
         <meta property="og:image" content="{{ asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="og:type" content="website" />
         <link rel="canonical" href="{{ route('home') }}">
-        <x-misc.schema>
-            "@type": "WebSite",
-            "url": "{{ config('app.url') }}",
-            "potentialAction": {
-                "@type": "SearchAction",
-                "target": {
-                    "@type": "EntryPoint",
-                    "urlTemplate": "{{ route('search.index') }}?q={search_term_string}&src={{ \App\Enums\SearchSource::Google }}"
-                },
-                "query-input": "required name=search_term_string"
-            }
-        </x-misc.schema>
+        <x-misc.schema :data="$this->schema" />
     </x-slot:meta>
 
     <x-slot:appArgument>
@@ -28,28 +17,6 @@
     </x-slot:appArgument>
 
     <div>
-{{--        <section>--}}
-{{--            <a href="{{ route('recap.index') }}" wire:navigate>--}}
-{{--                <x-picture>--}}
-{{--                    <img class="w-full object-cover h-40 rounded-lg md:h-80" src="{{ asset('images/static/banners/kurozora_recap_2023.webp') }}" alt="Kurozora Recap 2023">--}}
-{{--                </x-picture>--}}
-{{--            </a>--}}
-{{--        </section>--}}
-
-{{--        <section>--}}
-{{--            <x-picture>--}}
-{{--                <img class="w-full object-cover h-32 rounded-lg sm:h-40 md:h-80" src="{{ asset('images/static/banners/games_now_on_kurozora.webp') }}" alt="Games and Manga tracking now available on Kurozora">--}}
-{{--            </x-picture>--}}
-{{--        </section>--}}
-
-{{--        <section class="relative mb-8">--}}
-{{--            <a href="{{ config('social.discord.url') }}" target="_blank" class="no-external-icon">--}}
-{{--                <x-picture>--}}
-{{--                    <img class="h-32 w-full object-cover object-center rounded-lg shadow-lg sm:h-44" src="{{ asset('images/static/banners/kurozora_art_challenge_2022.webp') }}"  alt="Kurozora Art Challenge 2022" />--}}
-{{--                </x-picture>--}}
-{{--            </a>--}}
-{{--        </section>--}}
-
         <section wire:init="loadPage">
             @foreach ($this->exploreCategories as $index => $exploreCategory)
                 @switch($exploreCategory->type)
@@ -188,7 +155,7 @@
                     @break
                 @default
                     <section>
-                        <livewire:components.explore-category-section :index="$index" :exploreCategory="$exploreCategory" />
+                        <livewire:components.explore-category-section :index="$index" :exploreCategory="$exploreCategory" :key="'explore-section-' . $exploreCategory->id" />
                     </section>
                 @endswitch
             @endforeach

@@ -1,8 +1,9 @@
 <?php
 
+use App\Livewire\KnowledgeBase\CommunityGuidelines;
 use App\Livewire\KnowledgeBase\GeneratingDeveloperTokens;
 use App\Livewire\KnowledgeBase\InAppPurchases;
-use App\Livewire\KnowledgeBase\Personalisation;
+use App\Livewire\KnowledgeBase\Personalization;
 
 Route::prefix('/kb')
     ->name('kb')
@@ -10,9 +11,12 @@ Route::prefix('/kb')
         Route::get('/generating-developer-tokens', GeneratingDeveloperTokens::class)
             ->name('.generating-developer-tokens');
 
+        Route::get('/guidelines', CommunityGuidelines::class)
+            ->name('.guidelines');
+
         Route::get('/iap', InAppPurchases::class)
             ->name('.iap');
 
-        Route::get('/personalisation', Personalisation::class)
-            ->name('.personalisation');
+        Route::get('/personalization', Personalization::class)
+            ->name('.personalization');
     });

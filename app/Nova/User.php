@@ -3,6 +3,8 @@
 namespace App\Nova;
 
 use App\Enums\MediaCollection;
+use App\Nova\Actions\IssueTimeout;
+use App\Nova\Actions\RevokeTimeout;
 use App\Nova\Filters\PremiumStatus;
 use App\Nova\Filters\UserRole;
 use App\Nova\Lenses\UnconfirmedUsers;
@@ -299,10 +301,15 @@ class User extends Resource
                 ->options(function () {
                     $timestamp = time();
                     $timezone = [];
+                    $originalTimezone = date_default_timezone_get();
 
-                    foreach (timezone_identifiers_list(DateTimeZone::ALL) as $key => $value) {
-                        date_default_timezone_set($value);
-                        $timezone[$value] = $value . ' (UTC ' . date('P', $timestamp) . ')';
+                    try {
+                        foreach (timezone_identifiers_list(DateTimeZone::ALL) as $key => $value) {
+                            date_default_timezone_set($value);
+                            $timezone[$value] = $value . ' (UTC ' . date('P', $timestamp) . ')';
+                        }
+                    } finally {
+                        date_default_timezone_set($originalTimezone);
                     }
 
                     return collect($timezone)->sortKeys();
@@ -362,10 +369,12 @@ class User extends Resource
 
             HasMany::make('Favorites', 'favorites', UserFavorite::class),
 
-            BelongsToMany::make('Badges', 'badges', Achievement::class)
+            BelongsToMany::make('Achievements', 'achievements', Achievement::class)
                 ->searchable(),
 
             HasMany::make('Sessions'),
+
+            HasMany::make('Timeouts', 'timeouts', Timeout::class),
         ];
     }
 
@@ -431,7 +440,23 @@ class User extends Resource
      */
     public function actions(Request $request): array
     {
-        return [];
+        return [
+            new IssueTimeout()
+                ->canSee(function (Request $request) {
+                    return $request->user()?->hasAnyRole(['superAdmin', 'admin', 'mod']) ?? false;
+                })
+                ->canRun(function (Request $request) {
+                    return $request->user()?->hasAnyRole(['superAdmin', 'admin', 'mod']) ?? false;
+                }),
+
+            new RevokeTimeout()
+                ->canSee(function (Request $request) {
+                    return $request->user()?->hasAnyRole(['superAdmin', 'admin', 'mod']) ?? false;
+                })
+                ->canRun(function (Request $request) {
+                    return $request->user()?->hasAnyRole(['superAdmin', 'admin', 'mod']) ?? false;
+                }),
+        ];
     }
 
     /**

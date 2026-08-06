@@ -18,9 +18,11 @@ class Localization
      */
     public function handle(Request $request, Closure $next): mixed
     {
+        $user = auth()->user();
+
         // Check header request and determine localization
-        if (auth()->check()) {
-            $locale = auth()->user()->language_id ?? 'en';
+        if ($user !== null) {
+            $locale = $user->language_id ?? 'en';
         } else if ($request->hasHeader('X-Localization')) {
             $locale = $request->header('X-Localization');
         } else if (session()->has('locale')) {
@@ -29,10 +31,10 @@ class Localization
             $locale = 'en';
         }
 
-        // set laravel localization
+        // Set Laravel localization
         app()->setLocale($locale);
 
-        // continue request
+        // Continue request
         return $next($request);
     }
 }

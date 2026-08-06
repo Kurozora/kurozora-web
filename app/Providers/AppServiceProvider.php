@@ -2,11 +2,29 @@
 
 namespace App\Providers;
 
+use App\Models\Anime;
+use App\Models\FeedMessage;
+use App\Models\MediaRating;
 use App\Models\PersonalAccessToken;
 use App\Models\User;
+use App\Models\UserBlock;
+use App\Models\UserFavorite;
+use App\Models\UserFollow;
+use App\Models\UserLibrary;
+use App\Models\UserReminder;
+use App\Models\UserWatchedEpisode;
+use App\Observers\AnimeObserver;
+use App\Observers\FeedMessageObserver;
+use App\Observers\UserStateObserver;
 use App\Policies\NotificationPolicy;
+use App\Providers\SocialiteProviders\AppleProvider;
+use App\Services\AppleMusicService;
+use App\Services\AppStoreService;
 use App\Services\LinkPreviewService;
 use App\Services\ReputationService;
+use App\Support\Media\ImageTransformingFileAdder;
+use Carbon\Carbon;
+use Cog\Laravel\Love\Reaction\Models\Reaction;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Console\Seeds\SeedCommand;
@@ -15,7 +33,6 @@ use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\DatabaseNotification;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
@@ -23,13 +40,18 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Sanctum\Sanctum;
 use RoachPHP\Roach;
-use SocialiteProviders\Apple\AppleExtendSocialite;
 use SocialiteProviders\Manager\SocialiteWasCalled;
+use Spatie\MediaLibrary\MediaCollections\FileAdder;
+use Throwable;
 
 class AppServiceProvider extends ServiceProvider
 {
-    // The global query count is logged to this config key
-    public static string $queryCountConfigKey = 'kurozora.query_count';
+    /**
+     * The running total of database queries executed during the current request.
+     *
+     * @var int
+     */
+    public static int $queryCount = 0;
 
     /**
      * Bootstrap any application services.
@@ -38,6 +60,18 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Returns the receiver shifted into the requesting user's preferred timezone.
+        Carbon::macro('inUserTimezone', function () {
+            /** @var Carbon $this */
+            return $this->setTimezone(request()?->attributes->get('formatTimezone', 'UTC'));
+        });
+
+        // Returns the requesting user's preferred TV rating, or 4 by default.
+        Request::macro('tvRating', function (): int {
+            /** @var Request $this */
+            return (int) $this->attributes->get('tvRating', 4);
+        });
+
         // Prevent dangerous actions
         DB::prohibitDestructiveCommands(app()->isProduction());
         SeedCommand::prohibit(app()->isProduction());
@@ -69,8 +103,35 @@ class AppServiceProvider extends ServiceProvider
             };
         });
 
+        RateLimiter::for('api.feed', function (Request $request) {
+            return Limit::perMinute(120)->by('feed:' . ($request->user()?->id ?: $request->ip()));
+        });
+
+        RateLimiter::for('api.search', function (Request $request) {
+            return Limit::perMinute(60)->by('search:' . ($request->user()?->id ?: $request->ip()));
+        });
+
+        RateLimiter::for('api.library', function (Request $request) {
+            return Limit::perMinute(120)->by('library:' . ($request->user()?->id ?: $request->ip()));
+        });
+
+        // Register observers
+        Anime::observe(AnimeObserver::class);
+        FeedMessage::observe(FeedMessageObserver::class);
+        UserLibrary::observe(UserStateObserver::class);
+        MediaRating::observe(UserStateObserver::class);
+        UserFavorite::observe(UserStateObserver::class);
+        UserReminder::observe(UserStateObserver::class);
+        UserFollow::observe(UserStateObserver::class);
+        UserBlock::observe(UserStateObserver::class);
+        UserWatchedEpisode::observe(UserStateObserver::class);
+        FeedMessage::observe(UserStateObserver::class);
+        Reaction::observe(UserStateObserver::class);
+
         // Register events
-        Event::listen(SocialiteWasCalled::class, AppleExtendSocialite::class.'@handle');
+        Event::listen(SocialiteWasCalled::class, function (SocialiteWasCalled $event): void {
+            $event->extendSocialite('apple', AppleProvider::class);
+        });
 
         /// Register gates
         Gate::define('viewPulse', function (User $user) {
@@ -100,20 +161,13 @@ class AppServiceProvider extends ServiceProvider
         }
 
         if ($this->app->hasDebugModeEnabled()) {
-            /// This snippet logs the number of executed queries per request
-            /// to the config.
+            /// This snippet logs the number of executed queries per request.
             DB::listen(function (QueryExecuted $query) {
-                $currentConfigValue = Config::get(self::$queryCountConfigKey);
-
-                if ($currentConfigValue == null) {
-                    Config::set(self::$queryCountConfigKey, 1);
-                } else {
-                    // - NOTE: For local debug purposes
-//                    logger()->warning('==== Start ====');
-//                    logger()->info($query->sql);
-//                    logger()->warning('==== End ====');
-                    Config::set(self::$queryCountConfigKey, $currentConfigValue + 1);
-                }
+                // - NOTE: For local debug purposes
+//                logger()->warning('==== Start ====');
+//                logger()->info($query->sql);
+//                logger()->warning('==== End ====');
+                self::$queryCount++;
             });
         }
 
@@ -130,9 +184,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        // Register explore category scope. This makes sure only enabled categories are included.
-        $this->app->bind('explore.only_enabled', function () {
-            return true;
+        // Register Apple Music service.
+        $this->app->singleton(AppleMusicService::class, function () {
+            return new AppleMusicService;
+        });
+
+        // Register App Store service.
+        $this->app->bind(AppStoreService::class, function () {
+            return new AppStoreService;
         });
 
         // Register roach with the app container.
@@ -147,5 +206,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(ReputationService::class, function () {
             return new ReputationService;
         });
+
+        // Register image transformer.
+        $this->app->bind(FileAdder::class, ImageTransformingFileAdder::class);
     }
 }

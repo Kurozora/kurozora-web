@@ -9,6 +9,9 @@ Route::prefix('/sessions')
         Route::get('/', [SessionController::class, 'index'])
             ->name('.index');
 
+        Route::post('/delete', [SessionController::class, 'deleteMultiple'])
+            ->name('.delete-multiple');
+
         Route::prefix('{session}')
             ->group(function () {
                 Route::get('/', [SessionController::class, 'details'])

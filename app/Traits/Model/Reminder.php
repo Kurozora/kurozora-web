@@ -3,6 +3,7 @@
 namespace App\Traits\Model;
 
 use App\Models\UserReminder;
+use App\Support\UserLibraryTouch;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -102,6 +103,8 @@ trait Reminder
 
         $this->remindedModels($modelType)
             ->attach($modelKeys);
+
+        UserLibraryTouch::touch($this->id, $modelType, $modelKeys->all());
     }
 
     /**
@@ -130,8 +133,12 @@ trait Reminder
         $modelType = $models->first()->getMorphClass();
         $modelKeys = $models->map(fn($model) => $model->getKey());
 
-        return (bool) $this->remindedModels($modelType)
+        $affected = (bool) $this->remindedModels($modelType)
             ->detach($modelKeys);
+
+        UserLibraryTouch::touch($this->id, $modelType, $modelKeys->all());
+
+        return $affected;
     }
 
     /**
@@ -143,11 +150,15 @@ trait Reminder
      */
     public function clearReminders(?string $type = null): bool
     {
-        return $this->reminders()
+        $affected = (bool) $this->reminders()
             ->when($type != null, function ($query) use ($type) {
                 $query->where('remindable_type', '=', $type);
             })
             ->forceDelete();
+
+        UserLibraryTouch::touchAll($this->id, $type);
+
+        return $affected;
     }
 
     /**

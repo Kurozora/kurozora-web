@@ -4,6 +4,7 @@ use App\Http\Controllers\API\v1\SongController;
 
 Route::prefix('/songs')
     ->name('.songs')
+    ->middleware('cache.headers:private;no_cache;etag')
     ->group(function () {
         Route::get('/', [SongController::class, 'index'])
             ->middleware('auth.kurozora:optional')
@@ -24,7 +25,7 @@ Route::prefix('/songs')
                     ->name('.games');
 
                 Route::prefix('rate')
-                    ->middleware('auth.kurozora')
+                    ->middleware(['auth.kurozora', 'user.not-timed-out'])
                     ->group(function () {
                         Route::post('/', [SongController::class, 'rate'])
                             ->name('.rate');
@@ -36,5 +37,13 @@ Route::prefix('/songs')
                 Route::get('/reviews', [SongController::class, 'reviews'])
                     ->middleware('auth.kurozora:optional')
                     ->name('.reviews');
+
+                Route::get('/lyrics', [SongController::class, 'lyrics'])
+                    ->middleware('auth.kurozora:optional')
+                    ->name('.lyrics');
+
+                Route::post('/apple-music-id', [SongController::class, 'updateAppleMusicID'])
+                    ->middleware(['auth.kurozora', 'role:superAdmin|admin'])
+                    ->name('.apple-music-id');
             });
     });

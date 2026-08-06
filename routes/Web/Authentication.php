@@ -45,7 +45,7 @@ Route::prefix('/sign-up')
             ->name('sign-up');
 
         Route::post('/', [SignUpUserController::class, 'store'])
-            ->middleware(['guest', 'honey']);
+            ->middleware(['guest', 'honey', 'throttle:6,1']);
 
         Route::get('/child', [SignUpUserChildController::class, 'create'])
             ->middleware(['auth', 'throttle:6,1'])

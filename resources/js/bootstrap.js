@@ -18,17 +18,19 @@ import 'lazysizes'
 window.iro = iro
 
 /**
- * Echo exposes an expressive API for subscribing to channels and listening
- * for events that are broadcast by Laravel.
+ * Toggles the page viewport between zoom-locked and pinch-zoomable.
  */
+window.allowZoom = function (allow) {
+    const meta = document.getElementById('app-viewport')
 
-// import Echo from "laravel-echo"
+    if (!meta) {
+        return
+    }
 
-// window.Pusher = require("pusher-js")
-
-// window.Echo = new Echo({
-//     broadcaster: "pusher",
-//     key: process.env.MIX_PUSHER_APP_KEY,
-//     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
-//     forceTLS: true
-// })
+    meta.setAttribute(
+        'content',
+        allow
+            ? 'width=device-width, initial-scale=1, viewport-fit=cover'
+            : 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover'
+    )
+}

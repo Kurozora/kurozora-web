@@ -70,7 +70,11 @@ class SuggestedEpisodes extends Component
             return collect();
         }
 
-        $title = mb_convert_encoding(substr($this->title, 0, 20), 'UTF-8', mb_list_encodings());
+        $title = trim(mb_substr($this->title, 0, 20, 'UTF-8'));
+
+        if ($title === '') {
+            return collect();
+        }
 
         return Episode::search($title)
             ->take(10)
@@ -90,8 +94,9 @@ class SuggestedEpisodes extends Component
                 ])
                 ->when(auth()->user(), function ($query, $user) {
                     $query->withExists([
-                        'user_watched_episodes as isWatched' => function ($query) use ($user) {
-                            $query->where('user_id', $user->id);
+                        'userWatchedEpisodes as isWatched' => function ($query) use ($user) {
+                            $query->where('user_id', $user->id)
+                                ->completed();
                         },
                     ]);
                 });

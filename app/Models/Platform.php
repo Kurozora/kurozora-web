@@ -7,11 +7,11 @@ use App\Enums\MediaCollection;
 use App\Enums\PlatformType;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\HasSlug;
+use App\Traits\Model\HasTranslations;
 use App\Traits\Model\HasViews;
-use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Scout\Searchable;
 use Spatie\Activitylog\LogOptions;
@@ -26,13 +26,13 @@ class Platform extends KModel implements HasMedia, Sitemapable
 {
     use HasFactory,
         HasSlug,
+        HasTranslations,
         HasViews,
         InteractsWithMedia,
         InteractsWithMediaExtension,
         LogsActivity,
         Searchable,
-        SoftDeletes,
-        Translatable;
+        SoftDeletes;
 
     // Table name
     const string TABLE_NAME = 'platforms';
@@ -97,26 +97,6 @@ class Platform extends KModel implements HasMedia, Sitemapable
             ->singleFile();
         $this->addMediaCollection(MediaCollection::Logo)
             ->singleFile();
-    }
-
-    /**
-     * The model's translation relationship.
-     *
-     * @return HasOne
-     */
-    public function translation(): HasOne
-    {
-        $locale = $this->getLocaleKey();
-        if ($this->useFallback()) {
-            $countryFallbackLocale = $this->getFallbackLocale($locale);
-            $locales = array_unique([$locale, $countryFallbackLocale, $this->getFallbackLocale()]);
-
-            return $this->hasOne(PlatformTranslation::class)
-                ->whereIn($this->getTranslationsTable().'.'.$this->getLocaleKey(), $locales);
-        }
-
-        return $this->hasOne(PlatformTranslation::class)
-            ->where($this->getTranslationsTable().'.'.$this->getLocaleKey(), $locale);
     }
 
     /**
@@ -191,7 +171,7 @@ class Platform extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * The type of the studio.
+     * The type of the platform.
      *
      * @param int|null $value
      *
@@ -200,6 +180,18 @@ class Platform extends KModel implements HasMedia, Sitemapable
     public function getTypeAttribute(?int $value): ?PlatformType
     {
         return isset($value) ? PlatformType::fromValue($value) : null;
+    }
+
+    /**
+     * The games released on the platform.
+     *
+     * @return MorphToMany
+     */
+    public function games(): MorphToMany
+    {
+        return $this->morphedByMany(Game::class, 'model', MediaPlatform::class)
+            ->withPivot('region', 'release_status', 'released_at')
+            ->withTimestamps();
     }
 
     /**

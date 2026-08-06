@@ -13,7 +13,7 @@ use App\Http\Resources\EpisodeResource;
 use App\Http\Resources\MediaRatingResource;
 use App\Models\Anime;
 use App\Models\Episode;
-use App\Models\MediaRating;
+use App\Traits\Controller\WithCatalogCacheHeaders;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
@@ -21,6 +21,8 @@ use Illuminate\Http\Request;
 
 class EpisodeController extends Controller
 {
+    use WithCatalogCacheHeaders;
+
     /**
      * Returns the information for an episode.
      *
@@ -31,10 +33,28 @@ class EpisodeController extends Controller
      */
     public function details(Request $request, Episode $episode): JsonResponse
     {
+        $includeInput = $request->input('include');
+        $includes = is_string($includeInput) ? explode(',', $includeInput) : (is_array($includeInput) ? $includeInput : []);
+        sort($includes);
+
+        $fingerprint = [
+            'kind' => 'episode',
+            'publicId' => $episode->public_id,
+            'updatedAt' => optional($episode->updated_at)->toIso8601String(),
+            'locale' => app()->getLocale(),
+            'tvRating' => (int) $request->attributes->get('tvRating', 4),
+            'include' => $includes,
+        ];
+
+        $notModified = $this->returnIfNotModifiedCatalog($request, $fingerprint);
+        if ($notModified !== null) {
+            return $notModified;
+        }
+
         // Call the ModelViewed event
         ModelViewed::dispatch($episode, $request->ip());
 
-        $episode->load(['media', 'mediaStat', 'translation', 'tv_rating', 'videos'])
+        $episode->load(['media', 'mediaStat', 'translation', 'tvRating', 'videos'])
             ->when(auth()->user(), function ($query, $user) use ($episode) {
                 $episode->load(['mediaRatings' => function ($query) use ($user) {
                     $query->where([
@@ -42,8 +62,8 @@ class EpisodeController extends Controller
                     ]);
                 }])
                     ->loadExists([
-                        'user_watched_episodes as isWatched' => function ($query) use ($user) {
-                            $query->where('user_id', '=', $user->id);
+                        'userWatchedEpisodes as isWatched' => function ($query) use ($user) {
+                            $query->where('user_id', '=', $user->id)->completed();
                         }
                     ]);
             });
@@ -88,7 +108,7 @@ class EpisodeController extends Controller
 
         return JSONResult::success([
             'data' => EpisodeResource::collection([$episode])
-        ]);
+        ])->withHeaders($this->catalogCacheHeaders($request, $fingerprint));
     }
 
     /**
@@ -102,8 +122,8 @@ class EpisodeController extends Controller
     {
         $data = $request->validated();
 
-        $episode = Episode::whereIn('id', $data['ids'] ?? []);
-        $episode->with(['media', 'mediaStat', 'translation', 'tv_rating', 'videos'])
+        $episode = Episode::whereIn('public_id', $data['ids'] ?? []);
+        $episode->with(['media', 'mediaStat', 'translation', 'tvRating', 'videos'])
             ->when(auth()->user(), function ($query, $user) use ($episode) {
                 $episode->with(['mediaRatings' => function ($query) use ($user) {
                     $query->where([
@@ -111,7 +131,7 @@ class EpisodeController extends Controller
                     ]);
                 }])
                     ->withExists([
-                        'user_watched_episodes as isWatched' => function ($query) use ($user) {
+                        'userWatchedEpisodes as isWatched' => function ($query) use ($user) {
                             $query->where('user_id', '=', $user->id);
                         }
                     ]);
@@ -189,7 +209,7 @@ class EpisodeController extends Controller
                                 'translation'
                             ]);
                     },
-                    'tv_rating',
+                    'tvRating',
                     'translation',
                     'videos',
                 ])
@@ -200,7 +220,7 @@ class EpisodeController extends Controller
                             ]);
                         }])
                             ->withExists([
-                                'user_watched_episodes as isWatched' => function ($query) use ($user) {
+                                'userWatchedEpisodes as isWatched' => function ($query) use ($user) {
                                     $query->where('user_id', $user->id);
                                 },
                             ]);
@@ -273,45 +293,8 @@ class EpisodeController extends Controller
             throw new AuthorizationException(__('Please watch ":x" first.', ['x' => $episode->title]));
         }
 
-        // Validate the request
         $data = $request->validated();
-
-        // Fetch the variables
-        $givenRating = $data['rating'];
-        $description = $data['description'] ?? null;
-
-        // Modify the rating if it already exists
-        /** @var MediaRating $foundRating */
-        $foundRating = $user->episodeRatings()
-            ->withoutTvRatings()
-            ->where('model_id', '=', $episode->id)
-            ->first();
-
-        // The rating exists
-        if ($foundRating) {
-            // If the given rating is 0
-            if ($givenRating <= 0) {
-                // Delete the rating
-                $foundRating->delete();
-            } else {
-                // Update the current rating
-                $foundRating->update([
-                    'rating' => $givenRating,
-                    'description' => $description
-                ]);
-            }
-        } else {
-            // Only insert the rating if it's rated higher than 0
-            if ($givenRating > 0) {
-                MediaRating::create([
-                    'user_id' => $user->id,
-                    'model_id' => $episode->id,
-                    'model_type' => $episode->getMorphClass(),
-                    'rating' => $givenRating,
-                    'description' => $description,
-                ]);
-            }
-        }
+        $user->rateMediaModel($episode, $data['rating'], $data['description'] ?? null);
 
         return JSONResult::success();
     }
@@ -330,7 +313,7 @@ class EpisodeController extends Controller
                 ['model_id', '=', $episode->id],
                 ['model_type', '=', $episode->getMorphClass()],
             ])
-            ->forceDelete();
+            ->first()?->delete();
 
         return JSONResult::success();
     }
@@ -345,15 +328,18 @@ class EpisodeController extends Controller
      */
     public function reviews(GetPaginatedRequest $request, Episode $episode): JsonResponse
     {
+        $data = $request->validated();
+
         $reviews = $episode->mediaRatings()
             ->withoutTvRatings()
+            ->addEpisodePublicIdSelect()
             ->with([
                 'user' => function ($query) {
                     $query->with(['media'])
-                        ->withCount(['followers', 'followedModels as following_count', 'mediaRatings']);
+                        ->withCount(['followers', 'following', 'mediaRatings', 'achievements']);
                 }
             ])
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $reviews->nextPageUrl() ?? '');

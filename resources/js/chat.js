@@ -7,7 +7,6 @@
  * PicMo's emoji data comes from the Emojibase project. The data is cached locally in an IndexedDB database.
  */
 import {createPopup} from '@picmo/popup-picker'
-import {EmojiSelection} from 'picmo'
 
 (function() {
     // MARK: - Properties
@@ -47,7 +46,7 @@ import {EmojiSelection} from 'picmo'
     /**
      * Handle event when selecting an emoji.
      *
-     * @param {EmojiSelection} event - event
+     * @param {import('picmo').EmojiSelection} event - event
      */
     function handleEmojiSelect(event) {
         let id = localStorage.getItem('_x_selectedCommentBox')

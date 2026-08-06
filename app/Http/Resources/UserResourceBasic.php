@@ -3,7 +3,9 @@
 namespace App\Http\Resources;
 
 use App\Enums\MediaCollection;
+use App\Enums\UserActivityStatus;
 use App\Models\User;
+use App\Services\Presence\PresenceTracker;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -43,11 +45,12 @@ class UserResourceBasic extends JsonResource
                 'biography' => $this->resource->biography,
                 'biographyHTML' => $this->resource->biography_html,
                 'biographyMarkdown' => $this->resource->biography_markdown,
-                'activityStatus' => $this->resource->activityStatus->description,
+                'activityStatus' => $this->liveActivityStatus()->description,
                 'followerCount' => $this->resource->followers_count,
                 'followingCount' => $this->resource->following_count,
                 'ratingsCount' => $this->resource->media_ratings_count,
                 'reputationCount' => $this->resource->reputation_count,
+                'achievementsCount' => $this->resource->achievements_count,
                 'isDeveloper' => $this->resource->is_developer,
                 'isEarlySupporter' => $this->resource->is_early_supporter,
                 'isStaff' => $this->resource->is_staff,
@@ -71,6 +74,27 @@ class UserResourceBasic extends JsonResource
     }
 
     /**
+     * Returns the user's activity status derived solely from the live presence tracker.
+     *
+     * @return UserActivityStatus
+     */
+    protected function liveActivityStatus(): UserActivityStatus
+    {
+        $tracker = app(PresenceTracker::class);
+        $userId = (int) $this->resource->id;
+
+        if ($tracker->isUserGloballyOnline($userId)) {
+            return UserActivityStatus::Online();
+        }
+
+        if ($tracker->isSeenRecently($userId)) {
+            return UserActivityStatus::SeenRecently();
+        }
+
+        return UserActivityStatus::Offline();
+    }
+
+    /**
      * Returns the user-specific details for the resource.
      *
      * @return array
@@ -81,12 +105,19 @@ class UserResourceBasic extends JsonResource
         $user = auth()->user();
 
         $isFollowed = null;
+        $isBlocked = null;
+        $isBlockedBy = null;
+
         if ($followedUser->id != $user->id) {
             $isFollowed = (bool) $this->resource->isFollowed;
+            $isBlocked = $user->hasBlocked($followedUser);
+            $isBlockedBy = $user->isBlockedBy($followedUser);
         }
 
         return [
-            'isFollowed' => $isFollowed
+            'isFollowed' => $isFollowed,
+            'isBlocked' => $isBlocked,
+            'isBlockedBy' => $isBlockedBy,
         ];
     }
 
@@ -102,7 +133,7 @@ class UserResourceBasic extends JsonResource
             'preferredTVRating' => $this->resource->tv_rating,
             'preferredTimezone' => $this->resource->timezone,
             'canChangeUsername' => $this->resource->can_change_username,
-            'role' => $this->resource->roles->first()?->id
+            'role' => $this->resource->roles->first()?->id,
         ];
     }
 

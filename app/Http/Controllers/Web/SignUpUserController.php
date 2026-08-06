@@ -48,7 +48,7 @@ class SignUpUserController extends Controller
 
         // Create the user
         $newUser = User::create([
-            'username' => $data['nickname'] ?? $data['username'] ?? str()->random(8),
+            'username' => $data['nickname'] ?? $data['username'] ?? User::defaultUsername(),
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
             'can_change_username' => false,

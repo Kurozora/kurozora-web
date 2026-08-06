@@ -94,7 +94,7 @@ class ScheduleController extends Controller
         return Anime::withSchedule($dateRanges)
             ->select([Anime::TABLE_NAME . '.*', DB::raw('DATE(' . Episode::TABLE_NAME . '.started_at) as grouping_date')])
             ->groupBy('grouping_date') // scope already includes grouping on id
-            ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
+            ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
             ->when(auth()->user(), function ($query, $user) {
                 $query->with([
                     'mediaRatings' => fn($q) => $q->where('user_id', $user->id),
@@ -112,7 +112,7 @@ class ScheduleController extends Controller
         return Manga::withSchedule(array_column($dateRanges, 'dayOfWeek'))
             ->select([Manga::TABLE_NAME . '.*', DB::raw('DAYOFWEEK(started_at) as grouping_date')])
             ->groupBy('grouping_date') // scope already includes grouping on id
-            ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
+            ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
             ->when(auth()->user(), function ($query, $user) {
                 $query->with([
                     'mediaRatings' => fn($q) => $q->where('user_id', $user->id),
@@ -130,7 +130,7 @@ class ScheduleController extends Controller
         return Game::withSchedule(array_column($dateRanges, 'date'))
             ->select([Game::TABLE_NAME . '.*', DB::raw('DATE(published_at) as grouping_date')])
             ->groupBy('grouping_date') // scope already includes grouping on id
-            ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
+            ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
             ->when(auth()->user(), function ($query, $user) {
                 $query->with([
                     'mediaRatings' => fn($q) => $q->where('user_id', $user->id),

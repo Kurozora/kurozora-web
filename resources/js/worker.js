@@ -1,14 +1,19 @@
 if ('serviceWorker' in navigator) {
-    const mixManifest = require('/mix-manifest.json')
+    window.addEventListener('load', async () => {
+        const registrations = await navigator.serviceWorker.getRegistrations()
+        await Promise.all(
+            registrations
+                .filter(registration => new URL(registration.scope).pathname.startsWith('/build/'))
+                .map(registration => registration.unregister())
+        )
 
-    window.addEventListener('load', () => {
-        navigator.serviceWorker
-            .register(mixManifest['/service-worker.js'])
-            .then(registration => {
-                console.log('Service worker registered:', registration)
+        try {
+            const registration = await navigator.serviceWorker.register('/service-worker.js', {
+                scope: '/',
             })
-            .catch(error => {
-                console.error('Error registering service worker:', error)
-            })
+            console.log('Service worker registered:', registration)
+        } catch (error) {
+            console.error('Error registering service worker:', error)
+        }
     })
 }

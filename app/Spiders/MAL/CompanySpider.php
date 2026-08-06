@@ -5,6 +5,9 @@ namespace App\Spiders\MAL;
 use App\Enums\StudioType;
 use App\Models\Studio;
 use App\Processors\MAL\CompanyProcessor;
+use App\Spiders\MAL\Middleware\CircuitBreakerMiddleware;
+use App\Spiders\MAL\Middleware\BackoffMiddleware;
+use App\Spiders\MAL\Middleware\RateLimitMiddleware;
 use App\Spiders\MAL\Models\CompanyItem;
 use Generator;
 use RoachPHP\Downloader\DownloaderMiddlewareInterface;
@@ -40,6 +43,9 @@ class CompanySpider extends BasicSpider
      */
     public array $downloaderMiddleware = [
         RequestDeduplicationMiddleware::class,
+        CircuitBreakerMiddleware::class,
+        BackoffMiddleware::class,
+        RateLimitMiddleware::class,
         [
             UserAgentMiddleware::class,
             ['userAgent' => 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'],
@@ -98,6 +104,11 @@ class CompanySpider extends BasicSpider
      */
     public function parse(Response $response): Generator
     {
+        if ($response->getStatus() >= 400) {
+            logger()->error('Company;status:' . $response->getStatus());
+            return $this->item([]);
+        }
+
         $producerIDs = $response->filter('table tr td.company div a[href*="/anime/producer/"]')
             ->each(function (Crawler $item) {
                 $regex = '/(\d+)\//';

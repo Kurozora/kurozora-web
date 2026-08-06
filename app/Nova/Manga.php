@@ -76,9 +76,9 @@ class Manga extends Resource
      */
     public static $with = [
         'media',
-        'media_type',
-        'tv_rating',
-        'country_of_origin',
+        'mediaType',
+        'tvRating',
+        'countryOfOrigin',
         'status',
         'source',
         'translation'
@@ -260,17 +260,17 @@ class Manga extends Resource
                 ->help('The adaptation source of the manga. For example Light Novel, Game, Original, etc. If no source is available, especially for older anime, then choose Unknown.')
                 ->required(),
 
-            BelongsTo::make('Media Type', 'media_type')
+            BelongsTo::make('Media Type')
                 ->sortable()
                 ->help('The general type of the manga. For example Manga, Manhwa, One-shot, etc.')
                 ->required(),
 
-            BelongsTo::make('TV rating', 'tv_rating')
+            BelongsTo::make('TV rating', 'tvRating')
                 ->sortable()
                 ->help('The TV rating of the manga. For example NR, G, PG-12, etc.')
                 ->required(),
 
-            BelongsTo::make('Country of Origin', 'country_of_origin', Country::class)
+            BelongsTo::make('Country of Origin', 'countryOfOrigin', Country::class)
                 ->sortable()
                 ->required()
                 ->help('The country the manga originated from. For example Japan, Korea, China and the US.'),

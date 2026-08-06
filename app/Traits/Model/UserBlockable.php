@@ -16,7 +16,7 @@ trait UserBlockable
      *
      * @return HasMany
      */
-    function user_blocks(): HasMany
+    function userBlocks(): HasMany
     {
         return $this->hasMany(UserBlock::class);
     }
@@ -40,16 +40,16 @@ trait UserBlockable
      */
     public function isBlockedBy(User $user): bool
     {
-        $relationLoaded = $this->relationLoaded('user_blocks');
+        $relationLoaded = $this->relationLoaded('userBlocks');
 
         if ($relationLoaded) {
-            return $this->user_blocks->contains($user);
+            return $this->userBlocks->contains($user);
         }
 
         return (
-        $this->relationLoaded('blockers')
-            ? $this->blockers
-            : $this->blockers()
+            $this->relationLoaded('blockers')
+                ? $this->blockers
+                : $this->blockers()
         )
             ->where('user_id', '=', $user->id)
             ->exists();

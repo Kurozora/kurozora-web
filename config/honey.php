@@ -86,7 +86,12 @@ return [
          * The number of times a request from an ip address can be classed
          * as spam before they are added to the block list.
          */
-        'maximum_attempts' => 5
+        'maximum_attempts' => 5,
+        /**
+         * The number of days a blocked spammer is retained before pruning,
+         * allowing a recycled ip address to recover.
+         */
+        'block_ttl_days' => 14
     ],
 
     /**

@@ -4,6 +4,9 @@ namespace App\Spiders\MAL;
 
 use App\Processors\MAL\MangaProcessor;
 use App\Processors\MAL\MangaStatsProcessor;
+use App\Spiders\MAL\Middleware\CircuitBreakerMiddleware;
+use App\Spiders\MAL\Middleware\BackoffMiddleware;
+use App\Spiders\MAL\Middleware\RateLimitMiddleware;
 use App\Spiders\MAL\Models\MangaItem;
 use App\Spiders\MAL\Models\MangaStatItem;
 use Arr;
@@ -42,6 +45,9 @@ class MangaSpider extends BasicSpider
      */
     public array $downloaderMiddleware = [
         RequestDeduplicationMiddleware::class,
+        CircuitBreakerMiddleware::class,
+        BackoffMiddleware::class,
+        RateLimitMiddleware::class,
         [
             UserAgentMiddleware::class,
             ['userAgent' => 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'],
@@ -108,9 +114,15 @@ class MangaSpider extends BasicSpider
             return $this->item([]);
         }
 
-        logger()->channel('stderr')->info('🕷 [MAL_ID:MANGA:' . $id . '] Parsing response');
-        $originalTitle = $response->filter('[itemprop="name"]')
-            ->innerText();
+        logger()->channel('stderr')->debug('🕷 [MAL_ID:MANGA:' . $id . '] Parsing response');
+        $nameNode = $response->filter('[itemprop="name"]');
+
+        if (!$nameNode->count()) {
+            logger()->error('Manga: ' . $id . ';status:' . $response->getStatus() . ';missing-title-node');
+            return $this->item([]);
+        }
+
+        $originalTitle = $nameNode->innerText();
         $attributes = $response->filter('div.leftside')
             ->filter('.spaceit_pad')
             ->each(function ($item) {
@@ -156,7 +168,7 @@ class MangaSpider extends BasicSpider
         $imageUrl = $this->cleanImageUrl($response, 'div.leftside div a img[itemprop="image"]');
         $relations = $this->cleanRelations($response, 'div.related-entries');
 
-        logger()->channel('stderr')->info('✅️ [MAL_ID:MANGA:' . $id . '] Done parsing');
+        logger()->channel('stderr')->debug('✅️ [MAL_ID:MANGA:' . $id . '] Done parsing');
 
         yield $this->item(new MangaItem(
             $id,
@@ -186,7 +198,7 @@ class MangaSpider extends BasicSpider
         $regex = '/manga\/(\d*)/';
         $uri = str($response->getUri());
         $id = $uri->match($regex)->remove('/manga/')->value();
-        logger()->channel('stderr')->info('🕷 [MAL_ID:MANGA:' . $id . '] Parsing stats response');
+        logger()->channel('stderr')->debug('🕷 [MAL_ID:MANGA:' . $id . '] Parsing stats response');
 
         $scores = $response->filter('table.score-stats tr')
             ->each(function (Crawler $item) {

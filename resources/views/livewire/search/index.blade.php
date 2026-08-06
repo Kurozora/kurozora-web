@@ -19,18 +19,7 @@
         <meta property="twitter:image:alt" content="{{ __('Search for anime, manga, games, characters, light novels, music, people, studios, and more…') }}" />
         <link rel="canonical" href="{{ route('search.index') }}">
         <meta name="robots" content="noindex, nofollow">
-        <x-misc.schema>
-            "@type": "WebSite",
-            "url": "{{ config('app.url') }}",
-            "potentialAction": {
-                "@type": "SearchAction",
-                "target": {
-                    "@type": "EntryPoint",
-                    "urlTemplate": "{{ route('search.index') }}?q={search_term_string}&src={{ \App\Enums\SearchSource::Google }}"
-                },
-                "query-input": "required name=search_term_string"
-            }
-        </x-misc.schema>
+        <x-misc.schema :data="$this->schema" />
     </x-slot:meta>
 
     <x-slot:appArgument>

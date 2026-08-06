@@ -36,7 +36,7 @@ class ExploreCategoryItem extends KModel implements Sortable
      *
      * @return BelongsTo
      */
-    function explore_category(): BelongsTo
+    function exploreCategory(): BelongsTo
     {
         return $this->belongsTo(ExploreCategory::class)
             ->withoutGlobalScope(new ExploreCategoryIsEnabledScope);

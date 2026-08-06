@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Enums\MediaCollection;
-use App\Scopes\TvRatingScope;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\HasSlug;
 use App\Traits\Model\TvRated;
@@ -11,7 +10,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -68,47 +67,34 @@ class Theme extends KModel implements HasMedia, Sitemapable
     /**
      * Returns the Anime with the theme
      *
-     * @return BelongsToMany
+     * @return MorphToMany
      */
-    function animes(): BelongsToMany
+    function animes(): MorphToMany
     {
-        return $this->belongsToMany(Anime::class, MediaTheme::class, 'theme_id', 'model_id')
-            ->where('model_type', Anime::class)
+        return $this->morphedByMany(Anime::class, 'model', MediaTheme::class)
             ->withTimestamps();
     }
 
     /**
      * Returns the Manga with the theme
      *
-     * @return BelongsToMany
+     * @return MorphToMany
      */
-    function mangas(): BelongsToMany
+    function mangas(): MorphToMany
     {
-        return $this->belongsToMany(Manga::class, MediaTheme::class, 'theme_id', 'model_id')
-            ->where('model_type', Manga::class)
+        return $this->morphedByMany(Manga::class, 'model', MediaTheme::class)
             ->withTimestamps();
     }
 
     /**
      * Returns the Game with the theme
      *
-     * @return BelongsToMany
+     * @return MorphToMany
      */
-    function games(): BelongsToMany
+    function games(): MorphToMany
     {
-        return $this->belongsToMany(Game::class, MediaTheme::class, 'theme_id', 'model_id')
-            ->where('model_type', Game::class)
+        return $this->morphedByMany(Game::class, 'model', MediaTheme::class)
             ->withTimestamps();
-    }
-
-    /**
-     * The theme's TV rating.
-     *
-     * @return BelongsTo
-     */
-    public function tv_rating(): BelongsTo
-    {
-        return $this->belongsTo(TvRating::class);
     }
 
     /**
@@ -149,7 +135,7 @@ class Theme extends KModel implements HasMedia, Sitemapable
     public function resolveRouteBindingQuery($query, $value, $field = null): \Illuminate\Contracts\Database\Eloquent\Builder
     {
         return parent::resolveRouteBindingQuery($query, $value, $field)
-            ->withoutGlobalScopes([TvRatingScope::class]);
+            ->withoutGlobalScopes();
     }
 
     /**

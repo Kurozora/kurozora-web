@@ -21,41 +21,37 @@
         seasons/{{ $season->id }}/episodes
     </x-slot:appArgument>
 
-    <div class="pt-4 pb-6" wire:init="loadPage">
-        <section class="mb-4 xl:safe-area-inset">
-            <div>
-                <div class="flex gap-1 pl-4 pr-4">
-                    <div class="flex flex-wrap items-center w-full">
-                        <h1 class="text-2xl font-bold">{{ __(':x Episodes', ['x' => $season->title]) }}</h1>
-                    </div>
+    <div class="pb-6" wire:init="loadPage">
+        <x-back-link
+            :url="route('anime.seasons', $anime)"
+            :label="__(':x Seasons', ['x' => $anime->title])"
+            :title="__(':x Episodes', ['x' => $season->title])"
+        >
+            <x-slot:actions>
+                <livewire:season.watch-button :season="$season" />
 
-                    <div class="flex flex-wrap justify-end items-center gap-2 w-full">
-                        <livewire:season.watch-button :season="$season" />
+                @if ($this->canUpdateEpisodes && app()->isLocal())
+                    <x-circle-button
+                        wire:click="updateEpisodes"
+                        wire:loading.attr="disabled"
+                    >
+                        @svg('arrow_clockwise', 'fill-current', ['width' => '44'])
+                    </x-circle-button>
+                @endif
 
-                        @if ($this->canUpdateEpisodes && app()->isLocal())
-                            <x-circle-button
-                                wire:click="updateEpisodes"
-                                wire:loading.attr="disabled"
-                            >
-                                @svg('arrow_clockwise', 'fill-current', ['width' => '44'])
-                            </x-circle-button>
-                        @endif
+                <x-nova-link :href="route('seasons.edit', $season)">
+                    @svg('pencil', 'fill-current', ['width' => '44'])
+                </x-nova-link>
+            </x-slot:actions>
 
-                        <x-nova-link :href="route('seasons.edit', $season)">
-                            @svg('pencil', 'fill-current', ['width' => '44'])
-                        </x-nova-link>
-                    </div>
-                </div>
-
-                <x-search-bar>
-                    <x-slot:rightBarButtonItems>
-                        <x-square-button wire:click="randomEpisode">
-                            @svg('dice', 'fill-current', ['aria-labelledby' => 'random episode', 'width' => '28'])
-                        </x-square-button>
-                    </x-slot:rightBarButtonItems>
-                </x-search-bar>
-            </div>
-        </section>
+            <x-search-bar>
+                <x-slot:rightBarButtonItems>
+                    <x-square-button wire:click="randomEpisode">
+                        @svg('dice', 'fill-current', ['aria-labelledby' => 'random episode', 'width' => '28'])
+                    </x-square-button>
+                </x-slot:rightBarButtonItems>
+            </x-search-bar>
+        </x-back-link>
 
         @if ($this->searchResults->count())
             <section class="xl:safe-area-inset">

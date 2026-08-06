@@ -6,8 +6,8 @@ use App\Models\MediaTheme;
 use App\Models\Theme;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 trait HasMediaThemes
@@ -50,13 +50,14 @@ trait HasMediaThemes
     /**
      * Get the model's themes.
      *
-     * @return BelongsToMany
+     * @return MorphToMany
      */
-    public function themes(): BelongsToMany
+    public function themes(): MorphToMany
     {
-        return $this->belongsToMany(Theme::class, MediaTheme::class, 'model_id')
-            ->where('model_type', '=', $this->getMorphClass())
-            ->withTimestamps();
+        return $this->viewableViaParent(
+            $this->morphToMany(Theme::class, 'model', MediaTheme::class)
+                ->withTimestamps(),
+        );
     }
 
     /**

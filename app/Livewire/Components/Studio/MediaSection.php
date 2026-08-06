@@ -101,10 +101,7 @@ class MediaSection extends Component
             Game::class => $this->studio->games(),
         };
 
-        return $query->when($this->studio->tv_rating_id > config('app.tv_rating'), function ($query) {
-            $query->withoutGlobalScopes();
-        })
-            ->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating'])
+        return $query->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tvRating'])
             ->when(auth()->user(), function ($query, $user) {
                 $query->with(['library' => function ($query) use ($user) {
                     $query->where('user_id', '=', $user->id);

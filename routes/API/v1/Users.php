@@ -5,15 +5,18 @@ use App\Http\Controllers\API\v1\AchievementController;
 use App\Http\Controllers\API\v1\FollowingController;
 use App\Http\Controllers\API\v1\LibraryController;
 use App\Http\Controllers\API\v1\RegistrationController;
+use App\Http\Controllers\API\v1\TwoFactorChallengeController;
 use App\Http\Controllers\API\v1\UserBlockController;
 use App\Http\Controllers\API\v1\UserController;
 use App\Http\Controllers\API\v1\UserFavoriteController;
+use App\Http\Controllers\API\v1\UserTimeoutController;
 use App\Http\Controllers\Auth\SignInWithAppleController;
 
 Route::prefix('/users')
     ->name('.users')
     ->group(function () {
-        Route::get('/', [UserController::class, 'views'])
+        Route::get('/', [UserController::class, 'index'])
+            ->middleware('auth.kurozora:optional')
             ->name('.index');
 
         Route::post('/', [RegistrationController::class, 'signUp'])
@@ -21,6 +24,9 @@ Route::prefix('/users')
 
         Route::post('/signin', [AccessTokenController::class, 'create'])
             ->name('.sign-in');
+
+        Route::post('/two-factor-challenge', [TwoFactorChallengeController::class, 'create'])
+            ->name('.two-factor-challenge');
 
         Route::post('/reset-password', [UserController::class, 'resetPassword'])
             ->name('.reset-password');
@@ -42,11 +48,23 @@ Route::prefix('/users')
                     ->name('.achievements');
 
                 Route::post('/block', [UserBlockController::class, 'blockUser'])
-                    ->middleware('auth.kurozora')
+                    ->middleware(['auth.kurozora', 'user.not-timed-out'])
                     ->name('.block');
 
+                Route::get('/timeout', [UserTimeoutController::class, 'show'])
+                    ->middleware(['auth.kurozora', 'role:superAdmin|admin|mod'])
+                    ->name('.timeout.show');
+
+                Route::post('/timeout', [UserTimeoutController::class, 'store'])
+                    ->middleware(['auth.kurozora', 'role:superAdmin|admin|mod'])
+                    ->name('.timeout.store');
+
+                Route::delete('/timeout', [UserTimeoutController::class, 'destroy'])
+                    ->middleware(['auth.kurozora', 'role:superAdmin|admin|mod'])
+                    ->name('.timeout.destroy');
+
                 Route::get('/library', [LibraryController::class, 'index'])
-                    ->middleware('auth.kurozora:optional')
+                    ->middleware(['auth.kurozora:optional', 'throttle:api.library'])
                     ->name('.library');
 
                 Route::get('/favorites', [UserFavoriteController::class, 'index'])
@@ -58,7 +76,7 @@ Route::prefix('/users')
                     ->name('.feed-messages');
 
                 Route::post('/follow', [FollowingController::class, 'followUser'])
-                    ->middleware('auth.kurozora')
+                    ->middleware(['auth.kurozora', 'user.not-timed-out'])
                     ->can('follow', 'user')
                     ->name('.follow');
 

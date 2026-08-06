@@ -21,19 +21,12 @@
         anime/{{ $anime->id }}/seasons
     </x-slot:appArgument>
 
-    <div class="pt-4 pb-6" wire:init="loadPage">
-        <section class="mb-4 xl:safe-area-inset">
-            <div>
-                <div class="flex gap-1 pl-4 pr-4">
-                    <div class="flex flex-wrap items-center w-full">
-                        <h1 class="text-2xl font-bold">{{ __(':x Seasons', ['x' => $anime->title]) }}</h1>
-                    </div>
-
-                    <div class="flex flex-wrap flex-1 justify-end items-center w-full">
-                    </div>
-                </div>
-            </div>
-        </section>
+    <div class="pb-6" wire:init="loadPage">
+        <x-back-link
+            :url="$anime->schemaUrl()"
+            :label="$anime->title"
+            :title="__(':x Seasons', ['x' => $anime->title])"
+        />
 
         @if ($this->seasons->count())
             <section class="mt-4 xl:safe-area-inset">

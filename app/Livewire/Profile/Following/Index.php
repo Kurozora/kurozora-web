@@ -63,7 +63,7 @@ class Index extends Component
             return collect();
         }
 
-        return $this->user->followedModels()
+        return $this->user->following()
             ->with(['media'])
             ->withCount(['followers'])
             ->when(auth()->user(), function ($query, $user) {

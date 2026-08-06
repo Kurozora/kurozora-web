@@ -9,7 +9,7 @@
 
     <x-slot:meta>
         <meta property="og:title" content="{{ __(':x on :y', ['x' => $user->username, 'y' => config('app.name')]) }}" />
-        <meta property="og:description" content="{{ $user->biography ?? __('app.description') }}" />
+        <meta property="og:description" content="{{ $user->biography ?? __('A community for anime fans with an extensive library of anime, manga, music, games, movies, specials, OVA, and ONA. Only on :x, the largest, free online anime, manga, game & music database in the world. Track, share and discover anime with friends.', ['x' => config('app.name')]) }}" />
         <meta property="og:image" content="{{ $user->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) }}" />
         <meta property="og:type" content="profile" />
         <meta property="og:profile:username" content="{{ $user->username }}" />
@@ -17,14 +17,11 @@
     </x-slot:meta>
 
     <x-slot:styles>
-        <link rel="preload" href="{{ url(mix('css/watch.css')) }}" as="style">
-        <link rel="stylesheet" href="{{ url(mix('css/watch.css')) }}">
+        @vite(['resources/css/watch.css'])
     </x-slot:styles>
 
     <x-slot:scripts>
-        <script src="{{ url(mix('js/gif.js')) }}"></script>
-        <script src="{{ url(mix('js/markdown.js')) }}"></script>
-        <script src="{{ url(mix('js/watch.js')) }}"></script>
+        @vite(['resources/js/gif.js', 'resources/js/markdown.js', 'resources/js/watch.js'])
     </x-slot:scripts>
 
     <x-slot:appArgument>
@@ -59,7 +56,17 @@
                         @endif
 
                         @if ($user->id != auth()->user()?->id)
-                            <livewire:components.follow-button :user="$user" :is-followed="$this->isFollowed" wire:key="{{ uniqid(more_entropy: true) }}" />
+                            @if ($this->isBlocked)
+                                <x-button
+                                    class="!bg-red-500 hover:!bg-red-600"
+                                    wire:click="togglePopupFor('block')"
+                                    wire:loading.attr="disabled"
+                                >
+                                    {{ __('Blocked') }}
+                                </x-button>
+                            @elseif (!$this->isBlockedBy)
+                                <livewire:components.follow-button :user="$user" :is-followed="$this->isFollowed" wire:key="{{ uniqid(more_entropy: true) }}" />
+                            @endif
                         @endif
 
                         {{-- More Options --}}
@@ -86,7 +93,7 @@
                                             class="block w-full pl-4 pr-4 pt-2 pb-2 text-red-500 text-xs text-center font-semibold hover:bg-tertiary focus:bg-secondary"
                                             wire:click="togglePopupFor('block')"
                                         >
-                                            {{ $this->isBlocked ? __('Unblock') : __('Block') }}
+                                            {{ $this->isBlocked ? __('Blocked') : __('Block') }}
                                         </button>
                                     @endif
                                 @endauth
@@ -98,6 +105,11 @@
                 <div class="mt-2 pt-2 pb-2 px-3">{!! $user->biography_html !!}</div>
 
                 <div class="flex justify-between">
+                    <x-profile-information-badge href="{{ route('leaderboards.reputation') }}" wire:navigate>
+                        <x-slot:title>{{ __('Reputation') }}</x-slot:title>
+                        <x-slot:description>{{ number_shorten($counts['reputation_count'], 0, true) }}</x-slot:description>
+                    </x-profile-information-badge>
+
                     <x-profile-information-badge href="{{ route('profile.achievements', $user) }}" wire:navigate>
                         <x-slot:title>{{ __('Achievements') }}</x-slot:title>
                         <x-slot:description>{{ number_shorten($counts['achievements_count'], 0, true) }}</x-slot:description>
@@ -135,7 +147,29 @@
 
         <livewire:components.user.favorites-section :user="$user" :type="\App\Models\Game::class" />
 
-        <livewire:components.user.feed-messages-section :user="$user" />
+        @if ($this->isBlocked && !$this->showBlockedPosts)
+            <section class="pb-6 pl-4 pr-4 mb-8 xl:safe-area-inset-scroll">
+                <div class="max-w-2xl mx-auto">
+                    <h2 class="text-2xl font-bold">{{ __('@:x is blocked', ['x' => $user->username]) }}</h2>
+
+                    <p class="mt-2 text-sm text-secondary">{{ __('Are you sure you want to view these posts? Viewing posts won’t unblock @:x.', ['x' => $user->username]) }}</p>
+
+                    <x-button class="mt-4" wire:click="revealBlockedPosts">{{ __('View posts') }}</x-button>
+                </div>
+            </section>
+        @else
+            @if ($this->isBlockedBy)
+                <section class="pb-6 pl-4 pr-4 mb-8 xl:safe-area-inset-scroll">
+                    <div class="max-w-2xl mx-auto">
+                        <h2 class="text-2xl font-bold">{{ __('@:x has blocked you', ['x' => $user->username]) }}</h2>
+
+                        <p class="mt-2 text-sm text-secondary">{{ __('You can view public posts from @:x, but you are blocked from engaging with them. You also cannot follow or message @:x.', ['x' => $user->username]) }}</p>
+                    </div>
+                </section>
+            @endif
+
+            <livewire:components.user.feed-messages-section :user="$user" />
+        @endif
     </div>
 
     @if ($showSharePopup)
@@ -169,7 +203,7 @@
 
                 <x-slot:content>
                     <div class="pt-4 pb-4 pl-4 pr-4">
-                        <p>{{ $this->isBlocked ? __('They wil be able to follow you and view your messages.') : __('They won’t be able to see your profile, and public posts. They will also not be able to follow you, and you will not see notifications from them.') }}</p>
+                        <p>{{ $this->isBlocked ? __('They will be able to follow you and view your messages.') : __('They will be able to see your public messages, but will no longer be able to engage with them. They will also not be able to follow or message you, and you will not see notifications from them.') }}</p>
                     </div>
                 </x-slot:content>
 

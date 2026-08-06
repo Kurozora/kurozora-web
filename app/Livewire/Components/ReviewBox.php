@@ -3,6 +3,7 @@
 namespace App\Livewire\Components;
 
 use App\Models\MediaRating;
+use App\Support\UserLibraryTouch;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -129,7 +130,7 @@ class ReviewBox extends Component
         $reviewText = empty($reviewText) ? null : $reviewText;
         $noteText = empty($noteText) ? null : $noteText;
 
-        auth()->user()->mediaRatings()
+        auth()->user()->mediaRatings()->withoutGlobalScopes()
             ->updateOrCreate([
                 'model_type' => $this->modelType,
                 'model_id' => $this->modelID,
@@ -137,6 +138,8 @@ class ReviewBox extends Component
                 'description' => $reviewText,
                 'note' => $noteText,
             ]);
+
+        UserLibraryTouch::touch(auth()->id(), $this->modelType, [$this->modelID]);
 
         $this->showPopup = false;
     }

@@ -3,11 +3,11 @@
 namespace App\Models;
 
 use App\Enums\MediaCollection;
-use App\Scopes\TvRatingScope;
 use App\Traits\InteractsWithMediaExtension;
+use App\Traits\Model\HasPublicID;
+use App\Traits\Model\HasTranslations;
 use App\Traits\Model\HasViews;
 use App\Traits\Model\TvRated;
-use Astrotomic\Translatable\Translatable;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -15,7 +15,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -25,11 +24,12 @@ use Spatie\Sitemap\Tags\Url;
 class Season extends KModel implements HasMedia, Sitemapable
 {
     use HasFactory,
+        HasPublicID,
+        HasTranslations,
         HasViews,
         InteractsWithMedia,
         InteractsWithMediaExtension,
         SoftDeletes,
-        Translatable,
         TvRated;
 
     // Maximum relationships fetch limit
@@ -64,6 +64,33 @@ class Season extends KModel implements HasMedia, Sitemapable
     }
 
     /**
+    * Bootstrap the model and its traits.
+    *
+    * @return void
+    */
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        static::creating(function (Season $season) {
+            if (!is_null($season->tv_rating_id) && !is_null($season->is_nsfw)) {
+                return;
+            }
+
+            $anime = $season->relationLoaded('anime')
+                ? $season->anime
+                : $season->anime()->first(['tv_rating_id', 'is_nsfw']);
+
+            if (!$anime) {
+                return;
+            }
+
+            $season->tv_rating_id = $anime->tv_rating_id;
+            $season->is_nsfw = $anime->is_nsfw;
+        });
+    }
+
+    /**
      * Get the started_at attribute with the correct timezone.
      *
      * @return Attribute
@@ -77,7 +104,7 @@ class Season extends KModel implements HasMedia, Sitemapable
                 }
 
                 $value = $this->asDateTime($value);
-                $value->setTimezone(config('app.format_timezone'));
+                $value->inUserTimezone();
                 return $value;
             }
         );
@@ -97,30 +124,10 @@ class Season extends KModel implements HasMedia, Sitemapable
                 }
 
                 $value = $this->asDateTime($value);
-                $value->setTimezone(config('app.format_timezone'));
+                $value->inUserTimezone();
                 return $value;
             }
         );
-    }
-
-    /**
-     * Bootstrap the model and its traits.
-     *
-     * @return void
-     */
-    protected static function boot(): void
-    {
-        parent::boot();
-
-        static::creating(function (Season $season) {
-            if (empty($season->tv_rating_id)) {
-                $season->tv_rating_id = $season->anime()->withoutGlobalScopes()->first()->tv_rating_id;
-            }
-
-            if (empty($season->is_nsfw)) {
-                $season->is_nsfw = $season->anime()->withoutGlobalScopes()->first()->is_nsfw;
-            }
-        });
     }
 
     /**
@@ -140,7 +147,8 @@ class Season extends KModel implements HasMedia, Sitemapable
      */
     public function anime(): BelongsTo
     {
-        return $this->belongsTo(Anime::class);
+        return $this->belongsTo(Anime::class)
+            ->withoutGlobalScopes();
     }
 
     /**
@@ -150,7 +158,8 @@ class Season extends KModel implements HasMedia, Sitemapable
      */
     public function episodes(): HasMany
     {
-        return $this->hasMany(Episode::class);
+        return $this->hasMany(Episode::class)
+            ->withoutGlobalScopes();
     }
 
     /**
@@ -165,36 +174,6 @@ class Season extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * The season's TV rating.
-     *
-     * @return BelongsTo
-     */
-    public function tv_rating(): BelongsTo
-    {
-        return $this->belongsTo(TvRating::class);
-    }
-
-    /**
-     * The model's translation relationship.
-     *
-     * @return HasOne
-     */
-    public function translation(): HasOne
-    {
-        $locale = $this->getLocaleKey();
-        if ($this->useFallback()) {
-            $countryFallbackLocale = $this->getFallbackLocale($locale);
-            $locales = array_unique([$locale, $countryFallbackLocale, $this->getFallbackLocale()]);
-
-            return $this->hasOne(SeasonTranslation::class)
-                ->whereIn($this->getTranslationsTable().'.'.$this->getLocaleKey(), $locales);
-        }
-
-        return $this->hasOne(SeasonTranslation::class)
-            ->where($this->getTranslationsTable().'.'.$this->getLocaleKey(), $locale);
-    }
-
-    /**
      * Retrieve the model for a bound value.
      *
      * @param  Model|\Illuminate\Database\Eloquent\Relations\Relation  $query
@@ -205,7 +184,7 @@ class Season extends KModel implements HasMedia, Sitemapable
     public function resolveRouteBindingQuery($query, $value, $field = null): Builder
     {
         return parent::resolveRouteBindingQuery($query, $value, $field)
-            ->withoutGlobalScopes([TvRatingScope::class]);
+            ->withoutGlobalScopes();
     }
 
     /**

@@ -33,7 +33,6 @@ return new class extends Migration
             $table->index('position');
             $table->index('is_global');
             $table->index('is_enabled');
-            $table->index('deleted_at');
 
             // Set unique key constraints
             $table->unique(['slug']);

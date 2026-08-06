@@ -3,8 +3,12 @@
 namespace App\Spiders\MAL;
 
 use App\Processors\MAL\AnimeCharacterProcessor;
+use App\Spiders\MAL\Middleware\CircuitBreakerMiddleware;
+use App\Spiders\MAL\Middleware\BackoffMiddleware;
+use App\Spiders\MAL\Middleware\RateLimitMiddleware;
 use App\Spiders\MAL\Models\AnimeCharacterItem;
 use Generator;
+use RoachPHP\Downloader\Middleware\RequestDeduplicationMiddleware;
 use RoachPHP\Downloader\Middleware\UserAgentMiddleware;
 use RoachPHP\Extensions\LoggerExtension;
 use RoachPHP\Extensions\StatsCollectorExtension;
@@ -20,6 +24,10 @@ class AnimeCharacterSpider extends BasicSpider
     ];
 
     public array $downloaderMiddleware = [
+        RequestDeduplicationMiddleware::class,
+        CircuitBreakerMiddleware::class,
+        BackoffMiddleware::class,
+        RateLimitMiddleware::class,
         [
             UserAgentMiddleware::class,
             ['userAgent' => 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'],
@@ -64,7 +72,13 @@ class AnimeCharacterSpider extends BasicSpider
         $regex = '/anime\/(\d*)/';
         $uri = str($response->getUri());
         $id = $uri->match($regex)->remove('/anime/')->value();
-        logger()->channel('stderr')->info('🕷 [MAL_ID:ANIME:' . $id . '] Parsing character response');
+
+        if ($response->getStatus() >= 400) {
+            logger()->error('Anime Character: ' . $id . ';status:' . $response->getStatus());
+            return $this->item([]);
+        }
+
+        logger()->channel('stderr')->debug('🕷 [MAL_ID:ANIME:' . $id . '] Parsing character response');
 
         $cast = $response->filter('table[class*="anime-character-table"]')
             ->each(function (Crawler $item) {

@@ -18,7 +18,7 @@ use App\Http\Resources\LiteratureResourceIdentity;
 use App\Http\Resources\MediaRatingResource;
 use App\Http\Resources\PersonResourceIdentity;
 use App\Models\Character;
-use App\Models\MediaRating;
+use App\Traits\Controller\WithCatalogCacheHeaders;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
@@ -29,6 +29,8 @@ use Illuminate\Routing\Redirector;
 
 class CharacterController extends Controller
 {
+    use WithCatalogCacheHeaders;
+
     /**
      * Returns the characters index.
      *
@@ -75,6 +77,24 @@ class CharacterController extends Controller
      */
     public function details(Request $request, Character $character): JsonResponse
     {
+        $includeInput = $request->input('include');
+        $includes = is_string($includeInput) ? explode(',', $includeInput) : (is_array($includeInput) ? $includeInput : []);
+        sort($includes);
+
+        $fingerprint = [
+            'kind' => 'character',
+            'publicId' => $character->public_id,
+            'updatedAt' => optional($character->updated_at)->toIso8601String(),
+            'locale' => app()->getLocale(),
+            'tvRating' => (int) $request->attributes->get('tvRating', 4),
+            'include' => $includes,
+        ];
+
+        $notModified = $this->returnIfNotModifiedCatalog($request, $fingerprint);
+        if ($notModified !== null) {
+            return $notModified;
+        }
+
         // Call the ModelViewed event
         ModelViewed::dispatch($character, $request->ip());
 
@@ -106,19 +126,19 @@ class CharacterController extends Controller
                         break;
                     case 'shows':
                         $includeArray['anime'] = function ($query) {
-                            $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
+                            $query->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
                                 ->limit(Character::MAXIMUM_RELATIONSHIPS_LIMIT);
                         };
                         break;
                     case 'literatures':
                         $includeArray['manga'] = function ($query) {
-                            $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
+                            $query->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
                                 ->limit(Character::MAXIMUM_RELATIONSHIPS_LIMIT);
                         };
                         break;
                     case 'games':
                         $includeArray['games'] = function ($query) {
-                            $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
+                            $query->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
                                 ->limit(Character::MAXIMUM_RELATIONSHIPS_LIMIT);
                         };
                         break;
@@ -130,7 +150,7 @@ class CharacterController extends Controller
         // Return character details
         return JSONResult::success([
             'data' => CharacterResource::collection([$character])
-        ]);
+        ])->withHeaders($this->catalogCacheHeaders($request, $fingerprint));
     }
 
     /**
@@ -171,19 +191,19 @@ class CharacterController extends Controller
                         break;
                     case 'shows':
                         $includeArray['anime'] = function ($query) {
-                            $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
+                            $query->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
                                 ->limit(Character::MAXIMUM_RELATIONSHIPS_LIMIT);
                         };
                         break;
                     case 'literatures':
                         $includeArray['manga'] = function ($query) {
-                            $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
+                            $query->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
                                 ->limit(Character::MAXIMUM_RELATIONSHIPS_LIMIT);
                         };
                         break;
                     case 'games':
                         $includeArray['games'] = function ($query) {
-                            $query->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
+                            $query->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
                                 ->limit(Character::MAXIMUM_RELATIONSHIPS_LIMIT);
                         };
                         break;
@@ -212,7 +232,7 @@ class CharacterController extends Controller
 
         // Get the people
         $people = $character->people()
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $people->nextPageUrl() ?? '');
@@ -238,7 +258,7 @@ class CharacterController extends Controller
 
         // Get the anime
         $anime = $character->anime()
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $anime->nextPageUrl() ?? '');
@@ -264,7 +284,7 @@ class CharacterController extends Controller
 
         // Get the literatures
         $literatures = $character->manga()
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $literatures->nextPageUrl() ?? '');
@@ -290,7 +310,7 @@ class CharacterController extends Controller
 
         // Get the games
         $games = $character->games()
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $games->nextPageUrl() ?? '');
@@ -316,45 +336,8 @@ class CharacterController extends Controller
     {
         $user = auth()->user();
 
-        // Validate the request
         $data = $request->validated();
-
-        // Fetch the variables
-        $givenRating = $data['rating'];
-        $description = $data['description'] ?? null;
-
-        // Modify the rating if it already exists
-        /** @var MediaRating $foundRating */
-        $foundRating = $user->characterRatings()
-            ->withoutTvRatings()
-            ->where('model_id', '=', $character->id)
-            ->first();
-
-        // The rating exists
-        if ($foundRating) {
-            // If the given rating is 0
-            if ($givenRating <= 0) {
-                // Delete the rating
-                $foundRating->delete();
-            } else {
-                // Update the current rating
-                $foundRating->update([
-                    'rating' => $givenRating,
-                    'description' => $description ?? $foundRating->description,
-                ]);
-            }
-        } else {
-            // Only insert the rating if it's rated higher than 0
-            if ($givenRating > 0) {
-                MediaRating::create([
-                    'user_id' => $user->id,
-                    'model_id' => $character->id,
-                    'model_type' => $character->getMorphClass(),
-                    'rating' => $givenRating,
-                    'description' => $description,
-                ]);
-            }
-        }
+        $user->rateMediaModel($character, $data['rating'], $data['description'] ?? null);
 
         return JSONResult::success();
     }
@@ -373,7 +356,7 @@ class CharacterController extends Controller
                 ['model_id', '=', $character->id],
                 ['model_type', '=', $character->getMorphClass()],
             ])
-            ->forceDelete();
+            ->first()?->delete();
 
         return JSONResult::success();
     }
@@ -388,31 +371,17 @@ class CharacterController extends Controller
      */
     public function reviews(GetPaginatedRequest $request, Character $character): JsonResponse
     {
+        $data = $request->validated();
+
         $reviews = $character->mediaRatings()
             ->withoutTvRatings()
             ->with([
                 'user' => function ($query) {
-                    $query->with([
-                        'badges' => function ($query) {
-                            $query->with(['media']);
-                        },
-                        'media',
-                        'tokens' => function ($query) {
-                            $query
-                                ->orderBy('last_used_at', 'desc')
-                                ->limit(1);
-                        },
-                        'sessions' => function ($query) {
-                            $query
-                                ->orderBy('last_activity', 'desc')
-                                ->limit(1);
-                        },
-                    ])
-                        ->withCount(['followers', 'followedModels as following_count', 'mediaRatings']);
+                    $query->withProfileEagerLoad(auth()->user());
                 },
             ])
             ->where('description', '!=', null)
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $reviews->nextPageUrl() ?? '');

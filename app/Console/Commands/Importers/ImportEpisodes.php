@@ -7,6 +7,8 @@ use Illuminate\Console\Command;
 use JsonMachine\Exception\InvalidArgumentException;
 use JsonMachine\Items;
 use JsonMachine\JsonDecoder\ExtJsonDecoder;
+use Laravel\Telescope\Telescope;
+use Pulse;
 
 class ImportEpisodes extends Command
 {
@@ -42,6 +44,9 @@ class ImportEpisodes extends Command
      */
     public function handle(): int
     {
+        Pulse::stopRecording();
+        Telescope::stopRecording();
+
         $file = storage_path('app/episodes.json');
         $fileSize = filesize($file);
         $episodes = Items::fromFile($file, [
@@ -78,6 +83,9 @@ class ImportEpisodes extends Command
         }
 
         $progressBar->finish();
+
+        Pulse::startRecording();
+        Telescope::startRecording();
 
         return Command::SUCCESS;
     }

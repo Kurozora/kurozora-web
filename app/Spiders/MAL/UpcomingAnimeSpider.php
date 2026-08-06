@@ -4,6 +4,9 @@ namespace App\Spiders\MAL;
 
 use App\Models\Anime;
 use App\Processors\MAL\UpcomingAnimeProcessor;
+use App\Spiders\MAL\Middleware\CircuitBreakerMiddleware;
+use App\Spiders\MAL\Middleware\BackoffMiddleware;
+use App\Spiders\MAL\Middleware\RateLimitMiddleware;
 use Generator;
 use RoachPHP\Downloader\DownloaderMiddlewareInterface;
 use RoachPHP\Downloader\Middleware\RequestDeduplicationMiddleware;
@@ -39,6 +42,9 @@ class UpcomingAnimeSpider extends BasicSpider
      */
     public array $downloaderMiddleware = [
         RequestDeduplicationMiddleware::class,
+        CircuitBreakerMiddleware::class,
+        BackoffMiddleware::class,
+        RateLimitMiddleware::class,
         [
             UserAgentMiddleware::class,
             ['userAgent' => 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'],
@@ -97,6 +103,11 @@ class UpcomingAnimeSpider extends BasicSpider
      */
     public function parse(Response $response): Generator
     {
+        if ($response->getStatus() >= 400) {
+            logger()->error('Upcoming Anime;status:' . $response->getStatus());
+            return $this->item([]);
+        }
+
         $ids = $response->filter('table[width="100%"][cellspacing="0"]')
             ->filter('tr')
             ->each(function (Crawler $item) {

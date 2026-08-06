@@ -47,16 +47,19 @@ class Episode extends Component
         $this->episode = $episode->loadMissing([
             'anime' => function (HasOneThrough $hasOneThrough) {
                 $hasOneThrough->with([
+                    'countryOfOrigin',
                     'genres',
                     'studios',
                     'translation',
-                    'orderedVideos'
+                    'tvRating',
+                    'orderedVideos',
+                    'videos',
                 ]);
             },
             'media',
             'mediaStat',
             'translation',
-            'tv_rating',
+            'tvRating',
             'videos',
         ]);
     }
@@ -89,6 +92,19 @@ class Episode extends Component
     public function getAnimeProperty(): ?Anime
     {
         return $this->episode->anime;
+    }
+
+    /**
+     * The Schema.org JSON-LD payload for this page.
+     *
+     * @return array
+     */
+    public function getSchemaProperty(): array
+    {
+        $schema = $this->episode->toSchemaOrg();
+        $schema['@graph'][0]['url'] = route('embed.episodes', $this->episode);
+
+        return $schema;
     }
 
     /**

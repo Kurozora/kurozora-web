@@ -41,7 +41,7 @@ class StudioResourceBasic extends JsonResource
                 'successor' => $this->resource->successor?->name,
                 'about' => $this->resource->about,
                 'address' => $this->resource->address,
-                'tvRating' => $this->resource->tv_rating->only(['name', 'description']),
+                'tvRating' => $this->resource->tvRating->only(['name', 'description']),
                 'stats' => MediaStatsResource::make($this->resource->mediaStat),
                 'socialURLs' => $this->resource->social_urls,
                 'websiteURLs' => $this->resource->website_urls,
@@ -79,7 +79,7 @@ class StudioResourceBasic extends JsonResource
         // Return the array
         return [
             'library' => [
-                'rating' => (double) $givenRating?->rating,
+                'rating' => (float) $givenRating?->rating,
                 'review' => $givenRating?->description,
                 'isFavorited' => (bool) $this->resource->isFavorited,
             ]

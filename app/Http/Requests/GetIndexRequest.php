@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\ValidateIntegerOrPublicID;
 use Illuminate\Foundation\Http\FormRequest;
 
 class GetIndexRequest extends FormRequest
@@ -37,7 +38,7 @@ class GetIndexRequest extends FormRequest
     {
         return [
             'ids' => ['bail', 'nullable', 'array', 'max:25'],
-            'ids.*' => ['bail', 'integer'],
+            'ids.*' => ['bail', new ValidateIntegerOrPublicID()],
         ];
     }
 }

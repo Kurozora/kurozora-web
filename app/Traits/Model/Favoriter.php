@@ -3,6 +3,7 @@
 namespace App\Traits\Model;
 
 use App\Models\UserFavorite;
+use App\Support\UserLibraryTouch;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -75,7 +76,7 @@ trait Favoriter
     }
 
     /**
-     * Favorite the given models.
+     * Favorites the given models.
      *
      * @param Model|Model[] $models
      *
@@ -98,14 +99,27 @@ trait Favoriter
         }
 
         $modelType = $models->first()->getMorphClass();
-        $modelKeys = $models->map(fn($model) => $model->getKey());
+        $now = now();
 
-        $this->favoritedModels($modelType)
-            ->attach($modelKeys);
+        $records = $models->map(fn ($model) => [
+            'user_id' => $this->id,
+            'favorable_type' => $modelType,
+            'favorable_id' => $model->getKey(),
+            'created_at' => $now,
+            'updated_at' => $now,
+        ])->all();
+
+        UserFavorite::upsert(
+            $records,
+            ['user_id', 'favorable_type', 'favorable_id'],
+            ['updated_at']
+        );
+
+        UserLibraryTouch::touch($this->id, $modelType, $models->map->getKey()->all());
     }
 
     /**
-     * Unfavorite the given models.
+     * Removes the user's favorites for the given models.
      *
      * @param Model|Model[] $models
      *
@@ -128,14 +142,20 @@ trait Favoriter
         }
 
         $modelType = $models->first()->getMorphClass();
-        $modelKeys = $models->map(fn($model) => $model->getKey());
+        $modelKeys = $models->map(fn($model) => $model->getKey())->all();
 
-        return (bool) $this->favoritedModels($modelType)
-            ->detach($modelKeys);
+        $affected = (bool) $this->favorites()
+            ->where('favorable_type', '=', $modelType)
+            ->whereIn('favorable_id', $modelKeys)
+            ->delete();
+
+        UserLibraryTouch::touch($this->id, $modelType, $modelKeys);
+
+        return $affected;
     }
 
     /**
-     * Clears the favorites of the given type.
+     * Removes every favorite of the given type.
      *
      * @param string|null $type
      *
@@ -143,11 +163,15 @@ trait Favoriter
      */
     public function clearFavorites(?string $type = null): bool
     {
-        return $this->favorites()
+        $affected = (bool) $this->favorites()
             ->when($type != null, function ($query) use ($type) {
                 $query->where('favorable_type', '=', $type);
             })
-            ->forceDelete();
+            ->delete();
+
+        UserLibraryTouch::touchAll($this->id, $type);
+
+        return $affected;
     }
 
     /**
@@ -179,6 +203,7 @@ trait Favoriter
     {
         return $this->belongsToMany($type, UserFavorite::class, 'user_id', 'favorable_id')
             ->where('favorable_type', '=', $type)
+            ->wherePivotNull('deleted_at')
             ->withTimestamps();
     }
 }

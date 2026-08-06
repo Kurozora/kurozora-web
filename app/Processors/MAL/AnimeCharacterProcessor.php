@@ -47,7 +47,7 @@ final class AnimeCharacterProcessor extends CustomItemProcessor
 //        ]);
 
         foreach ($cast->chunk(100) as $castChunk) {
-            logger()->channel('stderr')->info('🛠 [MAL_ID:ANIME:' . $malID . '] Updating characters');
+            logger()->channel('stderr')->debug('🛠 [MAL_ID:ANIME:' . $malID . '] Updating characters');
 
             $characterIDs = $castChunk->pluck('character.id');
             $characters = Character::whereIn('mal_id', $characterIDs->toArray())
@@ -210,11 +210,11 @@ final class AnimeCharacterProcessor extends CustomItemProcessor
                 }
             });
 
-            logger()->channel('stderr')->info('✅️ [MAL_ID:ANIME:' . $malID . '] Done updating characters');
+            logger()->channel('stderr')->debug('✅️ [MAL_ID:ANIME:' . $malID . '] Done updating characters');
         }
 
         foreach ($staff->chunk(100) as $staffChunk) {
-            logger()->channel('stderr')->info('🛠 [MAL_ID:ANIME:' . $malID . '] Updating staff');
+            logger()->channel('stderr')->debug('🛠 [MAL_ID:ANIME:' . $malID . '] Updating staff');
             $ids = $staffChunk->pluck('id');
             $people = Person::whereIn('mal_id', $ids->toArray())
                 ->get();
@@ -278,7 +278,7 @@ final class AnimeCharacterProcessor extends CustomItemProcessor
                 });
             });
 
-            logger()->channel('stderr')->info('✅️ [MAL_ID:ANIME:' . $malID . '] Done updating staff');
+            logger()->channel('stderr')->debug('✅️ [MAL_ID:ANIME:' . $malID . '] Done updating staff');
         }
 
         logger()->channel('stderr')->info('✅️ [MAL_ID:ANIME:' . $malID . '] Done processing characters');

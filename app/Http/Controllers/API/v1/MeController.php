@@ -9,6 +9,7 @@ use App\Http\Requests\GetLibraryRequest;
 use App\Http\Requests\GetPaginatedRequest;
 use App\Http\Requests\GetUpNextEpisodesRequest;
 use App\Http\Requests\GetUserFavoritesRequest;
+use App\Http\Requests\GetWatchedEpisodesRequest;
 use App\Http\Requests\UpdateProfileRequest;
 use App\Http\Resources\EpisodeResourceIdentity;
 use App\Http\Resources\UserResource;
@@ -35,25 +36,21 @@ class MeController extends Controller
         // Get authenticated session
         $personalAccessToken = auth()->user()
             ->currentAccessToken()
-            ->load(['session_attribute']);
+            ->load(['sessionAttribute']);
 
         $user = $request->user()
             ->load([
-                'badges' => function ($query) {
+                'achievements' => function ($query) {
                     $query->with(['media']);
                 },
                 'media',
-                'sessions' => function ($query) {
-                    $query
-                        ->orderBy('last_activity', 'desc')
-                        ->limit(1);
-                },
+                'latestSession',
             ])
-            ->loadCount(['followers', 'followedModels as following_count', 'mediaRatings'])
+            ->loadCount(['followers', 'following', 'mediaRatings', 'achievements'])
             // Since we already have the latest access token, we
             // simply set the relation here instead of loading
             // the same relation on the user again.
-            ->setRelation('tokens', collect([$personalAccessToken]));
+            ->setRelation('latestToken', $personalAccessToken);
 
         return JSONResult::success([
             'data' => [
@@ -311,6 +308,30 @@ class MeController extends Controller
 
         return JSONResult::success([
             'data' => EpisodeResourceIdentity::collection($upNextEpisodes ?? collect()),
+            'next' => empty($nextPageURL) ? null : $nextPageURL
+        ]);
+    }
+
+    /**
+     * Returns a list of the user's watched episodes.
+     *
+     * @param GetWatchedEpisodesRequest $request
+     *
+     * @return JsonResponse
+     */
+    function watchedEpisodes(GetWatchedEpisodesRequest $request): JsonResponse
+    {
+        $data = $request->validated();
+
+        // Get the watched episodes
+        $watchedEpisodes = auth()->user()?->watched_episodes($data['model_id'] ?? null)
+            ->cursorPaginate($data['limit'] ?? 25);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $watchedEpisodes?->nextPageUrl() ?? '');
+
+        return JSONResult::success([
+            'data' => EpisodeResourceIdentity::collection($watchedEpisodes ?? collect()),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }

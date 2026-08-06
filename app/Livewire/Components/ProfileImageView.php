@@ -2,10 +2,13 @@
 
 namespace App\Livewire\Components;
 
+use App\Enums\UserActivityStatus;
 use App\Models\User;
+use App\Services\Presence\PresenceTracker;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Livewire\Attributes\Computed;
 use Livewire\Component;
 
 class ProfileImageView extends Component
@@ -25,13 +28,52 @@ class ProfileImageView extends Component
     public bool $onProfile;
 
     /**
-     * The component's listeners.
+     * Register listeners for the component.
      *
-     * @var array
+     * @return array
      */
-    protected $listeners = [
-        'refresh-profile-image' => '$refresh',
-    ];
+    public function getListeners(): array
+    {
+        $listeners = ['refresh-profile-image' => '$refresh'];
+
+        if ($this->onProfile) {
+            $listeners['echo:user-status.' . $this->user->id . ',.user.status.changed'] = 'onStatusChanged';
+        }
+
+        return $listeners;
+    }
+
+    /**
+     * Refreshes the cached activity status when a live transition arrives.
+     *
+     * @return void
+     */
+    public function onStatusChanged(): void
+    {
+        unset($this->activityStatus);
+    }
+
+    /**
+     * Returns the user's activity status derived solely from the live presence tracker.
+     *
+     * @return UserActivityStatus
+     */
+    #[Computed]
+    public function activityStatus(): UserActivityStatus
+    {
+        $tracker = app(PresenceTracker::class);
+        $userId = (int) $this->user->id;
+
+        if ($tracker->isUserGloballyOnline($userId)) {
+            return UserActivityStatus::Online();
+        }
+
+        if ($tracker->isSeenRecently($userId)) {
+            return UserActivityStatus::SeenRecently();
+        }
+
+        return UserActivityStatus::Offline();
+    }
 
     /**
      * Prepare the component.
@@ -43,23 +85,7 @@ class ProfileImageView extends Component
     public function mount(User $user, bool $onProfile = false): void
     {
         $this->onProfile = $onProfile;
-
-        if ($onProfile) {
-            $this->user = $user->load([
-                'tokens' => function ($query) {
-                    $query
-                        ->orderBy('last_used_at', 'desc')
-                        ->limit(1);
-                },
-                'sessions' => function ($query) {
-                    $query
-                        ->orderBy('last_activity', 'desc')
-                        ->limit(1);
-                },
-            ]);
-        } else {
-            $this->user = $user;
-        }
+        $this->user = $user;
     }
 
     /**

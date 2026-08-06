@@ -4,6 +4,7 @@ use App\Http\Controllers\API\v1\EpisodeController;
 
 Route::prefix('/episodes')
     ->name('.episodes')
+    ->middleware('cache.headers:private;no_cache;etag')
     ->group(function () {
         Route::get('/', [EpisodeController::class, 'views'])
             ->middleware('auth.kurozora:optional')
@@ -23,7 +24,7 @@ Route::prefix('/episodes')
                     ->middleware('auth.kurozora');
 
                 Route::prefix('rate')
-                    ->middleware('auth.kurozora')
+                    ->middleware(['auth.kurozora', 'user.not-timed-out'])
                     ->group(function () {
                         Route::post('/', [EpisodeController::class, 'rate'])
                             ->name('.rate');

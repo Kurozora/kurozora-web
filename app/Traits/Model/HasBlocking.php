@@ -4,6 +4,7 @@ namespace App\Traits\Model;
 
 use App\Models\User;
 use App\Models\UserBlock;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -25,7 +26,7 @@ trait HasBlocking
      *
      * @return HasMany
      */
-    public function blocked_by(): HasMany
+    public function blockedBy(): HasMany
     {
         return $this->hasMany(UserBlock::class, 'blocked_user_id', 'id');
     }
@@ -82,15 +83,25 @@ trait HasBlocking
 
         return $this->blocked()
             ->where($attributes)
-            ->firstOr(function () use ($attributes) {
+            ->firstOr(function () use ($attributes, $model) {
                 $blockedLoaded = $this->relationLoaded('blocked');
 
                 if ($blockedLoaded) {
                     $this->unsetRelation('blocked');
                 }
 
-                return $this->blocked()
+                $userBlock = $this->blocked()
                     ->create($attributes);
+
+                // Unfollow if following
+                if (method_exists($this, 'following')) {
+                    $this->following()->detach($model->getKey());
+                }
+                if (method_exists($model, 'following')) {
+                    $model->following()->detach($this->getKey());
+                }
+
+                return $userBlock;
             });
     }
 
@@ -141,5 +152,20 @@ trait HasBlocking
         return $this->hasBlocked($model)
             ? $this->unblock($model)
             : $this->block($model);
+    }
+
+    /**
+     * Eloquent builder scope that limits the query to models the given user has not blocked.
+     *
+     * @param Builder $query
+     * @param Model   $user
+     *
+     * @return Builder
+     */
+    public function scopeWhereNotBlocking(Builder $query, Model $user): Builder
+    {
+        return $query->whereDoesntHave('blockedBy', function (Builder $query) use ($user): Builder {
+            return $query->where('user_id', '=', $user->getKey());
+        });
     }
 }

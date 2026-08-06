@@ -22,6 +22,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 
 class UserReminderController extends Controller
@@ -56,7 +57,7 @@ class UserReminderController extends Controller
                     ->where(UserLibrary::TABLE_NAME . '.user_id', '=', $user->id)
                     ->where(UserLibrary::TABLE_NAME . '.is_hidden', '=', false);
             })
-            ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin', 'mediaRatings' => function ($query) use ($user) {
+            ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin', 'mediaRatings' => function ($query) use ($user) {
                 $query->where([
                     ['user_id', '=', $user->id],
                 ]);
@@ -76,7 +77,7 @@ class UserReminderController extends Controller
                     },
                 ]);
             })
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $userReminders->nextPageUrl() ?? '');
@@ -135,10 +136,16 @@ class UserReminderController extends Controller
         ])
             ->validate();
 
+        $isReminded = DB::transaction(function () use ($user, $models) {
+            $result = $user->toggleReminder($models);
+            $user->bumpStateVersion();
+            return $result;
+        });
+
         // Successful response
         return JSONResult::success([
             'data' => [
-                'isReminded' => $user->toggleReminder($models),
+                'isReminded' => $isReminded,
             ],
         ]);
     }

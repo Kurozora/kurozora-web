@@ -20,11 +20,15 @@ use App\Nova\Episode;
 use App\Nova\EpisodeTranslation;
 use App\Nova\ExploreCategory;
 use App\Nova\ExploreCategoryItem;
+use App\Nova\FeedMessage;
+use App\Nova\FeedMessageHashtag;
 use App\Nova\Game;
 use App\Nova\GameCast;
 use App\Nova\GameTranslation;
 use App\Nova\Genre;
+use App\Nova\Hashtag;
 use App\Nova\Language;
+use App\Nova\LinkPreview;
 use App\Nova\Manga;
 use App\Nova\MangaCast;
 use App\Nova\MangaTranslation;
@@ -39,12 +43,19 @@ use App\Nova\MediaStudio;
 use App\Nova\MediaTag;
 use App\Nova\MediaTheme;
 use App\Nova\MediaType;
+use App\Nova\Mention;
+use App\Nova\Minigames\Kotodama\DailyPuzzle;
+use App\Nova\Minigames\Kotodama\Game as KotodamaGame;
+use App\Nova\Minigames\Kotodama\Word;
 use App\Nova\Notification;
 use App\Nova\ParentalGuideEntry;
 use App\Nova\Permission;
 use App\Nova\Person;
 use App\Nova\PersonalAccessToken;
 use App\Nova\Platform;
+use App\Nova\ReconciliationRow;
+use App\Nova\ReconciliationRun;
+use App\Nova\ReconciliationUserImpact;
 use App\Nova\Relation;
 use App\Nova\Role;
 use App\Nova\Season;
@@ -52,6 +63,9 @@ use App\Nova\SeasonTranslation;
 use App\Nova\Session;
 use App\Nova\SessionAttribute;
 use App\Nova\Song;
+use App\Nova\SongLyric;
+use App\Nova\SongLyricLine;
+use App\Nova\SongLyricWord;
 use App\Nova\SongTranslation;
 use App\Nova\Source;
 use App\Nova\StaffRole;
@@ -59,6 +73,8 @@ use App\Nova\Status;
 use App\Nova\Studio;
 use App\Nova\Tag;
 use App\Nova\Theme;
+use App\Nova\Timeout;
+use App\Nova\TimeoutAppeal;
 use App\Nova\TvRating;
 use App\Nova\User;
 use App\Nova\UserBlock;
@@ -165,6 +181,9 @@ if (class_exists('Laravel\Nova\NovaApplicationServiceProvider')) {
                         collect([
                             Song::class,
                             SongTranslation::class,
+                            SongLyric::class,
+                            SongLyricLine::class,
+                            SongLyricWord::class
                         ])->map(fn($resource) => MenuItem::resource($resource))
                     )
                         ->collapsable()
@@ -290,6 +309,8 @@ if (class_exists('Laravel\Nova\NovaApplicationServiceProvider')) {
                             UserFavorite::class,
                             UserLibrary::class,
                             UserReminder::class,
+                            Timeout::class,
+                            TimeoutAppeal::class,
                             Notification::class,
                             Permission::class,
                             Role::class,
@@ -308,6 +329,31 @@ if (class_exists('Laravel\Nova\NovaApplicationServiceProvider')) {
                     )
                         ->collapsable()
                         ->icon('arrow-left-end-on-rectangle'),
+
+                    MenuSection::make(
+                        __('Store Reconciliation'),
+                        collect([
+                            ReconciliationRun::class,
+                            ReconciliationRow::class,
+                            ReconciliationUserImpact::class,
+                        ])->map(fn($resource) => MenuItem::resource($resource))
+                    )
+                        ->collapsable()
+                        ->icon('currency-dollar')
+                        ->canSee(function ($request) {
+                            return $request->user()->hasRole('superAdmin');
+                        }),
+
+                    MenuSection::make(
+                        __('Minigames'),
+                        collect([
+                            Word::class,
+                            DailyPuzzle::class,
+                            KotodamaGame::class,
+                        ])->map(fn($resource) => MenuItem::resource($resource))
+                    )
+                        ->collapsable()
+                        ->icon('rectangle-group'),
 
                     collect($this->tools())
                         ->map(fn($tool) => $tool->menu($request)),

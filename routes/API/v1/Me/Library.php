@@ -4,7 +4,7 @@ use App\Http\Controllers\API\v1\LibraryController;
 use App\Http\Controllers\API\v1\MeController;
 
 Route::prefix('/library')
-    ->middleware('auth.kurozora')
+    ->middleware(['auth.kurozora', 'throttle:api.library'])
     ->name('.library')
     ->group(function () {
         Route::get('/', [MeController::class, 'getLibrary'])
@@ -21,6 +21,9 @@ Route::prefix('/library')
 
         Route::post('/import', [LibraryController::class, 'import'])
             ->name('.import');
+
+        Route::post('/sync', [LibraryController::class, 'sync'])
+            ->name('.sync');
 
         Route::post('/update', [LibraryController::class, 'update'])
             ->name('.update');

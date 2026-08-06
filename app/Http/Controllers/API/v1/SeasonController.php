@@ -60,7 +60,7 @@ class SeasonController extends Controller
     {
         $data = $request->validated();
 
-        $season = Season::whereIn('id', $data['ids'] ?? []);
+        $season = Season::whereIn('public_id', $data['ids'] ?? []);
         $season->with([
             'anime' => function ($query) {
                 $query->withoutGlobalScopes();
@@ -96,7 +96,7 @@ class SeasonController extends Controller
 
         // Get the episodes
         $episodes = $season->episodes()
-            ->select('id', 'number_total')
+            ->select('public_id', 'number_total')
             ->orderBy('number_total');
 
         // Fillers

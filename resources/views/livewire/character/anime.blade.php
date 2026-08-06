@@ -4,12 +4,12 @@
     </x-slot:title>
 
     <x-slot:description>
-        {{ __('Discover the extensive list of anime that :x appears in only on :y, the largest, free online anime, manga, game & music database in the world.', ['x', $character->name, 'y' => config('app.name')]) }}
+        {{ __('Discover the extensive list of anime that :x appears in only on :y, the largest, free online anime, manga, game & music database in the world.', ['x' => config('app.name'), 'x', $character->name, 'y' => config('app.name')]) }}
     </x-slot:description>
 
     <x-slot:meta>
         <meta property="og:title" content="Anime | {{ $character->name }} — {{ config('app.name') }}" />
-        <meta property="og:description" content="{{ __('Discover the extensive list of anime that :x appears in only on :y, the largest, free online anime, manga, game & music database in the world.', ['x', $character->name, 'y' => config('app.name')]) }}" />
+        <meta property="og:description" content="{{ __('Discover the extensive list of anime that :x appears in only on :y, the largest, free online anime, manga, game & music database in the world.', ['x' => config('app.name'), 'x', $character->name, 'y' => config('app.name')]) }}" />
         <meta property="og:image" content="{{ $character->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/character_poster.webp') }}" />
         <meta property="og:type" content="profile" />
         <meta property="og:profile:username" content="{{ $character->name }}" />
@@ -20,19 +20,12 @@
         characters/{{ $character->id }}/shows
     </x-slot:appArgument>
 
-    <div class="pt-4 pb-6" wire:init="loadPage">
-        <section class="mb-4 xl:safe-area-inset">
-            <div>
-                <div class="flex gap-1 pl-4 pr-4">
-                    <div class="flex flex-wrap items-center w-full">
-                        <h1 class="text-2xl font-bold">{{ __(':x’s Anime', ['x' => $character->name]) }}</h1>
-                    </div>
-
-                    <div class="flex flex-wrap flex-1 justify-end items-center w-full">
-                    </div>
-                </div>
-            </div>
-        </section>
+    <div class="pb-6" wire:init="loadPage">
+        <x-back-link
+            :url="route('characters.details', $character)"
+            :label="$character->name"
+            :title="__(':x’s Anime', ['x' => $character->name])"
+        />
 
         @if ($readyToLoad)
             <section class="xl:safe-area-inset">

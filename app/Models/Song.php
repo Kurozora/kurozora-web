@@ -7,15 +7,15 @@ use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\Actionable;
 use App\Traits\Model\HasMediaRatings;
 use App\Traits\Model\HasMediaStat;
+use App\Traits\Model\HasTranslations;
+use App\Traits\Model\HasTvRatedRelations;
 use App\Traits\Model\HasViews;
 use App\Traits\SearchFilterable;
-use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Scout\Searchable;
 use Spatie\Activitylog\LogOptions;
@@ -33,14 +33,15 @@ class Song extends KModel implements HasMedia, Sitemapable
         HasFactory,
         HasMediaStat,
         HasSlug,
+        HasTranslations,
+        HasTvRatedRelations,
         HasViews,
         InteractsWithMedia,
         InteractsWithMediaExtension,
         LogsActivity,
         Searchable,
         SearchFilterable,
-        SoftDeletes,
-        Translatable;
+        SoftDeletes;
     use HasMediaRatings {
         mediaRatings as protected parentMediaRatings;
     }
@@ -181,6 +182,16 @@ class Song extends KModel implements HasMedia, Sitemapable
     }
 
     /**
+     * Get the song's synced lyrics across all sources.
+     *
+     * @return HasMany
+     */
+    public function lyrics(): HasMany
+    {
+        return $this->hasMany(SongLyric::class);
+    }
+
+    /**
      * Get the model's ratings.
      *
      * @return MorphMany
@@ -194,25 +205,25 @@ class Song extends KModel implements HasMedia, Sitemapable
     /**
      * Get the anime-songs relationship.
      *
-     * @return BelongsToMany
+     * @return MorphToMany
      */
-    public function anime(): BelongsToMany
+    public function anime(): MorphToMany
     {
-        return $this->belongsToMany(Anime::class, MediaSong::class, 'song_id', 'model_id')
-            ->where('model_type', '=', Anime::class)
-            ->withTimestamps();
+        return $this->viewableViaParent(
+            $this->morphedByMany(Anime::class, 'model', MediaSong::class),
+        )->withTimestamps();
     }
 
     /**
      * Get the game-songs relationship.
      *
-     * @return BelongsToMany
+     * @return MorphToMany
      */
-    public function games(): BelongsToMany
+    public function games(): MorphToMany
     {
-        return $this->belongsToMany(Game::class, MediaSong::class, 'song_id', 'model_id')
-            ->where('model_type', '=', Game::class)
-            ->withTimestamps();
+        return $this->viewableViaParent(
+            $this->morphedByMany(Game::class, 'model', MediaSong::class),
+        )->withTimestamps();
     }
 
     /**
@@ -227,23 +238,25 @@ class Song extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * The model's translation relationship.
+     * Bootstrap the model and its traits.
      *
-     * @return HasOne
+     * @return void
      */
-    public function translation(): HasOne
+    protected static function booted(): void
     {
-        $locale = $this->getLocaleKey();
-        if ($this->useFallback()) {
-            $countryFallbackLocale = $this->getFallbackLocale($locale);
-            $locales = array_unique([$locale, $countryFallbackLocale, $this->getFallbackLocale()]);
-
-            return $this->hasOne(SongTranslation::class)
-                ->whereIn($this->getTranslationsTable().'.'.$this->getLocaleKey(), $locales);
-        }
-
-        return $this->hasOne(SongTranslation::class)
-            ->where($this->getTranslationsTable().'.'.$this->getLocaleKey(), $locale);
+        static::saved(function (Song $song): void {
+            foreach (['en', 'ja'] as $locale) {
+                SongTranslation::firstOrCreate(
+                    [
+                        'song_id' => $song->id,
+                        'locale' => $locale,
+                    ],
+                    [
+                        'title' => $song->original_title,
+                    ]
+                );
+            }
+        });
     }
 
     /**

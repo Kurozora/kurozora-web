@@ -3,9 +3,13 @@
 namespace App\Spiders\MAL;
 
 use App\Processors\MAL\PersonProcessor;
+use App\Spiders\MAL\Middleware\CircuitBreakerMiddleware;
+use App\Spiders\MAL\Middleware\BackoffMiddleware;
+use App\Spiders\MAL\Middleware\RateLimitMiddleware;
 use App\Spiders\MAL\Models\PersonItem;
 use Exception;
 use Generator;
+use Laravel\Octane\Exceptions\DdException;
 use RoachPHP\Downloader\Middleware\RequestDeduplicationMiddleware;
 use RoachPHP\Downloader\Middleware\UserAgentMiddleware;
 use RoachPHP\Extensions\LoggerExtension;
@@ -23,6 +27,9 @@ class PersonSpider extends BasicSpider
 
     public array $downloaderMiddleware = [
         RequestDeduplicationMiddleware::class,
+        CircuitBreakerMiddleware::class,
+        BackoffMiddleware::class,
+        RateLimitMiddleware::class,
         [
             UserAgentMiddleware::class,
             ['userAgent' => 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'],
@@ -61,6 +68,7 @@ class PersonSpider extends BasicSpider
 
     /**
      * @return Generator<ParseResult>
+     * @throws DdException
      */
     public function parse(Response $response): Generator
     {
@@ -71,13 +79,19 @@ class PersonSpider extends BasicSpider
             return $this->item([]);
         }
 
-        logger()->channel('stderr')->info('🕷 [MAL_ID:PERSON:' . $id . '] Parsing response');
+        logger()->channel('stderr')->debug('🕷 [MAL_ID:PERSON:' . $id . '] Parsing response');
+
+        $nameNode = $response->filter('h1.title-name');
+
+        if (!$nameNode->count()) {
+            logger()->error('Person: ' . $id . ';status:' . $response->getStatus() . ';missing-title-node');
+            return $this->item([]);
+        }
 
         $imageURL = $response->filter('meta[property="og:image"]')
             ->attr('content');
 
-        $name = $response->filter('h1.title-name')
-            ->text();
+        $name = $nameNode->text();
 
         try {
             $element = $response->filter('span:contains(\'Given name:\')');

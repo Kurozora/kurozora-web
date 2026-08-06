@@ -2,115 +2,50 @@
 
 namespace App\Livewire;
 
+use App\Traits\Livewire\ListensForUserNotifications;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Collection;
+use Livewire\Attributes\Computed;
 use Livewire\Component;
 
 class NavNotification extends Component
 {
-    /**
-     * Whether the notification dropdown is open.
-     *
-     * @var bool $isNotificationOpen
-     */
-    public bool $isNotificationOpen = false;
+    use ListensForUserNotifications;
 
     /**
-     * The latest notification id.
+     * Register listeners for the component.
      *
-     * @var string|null
+     * @return array
      */
-    public ?string $latestNotificationId = null;
-
-    /**
-     * Whether there are new notifications.
-     *
-     * @var bool
-     */
-    public bool $newNotifications = false;
-
-    /**
-     * The component's listeners.
-     *
-     * @var array
-     */
-    protected $listeners = [
-        'is-notifications-open' => 'handleIsNotificationOpen',
-    ];
-
-    /**
-     * Prepare the component.
-     *
-     * @return void
-     */
-    public function mount(): void
-    {}
-
-    /**
-     * Handle the `is-notifications-open` event.
-     *
-     * @param bool $isOpen
-     *
-     * @return void
-     */
-    public function handleIsNotificationOpen(bool $isOpen): void
+    public function getListeners(): array
     {
-        $this->isNotificationOpen = $isOpen;
-        $this->newNotifications = false;
+        return $this->userNotificationListeners('onNotificationReceived');
     }
 
     /**
-     * Returns the list of user's notifications.
+     * Refresh the unread indicator when a sibling client mutates notifications.
      *
-     * @return Collection
+     * @return void
      */
-    public function getNotificationsProperty(): Collection
+    public function onNotificationReceived(): void
+    {
+        unset($this->hasUnreadNotifications);
+    }
+
+    /**
+     * Returns whether the user has any unread notifications.
+     *
+     * @return bool
+     */
+    #[Computed]
+    public function hasUnreadNotifications(): bool
     {
         if (!auth()->check()) {
-            return collect();
+            return false;
         }
 
-        $notifications = auth()->user()
-            ->notifications()
-            ->with(['notifier'])
-            ->get();
-        $this->latestNotificationId = $notifications->last->id;
-        return $notifications;
-    }
-
-    /**
-     * Polls for new notifications.
-     *
-     * @return void
-     */
-    public function pollForNewNotifications(): void
-    {
-        $notifications = auth()->user()
-            ->notifications()
-            ->when($this->latestNotificationId, function ($query) {
-                return $query->where('id', '>', $this->latestNotificationId);
-            })
-            ->orderBy('id')
-            ->exists();
-
-        if ($notifications) {
-            $this->newNotifications = $notifications;
-            $this->setLatestNotificationId();
-        }
-    }
-
-    /**
-     * Sets the latest notification id.
-     *
-     * @return void
-     */
-    function setLatestNotificationId(): void
-    {
-        $this->latestNotificationId = auth()->user()
-            ->notifications()
-            ->max('id');
+        return auth()->user()->unreadNotifications()->exists();
     }
 
     /**

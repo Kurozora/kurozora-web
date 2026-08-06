@@ -5,6 +5,8 @@ namespace App\Console\Commands\Calculators;
 use App\Jobs\UpdateParentalGuideStatsJob;
 use App\Services\ParentalGuideService;
 use Illuminate\Console\Command;
+use Laravel\Telescope\Telescope;
+use Pulse;
 
 class CalculateParentalGuideStats extends Command
 {
@@ -32,6 +34,9 @@ class CalculateParentalGuideStats extends Command
      */
     public function handle(): int
     {
+        Pulse::stopRecording();
+        Telescope::stopRecording();
+
         $ids = collect(explode(',', $this->argument('ids')))
             ->map(fn ($id) => (int) trim($id))
             ->filter();
@@ -56,6 +61,10 @@ class CalculateParentalGuideStats extends Command
         }
 
         $this->info('Done.');
+
+        Pulse::startRecording();
+        Telescope::startRecording();
+
         return self::SUCCESS;
     }
 }

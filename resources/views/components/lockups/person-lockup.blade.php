@@ -2,6 +2,7 @@
 
 @php
     $class = $isRow ? 'pb-2 shrink-0 snap-normal snap-center' : '';
+    $profileMedia = $person->getFirstMedia(\App\Enums\MediaCollection::Profile);
 @endphp
 
 <div {{ $attributes->merge(['class' => 'relative flex-grow w-28 ' . $class]) }}>
@@ -10,9 +11,9 @@
     <div class="flex flex-col">
         <picture
             class="relative aspect-square rounded-full shadow-md overflow-hidden"
-            style="background-color: {{ $person->getFirstMedia(\App\Enums\MediaCollection::Profile)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
+            style="background-color: {{ $profileMedia?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
         >
-            <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $person->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/person_poster.webp') }}" alt="{{ $person->full_name }} Profile Image" title="{{ $person->full_name }}">
+            <img class="w-full h-full object-cover lazyload" style="object-position: {{ $profileMedia?->objectPositionStyle() ?? 'center' }};" data-sizes="auto" data-src="{{ $person->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/person_poster.webp') }}" alt="{{ $person->full_name }} Profile Image" title="{{ $person->full_name }}">
 
             <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-full"></div>
         </picture>

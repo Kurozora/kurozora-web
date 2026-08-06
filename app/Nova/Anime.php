@@ -17,6 +17,7 @@ use App\Nova\Actions\ScrapeUpcomingAnime;
 use App\Nova\Actions\UpdateAiringAnime;
 use App\Nova\Filters\IsNsfw;
 use App\Nova\Filters\StartedAtYear;
+use App\Nova\Lenses\DesyncedEpisodeCount;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
@@ -81,9 +82,9 @@ class Anime extends Resource
      */
     public static $with = [
         'media',
-        'media_type',
-        'tv_rating',
-        'country_of_origin',
+        'mediaType',
+        'tvRating',
+        'countryOfOrigin',
         'status',
         'source',
         'translation'
@@ -295,17 +296,17 @@ class Anime extends Resource
                 ->required()
                 ->help('The adaptation source of the anime. For example Manga, Game, Original, etc. If no source is available, especially for older anime, then choose Unknown.'),
 
-            BelongsTo::make('Media Type', 'media_type')
+            BelongsTo::make('Media Type')
                 ->sortable()
                 ->required()
                 ->help('The general type of the anime. For example TV, Movie, Music, etc.'),
 
-            BelongsTo::make('TV rating', 'tv_rating')
+            BelongsTo::make('TV rating', 'tvRating')
                 ->sortable()
                 ->required()
                 ->help('The TV rating of the anime. For example NR, G, PG-12, etc.'),
 
-            BelongsTo::make('Country of Origin', 'country_of_origin', Country::class)
+            BelongsTo::make('Country of Origin', 'countryOfOrigin', Country::class)
                 ->sortable()
                 ->required()
                 ->help('The country the anime originated from. For example Japan, Korea, China and the US.'),
@@ -469,7 +470,9 @@ class Anime extends Resource
      */
     public function lenses(NovaRequest $request): array
     {
-        return [];
+        return [
+            new DesyncedEpisodeCount
+        ];
     }
 
     /**

@@ -45,7 +45,6 @@ return new class extends Migration
 
         Schema::table(MediaStat::TABLE_NAME, function (Blueprint $table) {
             // Set index key constraints
-            $table->index('deleted_at');
             $table->index(['rating_average', 'rating_count']);
 
             // Set unique key constraints

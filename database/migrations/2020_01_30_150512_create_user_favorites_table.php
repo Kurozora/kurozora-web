@@ -23,6 +23,12 @@ return new class extends Migration
         });
 
         Schema::table(UserFavorite::TABLE_NAME, function (Blueprint $table) {
+            // Set index key constraints
+            $table->index(['user_id', 'favorable_type', 'updated_at', 'id']);
+
+            // Set unique key constraints
+            $table->unique(['user_id', 'favorable_type', 'favorable_id'], 'user_favorites_user_favorable_unique');
+
             // Set foreign key constraints
             $table->foreign('user_id')
                 ->references('id')

@@ -23,6 +23,10 @@
                     <li class="mt-2">
                         <x-footer-link href="{{ route('anime.seasons.archive') }}" wire:navigate>{{ __('Anime Archive') }}</x-footer-link>
                     </li>
+
+                    <li class="mt-2">
+                        <x-footer-link href="{{ route('museum.anime') }}" wire:navigate>{{ __('Anime Museum') }}</x-footer-link>
+                    </li>
                 </ul>
             </div>
 
@@ -48,6 +52,10 @@
                     <li class="mt-2">
                         <x-footer-link href="{{ route('manga.seasons.archive') }}" wire:navigate>{{ __('Manga Archive') }}</x-footer-link>
                     </li>
+
+                    <li class="mt-2">
+                        <x-footer-link href="{{ route('museum.manga') }}" wire:navigate>{{ __('Manga Museum') }}</x-footer-link>
+                    </li>
                 </ul>
             </div>
 
@@ -68,6 +76,10 @@
 
                     <li class="mt-2">
                         <x-footer-link href="{{ route('games.seasons.archive') }}" wire:navigate>{{ __('Games Archive') }}</x-footer-link>
+                    </li>
+
+                    <li class="mt-2">
+                        <x-footer-link href="{{ route('museum.games') }}" wire:navigate>{{ __('Games Museum') }}</x-footer-link>
                     </li>
                 </ul>
             </div>
@@ -142,7 +154,11 @@
                 <h5 class="uppercase text-sm mb-2 font-semibold">{{ __('Services') }}</h5>
                 <ul class="m-0 mb-4 list-none">
                     <li class="mt-2">
-                        <x-footer-link href="#">{{ __(':x+', ['x' => config('app.name')]) }}</x-footer-link>
+                        <x-footer-link href="{{ route('kurozora-plus') }}" wire:navigate>{{ __(':x+', ['x' => config('app.name')]) }}</x-footer-link>
+                    </li>
+
+                    <li class="mt-2">
+                        <x-footer-link href="{{ route('tip-jar') }}" wire:navigate>{{ __('Tip Jar') }}</x-footer-link>
                     </li>
 
                     <li class="mt-2">
@@ -181,6 +197,12 @@
                     <li class="mt-2">
                         <x-footer-link href="{{ route('misc.press-kit') }}" wire:navigate>{{ __('Press-Kit') }}</x-footer-link>
                     </li>
+
+                    @auth
+                        <li class="mt-2">
+                            <x-footer-link href="{{ route('compare.index') }}" wire:navigate>{{ __(':x vs. Other Services', ['x' => config('app.name')]) }}</x-footer-link>
+                        </li>
+                    @endauth
                 </ul>
             </div>
 
@@ -250,6 +272,21 @@
                     </li>
                 </ul>
             </div>
+
+            @guest
+                <div class="w-1/2 sm:w-1/3 text-center md:w-1/4 md:text-left lg:w-1/6">
+                    <h5 class="uppercase text-sm mb-2 font-semibold">{{ __('New Here?') }}</h5>
+                    <ul class="m-0 mb-4 list-none">
+                        <li class="mt-2">
+                            <p class="text-sm text-secondary">{{ __('See how :x compares to the tracker you use today.', ['x' => config('app.name')]) }}</p>
+                        </li>
+
+                        <li class="mt-2">
+                            <x-link-button href="{{ route('compare.index') }}" wire:navigate>{{ __('Compare Services') }}</x-link-button>
+                        </li>
+                    </ul>
+                </div>
+            @endguest
 
             <x-hr class="mb-2" />
 

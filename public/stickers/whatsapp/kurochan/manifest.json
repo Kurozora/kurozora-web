@@ -1,0 +1,204 @@
+{
+    "identifier": "app.kurozora.stickers.kurochan",
+    "name": "Kuro-chan",
+    "publisher": "Kurozora",
+    "publisher_email": "support@kurozora.app",
+    "publisher_website": "https://kurozora.app",
+    "privacy_policy_website": "https://kurozora.app/legal/privacy-policy",
+    "license_agreement_website": "https://kurozora.app/legal/terms-of-service",
+    "tray_image_file": "tray.png",
+    "animated_sticker_pack": false,
+    "ios_app_store_link": "https://apps.apple.com/us/app/kurozora/id1476153872",
+    "stickers": [
+        {
+            "image_file": "heart.webp",
+            "emojis": [
+                "❤️",
+                "🥰"
+            ],
+            "accessibility_text": "Kuro-chan smiling while holding a red heart"
+        },
+        {
+            "image_file": "angry.webp",
+            "emojis": [
+                "😠",
+                "💢"
+            ],
+            "accessibility_text": "Kuro-chan with a furrowed brow and an angry expression"
+        },
+        {
+            "image_file": "confused.webp",
+            "emojis": [
+                "😕",
+                "🤔"
+            ],
+            "accessibility_text": "Kuro-chan tilting head with a puzzled look"
+        },
+        {
+            "image_file": "embarrassed.webp",
+            "emojis": [
+                "😳",
+                "🙈"
+            ],
+            "accessibility_text": "Kuro-chan with flushed cheeks looking embarrassed"
+        },
+        {
+            "image_file": "excited.webp",
+            "emojis": [
+                "🤩",
+                "✨"
+            ],
+            "accessibility_text": "Kuro-chan with sparkling eyes looking excited"
+        },
+        {
+            "image_file": "facepalm.webp",
+            "emojis": [
+                "🤦",
+                "😩"
+            ],
+            "accessibility_text": "Kuro-chan covering face with one hand in dismay"
+        },
+        {
+            "image_file": "flop.webp",
+            "emojis": [
+                "😩",
+                "💀"
+            ],
+            "accessibility_text": "Kuro-chan flopped on the ground looking exhausted"
+        },
+        {
+            "image_file": "good-morning.webp",
+            "emojis": [
+                "☀️",
+                "🌅"
+            ],
+            "accessibility_text": "Kuro-chan stretching with a sunny good-morning greeting"
+        },
+        {
+            "image_file": "good-night.webp",
+            "emojis": [
+                "🌙",
+                "😴"
+            ],
+            "accessibility_text": "Kuro-chan curled up sleepy with a crescent moon"
+        },
+        {
+            "image_file": "hehe.webp",
+            "emojis": [
+                "😏",
+                "☺️"
+            ],
+            "accessibility_text": "Kuro-chan giggling with a sly smile"
+        },
+        {
+            "image_file": "holding-back-tears.webp",
+            "emojis": [
+                "🥲",
+                "😢"
+            ],
+            "accessibility_text": "Kuro-chan with watery eyes holding back tears"
+        },
+        {
+            "image_file": "kawaii.webp",
+            "emojis": [
+                "🥰",
+                "✨"
+            ],
+            "accessibility_text": "Kuro-chan posing cutely with sparkles"
+        },
+        {
+            "image_file": "meow.webp",
+            "emojis": [
+                "🐱",
+                "😻"
+            ],
+            "accessibility_text": "Kuro-chan making a cat-like meow expression"
+        },
+        {
+            "image_file": "pout.webp",
+            "emojis": [
+                "😤",
+                "😒"
+            ],
+            "accessibility_text": "Kuro-chan puffing cheeks in a pout"
+        },
+        {
+            "image_file": "salute.webp",
+            "emojis": [
+                "🫡"
+            ],
+            "accessibility_text": "Kuro-chan giving a crisp salute"
+        },
+        {
+            "image_file": "shock.webp",
+            "emojis": [
+                "😱",
+                "😨"
+            ],
+            "accessibility_text": "Kuro-chan wide-eyed and gasping in shock"
+        },
+        {
+            "image_file": "shrug.webp",
+            "emojis": [
+                "🤷"
+            ],
+            "accessibility_text": "Kuro-chan shrugging shoulders with palms up"
+        },
+        {
+            "image_file": "sob.webp",
+            "emojis": [
+                "😭",
+                "💔"
+            ],
+            "accessibility_text": "Kuro-chan crying with streaming tears"
+        },
+        {
+            "image_file": "tada.webp",
+            "emojis": [
+                "🎉",
+                "🎊"
+            ],
+            "accessibility_text": "Kuro-chan cheering with arms raised in celebration"
+        },
+        {
+            "image_file": "tehe.webp",
+            "emojis": [
+                "😋",
+                "😝"
+            ],
+            "accessibility_text": "Kuro-chan winking with a playful tehe expression"
+        },
+        {
+            "image_file": "thinking.webp",
+            "emojis": [
+                "🤔",
+                "💭"
+            ],
+            "accessibility_text": "Kuro-chan with a hand on chin pondering"
+        },
+        {
+            "image_file": "thirsty.webp",
+            "emojis": [
+                "🥵",
+                "🤤"
+            ],
+            "accessibility_text": "Kuro-chan with a flustered, thirsty expression"
+        },
+        {
+            "image_file": "thumbs-up.webp",
+            "emojis": [
+                "👍",
+                "✨"
+            ],
+            "accessibility_text": "Kuro-chan giving an approving thumbs up"
+        },
+        {
+            "image_file": "wow.webp",
+            "emojis": [
+                "😮",
+                "🤯"
+            ],
+            "accessibility_text": "Kuro-chan mouth agape in amazement"
+        }
+    ]
+}

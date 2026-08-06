@@ -100,11 +100,28 @@ return [
             \App\Listeners\AppStore\Subscribed::class
         ],
 
-        \Imdhemy\Purchases\Events\AppStore\Cancel::class => [],
-        \Imdhemy\Purchases\Events\AppStore\DidRecover::class => [],
-        \Imdhemy\Purchases\Events\AppStore\InitialBuy::class => [],
-        \Imdhemy\Purchases\Events\AppStore\InteractiveRenewal::class => [],
-        \Imdhemy\Purchases\Events\AppStore\PriceIncreaseConsent::class => [],
+        \Imdhemy\Purchases\Events\AppStore\Cancel::class => [
+            \App\Listeners\AppStore\Cancel::class
+        ],
+        \Imdhemy\Purchases\Events\AppStore\DidRecover::class => [
+            \App\Listeners\AppStore\DidRecover::class
+        ],
+        \Imdhemy\Purchases\Events\AppStore\InitialBuy::class => [
+            \App\Listeners\AppStore\InitialBuy::class
+        ],
+        \Imdhemy\Purchases\Events\AppStore\InteractiveRenewal::class => [
+            \App\Listeners\AppStore\InteractiveRenewal::class
+        ],
+        \Imdhemy\Purchases\Events\AppStore\PriceIncreaseConsent::class => [
+            \App\Listeners\AppStore\PriceIncrease::class
+        ],
+
+        \Imdhemy\Purchases\Events\AppStore\ConsumptionRequest::class => [
+            \App\Listeners\AppStore\ConsumptionRequest::class
+        ],
+        \Imdhemy\Purchases\Events\AppStore\OneTimeCharge::class => [
+            \App\Listeners\AppStore\OneTimeCharge::class
+        ],
 
         /*
          |--------------------------------------------------------------------------

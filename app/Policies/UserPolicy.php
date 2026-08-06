@@ -20,7 +20,7 @@ class UserPolicy
      */
     public function follow(User $user, User $model): bool
     {
-        return $user->id !== $model->id;
+        return $user->id !== $model->id && $user->canInteractWith($model);
     }
 
     /**
@@ -58,7 +58,7 @@ class UserPolicy
      */
     public function view(?User $user, User $model): Response|bool
     {
-        return $user === null || !$model->hasBlocked($user);
+        return true;
     }
 
 //    /**

@@ -29,8 +29,9 @@ class AccessTokenResource extends JsonResource
             'type' => 'access-token',
             'href' => route('api.me.access-tokens.details', $this->resource, false),
             'attributes' => [
-                'ipAddress' => $this->resource->session_attribute->ip_address,
+                'ipAddress' => $this->resource->sessionAttribute->ip_address,
                 'lastValidatedAt' => $this->resource->last_used_at?->timestamp,
+                'appSource' => $this->resource->sessionAttribute?->app_source,
             ]
         ];
 
@@ -38,10 +39,10 @@ class AccessTokenResource extends JsonResource
         $relationships = [
             'relationships' => [
                 'platform' => [
-                    'data' => PlatformResource::collection([$this->resource->session_attribute])
+                    'data' => PlatformResource::collection([$this->resource->sessionAttribute])
                 ],
                 'location' => [
-                    'data' => LocationResource::collection([$this->resource->session_attribute])
+                    'data' => LocationResource::collection([$this->resource->sessionAttribute])
                 ]
             ]
         ];

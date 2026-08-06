@@ -5,8 +5,10 @@
 /vendor
 
 # Laravel
-/public/build
 /public/hot
+/public/offline.html
+/public/service-worker.js
+/public/service-worker.js.map
 /public/storage
 /public/sitemaps
 /public/images/user_uploads
@@ -20,13 +22,20 @@
 /storage/framework/testing/*
 /storage/framework/views/*
 /storage/logs/*.log
-.env
-.env.backup
-.env.production
+.env*
+.build
+build
 
 # AWS
 .ebextensions
 .platform
+
+# Terraform
+infra
+**/.terraform
+**/.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
 
 # Git
 .git
@@ -35,6 +44,9 @@
 # Docker
 docker-compose.yml
 docker-compose.override.yml
+
+# Octane (FrankenPHP local binary)
+/frankenphp
 
 # Homestead
 Homestead.json
@@ -53,10 +65,6 @@ yarn-error.log
 
 # PHP-CS-Fixer
 .php-cs-fixer.cache
-
-# PHP-Stan
-build
-phpstan*.neon
 
 # PHPStorm
 /.fleet

@@ -3,44 +3,35 @@
 namespace App\Listeners\AppStore;
 
 use Imdhemy\AppStore\ServerNotifications\V2DecodedPayload;
+use Imdhemy\Purchases\ServerNotifications\AppStoreV2ServerNotification;
 
 class Expired extends AppStoreListener
 {
-    /**
-     * Handle the received Cancel subscription event.
-     *
-     * @param \Imdhemy\Purchases\Events\AppStore\Expired $event
-     */
-    public function handle($event): void
+    protected function process($event, AppStoreV2ServerNotification $notification, V2DecodedPayload $payload): void
     {
-        // Retrieve the necessary data from the event
-        $notification = $event->getServerNotification();
-        $subscription = $notification->getSubscription();
+        $transactionInfo = $payload->getTransactionInfo();
+        $renewalInfo = $payload->getRenewalInfo();
 
-        /** @var V2DecodedPayload $providerRepresentation */
-        $providerRepresentation = $subscription->getProviderRepresentation();
-        $receiptInfo = $providerRepresentation->getTransactionInfo();
+        $user = $this->resolveUser($transactionInfo->getAppAccountToken());
+        if (!$user) {
+            return;
+        }
 
-        // Collect dates
-        $expiresDate = $receiptInfo->getExpiresDate();
+        $product = $this->resolveProduct($transactionInfo->getProductId());
+        if (!$product) {
+            return;
+        }
 
-        // Decide validity of the subscription and whether it will auto-renew
-        $isSubscriptionValid = $expiresDate->isFuture();
+        $transaction = $this->upsertTransaction($transactionInfo, $product, $user->uuid);
 
-        // Find the user and update their receipt.
-        $userReceipt = $this->findOrCreateUserReceipt($providerRepresentation);
-        $userReceipt->update([
-            'is_subscribed' => $isSubscriptionValid,
-            'expired_at' => $expiresDate?->toDateTime()
+        $receipt = $this->upsertReceipt($transactionInfo, $renewalInfo);
+        $receipt->update([
+            'is_subscribed' => false,
+            'will_auto_renew' => false,
+            'expires_at' => $transaction->expires_at,
         ]);
 
-        // Update user values.
-        $user = $userReceipt->user;
-        $user?->update([
-            'is_subscribed' => $isSubscriptionValid
-        ]);
-
-        // Notify the user about the subscription update.
-        $this->notifyUserAboutUpdate($user, $event);
+        $this->recomputeUserEntitlements($user);
+        $this->notifyUserAboutUpdate($user, $event, $product, $receipt);
     }
 }

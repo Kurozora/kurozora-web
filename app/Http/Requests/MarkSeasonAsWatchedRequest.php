@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Season;
 use Illuminate\Foundation\Http\FormRequest;
 
 class MarkSeasonAsWatchedRequest extends FormRequest
@@ -14,10 +13,7 @@ class MarkSeasonAsWatchedRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        /** @var Season $season */
-        $season = $this->route('season');
-
-        return $this->user()->can('mark_as_watched', $season);
+        return true;
     }
 
     /**

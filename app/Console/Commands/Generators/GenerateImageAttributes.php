@@ -2,11 +2,15 @@
 
 namespace App\Console\Commands\Generators;
 
-use App\Jobs\ConvertImageToWebPJob;
-use App\Jobs\GenerateImageAttributesJob;
 use App\Models\Media;
-use DB;
+use App\Support\Media\ImageAttributeGenerator;
+use App\Support\Media\ImageUploadTransformer;
 use Illuminate\Console\Command;
+use Laravel\Telescope\Telescope;
+use Log;
+use Pulse;
+use Storage;
+use Throwable;
 
 class GenerateImageAttributes extends Command
 {
@@ -23,7 +27,7 @@ class GenerateImageAttributes extends Command
      *
      * @var string
      */
-    protected $description = 'Generate a given image’s attributes.';
+    protected $description = 'Generate image attributes and convert stored images to WebP.';
 
     /**
      * Create a new command instance.
@@ -42,33 +46,80 @@ class GenerateImageAttributes extends Command
      */
     public function handle(): int
     {
-        $ids = $this->argument('id');
+        Pulse::stopRecording();
+        Telescope::stopRecording();
 
-        if (empty($ids)) {
-            $ids = $this->ask('Image ID');
-        }
+        $transformer = new ImageUploadTransformer;
+        $attributeGenerator = new ImageAttributeGenerator;
 
-        $ids = explode(',', $ids);
+        $count = Media::where('custom_properties', 'like', '[%]')
+            ->orWhere('mime_type', 'not like', '%webp%')
+            ->count();
+        $bar = $this->output->createProgressBar($count);
 
-        if (empty($ids)) {
-            $this->info('ID is empty. Exiting...');
-            return Command::INVALID;
-        }
+        Media::where('custom_properties', 'like', '[%]')
+            ->orWhere('mime_type', 'not like', '%webp%')
+            ->chunkById(100, function ($medias) use ($bar, $transformer, $attributeGenerator) {
+                $medias->each(function ($media) use ($bar, $transformer, $attributeGenerator) {
+                    try {
+                        $this->process($media, $transformer, $attributeGenerator);
+                    } catch (Throwable $throwable) {
+                        Log::warning('Image backfill failed.', [
+                            'media_id' => $media->id,
+                            'error' => $throwable->getMessage(),
+                        ]);
+                    }
 
-        DB::disableQueryLog();
-
-        Media::whereIn('id', $ids)
-            ->each(function ($media) {
-                (new GenerateImageAttributesJob($media))
-                    ->handle();
-
-                if ($media->mime_type != 'image/webp') {
-                    (new ConvertImageToWebPJob($media))
-                        ->handle();
-                }
+                    $bar->advance();
+                    usleep(300);
+                });
             });
 
-        DB::enableQueryLog();
+        $bar->finish();
+
+        Pulse::startRecording();
+        Telescope::startRecording();
+
         return Command::SUCCESS;
+    }
+
+    /**
+     * Converts the given media's stored file to WEBP and refreshes its generated attributes.
+     *
+     * @param Media $media
+     * @param ImageUploadTransformer $transformer
+     * @param ImageAttributeGenerator $attributeGenerator
+     * @return void
+     */
+    protected function process(Media $media, ImageUploadTransformer $transformer, ImageAttributeGenerator $attributeGenerator): void
+    {
+        $temporaryPath = tempnam(sys_get_temp_dir(), 'media-backfill');
+
+        try {
+            file_put_contents($temporaryPath, Storage::disk($media->disk)->get($media->getPathRelativeToRoot()));
+
+            $updates = [];
+
+            if ($transformer->transform($temporaryPath, $media->collection_name)) {
+                Storage::disk($media->disk)->put($media->getPathRelativeToRoot(), file_get_contents($temporaryPath));
+
+                $updates['file_name'] = ImageUploadTransformer::webPFileName($media->file_name);
+                $updates['mime_type'] = 'image/webp';
+                $updates['size'] = filesize($temporaryPath);
+            }
+
+            if (ImageUploadTransformer::isEligibleImage($temporaryPath)) {
+                $colors = $attributeGenerator->colorsFor($temporaryPath);
+                $dimensions = $attributeGenerator->dimensionsFor($temporaryPath);
+
+                $updates['custom_properties'] = array_merge($colors, $media->custom_properties, $dimensions);
+            }
+
+            if ($updates !== []) {
+                $media->update($updates);
+            }
+        } finally {
+            @unlink($temporaryPath);
+        }
     }
 }

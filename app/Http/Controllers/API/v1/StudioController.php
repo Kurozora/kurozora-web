@@ -17,8 +17,11 @@ use App\Http\Resources\LiteratureResourceIdentity;
 use App\Http\Resources\MediaRatingResource;
 use App\Http\Resources\StudioResource;
 use App\Http\Resources\StudioResourceIdentity;
-use App\Models\MediaRating;
+use App\Models\Anime;
+use App\Models\Game;
+use App\Models\Manga;
 use App\Models\Studio;
+use App\Traits\Controller\WithCatalogCacheHeaders;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\JsonResponse;
@@ -27,6 +30,8 @@ use Illuminate\Routing\Redirector;
 
 class StudioController extends Controller
 {
+    use WithCatalogCacheHeaders;
+
     /**
      * Returns the studios index.
      *
@@ -72,10 +77,28 @@ class StudioController extends Controller
      */
     public function details(Request $request, Studio $studio): JsonResponse
     {
+        $includeInput = $request->input('include');
+        $includes = is_string($includeInput) ? explode(',', $includeInput) : (is_array($includeInput) ? $includeInput : []);
+        sort($includes);
+
+        $fingerprint = [
+            'kind' => 'studio',
+            'publicId' => $studio->public_id,
+            'updatedAt' => optional($studio->updated_at)->toIso8601String(),
+            'locale' => app()->getLocale(),
+            'tvRating' => (int) $request->attributes->get('tvRating', 4),
+            'include' => $includes,
+        ];
+
+        $notModified = $this->returnIfNotModifiedCatalog($request, $fingerprint);
+        if ($notModified !== null) {
+            return $notModified;
+        }
+
         // Call the ModelViewed event
         ModelViewed::dispatch($studio, $request->ip());
 
-        $studio->load(['media', 'mediaStat', 'tv_rating', 'predecessors', 'successor']);
+        $studio->load(['media', 'mediaStat', 'mediaRatings', 'tvRating', 'predecessors', 'successor']);
 
         $includeArray = [];
         if ($includeInput = $request->input('include')) {
@@ -109,7 +132,7 @@ class StudioController extends Controller
         // Show studio details
         return JSONResult::success([
             'data' => StudioResource::collection([$studio])
-        ]);
+        ])->withHeaders($this->catalogCacheHeaders($request, $fingerprint));
     }
 
     /**
@@ -124,7 +147,7 @@ class StudioController extends Controller
         $data = $request->validated();
 
         $studio = Studio::whereIn('id', $data['ids'] ?? []);
-        $studio->with(['media', 'mediaStat', 'tv_rating', 'predecessors', 'successor']);
+        $studio->with(['media', 'mediaStat', 'mediaRatings', 'tvRating', 'predecessors', 'successor']);
 
         $includeArray = [];
         if ($includeInput = $request->input('include')) {
@@ -174,7 +197,7 @@ class StudioController extends Controller
 
         // Get the anime
         $anime = $studio->predecessors()
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $anime->nextPageUrl() ?? '');
@@ -198,7 +221,7 @@ class StudioController extends Controller
 
         // Get the anime
         $anime = $studio->successor()
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $anime->nextPageUrl() ?? '');
@@ -223,7 +246,8 @@ class StudioController extends Controller
         // Get the anime
         $anime = $studio->anime()
             ->orderBy('started_at')
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->orderBy(Anime::TABLE_NAME . '.id')
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $anime->nextPageUrl() ?? '');
@@ -248,7 +272,8 @@ class StudioController extends Controller
         // Get the literatures
         $literatures = $studio->manga()
             ->orderBy('started_at')
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->orderBy(Manga::TABLE_NAME . '.id')
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $literatures->nextPageUrl() ?? '');
@@ -273,7 +298,8 @@ class StudioController extends Controller
         // Get the games
         $games = $studio->games()
             ->orderBy('published_at')
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->orderBy(Game::TABLE_NAME . '.id')
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $games->nextPageUrl() ?? '');
@@ -296,45 +322,8 @@ class StudioController extends Controller
     {
         $user = auth()->user();
 
-        // Validate the request
         $data = $request->validated();
-
-        // Fetch the variables
-        $givenRating = $data['rating'];
-        $description = $data['description'] ?? null;
-
-        // Modify the rating if it already exists
-        /** @var MediaRating $foundRating */
-        $foundRating = $user->studioRatings()
-            ->withoutTvRatings()
-            ->where('model_id', '=', $studio->id)
-            ->first();
-
-        // The rating exists
-        if ($foundRating) {
-            // If the given rating is 0
-            if ($givenRating <= 0) {
-                // Delete the rating
-                $foundRating->delete();
-            } else {
-                // Update the current rating
-                $foundRating->update([
-                    'rating' => $givenRating,
-                    'description' => $description ?? $foundRating->description,
-                ]);
-            }
-        } else {
-            // Only insert the rating if it's rated higher than 0
-            if ($givenRating > 0) {
-                MediaRating::create([
-                    'user_id' => $user->id,
-                    'model_id' => $studio->id,
-                    'model_type' => $studio->getMorphClass(),
-                    'rating' => $givenRating,
-                    'description' => $description,
-                ]);
-            }
-        }
+        $user->rateMediaModel($studio, $data['rating'], $data['description'] ?? null);
 
         return JSONResult::success();
     }
@@ -353,7 +342,7 @@ class StudioController extends Controller
                 ['model_id', '=', $studio->id],
                 ['model_type', '=', $studio->getMorphClass()],
             ])
-            ->forceDelete();
+            ->first()?->delete();
 
         return JSONResult::success();
     }
@@ -368,31 +357,17 @@ class StudioController extends Controller
      */
     public function reviews(GetPaginatedRequest $request, Studio $studio): JsonResponse
     {
+        $data = $request->validated();
+
         $reviews = $studio->mediaRatings()
             ->withoutTvRatings()
             ->with([
                 'user' => function ($query) {
-                    $query->with([
-                        'badges' => function ($query) {
-                            $query->with(['media']);
-                        },
-                        'media',
-                        'tokens' => function ($query) {
-                            $query
-                                ->orderBy('last_used_at', 'desc')
-                                ->limit(1);
-                        },
-                        'sessions' => function ($query) {
-                            $query
-                                ->orderBy('last_activity', 'desc')
-                                ->limit(1);
-                        },
-                    ])
-                        ->withCount(['followers', 'followedModels as following_count', 'mediaRatings']);
+                    $query->withProfileEagerLoad(auth()->user());
                 },
             ])
             ->where('description', '!=', null)
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $reviews->nextPageUrl() ?? '');

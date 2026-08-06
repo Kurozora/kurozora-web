@@ -22,15 +22,18 @@ return new class extends Migration
             $table->tinyInteger('status');
             $table->unsignedTinyInteger('rewatch_count')->default(0);
             $table->boolean('is_hidden')->default(false);
-            $table->timestamp('started_at')->nullable();
-            $table->timestamp('ended_at')->nullable();
-            $table->timestamps();
+            $table->timestamp('started_at', 6)->nullable();
+            $table->timestamp('ended_at', 6)->nullable();
+            $table->timestamps(6);
+            $table->softDeletes('deleted_at', 6);
         });
 
         Schema::table(UserLibrary::TABLE_NAME, function (Blueprint $table) {
             // Set index key constraints
-            $table->index('user_id');
             $table->index('is_hidden');
+            $table->index(['user_id', 'trackable_id', 'trackable_type', 'is_hidden', 'status'], 'user_libraries_super_index');
+            $table->index(['user_id', 'trackable_type', 'status', 'trackable_id']);
+            $table->index(['user_id', 'trackable_type', 'updated_at', 'id']);
 
             // Set unique key constraints
             $table->unique(['trackable_type', 'trackable_id', 'user_id']);

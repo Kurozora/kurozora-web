@@ -75,7 +75,7 @@ trait WithEpisodeSearch
             ])
             ->when(auth()->user(), function ($query, $user) {
                 return $query->withExists([
-                    'user_watched_episodes as isWatched' => function ($query) use ($user) {
+                    'userWatchedEpisodes as isWatched' => function ($query) use ($user) {
                         $query->where('user_id', $user->id);
                     }
                 ]);
@@ -107,7 +107,7 @@ trait WithEpisodeSearch
                 ])
                 ->when(auth()->user(), function ($query, $user) {
                     return $query->withExists([
-                        'user_watched_episodes as isWatched' => function ($query) use ($user) {
+                        'userWatchedEpisodes as isWatched' => function ($query) use ($user) {
                             $query->where('user_id', $user->id);
                         }
                     ]);

@@ -1,15 +1,15 @@
 <main>
     <x-slot:title>
-        {!! $game->title !!}
+        {!! __(':x — Game, Cast & Reviews', ['x' => $game->title]) !!}
     </x-slot:title>
 
     <x-slot:description>
-        {{ $game->synopsis }}
+        {{ $this->metaDescription }}
     </x-slot:description>
 
     <x-slot:meta>
-        <meta property="og:title" content="{{ $game->title }} — {{ config('app.name') }}" />
-        <meta property="og:description" content="{{ $game->synopsis ?? __('app.description') }}" />
+        <meta property="og:title" content="{{ __(':x — Game, Cast & Reviews', ['x' => $game->title]) }} — {{ config('app.name') }}" />
+        <meta property="og:description" content="{{ $game->synopsis ?? __('A community for anime fans with an extensive library of anime, manga, music, games, movies, specials, OVA, and ONA. Only on :x, the largest, free online anime, manga, game & music database in the world. Track, share and discover anime with friends.', ['x' => config('app.name')]) }}" />
         <meta property="og:image" content="{{ $game->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $game->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="og:video" content="{{ $game->video_url ?? '' }}" />
         <meta property="og:type" content="video.tv_show" />
@@ -18,63 +18,16 @@
         @foreach ($game->tags() as $tag)
             <meta property="video:tag" content="{{ $tag->name }}" />
         @endforeach
-        <meta property="twitter:title" content="{{ $game->title }} — {{ config('app.name') }}" />
+        <meta property="twitter:title" content="{{ __(':x — Game, Cast & Reviews', ['x' => $game->title]) }} — {{ config('app.name') }}" />
         <meta property="twitter:description" content="{{ $game->synopsis }}" />
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:image" content="{{ $game->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $game->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="twitter:image:alt" content="{{ $game->synopsis }}" />
+        @if ($game->is_nsfw)
+            <meta name="rating" content="adult" />
+        @endif
         <link rel="canonical" href="{{ route('games.details', $game) }}">
-        <x-misc.schema>
-            "@type":"VideoGame",
-            "url":"/games/{{ $game->slug }}/",
-            "name": "{{ $game->title }}",
-            "alternateName": "{{ $game->original_title }}",
-            "image": "{{ $game->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $game->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}",
-            "description": "{{ json_encode($game->synopsis) }}",
-            "aggregateRating": {
-                "@type":"AggregateRating",
-                "itemReviewed": {
-                    "@type": "VideoGame",
-                    "image": [
-                        "{{ $game->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $game->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}"
-                    ],
-                    "name": "{{ $game->title }}"
-                },
-                "ratingCount": {{ $game->mediaStat->rating_count ?? 1 }},
-                "bestRating": 5,
-                "worstRating": 0,
-                "ratingValue": {{ $game->mediaStat->rating_average ?? 2.5 }}
-            },
-            "contentRating": "{{ $game->tv_rating->name }}",
-            @if (!empty($game->country_of_origin))
-                "countryOfOrigin": {
-                    "@type": "Country",
-                    "name": "{{ $game->country_of_origin->name }}",
-                    "alternateName": "{{ $game->country_of_origin->code }}"
-                },
-            @endif
-            "genre": {!! $game->genres()->pluck('name') !!},
-            "datePublished": "{{ $game->published_at?->format('Y-m-d') }}",
-            @if (!empty($this->studio))
-                "creator":[
-                    {
-                        "@type":"Organization",
-                        "url":"/studio/{{ $this->studio->id }}/"
-                    }
-                ],
-            @endif
-            "keywords": "game{{ (',' . $game->keywords) ?? '' }}"
-            @if (!empty($game->video_url))
-                ,"trailer": {
-                    "@type":"VideoObject",
-                    "name":"{{ $game->title }}",
-                    "embedUrl": "{{ $game->video_url }}",
-                    "description":"Official Trailer",
-                    "thumbnailUrl": "{{ $game->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $game->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}",
-                    "uploadDate": "{{ $game->published_at?->format('Y-m-d') }}"
-                }
-            @endif
-        </x-misc.schema>
+        <x-misc.schema :data="$this->schema" />
     </x-slot:meta>
 
     <x-slot:appArgument>
@@ -181,12 +134,22 @@
                     </a>
                 </div>
 
-                @if ($game->publish_season)
+                @if ($game->published_at && $game->publication_season)
+                    <div id="seasonBadge" class="flex-grow px-12 border-l border-primary">
+                        <a class="flex flex-col items-center" href="{{ route('games.seasons.year.season', [$game->published_at->year, $game->publication_season->key]) }}" wire:navigate>
+                            <p class="font-bold">{{ $game->publication_season->description }}</p>
+                            <p class="text-tint">
+                                {{ $game->publication_season->symbol() }}
+                            </p>
+                            <p class="text-sm text-secondary">{{ $game->published_at->year }}</p>
+                        </a>
+                    </div>
+                @elseif ($game->publication_season)
                     <div id="seasonBadge" class="flex-grow px-12 border-l border-primary">
                         <a class="flex flex-col items-center no-external-icon" href="#published">
-                            <p class="font-bold">{{ $game->publish_season->description }}</p>
+                            <p class="font-bold">{{ $game->publication_season->description }}</p>
                             <p class="text-tint">
-                                {{ $game->publish_season->symbol() }}
+                                {{ $game->publication_season->symbol() }}
                             </p>
                             <p class="text-sm text-secondary">{{ __('Season') }}</p>
                         </a>
@@ -205,7 +168,7 @@
 
                 <div id="tvRatingBadge" class="flex-grow px-12 border-l border-primary">
                     <a class="flex flex-col items-center" href="{{ route('games.parentalguide', $game) }}">
-                        <p class="font-bold">{{ $game->tv_rating->name }}</p>
+                        <p class="font-bold">{{ $game->tvRating->name }}</p>
                         <p class="text-tint">
                             @svg('tv_fill', 'fill-current', ['width' => '20'])
                         </p>
@@ -225,10 +188,10 @@
                     </div>
                 @endif
 
-                @if (!empty($game->country_of_origin))
+                @if (!empty($game->countryOfOrigin))
                     <div id="countryBadge" class="flex-grow px-12 border-l border-primary">
                         <a class="flex flex-col items-center no-external-icon" href="#country">
-                            <p class="font-bold">{{ strtoupper($game->country_of_origin->code) }}</p>
+                            <p class="font-bold">{{ strtoupper($game->countryOfOrigin->code) }}</p>
                             <p class="text-tint">
                                 @svg('globe', 'fill-current', ['width' => '20'])
                             </p>
@@ -332,11 +295,11 @@
                 <div class="grid grid-cols-2 gap-4 pl-4 pr-4 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
                     <x-information-list id="type" title="{{ __('Type') }}" icon="{{ asset('images/symbols/tv_and_mediabox.svg') }}">
                         <x-slot:information>
-                            {{ $game->media_type->name }}
+                            {{ $game->mediaType->name }}
                         </x-slot:information>
 
                         <x-slot:footer>
-                            <p class="text-sm">{{ $game->media_type->description }}</p>
+                            <p class="text-sm">{{ $game->mediaType->description }}</p>
                         </x-slot:footer>
                     </x-information-list>
 
@@ -362,7 +325,7 @@
                         </x-slot:information>
                     </x-information-list>
 
-                    @if (in_array($game->media_type->name, ['Unknown', 'TV', 'ONA']))
+                    @if (in_array($game->mediaType->name, ['Unknown', 'TV', 'ONA']))
                         <x-information-list id="episodes" title="{{ __('Episodes') }}" icon="{{ asset('images/symbols/film.svg') }}">
                             <x-slot:information>
                                 {{ $game->episode_count }}
@@ -442,17 +405,17 @@
 
                     <x-information-list id="tvRating" title="{{ __('Rating') }}" icon="{{ asset('images/symbols/tv_rating.svg') }}">
                         <x-slot:information>
-                            {{ $game->tv_rating->name }}
+                            {{ $game->tvRating->name }}
                         </x-slot:information>
 
                         <x-slot:footer>
-                            <p class="text-sm">{{ $game->tv_rating->description }}.</p>
+                            <p class="text-sm">{{ $game->tvRating->description }}.</p>
                         </x-slot:footer>
                     </x-information-list>
 
                     <x-information-list id="country" title="{{ __('Country') }}" icon="{{ asset('images/symbols/globe.svg') }}">
                         <x-slot:information>
-                            {{ $game->country_of_origin?->name ?: '-' }}
+                            {{ $game->countryOfOrigin?->name ?: '-' }}
                         </x-slot:information>
                     </x-information-list>
 
@@ -465,24 +428,24 @@
             </section>
 
             @if ($readyToLoad)
-                <livewire:components.game-cast-section :game="$game" />
+                <livewire:components.cast-section :kind="\App\Enums\UserLibraryKind::Game" :game="$game" />
 
-                <livewire:components.game-staff-section :game="$game" />
+                <livewire:components.staff-section :kind="\App\Enums\UserLibraryKind::Game" :game="$game" />
 
-                <livewire:components.game-songs-section :game="$game" />
+                <livewire:components.songs-section :kind="\App\Enums\UserLibraryKind::Game" :game="$game" />
 
-                <livewire:components.game-studios-section :game="$game" />
+                <livewire:components.studios-section :kind="\App\Enums\UserLibraryKind::Game" :game="$game" />
 
                 <div class="bg-tinted">
                     @if (!empty($this->studio))
-                        <livewire:components.game-more-by-studio-section :game="$game" :studio="$this->studio" />
+                        <livewire:components.more-by-studio-section :kind="\App\Enums\UserLibraryKind::Game" :game="$game" :studio="$this->studio" />
                     @endif
 
-                    <livewire:components.game.game-relations-section :game="$game" />
+                    <livewire:components.relations-section :kind="\App\Enums\UserLibraryKind::Game" :related-kind="\App\Enums\UserLibraryKind::Game" :game="$game" />
 
-                    <livewire:components.game.anime-relations-section :game="$game" />
+                    <livewire:components.relations-section :kind="\App\Enums\UserLibraryKind::Game" :related-kind="\App\Enums\UserLibraryKind::Anime" :game="$game" />
 
-                    <livewire:components.game.manga-relations-section :game="$game" />
+                    <livewire:components.relations-section :kind="\App\Enums\UserLibraryKind::Game" :related-kind="\App\Enums\UserLibraryKind::Manga" :game="$game" />
 
                     @if (!empty($game->copyright))
                         <section class="border-t border-primary xl:safe-area-inset">

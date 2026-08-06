@@ -42,6 +42,14 @@
                 </div>
 
                 <div class="flex flex-wrap justify-between gap-4 mt-10">
+                    <a class="relative flex-grow w-64 bg-primary overflow-hidden rounded-lg md:w-80" href="{{ route('kb.guidelines') }}" wire:navigate>
+                        <div class="flex flex-row items-center gap-2 pt-4 pb-4 pr-4 pl-4">
+                            @svg('text_page_fill', 'fill-current', ['width' => 24])
+
+                            <p class="text-lg leading-tight">{{ __('Community Guidelines') }}</p>
+                        </div>
+                    </a>
+
                     <a class="relative flex-grow w-64 bg-primary overflow-hidden rounded-lg md:w-80" href="{{ route('kb.iap') }}" wire:navigate>
                         <div class="flex flex-row items-center gap-2 pt-4 pb-4 pr-4 pl-4">
                             @svg('lock_fill', 'fill-current', ['width' => 24])
@@ -50,11 +58,11 @@
                         </div>
                     </a>
 
-                    <a class="relative flex-grow w-64 bg-primary overflow-hidden rounded-lg md:w-80" href="{{ route('kb.personalisation') }}" wire:navigate>
+                    <a class="relative flex-grow w-64 bg-primary overflow-hidden rounded-lg md:w-80" href="{{ route('kb.personalization') }}" wire:navigate>
                         <div class="flex flex-row items-center gap-2 pt-4 pb-4 pr-4 pl-4">
                             @svg('person_fill', 'fill-current', ['width' => 24])
 
-                            <p class="text-lg leading-tight">{{ __('About Personalisation') }}</p>
+                            <p class="text-lg leading-tight">{{ __('About Personalization') }}</p>
                         </div>
                     </a>
 

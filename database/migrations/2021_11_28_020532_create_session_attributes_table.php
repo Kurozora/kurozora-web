@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('platform_version', ValidatePlatformVersion::MAX_VERSION_LENGTH)->nullable();
             $table->string('device_vendor')->nullable();
             $table->string('device_model')->nullable();
+            $table->string('app_source');
 
             // Location information
             $table->string('ip_address', 45)->nullable();

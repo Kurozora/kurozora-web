@@ -32,7 +32,7 @@ final class ParentalGuideCategory extends Enum
     /**
      * Construct an Enum instance.
      *
-     * @param  TValue  $enumValue
+     * @param TValue $enumValue
      *
      * @throws InvalidEnumMemberException
      */
@@ -49,7 +49,7 @@ final class ParentalGuideCategory extends Enum
      * This works only if localization is enabled
      * for the enum and if the key exists in the lang file.
      *
-     * @param  TValue  $value
+     * @param TValue $value
      *
      * @return string|null
      */
@@ -83,5 +83,64 @@ final class ParentalGuideCategory extends Enum
             self::FrighteningAndIntenseScenes => 'frightening_intense',
             default => str(self::getFriendlyName(ParentalGuideCategory::getKey($value)))->slug('_'),
         };
+    }
+
+    /**
+     * Whether the category accepts a depiction value.
+     *
+     * @return bool
+     */
+    public function supportsDepiction(): bool
+    {
+        return match ($this->value) {
+            self::SexAndNudity,
+            self::ViolenceAndGore,
+            self::FrighteningAndIntenseScenes => true,
+            default => false,
+        };
+    }
+
+    /**
+     * Resolve a category from its kebab-case key slug (e.g. `sex-and-nudity`).
+     *
+     * @param string $slug
+     *
+     * @return ParentalGuideCategory|null
+     */
+    public static function fromSlug(string $slug): ?ParentalGuideCategory
+    {
+        return array_find(
+            self::getInstances(),
+            fn($instance) => str($instance->key)->kebab()->value() === $slug
+        );
+    }
+
+    /**
+     * The slug for the defined categories.
+     *
+     * @return array<int, string>
+     */
+    public static function slugs(): array
+    {
+        static $slugs = null;
+
+        if ($slugs === null) {
+            $slugs = array_map(
+                fn(ParentalGuideCategory $instance) => str($instance->key)->kebab()->value(),
+                self::getInstances()
+            );
+        }
+
+        return $slugs;
+    }
+
+    /**
+     * The URL slug for this category.
+     *
+     * @return string
+     */
+    public function urlSlug(): string
+    {
+        return str($this->key)->kebab()->value();
     }
 }

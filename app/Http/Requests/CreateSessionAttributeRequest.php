@@ -16,8 +16,9 @@ class CreateSessionAttributeRequest extends FormRequest
     public function rules(): array
     {
         return array_merge([
-            'email'     => ['bail', 'required', new ValidateEmail],
-            'password'  => ['bail', 'required']
+            'email' => ['bail', 'required', new ValidateEmail],
+            'password' => ['bail', 'required'],
+            'client_supports_2fa' => ['nullable', 'boolean'],
         ], Session::platformRules());
     }
 }

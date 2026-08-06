@@ -7,8 +7,6 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Pagination\CursorPaginator;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -63,30 +61,19 @@ class Detail extends Component
      */
     public function mount(FeedMessage $feedMessage): void
     {
-        $this->feedMessage = $feedMessage->loadMissing([
-            'user' => function (BelongsTo $belongsTo) {
-                $belongsTo->with(['media']);
-            },
-            'loveReactant' => function (BelongsTo $query) {
-                $query->with([
-                    'reactionCounters',
-                    'reactions' => function (HasMany $hasMany) {
-                        $hasMany->with(['reacter', 'type']);
-                    }
-                ]);
-            },
-            'linkPreview'
-        ])
-            ->loadCount(['replies', 'reShares'])
-            ->when(auth()->user(), function ($query, $user) use ($feedMessage) {
-                return $feedMessage->loadExists([
-                    'reShares as isReShared' => function ($query) use ($user) {
-                        $query->where('user_id', '=', $user->id);
-                    }
-                ]);
-            }, function() use ($feedMessage) {
-                return $feedMessage;
-            });
+        $authUser = auth()->user();
+
+        $this->feedMessage = $feedMessage
+            ->loadMissing(FeedMessage::lockupEagerLoads($authUser))
+            ->loadCount(['replies', 'reShares']);
+
+        if ($authUser !== null) {
+            $this->feedMessage->loadExists([
+                'simpleReShares as isReShared' => function ($query) use ($authUser) {
+                    $query->where('user_id', '=', $authUser->id);
+                },
+            ]);
+        }
     }
 
     /**
@@ -110,24 +97,13 @@ class Detail extends Component
             return collect();
         }
 
+        $authUser = auth()->user();
+
         return $this->feedMessage->replies()
-            ->with([
-                'user' => function (BelongsTo $belongsTo) {
-                    $belongsTo->with(['media']);
-                },
-                'loveReactant' => function (BelongsTo $query) {
-                    $query->with([
-                        'reactionCounters',
-                        'reactions' => function (HasMany $hasMany) {
-                            $hasMany->with(['reacter', 'type']);
-                        }
-                    ]);
-                },
-                'linkPreview'
-            ])
+            ->with(FeedMessage::lockupEagerLoads($authUser))
             ->withCount(['replies', 'reShares'])
-            ->when(auth()->user(), function ($query, $user) {
-                $query->withExists(['reShares as isReShared' => function ($query) use ($user) {
+            ->when($authUser, function ($query, $user) {
+                $query->withExists(['simpleReShares as isReShared' => function ($query) use ($user) {
                     $query->where('user_id', '=', $user->id);
                 }]);
             })

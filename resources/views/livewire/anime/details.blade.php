@@ -1,15 +1,15 @@
 <main>
     <x-slot:title>
-        {!! $anime->title !!}
+        {!! __(':x — Episodes, Cast & Reviews', ['x' => $anime->title]) !!}
     </x-slot:title>
 
     <x-slot:description>
-        {{ $anime->synopsis }}
+        {{ $this->metaDescription }}
     </x-slot:description>
 
     <x-slot:meta>
-        <meta property="og:title" content="{{ $anime->title }} — {{ config('app.name') }}" />
-        <meta property="og:description" content="{{ $anime->synopsis ?? __('app.description') }}" />
+        <meta property="og:title" content="{{ __(':x — Episodes, Cast & Reviews', ['x' => $anime->title]) }} — {{ config('app.name') }}" />
+        <meta property="og:description" content="{{ $anime->synopsis ?? __('A community for anime fans with an extensive library of anime, manga, music, games, movies, specials, OVA, and ONA. Only on :x, the largest, free online anime, manga, game & music database in the world. Track, share and discover anime with friends.', ['x' => config('app.name')]) }}" />
         <meta property="og:image" content="{{ $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="og:video" content="{{ $anime->video_url ?? '' }}" />
         <meta property="og:type" content="video.tv_show" />
@@ -18,63 +18,16 @@
         @foreach ($anime->tags() as $tag)
             <meta property="video:tag" content="{{ $tag->name }}" />
         @endforeach
-        <meta property="twitter:title" content="{{ $anime->title }} — {{ config('app.name') }}" />
+        <meta property="twitter:title" content="{{ __(':x — Episodes, Cast & Reviews', ['x' => $anime->title]) }} — {{ config('app.name') }}" />
         <meta property="twitter:description" content="{{ $anime->synopsis }}" />
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:image" content="{{ $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="twitter:image:alt" content="{{ $anime->synopsis }}" />
+        @if ($anime->is_nsfw)
+            <meta name="rating" content="adult" />
+        @endif
         <link rel="canonical" href="{{ route('anime.details', $anime) }}">
-        <x-misc.schema>
-            "@type":"TVSeries",
-            "url":"/anime/{{ $anime->slug }}/",
-            "name": "{{ $anime->title }}",
-            "alternateName": "{{ $anime->original_title }}",
-            "image": "{{ $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}",
-            "description": "{{ json_encode($anime->synopsis) }}",
-            "aggregateRating": {
-            "@type":"AggregateRating",
-            "itemReviewed": {
-            "@type": "TVSeries",
-            "image": [
-            "{{ $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}"
-            ],
-            "name": "{{ $anime->title }}"
-            },
-            "ratingCount": {{ $anime->mediaStat?->rating_count ?? 1 }},
-            "bestRating": 5,
-            "worstRating": 0,
-            "ratingValue": {{ $anime->mediaStat?->rating_average ?? 2.5 }}
-            },
-            "contentRating": "{{ $anime->tv_rating->name }}",
-            @if (!empty($anime->country_of_origin))
-                "countryOfOrigin": {
-                "@type": "Country",
-                "name": "{{ $anime->country_of_origin->name }}",
-                "alternateName": "{{ $anime->country_of_origin->code }}"
-                },
-            @endif
-            "genre": {!! $anime->genres()->pluck('name') !!},
-            "datePublished": "{{ $anime->started_at?->format('Y-m-d') }}",
-            @if (!empty($this->studio))
-                "creator":[
-                {
-                "@type":"Organization",
-                "url":"/studio/{{ $this->studio->id }}/"
-                }
-                ],
-            @endif
-            "keywords": "anime{{ (',' . $anime->keywords) ?? '' }}"
-            @if (!empty($anime->video_url))
-                ,"trailer": {
-                "@type":"VideoObject",
-                "name":"{{ $anime->title }}",
-                "embedUrl": "{{ $anime->video_url }}",
-                "description":"Official Trailer",
-                "thumbnailUrl": "{{ $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}",
-                "uploadDate": "{{ $anime->started_at?->format('Y-m-d') }}"
-                }
-            @endif
-        </x-misc.schema>
+        <x-misc.schema :data="$this->schema" />
     </x-slot:meta>
 
     <x-slot:appArgument>
@@ -85,9 +38,9 @@
         <div class="relative overflow-hidden max-h-[80vh]">
             <div class="relative flex flex-nowrap aspect-video md:relative md:h-full">
                 <x-picture
-                        class="w-full overflow-hidden"
-                        style="background-color: {{ ($anime->getFirstMedia(\App\Enums\MediaCollection::Banner) ?? $anime->getFirstMedia(\App\Enums\MediaCollection::Poster))?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
-                        wire:ignore
+                    class="w-full overflow-hidden"
+                    style="background-color: {{ ($anime->getFirstMedia(\App\Enums\MediaCollection::Banner) ?? $anime->getFirstMedia(\App\Enums\MediaCollection::Poster))?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
+                    wire:ignore
                 >
                     <img class="w-full h-full aspect-video object-cover lazyload" data-sizes="auto" data-src="{{ $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $anime->title }} Banner" title="{{ $anime->title }}">
                 </x-picture>
@@ -96,8 +49,8 @@
                     <div class="absolute top-0 bottom-0 left-0 right-0">
                         <div class="flex flex-col justify-center items-center h-full md:pb-40 lg:pb-0">
                             <button
-                                    class="inline-flex items-center pt-4 pr-4 pb-4 pl-4 bg-blur backdrop-blur border border-transparent rounded-full font-semibold text-xs uppercase tracking-widest shadow-md hover:bg-tint-800 hover:btn-text-tinted active:bg-tint active:btn-text-tinted focus:outline-none disabled:bg-gray-100 disabled:text-gray-300 disabled:cursor-default disabled:opacity-100 transition ease-in-out duration-150"
-                                    wire:click="showTrailerVideo"
+                                class="inline-flex items-center pt-4 pr-4 pb-4 pl-4 bg-blur backdrop-blur border border-transparent rounded-full font-semibold text-xs uppercase tracking-widest shadow-md hover:bg-tint-800 hover:btn-text-tinted active:bg-tint active:btn-text-tinted focus:outline-none disabled:bg-gray-100 disabled:text-gray-300 disabled:cursor-default disabled:opacity-100 transition ease-in-out duration-150"
+                                wire:click="showTrailerVideo"
                             >
                                 @svg('play_fill', 'fill-current', ['width' => '34'])
                             </button>
@@ -111,10 +64,10 @@
                     <div class="absolute top-0 right-0 left-0 h-full rounded-lg md:bg-blur md:backdrop-filter md:backdrop-blur"></div>
 
                     <x-picture
-                            :border="true"
-                            class="w-28 h-40 mr-2 rounded-lg overflow-hidden"
-                            style="min-width: 7rem; max-height: 10rem; background-color: {{ $anime->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
-                            wire:ignore
+                        :border="true"
+                        class="w-28 h-40 mr-2 rounded-lg overflow-hidden"
+                        style="min-width: 7rem; max-height: 10rem; background-color: {{ $anime->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
+                        wire:ignore
                     >
                         <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $anime->title }} Poster" title="{{ $anime->title }}">
                     </x-picture>
@@ -128,7 +81,7 @@
                             <div class="flex w-full justify-between mt-2 gap-1 sm:gap-4">
                                 <p class="flex-grow pt-1 pr-1 pb-1 pl-1 text-white text-center text-xs font-semibold whitespace-nowrap rounded-md" style="background-color: {{ $anime->status->color }};">{{ $anime->status->name }}</p>
 
-                                <p class="flex-grow pt-1 pr-1 pb-1 pl-1 bg-white text-black text-center text-xs font-semibold whitespace-nowrap rounded-md"> {{ trans_choice('{0} Rank -|[1,*] Rank #:x', $anime->mediaStat?->rank_total ?? 0, ['x' => $anime->mediaStat?->rank_total]) }}</p>
+                                <p class="flex-grow pt-1 pr-1 pb-1 pl-1 bg-white text-black text-center text-xs font-semibold whitespace-nowrap rounded-md"> {{ trans_choice('{0} Rank -|[1,*] Rank #:x', $anime->mediaStat->rank_total ?? 0, ['x' => $anime->mediaStat->rank_total]) }}</p>
                             </div>
                         </div>
 
@@ -171,16 +124,26 @@
                 <div id="ratingBadge" class="flex-grow pr-12">
                     <a class="flex flex-col items-center no-external-icon" href="#ratingsAndReviews">
                         <p class="font-bold text-tint">
-                            {{ number_format($anime->mediaStat?->rating_average, 1) }}
+                            {{ number_format($anime->mediaStat->rating_average, 1) }}
                         </p>
 
-                        <livewire:components.star-rating :rating="$anime->mediaStat?->rating_average" :star-size="'sm'" :disabled="true" />
+                        <livewire:components.star-rating :rating="$anime->mediaStat->rating_average" :star-size="'sm'" :disabled="true" />
 
-                        <p class="text-sm text-secondary">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x reviews', (int) $anime->mediaStat?->rating_count, ['x' => number_shorten((int) $anime->mediaStat?->rating_count, 0, true)]) }}</p>
+                        <p class="text-sm text-secondary">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x reviews', (int) $anime->mediaStat->rating_count, ['x' => number_shorten((int) $anime->mediaStat->rating_count, 0, true)]) }}</p>
                     </a>
                 </div>
 
-                @if ($anime->air_season)
+                @if ($anime->started_at && $anime->air_season)
+                    <div id="seasonBadge" class="flex-grow px-12 border-l border-primary">
+                        <a class="flex flex-col items-center" href="{{ route('anime.seasons.year.season', [$anime->started_at->year, $anime->air_season->key]) }}" wire:navigate>
+                            <p class="font-bold">{{ $anime->air_season->description }}</p>
+                            <p class="text-tint">
+                                {{ $anime->air_season->symbol() }}
+                            </p>
+                            <p class="text-sm text-secondary">{{ $anime->started_at->year }}</p>
+                        </a>
+                    </div>
+                @elseif ($anime->air_season)
                     <div id="seasonBadge" class="flex-grow px-12 border-l border-primary">
                         <a class="flex flex-col items-center no-external-icon" href="#aired">
                             <p class="font-bold">{{ $anime->air_season->description }}</p>
@@ -194,7 +157,7 @@
 
                 <div id="rankingBadge" class="flex-grow px-12 border-l border-primary">
                     <a class="flex flex-col items-center" href="{{ route('charts.top', App\Enums\ChartKind::Anime) }}" wire:navigate>
-                        <p class="font-bold">{{ trans_choice('{0} -|[1,*] #:x', $anime->mediaStat?->rank_total ?? 0, ['x' => $anime->mediaStat?->rank_total]) }}</p>
+                        <p class="font-bold">{{ trans_choice('{0} -|[1,*] #:x', $anime->mediaStat->rank_total ?? 0, ['x' => $anime->mediaStat->rank_total]) }}</p>
                         <p class="text-tint">
                             @svg('chart_bar_fill', 'fill-current', ['width' => '20'])
                         </p>
@@ -204,7 +167,7 @@
 
                 <div id="tvRatingBadge" class="flex-grow px-12 border-l border-primary">
                     <a class="flex flex-col items-center" href="{{ route('anime.parentalguide', $anime) }}">
-                        <p class="font-bold">{{ $anime->tv_rating->name }}</p>
+                        <p class="font-bold">{{ $anime->tvRating->name }}</p>
                         <p class="text-tint">
                             @svg('tv_fill', 'fill-current', ['width' => '20'])
                         </p>
@@ -224,10 +187,10 @@
                     </div>
                 @endif
 
-                @if (!empty($anime->country_of_origin))
+                @if (!empty($anime->countryOfOrigin))
                     <div id="countryBadge" class="flex-grow px-12 border-l border-primary">
                         <a class="flex flex-col items-center no-external-icon" href="#country">
-                            <p class="font-bold">{{ strtoupper($anime->country_of_origin->code) }}</p>
+                            <p class="font-bold">{{ strtoupper($anime->countryOfOrigin->code) }}</p>
                             <p class="text-tint">
                                 @svg('globe', 'fill-current', ['width' => '20'])
                             </p>
@@ -238,7 +201,7 @@
 
                 <div id="languageBadge" class="flex-grow px-12 border-l border-primary">
                     <a class="flex flex-col items-center no-external-icon" href="#languages">
-                        <p class="font-bold">{{ strtoupper($anime->languages->first()?->code) }}</p>
+                        <p class="font-bold">{{ strtoupper($anime->languages->first()->code) }}</p>
                         <p class="text-tint">
                             @svg('character_bubble_fill', 'fill-current', ['width' => '20'])
                         </p>
@@ -276,20 +239,20 @@
 
                 <div class="flex flex-row flex-wrap justify-between gap-4 pl-4 pr-4">
                     <div class="flex flex-col justify-end text-center">
-                        <p class="font-bold text-6xl">{{ number_format($anime->mediaStat?->rating_average, 1) }}</p>
+                        <p class="font-bold text-6xl">{{ number_format($anime->mediaStat->rating_average, 1) }}</p>
                         <p class="font-bold text-sm text-secondary">{{ __('out of') }} 5</p>
                     </div>
 
                     <div class="flex flex-col justify-end items-center text-center">
                         @svg('star_fill', 'fill-current', ['width' => 32])
-                        <p class="font-bold text-2xl">{{ number_format($anime->mediaStat?->highestRatingPercentage) }}%</p>
-                        <p class="text-sm text-secondary">{{ $anime->mediaStat?->sentiment }}</p>
+                        <p class="font-bold text-2xl">{{ number_format($anime->mediaStat->highestRatingPercentage) }}%</p>
+                        <p class="text-sm text-secondary">{{ $anime->mediaStat->sentiment }}</p>
                     </div>
 
                     <div class="flex flex-col w-full justify-end text-right sm:w-auto">
                         <x-star-rating-bar :media-stat="$anime->mediaStat" />
 
-                        <p class="text-sm text-secondary">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x Ratings', $anime->mediaStat?->rating_count, ['x' => number_format($anime->mediaStat?->rating_count)]) }}</p>
+                        <p class="text-sm text-secondary">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x Ratings', $anime->mediaStat->rating_count, ['x' => number_format($anime->mediaStat->rating_count)]) }}</p>
                     </div>
                 </div>
             </section>
@@ -303,7 +266,7 @@
                     <div class="flex justify-between items-center">
                         <p class="">{{ __('Click to Rate:') }}</p>
 
-                        <livewire:components.rating-input :model-id="$anime->id" :model-type="$anime->getMorphClass()" :rating="$userRating?->first()?->rating" :star-size="'md'" />
+                        <livewire:components.star-rating :model-id="$anime->id" :model-type="$anime->getMorphClass()" :rating="$userRating?->first()?->rating" :star-size="'md'" />
                     </div>
 
                     <div class="flex justify-between">
@@ -331,11 +294,11 @@
                 <div class="grid grid-cols-2 gap-4 pl-4 pr-4 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
                     <x-information-list id="type" title="{{ __('Type') }}" icon="{{ asset('images/symbols/tv_and_mediabox.svg') }}">
                         <x-slot:information>
-                            {{ $anime->media_type->name }}
+                            {{ $anime->mediaType->name }}
                         </x-slot:information>
 
                         <x-slot:footer>
-                            <p class="text-sm">{{ $anime->media_type->description }}</p>
+                            <p class="text-sm">{{ $anime->mediaType->description }}</p>
                         </x-slot:footer>
                     </x-information-list>
 
@@ -361,7 +324,7 @@
                         </x-slot:information>
                     </x-information-list>
 
-                    @if (in_array($anime->media_type->name, ['Unknown', 'TV', 'ONA']))
+                    @if (in_array($anime->mediaType->name, ['Unknown', 'TV', 'ONA']))
                         <x-information-list id="episodes" title="{{ __('Episodes') }}" icon="{{ asset('images/symbols/film.svg') }}">
                             <x-slot:information>
                                 {{ $anime->episode_count }}
@@ -396,8 +359,8 @@
                             {{ __('No broadcast data available at the moment.') }}
                         @elseif ($anime->status_id === 3)
                             <div
-                                    class="flex flex-col align-center mt-1"
-                                    x-data="{
+                                class="flex flex-col align-center mt-1"
+                                x-data="{
                                     broadcastTimestamp: {{ $anime->broadcast_date?->timestamp }},
                                     broadcastDuration: {{ $anime->duration }},
                                     broadcastString: '',
@@ -409,7 +372,7 @@
                                         this.broadcastString = Date.broadcastString(this.broadcastTimestamp * 1000, this.broadcastDuration)
                                     },
                                 }"
-                                    x-init="() => {
+                                x-init="() => {
                                     setInterval(() => {
                                         startTimer()
                                     }, 1000);
@@ -451,17 +414,17 @@
 
                     <x-information-list id="tvRating" title="{{ __('Rating') }}" icon="{{ asset('images/symbols/tv_rating.svg') }}">
                         <x-slot:information>
-                            {{ $anime->tv_rating->name }}
+                            {{ $anime->tvRating->name }}
                         </x-slot:information>
 
                         <x-slot:footer>
-                            <p class="text-sm">{{ $anime->tv_rating->description }}.</p>
+                            <p class="text-sm">{{ $anime->tvRating->description }}.</p>
                         </x-slot:footer>
                     </x-information-list>
 
                     <x-information-list id="country" title="{{ __('Country') }}" icon="{{ asset('images/symbols/globe.svg') }}">
                         <x-slot:information>
-                            {{ $anime->country_of_origin?->name ?: '-' }}
+                            {{ $anime->countryOfOrigin?->name ?: '-' }}
                         </x-slot:information>
                     </x-information-list>
 
@@ -471,41 +434,41 @@
                         </x-slot:information>
                     </x-information-list>
 
-                    {{--                    <x-information-list title="{{ __('Studio') }}" icon="{{ asset('images/symbols/building_2.svg') }}">--}}
-                    {{--                        <x:information>--}}
-                    {{--                            {{ $anime->studios()->first()->name ?? '-' }}--}}
-                    {{--                        </x:information>--}}
-                    {{--                    </x-information-list>--}}
+{{--                    <x-information-list title="{{ __('Studio') }}" icon="{{ asset('images/symbols/building_2.svg') }}">--}}
+{{--                        <x:information>--}}
+{{--                            {{ $anime->studios()->first()->name ?? '-' }}--}}
+{{--                        </x:information>--}}
+{{--                    </x-information-list>--}}
 
-                    {{--                    <x-information-list title="{{ __('Network') }}" icon="{{ asset('images/symbols/dot_radiowaves_left_and_right.svg') }}">--}}
-                    {{--                        <x:information>--}}
-                    {{--                            {{ $anime->studios()->first()->name ?? '-' }}--}}
-                    {{--                        </x:information>--}}
-                    {{--                    </x-information-list>--}}
+{{--                    <x-information-list title="{{ __('Network') }}" icon="{{ asset('images/symbols/dot_radiowaves_left_and_right.svg') }}">--}}
+{{--                        <x:information>--}}
+{{--                            {{ $anime->studios()->first()->name ?? '-' }}--}}
+{{--                        </x:information>--}}
+{{--                    </x-information-list>--}}
                 </div>
             </section>
 
             @if ($readyToLoad)
                 <livewire:components.anime-seasons-section :anime="$anime" />
 
-                <livewire:components.anime-cast-section :anime="$anime" />
+                <livewire:components.cast-section :kind="\App\Enums\UserLibraryKind::Anime" :anime="$anime" />
 
-                <livewire:components.anime-staff-section :anime="$anime" />
+                <livewire:components.staff-section :kind="\App\Enums\UserLibraryKind::Anime" :anime="$anime" />
 
-                <livewire:components.anime-songs-section :anime="$anime" />
+                <livewire:components.songs-section :kind="\App\Enums\UserLibraryKind::Anime" :anime="$anime" />
 
-                <livewire:components.anime-studios-section :anime="$anime" />
+                <livewire:components.studios-section :kind="\App\Enums\UserLibraryKind::Anime" :anime="$anime" />
 
                 <div class="bg-tinted">
                     @if (!empty($this->studio))
-                        <livewire:components.anime-more-by-studio-section :anime="$anime" :studio="$this->studio" />
+                        <livewire:components.more-by-studio-section :kind="\App\Enums\UserLibraryKind::Anime" :anime="$anime" :studio="$this->studio" />
                     @endif
 
-                    <livewire:components.anime.anime-relations-section :anime="$anime" />
+                    <livewire:components.relations-section :kind="\App\Enums\UserLibraryKind::Anime" :related-kind="\App\Enums\UserLibraryKind::Anime" :anime="$anime" />
 
-                    <livewire:components.anime.manga-relations-section :anime="$anime" />
+                    <livewire:components.relations-section :kind="\App\Enums\UserLibraryKind::Anime" :related-kind="\App\Enums\UserLibraryKind::Manga" :anime="$anime" />
 
-                    <livewire:components.anime.game-relations-section :anime="$anime" />
+                    <livewire:components.relations-section :kind="\App\Enums\UserLibraryKind::Anime" :related-kind="\App\Enums\UserLibraryKind::Game" :anime="$anime" />
 
                     @if (!empty($anime->copyright))
                         <section class="border-t border-primary xl:safe-area-inset">
@@ -528,16 +491,16 @@
 
         <x-slot:content>
             <iframe
-                    class="w-full aspect-video lazyload"
-                    type="text/html"
-                    allowfullscreen="allowfullscreen"
-                    mozallowfullscreen="mozallowfullscreen"
-                    msallowfullscreen="msallowfullscreen"
-                    oallowfullscreen="oallowfullscreen"
-                    webkitallowfullscreen="webkitallowfullscreen"
-                    allow="fullscreen;"
-                    data-size="auto"
-                    src="https://www.youtube-nocookie.com/embed/{{ str($anime->video_url)->after('?v=') }}?autoplay=0&iv_load_policy=3&disablekb=1&color=red&rel=0&cc_load_policy=0&start=0&end=0&origin={{ config('app.url') }}&modestbranding=1&playsinline=1&loop=1&playlist={{ str($anime->video_url)->after('?v=') }}"
+                class="w-full aspect-video lazyload"
+                type="text/html"
+                allowfullscreen="allowfullscreen"
+                mozallowfullscreen="mozallowfullscreen"
+                msallowfullscreen="msallowfullscreen"
+                oallowfullscreen="oallowfullscreen"
+                webkitallowfullscreen="webkitallowfullscreen"
+                allow="fullscreen;"
+                data-size="auto"
+                src="https://www.youtube-nocookie.com/embed/{{ str($anime->video_url)->after('?v=') }}?autoplay=0&iv_load_policy=3&disablekb=1&color=red&rel=0&cc_load_policy=0&start=0&end=0&origin={{ config('app.url') }}&modestbranding=1&playsinline=1&loop=1&playlist={{ str($anime->video_url)->after('?v=') }}"
             >
             </iframe>
         </x-slot:content>

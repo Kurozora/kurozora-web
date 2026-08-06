@@ -10,6 +10,8 @@ use App\Models\User;
 use App\Models\UserFollow;
 use App\Notifications\NewFollower;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class FollowingController extends Controller
 {
@@ -23,7 +25,15 @@ class FollowingController extends Controller
     {
         $authUser = auth()->user();
 
-        $isFollowed = !is_bool($authUser->toggleFollow($user));
+        if (!$authUser->canInteractWith($user)) {
+            throw new BadRequestHttpException(__('You are not allowed to follow this user.'));
+        }
+
+        $isFollowed = DB::transaction(function () use ($authUser, $user) {
+            $result = !is_bool($authUser->toggleFollow($user));
+            $authUser->bumpStateVersion();
+            return $result;
+        });
 
         if ($isFollowed) {
             // Send notification
@@ -51,6 +61,7 @@ class FollowingController extends Controller
 
         // Get the followers
         $followers = $user->followers()
+            ->visibleTo(auth()->user())
             ->orderBy(UserFollow::TABLE_NAME . '.created_at', 'desc')
             ->cursorPaginate($data['limit'] ?? 25);
 
@@ -75,7 +86,8 @@ class FollowingController extends Controller
         $data = $request->validated();
 
         // Get the following
-        $following = $user->followedModels()
+        $following = $user->following()
+            ->visibleTo(auth()->user())
             ->orderBy(UserFollow::TABLE_NAME . '.created_at', 'desc')
             ->cursorPaginate($data['limit'] ?? 25);
 

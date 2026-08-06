@@ -20,19 +20,12 @@
         characters/{{ $character->id }}/people
     </x-slot:appArgument>
 
-    <div class="pt-4 pb-6" wire:init="loadPage">
-        <section class="mb-4 xl:safe-area-inset">
-            <div>
-                <div class="flex gap-1 pl-4 pr-4">
-                    <div class="flex flex-wrap items-center w-full">
-                        <h1 class="text-2xl font-bold">{{ __(':x’s Voice Actors', ['x' => $character->name]) }}</h1>
-                    </div>
-
-                    <div class="flex flex-wrap flex-1 justify-end items-center w-full">
-                    </div>
-                </div>
-            </div>
-        </section>
+    <div class="pb-6" wire:init="loadPage">
+        <x-back-link
+            :url="route('characters.details', $character)"
+            :label="$character->name"
+            :title="__(':x’s Voice Actors', ['x' => $character->name])"
+        />
 
         @if ($readyToLoad)
             <section class="xl:safe-area-inset">

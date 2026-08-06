@@ -7,6 +7,8 @@ use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\DB;
+use Livewire\Attributes\Locked;
 use Livewire\Component;
 
 class Details extends Component
@@ -30,6 +32,7 @@ class Details extends Component
      *
      * @var string $selectedPopupType
      */
+    #[Locked]
     public string $selectedPopupType = '';
 
     /**
@@ -37,6 +40,7 @@ class Details extends Component
      *
      * @var array|string[]
      */
+    #[Locked]
     public array $popupData = [
         'title' => '',
         'message' => '',
@@ -47,11 +51,13 @@ class Details extends Component
      *
      * @var array|int[]
      */
+    #[Locked]
     public array $counts = [
         'achievements_count' => 0,
         'followers_count' => 0,
         'following_count' => 0,
         'media_ratings_count' => 0,
+        'reputation_count' => 0,
     ];
 
     /**
@@ -71,6 +77,13 @@ class Details extends Component
      * @var bool $showSharePopup
      */
     public bool $showSharePopup = false;
+
+    /**
+     * Whether the auth user has opted in to view the blocked user's posts.
+     *
+     * @var bool $showBlockedPosts
+     */
+    public bool $showBlockedPosts = false;
 
     /**
      * The component's listeners.
@@ -95,17 +108,18 @@ class Details extends Component
 
         $this->user = $user->load(['media'])
             ->loadCount([
-                'badges',
+                'achievements',
                 'followers',
-                'followedModels as following_count',
+                'following',
                 'mediaRatings'
             ]);
 
         $this->counts = [
-            'achievements_count' => $user->badges_count,
+            'achievements_count' => $user->achievements_count,
             'followers_count' => $user->followers_count,
             'following_count' => $user->following_count,
             'media_ratings_count' => $user->media_ratings_count,
+            'reputation_count' => $user->reputation_count,
         ];
     }
 
@@ -137,6 +151,20 @@ class Details extends Component
                 ->blockers()
                 ->where('user_id', '=', $authUser->id)
                 ->exists();
+        }
+
+        return false;
+    }
+
+    /**
+     * Whether the auth user is blocked by this profile's user.
+     *
+     * @return bool
+     */
+    public function getIsBlockedByProperty(): bool
+    {
+        if ($authUser = auth()->user()) {
+            return $this->user->hasBlocked($authUser);
         }
 
         return false;
@@ -180,9 +208,26 @@ class Details extends Component
      */
     public function toggleBlockUser(): void
     {
-        auth()->user()->toggleBlock($this->user);
+        $authUser = auth()->user();
+
+        DB::transaction(function () use ($authUser) {
+            $authUser->toggleBlock($this->user);
+            $authUser->bumpStateVersion();
+        });
+
+        $this->showBlockedPosts = false;
         $this->selectedPopupType = '';
         $this->showPopup = false;
+    }
+
+    /**
+     * Reveal posts of the blocked user the auth user has blocked.
+     *
+     * @return void
+     */
+    public function revealBlockedPosts(): void
+    {
+        $this->showBlockedPosts = true;
     }
 
     /**

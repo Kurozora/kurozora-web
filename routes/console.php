@@ -16,6 +16,14 @@ Schedule::command('queue:work --timeout=0')
     ->runInBackground();
 
 /**********************************************/
+// Re-score feed messages within the activity window every fifteen minutes
+Schedule::command('calculate:feed_message_ranking')
+    ->everyFifteenMinutes()
+    ->name('Calculate feed message ranking')
+    ->withoutOverlapping()
+    ->onOneServer();
+
+/**********************************************/
 // Delete stale cache every two hours
 Schedule::command('delete:stale_cache')
     ->everyTwoHours()
@@ -51,12 +59,42 @@ Schedule::command('fix:manga_details')
     ->onOneServer();
 
 /**********************************************/
-// Generate sitemap every day
-//Schedule::command('sitemap:generate')
-//    ->daily()
-//    ->name('Generate sitemap')
-//    ->onOneServer()
-//    ->runInBackground();
+// Top up the Kotodama word bank from the catalog every Monday at 03:40
+Schedule::command('kotodama:generate-words')
+    ->weeklyOn(1, '3:40')
+    ->name('Generate Kotodama words')
+    ->withoutOverlapping()
+    ->onOneServer();
+
+/**********************************************/
+// Schedule tomorrow's Kotodama puzzles every day at 00:10
+Schedule::command('kotodama:schedule')
+    ->dailyAt('0:10')
+    ->name('Schedule tomorrow\'s Kotodama puzzles')
+    ->onOneServer();
+
+/**********************************************/
+// Sweep abandoned daily Kotodama games every day at 00:20
+Schedule::command('kotodama:sweep-abandoned')
+    ->dailyAt('0:20')
+    ->name('Sweep abandoned Kotodama games')
+    ->onOneServer();
+
+/**********************************************/
+// Notify users whose moderation timeout has just expired
+Schedule::command('timeouts:notify-expired')
+    ->everyFiveMinutes()
+    ->name('Notify expired timeouts')
+    ->withoutOverlapping()
+    ->onOneServer();
+
+/**********************************************/
+// Generate sitemaps every day at 02:30
+Schedule::command('generate:sitemaps')
+    ->dailyAt('2:30')
+    ->name('Generate sitemaps')
+    ->onOneServer()
+    ->runInBackground();
 
 /**********************************************/
 // Prune Telescope table
@@ -98,12 +136,33 @@ Schedule::command('model:prune')
     ->onOneServer();
 
 /**********************************************/
+// Verify Apple Root CA pinned fingerprints still match Apple's published copy every day
+Schedule::command('refresh:apple_root_certs')
+    ->dailyAt('3:15')
+    ->name('Verify Apple Root CA pins')
+    ->onOneServer();
+
+/**********************************************/
 // Truncates login attempts every day
 Schedule::call(function() {
     LoginAttempt::truncate();
 })
     ->dailyAt('3:30')
     ->name('Clear login attempts')
+    ->onOneServer();
+
+/**********************************************/
+// Delete expired spammer blocks every day at 03:45
+Schedule::command('delete:expired_spammer_blocks')
+    ->dailyAt('3:45')
+    ->name('Delete expired spammer blocks')
+    ->onOneServer();
+
+/**********************************************/
+// Delete stale library sync tombstones every day at 03:50
+Schedule::command('delete:stale_library_tombstones')
+    ->dailyAt('3:50')
+    ->name('Delete stale library tombstones')
     ->onOneServer();
 
 /**********************************************/

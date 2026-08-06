@@ -10,6 +10,7 @@ use App\Models\MediaRating;
 use App\Models\Season;
 use App\Models\Video;
 use App\Traits\Livewire\PresentsAlert;
+use App\Traits\Livewire\PresentsSubscriptionSheet;
 use App\Traits\Livewire\WithReviewBox;
 use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
 use Illuminate\Contracts\Foundation\Application;
@@ -18,12 +19,16 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+use Livewire\Attributes\Locked;
 use Livewire\Component;
+use Throwable;
 
 class Details extends Component
 {
     use WithReviewBox,
-        PresentsAlert;
+        PresentsAlert,
+        PresentsSubscriptionSheet;
 
     /**
      * The object containing the episode data.
@@ -72,6 +77,7 @@ class Details extends Component
      *
      * @var bool $isTracking
      */
+    #[Locked]
     public bool $isTracking = false;
 
     /**
@@ -79,6 +85,7 @@ class Details extends Component
      *
      * @var bool $isReminded
      */
+    #[Locked]
     public bool $isReminded = false;
 
     /**
@@ -133,10 +140,10 @@ class Details extends Component
         ModelViewed::dispatch($episode, request()->ip());
 
         $this->episode = $episode->loadMissing([
-            'previous_episode' => function (BelongsTo $belongsTo) {
+            'previousEpisode' => function (BelongsTo $belongsTo) {
                 $belongsTo->withoutGlobalScopes();
             },
-            'next_episode' => function (BelongsTo $belongsTo) {
+            'nextEpisode' => function (BelongsTo $belongsTo) {
                 $belongsTo->withoutGlobalScopes()
                     ->with(['translation']);
             },
@@ -145,9 +152,13 @@ class Details extends Component
             'anime' => function (HasOneThrough $hasOneThrough) {
                 $hasOneThrough->withoutGlobalScopes()
                     ->with([
+                        'countryOfOrigin',
+                        'genres',
                         'studios',
                         'translation',
+                        'tvRating',
                         'orderedVideos',
+                        'videos',
                     ]);
             },
             'season' => function (BelongsTo $query) {
@@ -158,7 +169,7 @@ class Details extends Component
                     ]);
             },
             'translation',
-            'tv_rating',
+            'tvRating',
             'videos'
         ])
             ->when(auth()->user(), function ($query, $user) use ($episode) {
@@ -168,7 +179,7 @@ class Details extends Component
                     }
                 ])
                     ->loadExists([
-                        'user_watched_episodes as isWatched' => function ($query) use ($user) {
+                        'userWatchedEpisodes as isWatched' => function ($query) use ($user) {
                             $query->where('user_id', $user->id);
                         }
                     ]);
@@ -177,8 +188,8 @@ class Details extends Component
             });
         $episode->season->setRelation('anime', $episode->anime);
 
-        $this->previousEpisode = $episode->previous_episode;
-        $this->nextEpisode = $episode->next_episode;
+        $this->previousEpisode = $episode->previousEpisode;
+        $this->nextEpisode = $episode->nextEpisode;
         $this->season = $episode->season;
         $this->anime = $episode->season->anime;
 
@@ -194,7 +205,7 @@ class Details extends Component
     {
         $this->episode->when(auth()->user(), function ($query, $user) {
             $this->episode->loadExists([
-                'user_watched_episodes as isWatched' => function ($query) use ($user) {
+                'userWatchedEpisodes as isWatched' => function ($query) use ($user) {
                     $query->where('user_id', $user->id);
                 }
             ]);
@@ -277,6 +288,8 @@ class Details extends Component
 
     /**
      * Adds the anime to the user's reminder list.
+     *
+     * @throws Throwable
      */
     public function remindAnime(): void
     {
@@ -284,11 +297,15 @@ class Details extends Component
 
         if ($user->is_pro) {
             if ($this->isTracking) {
-                if ($this->isReminded) { // Don't remind the user
-                    $user->unremind($this->anime);
-                } else { // Remind the user
-                    $user->remind($this->anime);
-                }
+                DB::transaction(function () use ($user) {
+                    if ($this->isReminded) { // Don't remind the user
+                        $user->unremind($this->anime);
+                    } else { // Remind the user
+                        $user->remind($this->anime);
+                    }
+
+                    $user->bumpStateVersion();
+                });
 
                 $this->isReminded = !$this->isReminded;
             } else {
@@ -298,11 +315,31 @@ class Details extends Component
                 );
             }
         } else {
-            $this->presentAlert(
-                title: __('That’s unfortunate'),
-                message: __('Reminders are only available to pro and subscribed users 🧐'),
+            $this->presentSubscriptionSheet(
+                title: __('Integrate with Calendar'),
+                message: __('Integrate your anime schedule into your calendar. Never miss an episode again with reminders for new airings.'),
             );
         }
+    }
+
+    /**
+     * The Schema.org JSON-LD payload for this page.
+     *
+     * @return array
+     */
+    public function getSchemaProperty(): array
+    {
+        return $this->episode->toSchemaOrg();
+    }
+
+    /**
+     * The breadcrumb chain for this page.
+     *
+     * @return array
+     */
+    public function getBreadcrumbProperty(): array
+    {
+        return $this->episode->schemaBreadcrumbChain();
     }
 
     /**

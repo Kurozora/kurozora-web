@@ -47,7 +47,7 @@ class ProducerProcessor extends CustomItemProcessor
         $websites = $item->get('websites') ?? [];
 
         if (empty($studio)) {
-            logger()->channel('stderr')->info('🖨 [MAL_ID:PRODUCER:' . $malID . '] Creating producer');
+            logger()->channel('stderr')->debug('🖨 [MAL_ID:PRODUCER:' . $malID . '] Creating producer');
 
             $studio = Studio::withoutGlobalScopes()
                 ->create([
@@ -62,9 +62,9 @@ class ProducerProcessor extends CustomItemProcessor
                     'founded_at' => $foundedAt?->toDateString(),
                     'defunct_at' => $defunctAt?->toDateString(),
                 ]);
-            logger()->channel('stderr')->info('✅️ [MAL_ID:PRODUCER:' . $malID . '] Done creating producer');
+            logger()->channel('stderr')->debug('✅️ [MAL_ID:PRODUCER:' . $malID . '] Done creating producer');
         } else {
-            logger()->channel('stderr')->info('🛠 [MAL_ID:PRODUCER:' . $malID . '] Updating attributes');
+            logger()->channel('stderr')->debug('🛠 [MAL_ID:PRODUCER:' . $malID . '] Updating attributes');
             $newName = empty($name) ? $studio->name : $name;
             $newJapaneseName = empty($japaneseName) ? $studio->japanese_name : $japaneseName;
             $newAlternativeNames = array_values(array_unique(array_merge($studio->alternative_names?->toArray() ?? [], $alternativeNames ?? [])));
@@ -85,7 +85,7 @@ class ProducerProcessor extends CustomItemProcessor
                 'founded_at' => $newFoundedAt?->toDateString(),
                 'defunct_at' => $newDefunctAt?->toDateString(),
             ]);
-            logger()->channel('stderr')->info('✅️ [MAL_ID:PRODUCER:' . $malID . '] Done updating attributes');
+            logger()->channel('stderr')->debug('✅️ [MAL_ID:PRODUCER:' . $malID . '] Done updating attributes');
         }
 
         // Add poster image
@@ -206,11 +206,11 @@ class ProducerProcessor extends CustomItemProcessor
     {
         if (!empty($imageUrl) && empty($studio->getFirstMedia(MediaCollection::Profile))) {
             try {
-                logger()->channel('stderr')->info('🌄 [MAL_ID:PRODUCER:' . $studio->mal_id . '] Adding profile image');
+                logger()->channel('stderr')->debug('🌄 [MAL_ID:PRODUCER:' . $studio->mal_id . '] Adding profile image');
 
                 $studio->updateImageMedia(MediaCollection::Profile(), $imageUrl, $studio->name);
 
-                logger()->channel('stderr')->info('✅️ [MAL_ID:PRODUCER:' . $studio->mal_id . '] Done adding profile image');
+                logger()->channel('stderr')->debug('✅️ [MAL_ID:PRODUCER:' . $studio->mal_id . '] Done adding profile image');
             } catch (Exception $e) {
                 logger()->channel('stderr')->error('❌️ [MAL_ID:PRODUCER:' . $studio->mal_id . '] Failed adding profile image: ' . $e->getMessage());
             }

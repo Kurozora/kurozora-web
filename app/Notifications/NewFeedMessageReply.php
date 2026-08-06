@@ -5,15 +5,18 @@ namespace App\Notifications;
 use App\Enums\MediaCollection;
 use App\Models\FeedMessage;
 use App\Models\User;
+use App\Notifications\Concerns\BroadcastsAsNotification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Notification;
 use NotificationChannels\Apn\ApnChannel;
 use NotificationChannels\Apn\ApnMessage;
 
 class NewFeedMessageReply extends Notification implements ShouldQueue
 {
-    use Queueable;
+    use BroadcastsAsNotification,
+        Queueable;
 
     /**
      * The message that was replied to.
@@ -35,34 +38,67 @@ class NewFeedMessageReply extends Notification implements ShouldQueue
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function via(mixed $notifiable): array
     {
-        return ['database', ApnChannel::class];
+        return ['database', 'broadcast', ApnChannel::class];
+    }
+
+    /**
+     * Suppress delivery if the notifiable user has blocked the message author.
+     *
+     * @param mixed  $notifiable
+     * @param string $channel
+     *
+     * @return bool
+     */
+    public function shouldSend(mixed $notifiable, string $channel): bool
+    {
+        return !($notifiable instanceof User) || !$notifiable->hasBlocked($this->feedMessage->user);
     }
 
     /**
      * Get the database representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function toDatabase(mixed $notifiable): array
     {
         return [
-            'userID'            => (string) $this->feedMessage->user->id,
-            'username'          => $this->feedMessage->user->username,
-            'profileImageURL'   => $this->feedMessage->user->getFirstMediaFullUrl(MediaCollection::Profile()),
-            'feedMessageID'     => (string) $this->feedMessage->id,
+            'userID' => (string) $this->feedMessage->user->id,
+            'username' => $this->feedMessage->user->username,
+            'profileImageURL' => $this->feedMessage->user->getFirstMediaFullUrl(MediaCollection::Profile()),
+            'feedMessageID' => (string) $this->feedMessage->id,
         ];
+    }
+
+    /**
+     * Get the broadcast representation of the notification.
+     *
+     * @param mixed $notifiable
+     *
+     * @return BroadcastMessage
+     */
+    public function toBroadcast(mixed $notifiable): BroadcastMessage
+    {
+        return new BroadcastMessage([
+            'userID' => (string) $this->feedMessage->user->id,
+            'username' => $this->feedMessage->user->username,
+            'profileImageURL' => $this->feedMessage->user->getFirstMediaFullUrl(MediaCollection::Profile()),
+            'feedMessageID' => (string) $this->feedMessage->id,
+        ]);
     }
 
     /**
      * Get the APN representation of the notification.
      *
      * @param User $notifiable
+     *
      * @return ApnMessage
      */
     public function toApn(User $notifiable): ApnMessage
@@ -70,6 +106,7 @@ class NewFeedMessageReply extends Notification implements ShouldQueue
         return ApnMessage::create()
             ->title($this->feedMessage->user->username . ' Replied to Your Message')
             ->badge($notifiable->unreadNotifications()->count())
-            ->body($this->feedMessage->content);
+            ->body($this->feedMessage->content)
+            ->custom('notification_id', $this->id);
     }
 }

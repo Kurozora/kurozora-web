@@ -1,4 +1,4 @@
-@props(['animes' => [], 'relatedAnimes' => [], 'mangas' => [], 'relatedMangas' => [], 'games' => [], 'relatedGames' => [], 'page' => 1, 'perPage' => 25, 'trackingEnabled' => true, 'showsSchedule' => false, 'isRanked' => false, 'isRow' => true, 'safeAreaInsetEnabled' => true])
+@props(['animes' => [], 'relatedAnimes' => [], 'mangas' => [], 'relatedMangas' => [], 'games' => [], 'relatedGames' => [], 'page' => 1, 'perPage' => 25, 'trackingEnabled' => true, 'showsSchedule' => false, 'isRanked' => false, 'isRow' => true, 'safeAreaInsetEnabled' => true, 'marksLibrary' => false])
 
 @php
     $class = $isRow ? 'snap-mandatory snap-x overflow-x-scroll no-scrollbar' : 'flex-wrap';
@@ -11,7 +11,7 @@
 @if (!empty($animes) || !empty($relatedAnimes))
     <div {{ $attributes->merge(['class' => 'flex gap-4 justify-between pl-4 pr-4 ' . $class]) }}>
         @foreach ($animes as $index => $anime)
-            <x-lockups.small-lockup :anime="$anime" :rank="($page - 1) * $perPage + $index + 1" :tracking-enabled="$trackingEnabled" :shows-schedule="$showsSchedule" :is-ranked="$isRanked" :is-row="$isRow" />
+            <x-lockups.small-lockup :anime="$anime" :rank="($page - 1) * $perPage + $index + 1" :tracking-enabled="$trackingEnabled" :shows-schedule="$showsSchedule" :is-ranked="$isRanked" :is-row="$isRow" :in-library="$marksLibrary && $anime->library->isNotEmpty()" />
         @endforeach
 
         @foreach ($relatedAnimes as $index => $anime)
@@ -25,7 +25,7 @@
 @elseif (!empty($games) || !empty($relatedGames))
     <div {{ $attributes->merge(['class' => 'flex gap-4 justify-between pl-4 pr-4 ' . $class]) }}>
         @foreach ($games as $index => $game)
-            <x-lockups.small-lockup :game="$game" :rank="($page - 1) * $perPage + $index + 1" :tracking-enabled="$trackingEnabled" :shows-schedule="$showsSchedule" :is-ranked="$isRanked" :is-row="$isRow" />
+            <x-lockups.small-lockup :game="$game" :rank="($page - 1) * $perPage + $index + 1" :tracking-enabled="$trackingEnabled" :shows-schedule="$showsSchedule" :is-ranked="$isRanked" :is-row="$isRow" :in-library="$marksLibrary && $game->library->isNotEmpty()" />
         @endforeach
 
         @foreach ($relatedGames as $index => $game)
@@ -39,7 +39,7 @@
 @elseif (!empty($mangas) || !empty($relatedMangas))
     <div {{ $attributes->merge(['class' => 'flex gap-4 justify-between pl-4 pr-4 ' . $class]) }}>
         @foreach ($mangas as $index => $manga)
-            <x-lockups.small-lockup :manga="$manga" :rank="($page - 1) * $perPage + $index + 1" :tracking-enabled="$trackingEnabled" :shows-schedule="$showsSchedule" :is-ranked="$isRanked" :is-row="$isRow" />
+            <x-lockups.small-lockup :manga="$manga" :rank="($page - 1) * $perPage + $index + 1" :tracking-enabled="$trackingEnabled" :shows-schedule="$showsSchedule" :is-ranked="$isRanked" :is-row="$isRow" :in-library="$marksLibrary && $manga->library->isNotEmpty()" />
         @endforeach
 
         @foreach ($relatedMangas as $index => $manga)

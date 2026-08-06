@@ -4,6 +4,7 @@ use App\Http\Controllers\API\v1\StudioController;
 
 Route::prefix('/studios')
     ->name('.studios')
+    ->middleware('cache.headers:private;no_cache;etag')
     ->group(function () {
         Route::get('/', [StudioController::class, 'index'])
             ->middleware('auth.kurozora:optional')
@@ -36,7 +37,7 @@ Route::prefix('/studios')
                     ->name('.games');
 
                 Route::prefix('rate')
-                    ->middleware('auth.kurozora')
+                    ->middleware(['auth.kurozora', 'user.not-timed-out'])
                     ->group(function () {
                         Route::post('/', [StudioController::class, 'rate'])
                             ->name('.rate');

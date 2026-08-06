@@ -41,7 +41,7 @@ class PersonalAccessToken extends SanctumPersonalAccessToken
      *
      * @return morphOne
      */
-    public function session_attribute(): MorphOne
+    public function sessionAttribute(): MorphOne
     {
         return $this->morphOne(SessionAttribute::class, 'model', localKey: 'token');
     }

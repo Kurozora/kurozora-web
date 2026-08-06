@@ -24,7 +24,7 @@ trait WithPlatformSearch
      */
     public function randomPlatform(): void
     {
-        $platform = Platform::inRandomOrder()->first();
+        $platform = Platform::randomFirst();
         $this->redirectRoute('platforms.details', $platform);
     }
 

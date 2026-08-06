@@ -9,7 +9,7 @@
 
     <x-slot:meta>
         <meta property="og:title" content="{{ $studio->name }} — {{ config('app.name') }}" />
-        <meta property="og:description" content="{{ $studio->synopsis ?? __('app.description') }}" />
+        <meta property="og:description" content="{{ $studio->synopsis ?? __('A community for anime fans with an extensive library of anime, manga, music, games, movies, specials, OVA, and ONA. Only on :x, the largest, free online anime, manga, game & music database in the world. Track, share and discover anime with friends.', ['x' => config('app.name')]) }}" />
         <meta property="og:image" content="{{ $studio->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/person_poster.webp') }}" />
         <meta property="og:type" content="profile" />
         <meta property="og:profile:username" content="{{ $studio->name }}" />
@@ -80,7 +80,7 @@
 
             <div id="tvRatingBadge" class="flex-grow px-12 border-l border-primary">
                 <a class="flex flex-col items-center" href="#tvRating">
-                    <p class="font-bold">{{ $studio->tv_rating->name }}</p>
+                    <p class="font-bold">{{ $studio->tvRating->name }}</p>
                     <p class="text-tint">
                         @svg('tv_fill', 'fill-current', ['width' => '20'])
                     </p>
@@ -102,7 +102,7 @@
         </section>
 
         @if ($studio->about)
-            <section class="pb-8">
+            <section class="pt-4 pb-8 xl:safe-area-inset">
                 <x-section-nav class="pt-4">
                     <x-slot:title>
                         {{ __('About') }}
@@ -227,11 +227,11 @@
 
                 <x-information-list id="tvRating" title="{{ __('Rating') }}" icon="{{ asset('images/symbols/tv_rating.svg') }}">
                     <x-slot:information>
-                        {{ $studio->tv_rating->name }}
+                        {{ $studio->tvRating->name }}
                     </x-slot:information>
 
                     <x-slot:footer>
-                        <p class="text-sm">{{ $studio->tv_rating->description }}.</p>
+                        <p class="text-sm">{{ $studio->tvRating->description }}.</p>
                     </x-slot:footer>
                 </x-information-list>
 

@@ -83,6 +83,11 @@ class Episode extends Resource
 
             ID::make()->sortable(),
 
+            Text::make('Public ID', 'public_id')
+                ->readonly()
+                ->hideWhenCreating()
+                ->hideWhenUpdating(),
+
             Heading::make('Media'),
 
             Images::make('Banner')
@@ -135,18 +140,18 @@ class Episode extends Resource
                 ->searchable()
                 ->sortable(),
 
-            BelongsTo::make('TV rating', 'tv_rating')
+            BelongsTo::make('TV rating', 'tvRating')
                 ->sortable()
                 ->help('The TV rating of the episode. For example NR, G, PG-12, etc.')
                 ->required(),
 
-            BelongsTo::make('Previous Episode', 'previous_episode', Episode::class)
+            BelongsTo::make('Previous Episode', 'previousEpisode', Episode::class)
                 ->hideFromIndex()
                 ->searchable()
                 ->sortable()
                 ->nullable(),
 
-            BelongsTo::make('Next Episode', 'next_episode', Episode::class)
+            BelongsTo::make('Next Episode', 'nextEpisode', Episode::class)
                 ->hideFromIndex()
                 ->searchable()
                 ->sortable()

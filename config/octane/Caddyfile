@@ -1,0 +1,115 @@
+{
+	{$CADDY_GLOBAL_OPTIONS}
+
+	admin {$CADDY_SERVER_ADMIN_HOST}:{$CADDY_SERVER_ADMIN_PORT}
+
+	frankenphp {
+		worker {
+			file "{$APP_PUBLIC_PATH}/frankenphp-worker.php"
+			{$CADDY_SERVER_WORKER_DIRECTIVE}
+			{$CADDY_SERVER_WATCH_DIRECTIVES}
+			env MAX_REQUESTS {$OCTANE_MAX_REQUESTS:500}
+		}
+	}
+
+	servers {
+		timeouts {
+			read_body 60s
+			read_header 60s
+			idle 60s
+		}
+	}
+
+	order php_server before file_server
+}
+
+{$CADDY_EXTRA_CONFIG}
+
+{$CADDY_SERVER_SERVER_NAME} {
+	log {
+		level {$CADDY_SERVER_LOG_LEVEL}
+
+		# Redact the authorization query parameter that can be set by Mercure...
+		format filter {
+			wrap {$CADDY_SERVER_LOGGER}
+			fields {
+				uri query {
+					replace authorization REDACTED
+				}
+			}
+		}
+	}
+
+	route {
+		root * "{$APP_PUBLIC_PATH}"
+		encode zstd br gzip
+
+		request_body {
+			max_size 10MB
+		}
+
+		header {
+			X-Frame-Options "SAMEORIGIN"
+			X-XSS-Protection "1; mode=block"
+			X-Content-Type-Options "nosniff"
+			Referrer-Policy "strict-origin-when-cross-origin"
+			Permissions-Policy `accelerometer=*, ambient-light-sensor=(), autoplay=*, battery=(), camera=*, cross-origin-isolated=*, display-capture=*, document-domain=*, encrypted-media=*, execution-while-not-rendered=(), execution-while-out-of-viewport=(), fullscreen=*, geolocation=*, gyroscope=*, keyboard-map=(), magnetometer=(), microphone=*, midi=(), navigation-override=(), payment=(self "https://authorize.music.apple.com" "https://mediaauth.apple.com"), picture-in-picture=*, publickey-credentials-get=(self "https://authorize.music.apple.com" "https://mediaauth.apple.com"), screen-wake-lock=(), sync-xhr=(), usb=(), web-share=*, xr-spatial-tracking=(), clipboard-read=*, clipboard-write=*, gamepad=*, speaker-selection=*`
+			-Server
+			-X-Powered-By
+			-X-CF-Powered-By
+			-X-Runtime
+		}
+
+		# HSTS and HTTPS redirect, gated on upstream-set X-Forwarded-Proto...
+		@https header_regexp X-Forwarded-Proto ^https$
+		header @https Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+		header @https Content-Security-Policy "upgrade-insecure-requests"
+
+		@http header_regexp X-Forwarded-Proto ^http$
+		redir @http https://{host}{uri} 301
+
+		# Mercure configuration is injected here...
+		{$CADDY_SERVER_EXTRA_DIRECTIVES}
+
+		# Pusher-protocol traffic forwarded to Reverb...
+		@reverb path /api/v1/app/* /api/v1/apps/*
+		handle @reverb {
+			uri strip_prefix /api/v1
+			reverse_proxy localhost:{$REVERB_SERVER_PORT:8080} {
+				header_up Host {host}
+				header_up X-Real-IP {remote}
+			}
+		}
+
+		# Deny dotfile access...
+		@dotfile {
+			path_regexp /\.
+			not path /.well-known /.well-known/*
+		}
+		handle @dotfile {
+			respond 403
+		}
+
+		# Cache static assets...
+		@static {
+			path *.css *.js *.jpg *.jpeg *.png *.gif *.svg *.webp *.ico *.pdf
+			not path /service-worker.js
+		}
+		header @static Cache-Control "public, max-age=10368000"
+
+		# Exclude ServiceWorker from cache...
+		@sw path /service-worker.js
+		header @sw Cache-Control "no-cache"
+
+		# Skip access log...
+		@quiet path /favicon.ico /robots.txt /humans.txt /manifest.json /opensearch.xml /service-worker.js
+		log_skip @quiet
+
+		php_server {
+			index frankenphp-worker.php
+			try_files {path} frankenphp-worker.php
+			# Required for the public/storage/ directory...
+			resolve_root_symlink
+		}
+	}
+}

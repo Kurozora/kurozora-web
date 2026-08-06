@@ -3,6 +3,7 @@
 namespace App\Livewire\Components;
 
 use App\Models\MediaRating;
+use App\Support\UserLibraryTouch;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
@@ -108,17 +109,18 @@ class StarRating extends Component
         }
 
         if ($this->rating == -1) {
+            // Delete through the model so observers fire.
             $user->mediaRatings()->where([
                 ['model_id', '=', $this->modelID],
                 ['model_type', '=', $this->modelType],
-            ])->forceDelete();
+            ])->first()?->delete();
         } else {
             if ($this->rating < MediaRating::MIN_RATING_VALUE || $this->rating > MediaRating::MAX_RATING_VALUE) {
                 return;
             }
 
-            // Update authenticated user's rating
-            $user->mediaRatings()->withoutGlobalScopes()
+            // Update or create the authenticated user's rating for this model.
+            $user->mediaRatings()
                 ->updateOrCreate([
                     'model_id' => $this->modelID,
                     'model_type' => $this->modelType,
@@ -126,6 +128,8 @@ class StarRating extends Component
                     'rating' => $this->rating,
                 ]);
         }
+
+        UserLibraryTouch::touch($user->id, $this->modelType, [$this->modelID]);
 
         $this->dispatch($this->listenerKey(), id: $this->getID(), modelID: $this->modelID, modelType: $this->modelType, rating: $this->rating);
     }

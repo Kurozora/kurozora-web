@@ -33,7 +33,7 @@ return new class extends Migration
 
         Schema::table(Theme::TABLE_NAME, function (Blueprint $table) {
             // Set index key constraints
-            $table->index('deleted_at');
+            $table->index(['deleted_at', 'tv_rating_id']);
 
             // Set unique key constraints
             $table->unique(['slug']);

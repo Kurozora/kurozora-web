@@ -4,22 +4,27 @@
 # Composer
 /vendor
 
-# Kurozora
-/app/Models/KDashboard
-
 # Laravel
 /public/build
 /public/hot
+/public/offline.html
+/public/service-worker.js
+/public/service-worker.js.map
 /public/storage
 /public/images/user_uploads
 /public/img/user_uploads
 /storage/*.key
-.env
-.env.backup
-.env.production
+.env*
+!.env*.example
+!.env.testing
 
 # Docker
 docker-compose.override.yml
+
+# Octane
+/frankenphp
+**/caddy
+frankenphp-worker.php
 
 # Homestead
 Homestead.json

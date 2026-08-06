@@ -29,6 +29,7 @@
         "ext-intl": "*",
         "ext-json": "*",
         "ext-libxml": "*",
+        "ext-openssl": "*",
         "ext-pdo": "*",
         "ext-simplexml": "*",
         "abbasudo/pulse-users": "^1.0",
@@ -54,7 +55,9 @@
         "kiritokatklian/laravel-sort-request": "^2.0",
         "laravel-notification-channels/apn": "^v5.0",
         "laravel/framework": "^12.0",
+        "laravel/octane": "^2.5",
         "laravel/pulse": "^1.4",
+        "laravel/reverb": "^1.0",
         "laravel/sanctum": "^4.0",
         "laravel/scout": "^10.0",
         "laravel/socialite": "^5.2",
@@ -89,7 +92,6 @@
         "beyondcode/laravel-query-detector": "^2.0",
         "brianium/paratest": "^7.0",
         "fakerphp/faker": "^1.19",
-        "larastan/larastan": "^3.0",
         "laravel/sail": "^1.41",
         "mockery/mockery": "^1.5",
         "nunomaduro/collision": "^8.6",
@@ -162,12 +164,28 @@
             "@php artisan ide-helper:models -N",
             "@php artisan ide-helper:meta"
         ],
-        "analyse": "vendor/bin/phpstan analyse",
-        "baseline": "vendor/bin/phpstan analyse --generate-baseline",
         "lint": "vendor/bin/duster lint",
         "format": "vendor/bin/duster fix",
         "duster": "vendor/bin/duster",
-        "test": "vendor/bin/phpunit"
+        "test": "vendor/bin/phpunit",
+        "octane:up": "valet unlink kurozora 2>/dev/null; valet proxy kurozora http://127.0.0.1:8000 --secure",
+        "octane:down": "valet unproxy kurozora 2>/dev/null; valet link kurozora",
+        "octane:dev": [
+            "Composer\\Config::disableProcessTimeout",
+            "@php artisan octane:start --server=frankenphp --watch --caddyfile=config/octane/Caddyfile"
+        ],
+        "octane:share": [
+            "Composer\\Config::disableProcessTimeout",
+            "ngrok http --url=$(grep -E '^NGROK_DOMAIN=' .env | head -1 | cut -d= -f2-) --host-header=kurozora.test 8000"
+        ],
+        "docker:build": [
+            "Composer\\Config::disableProcessTimeout",
+            "docker/build-image.sh"
+        ],
+        "docker:build:frankenphp": [
+            "Composer\\Config::disableProcessTimeout",
+            "docker/build-image.frankenphp.sh"
+        ]
     },
     "extra": {
         "laravel": {

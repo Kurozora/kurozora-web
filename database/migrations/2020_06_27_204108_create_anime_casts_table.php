@@ -8,6 +8,7 @@ use App\Models\Language;
 use App\Models\Person;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -32,10 +33,13 @@ return new class extends Migration
 
         Schema::table(AnimeCast::TABLE_NAME, function(Blueprint $table) {
             // Set index key constraints
-            $table->index('deleted_at');
+            $table->index(['anime_id', 'deleted_at', 'id']);
 
             // Set unique key constraints
-            $table->unique(['person_id', 'character_id', 'anime_id', 'cast_role_id', 'language_id'], 'anime_cast_person_character_language_unique');
+            $table->unique(
+                [DB::raw('(COALESCE(person_id, 0))'), 'character_id', 'anime_id', 'cast_role_id', DB::raw('(COALESCE(language_id, 0))')],
+                'anime_cast_person_character_language_unique'
+            );
 
             // Set foreign key constraints
             $table->foreign('person_id')

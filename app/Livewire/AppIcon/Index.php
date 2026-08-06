@@ -3,7 +3,7 @@
 namespace App\Livewire\AppIcon;
 
 use App\Models\AppIcon;
-use App\Traits\Livewire\PresentsAlert;
+use App\Traits\Livewire\PresentsSubscriptionSheet;
 use File;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -13,7 +13,7 @@ use Livewire\Component;
 
 class Index extends Component
 {
-    use PresentsAlert;
+    use PresentsSubscriptionSheet;
 
     /**
      * The currently used app icon's name.
@@ -150,9 +150,10 @@ class Index extends Component
             }
 
             if (!($user->is_subscribed || $user->is_pro)) {
-                $this->presentAlert(
-                    title: __('That’s unfortunate'),
-                    message: __('Premium app icons are only available to pro and subscribed users 🧐'),
+                $this->presentSubscriptionSheet(
+                    title: __('Stylish App Icons'),
+                    message: __('Make your home screen stand out with premium and limited time app icons.'),
+                    tipJarEnabled: true,
                 );
                 return;
             }

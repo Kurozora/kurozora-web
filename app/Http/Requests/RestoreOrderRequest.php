@@ -24,7 +24,7 @@ class RestoreOrderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'orderID'   => ['bail', 'required', 'string'],
+            'orderID' => ['bail', 'required', 'string'],
         ];
     }
 }

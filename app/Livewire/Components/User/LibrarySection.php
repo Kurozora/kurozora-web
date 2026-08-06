@@ -6,6 +6,7 @@ use App\Models\Anime;
 use App\Models\Game;
 use App\Models\Manga;
 use App\Models\User;
+use App\Models\UserLibrary;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -96,7 +97,10 @@ class LibrarySection extends Component
         }
 
         return $this->user->whereTracked($this->type)
-            ->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tv_rating'])
+            ->when(auth()->id() !== $this->user->id, function ($query) {
+                $query->where(UserLibrary::TABLE_NAME . '.is_hidden', '=', false);
+            })
+            ->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tvRating'])
             ->when(auth()->user(), function ($query, $user) {
                 $query->with(['library' => function ($query) use ($user) {
                     $query->where('user_id', '=', $user->id);

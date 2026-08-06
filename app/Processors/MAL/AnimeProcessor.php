@@ -193,7 +193,7 @@ class AnimeProcessor extends CustomItemProcessor
 //        ], $attributes));
 
         if (empty($anime)) {
-            logger()->channel('stderr')->info('🖨 [MAL_ID:ANIME:' . $malID . '] Creating anime');
+            logger()->channel('stderr')->debug('🖨 [MAL_ID:ANIME:' . $malID . '] Creating anime');
             $anime = Anime::withoutGlobalScopes()
                 ->create(array_merge([
                     'mal_id' => $malID,
@@ -216,15 +216,15 @@ class AnimeProcessor extends CustomItemProcessor
                     'tv_rating_id' => $tvRating->id,
                     'is_nsfw' => $isNSFW,
                 ], $attributes));
-            logger()->channel('stderr')->info('✅️ [MAL_ID:ANIME:' . $malID . '] Done creating anime');
+            logger()->channel('stderr')->debug('✅️ [MAL_ID:ANIME:' . $malID . '] Done creating anime');
         } else {
-            logger()->channel('stderr')->info('🛠 [MAL_ID:ANIME:' . $malID . '] Updating attributes');
+            logger()->channel('stderr')->debug('🛠 [MAL_ID:ANIME:' . $malID . '] Updating attributes');
             $newTitle = $title ?? $originalTitle;
             $newEpisodeCount = empty($episodeCount) ? $anime->episode_count : $episodeCount;
             $newDuration = empty($anime->duration) ? $duration : $anime->duration;
             $newEndedAt = $anime->ended_at ?? $endedAt;
 
-            if ($anime->media_type?->id == 4 && $anime->status?->id == 3 && $newEndedAt != null) {
+            if ($anime->mediaType?->id == 4 && $anime->status?->id == 3 && $newEndedAt != null) {
                 // Movies stay in theaters about 13 weeks on average,
                 // so we only mark them as finished after 13 weeks.
                 $proposedEndedAt = $newEndedAt->copy()->addWeeks(13);
@@ -251,38 +251,38 @@ class AnimeProcessor extends CustomItemProcessor
                 'tv_rating_id' => $tvRating->id,
                 'is_nsfw' => $isNSFW,
             ], $attributes));
-            logger()->channel('stderr')->info('✅️ [MAL_ID:ANIME:' . $malID . '] Done updating attributes');
+            logger()->channel('stderr')->debug('✅️ [MAL_ID:ANIME:' . $malID . '] Done updating attributes');
         }
 
         // Add poster image
-        logger()->channel('stderr')->info('🌄 [MAL_ID:ANIME:' . $malID . '] Adding poster');
+        logger()->channel('stderr')->debug('🌄 [MAL_ID:ANIME:' . $malID . '] Adding poster');
         $this->addPosterImage($imageURL, $anime);
-        logger()->channel('stderr')->info('✅️ [MAL_ID:ANIME:' . $malID . '] Done adding poster');
+        logger()->channel('stderr')->debug('✅️ [MAL_ID:ANIME:' . $malID . '] Done adding poster');
 
         // Add different studio relations
-        logger()->channel('stderr')->info('🏢 [MAL_ID:ANIME:' . $malID . '] Adding studios');
+        logger()->channel('stderr')->debug('🏢 [MAL_ID:ANIME:' . $malID . '] Adding studios');
         $this->addStudios($producers, $anime, 'is_producer');
         $this->addStudios($licensors, $anime, 'is_licensor');
         $this->addStudios($studios, $anime, 'is_studio');
-        logger()->channel('stderr')->info('✅️ [MAL_ID:ANIME:' . $malID . '] Done adding studios');
+        logger()->channel('stderr')->debug('✅️ [MAL_ID:ANIME:' . $malID . '] Done adding studios');
 
         // Add genre and theme relations
-        logger()->channel('stderr')->info('🎭 [MAL_ID:ANIME:' . $malID . '] Adding genres and themes');
+        logger()->channel('stderr')->debug('🎭 [MAL_ID:ANIME:' . $malID . '] Adding genres and themes');
         $this->addGenres($genres, $anime);
         $this->addGenres($demographics, $anime);
         $this->addThemes($themes, $anime);
-        logger()->channel('stderr')->info('✅️ [MAL_ID:ANIME:' . $malID . '] Done adding genres');
+        logger()->channel('stderr')->debug('✅️ [MAL_ID:ANIME:' . $malID . '] Done adding genres');
 
         // Add relations
-        logger()->channel('stderr')->info('↔️ [MAL_ID:ANIME:' . $malID . '] Adding relations');
+        logger()->channel('stderr')->debug('↔️ [MAL_ID:ANIME:' . $malID . '] Adding relations');
         $this->addRelations($relations, $anime);
-        logger()->channel('stderr')->info('✅️ [MAL_ID:ANIME:' . $malID . '] Done adding relations');
+        logger()->channel('stderr')->debug('✅️ [MAL_ID:ANIME:' . $malID . '] Done adding relations');
 
         // Add songs
-        logger()->channel('stderr')->info('🎸 [MAL_ID:ANIME:' . $malID . '] Adding songs');
+        logger()->channel('stderr')->debug('🎸 [MAL_ID:ANIME:' . $malID . '] Adding songs');
         $this->addSongs(SongType::Opening(), $openingSongs, $anime);
         $this->addSongs(SongType::Ending(), $endingSongs, $anime);
-        logger()->channel('stderr')->info('✅️ [MAL_ID:ANIME:' . $malID . '] Done adding songs');
+        logger()->channel('stderr')->debug('✅️ [MAL_ID:ANIME:' . $malID . '] Done adding songs');
 
         logger()->channel('stderr')->info('✅️ [MAL_ID:ANIME:' . $malID . '] Done processing anime');
         return $item;
@@ -512,15 +512,21 @@ class AnimeProcessor extends CustomItemProcessor
         }
 
         foreach ($genres as $genreID => $genreName) {
-            preg_match('/((?:^|[A-Z])[a-z]+)/', $genreName, $genreName);
-            $genreName = implode('', array_unique($genreName));
-
             $genre = Genre::withoutGlobalScopes()
-                ->firstOrCreate([
+                ->where(function ($query) use ($genreID, $genreName) {
+                    $query->where('name', '=', $genreName)
+                        ->orWhere('mal_id', '=', $genreID);
+                })
+                ->orderByRaw('name = ? DESC', [$genreName])
+                ->first();
+
+            if (!$genre) {
+                $genre = Genre::create([
                     'mal_id' => $genreID,
-                ], [
-                    'name' => $genreName,
+                    'name'   => $genreName,
                 ]);
+            }
+
             $mediaGenre = $anime?->mediaGenres()->firstWhere('genre_id', '=', $genre->id);
 
             if (empty($mediaGenre)) {
@@ -548,15 +554,21 @@ class AnimeProcessor extends CustomItemProcessor
         }
 
         foreach ($themes as $themeID => $themeName) {
-            preg_match('/((?:^|[A-Z])[a-z]+)/', $themeName, $themeName);
-            $themeName = implode('', array_unique($themeName));
-
             $theme = Theme::withoutGlobalScopes()
-                ->firstOrCreate([
+                ->where(function ($query) use ($themeID, $themeName) {
+                    $query->where('name', '=', $themeName)
+                        ->orWhere('mal_id', '=', $themeID);
+                })
+                ->orderByRaw('name = ? DESC', [$themeName])
+                ->first();
+
+            if (!$theme) {
+                $theme = Theme::create([
                     'mal_id' => $themeID,
-                ], [
-                    'name' => $themeName,
+                    'name'   => $themeName,
                 ]);
+            }
+
             $mediaTheme = $anime?->mediaThemes()->firstWhere('theme_id', '=', $theme->id);
 
             if (empty($mediaTheme)) {
@@ -670,7 +682,7 @@ class AnimeProcessor extends CustomItemProcessor
                 try {
                     $date = Carbon::createFromFormat('Y', $str);
                     if ($date) {
-                        $date->month(1)
+                        $date->month(9)
                             ->day(1);
                         return $date;
                     }
@@ -821,9 +833,10 @@ class AnimeProcessor extends CustomItemProcessor
 
                 switch ($relation['type']) {
                     case 'anime':
-                        if ($foundAnime = Anime::firstWhere([
-                            'mal_id' => $malID,
-                        ])) {
+                        if ($foundAnime = Anime::withoutGlobalScopes()
+                            ->firstWhere([
+                                'mal_id' => $malID,
+                            ])) {
                             $relatedModel = $foundAnime;
                         } else {
                             $relatedModel = Anime::create([
@@ -835,9 +848,10 @@ class AnimeProcessor extends CustomItemProcessor
                         }
                         break;
                     case 'manga':
-                        if ($foundManga = Manga::firstWhere([
-                            'mal_id' => $malID,
-                        ])) {
+                        if ($foundManga = Manga::withoutGlobalScopes()
+                            ->firstWhere([
+                                'mal_id' => $malID,
+                            ])) {
                             $relatedModel = $foundManga;
                         } else {
                             $relatedModel = Manga::create([
@@ -886,7 +900,8 @@ class AnimeProcessor extends CustomItemProcessor
             }
 
             // Try to find the song by identifiers
-            $song = Song::when($malSong['mal_id'], fn($q) => $q->orWhere('mal_id', $malSong['mal_id']))
+            $song = Song::with(['translations', 'mediaStat'])
+                ->when($malSong['mal_id'], fn($q) => $q->orWhere('mal_id', $malSong['mal_id']))
                 ->when($malSong['amazon_id'], fn($q) => $q->orWhere('amazon_id', '=', $malSong['amazon_id']))
                 ->when($malSong['am_id'], fn($q) => $q->orWhere('am_id', '=', $malSong['am_id']))
                 ->when($malSong['spotify_id'], fn($q) => $q->orWhere('spotify_id', '=', $malSong['spotify_id']))
@@ -899,7 +914,8 @@ class AnimeProcessor extends CustomItemProcessor
                 $normalizedArtist = str($malSong['artist'])
                     ->trim()->lower();
 
-                $possibleSongs = Song::whereRaw('LOWER(artist) = ?', [$normalizedArtist])
+                $possibleSongs = Song::with(['translations', 'mediaStat'])
+                    ->whereRaw('LOWER(artist) = ?', [$normalizedArtist])
                     ->get();
 
                 foreach ($possibleSongs as $candidate) {

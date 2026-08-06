@@ -8,6 +8,17 @@ html, body {
   @apply h-full
   w-full
   scroll-smooth;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: contain;
+}
+
+/* Kill 300ms double-tap zoom on interactive surfaces */
+button, a, [role="button"], label, summary {
+  touch-action: manipulation;
+}
+
+img {
+  -webkit-user-drag: none;
 }
 
 code {
@@ -264,9 +275,9 @@ img:not([src]):not([srcset]) {
   --bg-primary-color: #353A50;
   --bg-secondary-color: #454F63;
   --bg-tertiary-color: #667286;
-  --border-color: #AFAFAF;
+  --border-color: #AFAFAF26;
   --bg-blur-color: #353A50BF;
-  --bg-tint-color: #50577D;
+  --bg-tint-color: #3e435f;
   --btn-tinted-text-color: #EEEEEE;
   --primary-text-color: #EEEEEE;
   --secondary-text-color: #AFAFAF;
@@ -298,6 +309,246 @@ a[href*="#"]:not([href="#"]):not(.no-external-icon):focus::after {
   cursor: default;
   pointer-events: none;
   opacity: 25%;
+}
+
+/* Lays two actions side by side when both fit, and stacks them otherwise. */
+.prompt-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.prompt-actions > * {
+  flex: 1 1 100%;
+  white-space: nowrap;
+}
+.prompt-actions > :first-child:nth-last-child(2),
+.prompt-actions > :first-child:nth-last-child(2) ~ * {
+  flex-basis: calc(50% - 0.25rem);
+}
+
+/* Presents a submenu as an overlay above its dimmed parent menu. */
+[data-dropdown-surface].is-dimmed {
+  transform: scale(0.95);
+  transform-origin: center;
+  transition: transform 0.2s ease;
+}
+
+[data-dropdown-surface].is-dimmed > * {
+  opacity: 0.4;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+[data-submenu-flyout].is-overlay > [data-submenu-header] {
+  display: flex;
+}
+
+[data-submenu-flyout].is-overlay > [data-overlay-divider] {
+  display: block;
+}
+
+/* Time-synced lyrics */
+@property --fill {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+
+[data-lyrics] {
+  background-color: var(--bg-primary-color);
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+[data-lyrics][data-open] {
+  opacity: 1;
+  transform: translateY(0);
+}
+body:has([data-lyrics][data-open]) {
+  overflow: hidden;
+}
+
+[data-lyrics-list] {
+  --am-sung: var(--primary-text-color);
+  --am-unsung: color-mix(in srgb, var(--primary-text-color) 35%, transparent);
+  padding-top: 16px;
+  padding-bottom: 70vh;
+  overscroll-behavior: contain;
+}
+
+/**
+ * Kotodama
+ */
+.kotodama-tile-hit {
+  background-color: #FF9300;
+  border-color: #FF9300;
+  color: #FFFFFF;
+}
+.kotodama-tile-present {
+  background-color: #A550CC;
+  border-color: #A550CC;
+  color: #FFFFFF;
+}
+.kotodama-tile-miss {
+  background-color: #000000;
+  border-color: #000000;
+  color: #FFFFFF;
+}
+
+/* Differentiate tile states without color (system "Increase Contrast" setting, or manual override) */
+.kotodama-board.kotodama-differentiate .kotodama-tile-hit::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background-color: #FFFFFF;
+}
+.kotodama-board.kotodama-differentiate .kotodama-tile-present::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  border: 2px solid #FFFFFF;
+  background-color: transparent;
+}
+
+/**
+ * Lyrics
+ */
+.lyrics-line {
+  padding: 12px 20px;
+  font-size: 26px;
+  cursor: pointer;
+  transition: filter 0.3s ease;
+}
+[data-lyrics-list][data-scrolling] .lyrics-line {
+  filter: none !important;
+}
+
+.lyrics-main,
+.lyrics-background {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  row-gap: 0.5em;
+}
+
+.lyrics-background {
+  display: none;
+  font-size: 0.65em;
+  opacity: 0.85;
+}
+.lyrics-line[data-active] .lyrics-background,
+[data-lyrics-list][data-static] .lyrics-background {
+  display: flex;
+}
+
+.lyrics-line[data-align="right"] .lyrics-main,
+.lyrics-line[data-align="right"] .lyrics-background {
+  justify-content: flex-end;
+}
+.lyrics-line[data-align="right"] .lyrics-translation {
+  text-align: right;
+}
+
+.lyrics-tile {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-right: 4px;
+}
+.lyrics-tile[data-space] {
+  margin-right: 0.28em;
+}
+
+.lyrics-word,
+.lyrics-romaji {
+  color: var(--am-unsung);
+}
+.lyrics-word {
+  font-size: 1em;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.lyrics-romaji {
+  max-height: 0;
+  margin-top: 0;
+  overflow: hidden;
+  opacity: 0;
+  font-size: 0.615em;
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+  transition: max-height 0.3s ease, margin-top 0.3s ease, opacity 0.3s ease;
+}
+[data-lyrics-list][data-show-romaji] .lyrics-romaji {
+  max-height: 1.5em;
+  margin-top: 2px;
+  opacity: 1;
+}
+
+/* The active line fills each syllable left-to-right as it is sung, with a fixed
+   feather, driven by the browser's animation engine via --fill. */
+.lyrics-line[data-active] .lyrics-word,
+.lyrics-line[data-active] .lyrics-romaji {
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  background-image: linear-gradient(
+    to right,
+    var(--am-sung) calc(var(--fill, 0%) - 20%),
+    var(--am-unsung) var(--fill, 0%)
+  );
+}
+
+/* Reveal a line in full on hover, and reveal everything when unsynced. */
+.lyrics-line:not([data-active]):hover .lyrics-word,
+.lyrics-line:not([data-active]):hover .lyrics-romaji,
+[data-lyrics-list][data-static] .lyrics-word,
+[data-lyrics-list][data-static] .lyrics-romaji {
+  color: var(--am-sung);
+}
+
+.lyrics-translation {
+  margin-top: 6px;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.3;
+  color: var(--secondary-text-color);
+}
+
+.lyrics-interlude {
+  display: flex;
+  align-items: center;
+  height: 0;
+  padding: 0 20px;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+.lyrics-interlude[data-active] {
+  height: auto;
+  padding: 16px 20px;
+  opacity: 1;
+}
+.lyrics-dots {
+  display: flex;
+  gap: 13px;
+  transform-origin: left center;
+}
+.lyrics-dot {
+  width: 13px;
+  height: 13px;
+  border-radius: 9999px;
+  background-color: var(--primary-text-color);
+  opacity: 0.25;
 }
 
 /**

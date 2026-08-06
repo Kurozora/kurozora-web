@@ -11,12 +11,14 @@ use App\Http\Requests\GetIndexRequest;
 use App\Http\Requests\GetPaginatedRequest;
 use App\Http\Requests\RateModelRequest;
 use App\Http\Requests\SearchRequest;
+use App\Http\Requests\UpdateSongAppleMusicIDRequest;
 use App\Http\Resources\AnimeResource;
 use App\Http\Resources\GameResource;
 use App\Http\Resources\MediaRatingResource;
+use App\Http\Resources\SongLyricResource;
 use App\Http\Resources\SongResource;
-use App\Models\MediaRating;
 use App\Models\Song;
+use App\Traits\Controller\WithCatalogCacheHeaders;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
@@ -27,6 +29,8 @@ use Illuminate\Routing\Redirector;
 
 class SongController extends Controller
 {
+    use WithCatalogCacheHeaders;
+
     /**
      * Returns the songs index.
      *
@@ -73,6 +77,24 @@ class SongController extends Controller
      */
     public function view(Request $request, Song $song): JsonResponse
     {
+        $includeInput = $request->input('include');
+        $includes = is_string($includeInput) ? explode(',', $includeInput) : (is_array($includeInput) ? $includeInput : []);
+        sort($includes);
+
+        $fingerprint = [
+            'kind' => 'song',
+            'publicId' => $song->public_id,
+            'updatedAt' => optional($song->updated_at)->toIso8601String(),
+            'locale' => app()->getLocale(),
+            'tvRating' => (int) $request->attributes->get('tvRating', 4),
+            'include' => $includes,
+        ];
+
+        $notModified = $this->returnIfNotModifiedCatalog($request, $fingerprint);
+        if ($notModified !== null) {
+            return $notModified;
+        }
+
         // Call the ModelViewed event
         ModelViewed::dispatch($song, $request->ip());
 
@@ -87,7 +109,7 @@ class SongController extends Controller
 
         return JSONResult::success([
             'data' => SongResource::collection([$song])
-        ]);
+        ])->withHeaders($this->catalogCacheHeaders($request, $fingerprint));
     }
 
     /**
@@ -131,7 +153,7 @@ class SongController extends Controller
 
         // Get the anime
         $animes = $song->anime()
-            ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
+            ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
             ->when(auth()->user(), function ($query, $user) {
                 $query->with(['mediaRatings' => function ($query) use ($user) {
                     $query->where([
@@ -149,7 +171,7 @@ class SongController extends Controller
                         },
                     ]);
             })
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $animes->nextPageUrl() ?? '');
@@ -174,7 +196,7 @@ class SongController extends Controller
 
         // Get the games
         $games = $song->games()
-            ->with(['genres', 'languages', 'media', 'mediaStat', 'media_type', 'source', 'status', 'studios', 'themes', 'translation', 'tv_rating', 'country_of_origin'])
+            ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
             ->when(auth()->user(), function ($query, $user) {
                 $query->with(['mediaRatings' => function ($query) use ($user) {
                     $query->where([
@@ -192,7 +214,7 @@ class SongController extends Controller
                         },
                     ]);
             })
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $games->nextPageUrl() ?? '');
@@ -217,45 +239,8 @@ class SongController extends Controller
     {
         $user = auth()->user();
 
-        // Validate the request
         $data = $request->validated();
-
-        // Fetch the variables
-        $givenRating = $data['rating'] ?? null;
-        $description = $data['description'] ?? null;
-
-        // Modify the rating if it already exists
-        /** @var MediaRating $foundRating */
-        $foundRating = $user->songRatings()
-            ->withoutTvRatings()
-            ->where('model_id', '=', $song->id)
-            ->first();
-
-        // The rating exists
-        if ($foundRating) {
-            // If the given rating is 0
-            if ($givenRating <= 0) {
-                // Delete the rating
-                $foundRating->delete();
-            } else {
-                // Update the current rating
-                $foundRating->update([
-                    'rating' => $givenRating,
-                    'description' => $description ?? $foundRating->description,
-                ]);
-            }
-        } else {
-            // Only insert the rating if it's rated higher than 0
-            if ($givenRating > 0) {
-                MediaRating::create([
-                    'user_id' => $user->id,
-                    'model_id' => $song->id,
-                    'model_type' => $song->getMorphClass(),
-                    'rating' => $givenRating,
-                    'description' => $description
-                ]);
-            }
-        }
+        $user->rateMediaModel($song, $data['rating'] ?? 0, $data['description'] ?? null);
 
         return JSONResult::success();
     }
@@ -274,13 +259,50 @@ class SongController extends Controller
                 ['model_id', '=', $song->id],
                 ['model_type', '=', $song->getMorphClass()],
             ])
-            ->forceDelete();
+            ->first()?->delete();
 
         return JSONResult::success();
     }
 
     /**
-     * Returns the reviews of an Song.
+     * Updates the Apple Music ID of the given song.
+     *
+     * @param UpdateSongAppleMusicIDRequest $request
+     * @param Song                          $song
+     *
+     * @return JsonResponse
+     */
+    public function updateAppleMusicID(UpdateSongAppleMusicIDRequest $request, Song $song): JsonResponse
+    {
+        $song->am_id = $request->input('am_id');
+        $song->save();
+
+        return JSONResult::success();
+    }
+
+    /**
+     * Returns the synced lyrics of the given song.
+     *
+     * @param Request $request
+     * @param Song    $song
+     *
+     * @return JsonResponse
+     */
+    public function lyrics(Request $request, Song $song): JsonResponse
+    {
+        $lyric = $song->lyrics()
+            ->where('status', 'approved')
+            ->with(['lines.words'])
+            ->orderByDesc('id')
+            ->first();
+
+        return JSONResult::success([
+            'data' => $lyric === null ? [] : [SongLyricResource::make($lyric)],
+        ]);
+    }
+
+    /**
+     * Returns the reviews of a Song.
      *
      * @param GetPaginatedRequest $request
      * @param Song                  $song
@@ -289,31 +311,17 @@ class SongController extends Controller
      */
     public function reviews(GetPaginatedRequest $request, Song $song): JsonResponse
     {
+        $data = $request->validated();
+
         $reviews = $song->mediaRatings()
             ->withoutTvRatings()
             ->with([
                 'user' => function ($query) {
-                    $query->with([
-                        'badges' => function ($query) {
-                            $query->with(['media']);
-                        },
-                        'media',
-                        'tokens' => function ($query) {
-                            $query
-                                ->orderBy('last_used_at', 'desc')
-                                ->limit(1);
-                        },
-                        'sessions' => function ($query) {
-                            $query
-                                ->orderBy('last_activity', 'desc')
-                                ->limit(1);
-                        },
-                    ])
-                        ->withCount(['followers', 'followedModels as following_count', 'mediaRatings']);
+                    $query->withProfileEagerLoad(auth()->user());
                 }
             ])
             ->where('description', '!=', null)
-            ->paginate($data['limit'] ?? 25, page: $data['page'] ?? 1);
+            ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $reviews->nextPageUrl() ?? '');

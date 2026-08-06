@@ -1,0 +1,81 @@
+name: Apple Root CA pin check
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - resources/certs/apple/**
+      - .github/workflows/apple-cert-check.yml
+  pull_request:
+    paths:
+      - resources/certs/apple/**
+      - .github/workflows/apple-cert-check.yml
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-pins:
+    runs-on: ubuntu-latest
+    name: Verify committed certs match Apple + pinned fingerprints
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Compare committed certs against pinned fingerprints and Apple's published copy
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          pins_file=resources/certs/apple/pins.json
+
+          if [[ ! -f $pins_file ]]; then
+            echo "::error file=$pins_file::pins file missing"
+            exit 1
+          fi
+
+          if ! jq -e 'type == "object" and length > 0' "$pins_file" >/dev/null; then
+            echo "::error file=$pins_file::pins file is not a non-empty JSON object"
+            exit 1
+          fi
+
+          fail=0
+          while IFS=$'\t' read -r filename pin; do
+            committed=resources/certs/apple/$filename
+
+            if [[ ! -f $committed ]]; then
+              echo "::error file=$committed::missing committed cert"
+              fail=1
+              continue
+            fi
+
+            disk_sha=$(sha256sum "$committed" | awk '{print $1}')
+            if [[ $disk_sha != "$pin" ]]; then
+              echo "::error file=$committed::on-disk sha256 $disk_sha does not match pin $pin"
+              fail=1
+              continue
+            fi
+
+            tmp=$(mktemp)
+            if ! curl -fsSL --max-time 15 -o "$tmp" "https://www.apple.com/certificateauthority/$filename"; then
+              echo "::warning::could not reach apple.com for $filename — skipping remote check on this run"
+              rm -f "$tmp"
+              continue
+            fi
+            remote_sha=$(sha256sum "$tmp" | awk '{print $1}')
+            rm -f "$tmp"
+
+            if [[ $remote_sha != "$pin" ]]; then
+              echo "::error::apple.com is serving $filename with sha256 $remote_sha but our pin is $pin — possible Apple rotation or CDN compromise. Verify via a second channel before updating $pins_file."
+              fail=1
+              continue
+            fi
+
+            echo "[$filename] OK (disk + apple.com both match pin $pin)"
+          done < <(jq -r 'to_entries[] | "\(.key)\t\(.value)"' "$pins_file")
+
+          exit $fail

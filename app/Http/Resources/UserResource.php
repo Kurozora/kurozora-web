@@ -48,8 +48,6 @@ class UserResource extends JsonResource
         // Add additional data to the resource
         $relationships = [];
 
-        $relationships = array_merge($relationships, $this->getAchievementRelationship());
-
         if ($this->shouldIncludeSession) {
             $resource['attributes'] = array_merge($resource['attributes'], [
                 'email'         => $this->resource->email,
@@ -58,23 +56,54 @@ class UserResource extends JsonResource
             $relationships = array_merge($relationships, $this->getAccessTokensRelationship());
         }
 
-        $resource = array_merge($resource, ['relationships' => $relationships]);
+        if ($this->shouldIncludeTimeout()) {
+            $relationships = array_merge($relationships, $this->getTimeoutRelationship());
+        }
+
+        if (!empty($relationships)) {
+            $resource = array_merge($resource, ['relationships' => $relationships]);
+        }
 
         return $resource;
     }
 
     /**
-     * Returns the achievements relationship for the resource.
+     * Indicates whether the active timeout should be embedded.
+     *
+     * @return bool
+     */
+    protected function shouldIncludeTimeout(): bool
+    {
+        $authUser = auth()->user();
+
+        if ($authUser === null) {
+            return false;
+        }
+
+        if ($authUser->id === $this->resource->id) {
+            return true;
+        }
+
+        return $authUser->hasAnyRole(['superAdmin', 'admin', 'mod']);
+    }
+
+    /**
+     * Returns the active timeout relationship for the user.
      *
      * @return array
      */
-    protected function getAchievementRelationship(): array
+    protected function getTimeoutRelationship(): array
     {
-        $achievements = AchievementResource::collection($this->resource->badges);
+        $timeout = $this->resource->relationLoaded('activeTimeout')
+            ? $this->resource->activeTimeout
+            : $this->resource->timeouts()->active()->latest('id')->first();
+
         return [
-            'achievements' => [
-                'data' => $achievements
-            ]
+            'timeout' => [
+                'data' => $timeout !== null && $timeout->isActive()
+                    ? TimeoutResource::collection([$timeout])
+                    : [],
+            ],
         ];
     }
 

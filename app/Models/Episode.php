@@ -3,17 +3,19 @@
 namespace App\Models;
 
 use App\Enums\MediaCollection;
-use App\Scopes\TvRatingScope;
+use App\Support\BreadcrumbNode;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\Actionable;
 use App\Traits\Model\HasComments;
 use App\Traits\Model\HasMediaRatings;
 use App\Traits\Model\HasMediaStat;
+use App\Traits\Model\HasPublicID;
+use App\Traits\Model\HasSchemaOrg;
+use App\Traits\Model\HasTranslations;
 use App\Traits\Model\HasVideos;
 use App\Traits\Model\HasViews;
 use App\Traits\Model\TvRated;
 use App\Traits\SearchFilterable;
-use Astrotomic\Translatable\Translatable;
 use Carbon\CarbonInterval;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
@@ -22,7 +24,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -38,9 +39,12 @@ class Episode extends KModel implements HasMedia, Sitemapable
 {
     use Actionable,
         HasComments,
+        HasFactory,
         HasMediaRatings,
         HasMediaStat,
-        HasFactory,
+        HasPublicID,
+        HasSchemaOrg,
+        HasTranslations,
         HasVideos,
         HasViews,
         InteractsWithMedia,
@@ -49,7 +53,6 @@ class Episode extends KModel implements HasMedia, Sitemapable
         Searchable,
         SearchFilterable,
         SoftDeletes,
-        Translatable,
         TvRated;
 
     // Table name
@@ -99,7 +102,7 @@ class Episode extends KModel implements HasMedia, Sitemapable
                 }
 
                 $value = $this->asDateTime($value);
-                $value->setTimezone(config('app.format_timezone'));
+                $value->inUserTimezone();
                 return $value;
             }
         );
@@ -119,7 +122,7 @@ class Episode extends KModel implements HasMedia, Sitemapable
                 }
 
                 $value = $this->asDateTime($value);
-                $value->setTimezone(config('app.format_timezone'));
+                $value->inUserTimezone();
                 return $value;
             }
         );
@@ -135,25 +138,33 @@ class Episode extends KModel implements HasMedia, Sitemapable
         parent::boot();
 
         $creationCallback = function (Episode $episode) {
-            if (empty($episode->tv_rating_id)) {
-                $episode->tv_rating_id = $episode->anime()->withoutGlobalScopes()->first()->tv_rating_id;
-            }
-
-            if (empty($episode->is_nsfw)) {
-                $episode->is_nsfw = $episode->anime()->withoutGlobalScopes()->first()->is_nsfw;
-            }
-
-            if (!empty($episode->started)) {
+            if (!empty($episode->started_at)) {
                 if (!empty($episode->duration) && empty($episode->ended_at)) {
                     $episode->ended_at = $episode->started_at->addSeconds($episode->duration);
                 } else if (empty($episode->duration) && !empty($episode->ended_at)) {
-                    $episode->duration = $episode->started_at->secondsUntil($episode->ended_at);
+                    $episode->duration = $episode->started_at->diffInSeconds($episode->ended_at, true);
                 }
             }
         };
-
         static::creating($creationCallback);
         static::saving($creationCallback);
+
+        static::creating(function (Episode $episode) {
+            if (!is_null($episode->tv_rating_id) && !is_null($episode->is_nsfw)) {
+                return;
+            }
+
+            $season = $episode->relationLoaded('season')
+                ? $episode->season
+                : $episode->season()->first(['tv_rating_id', 'is_nsfw']);
+
+            if (!$season) {
+                return;
+            }
+
+            $episode->tv_rating_id = $season->tv_rating_id;
+            $episode->is_nsfw = $season->is_nsfw;
+        });
     }
 
     /**
@@ -325,7 +336,7 @@ class Episode extends KModel implements HasMedia, Sitemapable
             ],
         ];
 
-        if (config('app.tv_rating') >= 4) {
+        if (request()->tvRating() >= 4) {
             $filter['is_nsfw'] = [
                 'title' => __('NSFW'),
                 'type' => 'bool',
@@ -379,7 +390,8 @@ class Episode extends KModel implements HasMedia, Sitemapable
      */
     function anime(): HasOneThrough
     {
-        return $this->hasOneThrough(Anime::class, Season::class, 'id', 'id', 'season_id', 'anime_id');
+        return $this->hasOneThrough(Anime::class, Season::class, 'id', 'id', 'season_id', 'anime_id')
+            ->withoutGlobalScopes();
     }
 
     /**
@@ -389,17 +401,8 @@ class Episode extends KModel implements HasMedia, Sitemapable
      */
     function season(): BelongsTo
     {
-        return $this->belongsTo(Season::class);
-    }
-
-    /**
-     * The episode's TV rating.
-     *
-     * @return BelongsTo
-     */
-    public function tv_rating(): BelongsTo
-    {
-        return $this->belongsTo(TvRating::class);
+        return $this->belongsTo(Season::class)
+            ->withoutGlobalScopes();
     }
 
     /**
@@ -407,9 +410,10 @@ class Episode extends KModel implements HasMedia, Sitemapable
      *
      * @return BelongsTo
      */
-    function next_episode(): BelongsTo
+    function nextEpisode(): BelongsTo
     {
-        return $this->belongsTo(Episode::class);
+        return $this->belongsTo(Episode::class)
+            ->withoutGlobalScopes();
     }
 
     /**
@@ -417,29 +421,10 @@ class Episode extends KModel implements HasMedia, Sitemapable
      *
      * @return BelongsTo
      */
-    function previous_episode(): BelongsTo
+    function previousEpisode(): BelongsTo
     {
-        return $this->belongsTo(Episode::class);
-    }
-
-    /**
-     * The model's translation relationship.
-     *
-     * @return HasOne
-     */
-    public function translation(): HasOne
-    {
-        $locale = $this->getLocaleKey();
-        if ($this->useFallback()) {
-            $countryFallbackLocale = $this->getFallbackLocale($locale);
-            $locales = array_unique([$locale, $countryFallbackLocale, $this->getFallbackLocale()]);
-
-            return $this->hasOne(EpisodeTranslation::class)
-                ->whereIn($this->getTranslationsTable().'.'.$this->getLocaleKey(), $locales);
-        }
-
-        return $this->hasOne(EpisodeTranslation::class)
-            ->where($this->getTranslationsTable().'.'.$this->getLocaleKey(), $locale);
+        return $this->belongsTo(Episode::class)
+            ->withoutGlobalScopes();
     }
 
     /**
@@ -447,7 +432,7 @@ class Episode extends KModel implements HasMedia, Sitemapable
      *
      * @return HasMany
      */
-    function user_watched_episodes(): HasMany
+    function userWatchedEpisodes(): HasMany
     {
         return $this->hasMany(UserWatchedEpisode::class);
     }
@@ -474,7 +459,7 @@ class Episode extends KModel implements HasMedia, Sitemapable
     public function resolveRouteBindingQuery($query, $value, $field = null): \Illuminate\Contracts\Database\Eloquent\Builder
     {
         return parent::resolveRouteBindingQuery($query, $value, $field)
-            ->withoutGlobalScopes([TvRatingScope::class]);
+            ->withoutGlobalScopes();
     }
 
     /**
@@ -487,5 +472,102 @@ class Episode extends KModel implements HasMedia, Sitemapable
         return Url::create(route('episodes.details', $this))
             ->setChangeFrequency('weekly')
             ->setLastModificationDate($this->updated_at);
+    }
+
+    /**
+     * The Schema.org type for this entity.
+     *
+     * @return string
+     */
+    public function schemaType(): string
+    {
+        return 'TVEpisode';
+    }
+
+    /**
+     * The canonical URL for this entity.
+     *
+     * @return string
+     */
+    public function schemaUrl(): string
+    {
+        return route('episodes.details', $this);
+    }
+
+    /**
+     * The prefix for the Schema.org keywords field.
+     *
+     * @return string
+     */
+    public function schemaKeywordsPrefix(): string
+    {
+        return 'anime,episode';
+    }
+
+    /**
+     * The label for this entity in a breadcrumb chain.
+     *
+     * @return string
+     */
+    public function schemaBreadcrumbLabel(): string
+    {
+        return __('Episode :n', ['n' => $this->number_total]);
+    }
+
+    /**
+     * The parent node in the breadcrumb chain.
+     *
+     * @return BreadcrumbNode
+     */
+    public function schemaBreadcrumbParent(): BreadcrumbNode
+    {
+        $anime = $this->anime;
+
+        return new BreadcrumbNode(
+            __('Season :n', ['n' => $this->season->number]),
+            route('seasons.episodes', $this->season),
+            new BreadcrumbNode(
+                __('Seasons'),
+                route('anime.seasons', $anime),
+                new BreadcrumbNode(
+                    $anime->title,
+                    route('anime.details', $anime),
+                    $anime->schemaBreadcrumbParent(),
+                ),
+            ),
+        );
+    }
+
+    /**
+     * The model whose attributes feed genre, contentRating, studios, and keywords.
+     *
+     * @return Model
+     */
+    protected function schemaSubject(): Model
+    {
+        return $this->anime;
+    }
+
+    /**
+     * The hero image URL.
+     *
+     * @return string
+     */
+    protected function schemaImage(): string
+    {
+        return $this->getFirstMediaFullUrl(MediaCollection::Banner())
+            ?? $this->season?->getFirstMediaFullUrl(MediaCollection::Poster())
+            ?? asset('images/static/promotional/social_preview_icon_only.webp');
+    }
+
+    /**
+     * The trailer embed URL.
+     *
+     * @return ?string
+     */
+    protected function schemaTrailerUrl(): ?string
+    {
+        return $this->videos->first()?->getUrl()
+            ?? $this->anime?->videos->first()?->getUrl();
     }
 }

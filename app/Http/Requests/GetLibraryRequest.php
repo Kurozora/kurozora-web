@@ -27,6 +27,18 @@ class GetLibraryRequest extends FormRequest
     }
 
     /**
+     * Normalises the deprecated `library` alias onto the canonical `kind` param.
+     *
+     * @return void
+     */
+    protected function prepareForValidation(): void
+    {
+        if (!$this->has('kind') && $this->has('library')) {
+            $this->merge(['kind' => $this->input('library')]);
+        }
+    }
+
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array
@@ -34,10 +46,12 @@ class GetLibraryRequest extends FormRequest
     public function rules(): array
     {
         return array_merge([
-            'library'   => ['bail', 'nullable', 'integer', 'in:' . implode(',', UserLibraryKind::getValues())],
-            'status'    => ['bail', 'required', new ValidateLibraryStatus],
-            'limit'     => ['bail', 'integer', 'min:1', 'max:100'],
-            'page'      => ['bail', 'integer', 'min:1']
+            'kind' => ['bail', 'nullable', 'integer', 'in:' . implode(',', UserLibraryKind::getValues())],
+            'library' => ['bail', 'nullable', 'integer', 'in:' . implode(',', UserLibraryKind::getValues())],
+            'status' => ['bail', 'required', new ValidateLibraryStatus],
+            'limit' => ['bail', 'integer', 'min:1', 'max:100'],
+            'page' => ['bail', 'integer', 'min:1'],
+            'offset' => ['bail', 'integer', 'min:0'],
         ], $this->sortingRules());
     }
 

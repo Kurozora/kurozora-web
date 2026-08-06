@@ -9,6 +9,7 @@ use App\Models\MediaRating;
 use App\Models\Studio;
 use App\Models\UserLibrary;
 use App\Traits\Livewire\PresentsAlert;
+use App\Traits\Livewire\PresentsSubscriptionSheet;
 use App\Traits\Livewire\WithReviewBox;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
@@ -16,12 +17,16 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+use Livewire\Attributes\Locked;
 use Livewire\Attributes\Renderless;
 use Livewire\Component;
+use Throwable;
 
 class Details extends Component
 {
     use PresentsAlert,
+        PresentsSubscriptionSheet,
         WithReviewBox;
 
     /**
@@ -57,6 +62,7 @@ class Details extends Component
      *
      * @var bool $isFavorited
      */
+    #[Locked]
     public bool $isFavorited = false;
 
     /**
@@ -64,6 +70,7 @@ class Details extends Component
      *
      * @var bool $isReminded
      */
+    #[Locked]
     public bool $isReminded = false;
 
     /**
@@ -71,6 +78,7 @@ class Details extends Component
      *
      * @var bool $isTracking
      */
+    #[Locked]
     public bool $isTracking = false;
 
     /**
@@ -123,12 +131,12 @@ class Details extends Component
             'languages',
             'media',
             'mediaStat',
-            'media_type',
+            'mediaType',
             'themes',
             'translation',
             'status',
-            'tv_rating',
-            'country_of_origin',
+            'tvRating',
+            'countryOfOrigin',
             'studios' => function (BelongsToMany $query) {
                 $query->withoutGlobalScopes()
                     ->orderByRaw('CASE WHEN is_studio = true THEN 0 ELSE 1 END')
@@ -219,16 +227,25 @@ class Details extends Component
         $addStatus = str($this->addStatus)
             ->title()
             ->replace('-', '');
+
+        if (!UserLibraryStatus::hasKey($addStatus)) {
+            $this->dismissAddToLibrary();
+
+            return;
+        }
+
         $libraryStatus = UserLibraryStatus::fromKey($addStatus);
 
         // Update or create the user library entry.
         UserLibrary::withoutSyncingToSearch(function () use($libraryStatus) {
-            $userLibrary = UserLibrary::updateOrCreate([
+            // `withTrashed()` avoids colliding with an existing tombstone on the unique key.
+            $userLibrary = UserLibrary::withTrashed()->updateOrCreate([
                 'user_id' => auth()->id(),
                 'trackable_type' => $this->manga->getMorphClass(),
                 'trackable_id' => $this->manga->id,
             ], [
                 'status' => $libraryStatus->value,
+                'deleted_at' => null,
             ]);
 
             $userLibrary->setRelation('trackable', $this->manga);
@@ -254,17 +271,23 @@ class Details extends Component
 
     /**
      * Adds the manga to the user's favorite list.
+     *
+     * @throws Throwable
      */
     public function favoriteManga(): void
     {
         $user = auth()->user();
 
         if ($this->isTracking) {
-            if ($this->isFavorited) { // Unfavorite the show
-                $user->unfavorite($this->manga);
-            } else { // Favorite the show
-                $user->favorite($this->manga);
-            }
+            DB::transaction(function () use ($user) {
+                if ($this->isFavorited) { // Unfavorite the show
+                    $user->unfavorite($this->manga);
+                } else { // Favorite the show
+                    $user->favorite($this->manga);
+                }
+
+                $user->bumpStateVersion();
+            });
 
             $this->isFavorited = !$this->isFavorited;
         }
@@ -293,11 +316,61 @@ class Details extends Component
                 );
             }
         } else {
-            $this->presentAlert(
-                title: __('That’s unfortunate'),
-                message: __('Reminders are only available to pro and subscribed users 🧐'),
+            $this->presentSubscriptionSheet(
+                title: __('Integrate with Calendar'),
+                message: __('Integrate your manga schedule into your calendar. Never miss a chapter again with reminders for new releases.'),
             );
         }
+    }
+
+    /**
+     * The meta description for this page.
+     *
+     * @return string
+     */
+    public function getMetaDescriptionProperty(): string
+    {
+        $facts = [];
+
+        if ($this->manga->chapter_count > 0) {
+            $facts[] = trans_choice('{1} :x chapter|[2,*] :x chapters', $this->manga->chapter_count, ['x' => $this->manga->chapter_count]);
+        }
+
+        if ($this->manga->volume_count > 0) {
+            $facts[] = trans_choice('{1} :x volume|[2,*] :x volumes', $this->manga->volume_count, ['x' => $this->manga->volume_count]);
+        }
+
+        if ($year = $this->manga->started_at?->year) {
+            $facts[] = $year;
+        }
+
+        if ($this->manga->mediaStat?->rating_average > 0) {
+            $facts[] = __('Rated :x/5', ['x' => number_format($this->manga->mediaStat->rating_average, 1)]);
+        }
+
+        $summary = array_filter([implode(' · ', $facts), $this->manga->synopsis]);
+
+        return implode(' — ', $summary) ?: __('A community for anime fans with an extensive library of anime, manga, music, games, movies, specials, OVA, and ONA. Only on :x, the largest, free online anime, manga, game & music database in the world. Track, share and discover anime with friends.', ['x' => config('app.name')]);
+    }
+
+    /**
+     * The Schema.org JSON-LD payload for this page.
+     *
+     * @return array
+     */
+    public function getSchemaProperty(): array
+    {
+        return $this->manga->toSchemaOrg();
+    }
+
+    /**
+     * The breadcrumb chain for this page.
+     *
+     * @return array
+     */
+    public function getBreadcrumbProperty(): array
+    {
+        return $this->manga->schemaBreadcrumbChain();
     }
 
     /**

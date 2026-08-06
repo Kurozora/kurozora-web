@@ -12,19 +12,24 @@ Route::prefix('/v1')
         Route::get('/', ApiIndex::class);
 
         Route::get('/info', [APIController::class, 'info'])
+            ->middleware('cache.headers:private;max_age=3600;etag')
             ->name('.info');
 
         Route::get('/settings', [APIController::class, 'settings'])
+            ->middleware('cache.headers:private;max_age=3600;etag')
             ->name('.settings');
 
         Route::get('/test', [APIController::class, 'test'])
             ->name('.test');
 
         require 'API/v1/Anime.php';
+        require 'API/v1/Broadcasting.php';
         require 'API/v1/Cast.php';
         require 'API/v1/Characters.php';
+        require 'API/v1/Charts.php';
         require 'API/v1/Episodes.php';
         require 'API/v1/Explore.php';
+        require 'API/v1/FaceDetections.php';
         require 'API/v1/Games.php';
         require 'API/v1/Genres.php';
         require 'API/v1/Images.php';
@@ -34,17 +39,20 @@ Route::prefix('/v1')
         require 'API/v1/Manga.php';
         require 'API/v1/Me.php';
         require 'API/v1/MyAnimeList.php';
+        require 'API/v1/ParentalGuide.php';
         require 'API/v1/People.php';
         require 'API/v1/Reviews.php';
         require 'API/v1/Schedule.php';
         require 'API/v1/Search.php';
         require 'API/v1/Seasons.php';
         require 'API/v1/Songs.php';
+        require 'API/v1/Stickers.php';
         require 'API/v1/Studios.php';
         require 'API/v1/Store.php';
         require 'API/v1/Themes.php';
         require 'API/v1/Theme Store.php';
         require 'API/v1/Users.php';
+        require 'API/v1/Minigames/Kotodama.php';
     });
 
 Route::get('/{wordpress_url}', [APIController::class, 'markSpammer'])

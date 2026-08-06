@@ -4,6 +4,7 @@ use App\Http\Controllers\API\v1\PersonController;
 
 Route::prefix('/people')
     ->name('.people')
+    ->middleware('cache.headers:private;no_cache;etag')
     ->group(function () {
         Route::get('/', [PersonController::class, 'index'])
             ->middleware('auth.kurozora:optional')
@@ -31,7 +32,7 @@ Route::prefix('/people')
                     ->name('.characters');
 
                 Route::prefix('rate')
-                    ->middleware('auth.kurozora')
+                    ->middleware(['auth.kurozora', 'user.not-timed-out'])
                     ->group(function () {
                         Route::post('/', [PersonController::class, 'rate'])
                             ->name('.rate');

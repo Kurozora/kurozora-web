@@ -18,15 +18,30 @@ class ClearUserLibraryRequest extends FormRequest
     }
 
     /**
+     * Normalises the deprecated `library` alias onto the canonical `kind` param.
+     *
+     * @return void
+     */
+    protected function prepareForValidation(): void
+    {
+        if (!$this->has('kind') && $this->has('library')) {
+            $this->merge(['kind' => $this->input('library')]);
+        }
+    }
+
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array
      */
     public function rules(): array
     {
+        $kindRule = 'in:' . implode(',', UserLibraryKind::getValues());
+
         return [
             'password' => ['required'],
-            'library'   => ['bail', 'required_without:anime_id', 'integer', 'in:' . implode(',', UserLibraryKind::getValues())],
+            'kind'    => ['bail', 'required_without:anime_id', 'integer', $kindRule],
+            'library' => ['bail', 'nullable', 'integer', $kindRule],
         ];
     }
 }

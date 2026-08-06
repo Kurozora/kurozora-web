@@ -2,9 +2,9 @@
 
 namespace App\Scopes;
 
-use App\Models\Badge;
+use App\Models\Achievement;
 use App\Models\User;
-use App\Models\UserBadge;
+use App\Models\UserAchievement;
 use DB;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -34,14 +34,14 @@ class UserAchievementsScope implements Scope
      */
     public function apply(Builder $builder, Model $model): void
     {
-        $builder->select([Badge::TABLE_NAME . '.*', UserBadge::TABLE_NAME . '.created_at as achieved_at', DB::raw('IF(' . UserBadge::TABLE_NAME . '.id IS NOT NULL, true, false) as is_achieved')])
-            ->leftJoin(UserBadge::TABLE_NAME, function ($join) {
-                $join->on(Badge::TABLE_NAME . '.id', '=', UserBadge::TABLE_NAME . '.badge_id')
-                    ->where(UserBadge::TABLE_NAME . '.user_id', '=', $this->user->id);
+        $builder->select([Achievement::TABLE_NAME . '.*', UserAchievement::TABLE_NAME . '.created_at as achieved_at', DB::raw('IF(' . UserAchievement::TABLE_NAME . '.id IS NOT NULL, true, false) as is_achieved')])
+            ->leftJoin(UserAchievement::TABLE_NAME, function ($join) {
+                $join->on(Achievement::TABLE_NAME . '.id', '=', UserAchievement::TABLE_NAME . '.achievement_id')
+                    ->where(UserAchievement::TABLE_NAME . '.user_id', '=', $this->user->id);
             })
             ->where(function ($query) {
-                $query->where(Badge::TABLE_NAME . '.is_unlockable', true)
-                    ->orWhereNotNull(UserBadge::TABLE_NAME . '.id'); // Include if the user unlocked it, even if is_unlockable is false
+                $query->where(Achievement::TABLE_NAME . '.is_unlockable', true)
+                    ->orWhereNotNull(UserAchievement::TABLE_NAME . '.id'); // Include if the user unlocked it, even if is_unlockable is false
             })
             ->withCasts([
                 'achieved_at' => 'datetime',

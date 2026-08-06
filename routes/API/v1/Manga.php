@@ -1,9 +1,13 @@
 <?php
 
+use App\Enums\UserLibraryKind;
 use App\Http\Controllers\API\v1\MangaController;
+use App\Http\Controllers\API\v1\MuseumController;
+use App\Http\Controllers\API\v1\ParentalGuideController;
 
 Route::prefix('/manga')
     ->name('.manga')
+    ->middleware('cache.headers:private;no_cache;etag')
     ->group(function () {
         Route::get('/', [MangaController::class, 'index'])
             ->middleware('auth.kurozora:optional')
@@ -13,13 +17,20 @@ Route::prefix('/manga')
             ->middleware('auth.kurozora:optional')
             ->name('.upcoming');
 
-        Route::prefix('/seasons')
-            ->name('.seasons')
-            ->group(function () {
-                Route::get('/{year}/{season}', [MangaController::class, 'browseSeason'])
-                    ->middleware('auth.kurozora:optional')
-                    ->name('.view');
-            });
+        Route::get('/seasons', [MangaController::class, 'browseSeason'])
+            ->middleware('auth.kurozora:optional')
+            ->name('.seasons');
+
+        Route::get('/museum', [MuseumController::class, 'index'])
+            ->middleware('auth.kurozora:optional')
+            ->defaults('kind', UserLibraryKind::Manga)
+            ->name('.museum');
+
+        Route::get('/museum/{year}', [MuseumController::class, 'year'])
+            ->middleware('auth.kurozora:optional')
+            ->defaults('kind', UserLibraryKind::Manga)
+            ->whereNumber('year')
+            ->name('.museum.year');
 
         Route::prefix('{manga}')
             ->group(function () {
@@ -57,7 +68,7 @@ Route::prefix('/manga')
                     ->name('.more-by-studio');
 
                 Route::prefix('rate')
-                    ->middleware('auth.kurozora')
+                    ->middleware(['auth.kurozora', 'user.not-timed-out'])
                     ->group(function () {
                         Route::post('/', [MangaController::class, 'rate'])
                             ->name('.rate');
@@ -69,5 +80,17 @@ Route::prefix('/manga')
                 Route::get('/reviews', [MangaController::class, 'reviews'])
                     ->middleware('auth.kurozora:optional')
                     ->name('.reviews');
+
+                Route::prefix('parentalguide')
+                    ->name('.parentalguide')
+                    ->group(function () {
+                        Route::get('/', [ParentalGuideController::class, 'indexForManga'])
+                            ->middleware('auth.kurozora:optional')
+                            ->name('.index');
+
+                        Route::post('/', [ParentalGuideController::class, 'storeForManga'])
+                            ->middleware(['auth.kurozora', 'user.not-timed-out'])
+                            ->name('.store');
+                    });
             });
     });

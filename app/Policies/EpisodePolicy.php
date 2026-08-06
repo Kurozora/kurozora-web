@@ -12,18 +12,6 @@ class EpisodePolicy
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can mark the episode as watched.
-     *
-     * @param User $user
-     * @param Episode $episode
-     * @return bool
-     */
-    public function mark_as_watched(User $user, Episode $episode): bool
-    {
-        return $user->hasTracked($episode->anime);
-    }
-
-    /**
      * Determine whether the user can view any models.
      *
      * @param User $user

@@ -24,9 +24,8 @@ class GetSeasonEpisodesRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'limit'         => ['bail', 'integer', 'min:1', 'max:100'],
-            'page'          => ['bail', 'integer', 'min:1'],
-            'hide_fillers'  => ['bail', 'integer', 'in:0,1']
+            'limit' => ['bail', 'integer', 'min:1', 'max:100'],
+            'hide_fillers' => ['bail', 'integer', 'in:0,1']
         ];
     }
 }

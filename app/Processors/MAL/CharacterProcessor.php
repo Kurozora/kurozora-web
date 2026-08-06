@@ -48,7 +48,7 @@ class CharacterProcessor extends CustomItemProcessor
         $people = $item->get('people') ?? [];
 
         if (empty($character)) {
-            logger()->channel('stderr')->info('🖨 [MAL_ID:CHARACTER:' . $malID . '] Creating character');
+            logger()->channel('stderr')->debug('🖨 [MAL_ID:CHARACTER:' . $malID . '] Creating character');
 
             $character = Character::withoutGlobalScopes()
                 ->create([
@@ -61,9 +61,9 @@ class CharacterProcessor extends CustomItemProcessor
                     'nicknames' => $alternativeNames,
                     'about' => $about
                 ]);
-            logger()->channel('stderr')->info('✅️ [MAL_ID:CHARACTER:' . $malID . '] Done creating character');
+            logger()->channel('stderr')->debug('✅️ [MAL_ID:CHARACTER:' . $malID . '] Done creating character');
         } else {
-            logger()->channel('stderr')->info('🛠 [MAL_ID:CHARACTER:' . $malID . '] Updating attributes');
+            logger()->channel('stderr')->debug('🛠 [MAL_ID:CHARACTER:' . $malID . '] Updating attributes');
             $newAlternativeNames = array_values(array_unique(array_merge($character->nicknames?->toArray() ?? [], $alternativeNames ?? [])));
 
             $character->update([
@@ -76,7 +76,7 @@ class CharacterProcessor extends CustomItemProcessor
                 'nicknames' => $newAlternativeNames,
                 'about' => $about,
             ]);
-            logger()->channel('stderr')->info('✅️ [MAL_ID:CHARACTER:' . $malID . '] Done updating attributes');
+            logger()->channel('stderr')->debug('✅️ [MAL_ID:CHARACTER:' . $malID . '] Done updating attributes');
         }
 
         // Add poster image
@@ -156,7 +156,7 @@ class CharacterProcessor extends CustomItemProcessor
             $missingAnimeIDs = $animeIDs->diff($animes->pluck('mal_id'));
 
             if ($missingAnimeIDs->isNotEmpty()) {
-                logger()->channel('stderr')->info('↔️ [MAL_ID:CHARACTER:' . $character->mal_id . '] Adding anime');
+                logger()->channel('stderr')->debug('↔️ [MAL_ID:CHARACTER:' . $character->mal_id . '] Adding anime');
 
                 DB::transaction(function () use ($animesCollection, $missingAnimeIDs) {
                     $missingAnimeIDs->each(function ($missingAnimeID) use ($animesCollection) {
@@ -171,7 +171,7 @@ class CharacterProcessor extends CustomItemProcessor
                     });
                 });
 
-                logger()->channel('stderr')->info('✅️ [MAL_ID:CHARACTER:' . $character->mal_id . '] Done adding anime staff');
+                logger()->channel('stderr')->debug('✅️ [MAL_ID:CHARACTER:' . $character->mal_id . '] Done adding anime staff');
             }
         } catch (Throwable $e) {
             logger()->channel('stderr')->error('❌ [MAL_ID:CHARACTER:' . $character->mal_id . '] Failed adding anime staff: ' . $e->getMessage());
@@ -201,7 +201,7 @@ class CharacterProcessor extends CustomItemProcessor
             $missingMangaIDs = $mangaIDs->diff($mangas->pluck('mal_id'));
 
             if ($missingMangaIDs->isNotEmpty()) {
-                logger()->channel('stderr')->info('↔️ [MAL_ID:CHARACTER:' . $character->mal_id . '] Adding manga');
+                logger()->channel('stderr')->debug('↔️ [MAL_ID:CHARACTER:' . $character->mal_id . '] Adding manga');
 
                 DB::transaction(function () use ($mangasCollection, $missingMangaIDs) {
                     $missingMangaIDs->each(function ($missingMangaID) use ($mangasCollection) {
@@ -216,7 +216,7 @@ class CharacterProcessor extends CustomItemProcessor
                     });
                 });
 
-                logger()->channel('stderr')->info('✅️ [MAL_ID:CHARACTER:' . $character->mal_id . '] Done adding manga staff');
+                logger()->channel('stderr')->debug('✅️ [MAL_ID:CHARACTER:' . $character->mal_id . '] Done adding manga staff');
             }
         } catch (Throwable $e) {
             logger()->channel('stderr')->error('❌ [MAL_ID:CHARACTER:' . $character->mal_id . '] Failed adding manga staff: ' . $e->getMessage());
@@ -246,7 +246,7 @@ class CharacterProcessor extends CustomItemProcessor
             $missingPersonIDs = $personIDs->diff($people->pluck('mal_id'));
 
             if ($missingPersonIDs->isNotEmpty()) {
-                logger()->channel('stderr')->info('↔️ [MAL_ID:CHARACTER:' . $character->mal_id . '] Adding person');
+                logger()->channel('stderr')->debug('↔️ [MAL_ID:CHARACTER:' . $character->mal_id . '] Adding person');
 
                 DB::transaction(function () use ($peopleCollection, $missingPersonIDs) {
                     $missingPersonIDs->each(function ($missingPersonID) use ($peopleCollection) {
@@ -261,7 +261,7 @@ class CharacterProcessor extends CustomItemProcessor
                     });
                 });
 
-                logger()->channel('stderr')->info('✅️ [MAL_ID:CHARACTER:' . $character->mal_id . '] Done adding person');
+                logger()->channel('stderr')->debug('✅️ [MAL_ID:CHARACTER:' . $character->mal_id . '] Done adding person');
             }
         } catch (Throwable $e) {
             logger()->channel('stderr')->error('❌ [MAL_ID:CHARACTER:' . $character->mal_id . '] Failed adding person: ' . $e->getMessage());
@@ -296,11 +296,11 @@ class CharacterProcessor extends CustomItemProcessor
     {
         if (!empty($imageUrl) && empty($character->getFirstMedia(MediaCollection::Profile))) {
             try {
-                logger()->channel('stderr')->info('🌄 [MAL_ID:CHARACTER:' . $character->mal_id . '] Adding profile image');
+                logger()->channel('stderr')->debug('🌄 [MAL_ID:CHARACTER:' . $character->mal_id . '] Adding profile image');
 
                 $character->updateImageMedia(MediaCollection::Profile(), $imageUrl, $character->name);
 
-                logger()->channel('stderr')->info('✅️ [MAL_ID:CHARACTER:' . $character->mal_id . '] Done adding profile image');
+                logger()->channel('stderr')->debug('✅️ [MAL_ID:CHARACTER:' . $character->mal_id . '] Done adding profile image');
             } catch (Exception $e) {
                 logger()->channel('stderr')->error('❌️ [MAL_ID:CHARACTER:' . $character->mal_id . '] Failed adding profile image: ' . $e->getMessage());
             }

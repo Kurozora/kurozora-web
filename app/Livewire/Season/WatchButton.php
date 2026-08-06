@@ -2,7 +2,10 @@
 
 namespace App\Livewire\Season;
 
+use App\Models\Anime;
 use App\Models\Season;
+use App\Models\UserWatchedEpisode;
+use App\Services\ScrobbleService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -56,19 +59,17 @@ class WatchButton extends Component
     /**
      * Marks the season as (un)watched.
      *
+     * @param ScrobbleService $scrobbleService
+     *
      * @return null|Redirector
      */
-    public function updateWatchStatus(): ?Redirector
+    public function updateWatchStatus(ScrobbleService $scrobbleService): ?Redirector
     {
         $user = auth()->user();
 
         // Require user to authenticate if necessary.
         if (empty($user)) {
             return to_route('sign-in');
-        }
-
-        if ($user->cannot('mark_as_watched', $this->season)) {
-            return null;
         }
 
         // Get episode IDs
@@ -82,15 +83,30 @@ class WatchButton extends Component
             $user->episodes()->detach($episodeIDs);
             $this->hasWatched = false;
         } else {
+            // Marking watched implies tracking; add the anime as in progress when absent.
+            $anime = $this->season->anime()->withoutGlobalScopes()
+                ->select([Anime::TABLE_NAME . '.id'])
+                ->first();
+            $scrobbleService->ensureTracked($user, $anime);
+
             $existingIDs = $user->episodes()
                 ->whereIn('episode_id', $episodeIDs)
                 ->pluck('episode_id');
             $diffedEpisodeIDs = $episodeIDs->diff($existingIDs);
 
-            $user->episodes()->attach($diffedEpisodeIDs);
+            $user->episodes()->attach($diffedEpisodeIDs, UserWatchedEpisode::completedAttributes());
+
+            // Upgrade in-progress scrobble rows without touching already completed ones.
+            $user->userWatchedEpisodes()
+                ->whereIn('episode_id', $episodeIDs)
+                ->whereNull('completed_at')
+                ->update(UserWatchedEpisode::completedAttributes());
 
             $this->hasWatched = true;
         }
+
+        // attach/detach bypass model events, so bump state_version explicitly.
+        $user->bumpStateVersion();
 
         // Notify other components of an update in the anime's data
         $this->dispatch('update-season');

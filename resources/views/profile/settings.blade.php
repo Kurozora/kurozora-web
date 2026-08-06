@@ -37,13 +37,13 @@
                 <livewire:profile.select-preferred-tv-rating-form :user="$user" />
             </div>
 
-            <div class="pt-10">
-                <livewire:profile.select-preferred-rating-style-form :user="$user" />
-            </div>
-
             @if ($user === auth()->user())
                 <div class="pt-10">
                     <livewire:profile.import-library-form />
+                </div>
+
+                <div class="pt-10">
+                    <livewire:profile.apple-music-connection />
                 </div>
 
                 <div class="pt-10">
@@ -59,11 +59,11 @@
                 </div>
 
                 <div class="pt-10">
-                    <livewire:profile.sign-out-app-sessions-form />
+                    <livewire:profile.active-sessions-form />
                 </div>
 
                 <div class="pt-10">
-                    <livewire:profile.sign-out-other-sessions-form />
+                    <livewire:profile.blocked-accounts-section :user="$user" />
                 </div>
 
                 <div class="pt-10">

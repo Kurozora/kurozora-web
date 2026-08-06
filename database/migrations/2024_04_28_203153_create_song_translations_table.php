@@ -28,7 +28,7 @@ return new class extends Migration
 
         Schema::table(SongTranslation::TABLE_NAME, function (Blueprint $table) {
             // Set index key constraints
-            $table->index('deleted_at');
+            $table->index(['song_id', 'locale', 'deleted_at']);
 
             // Set unique key constraints
             $table->unique(['song_id', 'locale']);

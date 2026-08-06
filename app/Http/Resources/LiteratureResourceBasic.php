@@ -48,9 +48,9 @@ class LiteratureResourceBasic extends JsonResource
                 'themes'                => $this->resource->themes->pluck('name'),
                 'studio'                => $studio?->name,
                 'languages'             => LanguageResource::collection($this->resource->languages),
-                'countryOfOrigin'       => CountryResource::make($this->resource->country_of_origin),
-                'tvRating'              => $this->resource->tv_rating->only(['name', 'description']),
-                'type'                  => $this->resource->media_type->only(['name', 'description']),
+                'countryOfOrigin'       => CountryResource::make($this->resource->countryOfOrigin),
+                'tvRating'              => $this->resource->tvRating->only(['name', 'description']),
+                'type'                  => $this->resource->mediaType->only(['name', 'description']),
                 'source'                => $this->resource->source->only(['name', 'description']),
                 'status'                => $this->resource->status->only(['name', 'description', 'color']),
                 'volumeCount'           => $this->resource->volume_count,
@@ -94,7 +94,7 @@ class LiteratureResourceBasic extends JsonResource
         // Return the array
         return [
             'library' => [
-                'rating' => (double) $givenRating?->rating,
+                'rating' => (float) $givenRating?->rating,
                 'review' => $givenRating?->description,
                 'status' => $library?->status,
                 'rewatchCount' => $library?->rewatch_count,

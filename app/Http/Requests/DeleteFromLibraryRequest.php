@@ -27,6 +27,10 @@ class DeleteFromLibraryRequest extends FormRequest
         if ($this->model_ids && is_string($this->model_ids)) {
             $this->merge(['model_ids' => explode(',', $this->model_ids)]);
         }
+
+        if (!$this->has('kind') && $this->has('library')) {
+            $this->merge(['kind' => $this->input('library')]);
+        }
     }
 
     /**
@@ -36,8 +40,11 @@ class DeleteFromLibraryRequest extends FormRequest
      */
     public function rules(): array
     {
+        $kindRule = 'in:' . implode(',', UserLibraryKind::getValues());
+
         return [
-            'library' => ['bail', 'integer', 'in:' . implode(',', UserLibraryKind::getValues())],
+            'kind' => ['bail', 'required', 'integer', $kindRule],
+            'library' => ['bail', 'nullable', 'integer', $kindRule],
             'model_id' => ['bail', 'string'],
             'model_ids' => ['bail', 'array', 'max:25'],
             'model_ids*' => ['bail', 'string'],

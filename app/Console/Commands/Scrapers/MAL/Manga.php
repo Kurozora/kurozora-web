@@ -4,6 +4,8 @@ namespace App\Console\Commands\Scrapers\MAL;
 
 use App\Spiders\MAL\MangaSpider;
 use Illuminate\Console\Command;
+use Laravel\Telescope\Telescope;
+use Pulse;
 use RoachPHP\Roach;
 use RoachPHP\Spider\Configuration\Overrides;
 
@@ -50,7 +52,13 @@ class Manga extends Command
         }
 
         // Scrape
+        Pulse::stopRecording();
+        Telescope::stopRecording();
+
         Roach::startSpider(MangaSpider::class, new Overrides(startUrls: $urls));
+
+        Pulse::startRecording();
+        Telescope::startRecording();
 
         return Command::SUCCESS;
     }

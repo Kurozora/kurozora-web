@@ -4,6 +4,7 @@ use App\Http\Controllers\API\v1\AppThemeController;
 
 Route::prefix('/theme-store')
     ->name('.theme-store')
+    ->middleware('cache.headers:private;max_age=3600;etag')
     ->group(function () {
         Route::get('/', [AppThemeController::class, 'index'])
             ->middleware('auth.kurozora:optional')

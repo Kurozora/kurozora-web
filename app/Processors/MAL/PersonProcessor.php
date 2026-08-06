@@ -54,7 +54,7 @@ class PersonProcessor extends CustomItemProcessor
         $mangas = $item->get('mangas') ?? [];
 
         if (empty($person)) {
-            logger()->channel('stderr')->info('🖨 [MAL_ID:PERSON:' . $malID . '] Creating person');
+            logger()->channel('stderr')->debug('🖨 [MAL_ID:PERSON:' . $malID . '] Creating person');
             $astrologicalSign = $this->getAstrologicalSign($birthdate);
 
             $person = Person::withoutGlobalScopes()
@@ -70,9 +70,9 @@ class PersonProcessor extends CustomItemProcessor
                     'astrological_sign' => $astrologicalSign?->value,
                     'website_urls' => $websites,
                 ]);
-            logger()->channel('stderr')->info('✅️ [MAL_ID:PERSON:' . $malID . '] Done creating person');
+            logger()->channel('stderr')->debug('✅️ [MAL_ID:PERSON:' . $malID . '] Done creating person');
         } else {
-            logger()->channel('stderr')->info('🛠 [MAL_ID:PERSON:' . $malID . '] Updating attributes');
+            logger()->channel('stderr')->debug('🛠 [MAL_ID:PERSON:' . $malID . '] Updating attributes');
             $newFirstName = empty($name[0]) ? $person->first_name : $name[0];
             $newLastName = empty($name[1]) ? $person->last_name : $name[1];
             $newGivenName = empty($japaneseName[0]) ? $person->given_name : $japaneseName[0];
@@ -94,7 +94,7 @@ class PersonProcessor extends CustomItemProcessor
                 'astrological_sign' => $astrologicalSign?->value,
                 'website_urls' => $newWebsites,
             ]);
-            logger()->channel('stderr')->info('✅️ [MAL_ID:PERSON:' . $malID . '] Done updating attributes');
+            logger()->channel('stderr')->debug('✅️ [MAL_ID:PERSON:' . $malID . '] Done updating attributes');
         }
 
         // Add poster image
@@ -276,7 +276,7 @@ class PersonProcessor extends CustomItemProcessor
 
         // Add missing staff
         try {
-            logger()->channel('stderr')->info('↔️ [MAL_ID:PERSON:' . $person->mal_id . '] Adding anime staff');
+            logger()->channel('stderr')->debug('↔️ [MAL_ID:PERSON:' . $person->mal_id . '] Adding anime staff');
 
             DB::transaction(function () use ($staffRoles, $person, $staffCollection) {
                 $staffCollection->each(function ($staff) use ($person, $staffRoles) {
@@ -309,7 +309,7 @@ class PersonProcessor extends CustomItemProcessor
                 });
             });
 
-            logger()->channel('stderr')->info('✅️ [MAL_ID:PERSON:' . $person->mal_id . '] Done adding anime staff');
+            logger()->channel('stderr')->debug('✅️ [MAL_ID:PERSON:' . $person->mal_id . '] Done adding anime staff');
         } catch (Throwable $e) {
             logger()->channel('stderr')->error('❌ [MAL_ID:PERSON:' . $person->mal_id . '] Failed adding anime staff: ' . $e->getMessage());
         }
@@ -341,7 +341,7 @@ class PersonProcessor extends CustomItemProcessor
 
             if ($missingCharacters->isNotEmpty()) {
                 try {
-                    logger()->channel('stderr')->info('↔️ [MAL_ID:PERSON:' . $person->mal_id . '] Adding character');
+                    logger()->channel('stderr')->debug('↔️ [MAL_ID:PERSON:' . $person->mal_id . '] Adding character');
 
                     DB::transaction(function () use ($missingCharacters, $person, $charactersCollection) {
                         $missingCharacters->each(function ($missingCharacter) use ($charactersCollection) {
@@ -356,7 +356,7 @@ class PersonProcessor extends CustomItemProcessor
                         });
                     });
 
-                    logger()->channel('stderr')->info('✅️ [MAL_ID:PERSON:' . $person->mal_id . '] Done adding anime character');
+                    logger()->channel('stderr')->debug('✅️ [MAL_ID:PERSON:' . $person->mal_id . '] Done adding anime character');
                 } catch (Throwable $e) {
                     logger()->channel('stderr')->error('❌ [MAL_ID:PERSON:' . $person->mal_id . '] Failed adding anime character: ' . $e->getMessage());
                 }
@@ -403,7 +403,7 @@ class PersonProcessor extends CustomItemProcessor
 
         // Add missing staff
         try {
-            logger()->channel('stderr')->info('↔️ [MAL_ID:PERSON:' . $person->mal_id . '] Adding manga staff');
+            logger()->channel('stderr')->debug('↔️ [MAL_ID:PERSON:' . $person->mal_id . '] Adding manga staff');
 
             DB::transaction(function () use ($staffRoles, $person, $staffCollection) {
                 $staffCollection->each(function ($staff) use ($person, $staffRoles) {
@@ -435,7 +435,7 @@ class PersonProcessor extends CustomItemProcessor
                 });
             });
 
-            logger()->channel('stderr')->info('✅️ [MAL_ID:PERSON:' . $person->mal_id . '] Done adding manga staff');
+            logger()->channel('stderr')->debug('✅️ [MAL_ID:PERSON:' . $person->mal_id . '] Done adding manga staff');
         } catch (Throwable $e) {
             logger()->channel('stderr')->error('❌ [MAL_ID:PERSON:' . $person->mal_id . '] Failed adding manga staff: ' . $e->getMessage());
         }
@@ -453,11 +453,11 @@ class PersonProcessor extends CustomItemProcessor
     {
         if (!empty($imageUrl) && empty($person->getFirstMedia(MediaCollection::Profile))) {
             try {
-                logger()->channel('stderr')->info('🌄 [MAL_ID:PERSON:' . $person->mal_id . '] Adding profile image');
+                logger()->channel('stderr')->debug('🌄 [MAL_ID:PERSON:' . $person->mal_id . '] Adding profile image');
 
                 $person->updateImageMedia(MediaCollection::Profile(), $imageUrl, $person->full_name);
 
-                logger()->channel('stderr')->info('✅️ [MAL_ID:PERSON:' . $person->mal_id . '] Done adding profile image');
+                logger()->channel('stderr')->debug('✅️ [MAL_ID:PERSON:' . $person->mal_id . '] Done adding profile image');
             } catch (Exception $e) {
                 logger()->channel('stderr')->error('❌️ [MAL_ID:PERSON:' . $person->mal_id . '] Failed adding profile image: ' . $e->getMessage());
             }

@@ -24,7 +24,7 @@ trait WithSongSearch
      */
     public function randomSong(): void
     {
-        $studio = Song::inRandomOrder()->first();
+        $studio = Song::randomFirst();
         $this->redirectRoute('songs.details', $studio);
     }
 

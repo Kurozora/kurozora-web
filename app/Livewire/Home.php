@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Enums\SearchSource;
 use App\Models\ExploreCategory;
 use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
@@ -24,7 +25,7 @@ class Home extends Component
      *
      * @return void
      */
-    function mount(): void
+    public function mount(): void
     {
         //
     }
@@ -44,7 +45,7 @@ class Home extends Component
      *
      * @return array|Collection
      */
-    function getExploreCategoriesProperty(): array|Collection
+    public function getExploreCategoriesProperty(): array|Collection
     {
         if (!$this->readyToLoad) {
             return collect();
@@ -61,7 +62,36 @@ class Home extends Component
      */
     public function getUsersProperty(): array|Collection
     {
-        return User::whereIn('id', [363, 765])->get();
+        $userIDs = [385, 363, 765];
+        $users = User::whereIn('id', $userIDs)
+            ->get();
+        $orderedUsers = [];
+        foreach ($userIDs as $key) {
+            if ($user = $users->firstWhere('id', $key)) {
+                $orderedUsers[$key] = $user;
+            }
+        }
+
+        return $orderedUsers;
+    }
+
+    /**
+     * The Schema.org JSON-LD payload for this page.
+     */
+    public function getSchemaProperty(): array
+    {
+        return [
+            '@type' => 'WebSite',
+            'url' => config('app.url'),
+            'potentialAction' => [
+                '@type' => 'SearchAction',
+                'target' => [
+                    '@type' => 'EntryPoint',
+                    'urlTemplate' => route('search.index') . '?q={search_term_string}&src=' . SearchSource::Google,
+                ],
+                'query-input' => 'required name=search_term_string',
+            ],
+        ];
     }
 
     /**

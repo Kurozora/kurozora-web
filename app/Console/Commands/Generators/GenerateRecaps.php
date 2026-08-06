@@ -22,6 +22,8 @@ use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Laravel\Telescope\Telescope;
+use Pulse;
 use Throwable;
 
 class GenerateRecaps extends Command
@@ -51,6 +53,9 @@ class GenerateRecaps extends Command
      */
     public function handle(): int
     {
+        Pulse::stopRecording();
+        Telescope::stopRecording();
+
         $user = $this->argument('userID');
         $year = $this->argument('year') ?? now()->year;
         $month = $this->argument('month');
@@ -94,11 +99,12 @@ class GenerateRecaps extends Command
                             'trackable.themes',
                         ]);
                 },
-                'user_watched_episodes' => function (HasMany $query) use ($startedAt, $endedAt, $year) {
-                    $query->where([
-                        [UserWatchedEpisode::TABLE_NAME . '.created_at', '>=', $startedAt],
-                        [UserWatchedEpisode::TABLE_NAME . '.created_at', '<=', $endedAt],
-                    ])
+                'userWatchedEpisodes' => function (HasMany $query) use ($startedAt, $endedAt, $year) {
+                    $query->completed()
+                        ->where([
+                            [UserWatchedEpisode::TABLE_NAME . '.completed_at', '>=', $startedAt],
+                            [UserWatchedEpisode::TABLE_NAME . '.completed_at', '<=', $endedAt],
+                        ])
                         ->join(Episode::TABLE_NAME, UserWatchedEpisode::TABLE_NAME . '.episode_id', '=', Episode::TABLE_NAME . '.id')
                         ->join(Season::TABLE_NAME, Episode::TABLE_NAME . '.season_id', '=', Season::TABLE_NAME . '.id')
                         ->join(Anime::TABLE_NAME, Season::TABLE_NAME . '.anime_id', '=', Anime::TABLE_NAME . '.id')
@@ -217,12 +223,12 @@ class GenerateRecaps extends Command
                         switch ($type) {
                             case Anime::class:
                                 // Sum total parts duration
-                                $totalEpisodesDuration = $user->user_watched_episodes
+                                $totalEpisodesDuration = $user->userWatchedEpisodes
                                     ->sum('episode.duration');
                                 $totalPartsDurations[$type] = $totalEpisodesDuration;
 
                                 // Get total completed parts count
-                                $totalPartsCount[$type] = $user->user_watched_episodes->count();
+                                $totalPartsCount[$type] = $user->userWatchedEpisodes->count();
                                 break;
                             case Manga::class:
                                 $totalPartsCount[$type] = $user->library
@@ -442,6 +448,9 @@ class GenerateRecaps extends Command
                     });
                 });
         });
+
+        Pulse::startRecording();
+        Telescope::startRecording();
 
         return Command::SUCCESS;
     }
