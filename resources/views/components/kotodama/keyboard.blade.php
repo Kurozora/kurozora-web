@@ -1,6 +1,6 @@
 @props(['game'])
 
-<div class="flex flex-col items-center gap-1 mt-4 w-full max-w-lg">
+<div class="flex flex-col items-center gap-1 w-full max-w-lg">
     @foreach(['qwertyuiop', 'asdfghjkl', 'zxcvbnm'] as $row)
         <div class="flex gap-1 justify-center w-full">
             @foreach(str_split($row) as $key)

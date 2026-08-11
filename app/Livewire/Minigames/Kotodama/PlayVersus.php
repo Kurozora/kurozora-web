@@ -12,14 +12,16 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Computed;
+use App\Traits\Livewire\WithKotodamaFlash;
 use Livewire\Component;
 
 class PlayVersus extends Component
 {
+    use WithKotodamaFlash;
+
     public string $seed = '';
     public ?int $gameId = null;
     public ?int $challengerGameId = null;
-    public ?string $flash = null;
 
     /**
      * Prepare the component.

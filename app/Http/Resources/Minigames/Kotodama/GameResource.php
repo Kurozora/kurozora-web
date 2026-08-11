@@ -5,7 +5,6 @@ namespace App\Http\Resources\Minigames\Kotodama;
 use App\Models\Minigames\Kotodama\Game;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\URL;
 
 class GameResource extends JsonResource
 {
@@ -66,10 +65,6 @@ class GameResource extends JsonResource
             'versusSeed' => $this->resource->versus_seed,
             'guesses' => GuessResource::collection($this->resource->guesses),
         ];
-
-        if ($this->resource->shouldRevealAnswer()) {
-            $attributes['shareUrl'] = URL::signedRoute('api.kotodama.games.share', ['game' => $this->resource->id]);
-        }
 
         $resource = [
             'id' => (string) $this->resource->id,

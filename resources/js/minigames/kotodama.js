@@ -32,13 +32,21 @@ document.addEventListener('alpine:init', () => {
         length,
         currentGuess: '',
 
+        // Called before the guards below, since a rejected guess leaves no room for another letter.
+        dismissFlash() {
+            if (!this.$wire.flash) return
+            this.$wire.dismissFlash()
+        },
+
         pressKey(key) {
+            this.dismissFlash()
             if (this.currentGuess.length >= this.length) return
             if (!/^[a-z]$/.test(key)) return
             this.currentGuess += key
         },
 
         backspaceKey() {
+            this.dismissFlash()
             this.currentGuess = this.currentGuess.slice(0, -1)
         },
 

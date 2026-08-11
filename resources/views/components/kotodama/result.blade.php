@@ -13,13 +13,20 @@
         @endif
     </h2>
 
-    @if($game->word->getHint())
-        <p class="text-sm text-secondary text-center mb-3">{{ __('Hint: :text', ['text' => $game->word->getHint()]) }}</p>
+    @php
+        $hintCount = $game->word->getHintImageUrl() === null ? 2 : 1;
+        $hintText = collect($game->word->getHints($hintCount))->implode("\n");
+    @endphp
+
+    @if($hintText)
+        <p class="text-sm text-secondary text-center mb-3 whitespace-pre-line">{{ __('Hint: :text', ['text' => $hintText]) }}</p>
     @endif
 
-    @if($game->word->getHintImageUrl())
+    @if($game->word->getSubjectKind())
         <div class="flex justify-center mt-3 mb-3">
-            <x-kotodama.subject-image :word="$game->word" />
+            <div>
+                <x-kotodama.subject-lockup :word="$game->word" />
+            </div>
         </div>
     @endif
 
@@ -47,9 +54,4 @@
         </div>
     @endif
 
-    @if($game->word->getSubjectUrl())
-        <div class="text-center mt-3">
-            <x-simple-link :href="$game->word->getSubjectUrl()" wire:navigate>{{ __('Learn more →') }}</x-simple-link>
-        </div>
-    @endif
 </div>

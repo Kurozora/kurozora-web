@@ -7,6 +7,7 @@ use App\Models\Minigames\Kotodama\Game;
 use App\Models\Minigames\Kotodama\Word;
 use App\Services\Minigames\Kotodama\GameCoordinator;
 use App\Services\Minigames\Kotodama\ShareGridFormatter;
+use App\Traits\Livewire\WithKotodamaFlash;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -17,9 +18,10 @@ use Livewire\Component;
 
 class PlayUnlimited extends Component
 {
+    use WithKotodamaFlash;
+
     public ?int $gameId = null;
     public ?int $lastWordId = null;
-    public ?string $flash = null;
 
     /**
      * Prepare the component.

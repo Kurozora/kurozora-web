@@ -18,10 +18,13 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Computed;
+use App\Traits\Livewire\WithKotodamaFlash;
 use Livewire\Component;
 
 class PlayDaily extends Component
 {
+    use WithKotodamaFlash;
+
     const int PEEK_LIMIT = 3;
 
     /**
@@ -37,13 +40,6 @@ class PlayDaily extends Component
      * @var int|null
      */
     public ?int $gameId = null;
-
-    /**
-     * The flash message.
-     *
-     * @var string|null
-     */
-    public ?string $flash = null;
 
     /**
      * The resolved puzzle.

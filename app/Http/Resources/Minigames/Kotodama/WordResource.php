@@ -63,21 +63,23 @@ class WordResource extends JsonResource
         $guessCount = (int) ($this->game?->guess_count ?? 0);
 
         $revealHint = $revealAnswer || $guessCount >= Game::HINT_REVEAL_THRESHOLD;
-        $revealSubjectPoster = $revealAnswer || $guessCount >= Game::SUBJECT_REVEAL_THRESHOLD;
+        $revealSubject = $revealAnswer || $guessCount >= Game::SUBJECT_REVEAL_THRESHOLD;
+
+        // If subject doesn't have an image then a secondary text hint is included.
+        $hintImage = $revealSubject ? $this->resource->getHintImage() : null;
+        $needsSecondaryHint = $revealSubject && $hintImage === null;
+        $hints = $revealHint ? $this->resource->getHints($needsSecondaryHint ? 2 : 1) : [];
 
         $attributes = [
             'length' => Word::LENGTH,
             'difficulty' => $this->resource->difficulty?->value,
+            'subjectType' => $this->resource->getSubjectKind(),
+            'hint' => $revealHint ? ($hints[0] ?? null) : null,
+            'secondaryHint' => $needsSecondaryHint ? ($hints[1] ?? null) : null,
         ];
 
-        if ($revealHint) {
-            $attributes['hint'] = $this->resource->getHint();
-        }
-
-        if ($revealSubjectPoster) {
-            $hintImage = $this->resource->getHintImage();
+        if ($revealSubject) {
             $attributes['poster'] = $hintImage ? MediaResource::make($hintImage) : null;
-            $attributes['subjectType'] = $this->resource->getSubjectKind();
         }
 
         if ($revealAnswer) {

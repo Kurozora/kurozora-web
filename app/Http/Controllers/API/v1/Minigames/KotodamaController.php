@@ -14,7 +14,6 @@ use App\Http\Requests\Minigames\Kotodama\SubmitGuessRequest;
 use App\Http\Resources\Minigames\Kotodama\ArchiveEntryResource;
 use App\Http\Resources\Minigames\Kotodama\GameResource;
 use App\Http\Resources\Minigames\Kotodama\LeaderboardEntryResource;
-use App\Http\Resources\Minigames\Kotodama\ShareGridResource;
 use App\Http\Resources\Minigames\Kotodama\StreakEntryResource;
 use App\Http\Resources\Minigames\Kotodama\UserStatsResource;
 use App\Models\Minigames\Kotodama\DailyPuzzle;
@@ -28,7 +27,6 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
 class KotodamaController extends Controller
 {
@@ -250,25 +248,6 @@ class KotodamaController extends Controller
     }
 
     /**
-     * Return the emoji share grid for a finished game.
-     *
-     * @param Request    $request
-     * @param Game $game
-     *
-     * @return JsonResponse
-     */
-    public function share(Request $request, Game $game): JsonResponse
-    {
-        if (!$game->shouldRevealAnswer()) {
-            throw new ConflictHttpException(__('This game hasn\'t finished yet.'));
-        }
-
-        return JSONResult::success([
-            'data' => [ShareGridResource::make($game)],
-        ]);
-    }
-
-    /**
      * Return the daily leaderboard for a date (defaults to today).
      *
      * @param GetDailyLeaderboardRequest $request
@@ -396,11 +375,12 @@ class KotodamaController extends Controller
      */
     protected function pickUnlimitedWord(): Word
     {
-        $word = Word::query()
-            ->eligibleForSchedule()
-            ->safeToReveal()
-            ->with(['subject'])
-            ->randomFirst();
+        $word = PuzzleResolver::drawHintable(
+            Word::query()
+                ->eligibleForSchedule()
+                ->safeToReveal()
+                ->with(['subject'])
+        );
 
         if (!$word) {
             throw (new ModelNotFoundException)->setModel(Word::class);

@@ -13,6 +13,7 @@ use App\Models\Media;
 use App\Models\Person;
 use App\Models\Song;
 use App\Models\Studio;
+use App\Services\Minigames\Kotodama\HintComposer;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -32,6 +33,20 @@ class Word extends KModel
      * @var string|null|false
      */
     protected string|null|false $hintImageUrl = false;
+
+    /**
+     * The composed hints.
+     *
+     * @var array|null
+     */
+    protected ?array $hints = null;
+
+    /**
+     * The number of hints the composed set was asked for.
+     *
+     * @var int
+     */
+    protected int $composedHintLimit = 0;
 
     /**
      * Get the attributes that should be cast.
@@ -69,32 +84,40 @@ class Word extends KModel
     }
 
     /**
+     * Returns the hints describing the subject.
+     *
+     * @param int $limit
+     *
+     * @return array
+     */
+    public function getHints(int $limit = 1): array
+    {
+        if ($this->hints === null || $limit > $this->composedHintLimit) {
+            $this->composedHintLimit = $limit;
+            $this->hints = HintComposer::compose($this, $limit);
+        }
+
+        return $this->hints;
+    }
+
+    /**
      * Returns the hint shown once enough guesses are spent.
      *
      * @return string|null
      */
     public function getHint(): ?string
     {
-        if (filled($this->hint_text)) {
-            return $this->hint_text;
-        }
+        return $this->getHints()[0] ?? null;
+    }
 
-        $subject = $this->subject;
-        $year = $subject?->started_at?->year ?? $subject?->published_at?->year;
-
-        return match (true) {
-            $subject instanceof Character               => __('The name of an anime character.'),
-            $subject instanceof Person                  => __('The name of someone who works in the anime industry.'),
-            $subject instanceof Studio                  => __('The name of an animation studio.'),
-            $subject instanceof Anime && $year !== null => __('The complete title of an anime that premiered in :year.', ['year' => $year]),
-            $subject instanceof Anime                   => __('The complete title of an anime.'),
-            $subject instanceof Manga && $year !== null => __('The complete title of a manga first published in :year.', ['year' => $year]),
-            $subject instanceof Manga                   => __('The complete title of a manga.'),
-            $subject instanceof Game && $year !== null  => __('The complete title of a game released in :year.', ['year' => $year]),
-            $subject instanceof Game                    => __('The complete title of a game.'),
-            $subject instanceof Song                    => __('The complete title of an anime song.'),
-            default                                     => null,
-        };
+    /**
+     * Returns the second hint describing the subject.
+     *
+     * @return string|null
+     */
+    public function getSecondaryHint(): ?string
+    {
+        return $this->getHints(2)[1] ?? null;
     }
 
     /**
@@ -129,7 +152,7 @@ class Word extends KModel
             return null;
         }
 
-        return $subject->getFirstMedia($this->getHintImageCollection());
+        return $subject->getFirstMedia($this->getHintImageCollection()->value);
     }
 
     /**
@@ -168,6 +191,25 @@ class Word extends KModel
             $this->subject instanceof Studio => 'studios',
             $this->subject instanceof Song => 'songs',
             default => null,
+        };
+    }
+
+    /**
+     * Returns the name of the subject's kind, shown above the board.
+     *
+     * @return string|null
+     */
+    public function getSubjectKindName(): ?string
+    {
+        return match (true) {
+            $this->subject instanceof Anime => __('Show'),
+            $this->subject instanceof Manga => __('Literature'),
+            $this->subject instanceof Game => __('Game'),
+            $this->subject instanceof Character => __('Character'),
+            $this->subject instanceof Person => __('Person'),
+            $this->subject instanceof Studio => __('Studio'),
+            $this->subject instanceof Song => __('Song'),
+            default => __('Word'),
         };
     }
 
@@ -224,6 +266,13 @@ class Word extends KModel
             ->where(function (Builder $query) {
                 $query->whereNull('released_at')
                     ->orWhere('released_at', '<=', Carbon::now());
+            })
+            ->where(function (Builder $query) {
+                $query->whereNotNull('subject_type')
+                    ->orWhere(function (Builder $query) {
+                        $query->whereNotNull('hint_text')
+                            ->where('hint_text', '!=', '');
+                    });
             });
     }
 

@@ -1,9 +1,16 @@
 @props(['word'])
 
+@php
+    $square = 'w-24 h-24';
+    $portrait = 'w-16 h-24';
+    $squareRoundness = 'rounded-2xl';
+    $artworkRoundness = 'rounded-lg';
+@endphp
+
 @switch($word->getSubjectKind())
     @case('literatures')
-        <div class="relative w-28 h-40 shrink-0">
-            <svg class="relative block h-full w-full overflow-hidden">
+        <div class="relative {{ $portrait }} shrink-0">
+            <svg class="relative block h-full w-full overflow-hidden" viewBox="0 0 112 160">
                 <rect width="100%" height="100%" fill="var(--bg-secondary-color)" mask="url(#svg-mask-book-cover)" />
 
                 <foreignObject width="112" height="160" mask="url(#svg-mask-book-cover)">
@@ -24,7 +31,7 @@
         </div>
         @break
     @case('games')
-        <x-picture class="shrink-0 w-28 h-28 rounded-3xl overflow-hidden" :border="true" borderRoundness="rounded-3xl">
+        <x-picture class="shrink-0 {{ $square }} {{ $squareRoundness }} overflow-hidden" :border="true" :borderRoundness="$squareRoundness">
             <img
                 class="w-full h-full object-cover"
                 src="{{ $word->getHintImageUrl() }}"
@@ -36,7 +43,7 @@
     @case('characters')
     @case('people')
     @case('studios')
-        <x-picture class="shrink-0 w-28 h-28 rounded-full overflow-hidden" :border="true" borderRoundness="rounded-full">
+        <x-picture class="shrink-0 {{ $square }} rounded-full overflow-hidden" :border="true" borderRoundness="rounded-full">
             <img
                 class="w-full h-full object-cover"
                 src="{{ $word->getHintImageUrl() }}"
@@ -46,7 +53,7 @@
         </x-picture>
         @break
     @case('songs')
-        <x-picture class="shrink-0 w-28 h-28 rounded-lg overflow-hidden" :border="true">
+        <x-picture class="shrink-0 {{ $square }} {{ $artworkRoundness }} overflow-hidden" :border="true">
             <img
                 class="w-full h-full object-cover"
                 src="{{ $word->getHintImageUrl() }}"
@@ -56,7 +63,7 @@
         </x-picture>
         @break
     @default
-        <x-picture class="shrink-0 w-28 h-40 rounded-lg overflow-hidden" :border="true">
+        <x-picture class="shrink-0 {{ $portrait }} {{ $artworkRoundness }} overflow-hidden" :border="true">
             <img
                 class="w-full h-full object-cover"
                 src="{{ $word->getHintImageUrl() }}"

@@ -235,4 +235,18 @@ class Game extends KModel
             ? $this->word?->getHintImageUrl()
             : null;
     }
+
+    /**
+     * Returns the second hint once earned.
+     *
+     * @return string|null
+     */
+    public function revealedSecondaryHint(): ?string
+    {
+        return $this->shouldRevealSubject()
+            && !$this->shouldRevealAnswer()
+            && $this->word?->getHintImageUrl() === null
+                ? $this->word?->getSecondaryHint()
+                : null;
+    }
 }

@@ -48,10 +48,6 @@ Route::prefix('/kotodama')
                 Route::post('/abandon', [KotodamaController::class, 'abandon'])
                     ->middleware(['auth.kurozora:optional', 'user.not-timed-out'])
                     ->name('.abandon');
-
-                Route::get('/share', [KotodamaController::class, 'share'])
-                    ->middleware('auth.kurozora:optional')
-                    ->name('.share');
             });
 
         Route::prefix('/leaderboards')

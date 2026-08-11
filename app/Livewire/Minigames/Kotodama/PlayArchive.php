@@ -16,13 +16,15 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Computed;
+use App\Traits\Livewire\WithKotodamaFlash;
 use Livewire\Component;
 
 class PlayArchive extends Component
 {
+    use WithKotodamaFlash;
+
     public string $date = '';
     public ?int $gameId = null;
-    public ?string $flash = null;
     public ?DailyPuzzle $puzzle = null;
 
     /**
