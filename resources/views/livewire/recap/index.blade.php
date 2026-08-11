@@ -388,7 +388,7 @@
                                 @if ($recap->total_parts_count)
                                     <x-lockups.milestone-lockup
                                         :recap="$recap"
-                                        :title="__('Games Played')"
+                                        :title="str(__('Games played'))->title()"
                                         :progress-aria-label="__(':x Games', ['x' => number_format(round_to_nearest_quarter($recap->total_parts_count))])"
                                         :progress-count="number_format(round_to_nearest_quarter($recap->total_parts_count))"
                                         :progress-unit="__('Games')"

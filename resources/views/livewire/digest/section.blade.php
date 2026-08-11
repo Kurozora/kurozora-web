@@ -167,13 +167,13 @@
                                 @if ($this->data['momentum']['episodesWatched'] > 0)
                                     <div>
                                         <p class="text-4xl font-bold">{{ number_format($this->data['momentum']['episodesWatched']) }}</p>
-                                        <p class="text-secondary">{{ __('episodes watched') }}</p>
+                                        <p class="text-secondary">{{ str(__('Episodes Watched'))->lower() }}</p>
                                     </div>
 
                                     @if ($this->data['watchedTime'])
                                         <div>
                                             <p class="text-4xl font-bold">{{ $this->data['watchedTime'] }}</p>
-                                            <p class="text-secondary">{{ __('watched') }}</p>
+                                            <p class="text-secondary">{{ str(__('Watched'))->lower() }}</p>
                                         </div>
                                     @endif
                                 @endif

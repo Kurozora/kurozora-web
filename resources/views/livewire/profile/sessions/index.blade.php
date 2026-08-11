@@ -126,7 +126,7 @@
                                 x-bind:disabled="!hasSelection"
                                 x-on:click="batchSignOut()"
                             >
-                                {{ __('Sign Out') }}
+                                {{ str(__('Sign out'))->title() }}
                             </button>
 
                             <button
@@ -178,7 +178,7 @@
                                             class="text-xs text-red-500 hover:opacity-75 cursor-pointer"
                                             x-on:click="$wire.confirmSignOutSelected(['{{ $session->key }}'])"
                                         >
-                                            {{ __('Sign Out') }}
+                                            {{ str(__('Sign out'))->title() }}
                                         </button>
                                     </div>
                                 </div>
@@ -196,7 +196,7 @@
         <!-- Sign Out Confirmation Modal -->
         <x-dialog-modal model="confirmingSignOut">
             <x-slot:title>
-                {{ __('Sign Out') }}
+                {{ str(__('Sign out'))->title() }}
             </x-slot:title>
 
             <x-slot:content>
@@ -219,7 +219,7 @@
                 </x-outlined-button>
 
                 <x-button class="ml-2" wire:click="signOut" wire:loading.attr="disabled">
-                    {{ __('Sign Out') }}
+                    {{ str(__('Sign out'))->title() }}
                 </x-button>
             </x-slot:footer>
         </x-dialog-modal>

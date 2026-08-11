@@ -25,7 +25,7 @@
     <x-simple-button
         @click="handleExpand()"
         x-show="isCollapsed"
-        x-text="'{{ __('more') }}'"
+        x-text="'{{ str(__('More'))->lower() }}'"
         class="absolute bottom-0 right-0 text-base tracking-normal leading-snug"
     />
 </p>

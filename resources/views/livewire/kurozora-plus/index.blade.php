@@ -27,7 +27,7 @@
 
                 <p class="pb-6 text-sm text-secondary text-center max-w-2xl mx-auto">
                     {{ __('Purchases are made in the :x app.', ['x' => config('app.name')]) }}
-                    <x-simple-link href="{{ config('app.ios.store_url') }}" target="_blank">{{ __('Get the app') }}</x-simple-link>
+                    <x-simple-link href="{{ config('app.ios.store_url') }}" target="_blank">{{ str(__('Get the App'))->lower()->ucfirst() }}</x-simple-link>
                 </p>
             </div>
         </section>

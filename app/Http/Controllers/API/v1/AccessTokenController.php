@@ -119,7 +119,7 @@ class AccessTokenController
             LoginAttempt::registerFailedLoginAttempt($request->ip());
 
             // Throw authorization error message
-            throw new AuthenticationException('Your Kurozora Account or password was incorrect.');
+            throw new AuthenticationException('Your :x Account or password was incorrect.', ['x' => config('app.name')]);
         }
 
         // Check if email is confirmed

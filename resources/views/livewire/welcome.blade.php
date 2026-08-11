@@ -533,7 +533,7 @@
                 </x-link-button>
 
                 <x-link-button class="text-lg" href="{{ config('app.ios.store_url') }}">
-                    <span>{{ __('Download The App') }}</span>
+                    <span>{{ str(__('Download the App'))->title() }}</span>
                 </x-link-button>
             </div>
         </section>

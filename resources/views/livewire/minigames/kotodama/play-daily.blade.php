@@ -15,7 +15,7 @@
         <section class="flex items-center justify-between pl-4 pr-4 xl:safe-area-inset-scroll">
             <h1 class="text-2xl font-bold text-primary">{{ $title }}</h1>
 
-            <x-square-button wire:click="$toggle('showHelp')" aria-label="{{ __('How to play') }}">
+            <x-square-button wire:click="$toggle('showHelp')" aria-label="{{ __('How to Play') }}">
                 @svg('questionmark', 'fill-current', ['width' => 20])
             </x-square-button>
         </section>

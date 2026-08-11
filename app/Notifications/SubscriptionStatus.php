@@ -183,8 +183,8 @@ class SubscriptionStatus extends Notification
             'RENEWAL_EXTENDED' => $expiresDate !== null
                 ? __(':productName extended. Active until :expiresDate.', ['productName' => $productName, 'expiresDate' => $expiresDate])
                 : __(':productName extended.', ['productName' => $productName]),
-            'PRICE_INCREASE' => __('A price change is coming to :productName. Open Kurozora to review.', ['productName' => $productName]),
-            'ONE_TIME_CHARGE' => __('Thanks for the tip! Kurozora Pro has been added to your account.'),
+            'PRICE_INCREASE' => __('A price change is coming to :productName. Open :x to review.', ['productName' => $productName, 'x' => config('app.name')]),
+            'ONE_TIME_CHARGE' => __('Thanks for the tip! :x Pro has been added to your account.', ['x' => config('app.name')]),
             'INTERACTIVE_RENEWAL' => $expiresDate !== null
                 ? __('Welcome back! :productName is active until :expiresDate.', ['productName' => $productName, 'expiresDate' => $expiresDate])
                 : __('Welcome back! :productName is active.', ['productName' => $productName]),

@@ -265,7 +265,7 @@
             </article>
 
             <div class="flex items-center justify-center text-secondary font-bold">
-                <p>{{ __('OR') }}</p>
+                <p class="uppercase">{{ __('or') }}</p>
             </div>
 
             <article
@@ -338,8 +338,8 @@
                 </div>
             </article>
 
-            <div class="flex items-center justify-center text-secondary font-bold sm:hidden">
-                {{ __('OR') }}
+            <div class="flex items-center justify-center text-secondary font-bold uppercase sm:hidden">
+                {{ __('or') }}
             </div>
         </section>
 
@@ -388,7 +388,7 @@
                         @break
                     @case ('merge')
                         <x-button class="ml-2" x-on:click="getLocalLibraryJSON().then(data => $wire.mergeLibrary(data))" wire:loading.attr="disabled">
-                            {{ __('Merge Libraries') }}
+                            {{ str(__('Merge libraries'))->title() }}
                         </x-button>
                         @break
                     @default

@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot:title>
-        {{ __('Sign In') }}
+        {{ str(__('Sign in'))->title() }}
     </x-slot:title>
 
     <x-slot:meta>

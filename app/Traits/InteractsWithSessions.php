@@ -194,7 +194,7 @@ trait InteractsWithSessions
             'latitude' => $sessionAttribute?->latitude,
             'longitude' => $sessionAttribute?->longitude,
             'is_current' => false,
-            'last_activity' => $lastUsed?->diffForHumans() ?? __('now'),
+            'last_activity' => $lastUsed?->diffForHumans() ?? str(__('Now'))->lower(),
             'last_activity_at' => $lastUsed ?? Carbon::createFromTimestamp(0),
         ];
     }

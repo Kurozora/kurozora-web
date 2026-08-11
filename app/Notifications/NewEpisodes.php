@@ -115,7 +115,7 @@ class NewEpisodes extends Notification implements ShouldQueue
     public function toApn(User $notifiable): ApnMessage
     {
         return ApnMessage::create()
-            ->title(__('New episodes'))
+            ->title(str(__('New Episodes'))->lower()->ucfirst())
             ->badge($notifiable->unreadNotifications()->count())
             ->body(__(':count new episodes of :title are out now.', [
                 'count' => count($this->episodes),

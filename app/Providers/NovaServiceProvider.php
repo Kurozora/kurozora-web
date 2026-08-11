@@ -331,7 +331,7 @@ if (class_exists('Laravel\Nova\NovaApplicationServiceProvider')) {
                         ->icon('arrow-left-end-on-rectangle'),
 
                     MenuSection::make(
-                        __('Store Reconciliation'),
+                        __('Store'),
                         collect([
                             ReconciliationRun::class,
                             ReconciliationRow::class,

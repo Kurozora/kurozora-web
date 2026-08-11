@@ -250,7 +250,7 @@
                             </div>
 
                             <div class="ml-3">
-                                <div class="font-medium text-base text-primary">{{ __('Sign In') }}</div>
+                                <div class="font-medium text-base text-primary">{{ str(__('Sign in'))->title() }}</div>
                             </div>
                         @endauth
                     </button>

@@ -75,8 +75,8 @@ final class TimeoutDuration extends Enum
             self::OneHour => __('1 hour'),
             self::OneDay => __('1 day'),
             self::ThreeDays => __('3 days'),
-            self::SevenDays => __('7 days'),
-            self::ThirtyDays => __('30 days'),
+            self::SevenDays => str(__('7 Days'))->lower(),
+            self::ThirtyDays => str(__('30 Days'))->lower(),
             self::Permanent => __('Permanent'),
             default => parent::getLocalizedDescription($value),
         };

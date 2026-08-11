@@ -38,7 +38,7 @@
             <div class="max-w-7xl mx-auto pt-4 pb-6 pl-4 pr-4">
                 <div class="flex flex-wrap justify-between gap-4">
                     <div class="flex flex-col w-full gap-2 md:w-3/4">
-                        <h2 class="text-4xl font-semibold">{{ __('Open-source projects') }}</h2>
+                        <h2 class="text-4xl font-semibold">{{ str(__('Open-Source Projects'))->lower()->ucfirst() }}</h2>
 
                         <p class="text-lg font-light md:text-2xl">{{ __('Every :x product and service is crafted with and embraces open-source. We manage the following projects and encourages your contribution.', ['x' => config('app.name')]) }}</p>
                     </div>
