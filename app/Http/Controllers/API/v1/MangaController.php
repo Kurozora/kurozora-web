@@ -647,7 +647,7 @@ class MangaController extends Controller
         }
 
         $data = $request->validated();
-        $user->rateMediaModel($manga, $data['rating'], $data['description'] ?? null);
+        $user->rateMediaModel($manga, $data);
 
         return JSONResult::success();
     }

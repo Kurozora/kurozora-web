@@ -714,7 +714,7 @@ class GameController extends Controller
         }
 
         $data = $request->validated();
-        $user->rateMediaModel($game, $data['rating'], $data['description'] ?? null);
+        $user->rateMediaModel($game, $data);
 
         return JSONResult::success();
     }

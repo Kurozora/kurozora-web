@@ -323,7 +323,7 @@ class StudioController extends Controller
         $user = auth()->user();
 
         $data = $request->validated();
-        $user->rateMediaModel($studio, $data['rating'], $data['description'] ?? null);
+        $user->rateMediaModel($studio, $data);
 
         return JSONResult::success();
     }

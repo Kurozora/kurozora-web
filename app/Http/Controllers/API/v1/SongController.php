@@ -240,7 +240,7 @@ class SongController extends Controller
         $user = auth()->user();
 
         $data = $request->validated();
-        $user->rateMediaModel($song, $data['rating'] ?? 0, $data['description'] ?? null);
+        $user->rateMediaModel($song, $data);
 
         return JSONResult::success();
     }

@@ -234,54 +234,22 @@ class ReviewBox extends Component
      */
     protected function submitDetailedReview(?string $noteText): void
     {
-        $totalWeight = 0.0;
-        $weightedSum = 0.0;
-        $validScores = [];
-        $reviewParts = [];
+        $model = $this->modelType::withoutGlobalScopes()
+            ->whereKey($this->modelID)
+            ->first();
 
-        foreach ($this->categories as $ratingCategory) {
-            $score = (float) ($this->scores[(string) $ratingCategory->id] ?? RatingCategoryScore::MAX_SCORE_VALUE / 2);
-            $score = max(RatingCategoryScore::MIN_SCORE_VALUE, min(RatingCategoryScore::MAX_SCORE_VALUE, $score));
-            $review = strip_tags(trim((string) ($this->categoryReviews[(string) $ratingCategory->id] ?? '')));
-            $review = empty($review) ? null : $review;
-
-            $validScores[$ratingCategory->id] = [
-                'score' => $score,
-                'review' => $review,
-            ];
-            $weightedSum += $score * $ratingCategory->weight;
-            $totalWeight += $ratingCategory->weight;
-
-            if ($review !== null) {
-                $reviewParts[] = $ratingCategory->name . ': ' . $review;
-            }
+        if ($model === null) {
+            return;
         }
 
-        $overallScore = $totalWeight > 0 ? $weightedSum / $totalWeight : RatingCategoryScore::MAX_SCORE_VALUE / 2;
-        $this->rating = round($overallScore / 2, 2);
-
-        // The review is inferred from the per-category texts.
-        $reviewText = empty($reviewParts) ? null : implode("\n\n", $reviewParts);
-
-        // Update or create the authenticated user's rating for this model.
-        $mediaRating = auth()->user()->mediaRatings()->withoutGlobalScopes()
-            ->updateOrCreate([
-                'model_type' => $this->modelType,
-                'model_id' => $this->modelID,
-            ], [
-                'rating' => $this->rating,
-                'description' => $reviewText,
+        $mediaRating = auth()->user()
+            ->rateMediaModel($model, [
                 'note' => $noteText,
+                'categoryScores' => $this->scores,
+                'categoryReviews' => $this->categoryReviews,
             ]);
 
-        foreach ($validScores as $ratingCategoryID => $categoryScore) {
-            RatingCategoryScore::updateOrCreate([
-                'rating_id' => $mediaRating->id,
-                'rating_category_id' => $ratingCategoryID,
-            ], $categoryScore);
-        }
-
-        UserLibraryTouch::touch(auth()->id(), $this->modelType, [$this->modelID]);
+        $this->rating = $mediaRating?->rating;
 
         $this->showPopup = false;
 

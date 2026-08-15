@@ -294,7 +294,7 @@ class EpisodeController extends Controller
         }
 
         $data = $request->validated();
-        $user->rateMediaModel($episode, $data['rating'], $data['description'] ?? null);
+        $user->rateMediaModel($episode, $data);
 
         return JSONResult::success();
     }

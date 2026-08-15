@@ -337,7 +337,7 @@ class CharacterController extends Controller
         $user = auth()->user();
 
         $data = $request->validated();
-        $user->rateMediaModel($character, $data['rating'], $data['description'] ?? null);
+        $user->rateMediaModel($character, $data);
 
         return JSONResult::success();
     }

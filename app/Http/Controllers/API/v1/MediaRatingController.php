@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\v1;
 use App\Enums\ReviewKind;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\GetRatingCategoriesRequest;
 use App\Http\Requests\GetUserReviewsRequest;
 use App\Http\Resources\AnimeResourceIdentity;
 use App\Http\Resources\CharacterResourceIdentity;
@@ -13,6 +14,7 @@ use App\Http\Resources\GameResourceIdentity;
 use App\Http\Resources\LiteratureResourceIdentity;
 use App\Http\Resources\MediaRatingResource;
 use App\Http\Resources\PersonResourceIdentity;
+use App\Http\Resources\RatingCategoryResource;
 use App\Http\Resources\SongResourceIdentity;
 use App\Http\Resources\StudioResourceIdentity;
 use App\Models\Anime;
@@ -22,6 +24,7 @@ use App\Models\Game;
 use App\Models\Manga;
 use App\Models\MediaRating;
 use App\Models\Person;
+use App\Models\RatingCategory;
 use App\Models\Song;
 use App\Models\Studio;
 use App\Models\User;
@@ -30,6 +33,7 @@ use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
 use BenSampo\Enum\Exceptions\InvalidEnumMemberException;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 
 class MediaRatingController extends Controller
@@ -103,16 +107,7 @@ class MediaRatingController extends Controller
         }
         $etag = $this->stateVersionETag($user, $fingerprint);
 
-        $morphClass = match ($reviewKind->value) {
-            ReviewKind::Manga => Manga::class,
-            ReviewKind::Game => Game::class,
-            ReviewKind::Character => Character::class,
-            ReviewKind::Person => Person::class,
-            ReviewKind::Studio => Studio::class,
-            ReviewKind::Song => Song::class,
-            ReviewKind::Episode => Episode::class,
-            default => Anime::class,
-        };
+        $morphClass = $this->morphClassFor($reviewKind);
         $relationshipKey = match ($reviewKind->value) {
             ReviewKind::Manga => 'literatures',
             ReviewKind::Game => 'games',
@@ -153,7 +148,7 @@ class MediaRatingController extends Controller
         MediaRating::where('user_id', '=', $user->id)
             ->where('model_type', '=', $morphClass)
             ->whereIn('model_id', $ids)
-            ->select(['model_id', 'rating', 'description', 'created_at', 'updated_at'])
+            ->select(['model_id', 'rating', 'description', 'note', 'created_at', 'updated_at'])
             ->cursor()
             ->each(function ($row) use (&$entries, $relationshipKey, $identityClass, $reviewKind, $episodePublicIds) {
                 $identityValue = $reviewKind->value === ReviewKind::Episode
@@ -168,6 +163,7 @@ class MediaRatingController extends Controller
                     'attributes' => [
                         'score' => (float) $row->rating,
                         'description' => $row->description,
+                        'note' => $row->note,
                         'createdAt' => $row->created_at ? Carbon::parse($row->created_at)->timestamp : null,
                         'updatedAt' => $row->updated_at ? Carbon::parse($row->updated_at)->timestamp : null,
                     ],
@@ -182,5 +178,102 @@ class MediaRatingController extends Controller
         return JSONResult::success([
             'data' => $entries,
         ])->withHeaders($this->stateVersionHeaders($etag, $user));
+    }
+
+    /**
+     * Returns the rating categories of the requested kind.
+     *
+     * @param GetRatingCategoriesRequest $request
+     *
+     * @return JsonResponse
+     * @throws InvalidEnumMemberException
+     */
+    public function categories(GetRatingCategoriesRequest $request): JsonResponse
+    {
+        $data = $request->validated();
+        $reviewKind = ReviewKind::fromValue((int) $data['kind']);
+        $morphClass = $this->morphClassFor($reviewKind);
+
+        $ratingCategories = RatingCategory::forModelType($morphClass)
+            ->get();
+
+        $this->attachUserScores($ratingCategories, $morphClass, $data['id'] ?? null);
+
+        return JSONResult::success([
+            'data' => RatingCategoryResource::collection($ratingCategories),
+        ]);
+    }
+
+    /**
+     * Returns the morph class of the given review kind.
+     *
+     * @param ReviewKind $reviewKind
+     *
+     * @return string
+     */
+    private function morphClassFor(ReviewKind $reviewKind): string
+    {
+        return match ($reviewKind->value) {
+            ReviewKind::Manga => Manga::class,
+            ReviewKind::Game => Game::class,
+            ReviewKind::Character => Character::class,
+            ReviewKind::Person => Person::class,
+            ReviewKind::Studio => Studio::class,
+            ReviewKind::Song => Song::class,
+            ReviewKind::Episode => Episode::class,
+            default => Anime::class,
+        };
+    }
+
+    /**
+     * Attaches the authenticated user's score and review to each rating category.
+     *
+     * @param Collection  $ratingCategories
+     * @param string      $morphClass
+     * @param null|string $modelID
+     *
+     * @return void
+     */
+    private function attachUserScores(Collection $ratingCategories, string $morphClass, ?string $modelID): void
+    {
+        $ratingCategories->each(function (RatingCategory $ratingCategory) {
+            $ratingCategory->user_score = null;
+            $ratingCategory->user_review = null;
+        });
+
+        $user = auth()->user();
+
+        if ($user === null || $modelID === null || $ratingCategories->isEmpty()) {
+            return;
+        }
+
+        $modelKey = $morphClass === Episode::class
+            ? Episode::withoutGlobalScopes()
+                ->where('public_id', '=', $modelID)
+                ->value('id')
+            : $modelID;
+
+        if ($modelKey === null) {
+            return;
+        }
+
+        $mediaRating = $user->mediaRatings()
+            ->where('model_type', '=', $morphClass)
+            ->where('model_id', '=', $modelKey)
+            ->with('categoryScores')
+            ->first();
+
+        if ($mediaRating === null) {
+            return;
+        }
+
+        $categoryScores = $mediaRating->categoryScores
+            ->keyBy('rating_category_id');
+
+        $ratingCategories->each(function (RatingCategory $ratingCategory) use ($categoryScores) {
+            $categoryScore = $categoryScores->get($ratingCategory->id);
+            $ratingCategory->user_score = $categoryScore?->score;
+            $ratingCategory->user_review = $categoryScore?->review;
+        });
     }
 }

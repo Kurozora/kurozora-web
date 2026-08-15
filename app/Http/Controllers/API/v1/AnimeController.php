@@ -811,7 +811,7 @@ class AnimeController extends Controller
         }
 
         $data = $request->validated();
-        $user->rateMediaModel($anime, $data['rating'], $data['description'] ?? null);
+        $user->rateMediaModel($anime, $data);
 
         return JSONResult::success();
     }

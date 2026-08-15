@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Models\MediaRating;
+use App\Models\RatingCategoryScore;
 use Illuminate\Foundation\Http\FormRequest;
 
 class RateModelRequest extends FormRequest
@@ -25,8 +26,13 @@ class RateModelRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'rating' => ['bail', 'required', 'numeric', 'between:' . MediaRating::MIN_RATING_VALUE . ',' . MediaRating::MAX_RATING_VALUE],
-            'description' => ['bail', 'string']
+            'rating' => ['bail', 'required_without:categoryScores', 'numeric', 'between:' . MediaRating::MIN_RATING_VALUE . ',' . MediaRating::MAX_RATING_VALUE],
+            'description' => ['bail', 'string'],
+            'note' => ['bail', 'nullable', 'string'],
+            'categoryScores' => ['bail', 'array', 'min:1'],
+            'categoryScores.*' => ['bail', 'numeric', 'between:' . RatingCategoryScore::MIN_SCORE_VALUE . ',' . RatingCategoryScore::MAX_SCORE_VALUE],
+            'categoryReviews' => ['bail', 'array'],
+            'categoryReviews.*' => ['bail', 'nullable', 'string']
         ];
     }
 }

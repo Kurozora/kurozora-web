@@ -336,7 +336,7 @@ class PersonController extends Controller
         $user = auth()->user();
 
         $data = $request->validated();
-        $user->rateMediaModel($person, $data['rating'], $data['description'] ?? null);
+        $user->rateMediaModel($person, $data);
 
         return JSONResult::success();
     }

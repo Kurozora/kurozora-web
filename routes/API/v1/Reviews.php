@@ -6,6 +6,10 @@ Route::prefix('/reviews')
     ->name('.reviews')
     ->middleware('cache.headers:private;no_cache;etag')
     ->group(function () {
+        Route::get('/categories', [MediaRatingController::class, 'categories'])
+            ->middleware('auth.kurozora:optional')
+            ->name('.categories');
+
         Route::prefix('{mediaRating}')
             ->group(function () {
                 Route::get('/', [MediaRatingController::class, 'details'])

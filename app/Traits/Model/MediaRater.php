@@ -3,7 +3,10 @@
 namespace App\Traits\Model;
 
 use App\Models\MediaRating;
+use App\Models\RatingCategory;
+use App\Models\RatingCategoryScore;
 use App\Support\UserLibraryTouch;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\Client\ConnectionException;
@@ -79,16 +82,29 @@ trait MediaRater
     /**
      * Records the user's rating for a media model.
      *
-     * @param Model       $model
-     * @param float       $rating
-     * @param null|string $description
+     * @param Model $model
+     * @param array $attributes
      *
-     * @return void
+     * @return null|MediaRating
      */
-    public function rateMediaModel(Model $model, float $rating, ?string $description = null): void
+    public function rateMediaModel(Model $model, array $attributes): ?MediaRating
     {
         $morphClass = $model->getMorphClass();
         $modelKey = $model->getKey();
+        $categoryScores = $attributes['categoryScores'] ?? [];
+        $categoryReviews = $attributes['categoryReviews'] ?? [];
+        $ratingCategories = $this->scoredCategoriesFor($morphClass, $categoryScores);
+        $isDetailed = $ratingCategories->isNotEmpty();
+
+        $rating = $attributes['rating'] ?? null;
+        $description = $attributes['description'] ?? null;
+
+        if ($isDetailed) {
+            $rating = $this->weightedRatingFor($ratingCategories, $categoryScores);
+            $description = $description ?? $this->composedDescriptionFor($ratingCategories, $categoryReviews);
+        }
+
+        $rating = (float) $rating;
 
         /** @var MediaRating|null $existing */
         $existing = $this->mediaRatings()
@@ -97,28 +113,151 @@ trait MediaRater
             ->first();
 
         if ($existing !== null) {
-            if ($rating <= 0) {
+            if ($rating <= 0 && !$isDetailed) {
                 $existing->delete();
                 UserLibraryTouch::touch($this->id, $morphClass, [$modelKey]);
-                return;
+                return null;
             }
 
-            $existing->update([
+            $existing->update(array_merge([
                 'rating' => $rating,
                 'description' => $description ?? $existing->description,
-            ]);
+            ], $this->noteAttributeFrom($attributes)));
+            $this->storeCategoryScores($existing, $ratingCategories, $categoryScores, $categoryReviews);
             UserLibraryTouch::touch($this->id, $morphClass, [$modelKey]);
-            return;
+            return $existing;
         }
 
-        if ($rating > 0) {
-            $this->mediaRatings()->create([
+        if ($rating > 0 || $isDetailed) {
+            /** @var MediaRating $mediaRating */
+            $mediaRating = $this->mediaRatings()->create(array_merge([
                 'model_type' => $morphClass,
                 'model_id' => $modelKey,
                 'rating' => $rating,
                 'description' => $description,
-            ]);
+            ], $this->noteAttributeFrom($attributes)));
+            $this->storeCategoryScores($mediaRating, $ratingCategories, $categoryScores, $categoryReviews);
             UserLibraryTouch::touch($this->id, $morphClass, [$modelKey]);
+            return $mediaRating;
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns the private note to write.
+     *
+     * @param array $attributes
+     *
+     * @return array
+     */
+    protected function noteAttributeFrom(array $attributes): array
+    {
+        if (!array_key_exists('note', $attributes)) {
+            return [];
+        }
+
+        $note = trim(strip_tags((string) $attributes['note']));
+
+        return ['note' => $note === '' ? null : $note];
+    }
+
+    /**
+     * Returns the morph type's rating categories that carry a submitted score, in display order.
+     *
+     * @param string $morphClass
+     * @param array  $categoryScores
+     *
+     * @return Collection
+     */
+    protected function scoredCategoriesFor(string $morphClass, array $categoryScores): Collection
+    {
+        if (empty($categoryScores)) {
+            return new Collection();
+        }
+
+        return RatingCategory::forModelType($morphClass)
+            ->whereIn('id', array_keys($categoryScores))
+            ->get();
+    }
+
+    /**
+     * Returns the weighted average of the submitted category scores, on the media rating scale.
+     *
+     * @param Collection $ratingCategories
+     * @param array      $categoryScores
+     *
+     * @return float
+     */
+    protected function weightedRatingFor(Collection $ratingCategories, array $categoryScores): float
+    {
+        $weightedSum = 0.0;
+        $totalWeight = 0.0;
+
+        foreach ($ratingCategories as $ratingCategory) {
+            $score = (float) $categoryScores[$ratingCategory->id];
+            $score = max(RatingCategoryScore::MIN_SCORE_VALUE, min(RatingCategoryScore::MAX_SCORE_VALUE, $score));
+
+            $weightedSum += $score * $ratingCategory->weight;
+            $totalWeight += $ratingCategory->weight;
+        }
+
+        if ($totalWeight <= 0) {
+            return MediaRating::MIN_RATING_VALUE;
+        }
+
+        $scale = RatingCategoryScore::MAX_SCORE_VALUE / MediaRating::MAX_RATING_VALUE;
+
+        return round($weightedSum / $totalWeight / $scale, 2);
+    }
+
+    /**
+     * Returns the review composed from the submitted per-category reviews.
+     *
+     * @param Collection $ratingCategories
+     * @param array      $categoryReviews
+     *
+     * @return null|string
+     */
+    protected function composedDescriptionFor(Collection $ratingCategories, array $categoryReviews): ?string
+    {
+        $parts = [];
+
+        foreach ($ratingCategories as $ratingCategory) {
+            $review = strip_tags(trim((string) ($categoryReviews[$ratingCategory->id] ?? '')));
+
+            if ($review !== '') {
+                $parts[] = $ratingCategory->name . ': ' . $review;
+            }
+        }
+
+        return empty($parts) ? null : implode("\n\n", $parts);
+    }
+
+    /**
+     * Stores the submitted per-category scores and reviews of the media rating.
+     *
+     * @param MediaRating $mediaRating
+     * @param Collection  $ratingCategories
+     * @param array       $categoryScores
+     * @param array       $categoryReviews
+     *
+     * @return void
+     */
+    protected function storeCategoryScores(MediaRating $mediaRating, Collection $ratingCategories, array $categoryScores, array $categoryReviews): void
+    {
+        foreach ($ratingCategories as $ratingCategory) {
+            $score = (float) $categoryScores[$ratingCategory->id];
+            $score = max(RatingCategoryScore::MIN_SCORE_VALUE, min(RatingCategoryScore::MAX_SCORE_VALUE, $score));
+            $review = strip_tags(trim((string) ($categoryReviews[$ratingCategory->id] ?? '')));
+
+            RatingCategoryScore::updateOrCreate([
+                'rating_id' => $mediaRating->id,
+                'rating_category_id' => $ratingCategory->id,
+            ], [
+                'score' => $score,
+                'review' => $review === '' ? null : $review,
+            ]);
         }
     }
 }
