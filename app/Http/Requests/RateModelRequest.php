@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\ReviewRecommendation;
 use App\Models\MediaRating;
 use App\Models\RatingCategoryScore;
+use BenSampo\Enum\Rules\EnumValue;
 use Illuminate\Foundation\Http\FormRequest;
 
 class RateModelRequest extends FormRequest
@@ -30,6 +32,8 @@ class RateModelRequest extends FormRequest
             'description' => ['bail', 'string'],
             'note' => ['bail', 'nullable', 'string'],
             'isSpoiler' => ['bail', 'sometimes', 'boolean'],
+            // Required once the request carries review content; a score-only quick rating states no opinion.
+            'recommendation' => ['bail', 'required_with:description,categoryScores,isSpoiler', 'integer', new EnumValue(ReviewRecommendation::class, false)],
             'categoryScores' => ['bail', 'array', 'min:1'],
             'categoryScores.*' => ['bail', 'numeric', 'between:' . RatingCategoryScore::MIN_SCORE_VALUE . ',' . RatingCategoryScore::MAX_SCORE_VALUE],
             'categoryReviews' => ['bail', 'array'],

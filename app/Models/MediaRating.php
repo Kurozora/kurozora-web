@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\ParentalGuideReaction;
+use App\Enums\ReviewRecommendation;
 use App\Traits\Model\MorphTvRated;
 use Cog\Contracts\Love\Reactable\Models\Reactable as ReactableContract;
 use Cog\Laravel\Love\Reactable\Models\Traits\Reactable;
@@ -11,13 +12,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class MediaRating extends KModel implements ReactableContract
 {
     use MorphTvRated,
-        Reactable,
-        SoftDeletes;
+        Reactable;
 
     // Rating boundaries
     const float MIN_RATING_VALUE = 0.00;
@@ -36,6 +35,7 @@ class MediaRating extends KModel implements ReactableContract
     {
         return [
             'is_spoiler' => 'boolean',
+            'recommendation' => ReviewRecommendation::class,
         ];
     }
 

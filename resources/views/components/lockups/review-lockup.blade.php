@@ -48,8 +48,12 @@
                 <p class="text-sm text-secondary whitespace-nowrap" title="{{ $review->created_at->toFormattedDateString() }}">{{ $review->created_at->toFormattedDateString() }}</p>
             </div>
 
-            <div>
+            <div class="flex items-center gap-2">
                 <livewire:components.star-rating :rating="$review->rating" :star-size="'sm'" :disabled="true" wire:key="{{ uniqid('rating-', true) }}" />
+
+                @if ($review->recommendation !== null)
+                    <span class="pl-2 pr-2 pt-1 pb-1 text-xs rounded-md bg-tertiary">{{ $review->recommendation->description }}</span>
+                @endif
             </div>
 
             <div class="relative mt-2 w-full">

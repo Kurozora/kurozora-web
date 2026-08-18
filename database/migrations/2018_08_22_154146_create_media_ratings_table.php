@@ -24,11 +24,14 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->text('note')->nullable();
             $table->boolean('is_spoiler')->default(false);
+            $table->unsignedTinyInteger('recommendation')->nullable();
             $table->timestamps();
-            $table->softDeletes();
         });
 
         Schema::table(MediaRating::TABLE_NAME, function(Blueprint $table) {
+            // Set index key constraints
+            $table->index(['user_id', 'model_type', 'updated_at', 'id']);
+
             // Set unique key constraints
             $table->unique(['user_id', 'model_id', 'model_type']);
 

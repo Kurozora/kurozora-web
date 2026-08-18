@@ -31,6 +31,7 @@ class MediaRatingResourceBasic extends JsonResource
                 'description' => $this->resource->description,
                 'note' => $isOwnRating ? $this->resource->note : null,
                 'isSpoiler' => (bool) $this->resource->is_spoiler,
+                'recommendation' => $this->resource->recommendation?->value,
                 'createdAt' => $this->resource->created_at->timestamp
             ]
         ]);

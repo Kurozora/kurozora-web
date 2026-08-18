@@ -122,7 +122,7 @@ trait MediaRater
             $existing->update(array_merge([
                 'rating' => $rating,
                 'description' => $description ?? $existing->description,
-            ], $this->noteAttributeFrom($attributes), $this->spoilerAttributeFrom($attributes)));
+            ], $this->noteAttributeFrom($attributes), $this->spoilerAttributeFrom($attributes), $this->recommendationAttributeFrom($attributes)));
             $this->storeCategoryScores($existing, $ratingCategories, $categoryScores, $categoryReviews);
             UserLibraryTouch::touch($this->id, $morphClass, [$modelKey]);
             return $existing;
@@ -135,7 +135,7 @@ trait MediaRater
                 'model_id' => $modelKey,
                 'rating' => $rating,
                 'description' => $description,
-            ], $this->noteAttributeFrom($attributes), $this->spoilerAttributeFrom($attributes)));
+            ], $this->noteAttributeFrom($attributes), $this->spoilerAttributeFrom($attributes), $this->recommendationAttributeFrom($attributes)));
             $this->storeCategoryScores($mediaRating, $ratingCategories, $categoryScores, $categoryReviews);
             UserLibraryTouch::touch($this->id, $morphClass, [$modelKey]);
             return $mediaRating;
@@ -176,6 +176,22 @@ trait MediaRater
         }
 
         return ['is_spoiler' => (bool) $attributes['isSpoiler']];
+    }
+
+    /**
+     * Returns the recommendation to write.
+     *
+     * @param array $attributes
+     *
+     * @return array
+     */
+    protected function recommendationAttributeFrom(array $attributes): array
+    {
+        if (!array_key_exists('recommendation', $attributes)) {
+            return [];
+        }
+
+        return ['recommendation' => (int) $attributes['recommendation']];
     }
 
     /**

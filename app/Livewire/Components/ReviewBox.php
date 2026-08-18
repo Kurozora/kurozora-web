@@ -3,10 +3,12 @@
 namespace App\Livewire\Components;
 
 use App\Enums\RatingStyle;
+use App\Enums\ReviewRecommendation;
 use App\Models\MediaRating;
 use App\Models\RatingCategory;
 use App\Models\RatingCategoryScore;
 use App\Support\UserLibraryTouch;
+use BenSampo\Enum\Rules\EnumValue;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -66,6 +68,13 @@ class ReviewBox extends Component
      * @var bool $isSpoiler
      */
     public bool $isSpoiler = false;
+
+    /**
+     * The user's recommendation of the model.
+     *
+     * @var null|int $recommendation
+     */
+    public ?int $recommendation = null;
 
     /**
      * Whether the detailed review form is shown.
@@ -166,6 +175,7 @@ class ReviewBox extends Component
         $this->reviewText = $mediaRating?->description ?? '';
         $this->noteText = $mediaRating?->note ?? '';
         $this->isSpoiler = (bool) $mediaRating?->is_spoiler;
+        $this->recommendation = $mediaRating?->recommendation?->value;
         $this->isDetailed = ($user->settings?->rating_style ?? RatingStyle::Standard())->is(RatingStyle::Detailed)
             && RatingCategory::where('model_type', '=', $this->modelType)->exists();
 
@@ -206,6 +216,10 @@ class ReviewBox extends Component
      */
     public function submitReview(): void
     {
+        $this->validate([
+            'recommendation' => ['bail', 'required', 'integer', new EnumValue(ReviewRecommendation::class, false)],
+        ]);
+
         $reviewText = strip_tags($this->reviewText);
         $noteText = strip_tags($this->noteText);
 
@@ -225,6 +239,7 @@ class ReviewBox extends Component
                 'description' => $reviewText,
                 'note' => $noteText,
                 'is_spoiler' => $this->isSpoiler,
+                'recommendation' => $this->recommendation,
             ]);
 
         UserLibraryTouch::touch(auth()->id(), $this->modelType, [$this->modelID]);
@@ -255,6 +270,7 @@ class ReviewBox extends Component
             ->rateMediaModel($model, [
                 'note' => $noteText,
                 'isSpoiler' => $this->isSpoiler,
+                'recommendation' => $this->recommendation,
                 'categoryScores' => $this->scores,
                 'categoryReviews' => $this->categoryReviews,
             ]);
@@ -283,6 +299,8 @@ class ReviewBox extends Component
         $this->rating = null;
         $this->reviewText = '';
         $this->noteText = '';
+        $this->isSpoiler = false;
+        $this->recommendation = null;
         $this->scores = [];
         $this->categoryReviews = [];
         $this->confirmingRemoval = false;

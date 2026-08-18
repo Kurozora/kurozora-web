@@ -216,6 +216,7 @@ class LibraryController extends Controller
                 $ratingsTable . '.description as rating_description',
                 $ratingsTable . '.note as rating_note',
                 $ratingsTable . '.is_spoiler as rating_is_spoiler',
+                $ratingsTable . '.recommendation as rating_recommendation',
                 $ratingsTable . '.created_at as rating_created_at',
                 $ratingsTable . '.updated_at as rating_updated_at',
                 $favoritesTable . '.id as favorite_id',
@@ -700,6 +701,7 @@ class LibraryController extends Controller
                     'description' => $row->rating_description,
                     'note' => $row->rating_note,
                     'isSpoiler' => (bool) $row->rating_is_spoiler,
+                    'recommendation' => isset($row->rating_recommendation) ? (int) $row->rating_recommendation : null,
                     'createdAt' => isset($row->rating_created_at) ? Carbon::parse($row->rating_created_at)->timestamp : null,
                     'updatedAt' => isset($row->rating_updated_at) ? Carbon::parse($row->rating_updated_at)->timestamp : null,
                 ]

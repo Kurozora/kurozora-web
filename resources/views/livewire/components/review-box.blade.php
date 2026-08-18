@@ -88,6 +88,18 @@
                     </div>
                 @endif
 
+                <div class="flex flex-col gap-2">
+                    <p class="text-secondary text-sm font-semibold">{{ __('Recommendation') }}</p>
+
+                    <div class="flex flex-wrap gap-4">
+                        @foreach (\App\Enums\ReviewRecommendation::offeredOrder() as $case)
+                            <x-radio wire:model="recommendation" name="recommendation" value="{{ $case->value }}">{{ $case->description }}</x-radio>
+                        @endforeach
+                    </div>
+
+                    <x-input-error for="recommendation" class="mt-1" />
+                </div>
+
                 <label class="flex items-center gap-2">
                     <x-checkbox wire:model="isSpoiler" />
                     <span class="text-sm">{{ __('Spoiler') }}</span>

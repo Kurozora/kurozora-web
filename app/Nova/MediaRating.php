@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use App\Enums\ReviewRecommendation;
 use App\Nova\Filters\IsSpoiler;
 use Illuminate\Http\Request;
 use Laravel\Nova\Actions\Action;
@@ -13,6 +14,7 @@ use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\MorphTo;
 use Laravel\Nova\Fields\Number;
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Filters\Filter;
@@ -115,6 +117,13 @@ class MediaRating extends Resource
 
             Boolean::make('Is Spoiler')
                 ->sortable(),
+
+            Select::make('Recommendation')
+                ->options(ReviewRecommendation::asSelectArray())
+                ->displayUsingLabels()
+                ->sortable()
+                ->nullable()
+                ->help('Indicates whether the reviewer recommends the media, regardless of the score they gave it.'),
         ];
     }
 
