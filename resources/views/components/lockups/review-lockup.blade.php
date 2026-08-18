@@ -22,7 +22,17 @@
 <div {{ $attributes->merge(['class' => 'relative flex-grow w-64 sm:w-96 ' . $class]) }}>
     <div
         class="relative flex flex-row gap-2 pr-2 pl-2 pt-2 pb-2 h-full bg-secondary rounded-xl"
-        x-data="{}"
+        x-data="{
+            isDisabled: false,
+            init() {
+                const dismissed = sessionStorage.getItem('review-spoiler-dismissed-' + @js($review->id))
+                this.isDisabled = @js($review->is_spoiler) && !dismissed
+            },
+            dismissSpoiler() {
+                this.isDisabled = false
+                sessionStorage.setItem('review-spoiler-dismissed-' + @js($review->id), '1')
+            },
+        }"
         wire:key="{{ uniqid($review->id, true) }}"
     >
         <x-profile-image-view class="w-12 h-12" :user="$review->user" />
@@ -42,12 +52,24 @@
                 <livewire:components.star-rating :rating="$review->rating" :star-size="'sm'" :disabled="true" wire:key="{{ uniqid('rating-', true) }}" />
             </div>
 
-            <div class="mt-2 w-full">
-                <x-truncated-text>
-                    <x-slot:text>
-                        {!! nl2br(e($review->description)) !!}
-                    </x-slot:text>
-                </x-truncated-text>
+            <div class="relative mt-2 w-full">
+                <div x-bind:class="{'invisible' : isDisabled}">
+                    <x-truncated-text>
+                        <x-slot:text>
+                            {!! nl2br(e($review->description)) !!}
+                        </x-slot:text>
+                    </x-truncated-text>
+                </div>
+
+                <button
+                    type="button"
+                    class="absolute inset-0 backdrop-blur bg-tertiary text-sm rounded-md text-center"
+                    x-show="isDisabled"
+                    x-on:click="dismissSpoiler()"
+                    x-cloak
+                >
+                    <p>{{ __('This review contains spoilers. Click to view') }}</p>
+                </button>
             </div>
 
             <div class="flex gap-2 items-center mt-2">

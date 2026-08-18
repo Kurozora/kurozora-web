@@ -29,6 +29,7 @@ class RateModelRequest extends FormRequest
             'rating' => ['bail', 'required_without:categoryScores', 'numeric', 'between:' . MediaRating::MIN_RATING_VALUE . ',' . MediaRating::MAX_RATING_VALUE],
             'description' => ['bail', 'string'],
             'note' => ['bail', 'nullable', 'string'],
+            'isSpoiler' => ['bail', 'sometimes', 'boolean'],
             'categoryScores' => ['bail', 'array', 'min:1'],
             'categoryScores.*' => ['bail', 'numeric', 'between:' . RatingCategoryScore::MIN_SCORE_VALUE . ',' . RatingCategoryScore::MAX_SCORE_VALUE],
             'categoryReviews' => ['bail', 'array'],

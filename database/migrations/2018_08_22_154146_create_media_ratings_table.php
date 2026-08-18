@@ -23,6 +23,7 @@ return new class extends Migration
             $table->double('rating')->default(MediaRating::MAX_RATING_VALUE);
             $table->text('description')->nullable();
             $table->text('note')->nullable();
+            $table->boolean('is_spoiler')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });

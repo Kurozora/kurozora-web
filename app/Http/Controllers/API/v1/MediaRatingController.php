@@ -141,7 +141,7 @@ class MediaRatingController extends Controller
         MediaRating::where('user_id', '=', $user->id)
             ->where('model_type', '=', $morphClass)
             ->whereIn('model_id', $ids)
-            ->select(['model_id', 'rating', 'description', 'note', 'created_at', 'updated_at'])
+            ->select(['model_id', 'rating', 'description', 'note', 'is_spoiler', 'created_at', 'updated_at'])
             ->cursor()
             ->each(function ($row) use (&$entries, $relationshipKey, $identityClass, $reviewKind, $episodePublicIds) {
                 $identityValue = $reviewKind->value === ReviewKind::Episode
@@ -157,6 +157,7 @@ class MediaRatingController extends Controller
                         'score' => (float) $row->rating,
                         'description' => $row->description,
                         'note' => $row->note,
+                        'isSpoiler' => (bool) $row->is_spoiler,
                         'createdAt' => $row->created_at ? Carbon::parse($row->created_at)->timestamp : null,
                         'updatedAt' => $row->updated_at ? Carbon::parse($row->updated_at)->timestamp : null,
                     ],

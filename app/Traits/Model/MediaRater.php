@@ -122,7 +122,7 @@ trait MediaRater
             $existing->update(array_merge([
                 'rating' => $rating,
                 'description' => $description ?? $existing->description,
-            ], $this->noteAttributeFrom($attributes)));
+            ], $this->noteAttributeFrom($attributes), $this->spoilerAttributeFrom($attributes)));
             $this->storeCategoryScores($existing, $ratingCategories, $categoryScores, $categoryReviews);
             UserLibraryTouch::touch($this->id, $morphClass, [$modelKey]);
             return $existing;
@@ -135,7 +135,7 @@ trait MediaRater
                 'model_id' => $modelKey,
                 'rating' => $rating,
                 'description' => $description,
-            ], $this->noteAttributeFrom($attributes)));
+            ], $this->noteAttributeFrom($attributes), $this->spoilerAttributeFrom($attributes)));
             $this->storeCategoryScores($mediaRating, $ratingCategories, $categoryScores, $categoryReviews);
             UserLibraryTouch::touch($this->id, $morphClass, [$modelKey]);
             return $mediaRating;
@@ -160,6 +160,22 @@ trait MediaRater
         $note = trim(strip_tags((string) $attributes['note']));
 
         return ['note' => $note === '' ? null : $note];
+    }
+
+    /**
+     * Returns the spoiler flag to write.
+     *
+     * @param array $attributes
+     *
+     * @return array
+     */
+    protected function spoilerAttributeFrom(array $attributes): array
+    {
+        if (!array_key_exists('isSpoiler', $attributes)) {
+            return [];
+        }
+
+        return ['is_spoiler' => (bool) $attributes['isSpoiler']];
     }
 
     /**

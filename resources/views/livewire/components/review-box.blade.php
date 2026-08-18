@@ -88,6 +88,11 @@
                     </div>
                 @endif
 
+                <label class="flex items-center gap-2">
+                    <x-checkbox wire:model="isSpoiler" />
+                    <span class="text-sm">{{ __('Spoiler') }}</span>
+                </label>
+
                 <x-hr />
 
                 <div class="flex flex-col gap-2">

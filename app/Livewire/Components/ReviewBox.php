@@ -61,6 +61,13 @@ class ReviewBox extends Component
     public ?string $noteText = null;
 
     /**
+     * Whether the written review contains spoiler material.
+     *
+     * @var bool $isSpoiler
+     */
+    public bool $isSpoiler = false;
+
+    /**
      * Whether the detailed review form is shown.
      *
      * @var bool $isDetailed
@@ -158,6 +165,7 @@ class ReviewBox extends Component
         $this->rating = $mediaRating?->rating;
         $this->reviewText = $mediaRating?->description ?? '';
         $this->noteText = $mediaRating?->note ?? '';
+        $this->isSpoiler = (bool) $mediaRating?->is_spoiler;
         $this->isDetailed = ($user->settings?->rating_style ?? RatingStyle::Standard())->is(RatingStyle::Detailed)
             && RatingCategory::where('model_type', '=', $this->modelType)->exists();
 
@@ -216,6 +224,7 @@ class ReviewBox extends Component
             ], [
                 'description' => $reviewText,
                 'note' => $noteText,
+                'is_spoiler' => $this->isSpoiler,
             ]);
 
         UserLibraryTouch::touch(auth()->id(), $this->modelType, [$this->modelID]);
@@ -245,6 +254,7 @@ class ReviewBox extends Component
         $mediaRating = auth()->user()
             ->rateMediaModel($model, [
                 'note' => $noteText,
+                'isSpoiler' => $this->isSpoiler,
                 'categoryScores' => $this->scores,
                 'categoryReviews' => $this->categoryReviews,
             ]);

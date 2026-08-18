@@ -2,10 +2,12 @@
 
 namespace App\Nova;
 
+use App\Nova\Filters\IsSpoiler;
 use Illuminate\Http\Request;
 use Laravel\Nova\Actions\Action;
 use Laravel\Nova\Card;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Field;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
@@ -110,6 +112,9 @@ class MediaRating extends Resource
             Number::make('Rating')
                 ->step(0.01)
                 ->sortable(),
+
+            Boolean::make('Is Spoiler')
+                ->sortable(),
         ];
     }
 
@@ -141,7 +146,9 @@ class MediaRating extends Resource
      */
     public function filters(NovaRequest $request): array
     {
-        return [];
+        return [
+            new IsSpoiler,
+        ];
     }
 
     /**

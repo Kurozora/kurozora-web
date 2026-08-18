@@ -28,6 +28,18 @@ class MediaRating extends KModel implements ReactableContract
     protected $table = self::TABLE_NAME;
 
     /**
+     * The attributes that should be cast.
+     *
+     * @return array
+     */
+    protected function casts(): array
+    {
+        return [
+            'is_spoiler' => 'boolean',
+        ];
+    }
+
+    /**
      * Returns the model related to the media rating.
      *
      * @return MorphTo
