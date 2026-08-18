@@ -12,6 +12,7 @@ use BenSampo\Enum\Rules\EnumValue;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\Isolate;
@@ -231,22 +232,42 @@ class ReviewBox extends Component
             return;
         }
 
+        $attributes = [
+            'description' => $reviewText,
+            'note' => $noteText,
+            'is_spoiler' => $this->isSpoiler,
+            'recommendation' => $this->recommendation,
+        ];
+
+        $model = $this->ratedModel();
+
+        if ($reviewText !== null && $model !== null) {
+            $attributes['progress'] = auth()->user()->progressSnapshotFor($model);
+        }
+
         auth()->user()->mediaRatings()->withoutGlobalScopes()
             ->updateOrCreate([
                 'model_type' => $this->modelType,
                 'model_id' => $this->modelID,
-            ], [
-                'description' => $reviewText,
-                'note' => $noteText,
-                'is_spoiler' => $this->isSpoiler,
-                'recommendation' => $this->recommendation,
-            ]);
+            ], $attributes);
 
         UserLibraryTouch::touch(auth()->id(), $this->modelType, [$this->modelID]);
 
         $this->showPopup = false;
 
         $this->dispatch('review-submitted');
+    }
+
+    /**
+     * Returns the model being reviewed.
+     *
+     * @return null|Model
+     */
+    protected function ratedModel(): ?Model
+    {
+        return $this->modelType::withoutGlobalScopes()
+            ->whereKey($this->modelID)
+            ->first();
     }
 
     /**
@@ -258,9 +279,7 @@ class ReviewBox extends Component
      */
     protected function submitDetailedReview(?string $noteText): void
     {
-        $model = $this->modelType::withoutGlobalScopes()
-            ->whereKey($this->modelID)
-            ->first();
+        $model = $this->ratedModel();
 
         if ($model === null) {
             return;

@@ -25,6 +25,7 @@ return new class extends Migration
             $table->text('note')->nullable();
             $table->boolean('is_spoiler')->default(false);
             $table->unsignedTinyInteger('recommendation')->nullable();
+            $table->unsignedInteger('progress')->nullable();
             $table->timestamps();
         });
 

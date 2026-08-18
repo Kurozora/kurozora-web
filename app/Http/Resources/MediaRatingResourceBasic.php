@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Anime;
 use App\Models\MediaRating;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -32,8 +33,26 @@ class MediaRatingResourceBasic extends JsonResource
                 'note' => $isOwnRating ? $this->resource->note : null,
                 'isSpoiler' => (bool) $this->resource->is_spoiler,
                 'recommendation' => $this->resource->recommendation?->value,
+                'progress' => $this->resource->progress,
+                'progressTotal' => $this->progressTotal(),
                 'createdAt' => $this->resource->created_at->timestamp
             ]
         ]);
+    }
+
+    /**
+     * Returns the rated model's total number of parts.
+     *
+     * @return null|int
+     */
+    protected function progressTotal(): ?int
+    {
+        if (!$this->resource->relationLoaded('model')) {
+            return null;
+        }
+
+        $model = $this->resource->model;
+
+        return $model instanceof Anime ? $model->episode_count : null;
     }
 }

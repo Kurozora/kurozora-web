@@ -27,6 +27,7 @@ use App\Http\Resources\SeasonResourceIdentity;
 use App\Http\Resources\ShowCastResourceIdentity;
 use App\Http\Resources\StudioResource;
 use App\Models\Anime;
+use App\Models\MediaRating;
 use App\Models\MediaRelation;
 use App\Support\UserLibraryTouch;
 use App\Traits\Controller\WithCatalogCacheHeaders;
@@ -883,6 +884,10 @@ class AnimeController extends Controller
             ])
             ->where('description', '!=', null)
             ->cursorPaginate($data['limit'] ?? 25);
+
+        $reviews->getCollection()->each(function (MediaRating $review) use ($anime) {
+            $review->setRelation('model', $anime);
+        });
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $reviews->nextPageUrl() ?? '');

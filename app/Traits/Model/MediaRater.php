@@ -2,6 +2,7 @@
 
 namespace App\Traits\Model;
 
+use App\Models\Anime;
 use App\Models\MediaRating;
 use App\Models\RatingCategory;
 use App\Models\RatingCategoryScore;
@@ -122,7 +123,7 @@ trait MediaRater
             $existing->update(array_merge([
                 'rating' => $rating,
                 'description' => $description ?? $existing->description,
-            ], $this->noteAttributeFrom($attributes), $this->spoilerAttributeFrom($attributes), $this->recommendationAttributeFrom($attributes)));
+            ], $this->noteAttributeFrom($attributes), $this->spoilerAttributeFrom($attributes), $this->recommendationAttributeFrom($attributes), $this->progressAttributeFrom($model, $description)));
             $this->storeCategoryScores($existing, $ratingCategories, $categoryScores, $categoryReviews);
             UserLibraryTouch::touch($this->id, $morphClass, [$modelKey]);
             return $existing;
@@ -135,7 +136,7 @@ trait MediaRater
                 'model_id' => $modelKey,
                 'rating' => $rating,
                 'description' => $description,
-            ], $this->noteAttributeFrom($attributes), $this->spoilerAttributeFrom($attributes), $this->recommendationAttributeFrom($attributes)));
+            ], $this->noteAttributeFrom($attributes), $this->spoilerAttributeFrom($attributes), $this->recommendationAttributeFrom($attributes), $this->progressAttributeFrom($model, $description)));
             $this->storeCategoryScores($mediaRating, $ratingCategories, $categoryScores, $categoryReviews);
             UserLibraryTouch::touch($this->id, $morphClass, [$modelKey]);
             return $mediaRating;
@@ -192,6 +193,42 @@ trait MediaRater
         }
 
         return ['recommendation' => (int) $attributes['recommendation']];
+    }
+
+    /**
+     * Returns the progress snapshot to write alongside a written review.
+     *
+     * @param Model       $model
+     * @param null|string $description
+     *
+     * @return array
+     */
+    protected function progressAttributeFrom(Model $model, ?string $description): array
+    {
+        if (trim((string) $description) === '') {
+            return [];
+        }
+
+        return ['progress' => $this->progressSnapshotFor($model)];
+    }
+
+    /**
+     * Returns the user's progress through the model.
+     *
+     * @param Model $model
+     *
+     * @return null|int
+     */
+    public function progressSnapshotFor(Model $model): ?int
+    {
+        if (!$model instanceof Anime) {
+            return null;
+        }
+
+        return $this->userWatchedEpisodes()
+            ->completed()
+            ->whereIn('episode_id', $model->episodes()->select('episodes.id'))
+            ->count();
     }
 
     /**

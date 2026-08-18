@@ -3,6 +3,10 @@
 @php
     $class = $isRow ? 'pb-2 shrink-0 snap-normal snap-center' : '';
 
+    $progressTotal = $review->relationLoaded('model') && $review->model instanceof \App\Models\Anime
+        ? $review->model->episode_count
+        : null;
+
     $voteOverride = $voteOverrides[$review->id] ?? null;
 
     if ($voteOverride !== null) {
@@ -53,6 +57,10 @@
 
                 @if ($review->recommendation !== null)
                     <span class="pl-2 pr-2 pt-1 pb-1 text-xs rounded-md bg-tertiary">{{ $review->recommendation->description }}</span>
+                @endif
+
+                @if ($review->progress !== null)
+                    <span class="pl-2 pr-2 pt-1 pb-1 text-xs rounded-md bg-tertiary">{{ $progressTotal !== null ? __('Ep :x/:y', ['x' => $review->progress, 'y' => $progressTotal]) : __('Ep :x', ['x' => $review->progress]) }}</span>
                 @endif
             </div>
 
