@@ -17,16 +17,9 @@ use App\Http\Resources\PersonResourceIdentity;
 use App\Http\Resources\RatingCategoryResource;
 use App\Http\Resources\SongResourceIdentity;
 use App\Http\Resources\StudioResourceIdentity;
-use App\Models\Anime;
-use App\Models\Character;
 use App\Models\Episode;
-use App\Models\Game;
-use App\Models\Manga;
 use App\Models\MediaRating;
-use App\Models\Person;
 use App\Models\RatingCategory;
-use App\Models\Song;
-use App\Models\Studio;
 use App\Models\User;
 use App\Traits\Controller\WithStateVersionETag;
 use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
@@ -107,7 +100,7 @@ class MediaRatingController extends Controller
         }
         $etag = $this->stateVersionETag($user, $fingerprint);
 
-        $morphClass = $this->morphClassFor($reviewKind);
+        $morphClass = $reviewKind->getMorphClass();
         $relationshipKey = match ($reviewKind->value) {
             ReviewKind::Manga => 'literatures',
             ReviewKind::Game => 'games',
@@ -192,7 +185,7 @@ class MediaRatingController extends Controller
     {
         $data = $request->validated();
         $reviewKind = ReviewKind::fromValue((int) $data['kind']);
-        $morphClass = $this->morphClassFor($reviewKind);
+        $morphClass = $reviewKind->getMorphClass();
 
         $ratingCategories = RatingCategory::forModelType($morphClass)
             ->get();
@@ -202,27 +195,6 @@ class MediaRatingController extends Controller
         return JSONResult::success([
             'data' => RatingCategoryResource::collection($ratingCategories),
         ]);
-    }
-
-    /**
-     * Returns the morph class of the given review kind.
-     *
-     * @param ReviewKind $reviewKind
-     *
-     * @return string
-     */
-    private function morphClassFor(ReviewKind $reviewKind): string
-    {
-        return match ($reviewKind->value) {
-            ReviewKind::Manga => Manga::class,
-            ReviewKind::Game => Game::class,
-            ReviewKind::Character => Character::class,
-            ReviewKind::Person => Person::class,
-            ReviewKind::Studio => Studio::class,
-            ReviewKind::Song => Song::class,
-            ReviewKind::Episode => Episode::class,
-            default => Anime::class,
-        };
     }
 
     /**
