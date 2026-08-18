@@ -883,6 +883,7 @@ class AnimeController extends Controller
                 },
             ])
             ->where('description', '!=', null)
+            ->orderedForReading()
             ->cursorPaginate($data['limit'] ?? 25);
 
         $reviews->getCollection()->each(function (MediaRating $review) use ($anime) {

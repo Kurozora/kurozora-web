@@ -128,7 +128,7 @@ class Reviews extends Component
         return $this->parent->mediaRatings()
             ->with(array_merge(['user.media'], MediaRating::lockupEagerLoads(auth()->user())))
             ->where('description', '!=', null)
-            ->orderBy('created_at')
+            ->orderedForReading()
             ->cursorPaginate();
     }
 

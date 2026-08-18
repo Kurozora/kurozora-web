@@ -7,6 +7,7 @@ use App\Enums\ReviewRecommendation;
 use App\Models\MediaRating;
 use App\Models\RatingCategory;
 use App\Models\RatingCategoryScore;
+use App\Support\LowEffortReviewDetector;
 use App\Support\UserLibraryTouch;
 use BenSampo\Enum\Rules\EnumValue;
 use Illuminate\Contracts\Foundation\Application;
@@ -237,6 +238,7 @@ class ReviewBox extends Component
             'note' => $noteText,
             'is_spoiler' => $this->isSpoiler,
             'recommendation' => $this->recommendation,
+            'is_low_effort' => LowEffortReviewDetector::detect($reviewText),
         ];
 
         $model = $this->ratedModel();

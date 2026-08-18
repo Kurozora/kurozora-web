@@ -36,6 +36,7 @@ class MediaRating extends KModel implements ReactableContract
         return [
             'is_spoiler' => 'boolean',
             'recommendation' => ReviewRecommendation::class,
+            'is_low_effort' => 'boolean',
         ];
     }
 
@@ -48,6 +49,19 @@ class MediaRating extends KModel implements ReactableContract
     {
         return $this->morphTo()
             ->withoutGlobalScopes();
+    }
+
+    /**
+     * Orders reviews so the low-effort ones come last.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     *
+     * @return void
+     */
+    public function scopeOrderedForReading(\Illuminate\Database\Eloquent\Builder $query): void
+    {
+        $query->orderBy('is_low_effort')
+            ->orderBy('created_at');
     }
 
     /**

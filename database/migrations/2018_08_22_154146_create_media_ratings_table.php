@@ -26,6 +26,7 @@ return new class extends Migration
             $table->boolean('is_spoiler')->default(false);
             $table->unsignedTinyInteger('recommendation')->nullable();
             $table->unsignedInteger('progress')->nullable();
+            $table->boolean('is_low_effort')->default(false);
             $table->timestamps();
         });
 

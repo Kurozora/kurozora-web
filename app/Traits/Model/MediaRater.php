@@ -6,6 +6,7 @@ use App\Models\Anime;
 use App\Models\MediaRating;
 use App\Models\RatingCategory;
 use App\Models\RatingCategoryScore;
+use App\Support\LowEffortReviewDetector;
 use App\Support\UserLibraryTouch;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -123,7 +124,7 @@ trait MediaRater
             $existing->update(array_merge([
                 'rating' => $rating,
                 'description' => $description ?? $existing->description,
-            ], $this->noteAttributeFrom($attributes), $this->spoilerAttributeFrom($attributes), $this->recommendationAttributeFrom($attributes), $this->progressAttributeFrom($model, $description)));
+            ], $this->noteAttributeFrom($attributes), $this->spoilerAttributeFrom($attributes), $this->recommendationAttributeFrom($attributes), $this->progressAttributeFrom($model, $description), $this->lowEffortAttributeFrom($description)));
             $this->storeCategoryScores($existing, $ratingCategories, $categoryScores, $categoryReviews);
             UserLibraryTouch::touch($this->id, $morphClass, [$modelKey]);
             return $existing;
@@ -136,7 +137,7 @@ trait MediaRater
                 'model_id' => $modelKey,
                 'rating' => $rating,
                 'description' => $description,
-            ], $this->noteAttributeFrom($attributes), $this->spoilerAttributeFrom($attributes), $this->recommendationAttributeFrom($attributes), $this->progressAttributeFrom($model, $description)));
+            ], $this->noteAttributeFrom($attributes), $this->spoilerAttributeFrom($attributes), $this->recommendationAttributeFrom($attributes), $this->progressAttributeFrom($model, $description), $this->lowEffortAttributeFrom($description)));
             $this->storeCategoryScores($mediaRating, $ratingCategories, $categoryScores, $categoryReviews);
             UserLibraryTouch::touch($this->id, $morphClass, [$modelKey]);
             return $mediaRating;
@@ -210,6 +211,22 @@ trait MediaRater
         }
 
         return ['progress' => $this->progressSnapshotFor($model)];
+    }
+
+    /**
+     * Returns the low-effort verdict to write alongside a written review.
+     *
+     * @param null|string $description
+     *
+     * @return array
+     */
+    protected function lowEffortAttributeFrom(?string $description): array
+    {
+        if ($description === null) {
+            return [];
+        }
+
+        return ['is_low_effort' => LowEffortReviewDetector::detect($description)];
     }
 
     /**

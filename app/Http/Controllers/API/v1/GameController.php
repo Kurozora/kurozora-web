@@ -785,6 +785,7 @@ class GameController extends Controller
                 }
             ])
             ->where('description', '!=', null)
+            ->orderedForReading()
             ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain

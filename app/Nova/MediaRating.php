@@ -118,6 +118,10 @@ class MediaRating extends Resource
             Boolean::make('Is Spoiler')
                 ->sortable(),
 
+            Boolean::make('Is Low Effort')
+                ->sortable()
+                ->help('Set automatically when a review reads as a meme, art, or a one-word joke. Low-effort reviews are sorted last.'),
+
             Select::make('Recommendation')
                 ->options(ReviewRecommendation::asSelectArray())
                 ->displayUsingLabels()

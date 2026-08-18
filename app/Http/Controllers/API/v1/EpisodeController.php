@@ -339,6 +339,8 @@ class EpisodeController extends Controller
                         ->withCount(['followers', 'following', 'mediaRatings', 'achievements']);
                 }
             ])
+            ->where('description', '!=', null)
+            ->orderedForReading()
             ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
