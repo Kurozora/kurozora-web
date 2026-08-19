@@ -216,6 +216,15 @@ Schedule::command('calculate:ratings', [
     ->onOneServer();
 
 /**********************************************/
+// Calculate favorites every week
+Schedule::command('calculate:favorites', [
+    'all'
+])
+    ->weeklyOn(0, '5:45')
+    ->name('Calculate favorites')
+    ->onOneServer();
+
+/**********************************************/
 // Calculate global ranking every week
 Schedule::command('calculate:rankings -g')
     ->weeklyOn(0, '6:00')

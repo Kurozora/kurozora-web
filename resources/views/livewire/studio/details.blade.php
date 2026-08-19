@@ -136,8 +136,14 @@
 
                 <div class="flex flex-col justify-end items-center text-center">
                     @svg('star_fill', 'fill-current', ['width' => 32])
-                    <p class="font-bold text-2xl">{{ number_format($studio->mediaStat->highestRatingPercentage) }}%</p>
+                    <p class="font-bold text-2xl">{{ number_format($studio->mediaStat->positivePercentage) }}%</p>
                     <p class="text-sm text-secondary">{{ $studio->mediaStat->sentiment }}</p>
+                </div>
+
+                <div class="flex flex-col justify-end items-center text-center">
+                    @svg('heart_fill', 'fill-current', ['width' => 32])
+                    <p class="font-bold text-2xl">{{ number_format($studio->mediaStat->favorite_share * 100) }}%</p>
+                    <p class="text-sm text-secondary">{{ $studio->mediaStat->favorite_sentiment }}</p>
                 </div>
 
                 <div class="flex flex-col w-full justify-end text-right sm:w-auto">

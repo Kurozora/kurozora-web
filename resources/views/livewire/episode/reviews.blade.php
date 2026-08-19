@@ -37,7 +37,7 @@
 
                 <div class="flex flex-col justify-end items-center text-center">
                     @svg('star_fill', 'fill-current', ['width' => 32])
-                    <p class="font-bold text-2xl">{{ number_format($this->mediaStat->highestRatingPercentage) }}%</p>
+                    <p class="font-bold text-2xl">{{ number_format($this->mediaStat->positivePercentage) }}%</p>
                     <p class="text-sm text-secondary">{{ $this->mediaStat->sentiment }}</p>
                 </div>
 

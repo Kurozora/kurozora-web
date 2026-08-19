@@ -37,6 +37,10 @@ return new class extends Migration
             $table->unsignedBigInteger('rating_10')->default(0);
             $table->double('rating_average')->default(0.0);
             $table->unsignedBigInteger('rating_count')->default(0);
+            $table->unsignedBigInteger('rater_count')->default(0);
+            $table->unsignedBigInteger('favorite_count')->default(0);
+            $table->unsignedBigInteger('rater_favorite_count')->default(0);
+            $table->double('sentiment_gap')->default(0.0);
             $table->unsignedBigInteger('rank_global')->default(0);
             $table->unsignedBigInteger('rank_total')->default(0);
             $table->timestamps();
