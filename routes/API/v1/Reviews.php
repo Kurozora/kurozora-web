@@ -18,5 +18,9 @@ Route::prefix('/reviews')
                 Route::delete('/delete', [MediaRatingController::class, 'delete'])
                     ->middleware(['auth.kurozora', 'user.not-timed-out'])
                     ->name('.delete');
+
+                Route::post('/elevate', [MediaRatingController::class, 'elevate'])
+                    ->middleware(['auth.kurozora', 'user.not-timed-out'])
+                    ->name('.elevate');
             });
     });

@@ -41,6 +41,9 @@ Route::prefix('/games')
                 Route::get('/characters', [GameController::class, 'characters'])
                     ->name('.characters');
 
+                Route::get('/editorial', [GameController::class, 'editorial'])
+                    ->name('.editorial');
+
                 Route::get('/cast', [GameController::class, 'cast'])
                     ->name('.cast');
 

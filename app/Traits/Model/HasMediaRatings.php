@@ -2,9 +2,11 @@
 
 namespace App\Traits\Model;
 
+use App\Models\Editorial;
 use App\Models\MediaRating;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 trait HasMediaRatings
@@ -54,6 +56,17 @@ trait HasMediaRatings
         return $this->mediaRatings()
             ->whereNotNull('description');
     }
+
+    /**
+     * Get the model's editorial endorsement.
+     *
+     * @return MorphOne
+     */
+    public function editorial(): MorphOne
+    {
+        return $this->morphOne(Editorial::class, 'model');
+    }
+
 
     /**
      * Get the model's detailed ratings.

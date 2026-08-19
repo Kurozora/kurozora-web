@@ -14,6 +14,7 @@ use App\Http\Requests\GetMediaSongsRequest;
 use App\Http\Requests\GetPaginatedRequest;
 use App\Http\Requests\RateModelRequest;
 use App\Http\Requests\SearchRequest;
+use App\Http\Resources\EditorialResource;
 use App\Http\Resources\CharacterResourceIdentity;
 use App\Http\Resources\GameCastResourceIdentity;
 use App\Http\Resources\GameResource;
@@ -24,6 +25,7 @@ use App\Http\Resources\MediaSongResource;
 use App\Http\Resources\MediaStaffResource;
 use App\Http\Resources\StudioResource;
 use App\Models\Game;
+use App\Models\MediaRating;
 use App\Models\MediaRelation;
 use App\Support\UserLibraryTouch;
 use App\Traits\Controller\WithCatalogCacheHeaders;
@@ -381,6 +383,24 @@ class GameController extends Controller
         return JSONResult::success([
             'data' => CharacterResourceIdentity::collection($characters),
             'next' => empty($nextPageURL) ? null : $nextPageURL
+        ]);
+    }
+
+    /**
+     * Returns the editorial of a Game.
+     *
+     * @param Game $game
+     *
+     * @return JsonResponse
+     */
+    public function editorial(Game $game): JsonResponse
+    {
+        $editorial = $game->editorial()
+            ->published()
+            ->get();
+
+        return JSONResult::success([
+            'data' => EditorialResource::collection($editorial),
         ]);
     }
 
@@ -785,7 +805,7 @@ class GameController extends Controller
                 }
             ])
             ->where('description', '!=', null)
-            ->orderedForReading()
+            ->forReading()
             ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain

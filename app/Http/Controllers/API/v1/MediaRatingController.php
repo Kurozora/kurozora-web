@@ -73,6 +73,56 @@ class MediaRatingController extends Controller
     }
 
     /**
+     * Toggles whether the given review holds the item's Editor's Choice slot.
+     *
+     * @param MediaRating $mediaRating
+     *
+     * @return JsonResponse
+     * @throws AuthorizationException
+     */
+    public function elevate(MediaRating $mediaRating): JsonResponse
+    {
+        $user = auth()->user();
+
+        if (!$user->can('elevateMediaRating')) {
+            throw new AuthorizationException(__('Elevating a review is limited to the editorial team.'));
+        }
+
+        if ($mediaRating->is_elevated) {
+            $mediaRating->update([
+                'is_elevated' => false,
+                'elevated_at' => null,
+                'elevated_by_user_id' => null,
+            ]);
+
+            return JSONResult::success();
+        }
+
+        if (trim((string) $mediaRating->description) === '') {
+            throw new AuthorizationException(__('Only a written review can be elevated.'));
+        }
+
+        // The slot holds one review, so the review that held it steps down.
+        MediaRating::withoutGlobalScopes()
+            ->where('model_type', '=', $mediaRating->model_type)
+            ->where('model_id', '=', $mediaRating->model_id)
+            ->where('is_elevated', '=', true)
+            ->update([
+                'is_elevated' => false,
+                'elevated_at' => null,
+                'elevated_by_user_id' => null,
+            ]);
+
+        $mediaRating->update([
+            'is_elevated' => true,
+            'elevated_at' => now(),
+            'elevated_by_user_id' => $user->id,
+        ]);
+
+        return JSONResult::success();
+    }
+
+    /**
      * Returns the user's review-state Resources for the requested model IDs.
      *
      * @throws AuthorizationException

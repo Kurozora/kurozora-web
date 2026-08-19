@@ -45,6 +45,9 @@ Route::prefix('/anime')
                 Route::get('/characters', [AnimeController::class, 'characters'])
                     ->name('.characters');
 
+                Route::get('/editorial', [AnimeController::class, 'editorial'])
+                    ->name('.editorial');
+
                 Route::get('/cast', [AnimeController::class, 'cast'])
                     ->name('.cast');
 

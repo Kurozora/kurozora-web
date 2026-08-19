@@ -86,6 +86,15 @@
             </div>
         </section>
 
+        @if ($this->editorial)
+            <section class="pb-8 xl:safe-area-inset">
+                <div class="pl-4 pr-4">
+                    <x-lockups.editorial-lockup :editorial="$this->editorial" />
+                </div>
+            </section>
+        @endif
+
+
         @if ($this->mediaRatings->count())
             <section class="xl:safe-area-inset">
                 <x-rows.review-lockup :reviews="$this->mediaRatings" :is-row="false" :vote-overrides="$voteOverrides" />

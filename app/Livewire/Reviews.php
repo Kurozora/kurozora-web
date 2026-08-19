@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Enums\UserLibraryKind;
 use App\Models\Anime;
+use App\Models\Editorial;
 use App\Models\Game;
 use App\Models\Manga;
 use App\Models\MediaRating;
@@ -128,7 +129,7 @@ class Reviews extends Component
         return $this->parent->mediaRatings()
             ->with(array_merge(['user.media'], MediaRating::lockupEagerLoads(auth()->user())))
             ->where('description', '!=', null)
-            ->orderedForReading()
+            ->forReading()
             ->cursorPaginate();
     }
 
@@ -143,6 +144,21 @@ class Reviews extends Component
             ->firstWhere('user_id', auth()->user()?->id);
     }
 
+    /**
+     * Returns the parent's published editorial endorsement, if any.
+     *
+     * @return Editorial|null
+     */
+    public function getEditorialProperty(): ?Editorial
+    {
+        if (!$this->readyToLoad) {
+            return null;
+        }
+
+        return $this->parent->editorial()
+            ->published()
+            ->first();
+    }
     /**
      * Returns the og:type meta value for the active kind.
      *

@@ -13,6 +13,7 @@ use App\Http\Requests\GetIndexRequest;
 use App\Http\Requests\GetPaginatedRequest;
 use App\Http\Requests\RateModelRequest;
 use App\Http\Requests\SearchRequest;
+use App\Http\Resources\EditorialResource;
 use App\Http\Resources\CharacterResourceIdentity;
 use App\Http\Resources\LiteratureCastResourceIdentity;
 use App\Http\Resources\LiteratureResource;
@@ -22,6 +23,7 @@ use App\Http\Resources\MediaRelatedResource;
 use App\Http\Resources\MediaStaffResource;
 use App\Http\Resources\StudioResource;
 use App\Models\Manga;
+use App\Models\MediaRating;
 use App\Models\MediaRelation;
 use App\Support\UserLibraryTouch;
 use App\Traits\Controller\WithCatalogCacheHeaders;
@@ -354,6 +356,24 @@ class MangaController extends Controller
         return JSONResult::success([
             'data' => CharacterResourceIdentity::collection($characters),
             'next' => empty($nextPageURL) ? null : $nextPageURL
+        ]);
+    }
+
+    /**
+     * Returns the editorial of a Manga.
+     *
+     * @param Manga $manga
+     *
+     * @return JsonResponse
+     */
+    public function editorial(Manga $manga): JsonResponse
+    {
+        $editorial = $manga->editorial()
+            ->published()
+            ->get();
+
+        return JSONResult::success([
+            'data' => EditorialResource::collection($editorial),
         ]);
     }
 
@@ -718,7 +738,7 @@ class MangaController extends Controller
                 }
             ])
             ->where('description', '!=', null)
-            ->orderedForReading()
+            ->forReading()
             ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain

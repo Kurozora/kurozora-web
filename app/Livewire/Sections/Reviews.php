@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Sections;
 
+use App\Models\Editorial;
 use App\Models\MediaRating;
 use App\Traits\Livewire\MediaRatingActions;
 use Illuminate\Contracts\Foundation\Application;
@@ -82,6 +83,21 @@ class Reviews extends Component
     }
 
     /**
+     * Returns the model's published editorial endorsement, if any.
+     *
+     * @return Editorial|null
+     */
+    public function getEditorialProperty(): ?Editorial
+    {
+        if (!$this->readyToLoad) {
+            return null;
+        }
+
+        return $this->model->editorial()
+            ->published()
+            ->first();
+    }
+    /**
      * The array of reviews.
      *
      * @return Collection
@@ -95,7 +111,7 @@ class Reviews extends Component
         return $this->model->mediaRatings()
             ->with(array_merge(['user.media'], MediaRating::lockupEagerLoads(auth()->user())))
             ->where('description', '!=', null)
-            ->orderedForReading()
+            ->forReading()
             ->limit(6)
             ->get();
     }

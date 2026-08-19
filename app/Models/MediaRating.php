@@ -37,6 +37,8 @@ class MediaRating extends KModel implements ReactableContract
             'is_spoiler' => 'boolean',
             'recommendation' => ReviewRecommendation::class,
             'is_low_effort' => 'boolean',
+            'is_elevated' => 'boolean',
+            'elevated_at' => 'datetime',
         ];
     }
 
@@ -52,15 +54,18 @@ class MediaRating extends KModel implements ReactableContract
     }
 
     /**
-     * Orders reviews so the low-effort ones come last.
+     * Shapes the query for a public review list.
+     *
+     * Every column ordered on is non-nullable, so the cursor stays stable across pages.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
      *
      * @return void
      */
-    public function scopeOrderedForReading(\Illuminate\Database\Eloquent\Builder $query): void
+    public function scopeForReading(\Illuminate\Database\Eloquent\Builder $query): void
     {
-        $query->orderBy('is_low_effort')
+        $query->orderByDesc('is_elevated')
+            ->orderBy('is_low_effort')
             ->orderBy('created_at');
     }
 
@@ -89,6 +94,16 @@ class MediaRating extends KModel implements ReactableContract
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Returns the staff member who elevated the review.
+     *
+     * @return BelongsTo
+     */
+    public function elevatedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'elevated_by_user_id');
     }
 
     /**

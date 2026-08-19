@@ -16,6 +16,7 @@ use App\Nova\Comment;
 use App\Nova\Country;
 use App\Nova\Dashboards\Main;
 use App\Nova\Dashboards\UserInsights;
+use App\Nova\Editorial;
 use App\Nova\Episode;
 use App\Nova\EpisodeTranslation;
 use App\Nova\ExploreCategory;
@@ -235,6 +236,7 @@ if (class_exists('Laravel\Nova\NovaApplicationServiceProvider')) {
                     MenuSection::make(
                         __('Media'),
                         collect([
+                            Editorial::class,
                             Media::class,
                             MediaGenre::class,
                             MediaRating::class,

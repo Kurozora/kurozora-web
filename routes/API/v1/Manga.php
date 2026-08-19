@@ -41,6 +41,9 @@ Route::prefix('/manga')
                 Route::get('/characters', [MangaController::class, 'characters'])
                     ->name('.characters');
 
+                Route::get('/editorial', [MangaController::class, 'editorial'])
+                    ->name('.editorial');
+
                 Route::get('/cast', [MangaController::class, 'cast'])
                     ->name('.cast');
 

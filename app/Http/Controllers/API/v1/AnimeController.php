@@ -15,6 +15,7 @@ use App\Http\Requests\GetMediaSongsRequest;
 use App\Http\Requests\GetPaginatedRequest;
 use App\Http\Requests\RateModelRequest;
 use App\Http\Requests\SearchRequest;
+use App\Http\Resources\EditorialResource;
 use App\Http\Resources\AnimeMappingResource;
 use App\Http\Resources\AnimeResource;
 use App\Http\Resources\AnimeResourceIdentity;
@@ -453,6 +454,24 @@ class AnimeController extends Controller
     }
 
     /**
+     * Returns the editorial of an Anime.
+     *
+     * @param Anime $anime
+     *
+     * @return JsonResponse
+     */
+    public function editorial(Anime $anime): JsonResponse
+    {
+        $editorial = $anime->editorial()
+            ->published()
+            ->get();
+
+        return JSONResult::success([
+            'data' => EditorialResource::collection($editorial),
+        ]);
+    }
+
+    /**
      * Returns the cast information of an Anime.
      *
      * @param GetPaginatedRequest $request
@@ -883,7 +902,7 @@ class AnimeController extends Controller
                 },
             ])
             ->where('description', '!=', null)
-            ->orderedForReading()
+            ->forReading()
             ->cursorPaginate($data['limit'] ?? 25);
 
         $reviews->getCollection()->each(function (MediaRating $review) use ($anime) {

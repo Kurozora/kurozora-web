@@ -27,6 +27,9 @@ return new class extends Migration
             $table->unsignedTinyInteger('recommendation')->nullable();
             $table->unsignedInteger('progress')->nullable();
             $table->boolean('is_low_effort')->default(false);
+            $table->boolean('is_elevated')->default(false);
+            $table->timestamp('elevated_at')->nullable();
+            $table->unsignedBigInteger('elevated_by_user_id')->nullable();
             $table->timestamps();
         });
 
@@ -47,6 +50,11 @@ return new class extends Migration
                 ->references('id')
                 ->on(User::TABLE_NAME)
                 ->cascadeOnDelete()
+                ->cascadeOnUpdate();
+            $table->foreign('elevated_by_user_id')
+                ->references('id')
+                ->on(User::TABLE_NAME)
+                ->nullOnDelete()
                 ->cascadeOnUpdate();
         });
     }

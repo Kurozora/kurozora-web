@@ -36,6 +36,7 @@ class MediaRatingResourceBasic extends JsonResource
                 'progress' => $this->resource->progress,
                 'progressTotal' => $this->progressTotal(),
                 'isLowEffort' => (bool) $this->resource->is_low_effort,
+                'isElevated' => (bool) $this->resource->is_elevated,
                 'createdAt' => $this->resource->created_at->timestamp
             ]
         ]);
