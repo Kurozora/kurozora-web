@@ -58,6 +58,7 @@ use App\Nova\ReconciliationRow;
 use App\Nova\ReconciliationRun;
 use App\Nova\ReconciliationUserImpact;
 use App\Nova\Relation;
+use App\Nova\Report;
 use App\Nova\Role;
 use App\Nova\Season;
 use App\Nova\SeasonTranslation;
@@ -71,6 +72,7 @@ use App\Nova\SongTranslation;
 use App\Nova\Source;
 use App\Nova\StaffRole;
 use App\Nova\Status;
+use App\Nova\StoreProduct;
 use App\Nova\Studio;
 use App\Nova\Tag;
 use App\Nova\Theme;
@@ -292,6 +294,19 @@ if (class_exists('Laravel\Nova\NovaApplicationServiceProvider')) {
                         ->icon('sparkles'),
 
                     MenuSection::make(
+                        __('Feed'),
+                        collect([
+                            FeedMessage::class,
+                            Hashtag::class,
+                            FeedMessageHashtag::class,
+                            LinkPreview::class,
+                            Mention::class,
+                        ])->map(fn($resource) => MenuItem::resource($resource))
+                    )
+                        ->collapsable()
+                        ->icon('pencil-square'),
+
+                    MenuSection::make(
                         __('User Activity'),
                         collect([
                             Activity::class,
@@ -301,6 +316,15 @@ if (class_exists('Laravel\Nova\NovaApplicationServiceProvider')) {
                     )
                         ->collapsable()
                         ->icon('chat-bubble-left-right'),
+
+                    MenuSection::make(
+                        __('Moderation'),
+                        collect([
+                            Report::class,
+                        ])->map(fn($resource) => MenuItem::resource($resource))
+                    )
+                        ->collapsable()
+                        ->icon('flag'),
 
                     MenuSection::make(
                         __('Users & Permissions'),
@@ -335,6 +359,7 @@ if (class_exists('Laravel\Nova\NovaApplicationServiceProvider')) {
                     MenuSection::make(
                         __('Store'),
                         collect([
+                            StoreProduct::class,
                             ReconciliationRun::class,
                             ReconciliationRow::class,
                             ReconciliationUserImpact::class,

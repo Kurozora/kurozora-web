@@ -31,6 +31,10 @@ Route::prefix('/messages')
             ->can('heart', 'feedMessage')
             ->name('.heart');
 
+        Route::post('/{feedMessage}/report', [FeedMessageController::class, 'report'])
+            ->middleware(['auth.kurozora', 'user.not-timed-out'])
+            ->name('.report');
+
         Route::post('/{feedMessage}/pin', [FeedMessageController::class, 'pin'])
             ->middleware(['auth.kurozora', 'user.not-timed-out'])
             ->can('update', 'feedMessage')

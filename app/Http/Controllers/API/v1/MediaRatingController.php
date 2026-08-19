@@ -8,6 +8,7 @@ use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GetRatingCategoriesRequest;
 use App\Http\Requests\GetUserReviewsRequest;
+use App\Http\Requests\ReportMediaRatingRequest;
 use App\Http\Requests\VoteMediaRatingRequest;
 use App\Http\Resources\AnimeResourceIdentity;
 use App\Http\Resources\CharacterResourceIdentity;
@@ -22,6 +23,7 @@ use App\Http\Resources\StudioResourceIdentity;
 use App\Models\Episode;
 use App\Models\MediaRating;
 use App\Models\RatingCategory;
+use App\Models\Report;
 use App\Models\User;
 use App\Traits\Controller\WithStateVersionETag;
 use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
@@ -169,6 +171,44 @@ class MediaRatingController extends Controller
                 'isHelpful' => $isHelpful,
             ],
         ]);
+    }
+
+    /**
+     * File a report against the review.
+     *
+     * @param ReportMediaRatingRequest $request
+     * @param MediaRating              $mediaRating
+     *
+     * @return JsonResponse
+     * @throws AuthorizationException
+     */
+    public function report(ReportMediaRatingRequest $request, MediaRating $mediaRating): JsonResponse
+    {
+        $user = auth()->user();
+
+        if ((int) $mediaRating->user_id === $user->id) {
+            throw new AuthorizationException(__('Reporting your own review is not allowed.'));
+        }
+
+        $data = $request->validated();
+        $alreadyReported = Report::where('reportable_type', '=', $mediaRating->getMorphClass())
+            ->where('reportable_id', '=', $mediaRating->getKey())
+            ->where('user_id', '=', $user->id)
+            ->exists();
+
+        if ($alreadyReported) {
+            return JSONResult::success();
+        }
+
+        Report::create([
+            'reportable_type' => $mediaRating->getMorphClass(),
+            'reportable_id' => $mediaRating->getKey(),
+            'user_id' => $user->id,
+            'reason_key' => $data['reason_key'],
+            'details' => $data['details'] ?? null,
+        ]);
+
+        return JSONResult::success();
     }
 
     /**

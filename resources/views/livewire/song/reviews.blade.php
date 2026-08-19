@@ -106,4 +106,6 @@
     </div>
 
     <livewire:components.review-box :review-box-id="$reviewBoxID" :model-id="$song->id" :model-type="$song->getMorphClass()" :user-rating="$this->userRating" />
+
+    @include('livewire.components.reviews.report-form')
 </main>

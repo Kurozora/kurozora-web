@@ -8,8 +8,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\FeedMessageUpdateRequest;
 use App\Http\Requests\GetPaginatedRequest;
 use App\Http\Requests\GetSortedPaginatedRequest;
+use App\Http\Requests\ReportFeedMessageRequest;
 use App\Http\Resources\FeedMessageResource;
 use App\Models\FeedMessage;
+use App\Models\Report;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Http\JsonResponse;
@@ -279,6 +281,44 @@ class FeedMessageController extends Controller
                 'isPinned' => $pinAction
             ]
         ]);
+    }
+
+    /**
+     * File a report against the feed message.
+     *
+     * @param ReportFeedMessageRequest $request
+     * @param FeedMessage              $feedMessage
+     *
+     * @return JsonResponse
+     * @throws AuthorizationException
+     */
+    public function report(ReportFeedMessageRequest $request, FeedMessage $feedMessage): JsonResponse
+    {
+        $user = auth()->user();
+
+        if ((int) $feedMessage->user_id === $user->id) {
+            throw new AuthorizationException(__('Reporting your own message is not allowed.'));
+        }
+
+        $data = $request->validated();
+        $alreadyReported = Report::where('reportable_type', '=', $feedMessage->getMorphClass())
+            ->where('reportable_id', '=', $feedMessage->getKey())
+            ->where('user_id', '=', $user->id)
+            ->exists();
+
+        if ($alreadyReported) {
+            return JSONResult::success();
+        }
+
+        Report::create([
+            'reportable_type' => $feedMessage->getMorphClass(),
+            'reportable_id' => $feedMessage->getKey(),
+            'user_id' => $user->id,
+            'reason_key' => $data['reason_key'],
+            'details' => $data['details'] ?? null,
+        ]);
+
+        return JSONResult::success();
     }
 
     /**

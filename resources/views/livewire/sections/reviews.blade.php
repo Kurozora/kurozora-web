@@ -17,4 +17,6 @@
             <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
         </div>
     @endif
+
+    @include('livewire.components.reviews.report-form')
 </div>

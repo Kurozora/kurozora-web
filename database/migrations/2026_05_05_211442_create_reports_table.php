@@ -24,6 +24,9 @@ return new class extends Migration {
         });
 
         Schema::table(Report::TABLE_NAME, function (Blueprint $table) {
+            // Set index key constraints
+            $table->index(['reportable_type', 'reportable_id', 'user_id']);
+
             // Set foreign key constraints
             $table->foreign('user_id')
                 ->references('id')
