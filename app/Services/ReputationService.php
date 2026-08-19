@@ -10,7 +10,8 @@ class ReputationService
      * Calculate a user's reputation score.
      *
      * The score combines volume (log-compressed, measures dedication) with
-     * a quality multiplier (ratio-based, measures engagement quality).
+     * a quality multiplier (ratio-based, measures engagement quality), and adds
+     * a social tier that counts the recognition a user's work received.
      * Quality ratios amplify or dampen the volume base, so:
      *
      * - Great ratios + big library = high score
@@ -34,6 +35,9 @@ class ReputationService
                 $user->hearts_received_count,
                 $user->media_ratings_without_description_count,
                 $user->media_ratings_with_description_count,
+                $user->reviews_found_helpful_count,
+                $user->reviews_found_unhelpful_count,
+                $user->reviews_elevated_count,
                 $user->followers_count,
                 $user->blocked_by_count,
             ], fn($count) => $count > 0)) === 0) {
@@ -75,10 +79,15 @@ class ReputationService
         // Rewatch dedication: does the user rewatch episodes?
         $rewatchRate = min($user->user_rewatched_episodes_count / max($user->user_watched_episodes_count, 1), 1.0);
 
+        // Review reception: of the reviews readers voted on, how many landed well?
+        $votedReviewCount = $user->reviews_found_helpful_count + $user->reviews_found_unhelpful_count;
+        $helpfulnessRate = min($user->reviews_found_helpful_count / max($votedReviewCount, 1), 1.0);
+
         $qualityMultiplier = 0.25
             + ($completionRate * 0.8)
             + ($reviewRate * 0.6)
             + ($feedRate * 0.2)
+            + ($helpfulnessRate * 0.15)
             + ($ratingRate * 0.1)
             + ($rewatchRate * 0.05);
 
@@ -93,7 +102,9 @@ class ReputationService
             2 * sqrt(min($user->reshares_received_count, 500)) +
             1.5 * sqrt(min($user->replies_received_count, 500)) +
             1.5 * sqrt(min($user->hearts_received_count, 1000)) +
-            1.5 * sqrt(min($user->followers_count, 1000));
+            1.5 * sqrt(min($user->followers_count, 1000)) +
+            2 * sqrt(min($user->reviews_found_helpful_count, 500)) +               // 1→2, 25→10, 200→28.3, 500→44.7
+            8 * sqrt(min($user->reviews_elevated_count, 10));                     // 1→8, 4→16, 10→25.3
 
         // =====================================================================
         // Library health penalties

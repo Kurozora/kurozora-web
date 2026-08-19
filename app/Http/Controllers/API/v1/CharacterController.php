@@ -18,6 +18,7 @@ use App\Http\Resources\LiteratureResourceIdentity;
 use App\Http\Resources\MediaRatingResource;
 use App\Http\Resources\PersonResourceIdentity;
 use App\Models\Character;
+use App\Models\MediaRating;
 use App\Traits\Controller\WithCatalogCacheHeaders;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -375,11 +376,11 @@ class CharacterController extends Controller
 
         $reviews = $character->mediaRatings()
             ->withoutTvRatings()
-            ->with([
+            ->with(array_merge([
                 'user' => function ($query) {
                     $query->withProfileEagerLoad(auth()->user());
                 },
-            ])
+            ], MediaRating::lockupEagerLoads(auth()->user())))
             ->where('description', '!=', null)
             ->forReading()
             ->cursorPaginate($data['limit'] ?? 25);

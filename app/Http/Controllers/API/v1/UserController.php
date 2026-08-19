@@ -16,6 +16,7 @@ use App\Http\Resources\MediaRatingResource;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\UserResourceIdentity;
 use App\Models\FeedMessage;
+use App\Models\MediaRating;
 use App\Models\User;
 use App\Traits\Controller\WithStateVersionETag;
 use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
@@ -203,9 +204,9 @@ class UserController extends Controller
         // Get the feed messages
         $mediaRatings = $user->mediaRatings()
             ->addEpisodePublicIdSelect()
-            ->with([
+            ->with(array_merge([
                 'user' => fn($query) => $this->eagerLoadUser($query)
-            ])
+            ], MediaRating::lockupEagerLoads(auth()->user())))
             ->orderBy('created_at', 'desc')
             ->cursorPaginate($limit);
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Enums\ParentalGuideReaction;
 use App\Models\Anime;
 use App\Models\MediaRating;
 use Illuminate\Http\Request;
@@ -37,9 +38,30 @@ class MediaRatingResourceBasic extends JsonResource
                 'progressTotal' => $this->progressTotal(),
                 'isLowEffort' => (bool) $this->resource->is_low_effort,
                 'isElevated' => (bool) $this->resource->is_elevated,
+                'helpfulCount' => $this->resource->helpful_count,
+                'unhelpfulCount' => $this->resource->unhelpful_count,
+                'isHelpful' => $this->resolveIsHelpful(),
                 'createdAt' => $this->resource->created_at->timestamp
             ]
         ]);
+    }
+
+    /**
+     * Returns the authenticated user's helpful state on the review.
+     *
+     * @return bool|null
+     */
+    private function resolveIsHelpful(): ?bool
+    {
+        $user = auth()->user();
+
+        if ($user === null) {
+            return null;
+        }
+
+        $reaction = $user->getHelpfulnessFor($this->resource);
+
+        return $reaction?->is(ParentalGuideReaction::Helpful());
     }
 
     /**

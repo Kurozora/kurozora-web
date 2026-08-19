@@ -2,12 +2,14 @@
 
 namespace App\Traits\Model;
 
+use App\Enums\ParentalGuideReaction;
 use App\Models\Anime;
 use App\Models\MediaRating;
 use App\Models\RatingCategory;
 use App\Models\RatingCategoryScore;
 use App\Support\LowEffortReviewDetector;
 use App\Support\UserLibraryTouch;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -58,6 +60,55 @@ trait MediaRater
     {
         return $this->mediaRatings()
             ->whereNotNull('description');
+    }
+
+    /**
+     * Returns the user's reviews that at least one reader found helpful.
+     *
+     * @return HasMany
+     */
+    public function reviewsFoundHelpful(): HasMany
+    {
+        return $this->reviewsFound(ParentalGuideReaction::Helpful());
+    }
+
+    /**
+     * Returns the user's reviews that at least one reader found unhelpful.
+     *
+     * @return HasMany
+     */
+    public function reviewsFoundUnhelpful(): HasMany
+    {
+        return $this->reviewsFound(ParentalGuideReaction::Unhelpful());
+    }
+
+    /**
+     * Returns the user's reviews that hold an item's Editor's Choice slot.
+     *
+     * @return HasMany
+     */
+    public function reviewsElevated(): HasMany
+    {
+        return $this->mediaRatingsWithDescription()
+            ->where('is_elevated', '=', true);
+    }
+
+    /**
+     * Returns the user's reviews carrying the given reaction.
+     *
+     * @param ParentalGuideReaction $reaction
+     *
+     * @return HasMany
+     */
+    private function reviewsFound(ParentalGuideReaction $reaction): HasMany
+    {
+        return $this->mediaRatingsWithDescription()
+            ->whereHas('loveReactant.reactionCounters', function (Builder $query) use ($reaction) {
+                $query->where('count', '>', 0)
+                    ->whereHas('reactionType', function (Builder $reactionTypeQuery) use ($reaction) {
+                        $reactionTypeQuery->where('name', '=', $reaction->description);
+                    });
+            });
     }
 
     /**

@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 
 trait HelpfulnessActionTrait
 {
+    // Weight boundary
+    const float MAX_HELPFULNESS_WEIGHT = 5.0;
+
     /**
      * Toggle the user's helpful reaction on the given reactable.
      *
@@ -41,13 +44,15 @@ trait HelpfulnessActionTrait
             return null;
         }
 
+        $rate = $this->helpfulnessVoteWeight();
+
         if ($reaction->is(ParentalGuideReaction::Helpful)) {
             if ($hasUnhelpful) {
                 $reacter->unreactTo($reactable, ParentalGuideReaction::Unhelpful()->description);
             }
 
             if (!$hasHelpful) {
-                $reacter->reactTo($reactable, ParentalGuideReaction::Helpful()->description);
+                $reacter->reactTo($reactable, ParentalGuideReaction::Helpful()->description, $rate);
             }
         } else {
             if ($hasHelpful) {
@@ -55,11 +60,33 @@ trait HelpfulnessActionTrait
             }
 
             if (!$hasUnhelpful) {
-                $reacter->reactTo($reactable, ParentalGuideReaction::Unhelpful()->description);
+                $reacter->reactTo($reactable, ParentalGuideReaction::Unhelpful()->description, $rate);
             }
         }
 
         return $reaction;
+    }
+
+    /**
+     * The weight the user's vote carries.
+     *
+     * @return float
+     */
+    public function helpfulnessVoteWeight(): float
+    {
+        return self::helpfulnessWeightFor((int) $this->reputation_count);
+    }
+
+    /**
+     * The vote weight earned by the given reputation.
+     *
+     * @param int $reputationCount
+     *
+     * @return float
+     */
+    public static function helpfulnessWeightFor(int $reputationCount): float
+    {
+        return min(self::MAX_HELPFULNESS_WEIGHT, 1.0 + log(1 + max(0, $reputationCount), 2) / 2);
     }
 
     /**

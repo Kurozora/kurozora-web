@@ -39,6 +39,10 @@ trait MediaRatingActions
             return;
         }
 
+        if ((int) $mediaRating->user_id === $user->id) {
+            return;
+        }
+
         // Ratings created before reactions shipped aren't registered as reactants yet.
         if ($mediaRating->isNotRegisteredAsLoveReactant()) {
             $mediaRating->registerAsLoveReactant();

@@ -22,5 +22,9 @@ Route::prefix('/reviews')
                 Route::post('/elevate', [MediaRatingController::class, 'elevate'])
                     ->middleware(['auth.kurozora', 'user.not-timed-out'])
                     ->name('.elevate');
+
+                Route::post('/vote', [MediaRatingController::class, 'vote'])
+                    ->middleware(['auth.kurozora', 'user.not-timed-out'])
+                    ->name('.vote');
             });
     });

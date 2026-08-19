@@ -13,6 +13,7 @@ use App\Http\Resources\EpisodeResource;
 use App\Http\Resources\MediaRatingResource;
 use App\Models\Anime;
 use App\Models\Episode;
+use App\Models\MediaRating;
 use App\Traits\Controller\WithCatalogCacheHeaders;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -333,12 +334,12 @@ class EpisodeController extends Controller
         $reviews = $episode->mediaRatings()
             ->withoutTvRatings()
             ->addEpisodePublicIdSelect()
-            ->with([
+            ->with(array_merge([
                 'user' => function ($query) {
                     $query->with(['media'])
                         ->withCount(['followers', 'following', 'mediaRatings', 'achievements']);
                 }
-            ])
+            ], MediaRating::lockupEagerLoads(auth()->user())))
             ->where('description', '!=', null)
             ->forReading()
             ->cursorPaginate($data['limit'] ?? 25);

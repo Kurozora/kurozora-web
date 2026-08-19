@@ -74,6 +74,9 @@ class CalculateUserReputation extends Command
                     'heartsReceived',
                     'mediaRatingsWithoutDescription',
                     'mediaRatingsWithDescription',
+                    'reviewsFoundHelpful',
+                    'reviewsFoundUnhelpful',
+                    'reviewsElevated',
                     'followers',
                     'blockedBy',
                 ])
@@ -104,6 +107,9 @@ class CalculateUserReputation extends Command
                     'heartsReceived',
                     'mediaRatingsWithoutDescription',
                     'mediaRatingsWithDescription',
+                    'reviewsFoundHelpful',
+                    'reviewsFoundUnhelpful',
+                    'reviewsElevated',
                     'followers',
                     'blockedBy',
                 ])

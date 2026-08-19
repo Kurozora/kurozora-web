@@ -88,27 +88,29 @@
                 </button>
             </div>
 
-            <div class="flex gap-2 items-center mt-2">
-                <button
-                    type="button"
-                    class="inline-flex items-center gap-1 pl-2 pr-2 pt-1 pb-1 text-xs rounded-md bg-tertiary {{ $isHelpful ? 'text-tint font-semibold' : '' }}"
-                    title="{{ __('Helpful') }}"
-                    wire:click="voteOnReview({{ $review->id }}, 'helpful')"
-                >
-                    <span aria-hidden="true">👍</span>
-                    <span>{{ $helpfulCount }}</span>
-                </button>
+            @if (auth()->id() !== $review->user_id)
+                <div class="flex gap-2 items-center mt-2">
+                    <button
+                        type="button"
+                        class="inline-flex items-center gap-1 pl-2 pr-2 pt-1 pb-1 text-xs rounded-md bg-tertiary {{ $isHelpful ? 'text-tint font-semibold' : '' }}"
+                        title="{{ __('Helpful') }}"
+                        wire:click="voteOnReview({{ $review->id }}, 'helpful')"
+                    >
+                        <span aria-hidden="true">👍</span>
+                        <span>{{ $helpfulCount }}</span>
+                    </button>
 
-                <button
-                    type="button"
-                    class="inline-flex items-center gap-1 pl-2 pr-2 pt-1 pb-1 text-xs rounded-md bg-tertiary {{ $isUnhelpful ? 'text-tint font-semibold' : '' }}"
-                    title="{{ __('Unhelpful') }}"
-                    wire:click="voteOnReview({{ $review->id }}, 'unhelpful')"
-                >
-                    <span aria-hidden="true">👎</span>
-                    <span>{{ $unhelpfulCount }}</span>
-                </button>
-            </div>
+                    <button
+                        type="button"
+                        class="inline-flex items-center gap-1 pl-2 pr-2 pt-1 pb-1 text-xs rounded-md bg-tertiary {{ $isUnhelpful ? 'text-tint font-semibold' : '' }}"
+                        title="{{ __('Unhelpful') }}"
+                        wire:click="voteOnReview({{ $review->id }}, 'unhelpful')"
+                    >
+                        <span aria-hidden="true">👎</span>
+                        <span>{{ $unhelpfulCount }}</span>
+                    </button>
+                </div>
+            @endif
 
 {{--            <div class="flex gap-2 justify-between w-full">--}}
 {{--                <div class="flex justify-between">--}}

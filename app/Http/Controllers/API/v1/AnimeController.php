@@ -896,11 +896,11 @@ class AnimeController extends Controller
 
         $reviews = $anime->mediaRatings()
             ->withoutTvRatings()
-            ->with([
+            ->with(array_merge([
                 'user' => function ($query) {
                     $query->withProfileEagerLoad(auth()->user());
                 },
-            ])
+            ], MediaRating::lockupEagerLoads(auth()->user())))
             ->where('description', '!=', null)
             ->forReading()
             ->cursorPaginate($data['limit'] ?? 25);

@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\API\v1;
 
+use App\Enums\ParentalGuideReaction;
 use App\Enums\ReviewKind;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GetRatingCategoriesRequest;
 use App\Http\Requests\GetUserReviewsRequest;
+use App\Http\Requests\VoteMediaRatingRequest;
 use App\Http\Resources\AnimeResourceIdentity;
 use App\Http\Resources\CharacterResourceIdentity;
 use App\Http\Resources\EpisodeResourceIdentity;
@@ -41,11 +43,11 @@ class MediaRatingController extends Controller
      */
     public function details(MediaRating $mediaRating): JsonResponse
     {
-        $mediaRating->load([
+        $mediaRating->load(array_merge([
             'user' => function ($query) {
                 $query->withProfileEagerLoad(auth()->user());
             },
-        ]);
+        ], MediaRating::lockupEagerLoads(auth()->user())));
 
         if ($mediaRating->model_type === Episode::class) {
             $mediaRating->episode_public_id = Episode::withoutGlobalScopes()
@@ -120,6 +122,53 @@ class MediaRatingController extends Controller
         ]);
 
         return JSONResult::success();
+    }
+
+    /**
+     * Toggles the (un)helpful vote on the review.
+     *
+     * @param VoteMediaRatingRequest $request
+     * @param MediaRating            $mediaRating
+     *
+     * @return JsonResponse
+     * @throws AuthorizationException
+     */
+    public function vote(VoteMediaRatingRequest $request, MediaRating $mediaRating): JsonResponse
+    {
+        $user = auth()->user();
+
+        if ((int) $mediaRating->user_id === $user->id) {
+            throw new AuthorizationException(__('Voting on your own review is not allowed.'));
+        }
+
+        // Ratings created before reactions shipped aren't registered as reactants yet.
+        if ($mediaRating->isNotRegisteredAsLoveReactant()) {
+            $mediaRating->registerAsLoveReactant();
+            $mediaRating->refresh();
+        }
+
+        $voteString = $request->validated()['vote'] ?? null;
+        $reaction = match ($voteString) {
+            'helpful' => ParentalGuideReaction::Helpful(),
+            'unhelpful' => ParentalGuideReaction::Unhelpful(),
+            default => null,
+        };
+
+        if ($reaction !== null && $reaction->is($user->getHelpfulnessFor($mediaRating))) {
+            $reaction = null;
+        }
+
+        $user->setHelpfulness($mediaRating, $reaction);
+
+        $mediaRating->load(MediaRating::lockupEagerLoads($user));
+        $newReaction = $user->getHelpfulnessFor($mediaRating);
+        $isHelpful = $newReaction?->is(ParentalGuideReaction::Helpful());
+
+        return JSONResult::success([
+            'data' => [
+                'isHelpful' => $isHelpful,
+            ],
+        ]);
     }
 
     /**

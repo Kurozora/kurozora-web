@@ -19,6 +19,7 @@ use App\Http\Resources\MediaRatingResource;
 use App\Http\Resources\MediaResource;
 use App\Http\Resources\PersonRelationshipResource;
 use App\Http\Resources\PersonResource;
+use App\Models\MediaRating;
 use App\Models\Person;
 use App\Traits\Controller\WithCatalogCacheHeaders;
 use Exception;
@@ -374,11 +375,11 @@ class PersonController extends Controller
 
         $reviews = $person->mediaRatings()
             ->withoutTvRatings()
-            ->with([
+            ->with(array_merge([
                 'user' => function ($query) {
                     $query->withProfileEagerLoad(auth()->user());
                 },
-            ])
+            ], MediaRating::lockupEagerLoads(auth()->user())))
             ->where('description', '!=', null)
             ->forReading()
             ->cursorPaginate($data['limit'] ?? 25);

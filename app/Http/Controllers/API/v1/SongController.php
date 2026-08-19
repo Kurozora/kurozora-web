@@ -17,6 +17,7 @@ use App\Http\Resources\GameResource;
 use App\Http\Resources\MediaRatingResource;
 use App\Http\Resources\SongLyricResource;
 use App\Http\Resources\SongResource;
+use App\Models\MediaRating;
 use App\Models\Song;
 use App\Traits\Controller\WithCatalogCacheHeaders;
 use Exception;
@@ -315,11 +316,11 @@ class SongController extends Controller
 
         $reviews = $song->mediaRatings()
             ->withoutTvRatings()
-            ->with([
+            ->with(array_merge([
                 'user' => function ($query) {
                     $query->withProfileEagerLoad(auth()->user());
                 }
-            ])
+            ], MediaRating::lockupEagerLoads(auth()->user())))
             ->where('description', '!=', null)
             ->forReading()
             ->cursorPaginate($data['limit'] ?? 25);

@@ -20,6 +20,7 @@ use App\Http\Resources\StudioResourceIdentity;
 use App\Models\Anime;
 use App\Models\Game;
 use App\Models\Manga;
+use App\Models\MediaRating;
 use App\Models\Studio;
 use App\Traits\Controller\WithCatalogCacheHeaders;
 use Illuminate\Auth\AuthenticationException;
@@ -361,11 +362,11 @@ class StudioController extends Controller
 
         $reviews = $studio->mediaRatings()
             ->withoutTvRatings()
-            ->with([
+            ->with(array_merge([
                 'user' => function ($query) {
                     $query->withProfileEagerLoad(auth()->user());
                 },
-            ])
+            ], MediaRating::lockupEagerLoads(auth()->user())))
             ->where('description', '!=', null)
             ->forReading()
             ->cursorPaginate($data['limit'] ?? 25);
