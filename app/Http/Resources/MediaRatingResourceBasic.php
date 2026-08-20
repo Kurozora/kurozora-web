@@ -41,9 +41,22 @@ class MediaRatingResourceBasic extends JsonResource
                 'helpfulCount' => $this->resource->helpful_count,
                 'unhelpfulCount' => $this->resource->unhelpful_count,
                 'isHelpful' => $this->resolveIsHelpful(),
+                'revisionCount' => $this->revisionCount(),
                 'createdAt' => $this->resource->created_at->timestamp
             ]
         ]);
+    }
+
+    /**
+     * Returns the number of superseded versions kept for the review.
+     *
+     * @return null|int
+     */
+    protected function revisionCount(): ?int
+    {
+        $revisionCount = $this->resource->revisions_count;
+
+        return $revisionCount === null ? null : (int) $revisionCount;
     }
 
     /**

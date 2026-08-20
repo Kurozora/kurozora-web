@@ -15,6 +15,7 @@ use App\Models\UserReminder;
 use App\Models\UserWatchedEpisode;
 use App\Observers\AnimeObserver;
 use App\Observers\FeedMessageObserver;
+use App\Observers\MediaRatingObserver;
 use App\Observers\UserStateObserver;
 use App\Policies\NotificationPolicy;
 use App\Providers\SocialiteProviders\AppleProvider;
@@ -119,6 +120,7 @@ class AppServiceProvider extends ServiceProvider
         Anime::observe(AnimeObserver::class);
         FeedMessage::observe(FeedMessageObserver::class);
         UserLibrary::observe(UserStateObserver::class);
+        MediaRating::observe(MediaRatingObserver::class);
         MediaRating::observe(UserStateObserver::class);
         UserFavorite::observe(UserStateObserver::class);
         UserReminder::observe(UserStateObserver::class);

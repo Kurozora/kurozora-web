@@ -204,6 +204,7 @@ class UserController extends Controller
         // Get the feed messages
         $mediaRatings = $user->mediaRatings()
             ->addEpisodePublicIdSelect()
+            ->withCount('revisions')
             ->with(array_merge([
                 'user' => fn($query) => $this->eagerLoadUser($query)
             ], MediaRating::lockupEagerLoads(auth()->user())))

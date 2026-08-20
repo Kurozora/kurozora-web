@@ -15,6 +15,9 @@ Route::prefix('/reviews')
                 Route::get('/', [MediaRatingController::class, 'details'])
                     ->name('.details');
 
+                Route::get('/revisions', [MediaRatingController::class, 'revisions'])
+                    ->name('.revisions');
+
                 Route::delete('/delete', [MediaRatingController::class, 'delete'])
                     ->middleware(['auth.kurozora', 'user.not-timed-out'])
                     ->name('.delete');

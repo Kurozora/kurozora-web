@@ -16,12 +16,15 @@ use App\Http\Resources\EpisodeResourceIdentity;
 use App\Http\Resources\GameResourceIdentity;
 use App\Http\Resources\LiteratureResourceIdentity;
 use App\Http\Resources\MediaRatingResource;
+use App\Http\Resources\MediaRatingRevisionResource;
 use App\Http\Resources\PersonResourceIdentity;
 use App\Http\Resources\RatingCategoryResource;
 use App\Http\Resources\SongResourceIdentity;
 use App\Http\Resources\StudioResourceIdentity;
+use App\Models\Anime;
 use App\Models\Episode;
 use App\Models\MediaRating;
+use App\Models\MediaRatingRevision;
 use App\Models\RatingCategory;
 use App\Models\Report;
 use App\Models\User;
@@ -51,6 +54,8 @@ class MediaRatingController extends Controller
             },
         ], MediaRating::lockupEagerLoads(auth()->user())));
 
+        $mediaRating->loadCount('revisions');
+
         if ($mediaRating->model_type === Episode::class) {
             $mediaRating->episode_public_id = Episode::withoutGlobalScopes()
                 ->whereKey($mediaRating->model_id)
@@ -59,6 +64,33 @@ class MediaRatingController extends Controller
 
         return JSONResult::success([
             'data' => MediaRatingResource::collection([$mediaRating])
+        ]);
+    }
+
+    /**
+     * Returns the superseded versions of the review, newest first.
+     *
+     * @param MediaRating $mediaRating
+     *
+     * @return JsonResponse
+     */
+    public function revisions(MediaRating $mediaRating): JsonResponse
+    {
+        $revisions = $mediaRating->revisions()
+            ->limit(MediaRatingRevision::MAXIMUM_KEPT)
+            ->get();
+
+        // Only anime carry a progress total, so only they are worth the extra query.
+        if ($mediaRating->model_type === Anime::class) {
+            $mediaRating->loadMissing('model');
+        }
+
+        $revisions->each(function (MediaRatingRevision $revision) use ($mediaRating) {
+            $revision->setRelation('mediaRating', $mediaRating);
+        });
+
+        return JSONResult::success([
+            'data' => MediaRatingRevisionResource::collection($revisions),
         ]);
     }
 

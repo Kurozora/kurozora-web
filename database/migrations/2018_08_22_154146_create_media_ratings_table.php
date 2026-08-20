@@ -30,6 +30,7 @@ return new class extends Migration
             $table->boolean('is_elevated')->default(false);
             $table->timestamp('elevated_at')->nullable();
             $table->unsignedBigInteger('elevated_by_user_id')->nullable();
+            $table->timestamp('description_written_at')->nullable();
             $table->timestamps();
         });
 

@@ -7,6 +7,8 @@
         ? $review->model->episode_count
         : null;
 
+    $revisions = $review->relationLoaded('revisions') ? $review->revisions : collect();
+
     $voteOverride = $voteOverrides[$review->id] ?? null;
 
     if ($voteOverride !== null) {
@@ -87,6 +89,56 @@
                     <p>{{ __('This review contains spoilers. Click to view') }}</p>
                 </button>
             </div>
+
+            @if ($revisions->isNotEmpty())
+                <div class="w-full mt-2" x-data="{ isExpanded: false }">
+                    <button
+                        type="button"
+                        class="flex items-center gap-1 pl-2 pr-2 pt-1 pb-1 text-xs text-secondary rounded-md bg-tertiary"
+                        x-on:click="isExpanded = !isExpanded"
+                    >
+                        <span x-show="!isExpanded">{{ __('Show earlier versions (:count)', ['count' => $revisions->count()]) }}</span>
+                        <span x-show="isExpanded" x-cloak>{{ __('Hide earlier versions') }}</span>
+                    </button>
+
+                    <div class="flex flex-col gap-3 mt-2" x-show="isExpanded" x-cloak>
+                        @foreach ($revisions as $revision)
+                            <div>
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <span class="inline-flex items-center gap-1 pl-2 pr-2 pt-1 pb-1 text-xs rounded-md bg-tertiary">
+                                        @svg('star_fill', 'fill-current', ['width' => 10])
+                                        {{ number_format($revision->rating, 1) }}
+                                    </span>
+
+                                    @if ($revision->recommendation !== null)
+                                        <span class="pl-2 pr-2 pt-1 pb-1 text-xs rounded-md bg-tertiary">{{ $revision->recommendation->description }}</span>
+                                    @endif
+
+                                    @if ($revision->progress !== null)
+                                        <span class="pl-2 pr-2 pt-1 pb-1 text-xs rounded-md bg-tertiary">{{ $progressTotal !== null ? __('Ep :x/:y', ['x' => $revision->progress, 'y' => $progressTotal]) : __('Ep :x', ['x' => $revision->progress]) }}</span>
+                                    @endif
+
+                                    <p class="text-xs text-secondary whitespace-nowrap">{{ $revision->written_at->toFormattedDateString() }}</p>
+                                </div>
+
+                                <div class="relative mt-1" x-data="{ isDisabled: @js($revision->is_spoiler) }">
+                                    <p class="text-sm" x-bind:class="{'invisible' : isDisabled}">{!! nl2br(e($revision->description)) !!}</p>
+
+                                    <button
+                                        type="button"
+                                        class="absolute inset-0 backdrop-blur bg-tertiary text-sm rounded-md text-center"
+                                        x-show="isDisabled"
+                                        x-on:click="isDisabled = false"
+                                        x-cloak
+                                    >
+                                        <p>{{ __('This review contains spoilers. Click to view') }}</p>
+                                    </button>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
 
             @if (auth()->id() !== $review->user_id)
                 <div class="flex justify-between items-center w-full mt-2">

@@ -34,6 +34,7 @@ class MediaRating extends KModel implements ReactableContract
     protected function casts(): array
     {
         return [
+            'description_written_at' => 'datetime',
             'is_spoiler' => 'boolean',
             'recommendation' => ReviewRecommendation::class,
             'is_low_effort' => 'boolean',
@@ -64,7 +65,8 @@ class MediaRating extends KModel implements ReactableContract
      */
     public function scopeForReading(\Illuminate\Database\Eloquent\Builder $query): void
     {
-        $query->orderByDesc('is_elevated')
+        $query->withCount('revisions')
+            ->orderByDesc('is_elevated')
             ->orderBy('is_low_effort')
             ->orderBy('created_at');
     }
@@ -114,6 +116,18 @@ class MediaRating extends KModel implements ReactableContract
     public function categoryScores(): HasMany
     {
         return $this->hasMany(RatingCategoryScore::class, 'rating_id');
+    }
+
+    /**
+     * Returns the superseded versions of the review, newest first.
+     *
+     * @return HasMany
+     */
+    public function revisions(): HasMany
+    {
+        return $this->hasMany(MediaRatingRevision::class, 'rating_id')
+            ->orderByDesc('written_at')
+            ->orderByDesc('id');
     }
 
     /**
