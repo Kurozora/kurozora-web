@@ -14,6 +14,7 @@ use App\Traits\Model\HasTranslatableSlug;
 use App\Traits\Model\HasTranslations;
 use App\Traits\Model\HasTvRatedRelations;
 use App\Traits\Model\HasViews;
+use App\Traits\Model\Noteable;
 use App\Traits\SearchFilterable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -38,6 +39,7 @@ class Character extends KModel implements HasMedia, Sitemapable
         HasViews,
         InteractsWithMedia,
         InteractsWithMediaExtension,
+        Noteable,
         Searchable,
         SearchFilterable,
         SoftDeletes;

@@ -14,6 +14,7 @@ use App\Traits\Model\HasSchemaOrg;
 use App\Traits\Model\HasTranslations;
 use App\Traits\Model\HasVideos;
 use App\Traits\Model\HasViews;
+use App\Traits\Model\Noteable;
 use App\Traits\Model\TvRated;
 use App\Traits\SearchFilterable;
 use Carbon\CarbonInterval;
@@ -50,6 +51,7 @@ class Episode extends KModel implements HasMedia, Sitemapable
         InteractsWithMedia,
         InteractsWithMediaExtension,
         LogsActivity,
+        Noteable,
         Searchable,
         SearchFilterable,
         SoftDeletes,

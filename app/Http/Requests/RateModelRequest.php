@@ -30,7 +30,6 @@ class RateModelRequest extends FormRequest
         return [
             'rating' => ['bail', 'required_without:categoryScores', 'numeric', 'between:' . MediaRating::MIN_RATING_VALUE . ',' . MediaRating::MAX_RATING_VALUE],
             'description' => ['bail', 'string'],
-            'note' => ['bail', 'nullable', 'string'],
             'isSpoiler' => ['bail', 'sometimes', 'boolean'],
             // Required once the request carries review content; a score-only quick rating states no opinion.
             'recommendation' => ['bail', 'required_with:description,categoryScores,isSpoiler', 'integer', new EnumValue(ReviewRecommendation::class, false)],

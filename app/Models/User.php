@@ -23,6 +23,7 @@ use App\Traits\Model\HasSlug;
 use App\Traits\Model\HasViews;
 use App\Traits\Model\Impersonatable;
 use App\Traits\Model\MediaRater;
+use App\Traits\Model\Noter;
 use App\Traits\Model\Reminder;
 use App\Traits\Model\Tracker;
 use App\Traits\Model\UserBlockable;
@@ -95,6 +96,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         Notifiable,
         MassPrunable,
         MediaRater,
+        Noter,
         Reacterable,
         Reminder,
         Searchable,

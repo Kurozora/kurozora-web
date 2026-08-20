@@ -10,6 +10,7 @@ use App\Traits\Model\HasMediaStat;
 use App\Traits\Model\HasTranslations;
 use App\Traits\Model\HasTvRatedRelations;
 use App\Traits\Model\HasViews;
+use App\Traits\Model\Noteable;
 use App\Traits\SearchFilterable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -39,6 +40,7 @@ class Song extends KModel implements HasMedia, Sitemapable
         InteractsWithMedia,
         InteractsWithMediaExtension,
         LogsActivity,
+        Noteable,
         Searchable,
         SearchFilterable,
         SoftDeletes;

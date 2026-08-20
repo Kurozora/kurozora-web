@@ -83,6 +83,7 @@ use App\Nova\User;
 use App\Nova\UserBlock;
 use App\Nova\UserFavorite;
 use App\Nova\UserLibrary;
+use App\Nova\UserNote;
 use App\Nova\UserReminder;
 use App\Nova\Video;
 use App\Nova\View;
@@ -334,6 +335,7 @@ if (class_exists('Laravel\Nova\NovaApplicationServiceProvider')) {
                             UserBlock::class,
                             UserFavorite::class,
                             UserLibrary::class,
+                            UserNote::class,
                             UserReminder::class,
                             Timeout::class,
                             TimeoutAppeal::class,

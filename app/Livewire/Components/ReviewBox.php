@@ -175,7 +175,10 @@ class ReviewBox extends Component
 
         $this->rating = $mediaRating?->rating;
         $this->reviewText = $mediaRating?->description ?? '';
-        $this->noteText = $mediaRating?->note ?? '';
+        $this->noteText = $user->notes()
+            ->where('noteable_type', '=', $this->modelType)
+            ->where('noteable_id', '=', $this->modelID)
+            ->value('body') ?? '';
         $this->isSpoiler = (bool) $mediaRating?->is_spoiler;
         $this->recommendation = $mediaRating?->recommendation?->value;
         $this->isDetailed = ($user->settings?->rating_style ?? RatingStyle::Standard())->is(RatingStyle::Detailed)
@@ -223,25 +226,26 @@ class ReviewBox extends Component
         ]);
 
         $reviewText = strip_tags($this->reviewText);
-        $noteText = strip_tags($this->noteText);
-
         $reviewText = empty($reviewText) ? null : $reviewText;
-        $noteText = empty($noteText) ? null : $noteText;
+
+        $model = $this->ratedModel();
+
+        // The note stands on its own, so it is written whether or not a rating is.
+        if ($model !== null) {
+            auth()->user()->setNote($model, $this->noteText);
+        }
 
         if ($this->isDetailed) {
-            $this->submitDetailedReview($noteText);
+            $this->submitDetailedReview($model);
             return;
         }
 
         $attributes = [
             'description' => $reviewText,
-            'note' => $noteText,
             'is_spoiler' => $this->isSpoiler,
             'recommendation' => $this->recommendation,
             'is_low_effort' => LowEffortReviewDetector::detect($reviewText),
         ];
-
-        $model = $this->ratedModel();
 
         if ($reviewText !== null && $model !== null) {
             $attributes['progress'] = auth()->user()->progressSnapshotFor($model);
@@ -275,21 +279,18 @@ class ReviewBox extends Component
     /**
      * Submits the detailed review.
      *
-     * @param null|string $noteText
+     * @param null|Model $model
      *
      * @return void
      */
-    protected function submitDetailedReview(?string $noteText): void
+    protected function submitDetailedReview(?Model $model): void
     {
-        $model = $this->ratedModel();
-
         if ($model === null) {
             return;
         }
 
         $mediaRating = auth()->user()
             ->rateMediaModel($model, [
-                'note' => $noteText,
                 'isSpoiler' => $this->isSpoiler,
                 'recommendation' => $this->recommendation,
                 'categoryScores' => $this->scores,
@@ -317,9 +318,9 @@ class ReviewBox extends Component
             ['model_type', '=', $this->modelType],
         ])->first()?->delete();
 
+        // The note outlives the rating, so it is left where it is.
         $this->rating = null;
         $this->reviewText = '';
-        $this->noteText = '';
         $this->isSpoiler = false;
         $this->recommendation = null;
         $this->scores = [];

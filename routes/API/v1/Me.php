@@ -44,6 +44,7 @@ Route::prefix('/me')
         require 'Me/Favorites.php';
         require 'Me/Feed-Messages.php';
         require 'Me/Library.php';
+        require 'Me/Notes.php';
         require 'Me/Notifications.php';
         require 'Me/Recap.php';
         require 'Me/Reminders.php';

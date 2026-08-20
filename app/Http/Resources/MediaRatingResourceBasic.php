@@ -25,13 +25,11 @@ class MediaRatingResourceBasic extends JsonResource
     public function toArray(Request $request): array
     {
         $resource = MediaRatingResourceIdentity::make($this->resource)->toArray($request);
-        $isOwnRating = auth()->id() === $this->resource->user_id;
 
         return array_merge($resource, [
             'attributes' => [
                 'score' => $this->resource->rating,
                 'description' => $this->resource->description,
-                'note' => $isOwnRating ? $this->resource->note : null,
                 'isSpoiler' => (bool) $this->resource->is_spoiler,
                 'recommendation' => $this->resource->recommendation?->value,
                 'progress' => $this->resource->progress,

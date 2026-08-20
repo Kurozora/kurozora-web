@@ -11,6 +11,7 @@ use App\Models\UserBlock;
 use App\Models\UserFavorite;
 use App\Models\UserFollow;
 use App\Models\UserLibrary;
+use App\Models\UserNote;
 use App\Models\UserReminder;
 use App\Models\UserWatchedEpisode;
 use App\Observers\AnimeObserver;
@@ -123,6 +124,7 @@ class AppServiceProvider extends ServiceProvider
         MediaRating::observe(MediaRatingObserver::class);
         MediaRating::observe(UserStateObserver::class);
         UserFavorite::observe(UserStateObserver::class);
+        UserNote::observe(UserStateObserver::class);
         UserReminder::observe(UserStateObserver::class);
         UserFollow::observe(UserStateObserver::class);
         UserBlock::observe(UserStateObserver::class);

@@ -29,6 +29,7 @@ use App\Traits\Model\HasVideos;
 use App\Traits\Model\HasViews;
 use App\Traits\Model\Ignored;
 use App\Traits\Model\MediaRelated;
+use App\Traits\Model\Noteable;
 use App\Traits\Model\Trackable;
 use App\Traits\Model\TvRated;
 use App\Traits\SearchFilterable;
@@ -81,6 +82,7 @@ class Manga extends KModel implements HasMedia, Sitemapable
         InteractsWithMediaExtension,
         LogsActivity,
         MediaRelated,
+        Noteable,
         Searchable,
         SearchFilterable,
         SoftDeletes,

@@ -175,7 +175,7 @@ trait MediaRater
             $existing->update(array_merge([
                 'rating' => $rating,
                 'description' => $description ?? $existing->description,
-            ], $this->noteAttributeFrom($attributes), $this->spoilerAttributeFrom($attributes), $this->recommendationAttributeFrom($attributes), $this->progressAttributeFrom($model, $description), $this->lowEffortAttributeFrom($description)));
+            ], $this->spoilerAttributeFrom($attributes), $this->recommendationAttributeFrom($attributes), $this->progressAttributeFrom($model, $description), $this->lowEffortAttributeFrom($description)));
             $this->storeCategoryScores($existing, $ratingCategories, $categoryScores, $categoryReviews);
             UserLibraryTouch::touch($this->id, $morphClass, [$modelKey]);
             return $existing;
@@ -188,31 +188,13 @@ trait MediaRater
                 'model_id' => $modelKey,
                 'rating' => $rating,
                 'description' => $description,
-            ], $this->noteAttributeFrom($attributes), $this->spoilerAttributeFrom($attributes), $this->recommendationAttributeFrom($attributes), $this->progressAttributeFrom($model, $description), $this->lowEffortAttributeFrom($description)));
+            ], $this->spoilerAttributeFrom($attributes), $this->recommendationAttributeFrom($attributes), $this->progressAttributeFrom($model, $description), $this->lowEffortAttributeFrom($description)));
             $this->storeCategoryScores($mediaRating, $ratingCategories, $categoryScores, $categoryReviews);
             UserLibraryTouch::touch($this->id, $morphClass, [$modelKey]);
             return $mediaRating;
         }
 
         return null;
-    }
-
-    /**
-     * Returns the private note to write.
-     *
-     * @param array $attributes
-     *
-     * @return array
-     */
-    protected function noteAttributeFrom(array $attributes): array
-    {
-        if (!array_key_exists('note', $attributes)) {
-            return [];
-        }
-
-        $note = trim(strip_tags((string) $attributes['note']));
-
-        return ['note' => $note === '' ? null : $note];
     }
 
     /**

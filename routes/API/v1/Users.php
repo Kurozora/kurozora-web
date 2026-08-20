@@ -9,6 +9,7 @@ use App\Http\Controllers\API\v1\TwoFactorChallengeController;
 use App\Http\Controllers\API\v1\UserBlockController;
 use App\Http\Controllers\API\v1\UserController;
 use App\Http\Controllers\API\v1\UserFavoriteController;
+use App\Http\Controllers\API\v1\UserNoteController;
 use App\Http\Controllers\API\v1\UserTimeoutController;
 use App\Http\Controllers\Auth\SignInWithAppleController;
 
@@ -91,6 +92,10 @@ Route::prefix('/users')
                 Route::get('/reviews', [UserController::class, 'getRatings'])
                     ->middleware('auth.kurozora:optional')
                     ->name('.reviews');
+
+                Route::get('/notes', [UserNoteController::class, 'overlay'])
+                    ->middleware('auth.kurozora')
+                    ->name('.notes');
 
                 Route::get('/profile', [UserController::class, 'profile'])
                     ->middleware('auth.kurozora:optional')
