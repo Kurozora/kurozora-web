@@ -20,6 +20,7 @@ use App\Http\Resources\GameCastResourceIdentity;
 use App\Http\Resources\GameResource;
 use App\Http\Resources\GameResourceIdentity;
 use App\Http\Resources\MediaRatingResource;
+use App\Http\Resources\MediaRatingResourceIdentity;
 use App\Http\Resources\MediaRelatedResource;
 use App\Http\Resources\MediaSongResource;
 use App\Http\Resources\MediaStaffResource;
@@ -734,9 +735,11 @@ class GameController extends Controller
         }
 
         $data = $request->validated();
-        $user->rateMediaModel($game, $data);
+        $mediaRating = $user->rateMediaModel($game, $data);
 
-        return JSONResult::success();
+        return JSONResult::success([
+            'data' => MediaRatingResourceIdentity::collection(array_filter([$mediaRating])),
+        ]);
     }
 
     /**
@@ -750,16 +753,20 @@ class GameController extends Controller
     {
         $user = auth()->user();
 
-        $user->mediaRatings()
+        $mediaRating = $user->mediaRatings()
             ->where([
                 ['model_id', '=', $game->id],
                 ['model_type', '=', $game->getMorphClass()],
             ])
-            ->first()?->delete();
+            ->first();
+
+        $mediaRating?->delete();
 
         UserLibraryTouch::touch($user->id, $game->getMorphClass(), [$game->id]);
 
-        return JSONResult::success();
+        return JSONResult::success([
+            'data' => MediaRatingResourceIdentity::collection(array_filter([$mediaRating])),
+        ]);
     }
 
     /**

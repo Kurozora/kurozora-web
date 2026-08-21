@@ -21,6 +21,7 @@ use App\Http\Resources\AnimeResource;
 use App\Http\Resources\AnimeResourceIdentity;
 use App\Http\Resources\CharacterResourceIdentity;
 use App\Http\Resources\MediaRatingResource;
+use App\Http\Resources\MediaRatingResourceIdentity;
 use App\Http\Resources\MediaRelatedResource;
 use App\Http\Resources\MediaSongResource;
 use App\Http\Resources\MediaStaffResource;
@@ -831,9 +832,11 @@ class AnimeController extends Controller
         }
 
         $data = $request->validated();
-        $user->rateMediaModel($anime, $data);
+        $mediaRating = $user->rateMediaModel($anime, $data);
 
-        return JSONResult::success();
+        return JSONResult::success([
+            'data' => MediaRatingResourceIdentity::collection(array_filter([$mediaRating])),
+        ]);
     }
 
     /**
@@ -847,16 +850,20 @@ class AnimeController extends Controller
     {
         $user = auth()->user();
 
-        $user->mediaRatings()
+        $mediaRating = $user->mediaRatings()
             ->where([
                 ['model_id', '=', $anime->id],
                 ['model_type', '=', $anime->getMorphClass()],
             ])
-            ->first()?->delete();
+            ->first();
+
+        $mediaRating?->delete();
 
         UserLibraryTouch::touch($user->id, $anime->getMorphClass(), [$anime->id]);
 
-        return JSONResult::success();
+        return JSONResult::success([
+            'data' => MediaRatingResourceIdentity::collection(array_filter([$mediaRating])),
+        ]);
     }
 
     /**

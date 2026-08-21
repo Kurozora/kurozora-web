@@ -15,6 +15,7 @@ use App\Http\Requests\UpdateSongAppleMusicIDRequest;
 use App\Http\Resources\AnimeResource;
 use App\Http\Resources\GameResource;
 use App\Http\Resources\MediaRatingResource;
+use App\Http\Resources\MediaRatingResourceIdentity;
 use App\Http\Resources\SongLyricResource;
 use App\Http\Resources\SongResource;
 use App\Models\MediaRating;
@@ -241,9 +242,11 @@ class SongController extends Controller
         $user = auth()->user();
 
         $data = $request->validated();
-        $user->rateMediaModel($song, $data);
+        $mediaRating = $user->rateMediaModel($song, $data);
 
-        return JSONResult::success();
+        return JSONResult::success([
+            'data' => MediaRatingResourceIdentity::collection(array_filter([$mediaRating])),
+        ]);
     }
 
     /**
@@ -255,14 +258,18 @@ class SongController extends Controller
      */
     public function deleteRating(Song $song)
     {
-        auth()->user()->mediaRatings()
+        $mediaRating = auth()->user()->mediaRatings()
             ->where([
                 ['model_id', '=', $song->id],
                 ['model_type', '=', $song->getMorphClass()],
             ])
-            ->first()?->delete();
+            ->first();
 
-        return JSONResult::success();
+        $mediaRating?->delete();
+
+        return JSONResult::success([
+            'data' => MediaRatingResourceIdentity::collection(array_filter([$mediaRating])),
+        ]);
     }
 
     /**

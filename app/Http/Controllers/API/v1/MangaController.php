@@ -19,6 +19,7 @@ use App\Http\Resources\LiteratureCastResourceIdentity;
 use App\Http\Resources\LiteratureResource;
 use App\Http\Resources\LiteratureResourceIdentity;
 use App\Http\Resources\MediaRatingResource;
+use App\Http\Resources\MediaRatingResourceIdentity;
 use App\Http\Resources\MediaRelatedResource;
 use App\Http\Resources\MediaStaffResource;
 use App\Http\Resources\StudioResource;
@@ -667,9 +668,11 @@ class MangaController extends Controller
         }
 
         $data = $request->validated();
-        $user->rateMediaModel($manga, $data);
+        $mediaRating = $user->rateMediaModel($manga, $data);
 
-        return JSONResult::success();
+        return JSONResult::success([
+            'data' => MediaRatingResourceIdentity::collection(array_filter([$mediaRating])),
+        ]);
     }
 
     /**
@@ -683,16 +686,20 @@ class MangaController extends Controller
     {
         $user = auth()->user();
 
-        $user->mediaRatings()
+        $mediaRating = $user->mediaRatings()
             ->where([
                 ['model_id', '=', $manga->id],
                 ['model_type', '=', $manga->getMorphClass()],
             ])
-            ->first()?->delete();
+            ->first();
+
+        $mediaRating?->delete();
 
         UserLibraryTouch::touch($user->id, $manga->getMorphClass(), [$manga->id]);
 
-        return JSONResult::success();
+        return JSONResult::success([
+            'data' => MediaRatingResourceIdentity::collection(array_filter([$mediaRating])),
+        ]);
     }
 
     /**

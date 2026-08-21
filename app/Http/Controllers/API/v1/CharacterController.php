@@ -16,6 +16,7 @@ use App\Http\Resources\CharacterResource;
 use App\Http\Resources\GameResourceIdentity;
 use App\Http\Resources\LiteratureResourceIdentity;
 use App\Http\Resources\MediaRatingResource;
+use App\Http\Resources\MediaRatingResourceIdentity;
 use App\Http\Resources\PersonResourceIdentity;
 use App\Models\Character;
 use App\Models\MediaRating;
@@ -338,9 +339,11 @@ class CharacterController extends Controller
         $user = auth()->user();
 
         $data = $request->validated();
-        $user->rateMediaModel($character, $data);
+        $mediaRating = $user->rateMediaModel($character, $data);
 
-        return JSONResult::success();
+        return JSONResult::success([
+            'data' => MediaRatingResourceIdentity::collection(array_filter([$mediaRating])),
+        ]);
     }
 
     /**
@@ -352,14 +355,18 @@ class CharacterController extends Controller
      */
     public function deleteRating(Character $character)
     {
-        auth()->user()->mediaRatings()
+        $mediaRating = auth()->user()->mediaRatings()
             ->where([
                 ['model_id', '=', $character->id],
                 ['model_type', '=', $character->getMorphClass()],
             ])
-            ->first()?->delete();
+            ->first();
 
-        return JSONResult::success();
+        $mediaRating?->delete();
+
+        return JSONResult::success([
+            'data' => MediaRatingResourceIdentity::collection(array_filter([$mediaRating])),
+        ]);
     }
 
     /**

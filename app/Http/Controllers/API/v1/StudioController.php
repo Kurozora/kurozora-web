@@ -15,6 +15,7 @@ use App\Http\Resources\AnimeResourceIdentity;
 use App\Http\Resources\GameResourceIdentity;
 use App\Http\Resources\LiteratureResourceIdentity;
 use App\Http\Resources\MediaRatingResource;
+use App\Http\Resources\MediaRatingResourceIdentity;
 use App\Http\Resources\StudioResource;
 use App\Http\Resources\StudioResourceIdentity;
 use App\Models\Anime;
@@ -324,9 +325,11 @@ class StudioController extends Controller
         $user = auth()->user();
 
         $data = $request->validated();
-        $user->rateMediaModel($studio, $data);
+        $mediaRating = $user->rateMediaModel($studio, $data);
 
-        return JSONResult::success();
+        return JSONResult::success([
+            'data' => MediaRatingResourceIdentity::collection(array_filter([$mediaRating])),
+        ]);
     }
 
     /**
@@ -338,14 +341,18 @@ class StudioController extends Controller
      */
     public function deleteRating(Studio $studio)
     {
-        auth()->user()->mediaRatings()
+        $mediaRating = auth()->user()->mediaRatings()
             ->where([
                 ['model_id', '=', $studio->id],
                 ['model_type', '=', $studio->getMorphClass()],
             ])
-            ->first()?->delete();
+            ->first();
 
-        return JSONResult::success();
+        $mediaRating?->delete();
+
+        return JSONResult::success([
+            'data' => MediaRatingResourceIdentity::collection(array_filter([$mediaRating])),
+        ]);
     }
 
     /**

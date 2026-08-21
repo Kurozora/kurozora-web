@@ -11,6 +11,7 @@ use App\Http\Requests\MarkEpisodeAsWatchedRequest;
 use App\Http\Requests\RateModelRequest;
 use App\Http\Resources\EpisodeResource;
 use App\Http\Resources\MediaRatingResource;
+use App\Http\Resources\MediaRatingResourceIdentity;
 use App\Models\Anime;
 use App\Models\Episode;
 use App\Models\MediaRating;
@@ -295,9 +296,11 @@ class EpisodeController extends Controller
         }
 
         $data = $request->validated();
-        $user->rateMediaModel($episode, $data);
+        $mediaRating = $user->rateMediaModel($episode, $data);
 
-        return JSONResult::success();
+        return JSONResult::success([
+            'data' => MediaRatingResourceIdentity::collection(array_filter([$mediaRating])),
+        ]);
     }
 
     /**
@@ -309,14 +312,18 @@ class EpisodeController extends Controller
      */
     public function deleteRating(Episode $episode)
     {
-        auth()->user()->mediaRatings()
+        $mediaRating = auth()->user()->mediaRatings()
             ->where([
                 ['model_id', '=', $episode->id],
                 ['model_type', '=', $episode->getMorphClass()],
             ])
-            ->first()?->delete();
+            ->first();
 
-        return JSONResult::success();
+        $mediaRating?->delete();
+
+        return JSONResult::success([
+            'data' => MediaRatingResourceIdentity::collection(array_filter([$mediaRating])),
+        ]);
     }
 
     /**
