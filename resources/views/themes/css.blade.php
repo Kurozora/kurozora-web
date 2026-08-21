@@ -14,4 +14,5 @@
     --secondary-text-color: {{ $theme->global_sub_text_color }};
     --primary-separator-color: {{ $theme->global_separator_color }};
     --secondary-separator-color: {{ $theme->global_separator_color_light }};
+    --nav-tint: {{ (int) ($theme->ui_status_bar_style ?? \App\Enums\StatusBarStyle::LightContent) === \App\Enums\StatusBarStyle::LightContent ? '#00000033' : '#ffffff66' }};
 }

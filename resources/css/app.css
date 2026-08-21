@@ -283,6 +283,7 @@ img:not([src]):not([srcset]) {
   --secondary-text-color: #AFAFAF;
   --primary-separator-color: #C6C5C5;
   --secondary-separator-color: #5A5D6D;
+  --nav-tint: #00000033;
 }
 
 a[href*="#"]:not([href="#"]):not(.no-external-icon) {
@@ -309,6 +310,11 @@ a[href*="#"]:not([href="#"]):not(.no-external-icon):focus::after {
   cursor: default;
   pointer-events: none;
   opacity: 25%;
+}
+
+/* Tints the sidebar darker on dark themes and lighter on light themes. */
+.navigation-tint {
+  background-image: linear-gradient(var(--nav-tint), var(--nav-tint));
 }
 
 /* Lays two actions side by side when both fit, and stacks them otherwise. */

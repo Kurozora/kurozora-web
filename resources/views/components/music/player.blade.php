@@ -3,7 +3,7 @@
     data-music-song
     class="fixed inset-x-0 bottom-0 z-40 px-4 pb-4 pointer-events-none translate-y-full opacity-0 transition-[transform,opacity] duration-300 ease-out"
 >
-    <div class="pointer-events-auto mx-auto flex max-w-md items-center gap-3 rounded-2xl p-2 backdrop-blur bg-blur">
+    <div class="pointer-events-auto mx-auto flex max-w-md items-center gap-3 pt-2 pr-2 pb-2 pl-2 rounded-3xl border border-primary bg-blur backdrop-blur shadow-lg">
         <button type="button" data-music-player-lyrics class="flex min-w-0 flex-1 items-center gap-3 text-left">
             <span class="relative block h-11 w-11 shrink-0 overflow-hidden rounded-lg">
                 <img

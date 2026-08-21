@@ -1,4 +1,6 @@
 {
+    "ui_status_bar_style": 0,
+    "ui_visual_effect_view": 1,
     "global_tint_color": "#FF9300",
     "global_background_color": "#FFFFFF",
     "table_view_cell_background_color": "#F6F6F6",
