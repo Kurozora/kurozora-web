@@ -6,7 +6,7 @@
 >
     <nav
         class="fixed flex flex-col mt-2 ml-2 bg-blur backdrop-blur navigation-tint border-primary rounded-xl shadow-lg"
-        style="height: calc(100% - 1rem); border-width: 0.5px"
+        style="width: calc(var(--sidebar-width) - 0.5rem); height: calc(100% - 1rem); border-width: 0.5px"
     >
         <div class="relative">
             {{-- Scroll Edge Effect --}}
