@@ -4,6 +4,7 @@ namespace App\Traits\Model;
 
 use App\Enums\ParentalGuideReaction;
 use App\Models\Anime;
+use App\Models\Episode;
 use App\Models\MediaRating;
 use App\Models\RatingCategory;
 use App\Models\RatingCategoryScore;
@@ -130,6 +131,28 @@ trait MediaRater
         UserLibraryTouch::touchAll($this->id, $type);
 
         return $affected;
+    }
+
+    /**
+     * Returns the reason the user may not rate the given model.
+     *
+     * @param Model $model
+     *
+     * @return null|string
+     */
+    public function ratingRestrictionFor(Model $model): ?string
+    {
+        if ($model instanceof Episode) {
+            return $this->hasWatched($model)
+                ? null
+                : __('Please watch ":x" first.', ['x' => $model->title]);
+        }
+
+        if (in_array(Trackable::class, class_uses_recursive($model), true) && $this->hasNotTracked($model)) {
+            return __('Please add ":x" to your library first.', ['x' => $model->title]);
+        }
+
+        return null;
     }
 
     /**

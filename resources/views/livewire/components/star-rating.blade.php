@@ -1,4 +1,4 @@
-<div class="flex gap-0.5 justify-center text-tint">
+<div class="flex gap-0.5 justify-center">
     @if ($allowsRemove)
         @php
             $star0 = uniqid('star-0');
@@ -58,4 +58,20 @@
             </x-slot:footer>
         </x-dialog-modal>
     @endif
+
+    <x-dialog-modal model="showingRatingRestriction" maxWidth="md">
+        <x-slot:title>
+            {{ __('Rating Failed') }}
+        </x-slot:title>
+
+        <x-slot:content>
+            <div class="pt-4 pb-4 pl-4 pr-4">
+                <p>{{ $ratingRestriction }}</p>
+            </div>
+        </x-slot:content>
+
+        <x-slot:footer>
+            <x-button wire:click="$toggle('showingRatingRestriction')">{{ __('OK') }}</x-button>
+        </x-slot:footer>
+    </x-dialog-modal>
 </div>

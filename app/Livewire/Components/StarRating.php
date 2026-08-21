@@ -64,6 +64,20 @@ class StarRating extends Component
     public bool $confirmingRemoval = false;
 
     /**
+     * The reason the model may not be rated.
+     *
+     * @var string|null $ratingRestriction
+     */
+    public ?string $ratingRestriction = null;
+
+    /**
+     * Whether the rating restriction is shown.
+     *
+     * @var bool $showingRatingRestriction
+     */
+    public bool $showingRatingRestriction = false;
+
+    /**
      * The component's listeners.
      *
      * @return array
@@ -141,6 +155,23 @@ class StarRating extends Component
             $mediaRating?->delete();
         } else {
             if ($this->rating < MediaRating::MIN_RATING_VALUE || $this->rating > MediaRating::MAX_RATING_VALUE) {
+                return;
+            }
+
+            $model = $this->modelType::withoutGlobalScopes()
+                ->whereKey($this->modelID)
+                ->first();
+
+            if ($model !== null && ($restriction = $user->ratingRestrictionFor($model)) !== null) {
+                $this->rating = $user->mediaRatings()
+                    ->where([
+                        ['model_id', '=', $this->modelID],
+                        ['model_type', '=', $this->modelType],
+                    ])
+                    ->value('rating') ?? MediaRating::MIN_RATING_VALUE;
+
+                $this->ratingRestriction = $restriction;
+                $this->showingRatingRestriction = true;
                 return;
             }
 

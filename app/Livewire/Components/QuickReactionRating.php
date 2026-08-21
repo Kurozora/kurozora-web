@@ -57,6 +57,20 @@ class QuickReactionRating extends Component
     public bool $confirmingRemoval = false;
 
     /**
+     * The reason the model may not be rated.
+     *
+     * @var string|null $ratingRestriction
+     */
+    public ?string $ratingRestriction = null;
+
+    /**
+     * Whether the rating restriction is shown.
+     *
+     * @var bool $showingRatingRestriction
+     */
+    public bool $showingRatingRestriction = false;
+
+    /**
      * The component's listeners.
      *
      * @return array
@@ -143,6 +157,16 @@ class QuickReactionRating extends Component
             UserLibraryTouch::touch($user->id, $this->modelType, [$this->modelID]);
 
             $this->dispatch($this->listenerKey(), id: $this->getID(), modelID: $this->modelID, modelType: $this->modelType, rating: null);
+            return;
+        }
+
+        $model = $this->modelType::withoutGlobalScopes()
+            ->whereKey($this->modelID)
+            ->first();
+
+        if ($model !== null && ($restriction = $user->ratingRestrictionFor($model)) !== null) {
+            $this->ratingRestriction = $restriction;
+            $this->showingRatingRestriction = true;
             return;
         }
 

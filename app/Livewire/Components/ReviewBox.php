@@ -112,6 +112,20 @@ class ReviewBox extends Component
     public bool $showPopup = false;
 
     /**
+     * The reason the model may not be rated.
+     *
+     * @var string|null $ratingRestriction
+     */
+    public ?string $ratingRestriction = null;
+
+    /**
+     * Whether the rating restriction is shown.
+     *
+     * @var bool $showingRatingRestriction
+     */
+    public bool $showingRatingRestriction = false;
+
+    /**
      * The component's listeners.
      *
      * @var array
@@ -164,6 +178,15 @@ class ReviewBox extends Component
 
         $user = auth()->user();
         $user->loadMissing('settings');
+
+        $model = $this->ratedModel();
+
+        // An unrateable model gets the reason instead of the editor.
+        if ($model !== null && ($restriction = $user->ratingRestrictionFor($model)) !== null) {
+            $this->ratingRestriction = $restriction;
+            $this->showingRatingRestriction = true;
+            return;
+        }
 
         $mediaRating = $user->mediaRatings()
             ->where([
@@ -230,9 +253,18 @@ class ReviewBox extends Component
 
         $model = $this->ratedModel();
 
-        // The note stands on its own, so it is written whether or not a rating is.
         if ($model !== null) {
+            // The note stands on its own, so it is written whether or not a rating is.
             auth()->user()->setNote($model, $this->noteText);
+
+            $restriction = auth()->user()->ratingRestrictionFor($model);
+
+            if ($restriction !== null) {
+                $this->ratingRestriction = $restriction;
+                $this->showingRatingRestriction = true;
+                $this->showPopup = false;
+                return;
+            }
         }
 
         if ($this->isDetailed) {
