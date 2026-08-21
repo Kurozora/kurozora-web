@@ -49,17 +49,26 @@ class Reviews extends Component
     public bool $showPopup = false;
 
     /**
+     * The id of the page's review box.
+     *
+     * @var string|null $reviewBoxID
+     */
+    public ?string $reviewBoxID = null;
+
+    /**
      * Prepare the component.
      *
-     * @param Model $model
+     * @param Model       $model
+     * @param null|string $reviewBoxId
      *
      * @return void
      */
-    public function mount(Model $model): void
+    public function mount(Model $model, ?string $reviewBoxId = null): void
     {
         $translation = $model->translation;
         $this->model = $model->withoutRelations()
             ->setRelation('translation', $translation);
+        $this->reviewBoxID = $reviewBoxId;
     }
 
     /**

@@ -1,4 +1,4 @@
-@props(['reviews' => [], 'isRow' => true, 'safeAreaInsetEnabled' => true, 'voteOverrides' => []])
+@props(['reviews' => [], 'isRow' => true, 'safeAreaInsetEnabled' => true, 'voteOverrides' => [], 'reviewBoxId' => null])
 
 @php
     $class = $isRow ? 'snap-mandatory snap-x overflow-x-scroll no-scrollbar' : 'flex-wrap';
@@ -21,7 +21,7 @@
 
 <div {{ $attributes->merge(['class' => 'flex gap-4 justify-between pl-4 pr-4 ' . $class]) }}>
     @foreach ($shownReviews as $review)
-        <x-lockups.review-lockup :review="$review" :is-row="$isRow" :vote-overrides="$voteOverrides" />
+        <x-lockups.review-lockup :review="$review" :is-row="$isRow" :vote-overrides="$voteOverrides" :review-box-id="$reviewBoxId" />
     @endforeach
 
     @if ($lowEffortReviews->isNotEmpty())
@@ -37,7 +37,7 @@
 
             <div class="flex flex-wrap gap-4 justify-between mt-4" x-show="isExpanded" x-cloak>
                 @foreach ($lowEffortReviews as $review)
-                    <x-lockups.review-lockup :review="$review" :is-row="$isRow" :vote-overrides="$voteOverrides" />
+                    <x-lockups.review-lockup :review="$review" :is-row="$isRow" :vote-overrides="$voteOverrides" :review-box-id="$reviewBoxId" />
                 @endforeach
 
                 <div class="w-64 sm:w-96 flex-grow"></div>

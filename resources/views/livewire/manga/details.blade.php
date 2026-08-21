@@ -293,7 +293,7 @@
                 </div>
 
                 <div class="mt-5">
-                    <livewire:sections.reviews :model="$manga" />
+                    <livewire:sections.reviews :model="$manga" :review-box-id="$this->reviewBoxID" />
                 </div>
             </section>
 

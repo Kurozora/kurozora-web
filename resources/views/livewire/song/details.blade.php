@@ -334,7 +334,7 @@
                 </div>
 
                 <div class="mt-5">
-                    <livewire:sections.reviews :model="$song" />
+                    <livewire:sections.reviews :model="$song" :review-box-id="$this->reviewBoxID" />
                 </div>
             </section>
 

@@ -287,7 +287,7 @@
                 </div>
 
                 <div class="mt-5">
-                    <livewire:sections.reviews :model="$game" />
+                    <livewire:sections.reviews :model="$game" :review-box-id="$this->reviewBoxID" />
                 </div>
             </section>
 

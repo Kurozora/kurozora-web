@@ -1,7 +1,13 @@
-@props(['review', 'isRow' => true, 'voteOverrides' => []])
+@props(['review', 'isRow' => true, 'voteOverrides' => [], 'reviewBoxId' => null])
 
 @php
     $class = $isRow ? 'pb-2 shrink-0 snap-normal snap-center' : '';
+
+    $isOwnReview = auth()->id() === $review->user_id;
+    $canDelete = $isOwnReview || auth()->user()?->hasRole(['superAdmin', 'admin']);
+
+    // A shared review reads as a quote, matching what the app hands to the share sheet.
+    $shareText = '"' . $review->description . '"-' . $review->user->username;
 
     $progressTotal = $review->relationLoaded('model') && $review->model instanceof \App\Models\Anime
         ? $review->model->episode_count
@@ -167,7 +173,7 @@
 
                 @auth
                     <div class="relative">
-                        <x-dropdown align="right" width="48">
+                        <x-dropdown id="review-menu-{{ $review->id }}" align="right" width="64" :overflow="false" contentClasses="bg-secondary p-1" :auto-placement="true">
                             <x-slot:trigger>
                                 <x-square-button title="{{ __('More') }}">
                                     @svg('ellipsis', 'fill-current', ['width' => '18'])
@@ -175,27 +181,71 @@
                             </x-slot:trigger>
 
                             <x-slot:content>
+                                @if ($isOwnReview && $reviewBoxId !== null)
+                                    <x-menu.item icon="pencil" wire:click="$dispatch('show-review-box', { 'id': '{{ $reviewBoxId }}' })">{{ __('Update Review') }}</x-menu.item>
+                                @endif
+
+                                @if ($canDelete)
+                                    <x-menu.submenu icon="trash" :label="__('Delete')">
+                                        <x-menu.item icon="trash" wire:click="deleteReview({{ $review->id }})">{{ __('Delete Review') }}</x-menu.item>
+                                    </x-menu.submenu>
+                                @endif
+
+                                @if (($isOwnReview && $reviewBoxId !== null) || $canDelete)
+                                    <x-hr class="my-1" />
+                                @endif
+
+                                <x-menu.item icon="person_fill" :href="route('profile.details', $review->user)" :new-tab="false" wire:navigate>{{ __('Show :x\'s Profile', ['x' => $review->user->username]) }}</x-menu.item>
+
+                                <x-hr class="my-1" />
+
+                                <div x-data="{ review: @js($review->description), shareText: @js($shareText) }">
+                                    <x-menu.item
+                                        icon="document_on_document_fill"
+                                        x-on:click="navigator.clipboard?.writeText(review)"
+                                    >{{ __('Copy Review') }}</x-menu.item>
+
+                                    <x-menu.item
+                                        icon="square_and_arrow_up_fill"
+                                        x-on:click="navigator.share ? navigator.share({ text: shareText }) : navigator.clipboard?.writeText(shareText)"
+                                    >{{ __('Share') }}</x-menu.item>
+                                </div>
+
+                                @unless ($isOwnReview)
+                                    <x-hr class="my-1" />
+
+                                    <x-menu.item wire:click="voteOnReview({{ $review->id }}, 'helpful')">
+                                        <span class="inline-flex items-center gap-2">
+                                            <span class="shrink-0 w-3 text-center" aria-hidden="true">👍</span>
+                                            {{ __('Helpful') }}
+                                        </span>
+                                    </x-menu.item>
+
+                                    <x-menu.item wire:click="voteOnReview({{ $review->id }}, 'unhelpful')">
+                                        <span class="inline-flex items-center gap-2">
+                                            <span class="shrink-0 w-3 text-center" aria-hidden="true">👎</span>
+                                            {{ __('Unhelpful') }}
+                                        </span>
+                                    </x-menu.item>
+                                @endunless
+
                                 @can('elevateMediaRating')
-                                    <button
-                                        type="button"
-                                        class="block w-full pl-4 pr-4 pt-2 pb-2 text-xs text-center font-semibold hover:bg-tertiary focus:bg-secondary"
-                                        wire:click="elevateReview({{ $review->id }})"
-                                    >
+                                    <x-hr class="my-1" />
+
+                                    <x-menu.item icon="star_fill" wire:click="elevateReview({{ $review->id }})">
                                         @if ($review->is_elevated)
                                             {{ __('Remove Community Pick') }}
                                         @else
                                             {{ __('Mark as Community Pick') }}
                                         @endif
-                                    </button>
+                                    </x-menu.item>
                                 @endcan
 
-                                <button
-                                    type="button"
-                                    class="block w-full pl-4 pr-4 pt-2 pb-2 text-red-500 text-xs text-center font-semibold hover:bg-tertiary focus:bg-secondary"
-                                    wire:click="openReviewReportForm({{ $review->id }})"
-                                >
-                                    {{ __('Report') }}
-                                </button>
+                                <x-hr class="my-1" />
+
+                                <x-menu.submenu icon="exclamationmark_circle" :label="__('Report')">
+                                    <x-menu.item icon="exclamationmark_circle" wire:click="openReviewReportForm({{ $review->id }})">{{ __('Report Review') }}</x-menu.item>
+                                </x-menu.submenu>
                             </x-slot:content>
                         </x-dropdown>
                     </div>

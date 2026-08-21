@@ -129,7 +129,7 @@
             </div>
 
             <div class="mt-5">
-                <livewire:sections.reviews :model="$character" />
+                <livewire:sections.reviews :model="$character" :review-box-id="$this->reviewBoxID" />
             </div>
         </section>
 

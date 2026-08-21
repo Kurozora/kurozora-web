@@ -86,7 +86,7 @@
 
         @if ($this->mediaRatings->count())
             <section class="xl:safe-area-inset">
-                <x-rows.review-lockup :reviews="$this->mediaRatings" :is-row="false" :vote-overrides="$voteOverrides" />
+                <x-rows.review-lockup :reviews="$this->mediaRatings" :is-row="false" :vote-overrides="$voteOverrides" :review-box-id="$this->reviewBoxID" />
 
                 <div class="mt-4 pl-4 pr-4">
                     {{ $this->mediaRatings->links() }}

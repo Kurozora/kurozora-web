@@ -6,6 +6,7 @@ use App\Enums\ParentalGuideReaction;
 use App\Enums\ReportReason;
 use App\Models\MediaRating;
 use App\Models\Report;
+use App\Support\UserLibraryTouch;
 use Illuminate\Validation\Rule;
 
 trait MediaRatingActions
@@ -44,6 +45,39 @@ trait MediaRatingActions
      * @var string $reportDetails
      */
     public string $reportDetails = '';
+
+    /**
+     * Deletes the given review.
+     *
+     * @param int $ratingID
+     *
+     * @return void
+     */
+    public function deleteReview(int $ratingID): void
+    {
+        $user = auth()->user();
+
+        if ($user === null) {
+            $this->redirect(route('sign-in'));
+            return;
+        }
+
+        $mediaRating = MediaRating::withoutGlobalScopes()
+            ->find($ratingID);
+
+        if ($mediaRating === null) {
+            return;
+        }
+
+        if ($mediaRating->user_id !== $user->id && !$user->hasRole(['superAdmin', 'admin'])) {
+            return;
+        }
+
+        // Delete through the model so observers fire.
+        $mediaRating->delete();
+
+        UserLibraryTouch::touch($mediaRating->user_id, $mediaRating->model_type, [$mediaRating->model_id]);
+    }
 
     /**
      * Returns the reasons offered when reporting a review, keyed by reason key.
