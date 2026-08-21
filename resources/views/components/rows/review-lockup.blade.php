@@ -7,10 +7,16 @@
         $class .= ' xl:safe-area-inset-scroll';
     }
 
+    // The rows of a paginated set live on its own collection.
+    $allReviews = $reviews instanceof \Illuminate\Contracts\Pagination\CursorPaginator
+        || $reviews instanceof \Illuminate\Contracts\Pagination\Paginator
+            ? $reviews->getCollection()
+            : collect($reviews);
+
     // The horizontal row shows too few reviews to be worth collapsing.
     $collapsesLowEffort = !$isRow;
-    $shownReviews = $collapsesLowEffort ? collect($reviews)->reject->is_low_effort : $reviews;
-    $lowEffortReviews = $collapsesLowEffort ? collect($reviews)->filter->is_low_effort : collect();
+    $shownReviews = $collapsesLowEffort ? $allReviews->reject->is_low_effort : $allReviews;
+    $lowEffortReviews = $collapsesLowEffort ? $allReviews->filter->is_low_effort : collect();
 @endphp
 
 <div {{ $attributes->merge(['class' => 'flex gap-4 justify-between pl-4 pr-4 ' . $class]) }}>

@@ -70,7 +70,7 @@
                 @endif
             </div>
 
-            <div class="relative mt-2 w-full">
+            <div class="relative mt-2 w-full h-full">
                 <div x-bind:class="{'invisible' : isDisabled}">
                     <x-truncated-text>
                         <x-slot:text>
@@ -140,53 +140,53 @@
                 </div>
             @endif
 
-            @if (auth()->id() !== $review->user_id)
-                <div class="flex justify-between items-center w-full mt-2">
-                    <div class="flex gap-2 items-center">
-                        <button
-                            type="button"
-                            class="inline-flex items-center gap-1 pl-2 pr-2 pt-1 pb-1 text-xs rounded-md bg-tertiary {{ $isHelpful ? 'text-tint font-semibold' : '' }}"
-                            title="{{ __('Helpful') }}"
-                            wire:click="voteOnReview({{ $review->id }}, 'helpful')"
-                        >
-                            <span aria-hidden="true">👍</span>
-                            <span>{{ $helpfulCount }}</span>
-                        </button>
+            <div class="flex justify-between items-center w-full mt-2">
+                <div class="flex gap-2 items-center">
+                    <button
+                        type="button"
+                        class="inline-flex items-center gap-1 pl-2 pr-2 pt-1 pb-1 text-xs rounded-md bg-tertiary {{ $isHelpful ? 'text-tint font-semibold' : '' }}"
+                        title="{{ __('Helpful') }}"
+                        wire:click="voteOnReview({{ $review->id }}, 'helpful')"
+                        {{ auth()->id() == $review->user_id ? 'disabled' : '' }}
+                    >
+                        <span aria-hidden="true">👍</span>
+                        <span>{{ $helpfulCount }}</span>
+                    </button>
 
-                        <button
-                            type="button"
-                            class="inline-flex items-center gap-1 pl-2 pr-2 pt-1 pb-1 text-xs rounded-md bg-tertiary {{ $isUnhelpful ? 'text-tint font-semibold' : '' }}"
-                            title="{{ __('Unhelpful') }}"
-                            wire:click="voteOnReview({{ $review->id }}, 'unhelpful')"
-                        >
-                            <span aria-hidden="true">👎</span>
-                            <span>{{ $unhelpfulCount }}</span>
-                        </button>
-                    </div>
-
-                    @auth
-                        <div class="relative">
-                            <x-dropdown align="right" width="48">
-                                <x-slot:trigger>
-                                    <x-square-button title="{{ __('More') }}">
-                                        @svg('ellipsis', 'fill-current', ['width' => '18'])
-                                    </x-square-button>
-                                </x-slot:trigger>
-
-                                <x-slot:content>
-                                    <button
-                                        type="button"
-                                        class="block w-full pl-4 pr-4 pt-2 pb-2 text-red-500 text-xs text-center font-semibold hover:bg-tertiary focus:bg-secondary"
-                                        wire:click="openReviewReportForm({{ $review->id }})"
-                                    >
-                                        {{ __('Report') }}
-                                    </button>
-                                </x-slot:content>
-                            </x-dropdown>
-                        </div>
-                    @endauth
+                    <button
+                        type="button"
+                        class="inline-flex items-center gap-1 pl-2 pr-2 pt-1 pb-1 text-xs rounded-md bg-tertiary {{ $isUnhelpful ? 'text-tint font-semibold' : '' }}"
+                        title="{{ __('Unhelpful') }}"
+                        wire:click="voteOnReview({{ $review->id }}, 'unhelpful')"
+                        {{ auth()->id() == $review->user_id ? 'disabled' : '' }}
+                    >
+                        <span aria-hidden="true">👎</span>
+                        <span>{{ $unhelpfulCount }}</span>
+                    </button>
                 </div>
-            @endif
+
+                @auth
+                    <div class="relative">
+                        <x-dropdown align="right" width="48">
+                            <x-slot:trigger>
+                                <x-square-button title="{{ __('More') }}">
+                                    @svg('ellipsis', 'fill-current', ['width' => '18'])
+                                </x-square-button>
+                            </x-slot:trigger>
+
+                            <x-slot:content>
+                                <button
+                                    type="button"
+                                    class="block w-full pl-4 pr-4 pt-2 pb-2 text-red-500 text-xs text-center font-semibold hover:bg-tertiary focus:bg-secondary"
+                                    wire:click="openReviewReportForm({{ $review->id }})"
+                                >
+                                    {{ __('Report') }}
+                                </button>
+                            </x-slot:content>
+                        </x-dropdown>
+                    </div>
+                @endauth
+            </div>
 
 {{--            <div class="flex gap-2 justify-between w-full">--}}
 {{--                <div class="flex justify-between">--}}
