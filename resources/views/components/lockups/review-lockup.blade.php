@@ -175,6 +175,20 @@
                             </x-slot:trigger>
 
                             <x-slot:content>
+                                @can('elevateMediaRating')
+                                    <button
+                                        type="button"
+                                        class="block w-full pl-4 pr-4 pt-2 pb-2 text-xs text-center font-semibold hover:bg-tertiary focus:bg-secondary"
+                                        wire:click="elevateReview({{ $review->id }})"
+                                    >
+                                        @if ($review->is_elevated)
+                                            {{ __('Remove Community Pick') }}
+                                        @else
+                                            {{ __('Mark as Community Pick') }}
+                                        @endif
+                                    </button>
+                                @endcan
+
                                 <button
                                     type="button"
                                     class="block w-full pl-4 pr-4 pt-2 pb-2 text-red-500 text-xs text-center font-semibold hover:bg-tertiary focus:bg-secondary"
