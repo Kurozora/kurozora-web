@@ -28,6 +28,7 @@ return [
             'producer' => 'https://myanimelist.net/anime/producer',
             'magazine' => 'https://myanimelist.net/manga/magazine',
             'manga' => 'https://myanimelist.net/manga',
+            'manga_adapted' => 'https://myanimelist.net/manga/adapted',
             'top_manga' => 'https://myanimelist.net/topmanga.php',
             'upcoming_manga' => 'https://myanimelist.net/manga.php?o=9',
             'people' => 'https://myanimelist.net/people',

@@ -15,23 +15,42 @@
         <link rel="canonical" href="{{ $this->canonicalUrl }}">
     </x-slot:meta>
 
-    <div class="pt-4 pb-6" wire:init="loadPage">
+    <div
+        class="pb-6"
+        wire:init="loadPage"
+        x-data="{ dimLibrary: false }"
+        x-init="dimLibrary = localStorage.getItem('adapted-dim-library') === 'true'"
+        x-bind:class="{ 'dim-in-library': dimLibrary }"
+    >
+        <x-back-link :url="$this->parentUrl" :label="$this->parentLabel" :title="$this->heading">
+            <x-slot:actions>
+                @auth
+                    <template x-if="dimLibrary">
+                        <x-toggle-button :selected="true" title="{{ __('Dim library') }}" aria-label="{{ __('Dim library') }}" x-on:click="dimLibrary = false; localStorage.setItem('adapted-dim-library', 'false')">
+                            @svg('rectangle_stack_slash_fill', 'fill-current', ['width' => '16'])
+                        </x-toggle-button>
+                    </template>
+
+                    <template x-if="!dimLibrary">
+                        <x-toggle-button title="{{ __('Dim library') }}" aria-label="{{ __('Dim library') }}" x-on:click="dimLibrary = true; localStorage.setItem('adapted-dim-library', 'true')">
+                            @svg('rectangle_stack_fill', 'fill-current', ['width' => '16'])
+                        </x-toggle-button>
+                    </template>
+                @endauth
+            </x-slot:actions>
+        </x-back-link>
+
         <section class="mb-4 xl:safe-area-inset">
             <div>
-                <div class="flex gap-1 pl-4 pr-4">
-                    <div class="flex flex-wrap items-center w-full">
-                        <h1 class="text-2xl font-bold">{{ $this->heading }}</h1>
-                    </div>
-
-                    <div class="flex flex-wrap flex-1 justify-end items-center w-full">
-                    </div>
+                <div class="flex gap-2 pl-4 pr-4 overflow-x-scroll no-scrollbar">
+                    @foreach (\App\Enums\AdaptedAnimeFilter::asSelectArray() as $value => $label)
+                        @if ($adaptation === strtolower(\App\Enums\AdaptedAnimeFilter::getKey($value)))
+                            <x-button>{{ __($label) }}</x-button>
+                        @else
+                            <x-outlined-button wire:click="$set('adaptation', '{{ strtolower(\App\Enums\AdaptedAnimeFilter::getKey($value)) }}')">{{ __($label) }}</x-outlined-button>
+                        @endif
+                    @endforeach
                 </div>
-
-                @if ($this->adaptedUrl)
-                    <div class="flex gap-2 mt-4 pl-4 pr-4 overflow-x-scroll no-scrollbar">
-                        <x-link-button href="{{ $this->adaptedUrl }}" wire:navigate>{{ __('Adapted to Anime') }}</x-link-button>
-                    </div>
-                @endif
 
                 <x-search-bar>
                     <x-slot:rightBarButtonItems>
@@ -46,14 +65,11 @@
         @if ($this->searchResults?->count())
             <section class="mt-4 xl:safe-area-inset">
                 @switch ($kind)
-                    @case (\App\Enums\UserLibraryKind::Anime)
-                        <x-rows.small-lockup :animes="$this->searchResults" :is-row="false" />
-                        @break
                     @case (\App\Enums\UserLibraryKind::Manga)
-                        <x-rows.small-lockup :mangas="$this->searchResults" :is-row="false" />
+                        <x-rows.small-lockup :mangas="$this->searchResults" :is-row="false" :marks-library="auth()->check()" />
                         @break
                     @case (\App\Enums\UserLibraryKind::Game)
-                        <x-rows.small-lockup :games="$this->searchResults" :is-row="false" />
+                        <x-rows.small-lockup :games="$this->searchResults" :is-row="false" :marks-library="auth()->check()" />
                         @break
                 @endswitch
 
@@ -83,4 +99,10 @@
             </section>
         @endif
     </div>
+
+    <style>
+        .dim-in-library [data-in-library] {
+            opacity: 0.25;
+        }
+    </style>
 </main>

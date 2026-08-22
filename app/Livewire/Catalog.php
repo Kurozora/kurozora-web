@@ -329,6 +329,20 @@ class Catalog extends Component
     }
 
     /**
+     * Returns the URL of the adapted-to-anime page for the active kind.
+     *
+     * @return ?string
+     */
+    public function getAdaptedUrlProperty(): ?string
+    {
+        return match ($this->kind) {
+            UserLibraryKind::Manga => route('manga.adapted'),
+            UserLibraryKind::Game  => route('games.adapted'),
+            default => null,
+        };
+    }
+
+    /**
      * Returns the heading shown above the list.
      *
      * @return string

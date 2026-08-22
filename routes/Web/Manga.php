@@ -6,6 +6,7 @@ use App\Livewire\Browse\Continuing\Index as BrowseContinuingIndex;
 use App\Livewire\Browse\Seasons\Archive as BrowseSeasonsArchive;
 use App\Livewire\Browse\Seasons\Index as BrowseSeasonsIndex;
 use App\Livewire\Browse\Upcoming\Index as BrowseUpcomingIndex;
+use App\Livewire\Adapted;
 use App\Livewire\Cast;
 use App\Livewire\Catalog;
 use App\Livewire\Manga\Details as MangaDetails;
@@ -25,6 +26,10 @@ Route::prefix('/manga')
         Route::get('/', Catalog::class)
             ->defaults('kind', UserLibraryKind::Manga)
             ->name('.index');
+
+        Route::get('/adapted', Adapted::class)
+            ->defaults('kind', UserLibraryKind::Manga)
+            ->name('.adapted');
 
         Route::prefix('/upcoming')
             ->name('.upcoming')

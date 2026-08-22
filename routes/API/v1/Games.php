@@ -17,6 +17,10 @@ Route::prefix('/games')
             ->middleware('auth.kurozora:optional')
             ->name('.upcoming');
 
+        Route::get('/adapted', [GameController::class, 'adapted'])
+            ->middleware('auth.kurozora:optional')
+            ->name('.adapted');
+
         Route::get('/seasons', [GameController::class, 'browseSeason'])
             ->middleware('auth.kurozora:optional')
             ->name('.seasons');

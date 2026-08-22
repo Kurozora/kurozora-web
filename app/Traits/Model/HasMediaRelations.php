@@ -2,10 +2,12 @@
 
 namespace App\Traits\Model;
 
+use App\Enums\AdaptedAnimeFilter;
 use App\Models\Anime;
 use App\Models\Game;
 use App\Models\Manga;
 use App\Models\MediaRelation;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -88,5 +90,26 @@ trait HasMediaRelations
             ->whereHasMorph('related', [Game::class], function ($query) {
                 $this->viewableViaParent($query);
             });
+    }
+
+    /**
+     * Eloquent builder scope that limits the query to models adapted to anime, optionally by airing status.
+     *
+     * @param Builder            $query
+     * @param AdaptedAnimeFilter $filter
+     *
+     * @return Builder
+     */
+    public function scopeAdaptedToAnime(Builder $query, AdaptedAnimeFilter $filter): Builder
+    {
+        return $query->whereHas('mediaRelations', function (Builder $query) use ($filter) {
+            $query->whereHasMorph('related', [Anime::class], function (Builder $query) use ($filter) {
+                match ($filter->value) {
+                    AdaptedAnimeFilter::Airing => $query->where(Anime::TABLE_NAME . '.status_id', '=', 3),
+                    AdaptedAnimeFilter::Upcoming => $query->whereDate(Anime::TABLE_NAME . '.started_at', '>', today()),
+                    default => $query,
+                };
+            });
+        });
     }
 }

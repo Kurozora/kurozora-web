@@ -17,6 +17,10 @@ Route::prefix('/manga')
             ->middleware('auth.kurozora:optional')
             ->name('.upcoming');
 
+        Route::get('/adapted', [MangaController::class, 'adapted'])
+            ->middleware('auth.kurozora:optional')
+            ->name('.adapted');
+
         Route::get('/seasons', [MangaController::class, 'browseSeason'])
             ->middleware('auth.kurozora:optional')
             ->name('.seasons');

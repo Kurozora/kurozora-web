@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\API\v1;
 
+use App\Enums\AdaptedAnimeFilter;
 use App\Enums\BrowseSeasonKind;
 use App\Enums\SearchScope;
 use App\Enums\SearchType;
 use App\Events\ModelViewed;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\GetAdaptedRequest;
 use App\Http\Requests\GetBrowseSeasonRequest;
 use App\Http\Requests\GetIndexRequest;
 use App\Http\Requests\GetMediaSongsRequest;
@@ -781,6 +783,33 @@ class GameController extends Controller
         $data = $request->validated();
 
         $game = Game::upcoming(-1)
+            ->cursorPaginate($data['limit'] ?? 25);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $game->nextPageUrl() ?? '');
+
+        return JSONResult::success([
+            'data' => GameResourceIdentity::collection($game),
+            'next' => empty($nextPageURL) ? null : $nextPageURL
+        ]);
+    }
+
+    /**
+     * Retrieves games adapted to anime, optionally filtered by airing status.
+     *
+     * @param GetAdaptedRequest $request
+     *
+     * @return JsonResponse
+     */
+    public function adapted(GetAdaptedRequest $request): JsonResponse
+    {
+        $data = $request->validated();
+        $filter = isset($data['filter'])
+            ? AdaptedAnimeFilter::fromValue((int) $data['filter'])
+            : AdaptedAnimeFilter::Airing();
+
+        $game = Game::adaptedToAnime($filter)
+            ->orderBy(Game::TABLE_NAME . '.id')
             ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain

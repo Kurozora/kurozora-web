@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\API\v1;
 
+use App\Enums\AdaptedAnimeFilter;
 use App\Enums\BrowseSeasonKind;
 use App\Enums\SearchScope;
 use App\Enums\SearchType;
 use App\Events\ModelViewed;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\GetAdaptedRequest;
 use App\Http\Requests\GetBrowseSeasonRequest;
 use App\Http\Requests\GetIndexRequest;
 use App\Http\Requests\GetPaginatedRequest;
@@ -714,6 +716,33 @@ class MangaController extends Controller
         $data = $request->validated();
 
         $manga = Manga::upcoming(-1)
+            ->cursorPaginate($data['limit'] ?? 25);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $manga->nextPageUrl() ?? '');
+
+        return JSONResult::success([
+            'data' => LiteratureResourceIdentity::collection($manga),
+            'next' => empty($nextPageURL) ? null : $nextPageURL
+        ]);
+    }
+
+    /**
+     * Retrieves manga adapted to anime, optionally filtered by airing status.
+     *
+     * @param GetAdaptedRequest $request
+     *
+     * @return JsonResponse
+     */
+    public function adapted(GetAdaptedRequest $request): JsonResponse
+    {
+        $data = $request->validated();
+        $filter = isset($data['filter'])
+            ? AdaptedAnimeFilter::fromValue((int) $data['filter'])
+            : AdaptedAnimeFilter::Airing();
+
+        $manga = Manga::adaptedToAnime($filter)
+            ->orderBy(Manga::TABLE_NAME . '.id')
             ->cursorPaginate($data['limit'] ?? 25);
 
         // Get next page url minus domain

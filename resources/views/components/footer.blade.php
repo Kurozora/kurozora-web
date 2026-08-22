@@ -56,6 +56,10 @@
                     <li class="mt-2">
                         <x-footer-link href="{{ route('museum.manga') }}" wire:navigate>{{ __('Manga Museum') }}</x-footer-link>
                     </li>
+
+                    <li class="mt-2">
+                        <x-footer-link href="{{ route('manga.adapted') }}" wire:navigate>{{ __('Manga Adapted to Anime') }}</x-footer-link>
+                    </li>
                 </ul>
             </div>
 
@@ -80,6 +84,10 @@
 
                     <li class="mt-2">
                         <x-footer-link href="{{ route('museum.games') }}" wire:navigate>{{ __('Games Museum') }}</x-footer-link>
+                    </li>
+
+                    <li class="mt-2">
+                        <x-footer-link href="{{ route('games.adapted') }}" wire:navigate>{{ __('Games Adapted to Anime') }}</x-footer-link>
                     </li>
                 </ul>
             </div>

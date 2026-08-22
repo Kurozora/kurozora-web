@@ -2,6 +2,7 @@
 
 use App\Enums\ParentalGuideCategory;
 use App\Enums\UserLibraryKind;
+use App\Livewire\Adapted;
 use App\Livewire\Browse\Seasons\Archive as BrowseSeasonsArchive;
 use App\Livewire\Browse\Seasons\Index as BrowseSeasonsIndex;
 use App\Livewire\Browse\Upcoming\Index as BrowseUpcomingIndex;
@@ -25,6 +26,10 @@ Route::prefix('/games')
         Route::get('/', Catalog::class)
             ->defaults('kind', UserLibraryKind::Game)
             ->name('.index');
+
+        Route::get('/adapted', Adapted::class)
+            ->defaults('kind', UserLibraryKind::Game)
+            ->name('.adapted');
 
         Route::prefix('/upcoming')
             ->name('.upcoming')
