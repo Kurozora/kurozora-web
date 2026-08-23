@@ -203,7 +203,6 @@ trait Favoriter
     {
         return $this->belongsToMany($type, UserFavorite::class, 'user_id', 'favorable_id')
             ->where('favorable_type', '=', $type)
-            ->wherePivotNull('deleted_at')
             ->withTimestamps();
     }
 }
