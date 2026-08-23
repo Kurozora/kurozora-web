@@ -43,13 +43,6 @@ class QuickReactionRating extends Component
     public bool $disabled = false;
 
     /**
-     * Whether removing rating is allowed.
-     *
-     * @var bool $allowsRemove
-     */
-    public bool $allowsRemove = false;
-
-    /**
      * Whether the removal confirmation is shown.
      *
      * @var bool $confirmingRemoval
@@ -99,17 +92,15 @@ class QuickReactionRating extends Component
      * @param null|string $modelType
      * @param null|float  $rating
      * @param bool        $disabled
-     * @param bool        $allowsRemove
      *
      * @return void
      */
-    public function mount(?string $modelId = null, ?string $modelType = null, ?float $rating = null, bool $disabled = false, bool $allowsRemove = false): void
+    public function mount(?string $modelId = null, ?string $modelType = null, ?float $rating = null, bool $disabled = false): void
     {
         $this->modelID = $modelId;
         $this->modelType = $modelType;
         $this->emojiScore = EmojiScore::fromRating($rating)?->value;
         $this->disabled = $disabled;
-        $this->allowsRemove = $allowsRemove;
     }
 
     /**
@@ -133,17 +124,14 @@ class QuickReactionRating extends Component
             return;
         }
 
+        // Tapping the selected reaction again removes the rating.
         if ($this->emojiScore === $emojiScore->value) {
-            if (!$this->allowsRemove) {
-                return;
-            }
-
             $mediaRating = $user->mediaRatings()->where([
                 ['model_id', '=', $this->modelID],
                 ['model_type', '=', $this->modelType],
             ])->first();
 
-            // Removing the rating also deletes the review.
+            // Removing the rating also deletes the review, so ask for confirmation first.
             if (filled($mediaRating?->description)) {
                 $this->confirmingRemoval = true;
                 return;

@@ -10,7 +10,7 @@
         </button>
     @endforeach
 
-    @if ($allowsRemove)
+    @if (!$disabled)
         <x-dialog-modal model="confirmingRemoval">
             <x-slot:title>
                 {{ __('Remove Rating') }}

@@ -6,7 +6,6 @@
                 :model-type="$modelType"
                 :rating="$rating"
                 :disabled="$disabled"
-                :allows-remove="!$disabled"
                 :key="'quick-reaction-rating-' . $modelID . '-' . $modelType"
             />
             @break
