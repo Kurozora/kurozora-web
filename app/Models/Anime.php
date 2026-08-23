@@ -503,6 +503,18 @@ class Anime extends KModel implements HasMedia, Sitemapable
     }
 
     /**
+     * Eloquent builder scope that limits the query to shows with a trailer.
+     *
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeWithTrailer(Builder $query): Builder
+    {
+        return $query->whereNotNull(self::TABLE_NAME . '.video_url')
+            ->where(self::TABLE_NAME . '.video_url', '!=', '');
+    }
+
+    /**
      * Eloquent builder scope that limits the query to the most popular shows.
      *
      * @param Builder $query

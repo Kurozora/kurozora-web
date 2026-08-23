@@ -4,6 +4,7 @@ use App\Enums\UserLibraryKind;
 use App\Http\Controllers\API\v1\AnimeController;
 use App\Http\Controllers\API\v1\MuseumController;
 use App\Http\Controllers\API\v1\ParentalGuideController;
+use App\Http\Controllers\API\v1\TrailerController;
 
 Route::prefix('/anime')
     ->name('.anime')
@@ -20,6 +21,11 @@ Route::prefix('/anime')
         Route::get('/upcoming', [AnimeController::class, 'upcoming'])
             ->middleware('auth.kurozora:optional')
             ->name('.upcoming');
+
+        Route::get('/trailers', [TrailerController::class, 'index'])
+            ->middleware('auth.kurozora:optional')
+            ->defaults('kind', UserLibraryKind::Anime)
+            ->name('.trailers');
 
         Route::get('/seasons', [AnimeController::class, 'browseSeason'])
             ->middleware('auth.kurozora:optional')
@@ -50,6 +56,9 @@ Route::prefix('/anime')
 
                 Route::get('/cast', [AnimeController::class, 'cast'])
                     ->name('.cast');
+
+                Route::get('/videos', [AnimeController::class, 'videos'])
+                    ->name('.videos');
 
                 Route::get('/related-shows', [AnimeController::class, 'relatedShows'])
                     ->middleware('auth.kurozora:optional')

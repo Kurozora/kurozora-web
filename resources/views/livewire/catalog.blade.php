@@ -27,9 +27,15 @@
                     </div>
                 </div>
 
-                @if ($this->adaptedUrl)
+                @if ($this->adaptedUrl || $this->trailersUrl)
                     <div class="flex gap-2 mt-4 pl-4 pr-4 overflow-x-scroll no-scrollbar">
-                        <x-link-button href="{{ $this->adaptedUrl }}" wire:navigate>{{ __('Adapted to Anime') }}</x-link-button>
+                        @if ($this->adaptedUrl)
+                            <x-link-button href="{{ $this->adaptedUrl }}" wire:navigate>{{ __('Adapted to Anime') }}</x-link-button>
+                        @endif
+
+                        @if ($this->trailersUrl)
+                            <x-link-button href="{{ $this->trailersUrl }}" wire:navigate>{{ __('Trailers') }}</x-link-button>
+                        @endif
                     </div>
                 @endif
 

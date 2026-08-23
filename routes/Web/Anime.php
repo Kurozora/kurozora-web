@@ -19,6 +19,7 @@ use App\Livewire\Season\Details as SeasonDetails;
 use App\Livewire\Songs;
 use App\Livewire\Staff;
 use App\Livewire\Studios;
+use App\Livewire\Trailers;
 use App\Models\Anime;
 
 Route::prefix('/anime')
@@ -27,6 +28,10 @@ Route::prefix('/anime')
         Route::get('/', Catalog::class)
             ->defaults('kind', UserLibraryKind::Anime)
             ->name('.index');
+
+        Route::get('/trailers', Trailers::class)
+            ->defaults('kind', UserLibraryKind::Anime)
+            ->name('.trailers');
 
         Route::prefix('/upcoming')
             ->name('.upcoming')

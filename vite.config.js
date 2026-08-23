@@ -84,6 +84,7 @@ export default defineConfig({
                 'resources/js/museum.js',
                 'resources/js/settings.js',
                 'resources/js/submenu.js',
+                'resources/js/trailer-hero.js',
                 'resources/js/watch.js',
                 'resources/js/worker.js',
             ],

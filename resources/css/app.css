@@ -557,6 +557,10 @@ body:has([data-lyrics][data-open]) {
   opacity: 0.25;
 }
 
+.dim-in-library [data-in-library] {
+  opacity: 0.25;
+}
+
 /**
  * This injects all of Tailwind's screen classes, generated based on the
  * config file.

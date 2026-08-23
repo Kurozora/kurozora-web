@@ -135,7 +135,7 @@ return [
         'index-settings' => [
             \App\Models\Anime::TABLE_NAME => [
                 'searchableAttributes' => ['original_title', 'title', 'synonym_titles', 'translations', 'synopsis', 'tagline', 'tags'],
-                'sortableAttributes'=> ['original_title', 'title', 'duration', 'air_time', 'air_day', 'air_season', 'rank_total', 'started_at', 'ended_at', 'created_at', 'updated_at'],
+                'sortableAttributes'=> ['original_title', 'title', 'duration', 'air_time', 'air_day', 'air_season', 'rank_total', 'view_count', 'started_at', 'ended_at', 'created_at', 'updated_at'],
                 'filterableAttributes'=> ['id', 'letter', 'country_id', 'tv_rating_id', 'media_type_id', 'source_id', 'status_id', 'genres.id', 'themes.id', 'duration', 'air_time', 'air_day', 'air_season', 'is_nsfw', 'episode_count', 'season_count', 'started_at', 'ended_at'],
                 'pagination' => ['maxTotalHits' => 10000],
             ],
@@ -156,7 +156,7 @@ return [
             ],
             \App\Models\Game::TABLE_NAME => [
                 'searchableAttributes' => ['original_title', 'title', 'synonym_titles', 'translations', 'synopsis', 'tagline', 'tags'],
-                'sortableAttributes'=> ['original_title', 'title', 'duration', 'publication_day', 'publication_season', 'rank_total', 'edition_count', 'published_at', 'created_at', 'updated_at'],
+                'sortableAttributes'=> ['original_title', 'title', 'duration', 'publication_day', 'publication_season', 'rank_total', 'view_count', 'edition_count', 'published_at', 'created_at', 'updated_at'],
                 'filterableAttributes'=> ['id', 'letter', 'duration', 'country_id', 'tv_rating_id', 'media_type_id', 'source_id', 'status_id', 'genres.id', 'themes.id', 'publication_day', 'publication_season', 'is_nsfw', 'edition_count', 'published_at'],
                 'pagination' => ['maxTotalHits' => 10000],
             ],

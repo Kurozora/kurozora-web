@@ -4,17 +4,29 @@ namespace App\Models;
 
 use App\Enums\VideoSource;
 use App\Enums\VideoType;
+use App\Traits\Model\HasViews;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Video extends KModel
 {
-    use SoftDeletes;
+    use HasViews, SoftDeletes;
 
     // Table name
     const string TABLE_NAME = 'videos';
     protected $table = self::TABLE_NAME;
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'is_sub' => 'bool',
+        'is_dub' => 'bool',
+        'published_at' => 'datetime',
+    ];
 
     /**
      * Bootstrap the model and its traits.
@@ -89,6 +101,33 @@ class Video extends KModel
         $sourceClass = VideoSource::fromValue($this->source)->value;
 
         return (new $sourceClass($this))->getEmbed($data);
+    }
+
+    /**
+     * Get the meta line of the video.
+     *
+     * @return string
+     */
+    public function getMetaLine(): string
+    {
+        $title = $this->videoable;
+
+        if (empty($title)) {
+            return '';
+        }
+
+        $genres = $title->genres
+            ?->take(3)
+            ->pluck('name')
+            ->join(', ');
+
+        $releaseDate = $title instanceof Game
+            ? $title->published_at
+            : $title->started_at;
+
+        return collect([$genres, $releaseDate?->format('M Y')])
+            ->filter()
+            ->join(' · ');
     }
 
     /**

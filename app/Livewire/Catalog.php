@@ -343,6 +343,20 @@ class Catalog extends Component
     }
 
     /**
+     * Returns the URL of the trailers page for the active kind.
+     *
+     * @return ?string
+     */
+    public function getTrailersUrlProperty(): ?string
+    {
+        return match ($this->kind) {
+            UserLibraryKind::Anime => route('anime.trailers'),
+            UserLibraryKind::Game  => route('games.trailers'),
+            default => null,
+        };
+    }
+
+    /**
      * Returns the heading shown above the list.
      *
      * @return string

@@ -26,6 +26,8 @@ return new class extends Migration
             $table->boolean('is_sub');
             $table->boolean('is_dub');
             $table->integer('order');
+            $table->integer('view_count')->default(0);
+            $table->dateTime('published_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -33,6 +35,7 @@ return new class extends Migration
         Schema::table(Video::TABLE_NAME, function (Blueprint $table) {
             // Set index key constraints
             $table->index(['deleted_at', 'order']);
+            $table->index(['deleted_at', 'published_at']);
 
             // Set foreign key constraints
             $table->foreign('language_id')

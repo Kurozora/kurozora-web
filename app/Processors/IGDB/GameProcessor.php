@@ -1053,16 +1053,22 @@ class GameProcessor extends CustomItemProcessor
                 continue;
             }
 
-            $game->videos()->firstOrCreate([
+            $type = $this->getVideoType($video['name'] ?? '');
+
+            $gameVideo = $game->videos()->firstOrCreate([
                 'source' => VideoSource::YouTube,
                 'code' => $video['videoId'],
             ], [
                 'language_id' => $languageID,
-                'type' => VideoType::Trailer,
+                'type' => $type,
                 'is_sub' => false,
                 'is_dub' => false,
                 'order' => $order,
             ]);
+
+            if ($gameVideo->type->value !== $type) {
+                $gameVideo->update(['type' => $type]);
+            }
         }
 
         $primary = $videos[0]['videoId'] ?? null;
@@ -1070,6 +1076,23 @@ class GameProcessor extends CustomItemProcessor
         if (!empty($primary) && empty($game->video_url)) {
             $game->update(['video_url' => 'https://www.youtube.com/watch?v=' . $primary]);
         }
+    }
+
+    /**
+     * Map IGDB's video name to a video type.
+     *
+     * @param string $name
+     *
+     * @return int
+     */
+    private function getVideoType(string $name): int
+    {
+        return match (true) {
+            str($name)->contains('CM') => VideoType::CommercialMessage,
+            str($name)->contains('Teaser', ignoreCase: true) => VideoType::Teaser,
+            str($name)->contains('Trailer', ignoreCase: true) => VideoType::Trailer,
+            default => VideoType::PromotionalVideo,
+        };
     }
 
     /**

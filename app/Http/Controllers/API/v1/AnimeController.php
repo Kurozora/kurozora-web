@@ -28,6 +28,7 @@ use App\Http\Resources\MediaStaffResource;
 use App\Http\Resources\SeasonResourceIdentity;
 use App\Http\Resources\ShowCastResourceIdentity;
 use App\Http\Resources\StudioResource;
+use App\Http\Resources\VideoResource;
 use App\Models\Anime;
 use App\Models\MediaRating;
 use App\Models\MediaRelation;
@@ -747,6 +748,38 @@ class AnimeController extends Controller
     }
 
     /**
+     * Returns the videos of an Anime.
+     *
+     * @param GetPaginatedRequest $request
+     * @param Anime               $anime
+     *
+     * @return JsonResponse
+     */
+    public function videos(GetPaginatedRequest $request, Anime $anime): JsonResponse
+    {
+        $data = $request->validated();
+
+        // Get the videos, most recent first
+        $videos = $anime->videos()
+            ->orderBy('order', 'desc')
+            ->orderBy('id', 'desc')
+            ->cursorPaginate($data['limit'] ?? 25);
+
+        // Call the ModelViewed event
+        foreach ($videos as $video) {
+            ModelViewed::dispatch($video, $request->ip());
+        }
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $videos->nextPageUrl() ?? '');
+
+        return JSONResult::success([
+            'data' => VideoResource::collection($videos),
+            'next' => empty($nextPageURL) ? null : $nextPageURL,
+        ]);
+    }
+
+    /**
      * Returns the studios information of an Anime.
      *
      * @param GetPaginatedRequest $request
@@ -912,6 +945,7 @@ class AnimeController extends Controller
             ->forReading()
             ->cursorPaginate($data['limit'] ?? 25);
 
+        // The reviewed model is already in hand, so the progress total costs no extra query.
         $reviews->getCollection()->each(function (MediaRating $review) use ($anime) {
             $review->setRelation('model', $anime);
         });

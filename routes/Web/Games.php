@@ -18,6 +18,7 @@ use App\Livewire\Reviews;
 use App\Livewire\Songs;
 use App\Livewire\Staff;
 use App\Livewire\Studios;
+use App\Livewire\Trailers;
 use App\Models\Game;
 
 Route::prefix('/games')
@@ -30,6 +31,10 @@ Route::prefix('/games')
         Route::get('/adapted', Adapted::class)
             ->defaults('kind', UserLibraryKind::Game)
             ->name('.adapted');
+
+        Route::get('/trailers', Trailers::class)
+            ->defaults('kind', UserLibraryKind::Game)
+            ->name('.trailers');
 
         Route::prefix('/upcoming')
             ->name('.upcoming')

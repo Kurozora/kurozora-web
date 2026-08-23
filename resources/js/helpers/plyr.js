@@ -194,10 +194,7 @@ export default class PlyrManager {
         videoElement.removeAttribute('player-src')
 
         // Merge options.
-        this.playerOptions = {
-            ...this.playerOptions,
-            ...options,
-        }
+        this.playerOptions = this.#merge(this.playerOptions, options)
 
         // For more options see: https://github.com/sampotts/plyr/#options
         if (is.youTube(this.#url) || is.iframe(this.#videoElement)) {
@@ -248,6 +245,46 @@ export default class PlyrManager {
             this.#player = new Plyr(videoElement, this.playerOptions)
             this.#setupPlayer()
         }
+    }
+
+    /**
+     * Merges the given options over the defaults.
+     *
+     * @param {Object} defaults - defaults
+     * @param {Object} overrides - overrides
+     *
+     * @returns {Object}
+     */
+    #merge(defaults, overrides) {
+        const merged = { ...defaults }
+
+        Object.entries(overrides ?? {}).forEach(([key, value]) => {
+            merged[key] = is.object(value) && is.object(defaults?.[key])
+                ? this.#merge(defaults[key], value)
+                : value
+        })
+
+        return merged
+    }
+
+    // MARK: - Accessors
+    /**
+     * The underlying Plyr instance.
+     *
+     * @returns {Plyr}
+     */
+    get player() {
+        return this.#player
+    }
+
+    /**
+     * Tears the player down.
+     */
+    destroy() {
+        this.#hls?.destroy()
+        this.#hls = null
+        this.#player?.destroy()
+        this.#player = null
     }
 
     // MARK: - Functions

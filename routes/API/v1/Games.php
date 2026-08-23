@@ -4,6 +4,7 @@ use App\Enums\UserLibraryKind;
 use App\Http\Controllers\API\v1\GameController;
 use App\Http\Controllers\API\v1\MuseumController;
 use App\Http\Controllers\API\v1\ParentalGuideController;
+use App\Http\Controllers\API\v1\TrailerController;
 
 Route::prefix('/games')
     ->name('.games')
@@ -20,6 +21,11 @@ Route::prefix('/games')
         Route::get('/adapted', [GameController::class, 'adapted'])
             ->middleware('auth.kurozora:optional')
             ->name('.adapted');
+
+        Route::get('/trailers', [TrailerController::class, 'index'])
+            ->middleware('auth.kurozora:optional')
+            ->defaults('kind', UserLibraryKind::Game)
+            ->name('.trailers');
 
         Route::get('/seasons', [GameController::class, 'browseSeason'])
             ->middleware('auth.kurozora:optional')

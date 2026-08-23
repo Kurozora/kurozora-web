@@ -1,58 +1,123 @@
-@props(['anime'])
+@props(['anime' => null, 'game' => null, 'isRow' => true, 'inLibrary' => false])
 
-<div class="relative w-64 pb-2 snap-normal snap-center md:w-80">
-    <div class="flex flex-col">
-        @if (empty($anime->video_url))
-            <picture
-                class="relative aspect-video rounded-lg overflow-hidden"
-                style="background-color: {{ $anime->getFirstMedia(\App\Enums\MediaCollection::Banner)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
-            >
-                <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $anime->title }} Banner" title="{{ $anime->title }}">
+@php
+    $class = $isRow ? 'snap-normal snap-center' : 'flex-grow';
+@endphp
 
-                <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-lg"></div>
-            </picture>
-        @else
-            <div class="relative aspect-video rounded-lg overflow-hidden">
-                <iframe
-                    class="w-full h-full lazyload"
-                    type="text/html"
-                    allowfullscreen="allowfullscreen"
-                    mozallowfullscreen="mozallowfullscreen"
-                    msallowfullscreen="msallowfullscreen"
-                    oallowfullscreen="oallowfullscreen"
-                    webkitallowfullscreen="webkitallowfullscreen"
-                    allow="fullscreen;"
-                    data-size="auto"
-                    src="https://www.youtube-nocookie.com/embed/{{ str($anime->video_url)->after('?v=') }}?autoplay=0&iv_load_policy=3&disablekb=1&color=red&rel=0&cc_load_policy=0&start=0&end=0&origin={{ config('app.url') }}&modestbranding=1&playsinline=1&loop=1&playlist={{ str($anime->video_url)->after('?v=') }}"
+<div {{ $attributes->merge(['class' => 'relative w-64 pb-2 md:w-80 ' . $class]) }} @if ($inLibrary) data-in-library @endif>
+    @if (!empty($anime))
+        <div class="flex flex-col">
+            @if (empty($anime->video_url))
+                <picture
+                    class="relative aspect-video rounded-lg overflow-hidden"
+                    style="background-color: {{ $anime->getFirstMedia(\App\Enums\MediaCollection::Banner)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
                 >
-                </iframe>
-            </div>
-        @endif
-    </div>
+                    <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $anime->title }} Banner" title="{{ $anime->title }}">
 
-    <div class="relative mt-4">
-        <div class="flex flex-nowrap">
-            <picture
-                class="relative shrink-0 w-28 h-40 mr-2 rounded-lg overflow-hidden"
-                style="background-color: {{ $anime->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
-            >
-                <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $anime->title }} Poster" title="{{ $anime->title }}">
-
-                <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-lg"></div>
-            </picture>
-
-            <a class="absolute w-full h-full" href="{{ route('anime.details', $anime) }}" wire:navigate></a>
-
-            <div class="flex flex-col gap-2 justify-between">
-                <div>
-                    <p class="leading-tight line-clamp-2" title="{{ $anime->title }}">{{ $anime->title }}</p>
-                    <p class="text-xs leading-tight opacity-75 line-clamp-2" title="{{ $anime->genres?->pluck('name')->join(', ', ' and ') }}">{{ $anime->genres?->pluck('name')->join(', ', ' and ') }}</p>
+                    <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-lg"></div>
+                </picture>
+            @else
+                <div class="relative aspect-video rounded-lg overflow-hidden">
+                    <iframe
+                        class="w-full h-full lazyload"
+                        type="text/html"
+                        loading="lazy"
+                        title="{{ __('Trailer for :x', ['x' => $anime->title]) }}"
+                        allowfullscreen="allowfullscreen"
+                        mozallowfullscreen="mozallowfullscreen"
+                        msallowfullscreen="msallowfullscreen"
+                        oallowfullscreen="oallowfullscreen"
+                        webkitallowfullscreen="webkitallowfullscreen"
+                        allow="fullscreen;"
+                        data-size="auto"
+                        src="https://www.youtube-nocookie.com/embed/{{ str($anime->video_url)->after('?v=') }}?autoplay=0&iv_load_policy=3&disablekb=1&color=red&rel=0&cc_load_policy=0&start=0&end=0&origin={{ config('app.url') }}&modestbranding=1&playsinline=1&loop=1&playlist={{ str($anime->video_url)->after('?v=') }}"
+                    >
+                    </iframe>
                 </div>
-
-                <livewire:components.library-button :model="$anime" wire:key="{{ uniqid($anime->id, true) }}" />
-            </div>
+            @endif
         </div>
 
-        <p class="text-sm leading-tight mt-4">{{ $anime->tagline ?? ' ' }}</p>
-    </div>
+        <div class="relative mt-4">
+            <div class="flex flex-nowrap">
+                <picture
+                    class="relative shrink-0 w-28 h-40 mr-2 rounded-lg overflow-hidden"
+                    style="background-color: {{ $anime->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
+                >
+                    <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $anime->title }} Poster" title="{{ $anime->title }}">
+
+                    <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-lg"></div>
+                </picture>
+
+                <a class="absolute w-full h-full" href="{{ route('anime.details', $anime) }}" wire:navigate></a>
+
+                <div class="flex flex-col gap-2 justify-between">
+                    <div>
+                        <p class="leading-tight line-clamp-2" title="{{ $anime->title }}">{{ $anime->title }}</p>
+                        <p class="text-xs leading-tight opacity-75 line-clamp-2" title="{{ $anime->genres?->pluck('name')->join(', ', ' and ') }}">{{ $anime->genres?->pluck('name')->join(', ', ' and ') }}</p>
+                    </div>
+
+                    <livewire:components.library-button :model="$anime" wire:key="{{ uniqid($anime->id, true) }}" />
+                </div>
+            </div>
+
+            <p class="text-sm leading-tight mt-4">{{ $anime->tagline ?? ' ' }}</p>
+        </div>
+    @elseif (!empty($game))
+        <div class="flex flex-col">
+            @if (empty($game->video_url))
+                <picture
+                    class="relative aspect-video rounded-lg overflow-hidden"
+                    style="background-color: {{ $game->getFirstMedia(\App\Enums\MediaCollection::Banner)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
+                >
+                    <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $game->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $game->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $game->title }} Banner" title="{{ $game->title }}">
+
+                    <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-lg"></div>
+                </picture>
+            @else
+                <div class="relative aspect-video rounded-lg overflow-hidden">
+                    <iframe
+                        class="w-full h-full lazyload"
+                        type="text/html"
+                        loading="lazy"
+                        title="{{ __('Trailer for :x', ['x' => $game->title]) }}"
+                        allowfullscreen="allowfullscreen"
+                        mozallowfullscreen="mozallowfullscreen"
+                        msallowfullscreen="msallowfullscreen"
+                        oallowfullscreen="oallowfullscreen"
+                        webkitallowfullscreen="webkitallowfullscreen"
+                        allow="fullscreen;"
+                        data-size="auto"
+                        src="https://www.youtube-nocookie.com/embed/{{ str($game->video_url)->after('?v=') }}?autoplay=0&iv_load_policy=3&disablekb=1&color=red&rel=0&cc_load_policy=0&start=0&end=0&origin={{ config('app.url') }}&modestbranding=1&playsinline=1&loop=1&playlist={{ str($game->video_url)->after('?v=') }}"
+                    >
+                    </iframe>
+                </div>
+            @endif
+        </div>
+
+        <div class="relative mt-4">
+            <div class="flex flex-nowrap">
+                <picture
+                    class="relative shrink-0 w-28 h-28 mr-2 rounded-3xl overflow-hidden"
+                    style="background-color: {{ $game->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
+                >
+                    <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $game->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $game->title }} Poster" title="{{ $game->title }}">
+
+                    <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-3xl"></div>
+                </picture>
+
+                <a class="absolute w-full h-full" href="{{ route('games.details', $game) }}" wire:navigate></a>
+
+                <div class="flex flex-col gap-2 justify-between">
+                    <div>
+                        <p class="leading-tight line-clamp-2" title="{{ $game->title }}">{{ $game->title }}</p>
+                        <p class="text-xs leading-tight opacity-75 line-clamp-2" title="{{ $game->genres?->pluck('name')->join(', ', ' and ') }}">{{ $game->genres?->pluck('name')->join(', ', ' and ') }}</p>
+                    </div>
+
+                    <livewire:components.library-button :model="$game" wire:key="{{ uniqid($game->id, true) }}" />
+                </div>
+            </div>
+
+            <p class="text-sm leading-tight mt-4">{{ $game->tagline ?? ' ' }}</p>
+        </div>
+    @endif
 </div>
