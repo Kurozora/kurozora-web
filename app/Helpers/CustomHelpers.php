@@ -240,29 +240,145 @@ if (!function_exists('yesterday')) {
     }
 }
 
-if (!function_exists('generate_random_color')) {
+if (!function_exists('hsv_to_hex')) {
     /**
-     * Generate a random color based on a seed.
+     * Convert the given hue, saturation and value to a hexadecimal color code.
      *
-     * @param $number
+     * @param float $hue
+     * @param float $saturation
+     * @param float $value
      *
      * @return string
      */
-    function generate_random_color($number): string
+    function hsv_to_hex(float $hue, float $saturation, float $value): string
     {
-        // Ensure the number is positive
-        $number = abs($number);
+        $hue = fmod(fmod($hue, 360) + 360, 360);
 
-        // Use the number to seed the random color generation
-        srand($number);
+        $chroma = $value * $saturation;
+        $secondary = $chroma * (1 - abs(fmod($hue / 60, 2) - 1));
+        $offset = $value - $chroma;
 
-        // Generate random RGB values
-        $red = rand(0, 175);
-        $green = rand(0, 175);
-        $blue = rand(0, 175);
+        [$red, $green, $blue] = match ((int) ($hue / 60)) {
+            0 => [$chroma, $secondary, 0],
+            1 => [$secondary, $chroma, 0],
+            2 => [0, $chroma, $secondary],
+            3 => [0, $secondary, $chroma],
+            4 => [$secondary, 0, $chroma],
+            default => [$chroma, 0, $secondary],
+        };
 
-        // Format the RGB values into a hexadecimal color code
-        return sprintf('#%02x%02x%02x', $red, $green, $blue);
+        return sprintf(
+            '#%02x%02x%02x',
+            (int) round(($red + $offset) * 255),
+            (int) round(($green + $offset) * 255),
+            (int) round(($blue + $offset) * 255)
+        );
+    }
+}
+
+if (!function_exists('hex_to_hsv')) {
+    /**
+     * Convert the given hexadecimal color code to hue, saturation and value.
+     *
+     * @param string $color
+     *
+     * @return array
+     */
+    function hex_to_hsv(string $color): array
+    {
+        $hex = ltrim($color, '#');
+
+        if (strlen($hex) !== 6) {
+            return [0.0, 0.0, 0.0];
+        }
+
+        $red = hexdec(substr($hex, 0, 2)) / 255;
+        $green = hexdec(substr($hex, 2, 2)) / 255;
+        $blue = hexdec(substr($hex, 4, 2)) / 255;
+
+        $highest = max($red, $green, $blue);
+        $lowest = min($red, $green, $blue);
+        $chroma = $highest - $lowest;
+
+        $hue = match (true) {
+            $chroma == 0.0 => 0.0,
+            $highest === $red => 60 * fmod(($green - $blue) / $chroma, 6),
+            $highest === $green => 60 * ((($blue - $red) / $chroma) + 2),
+            default => 60 * ((($red - $green) / $chroma) + 4),
+        };
+
+        return [fmod($hue + 360, 360), $highest > 0 ? $chroma / $highest : 0.0, $highest];
+    }
+}
+
+if (!function_exists('generate_spectrum_color')) {
+    /**
+     * Generate the color sitting at the given step of the shared spectrum.
+     *
+     * Neighbouring steps sit a fixed distance apart on the hue wheel, so a resource
+     * can hand out the step before or after its own to meet its neighbour on a
+     * color they both carry.
+     *
+     * @param int $step
+     *
+     * @return string
+     */
+    function generate_spectrum_color(int $step): string
+    {
+        $anchorStep = 2026;
+        $anchorHue = 150;
+        $hueStride = 38;
+
+        return hsv_to_hex($anchorHue + ($anchorStep - $step) * $hueStride, 0.68, 0.82);
+    }
+}
+
+if (!function_exists('lit_variant_color')) {
+    /**
+     * Turn the given color into the light it would cast, rotated around the hue wheel.
+     *
+     * @param string $color
+     * @param float $hueShift
+     *
+     * @return string
+     */
+    function lit_variant_color(string $color, float $hueShift): string
+    {
+        [$hue, $saturation, $value] = hex_to_hsv($color);
+
+        return hsv_to_hex($hue + $hueShift, min($saturation * 0.65, 0.55), 1.0);
+    }
+}
+
+if (!function_exists('color_is_light')) {
+    /**
+     * Determine whether the given color is bright enough to need dark content on top of it.
+     *
+     * Uses sRGB linearization and BT.709 coefficients, matching the apps.
+     *
+     * @param string $color
+     *
+     * @return bool
+     */
+    function color_is_light(string $color): bool
+    {
+        $hex = ltrim($color, '#');
+
+        if (strlen($hex) !== 6) {
+            return false;
+        }
+
+        $linearize = function (float $channel): float {
+            return $channel <= 0.04045
+                ? $channel / 12.92
+                : pow(($channel + 0.055) / 1.055, 2.4);
+        };
+
+        $red = $linearize(hexdec(substr($hex, 0, 2)) / 255);
+        $green = $linearize(hexdec(substr($hex, 2, 2)) / 255);
+        $blue = $linearize(hexdec(substr($hex, 4, 2)) / 255);
+
+        return (0.2126 * $red) + (0.7152 * $green) + (0.0722 * $blue) > 0.5;
     }
 }
 

@@ -35,17 +35,50 @@ class Recap extends KModel
      */
     public function getBackgroundColor1Attribute(): string
     {
-        return generate_random_color($this->year);
+        return generate_spectrum_color($this->year);
     }
 
     /**
      * The second background color of the recap.
      *
+     * Recaps are listed newest first, so the second color is the year that follows
+     * this one in the list, letting neighbouring recaps meet on a shared color.
+     *
      * @return string
      */
     public function getBackgroundColor2Attribute(): string
     {
-        return generate_random_color($this->year - 3);
+        return generate_spectrum_color($this->year - 1);
+    }
+
+    /**
+     * The tint of the fringe drawn above the core of the recap’s crescent.
+     *
+     * @return string
+     */
+    public function getCoolFringeColorAttribute(): string
+    {
+        return lit_variant_color($this->background_color1, -21.6);
+    }
+
+    /**
+     * The tint of the fringe drawn below the core of the recap’s crescent.
+     *
+     * @return string
+     */
+    public function getWarmFringeColorAttribute(): string
+    {
+        return lit_variant_color($this->background_color2, 21.6);
+    }
+
+    /**
+     * Whether the recap’s colors are bright enough to need dark content on top of them.
+     *
+     * @return bool
+     */
+    public function getIsLightAttribute(): bool
+    {
+        return color_is_light($this->background_color1) && color_is_light($this->background_color2);
     }
 
     /**
