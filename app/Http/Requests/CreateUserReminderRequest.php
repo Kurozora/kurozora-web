@@ -41,6 +41,7 @@ class CreateUserReminderRequest extends FormRequest
             'model_id' => ['bail', 'string'],
             'model_ids' => ['bail', 'array', 'max:25'],
             'model_ids*' => ['bail', 'string'],
+            'is_reminded' => ['bail', 'nullable', 'boolean'],
         ];
     }
 }

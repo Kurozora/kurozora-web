@@ -136,8 +136,22 @@ class UserReminderController extends Controller
         ])
             ->validate();
 
-        $isReminded = DB::transaction(function () use ($user, $models) {
-            $result = $user->toggleReminder($models);
+        $requestedState = array_key_exists('is_reminded', $data) && $data['is_reminded'] !== null
+            ? $request->boolean('is_reminded')
+            : null;
+
+        $isReminded = DB::transaction(function () use ($user, $models, $requestedState) {
+            if ($requestedState === null) {
+                // TODO: Remove the toggle fallback once the forced update ships and every client sends `is_reminded`.
+                $result = $user->toggleReminder($models);
+            } elseif ($requestedState) {
+                $user->remind($models);
+                $result = true;
+            } else {
+                $user->unremind($models);
+                $result = false;
+            }
+
             $user->bumpStateVersion();
             return $result;
         });

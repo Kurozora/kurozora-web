@@ -76,7 +76,7 @@ trait Reminder
     }
 
     /**
-     * Reminder the given models.
+     * Reminds the given models.
      *
      * @param Model|Model[] $models
      *
@@ -102,7 +102,7 @@ trait Reminder
         $modelKeys = $models->map(fn($model) => $model->getKey());
 
         $this->remindedModels($modelType)
-            ->attach($modelKeys);
+            ->syncWithoutDetaching($modelKeys->all());
 
         UserLibraryTouch::touch($this->id, $modelType, $modelKeys->all());
     }

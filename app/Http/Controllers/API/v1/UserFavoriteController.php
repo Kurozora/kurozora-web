@@ -169,8 +169,22 @@ class UserFavoriteController extends Controller
                 ->validate();
         }
 
-        $isFavorited = DB::transaction(function () use ($user, $models) {
-            $result = $user->toggleFavorite($models);
+        $requestedState = array_key_exists('is_favorited', $data) && $data['is_favorited'] !== null
+            ? $request->boolean('is_favorited')
+            : null;
+
+        $isFavorited = DB::transaction(function () use ($user, $models, $requestedState) {
+            if ($requestedState === null) {
+                // TODO: Remove the toggle fallback once the forced update ships and every client sends `is_favorited`.
+                $result = $user->toggleFavorite($models);
+            } elseif ($requestedState) {
+                $user->favorite($models);
+                $result = true;
+            } else {
+                $user->unfavorite($models);
+                $result = false;
+            }
+
             $user->bumpStateVersion();
             return $result;
         });
