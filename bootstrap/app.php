@@ -51,6 +51,8 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Illuminate\View\ViewException;
+use Laravel\Sanctum\Http\Middleware\CheckAbilities;
+use Laravel\Sanctum\Http\Middleware\CheckForAnyAbility;
 use Nette\NotImplementedException;
 use Spatie\Permission\Middleware\RoleMiddleware;
 use Symfony\Component\Console\Exception\CommandNotFoundException;
@@ -126,6 +128,8 @@ return Application::configure(basePath: dirname(__DIR__))
             ])
             ->alias([
                 'auth' => KAuthenticate::class,
+                'abilities' => CheckAbilities::class,
+                'ability' => CheckForAnyAbility::class,
                 'auth.basic' => AuthenticateWithBasicAuth::class,
                 'auth.kurozora' => CheckKurozoraUserAuthentication::class,
                 'auth.session' => AuthenticateSession::class,
