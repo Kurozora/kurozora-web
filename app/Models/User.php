@@ -5,12 +5,13 @@ namespace App\Models;
 use App\Enums\MediaCollection;
 use App\Enums\UserActivityStatus;
 use App\Enums\UserLibraryStatus;
-use App\Events\UserStateChanged;
 use App\Helpers\OptionsBag;
 use App\Jobs\FetchSessionLocation;
+use App\Jobs\PublishUserStateChange;
 use App\Notifications\NewSession;
 use App\Notifications\ResetPassword as ResetPasswordNotification;
 use App\Notifications\VerifyEmail as VerifyEmailNotification;
+use App\Observers\UserStateObserver;
 use App\Parsers\MentionParser;
 use App\Traits\HeartActionTrait;
 use App\Traits\HelpfulnessActionTrait;
@@ -607,7 +608,28 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     {
         $this->increment('state_version');
 
-        UserStateChanged::dispatch($this->getKey(), (int) $this->state_version);
+        PublishUserStateChange::dispatch($this->getKey())
+            ->afterCommit()
+            ->delay(now()->addSeconds((int) config('library.state_hint_delay_seconds', 2)));
+    }
+
+    /**
+     * Runs a bulk write as a single change to the user's state.
+     *
+     * @param callable $bulkWrite
+     *
+     * @return mixed
+     */
+    public function withSingleStateBump(callable $bulkWrite): mixed
+    {
+        UserStateObserver::suppress($this->getKey());
+
+        try {
+            return $bulkWrite();
+        } finally {
+            UserStateObserver::release($this->getKey());
+            $this->bumpStateVersion();
+        }
     }
 
     /**

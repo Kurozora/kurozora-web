@@ -107,8 +107,6 @@ class ProcessMALImport implements ShouldQueue
      */
     public function handle(): void
     {
-        $success = false;
-
         // Create XML object
         $xml = simplexml_load_string($this->xmlContent);
 
@@ -116,14 +114,16 @@ class ProcessMALImport implements ShouldQueue
         $json = json_encode($xml);
         $json = json_decode($json, true);
 
-        switch ($this->libraryKind->value) {
-            case UserLibraryKind::Anime:
-                $success = $this->handleAnime($json);
-                break;
-            case UserLibraryKind::Manga:
-                $success = $this->handleManga($json);
-                break;
-        }
+        $success = $this->user->withSingleStateBump(function () use ($json): bool {
+            switch ($this->libraryKind->value) {
+                case UserLibraryKind::Anime:
+                    return $this->handleAnime($json);
+                case UserLibraryKind::Manga:
+                    return $this->handleManga($json);
+            }
+
+            return false;
+        });
 
         if ($success) {
             $this->user->notify(new LibraryImportFinished($this->results, $this->libraryKind, $this->service, $this->behavior));

@@ -11,4 +11,15 @@ return [
     */
 
     'tombstone_retention_days' => env('LIBRARY_TOMBSTONE_RETENTION_DAYS', 90),
+
+    /*
+    |--------------------------------------------------------------------------
+    | State hint delay
+    |--------------------------------------------------------------------------
+    |
+    | Number of seconds a queued state-change hint waits before it is published.
+    |
+    */
+
+    'state_hint_delay_seconds' => env('LIBRARY_STATE_HINT_DELAY_SECONDS', 2),
 ];

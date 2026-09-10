@@ -88,25 +88,27 @@ class ProcessLocalLibraryImport implements ShouldQueue
         // Decode the JSON string
         $json = json_decode($this->jsonString, true);
 
-        // Wipe current library if behavior is set to overwrite
-        if ($this->behavior->value === ImportBehavior::Overwrite) {
-            $this->user->clearLibrary();
-            $this->user->clearFavorites();
-            $this->user->mediaRatings()->forceDelete();
-        }
+        $this->user->withSingleStateBump(function () use ($json): void {
+            // Wipe current library if behavior is set to overwrite
+            if ($this->behavior->value === ImportBehavior::Overwrite) {
+                $this->user->clearLibrary();
+                $this->user->clearFavorites();
+                $this->user->mediaRatings()->forceDelete();
+            }
 
-        // Loop through the anime in the export file
-        foreach ($json as $entry) {
-            $slug = $entry['slug'];
-            $libraryKind = UserLibraryKind::fromKey($entry['libraryKind']);
-            $status = $entry['libraryCategory'];
-            $startDate = $entry['startDate'] ?? '0000-00-00';
-            $endDate = $entry['endDate'] ?? '0000-00-00';
-            $creationDate = $entry['creationDate'] ?? '0000-00-00';
+            // Loop through the anime in the export file
+            foreach ($json as $entry) {
+                $slug = $entry['slug'];
+                $libraryKind = UserLibraryKind::fromKey($entry['libraryKind']);
+                $status = $entry['libraryCategory'];
+                $startDate = $entry['startDate'] ?? '0000-00-00';
+                $endDate = $entry['endDate'] ?? '0000-00-00';
+                $creationDate = $entry['creationDate'] ?? '0000-00-00';
 
-            // Handle import
-            $this->importModel($slug, $libraryKind, $status, $startDate, $endDate, $creationDate);
-        }
+                // Handle import
+                $this->importModel($slug, $libraryKind, $status, $startDate, $endDate, $creationDate);
+            }
+        });
 
         $this->user->notify(new LocalLibraryImportFinished($this->results, $this->behavior));
     }
