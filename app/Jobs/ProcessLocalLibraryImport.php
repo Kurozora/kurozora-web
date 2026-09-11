@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Enums\ImportBehavior;
 use App\Enums\UserLibraryKind;
+use App\Jobs\Concerns\ReportsLibraryImportProgress;
 use App\Models\Anime;
 use App\Models\Game;
 use App\Models\Manga;
@@ -19,7 +20,7 @@ use Illuminate\Support\Carbon;
 
 class ProcessLocalLibraryImport implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, ReportsLibraryImportProgress, SerializesModels;
 
     /**
      * The number of tries.
@@ -96,6 +97,8 @@ class ProcessLocalLibraryImport implements ShouldQueue
                 $this->user->mediaRatings()->forceDelete();
             }
 
+            $this->startImportProgress(count($json));
+
             // Loop through the anime in the export file
             foreach ($json as $entry) {
                 $slug = $entry['slug'];
@@ -107,6 +110,7 @@ class ProcessLocalLibraryImport implements ShouldQueue
 
                 // Handle import
                 $this->importModel($slug, $libraryKind, $status, $startDate, $endDate, $creationDate);
+                $this->advanceImportProgress();
             }
         });
 

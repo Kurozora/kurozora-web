@@ -14,11 +14,12 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Import progress interval
     |--------------------------------------------------------------------------
     |
-    | Number of seconds a queued state-change hint waits before it is published.
+    | Minimum number of seconds between two progress broadcasts of one library import job.
     |
     */
 
-    'state_hint_delay_seconds' => env('LIBRARY_STATE_HINT_DELAY_SECONDS', 2),
+    'import_progress_interval_seconds' => env('LIBRARY_IMPORT_PROGRESS_INTERVAL_SECONDS', 1),
 ];

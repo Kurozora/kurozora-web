@@ -6,6 +6,7 @@ use App\Enums\ImportBehavior;
 use App\Enums\ImportService;
 use App\Enums\UserLibraryKind;
 use App\Enums\UserLibraryStatus;
+use App\Jobs\Concerns\ReportsLibraryImportProgress;
 use App\Models\Anime;
 use App\Models\Manga;
 use App\Models\MediaRating;
@@ -23,7 +24,7 @@ use Illuminate\Support\Carbon;
 
 class ProcessMALImport implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, ReportsLibraryImportProgress, SerializesModels;
 
     /**
      * The number of tries.
@@ -149,6 +150,8 @@ class ProcessMALImport implements ShouldQueue
                 $this->user->clearRatings(Anime::class);
             }
 
+            $this->startImportProgress(count($json['anime']));
+
             // Loop through the anime in the export file
             foreach ($json['anime'] as $anime) {
                 $animeID = $anime['series_animedb_id'];
@@ -160,11 +163,13 @@ class ProcessMALImport implements ShouldQueue
                 // Skip records where id is not numeric
                 if (!is_numeric($animeID)) {
                     $this->registerFailure($animeID, 'MAL ID is not a valid number.');
+                    $this->advanceImportProgress();
                     continue;
                 }
 
                 // Handle import
                 $this->importModel((int) $animeID, $status, $rating, $startDate, $endDate);
+                $this->advanceImportProgress();
             }
         } else if (isset($json['folder'])) { // 9anime export
             // Wipe current anime library if behavior is set to overwrite
@@ -174,6 +179,8 @@ class ProcessMALImport implements ShouldQueue
                 $this->user->clearReminders(Anime::class);
                 $this->user->clearRatings(Anime::class);
             }
+
+            $this->startImportProgress(array_sum(array_map(fn (array $folder): int => count($folder['data']['item']), $json['folder'])));
 
             // Loop through the anime in the export file
             foreach ($json['folder'] as $folder) {
@@ -186,11 +193,13 @@ class ProcessMALImport implements ShouldQueue
                     // Skip records where id is not numeric
                     if (!is_numeric($animeID)) {
                         $this->registerFailure($animeID, 'MAL ID is not a valid number.');
+                        $this->advanceImportProgress();
                         continue;
                     }
 
                     // Handle import
                     $this->importModel((int) $animeID, $status, 0, '0000-00-00', '0000-00-00');
+                    $this->advanceImportProgress();
                 }
             }
         } else {
@@ -218,6 +227,8 @@ class ProcessMALImport implements ShouldQueue
                 $this->user->clearRatings(Manga::class);
             }
 
+            $this->startImportProgress(count($json['manga']));
+
             // Loop through the manga in the export file
             foreach ($json['manga'] as $manga) {
                 $mangaID = $manga['manga_mangadb_id'];
@@ -229,11 +240,13 @@ class ProcessMALImport implements ShouldQueue
                 // Skip records where id is not numeric
                 if (!is_numeric($mangaID)) {
                     $this->registerFailure($mangaID, 'MAL ID is not a valid number.');
+                    $this->advanceImportProgress();
                     continue;
                 }
 
                 // Handle import
                 $this->importModel((int) $mangaID, $status, $rating, $startDate, $endDate);
+                $this->advanceImportProgress();
             }
         } else {
             $this->fail('Unsupported manga import file structure.');
