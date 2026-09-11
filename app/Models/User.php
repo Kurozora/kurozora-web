@@ -608,9 +608,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     {
         $this->increment('state_version');
 
-        PublishUserStateChange::dispatch($this->getKey())
-            ->afterCommit()
-            ->delay(now()->addSeconds((int) config('library.state_hint_delay_seconds', 2)));
+        PublishUserStateChange::dispatch($this->getKey())->afterCommit();
     }
 
     /**

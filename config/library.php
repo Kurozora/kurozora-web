@@ -14,7 +14,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | State hint delay
     |--------------------------------------------------------------------------
     |
     | Number of seconds a queued state-change hint waits before it is published.
