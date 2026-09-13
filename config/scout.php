@@ -87,6 +87,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Tolerate Search Outage
+    |--------------------------------------------------------------------------
+    |
+    | This option controls whether Meilisearch transport failures during an
+    | index write are logged and swallowed instead of thrown. Enable it for
+    | operator runs against a Meilisearch reachable only over a flaky link,
+    | so a dropped connection cannot abort a long scrape or backfill.
+    |
+    */
+
+    'tolerate_outage'=> env('SCOUT_TOLERATE_OUTAGE', false),
+
+    /*
+    |--------------------------------------------------------------------------
     | Identify User
     |--------------------------------------------------------------------------
     |
@@ -136,7 +150,7 @@ return [
             \App\Models\Anime::TABLE_NAME => [
                 'searchableAttributes' => ['original_title', 'title', 'synonym_titles', 'translations', 'synopsis', 'tagline', 'tags'],
                 'sortableAttributes'=> ['original_title', 'title', 'duration', 'air_time', 'air_day', 'air_season', 'rank_total', 'view_count', 'started_at', 'ended_at', 'created_at', 'updated_at'],
-                'filterableAttributes'=> ['id', 'letter', 'country_id', 'tv_rating_id', 'media_type_id', 'source_id', 'status_id', 'genres.id', 'themes.id', 'duration', 'air_time', 'air_day', 'air_season', 'is_nsfw', 'episode_count', 'season_count', 'started_at', 'ended_at'],
+                'filterableAttributes'=> ['id', 'letter', 'country_id', 'tv_rating_id', 'media_type_id', 'source_id', 'status_id', 'genres.id', 'themes.id', 'duration', 'air_time', 'air_time_minutes', 'air_day', 'air_season', 'is_nsfw', 'episode_count', 'season_count', 'started_at', 'ended_at'],
                 'pagination' => ['maxTotalHits' => 10000],
             ],
             \App\Models\AppTheme::TABLE_NAME => [
@@ -152,7 +166,7 @@ return [
             \App\Models\Episode::TABLE_NAME => [
                 'searchableAttributes' => ['title', 'translations', 'synopsis'],
                 'sortableAttributes'=> ['duration', 'number', 'number_total', 'title', 'rank_total', 'started_at', 'ended_at', 'created_at', 'updated_at'],
-                'filterableAttributes'=> ['id', 'letter', 'duration', 'is_filler', 'is_nsfw', 'is_special', 'is_premiere', 'is_finale', 'is_verified', 'number', 'number_total', 'season_id', 'tv_rating_id', 'started_at', 'ended_at'],
+                'filterableAttributes'=> ['id', 'letter', 'duration', 'filler_kind', 'is_nsfw', 'is_special', 'is_premiere', 'is_finale', 'is_verified', 'number', 'number_total', 'season_id', 'tv_rating_id', 'started_at', 'ended_at', 'is_filler'], // TODO: Remove `is_filler` after 1.15.0 release
             ],
             \App\Models\Game::TABLE_NAME => [
                 'searchableAttributes' => ['original_title', 'title', 'synonym_titles', 'translations', 'synopsis', 'tagline', 'tags'],
@@ -163,7 +177,7 @@ return [
             \App\Models\Manga::TABLE_NAME => [
                 'searchableAttributes' => ['original_title', 'title', 'synonym_titles', 'translations', 'synopsis', 'tagline', 'tags'],
                 'sortableAttributes'=> ['original_title', 'title', 'duration', 'publication_time', 'publication_day', 'publication_season', 'rank_total', 'started_at', 'ended_at', 'created_at', 'updated_at'],
-                'filterableAttributes'=> ['id', 'letter', 'duration', 'publication_time', 'publication_day', 'publication_season', 'is_nsfw', 'country_id', 'tv_rating_id', 'media_type_id', 'source_id', 'status_id', 'genres.id', 'themes.id', 'volume_count', 'chapter_count', 'page_count', 'started_at', 'ended_at'],
+                'filterableAttributes'=> ['id', 'letter', 'duration', 'publication_time', 'publication_time_minutes', 'publication_day', 'publication_season', 'is_nsfw', 'country_id', 'tv_rating_id', 'media_type_id', 'source_id', 'status_id', 'genres.id', 'themes.id', 'volume_count', 'chapter_count', 'page_count', 'started_at', 'ended_at'],
                 'pagination' => ['maxTotalHits' => 10000],
             ],
             \App\Models\Person::TABLE_NAME => [
@@ -172,7 +186,7 @@ return [
                 'filterableAttributes'=> ['id', 'letter', 'astrological_sign', 'birth_month', 'birthdate', 'deceased_date'],
             ],
             \App\Models\Platform::TABLE_NAME => [
-                'searchableAttributes' => ['original_name', 'name', 'alternative_names', 'translations', 'about', 'tagline',],
+                'searchableAttributes' => ['original_name', 'name', 'alternative_names', 'translations', 'about', 'tagline'],
                 'sortableAttributes'=> ['original_name', 'name', 'generation', 'type', 'rank_total', 'started_at', 'ended_at', 'created_at', 'updated_at'],
                 'filterableAttributes'=> ['id', 'letter', 'generation', 'type', 'started_at', 'ended_at'],
             ],

@@ -773,6 +773,7 @@ class Manga extends KModel implements HasMedia, Sitemapable
 //            ->map(function ($item) {
 //                return $item->toSearchableArray();
 //            });
+        $manga['publication_time_minutes'] = minutes_past_midnight($this->publication_time);
         $manga['started_at'] = $this->started_at?->timestamp;
         $manga['ended_at'] = $this->ended_at?->timestamp;
         $manga['created_at'] = $this->created_at?->timestamp;

@@ -27,6 +27,7 @@ use App\Models\Studio;
 use App\Models\User;
 use App\Models\UserLibrary;
 use App\Scopes\IgnoreListScope;
+use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\Pagination\Paginator;
@@ -37,6 +38,29 @@ use Uri;
 
 class SearchController extends Controller
 {
+    /**
+     * The weekday filters read in the requester's timezone.
+     */
+    private const array SCHEDULE_DAY_FIELDS = ['air_day', 'publication_day'];
+
+    /**
+     * The part of day filters and the attribute each one reads.
+     */
+    private const array DAY_PART_FIELDS = [
+        'air_time_part' => 'air_time_minutes',
+        'publication_time_part' => 'publication_time_minutes',
+    ];
+
+    /**
+     * The start and end hour of every part of the day.
+     */
+    private const array DAY_PARTS = [
+        0 => [23, 6],
+        1 => [6, 12],
+        2 => [12, 18],
+        3 => [18, 23],
+    ];
+
     /**
      * Retrieves search results of the given type.
      *
@@ -211,57 +235,322 @@ class SearchController extends Controller
      */
     private function filter($model, SearchRequest $request, Builder $resource)
     {
-        if ($filters = $request->input('filter')) {
-            $filters = json_decode(base64_decode($filters), true);
-            $searchFilters = $model::searchFilters();
+        $filters = $request->input('filter');
 
-            $wheres = [];
-            $whereIns = [];
-            $whereNotIns = [];
+        if (empty($filters)) {
+            return;
+        }
 
-            $toArray = function ($value) {
-                if (is_string($value)) {
-                    return str_contains($value, ',')
-                        ? array_map('trim', explode(',', $value))
-                        : [$value];
-                }
+        $filters = json_decode(base64_decode($filters), true);
 
-                return is_array($value) ? $value : [$value];
+        if (!is_array($filters)) {
+            return;
+        }
+
+        $searchFilters = $model::searchFilters();
+        $expressions = [];
+
+        foreach ($filters as $key => $value) {
+            if (!in_array($this->indexedField($key), $searchFilters, true)) {
+                continue;
+            }
+
+            $expression = match (true) {
+                in_array($key, self::SCHEDULE_DAY_FIELDS, true) => $this->scheduleDayExpression($key, $value),
+                array_key_exists($key, self::DAY_PART_FIELDS) => $this->dayPartExpression($key, $value),
+                default => $this->attributeExpression($key, $value),
             };
 
-            foreach ($searchFilters as $searchFilter) {
-                if (!isset($filters[$searchFilter])) {
-                    continue;
-                }
+            if (!empty($expression)) {
+                $expressions[] = $expression;
+            }
+        }
 
-                $value = $filters[$searchFilter];
+        if (!empty($expressions)) {
+            $resource->options(['filter' => implode(' AND ', $expressions)]);
+        }
+    }
 
-                // Simple value (where)
-                if (!is_array($value)) {
-                    // String with commas → whereIn
-                    if (is_string($value) && str_contains($value, ',')) {
-                        $whereIns[$searchFilter] = $toArray($value);
-                    } else {
-                        $wheres[$searchFilter] = $value;
-                    }
+    /**
+     * Returns the indexed attribute a filter key reads.
+     *
+     * @param string $key
+     *
+     * @return string
+     */
+    private function indexedField(string $key): string
+    {
+        return self::DAY_PART_FIELDS[$key] ?? $key;
+    }
 
-                    continue;
-                }
+    /**
+     * Compiles a filter key into a Meilisearch expression.
+     *
+     * @param string $field
+     * @param mixed  $value
+     *
+     * @return string|null
+     */
+    private function attributeExpression(string $field, mixed $value): ?string
+    {
+        if (!is_array($value)) {
+            if (is_string($value) && str_contains($value, ',')) {
+                return sprintf('%s IN [%s]', $field, $this->listValues(array_map('trim', explode(',', $value))));
+            }
 
-                // Structured include/exclude array
-                if (isset($value['include'])) {
-                    $whereIns[$searchFilter] = $toArray($value['include']);
-                }
+            return sprintf('%s = %s', $field, $this->literal($value));
+        }
 
-                if (isset($value['exclude'])) {
-                    $whereNotIns[$searchFilter] = $toArray($value['exclude']);
+        $clauses = [];
+
+        if (!empty($value['include'])) {
+            $clauses[] = sprintf('%s IN [%s]', $field, $this->listValues((array) $value['include']));
+        }
+
+        if (!empty($value['exclude'])) {
+            $clauses[] = sprintf('%s NOT IN [%s]', $field, $this->listValues((array) $value['exclude']));
+        }
+
+        if (isset($value['from'])) {
+            $clauses[] = sprintf('%s >= %d', $field, (int) $value['from']);
+        }
+
+        if (isset($value['to'])) {
+            $clauses[] = sprintf('%s <= %d', $field, (int) $value['to']);
+        }
+
+        if (empty($clauses) && array_is_list($value) && !empty($value)) {
+            $clauses[] = sprintf('%s IN [%s]', $field, $this->listValues($value));
+        }
+
+        return empty($clauses) ? null : '(' . implode(' AND ', $clauses) . ')';
+    }
+
+    /**
+     * Compiles a weekday filter read in the requester's timezone.
+     *
+     * @param string $field
+     * @param mixed  $value
+     *
+     * @return string|null
+     */
+    private function scheduleDayExpression(string $field, mixed $value): ?string
+    {
+        $timeField = $field === 'air_day' ? 'air_time_minutes' : 'publication_time_minutes';
+        $shift = $this->minutesBehindJapan();
+        $clauses = [];
+
+        foreach (['include' => false, 'exclude' => true] as $bucket => $negated) {
+            $days = $this->bucketValues($value, $bucket);
+
+            if (empty($days)) {
+                continue;
+            }
+
+            $parts = array_map(function ($day) use ($field, $timeField, $shift) {
+                return $this->localDayExpression($field, $timeField, (int) $day, $shift);
+            }, $days);
+
+            $clauses[] = ($negated ? 'NOT ' : '') . '(' . implode(' OR ', $parts) . ')';
+        }
+
+        return empty($clauses) ? null : '(' . implode(' AND ', $clauses) . ')';
+    }
+
+    /**
+     * Compiles a single weekday into a Japanese broadcast window.
+     *
+     * @param string $dayField
+     * @param string $timeField
+     * @param int    $localDay
+     * @param int    $shift
+     *
+     * @return string
+     */
+    private function localDayExpression(string $dayField, string $timeField, int $localDay, int $shift): string
+    {
+        $start = ((($localDay * 1440) + $shift) % 10080 + 10080) % 10080;
+        $day = intdiv($start, 1440);
+        $offset = $start % 1440;
+
+        if ($offset === 0) {
+            return sprintf('%s = %d', $dayField, $day);
+        }
+
+        return sprintf(
+            '((%s = %d AND %s >= %d) OR (%s = %d AND %s < %d))',
+            $dayField,
+            $day,
+            $timeField,
+            $offset,
+            $dayField,
+            ($day + 1) % 7,
+            $timeField,
+            $offset
+        );
+    }
+
+    /**
+     * Compiles a part of day filter read in the requester's timezone.
+     *
+     * @param string $field
+     * @param mixed  $value
+     *
+     * @return string|null
+     */
+    private function dayPartExpression(string $field, mixed $value): ?string
+    {
+        $timeField = self::DAY_PART_FIELDS[$field];
+        $shift = $this->minutesBehindJapan();
+        $clauses = [];
+
+        foreach (['include' => false, 'exclude' => true] as $bucket => $negated) {
+            $parts = $this->bucketValues($value, $bucket);
+
+            if (empty($parts)) {
+                continue;
+            }
+
+            $ranges = [];
+
+            foreach ($parts as $part) {
+                foreach ($this->dayPartRanges((int) $part, $shift) as $range) {
+                    $ranges[] = sprintf('(%s >= %d AND %s < %d)', $timeField, $range[0], $timeField, $range[1]);
                 }
             }
 
-            $resource->wheres = $wheres;
-            $resource->whereIns = $whereIns;
-            $resource->whereNotIns = $whereNotIns;
+            if (empty($ranges)) {
+                continue;
+            }
+
+            $clauses[] = ($negated ? 'NOT ' : '') . '(' . implode(' OR ', $ranges) . ')';
         }
+
+        return empty($clauses) ? null : '(' . implode(' AND ', $clauses) . ')';
+    }
+
+    /**
+     * Returns the Japanese minute ranges a part of day covers.
+     *
+     * @param int $part
+     * @param int $shift
+     *
+     * @return array
+     */
+    private function dayPartRanges(int $part, int $shift): array
+    {
+        $bounds = self::DAY_PARTS[$part] ?? null;
+
+        if ($bounds === null) {
+            return [];
+        }
+
+        [$startHour, $endHour] = $bounds;
+        $localRanges = $startHour > $endHour
+            ? [[$startHour * 60, 1440], [0, $endHour * 60]]
+            : [[$startHour * 60, $endHour * 60]];
+
+        $ranges = [];
+
+        foreach ($localRanges as [$start, $end]) {
+            $shiftedStart = (($start + $shift) % 1440 + 1440) % 1440;
+            $shiftedEnd = (($end + $shift) % 1440 + 1440) % 1440;
+
+            if ($shiftedEnd === 0) {
+                $shiftedEnd = 1440;
+            }
+
+            if ($shiftedStart < $shiftedEnd) {
+                $ranges[] = [$shiftedStart, $shiftedEnd];
+                continue;
+            }
+
+            $ranges[] = [$shiftedStart, 1440];
+
+            if ($shiftedEnd > 0 && $shiftedEnd < 1440) {
+                $ranges[] = [0, $shiftedEnd];
+            }
+        }
+
+        return array_values(array_filter($ranges, fn ($range) => $range[0] < $range[1]));
+    }
+
+    /**
+     * Returns the minutes Japan runs ahead of the requester.
+     *
+     * @return int
+     */
+    private function minutesBehindJapan(): int
+    {
+        $timezone = request()?->attributes->get('formatTimezone', 'UTC') ?? 'UTC';
+        $now = now();
+
+        try {
+            $userOffset = $now->copy()->setTimezone($timezone)->utcOffset();
+        } catch (Exception $exception) {
+            $userOffset = 0;
+        }
+
+        return $now->copy()->setTimezone('Asia/Tokyo')->utcOffset() - $userOffset;
+    }
+
+    /**
+     * Returns the values held in a filter's bucket.
+     *
+     * @param mixed  $value
+     * @param string $bucket
+     *
+     * @return array
+     */
+    private function bucketValues(mixed $value, string $bucket): array
+    {
+        if (is_array($value)) {
+            if (!empty($value[$bucket])) {
+                return (array) $value[$bucket];
+            }
+
+            return $bucket === 'include' && array_is_list($value) ? $value : [];
+        }
+
+        return $bucket === 'include' && $value !== null ? [$value] : [];
+    }
+
+    /**
+     * Returns the values written as a Meilisearch list.
+     *
+     * @param array $values
+     *
+     * @return string
+     */
+    private function listValues(array $values): string
+    {
+        return collect($values)
+            ->map(fn ($value) => $this->literal($value))
+            ->implode(', ');
+    }
+
+    /**
+     * Returns the value written as a Meilisearch literal.
+     *
+     * @param mixed $value
+     *
+     * @return string
+     */
+    private function literal(mixed $value): string
+    {
+        if (is_bool($value)) {
+            return $value ? 'true' : 'false';
+        }
+
+        if (is_int($value) || is_float($value)) {
+            return (string) $value;
+        }
+
+        if (filter_var($value, FILTER_VALIDATE_INT) !== false) {
+            return (string) (int) $value;
+        }
+
+        return '"' . addcslashes((string) $value, '"\\') . '"';
     }
 
     /**

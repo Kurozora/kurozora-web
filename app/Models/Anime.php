@@ -804,6 +804,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
 //            ->map(function ($item) {
 //                return $item->toSearchableArray();
 //            });
+        $anime['air_time_minutes'] = minutes_past_midnight($this->air_time);
         $anime['started_at'] = $this->started_at?->timestamp;
         $anime['ended_at'] = $this->ended_at?->timestamp;
         $anime['created_at'] = $this->created_at?->timestamp;

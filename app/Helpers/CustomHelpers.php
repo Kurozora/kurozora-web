@@ -562,3 +562,33 @@ if (!function_exists('appStoreVerifier')) {
         );
     }
 }
+
+if (!function_exists('minutes_past_midnight')) {
+    /**
+     * Get the minutes past midnight of a wall-clock time.
+     *
+     * @param string|null $time
+     * @return int|null
+     */
+    function minutes_past_midnight(?string $time): ?int
+    {
+        if (empty($time)) {
+            return null;
+        }
+
+        $parts = explode(':', $time);
+
+        if (count($parts) < 2) {
+            return null;
+        }
+
+        $hours = filter_var($parts[0], FILTER_VALIDATE_INT);
+        $minutes = filter_var($parts[1], FILTER_VALIDATE_INT);
+
+        if ($hours === false || $minutes === false) {
+            return null;
+        }
+
+        return ($hours * 60) + $minutes;
+    }
+}
