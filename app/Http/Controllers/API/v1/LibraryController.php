@@ -673,6 +673,26 @@ class LibraryController extends Controller
             Manga::class => $trackable?->publication_date?->timestamp,
             default => null,
         };
+        $scheduleDay = match ($morphClass) {
+            Anime::class => $trackable?->air_day,
+            default => $trackable?->publication_day,
+        };
+        $scheduleSeason = match ($morphClass) {
+            Anime::class => $trackable?->air_season,
+            default => $trackable?->publication_season,
+        };
+        $episodeCount = match ($morphClass) {
+            Anime::class => $trackable?->episode_count,
+            Manga::class => $trackable?->chapter_count,
+            default => $trackable?->edition_count,
+        };
+        $seasonCount = match ($morphClass) {
+            Anime::class => $trackable?->season_count,
+            Manga::class => $trackable?->volume_count,
+            default => null,
+        };
+        $firstAired = $trackable?->started_at ?? $trackable?->published_at;
+        $lastAired = $trackable?->ended_at;
 
         $ratingID = $row->rating_id ?? null;
         $favoriteID = $row->favorite_id ?? null;
@@ -713,12 +733,24 @@ class LibraryController extends Controller
             'bannerURL' => $banner?->getFullUrl(),
             'bannerBackgroundColor' => $banner?->getCustomProperty('background_color'),
             'genresLocalized' => $trackable?->genres->pluck('name')->implode(', '),
+            'mediaTypeID' => $trackable?->media_type_id !== null ? (int) $trackable->media_type_id : null,
             'mediaTypeName' => $trackable?->mediaType?->name,
+            'statusID' => $trackable?->status_id !== null ? (int) $trackable->status_id : null,
             'statusName' => $trackable?->status?->name,
             'airingDate' => $airingDate,
             'durationCount' => $trackable?->duration,
             'popularityRank' => $trackable?->mediaStat?->rank_total,
             'publicRating' => $trackable?->mediaStat?->rating_average !== null ? (float) $trackable->mediaStat->rating_average : null,
+            'tvRatingID' => $trackable?->tv_rating_id !== null ? (int) $trackable->tv_rating_id : null,
+            'sourceID' => $trackable?->source_id !== null ? (int) $trackable->source_id : null,
+            'countryOfOrigin' => $trackable?->country_id,
+            'isNSFW' => $trackable?->is_nsfw !== null ? (bool) $trackable->is_nsfw : null,
+            'scheduleDay' => $scheduleDay?->value,
+            'scheduleSeason' => $scheduleSeason?->value,
+            'episodeCount' => $episodeCount !== null ? (int) $episodeCount : null,
+            'seasonCount' => $seasonCount !== null ? (int) $seasonCount : null,
+            'firstAired' => $firstAired ? Carbon::parse($firstAired)->timestamp : null,
+            'lastAired' => $lastAired ? Carbon::parse($lastAired)->timestamp : null,
         ];
     }
 
