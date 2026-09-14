@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Notifications\LibraryImportFinished;
 use App\Notifications\LibraryImportUnsupported;
 use App\Notifications\LocalLibraryImportFinished;
+use App\Notifications\NewEpisode;
+use App\Notifications\NewEpisodes;
 use App\Notifications\NewFeedMessageReply;
 use App\Notifications\NewFeedMessageReShare;
 use App\Notifications\NewFollower;
@@ -127,6 +129,19 @@ class Notification extends DatabaseNotification
                     : __('Your account has been suspended.');
             case UserTimeoutExpired::class:
                 return __('Your account suspension has ended. Welcome back!');
+            // New episode notifications
+            case NewEpisode::class:
+                return __('Episode :number of :title is out now.', [
+                    'number' => self::getData('number'),
+                    'title' => self::getData('animeTitle'),
+                ]);
+            case NewEpisodes::class:
+                $count = (int) self::getData('count');
+
+                return trans_choice('{1} :count new episode of :title is out now.|[2,*] :count new episodes of :title are out now.', $count, [
+                    'count' => $count,
+                    'title' => self::getData('animeTitle'),
+                ]);
         }
 
         return __('You have a new notification.');

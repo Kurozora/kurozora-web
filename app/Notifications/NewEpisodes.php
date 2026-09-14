@@ -137,6 +137,8 @@ class NewEpisodes extends Notification implements ShouldQueue
             'posterImageURL' => $this->posterImageURL,
             'episodes' => $this->episodes,
             'count' => count($this->episodes),
+            // The earliest episode of the batch is the one a tap opens.
+            'episodeID' => $this->episodes[0]['episodeID'] ?? null,
         ];
     }
 
