@@ -684,7 +684,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
             $productIdentifier = '-//' . $appName . '//' . $appName . '//' . strtoupper($appLocale);
 
             $calendar = Calendar::create($appName)
-                ->description(__('The Kurozora calendar group contains all reminders you have subscribed to in the Kurozora app.'))
+                ->description(__('The :x calendar group contains all reminders you have subscribed to in the :x app.', ['x' => config('app.name')]))
                 ->productIdentifier($productIdentifier)
                 ->refreshInterval(UserReminder::CAL_REFRESH_INTERVAL)
                 ->appendProperty(TextProperty::create('CALSCALE', 'GREGORIAN'))
@@ -703,7 +703,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
                     // Generate a deterministic UID instead of random UUID
                     $uniqueIdentifier = 'episode-' . $episode->id . '@' . $appDomain;
 
-                    if ( $episode->number != $episode->number_total) {
+                    if ($episode->number != $episode->number_total) {
                         $eventName = __(':title Episode :number (:total_number)', ['title' => $anime->title, 'number' => $episode->number, 'total_number' => $episode->number_total]);
                     } else {
                         $eventName = __(':title Episode :number', ['title' => $anime->title, 'number' => $episode->number]);
@@ -716,7 +716,8 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
                         ->startsAt($episode->started_at)
                         ->endsAt($episode->ended_at)
                         ->uniqueIdentifier($uniqueIdentifier)
-                        ->appendProperty(TextProperty::create('URL', route('anime.details', $anime)))
+                        // An API request resolves the route key to the id.
+                        ->appendProperty(TextProperty::create('URL', route('anime.details', $anime->slug)))
                         ->appendProperty(TextProperty::create('X-APPLE-TRAVEL-ADVISORY-BEHAVIOR', 'AUTOMATIC'));
 
                     // Prebuild alert messages with deterministic UIDs
