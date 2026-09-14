@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Enums\MediaCollection;
-use App\Enums\UserActivityStatus;
 use App\Enums\UserLibraryStatus;
 use App\Helpers\OptionsBag;
 use App\Jobs\FetchSessionLocation;
@@ -76,8 +75,8 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
 {
     use Authorizable,
         Favoriter,
-        Follower,
         Followable,
+        Follower,
         HasApiTokens,
         HasBlocking,
         HasFactory,
@@ -94,10 +93,10 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         InteractsWithMedia,
         InteractsWithMediaExtension,
         LogsActivity,
-        Notifiable,
         MassPrunable,
         MediaRater,
         Noter,
+        Notifiable,
         Reacterable,
         Reminder,
         Searchable,
@@ -237,7 +236,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      *
      * @return string
      */
-    function slugSourceFromUsername(): string
+    public function slugSourceFromUsername(): string
     {
         $source = $this->romanize((string) $this->username);
         $slug = Str::slug($this->nameSymbols($source), '_');
@@ -493,7 +492,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      *
      * @return HasMany
      */
-    function feedMessages(): HasMany
+    public function feedMessages(): HasMany
     {
         return $this->hasMany(FeedMessage::class);
     }
@@ -535,34 +534,11 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     }
 
     /**
-     * Returns the user's activity status based on their sessions.
-     *
-     * @return UserActivityStatus
-     */
-    public function getActivityStatusAttribute(): UserActivityStatus
-    {
-        $personalAccessTokenLastUsedAt = $this->latestToken?->last_used_at;
-        $sessionLastActivity = Carbon::createFromTimestamp($this->latestSession?->last_activity ?? 0);
-
-        $activity = max($sessionLastActivity, $personalAccessTokenLastUsedAt);
-
-        if ($activity >= now()->subMinutes(5)) {
-            // Seen within the last 5 minutes
-            return UserActivityStatus::Online();
-        } else if ($activity >= now()->subMinutes(15)) {
-            // Seen within the last 15 minutes
-            return UserActivityStatus::SeenRecently();
-        }
-
-        return UserActivityStatus::Offline();
-    }
-
-    /**
      * Returns the associated sessions for the user
      *
      * @return HasMany
      */
-    function sessions(): HasMany
+    public function sessions(): HasMany
     {
         return $this->hasMany(Session::class);
     }
@@ -646,8 +622,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
             },
             'activeTimeout',
             'media',
-            'latestToken',
-            'latestSession',
+            'roles',
         ])
             ->withCount(['followers', 'following', 'mediaRatings', 'achievements']);
 
@@ -675,8 +650,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
             },
             'activeTimeout',
             'media',
-            'latestToken',
-            'latestSession',
+            'roles',
         ])
             ->loadCount(['followers', 'following', 'mediaRatings', 'achievements']);
 
@@ -694,7 +668,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      *
      * @return string
      */
-    function getCalendar(): string
+    public function getCalendar(): string
     {
         $reminders = $this->reminders;
 
@@ -786,7 +760,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      *
      * @return bool
      */
-    function hasWatched(Episode $episode): bool
+    public function hasWatched(Episode $episode): bool
     {
         return $this->userWatchedEpisodes()
             ->completed()
@@ -801,7 +775,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      *
      * @return bool
      */
-    function hasWatchedSeason(Season $season): bool
+    public function hasWatchedSeason(Season $season): bool
     {
         return $this->userWatchedEpisodes()
                 ->completed()
@@ -814,7 +788,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      *
      * @return BelongsToMany
      */
-    function episodes(): BelongsToMany
+    public function episodes(): BelongsToMany
     {
         return $this->belongsToMany(Episode::class, UserWatchedEpisode::class, 'user_id', 'episode_id')
             ->withTimestamps();
@@ -825,7 +799,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      *
      * @return HasMany
      */
-    function userWatchedEpisodes(): HasMany
+    public function userWatchedEpisodes(): HasMany
     {
         return $this->hasMany(UserWatchedEpisode::class);
     }
@@ -835,7 +809,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      *
      * @return HasMany
      */
-    function userRewatchedEpisodes(): HasMany
+    public function userRewatchedEpisodes(): HasMany
     {
         return $this->hasMany(UserWatchedEpisode::class)
             ->completed()
@@ -849,7 +823,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      *
      * @return Builder
      */
-    function up_next_episodes(?string $modelId = null): Builder
+    public function up_next_episodes(?string $modelId = null): Builder
     {
         $subquery = Episode::join(Season::TABLE_NAME, Episode::TABLE_NAME . '.season_id', '=', Season::TABLE_NAME . '.id')
             ->join(Anime::TABLE_NAME, Season::TABLE_NAME . '.anime_id', '=', Anime::TABLE_NAME . '.id')
@@ -895,7 +869,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      *
      * @return Builder
      */
-    function watched_episodes(?string $modelId = null): Builder
+    public function watched_episodes(?string $modelId = null): Builder
     {
         return Episode::select(Episode::TABLE_NAME . '.*')
             ->join(UserWatchedEpisode::TABLE_NAME, function ($join) {
@@ -957,7 +931,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      *
      * @return SessionAttribute
      */
-    function createSessionAttributes(Session|PersonalAccessToken $model, array $options = [], bool $notify = false): SessionAttribute
+    public function createSessionAttributes(Session|PersonalAccessToken $model, array $options = [], bool $notify = false): SessionAttribute
     {
         $options = new OptionsBag($options);
 
@@ -974,6 +948,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
             'platform_version' => $options->get('platform_version'),
             'device_vendor' => $options->get('device_vendor'),
             'device_model' => $options->get('device_model'),
+            'app_source' => $options->get('app_source') ?? $this->resolveAppSource(),
         ]);
 
         // Dispatch job to retrieve location
@@ -987,6 +962,27 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         }
 
         return $sessionAttribute;
+    }
+
+    /**
+     * Resolves a human-readable source label for the client that made the current request.
+     *
+     * @return string
+     */
+    private function resolveAppSource(): string
+    {
+        $request = request();
+        $userAgent = parse_user_agent($request->userAgent());
+
+        if (($userAgent['bundle'] ?? null) === config('app.ios.bundle_id')) {
+            return 'Kurozora for iOS';
+        }
+
+        if ($jwt = $request->header('X-API-Key')) {
+            return APIClientToken::where('token', $jwt)->value('name') ?? 'Third-party client';
+        }
+
+        return 'Web browser';
     }
 
     /**
@@ -1051,7 +1047,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      *
      * @return bool
      */
-    function canDoAnimeImport(): bool
+    public function canDoAnimeImport(): bool
     {
         if (!$this->anime_imported_at) {
             return true;
@@ -1069,7 +1065,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      *
      * @return bool
      */
-    function canDoMangaImport(): bool
+    public function canDoMangaImport(): bool
     {
         if (!$this->manga_imported_at) {
             return true;
@@ -1108,7 +1104,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      *
      * @return HasMany
      */
-    function receipts(): HasMany
+    public function receipts(): HasMany
     {
         return $this->hasMany(UserReceipt::class, 'user_id', 'uuid');
     }
