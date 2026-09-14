@@ -22,4 +22,15 @@ return [
     */
 
     'import_progress_interval_seconds' => env('LIBRARY_IMPORT_PROGRESS_INTERVAL_SECONDS', 1),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Reminder window
+    |--------------------------------------------------------------------------
+    |
+    | Number of days ahead the episode sync stream carries.
+    |
+    */
+
+    'reminder_window_days' => env('LIBRARY_REMINDER_WINDOW_DAYS', 14),
 ];

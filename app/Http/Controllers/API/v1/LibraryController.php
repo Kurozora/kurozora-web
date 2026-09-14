@@ -21,9 +21,11 @@ use App\Http\Resources\GameResourceBasic;
 use App\Http\Resources\LiteratureResourceBasic;
 use App\Jobs\ProcessMALImport;
 use App\Models\Anime;
+use App\Models\Episode;
 use App\Models\Game;
 use App\Models\Manga;
 use App\Models\MediaRating;
+use App\Models\Season;
 use App\Models\User;
 use App\Models\UserFavorite;
 use App\Models\UserLibrary;
@@ -50,6 +52,28 @@ use Throwable;
 class LibraryController extends Controller
 {
     use WithStateVersionETag;
+
+    /**
+     * The catalog table each trackable stream is cursored over.
+     *
+     * @var array
+     */
+    private const array TRACKABLE_STREAMS = [
+        'shows' => Anime::class,
+        'literatures' => Manga::class,
+        'games' => Game::class,
+    ];
+
+    /**
+     * The `UserLibraryKind` value each trackable type carries.
+     *
+     * @var array
+     */
+    private const array KIND_VALUES = [
+        Anime::class => UserLibraryKind::Anime,
+        Manga::class => UserLibraryKind::Manga,
+        Game::class => UserLibraryKind::Game,
+    ];
 
     /**
      * Returns the authenticated user's library with the given status.
@@ -163,10 +187,7 @@ class LibraryController extends Controller
     }
 
     /**
-     * Returns the authenticated user's combined library delta since the given cursor.
-     *
-     * @throws InvalidEnumKeyException
-     * @throws InvalidEnumMemberException
+     * Returns the authenticated user's library delta across every sync stream.
      */
     public function sync(GetLibrarySyncRequest $request): JsonResponse
     {
@@ -175,40 +196,77 @@ class LibraryController extends Controller
         $user = auth()->user();
         $limit = (int) ($data['limit'] ?? 10000);
         $since = $data['since'] ?? [];
+        $syncTime = now()->timestamp;
 
-        $libraryKind = UserLibraryKind::fromValue((int) $data['kind']);
-        $morphClass = match ($libraryKind->value) {
-            UserLibraryKind::Manga => Manga::class,
-            UserLibraryKind::Game => Game::class,
-            default => Anime::class,
-        };
+        $entries = $this->syncEntries($user, $since['entries'] ?? [], $limit, $syncTime);
 
+        $attributes = ['syncTime' => $syncTime, 'streams' => ['entries' => $entries['stream']]];
+        $trackables = [];
+
+        foreach (self::TRACKABLE_STREAMS as $stream => $morphClass) {
+            $result = $this->syncTrackables(
+                $user,
+                $morphClass,
+                $since[$stream] ?? [],
+                $limit,
+                $entries['referencedIDs'][$morphClass] ?? [],
+                $syncTime
+            );
+
+            $attributes['streams'][$stream] = $result['stream'];
+            $trackables = array_merge($trackables, $result['rows']);
+        }
+
+        return JSONResult::success([
+            'data' => [
+                'attributes' => $attributes,
+                'relationships' => [
+                    'entries' => $entries['rows'],
+                    'trackables' => $trackables,
+                    'episodes' => $this->syncEpisodes($user),
+                ],
+            ],
+        ])->withHeaders([
+            'X-State-Version' => (string) $user->state_version,
+            'Cache-Control' => 'private, no-cache',
+        ]);
+    }
+
+    /**
+     * Returns the user-state delta over `user_libraries`.
+     *
+     * @param User $user
+     * @param array $since
+     * @param int $limit
+     * @param int $syncTime
+     *
+     * @return array
+     */
+    private function syncEntries(User $user, array $since, int $limit, int $syncTime): array
+    {
         $libraryTable = UserLibrary::TABLE_NAME;
         $ratingsTable = MediaRating::TABLE_NAME;
         $favoritesTable = UserFavorite::TABLE_NAME;
         $remindersTable = UserReminder::TABLE_NAME;
 
-        // Only `user_libraries` soft-deletes; the joined tables don't need a filter.
-        $query = UserLibrary::leftJoin($ratingsTable, function ($join) use ($ratingsTable, $libraryTable, $morphClass) {
+        // Only `user_libraries` soft-deletes.
+        $query = UserLibrary::leftJoin($ratingsTable, function ($join) use ($ratingsTable, $libraryTable) {
             $join->on($ratingsTable . '.user_id', '=', $libraryTable . '.user_id')
                 ->on($ratingsTable . '.model_id', '=', $libraryTable . '.trackable_id')
-                ->where($ratingsTable . '.model_type', '=', $morphClass);
+                ->on($ratingsTable . '.model_type', '=', $libraryTable . '.trackable_type');
         })
-            ->leftJoin($favoritesTable, function ($join) use ($favoritesTable, $libraryTable, $morphClass) {
+            ->leftJoin($favoritesTable, function ($join) use ($favoritesTable, $libraryTable) {
                 $join->on($favoritesTable . '.user_id', '=', $libraryTable . '.user_id')
                     ->on($favoritesTable . '.favorable_id', '=', $libraryTable . '.trackable_id')
-                    ->where($favoritesTable . '.favorable_type', '=', $morphClass);
+                    ->on($favoritesTable . '.favorable_type', '=', $libraryTable . '.trackable_type');
             })
-            ->leftJoin($remindersTable, function ($join) use ($remindersTable, $libraryTable, $morphClass) {
+            ->leftJoin($remindersTable, function ($join) use ($remindersTable, $libraryTable) {
                 $join->on($remindersTable . '.user_id', '=', $libraryTable . '.user_id')
                     ->on($remindersTable . '.remindable_id', '=', $libraryTable . '.trackable_id')
-                    ->where($remindersTable . '.remindable_type', '=', $morphClass);
+                    ->on($remindersTable . '.remindable_type', '=', $libraryTable . '.trackable_type');
             })
             ->where($libraryTable . '.user_id', '=', $user->id)
-            ->where($libraryTable . '.trackable_type', '=', $morphClass)
-            ->with(['trackable' => function ($q) {
-                $q->withoutGlobalScopes()->with(['translation', 'media', 'genres', 'status', 'mediaType', 'mediaStat']);
-            }])
+            ->whereIn($libraryTable . '.trackable_type', array_values(self::TRACKABLE_STREAMS))
             ->select([
                 $libraryTable . '.*',
                 $ratingsTable . '.id as rating_id',
@@ -224,50 +282,30 @@ class LibraryController extends Controller
                 $remindersTable . '.created_at as reminded_at',
             ]);
 
-        if (!empty($since['updated_at'])) {
-            // Bind as a formatted string; a Carbon binding loses microsecond precision.
-            $sinceUpdatedAt = Carbon::parse($since['updated_at']);
-            $sinceBoundary = $sinceUpdatedAt->format('Y-m-d H:i:s.u');
-            $sinceId = (int) ($since['id'] ?? 0);
-
-            // A cursor older than the tombstone-retention horizon is stale.
-            $horizon = now()->subDays((int) config('library.tombstone_retention_days', 90));
-            $freshness = isset($since['synced_at'])
-                ? Carbon::createFromTimestamp((int) $since['synced_at'])
-                : $sinceUpdatedAt;
-            if ($freshness->lt($horizon)) {
-                throw new GoneHttpException(__('Your sync cursor has expired. Restart the sync without a cursor.'));
-            }
-
-            // Incremental sync surfaces tombstones.
-            $query->withTrashed()
-                ->where(function ($outer) use ($libraryTable, $sinceBoundary, $sinceId) {
-                    $outer->where($libraryTable . '.updated_at', '>', $sinceBoundary)
-                        ->orWhere(function ($inner) use ($libraryTable, $sinceBoundary, $sinceId) {
-                            $inner->where($libraryTable . '.updated_at', '=', $sinceBoundary)
-                                ->where($libraryTable . '.id', '>', $sinceId);
-                        });
-                });
-        }
-        // Initial sync — SoftDeletes scope already filters tombstones; pure waste to emit them.
+        $cursor = $this->applyCursor($query, $libraryTable, $since, true);
 
         // Total rows past the cursor.
         $total = (clone $query)->count();
 
-        // `lazy()` doesn't cap rows itself; the loop below enforces `limit` explicitly.
+        // The loop below enforces `limit`.
         $rowsCursor = $query
             ->orderBy($libraryTable . '.updated_at')
             ->orderBy($libraryTable . '.id')
             ->lazy(500);
 
-        $libraries = [];
+        $rows = [];
+        $referencedIDs = [];
         $count = 0;
         $lastRow = null;
 
         foreach ($rowsCursor as $row) {
             if ($count < $limit) {
-                $libraries[] = $this->buildSyncEntry($row, $morphClass);
+                $rows[] = $this->buildEntryRow($row);
                 $lastRow = $row;
+
+                if ($row->deleted_at === null) {
+                    $referencedIDs[$row->trackable_type][] = $row->trackable_id;
+                }
             }
             $count++;
 
@@ -276,45 +314,197 @@ class LibraryController extends Controller
             }
         }
 
-        $hasMore = $count > $limit;
-        $syncTime = now()->timestamp;
-        $hasIncomingCursor = !empty($since['updated_at']);
+        return [
+            'stream' => [
+                'hasMore' => $count > $limit,
+                'total' => $total,
+                'nextSince' => $this->nextCursor($lastRow, $cursor, $syncTime),
+            ],
+            'rows' => $rows,
+            'referencedIDs' => $referencedIDs,
+        ];
+    }
 
+    /**
+     * Returns the catalog delta over one trackable table.
+     *
+     * @param User $user
+     * @param string $morphClass
+     * @param array $since
+     * @param int $limit
+     * @param array $referencedIDs
+     * @param int $syncTime
+     *
+     * @return array
+     */
+    private function syncTrackables(User $user, string $morphClass, array $since, int $limit, array $referencedIDs, int $syncTime): array
+    {
+        $table = $morphClass::TABLE_NAME;
+        $libraryTable = UserLibrary::TABLE_NAME;
+
+        $query = $morphClass::withoutGlobalScopes()
+            ->with(['translation', 'media', 'genres', 'status', 'mediaType', 'mediaStat'])
+            ->whereIn($table . '.id', function ($sub) use ($libraryTable, $morphClass, $user) {
+                $sub->select('trackable_id')
+                    ->from($libraryTable)
+                    ->where('user_id', '=', $user->id)
+                    ->where('trackable_type', '=', $morphClass)
+                    ->whereNull('deleted_at');
+            });
+
+        $cursor = $this->applyCursor($query, $table, $since, false);
+
+        $total = (clone $query)->count();
+
+        $models = $query
+            ->orderBy($table . '.updated_at')
+            ->orderBy($table . '.id')
+            ->limit($limit + 1)
+            ->get();
+
+        $hasMore = $models->count() > $limit;
+        $models = $models->take($limit);
+        $lastRow = $models->last();
+
+        // A trackable an entry has just started pointing at predates the cursor.
+        $gapIDs = array_diff($referencedIDs, $models->pluck('id')->all());
+
+        if (!empty($gapIDs)) {
+            $models = $models->concat(
+                $morphClass::withoutGlobalScopes()
+                    ->with(['translation', 'media', 'genres', 'status', 'mediaType', 'mediaStat'])
+                    ->whereIn($table . '.id', $gapIDs)
+                    ->get()
+            );
+        }
+
+        return [
+            'stream' => [
+                'hasMore' => $hasMore,
+                'total' => $total,
+                'nextSince' => $this->nextCursor($lastRow, $cursor, $syncTime),
+            ],
+            'rows' => $models->map(fn ($model) => $this->buildTrackableRow($model, $morphClass))->all(),
+        ];
+    }
+
+    /**
+     * Returns the episodes of the user's reminded shows inside the reminder window.
+     *
+     * @param User $user
+     *
+     * @return array
+     */
+    private function syncEpisodes(User $user): array
+    {
+        $remindedIDs = UserReminder::where('user_id', '=', $user->id)
+            ->where('remindable_type', '=', Anime::class)
+            ->pluck('remindable_id');
+
+        if ($remindedIDs->isEmpty()) {
+            return [];
+        }
+
+        $episodeTable = Episode::TABLE_NAME;
+        $seasonTable = Season::TABLE_NAME;
+        $days = (int) config('library.reminder_window_days', 14);
+
+        return Episode::join($seasonTable, $seasonTable . '.id', '=', $episodeTable . '.season_id')
+            ->whereNull($seasonTable . '.deleted_at')
+            ->whereIn($seasonTable . '.anime_id', $remindedIDs)
+            ->whereNotNull($episodeTable . '.started_at')
+            ->whereBetween($episodeTable . '.started_at', [now(), now()->addDays($days)])
+            ->with(['media'])
+            ->select([
+                $episodeTable . '.*',
+                $seasonTable . '.anime_id as trackable_id',
+                $seasonTable . '.number as season_number',
+            ])
+            ->orderBy($episodeTable . '.started_at')
+            ->get()
+            ->map(fn (Episode $episode) => [
+                'id' => (string) $episode->public_id,
+                'trackableID' => (string) $episode->trackable_id,
+                'numberTotal' => (int) $episode->number_total,
+                'number' => (int) $episode->number,
+                'seasonNumber' => (int) $episode->season_number,
+                'startedAt' => $episode->started_at?->timestamp,
+                'bannerURL' => $episode->media->firstWhere('collection_name', '=', MediaCollection::Banner)?->getFullUrl(),
+            ])
+            ->all();
+    }
+
+    /**
+     * Narrows the query to the rows past the given cursor.
+     *
+     * @param mixed $query
+     * @param string $table
+     * @param array $since
+     * @param bool $withTombstones
+     *
+     * @return null|array
+     */
+    private function applyCursor(mixed $query, string $table, array $since, bool $withTombstones): ?array
+    {
+        if (empty($since['updated_at'])) {
+            return null;
+        }
+
+        // A formatted string binding keeps microsecond precision.
+        $sinceUpdatedAt = Carbon::parse($since['updated_at']);
+        $boundary = $sinceUpdatedAt->format('Y-m-d H:i:s.u');
+        $id = (int) ($since['id'] ?? 0);
+
+        // A cursor older than the tombstone-retention horizon is stale.
+        $horizon = now()->subDays((int) config('library.tombstone_retention_days', 90));
+        $freshness = isset($since['synced_at'])
+            ? Carbon::createFromTimestamp((int) $since['synced_at'])
+            : $sinceUpdatedAt;
+
+        if ($freshness->lt($horizon)) {
+            throw new GoneHttpException(__('Your sync cursor has expired. Restart the sync without a cursor.'));
+        }
+
+        if ($withTombstones) {
+            $query->withTrashed();
+        }
+
+        $query->where(function ($outer) use ($table, $boundary, $id) {
+            $outer->where($table . '.updated_at', '>', $boundary)
+                ->orWhere(function ($inner) use ($table, $boundary, $id) {
+                    $inner->where($table . '.updated_at', '=', $boundary)
+                        ->where($table . '.id', '>', $id);
+                });
+        });
+
+        return ['updatedAt' => $boundary, 'id' => (string) $id];
+    }
+
+    /**
+     * Returns the cursor the next round of a stream resumes from.
+     *
+     * @param mixed $lastRow
+     * @param null|array $incoming
+     * @param int $syncTime
+     *
+     * @return null|array
+     */
+    private function nextCursor(mixed $lastRow, ?array $incoming, int $syncTime): ?array
+    {
+        // `updatedAt` is opaque and only ever echoed back.
         if ($lastRow !== null) {
-            // `updatedAt` is opaque; never reinterpret it, only echo it back.
-            $nextSince = [
+            return [
                 'updatedAt' => Carbon::parse($lastRow->updated_at)->format('Y-m-d H:i:s.u'),
                 'id' => (string) $lastRow->id,
                 'syncedAt' => $syncTime,
             ];
-        } elseif ($hasIncomingCursor) {
-            // Empty incremental delta — echo the same cursor back with a refreshed `syncedAt`.
-            $nextSince = [
-                'updatedAt' => $sinceBoundary,
-                'id' => (string) $sinceId,
-                'syncedAt' => $syncTime,
-            ];
-        } else {
-            $nextSince = null;
         }
 
-        return JSONResult::success([
-            'data' => [
-                'attributes' => [
-                    'kind' => $libraryKind->value,
-                    'syncTime' => $syncTime,
-                    'hasMore' => $hasMore,
-                    'total' => $total,
-                    'nextSince' => $nextSince,
-                ],
-                'relationships' => [
-                    'libraries' => $libraries,
-                ],
-            ],
-        ])->withHeaders([
-            'X-State-Version' => (string) $user->state_version,
-            'Cache-Control' => 'private, no-cache',
-        ]);
+        if ($incoming === null) {
+            return null;
+        }
+
+        return $incoming + ['syncedAt' => $syncTime];
     }
 
     /**
@@ -410,7 +600,7 @@ class LibraryController extends Controller
         $userLibraries->searchable();
 
         // Project each row into the LibrarySyncEntry shape for the response.
-        $entries = $userLibraries->map(fn ($library) => $this->buildSyncEntry($library, $modelType))->all();
+        $entries = $userLibraries->map(fn ($library) => $this->buildEntryRow($library))->all();
 
         // Successful response
         return JSONResult::success([
@@ -657,49 +847,20 @@ class LibraryController extends Controller
     }
 
     /**
-     * Projects a `UserLibrary` row into the `LibrarySyncEntry` shape.
+     * Projects a `UserLibrary` row into the entries-stream shape.
      *
      * @param UserLibrary $row
-     * @param string $morphClass
      * @return array
      */
-    private function buildSyncEntry(UserLibrary $row, string $morphClass): array
+    private function buildEntryRow(UserLibrary $row): array
     {
-        $trackable = $row->trackable;
-        $poster = $trackable?->media->firstWhere('collection_name', '=', MediaCollection::Poster);
-        $banner = $trackable?->media->firstWhere('collection_name', '=', MediaCollection::Banner);
-        $airingDate = match ($morphClass) {
-            Anime::class => $trackable?->broadcast_date?->timestamp,
-            Manga::class => $trackable?->publication_date?->timestamp,
-            default => null,
-        };
-        $scheduleDay = match ($morphClass) {
-            Anime::class => $trackable?->air_day,
-            default => $trackable?->publication_day,
-        };
-        $scheduleSeason = match ($morphClass) {
-            Anime::class => $trackable?->air_season,
-            default => $trackable?->publication_season,
-        };
-        $episodeCount = match ($morphClass) {
-            Anime::class => $trackable?->episode_count,
-            Manga::class => $trackable?->chapter_count,
-            default => $trackable?->edition_count,
-        };
-        $seasonCount = match ($morphClass) {
-            Anime::class => $trackable?->season_count,
-            Manga::class => $trackable?->volume_count,
-            default => null,
-        };
-        $firstAired = $trackable?->started_at ?? $trackable?->published_at;
-        $lastAired = $trackable?->ended_at;
-
         $ratingID = $row->rating_id ?? null;
         $favoriteID = $row->favorite_id ?? null;
         $reminderID = $row->reminder_id ?? null;
 
         return [
             'id' => (string) $row->id,
+            'kind' => self::KIND_VALUES[$row->trackable_type],
             'trackableID' => (string) $row->trackable_id,
             'status' => (int) $row->status,
             'rewatchCount' => (int) $row->rewatch_count,
@@ -724,27 +885,70 @@ class LibraryController extends Controller
                     'updatedAt' => isset($row->rating_updated_at) ? Carbon::parse($row->rating_updated_at)->timestamp : null,
                 ]
                 : null,
-            'slug' => $trackable?->slug,
-            'title' => $trackable?->title,
-            'sortTitle' => $this->normalizedSortTitle($trackable?->title),
-            'tagline' => $trackable?->tagline,
+        ];
+    }
+
+    /**
+     * Projects a catalog model into the trackables-stream shape.
+     *
+     * @param mixed $trackable
+     * @param string $morphClass
+     * @return array
+     */
+    private function buildTrackableRow(mixed $trackable, string $morphClass): array
+    {
+        $poster = $trackable->media->firstWhere('collection_name', '=', MediaCollection::Poster);
+        $banner = $trackable->media->firstWhere('collection_name', '=', MediaCollection::Banner);
+        $airingDate = match ($morphClass) {
+            Anime::class => $trackable->broadcast_date?->timestamp,
+            Manga::class => $trackable->publication_date?->timestamp,
+            default => null,
+        };
+        $scheduleDay = match ($morphClass) {
+            Anime::class => $trackable->air_day,
+            default => $trackable->publication_day,
+        };
+        $scheduleSeason = match ($morphClass) {
+            Anime::class => $trackable->air_season,
+            default => $trackable->publication_season,
+        };
+        $episodeCount = match ($morphClass) {
+            Anime::class => $trackable->episode_count,
+            Manga::class => $trackable->chapter_count,
+            default => $trackable->edition_count,
+        };
+        $seasonCount = match ($morphClass) {
+            Anime::class => $trackable->season_count,
+            Manga::class => $trackable->volume_count,
+            default => null,
+        };
+        $firstAired = $trackable->started_at ?? $trackable->published_at;
+        $lastAired = $trackable->ended_at;
+
+        return [
+            'id' => (string) $trackable->id,
+            'kind' => self::KIND_VALUES[$morphClass],
+            'slug' => $trackable->slug,
+            'title' => $trackable->title,
+            'sortTitle' => $this->normalizedSortTitle($trackable->title),
+            'tagline' => $trackable->tagline,
             'posterURL' => $poster?->getFullUrl(),
             'posterBackgroundColor' => $poster?->getCustomProperty('background_color'),
             'bannerURL' => $banner?->getFullUrl(),
             'bannerBackgroundColor' => $banner?->getCustomProperty('background_color'),
-            'genresLocalized' => $trackable?->genres->pluck('name')->implode(', '),
-            'mediaTypeID' => $trackable?->media_type_id !== null ? (int) $trackable->media_type_id : null,
-            'mediaTypeName' => $trackable?->mediaType?->name,
-            'statusID' => $trackable?->status_id !== null ? (int) $trackable->status_id : null,
-            'statusName' => $trackable?->status?->name,
+            'genresLocalized' => $trackable->genres->pluck('name')->implode(', '),
+            'mediaTypeID' => $trackable->media_type_id !== null ? (int) $trackable->media_type_id : null,
+            'mediaTypeName' => $trackable->mediaType?->name,
+            'statusID' => $trackable->status_id !== null ? (int) $trackable->status_id : null,
+            'statusName' => $trackable->status?->name,
             'airingDate' => $airingDate,
-            'durationCount' => $trackable?->duration,
-            'popularityRank' => $trackable?->mediaStat?->rank_total,
-            'publicRating' => $trackable?->mediaStat?->rating_average !== null ? (float) $trackable->mediaStat->rating_average : null,
-            'tvRatingID' => $trackable?->tv_rating_id !== null ? (int) $trackable->tv_rating_id : null,
-            'sourceID' => $trackable?->source_id !== null ? (int) $trackable->source_id : null,
-            'countryOfOrigin' => $trackable?->country_id,
-            'isNSFW' => $trackable?->is_nsfw !== null ? (bool) $trackable->is_nsfw : null,
+            'durationCount' => $trackable->duration,
+            'popularityRank' => $trackable->mediaStat?->rank_total,
+            'publicRating' => $trackable->mediaStat?->rating_average !== null ? (float) $trackable->mediaStat->rating_average : null,
+            'tvRatingID' => $trackable->tv_rating_id !== null ? (int) $trackable->tv_rating_id : null,
+            'sourceID' => $trackable->source_id !== null ? (int) $trackable->source_id : null,
+            'countryOfOrigin' => $trackable->country_id,
+            'isNSFW' => $trackable->is_nsfw !== null ? (bool) $trackable->is_nsfw : null,
             'scheduleDay' => $scheduleDay?->value,
             'scheduleSeason' => $scheduleSeason?->value,
             'episodeCount' => $episodeCount !== null ? (int) $episodeCount : null,
