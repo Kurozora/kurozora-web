@@ -43,8 +43,9 @@ class MeController extends Controller
                 'achievements' => function ($query) {
                     $query->with(['media']);
                 },
+                'activeTimeout',
                 'media',
-                'latestSession',
+                'roles',
             ])
             ->loadCount(['followers', 'following', 'mediaRatings', 'achievements'])
             // Since we already have the latest access token, we
