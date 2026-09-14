@@ -54,28 +54,6 @@ class LibraryController extends Controller
     use WithStateVersionETag;
 
     /**
-     * The catalog table each trackable stream is cursored over.
-     *
-     * @var array
-     */
-    private const array TRACKABLE_STREAMS = [
-        'shows' => Anime::class,
-        'literatures' => Manga::class,
-        'games' => Game::class,
-    ];
-
-    /**
-     * The `UserLibraryKind` value each trackable type carries.
-     *
-     * @var array
-     */
-    private const array KIND_VALUES = [
-        Anime::class => UserLibraryKind::Anime,
-        Manga::class => UserLibraryKind::Manga,
-        Game::class => UserLibraryKind::Game,
-    ];
-
-    /**
      * Returns the authenticated user's library with the given status.
      *
      *
@@ -203,7 +181,7 @@ class LibraryController extends Controller
         $attributes = ['syncTime' => $syncTime, 'streams' => ['entries' => $entries['stream']]];
         $trackables = [];
 
-        foreach (self::TRACKABLE_STREAMS as $stream => $morphClass) {
+        foreach (UserLibraryKind::syncStreams() as $stream => $morphClass) {
             $result = $this->syncTrackables(
                 $user,
                 $morphClass,
@@ -266,7 +244,7 @@ class LibraryController extends Controller
                     ->on($remindersTable . '.remindable_type', '=', $libraryTable . '.trackable_type');
             })
             ->where($libraryTable . '.user_id', '=', $user->id)
-            ->whereIn($libraryTable . '.trackable_type', array_values(self::TRACKABLE_STREAMS))
+            ->whereIn($libraryTable . '.trackable_type', array_values(UserLibraryKind::syncStreams()))
             ->select([
                 $libraryTable . '.*',
                 $ratingsTable . '.id as rating_id',
@@ -571,13 +549,28 @@ class LibraryController extends Controller
             ];
         })->all();
 
-        // Bulk upsert; clearing `deleted_at` restores a soft-deleted row on re-add.
-        DB::transaction(function () use ($records, $user) {
+        // A title the user has never tracked before is reminded unless it lands in a muted list.
+        $addedModels = $models->reject(fn ($model) => $userLibraries->has($model->id));
+
+        // A title already sitting in a muted list keeps whatever reminder the user gave it.
+        $mutedModels = $models->reject(function ($model) use ($userLibraries) {
+            $status = $userLibraries->get($model->id)?->status;
+            return $status !== null && !UserLibraryStatus::enablesRemindersByDefault($status);
+        });
+
+        // Clearing `deleted_at` restores a soft-deleted row on re-add.
+        DB::transaction(function () use ($records, $user, $mutedModels, $addedModels, $userLibraryStatus) {
             UserLibrary::upsert(
                 $records,
                 ['user_id', 'trackable_type', 'trackable_id'],
                 ['status', 'started_at', 'ended_at', 'deleted_at', 'updated_at']
             );
+
+            if (UserLibraryStatus::enablesRemindersByDefault($userLibraryStatus->value)) {
+                $user->remind($addedModels);
+            } else {
+                $user->unremind($mutedModels);
+            }
 
             $user->bumpStateVersion();
         });
@@ -860,7 +853,7 @@ class LibraryController extends Controller
 
         return [
             'id' => (string) $row->id,
-            'kind' => self::KIND_VALUES[$row->trackable_type],
+            'kind' => UserLibraryKind::fromMorphClass($row->trackable_type),
             'trackableID' => (string) $row->trackable_id,
             'status' => (int) $row->status,
             'rewatchCount' => (int) $row->rewatch_count,
@@ -927,7 +920,7 @@ class LibraryController extends Controller
 
         return [
             'id' => (string) $trackable->id,
-            'kind' => self::KIND_VALUES[$morphClass],
+            'kind' => UserLibraryKind::fromMorphClass($morphClass),
             'slug' => $trackable->slug,
             'title' => $trackable->title,
             'sortTitle' => $this->normalizedSortTitle($trackable->title),

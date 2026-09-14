@@ -59,6 +59,21 @@ final class UserLibraryStatus extends Enum
     }
 
     /**
+     * Whether a title placed in this status is reminded without being asked.
+     *
+     * @param int|string $value
+     *
+     * @return bool
+     */
+    public static function enablesRemindersByDefault(mixed $value): bool
+    {
+        return match ((int) $value) {
+            self::Dropped, self::Ignored => false,
+            default => true,
+        };
+    }
+
+    /**
      * Returns the description of the status
      *
      * @param int|string $value

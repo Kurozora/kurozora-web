@@ -11,6 +11,7 @@ use App\Models\Episode;
 use App\Models\ScheduledNotification;
 use App\Models\User;
 use App\Models\UserLibrary;
+use App\Models\UserReminder;
 use App\Notifications\NewEpisode;
 use App\Notifications\NewEpisodes;
 use Carbon\Carbon;
@@ -86,18 +87,28 @@ class DispatchScheduledNotifications extends Command
         $groups = $this->groupPlansByAnime($duePlans, $now);
         $dispatchedCount = 0;
 
+        // A run aimed at one user leaves every plan pending for everyone else.
+        $isScoped = $this->option('user') !== null;
+
         foreach ($groups as $group) {
             $this->notifyTrackers($group['anime'], $group['episodes']);
 
             foreach ($group['plans'] as $plan) {
+                $dispatchedCount++;
+
+                if ($isScoped) {
+                    continue;
+                }
+
                 $plan->status = ScheduledNotificationStatus::Dispatched();
                 $plan->dispatched_at = $now;
                 $plan->save();
-                $dispatchedCount++;
             }
         }
 
-        $this->info('Dispatched ' . $dispatchedCount . ' scheduled notification(s).');
+        $this->info($isScoped
+            ? 'Test run for user ' . $this->option('user') . ': processed ' . $dispatchedCount . ' due plan(s) and left them pending. The count spans every user, so check the notifications table for actual deliveries.'
+            : 'Dispatched ' . $dispatchedCount . ' scheduled notification(s).');
 
         Pulse::startRecording();
         Telescope::startRecording();
@@ -171,17 +182,26 @@ class DispatchScheduledNotifications extends Command
     {
         $notification = $this->buildNotification($anime, $episodes);
 
-        UserLibrary::where('trackable_type', '=', $anime->getMorphClass())
-            ->where('trackable_id', '=', $anime->getKey())
-            ->where('is_hidden', '=', false)
-            ->whereIn('status', $this->notifiableStatuses)
-            ->when($this->option('user'), fn ($query, $userID) => $query->where('user_id', '=', $userID))
+        $libraryTable = UserLibrary::TABLE_NAME;
+        $remindersTable = UserReminder::TABLE_NAME;
+
+        UserLibrary::where($libraryTable . '.trackable_type', '=', $anime->getMorphClass())
+            ->where($libraryTable . '.trackable_id', '=', $anime->getKey())
+            ->where($libraryTable . '.is_hidden', '=', false)
+            ->whereIn($libraryTable . '.status', $this->notifiableStatuses)
+            ->join($remindersTable, function ($join) use ($remindersTable, $libraryTable) {
+                $join->on($remindersTable . '.user_id', '=', $libraryTable . '.user_id')
+                    ->on($remindersTable . '.remindable_id', '=', $libraryTable . '.trackable_id')
+                    ->on($remindersTable . '.remindable_type', '=', $libraryTable . '.trackable_type');
+            })
+            ->select($libraryTable . '.*')
+            ->when($this->option('user'), fn ($query, $userID) => $query->where($libraryTable . '.user_id', '=', $userID))
             ->chunkById(500, function (Collection $libraryEntries) use ($notification) {
                 $users = User::whereIn('id', $libraryEntries->pluck('user_id'))
                     ->get();
 
                 Notification::send($users, $notification);
-            });
+            }, $libraryTable . '.id', 'id');
     }
 
     /**
