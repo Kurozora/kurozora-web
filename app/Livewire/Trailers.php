@@ -11,7 +11,6 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Str;
 
@@ -37,16 +36,18 @@ class Trailers extends Catalog
     protected ?array $parentIdsCache = null;
 
     /**
-     * The number of videos the hero section rotates through.
+     * The id of the video the hero section plays.
+     *
+     * @var int|null $featuredVideoId
      */
-    protected const int HERO_SIZE = 8;
+    public ?int $featuredVideoId = null;
 
     /**
-     * The videos given the prominent placement.
+     * The video given the prominent placement.
      *
-     * @var Collection|null $heroCache
+     * @var Video|null $featuredCache
      */
-    protected ?Collection $heroCache = null;
+    protected ?Video $featuredCache = null;
 
     /**
      * The query strings of the component.
@@ -68,7 +69,8 @@ class Trailers extends Catalog
      */
     public function updatedSort(): void
     {
-        $this->heroCache = null;
+        $this->featuredVideoId = null;
+        $this->featuredCache = null;
         $this->resetPage();
     }
 
@@ -104,36 +106,46 @@ class Trailers extends Catalog
             return null;
         }
 
-        $query = $this->videoQuery();
-        $heroKeys = $this->getHeroVideosProperty()
-            ->modelKeys();
-
-        if (!empty($heroKeys)) {
-            $query->whereKeyNot($heroKeys);
-        }
-
-        return $this->applySort($query)
+        return $this->applySort($this->videoQuery())
             ->paginate($this->perPage);
     }
 
     /**
-     * The videos the hero section rotates through.
+     * Gives the hero section the video with the given id.
      *
-     * @return Collection
+     * @param int $videoId
+     *
+     * @return void
      */
-    public function getHeroVideosProperty(): Collection
+    public function feature(int $videoId): void
+    {
+        $this->featuredVideoId = $videoId;
+        $this->featuredCache = null;
+    }
+
+    /**
+     * The video the hero section plays.
+     *
+     * @return Video|null
+     */
+    public function getFeaturedVideoProperty(): ?Video
     {
         if (!$this->readyToLoad) {
-            return new Collection();
+            return null;
         }
 
-        if ($this->heroCache === null) {
-            $this->heroCache = $this->applySort($this->videoQuery())
-                ->take(self::HERO_SIZE)
-                ->get();
+        if ($this->featuredCache === null && $this->featuredVideoId !== null) {
+            $this->featuredCache = $this->videoQuery()
+                ->whereKey($this->featuredVideoId)
+                ->first();
         }
 
-        return $this->heroCache;
+        if ($this->featuredCache === null) {
+            $this->featuredCache = $this->applySort($this->videoQuery())
+                ->first();
+        }
+
+        return $this->featuredCache;
     }
 
     /**
@@ -155,6 +167,7 @@ class Trailers extends Catalog
                     $modelClass => [
                         'genres',
                         'media',
+                        'mediaStat',
                         'translation',
                         'library' => function ($query) use ($user) {
                             $query->where('user_id', '=', $user?->id);

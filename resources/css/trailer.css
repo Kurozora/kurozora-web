@@ -1,0 +1,60 @@
+/* Hero player */
+.trailer-hero-stage {
+    position: absolute;
+    inset: 0;
+}
+
+.trailer-hero-stage[data-pinned] {
+    position: fixed;
+    top: var(--trailer-pin-top, 1rem);
+    right: auto;
+    bottom: auto;
+    left: var(--trailer-pin-left, 1rem);
+    width: var(--trailer-pin-width, 22.5rem);
+    height: auto;
+    aspect-ratio: 16 / 9;
+    z-index: 40;
+    animation: trailer-pin-in 0.2s ease-out;
+}
+
+.trailer-hero-stage[data-pinned] [data-trailer-hero-frame] {
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 30px rgb(0 0 0 / 0.35);
+}
+
+.trailer-hero-stage[data-pinned] .plyr__controls {
+    display: none;
+}
+
+.trailer-hero-stage[data-pinned] [data-trailer-hero-close] {
+    display: flex;
+}
+
+.trailer-hero-stage[data-pinned] [data-trailer-hero-return] {
+    display: block;
+}
+
+@keyframes trailer-pin-in {
+    from {
+        opacity: 0;
+        transform: scale(0.94);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Trailer lockup */
+[data-trailer-lockup] [data-trailer-glyph-pause] {
+    display: none;
+}
+
+[data-trailer-lockup][data-playing] [data-trailer-glyph-play] {
+    display: none;
+}
+
+[data-trailer-lockup][data-playing] [data-trailer-glyph-pause] {
+    display: block;
+}

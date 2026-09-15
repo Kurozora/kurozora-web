@@ -69,6 +69,7 @@ export default defineConfig({
             input: [
                 'resources/css/app.css',
                 'resources/css/chat.css',
+                'resources/css/trailer.css',
                 'resources/css/watch.css',
                 'resources/js/app.js',
                 'resources/js/charts.js',

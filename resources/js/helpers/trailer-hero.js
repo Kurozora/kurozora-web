@@ -2,11 +2,25 @@ import PlyrManager from './plyr'
 
 export default class TrailerHero {
     /**
-     * The width from which the queue is listed beside the trailer.
+     * The width the pinned player takes.
      *
-     * @type {string}
+     * @type {number}
      */
-    static wideQuery = '(min-width: 1024px)'
+    static pinWidth = 360
+
+    /**
+     * The distance the pinned player keeps from the page's header.
+     *
+     * @type {number}
+     */
+    static pinGap = 12
+
+    /**
+     * The share of the player that has to leave the top before it pins.
+     *
+     * @type {number}
+     */
+    static pinThreshold = 2 / 3
 
     /**
      * The player options the hero's trailers are built with.
@@ -22,13 +36,6 @@ export default class TrailerHero {
     }
 
     /**
-     * The milliseconds the caption spends faded out while it changes.
-     *
-     * @type {number}
-     */
-    static captionFade = 150
-
-    /**
      * The hero section.
      *
      * @type {?HTMLElement}
@@ -36,53 +43,18 @@ export default class TrailerHero {
     #root = null
 
     /**
-     * The track the trailers are laid out on.
+     * The space the player occupies inline, which is kept while the player is pinned.
      *
      * @type {?HTMLElement}
      */
-    #track = null
+    #slot = null
 
     /**
-     * The queue beside the trailer.
+     * The element that moves to the corner while the reader scrolls.
      *
      * @type {?HTMLElement}
      */
-    #queue = null
-
-    /**
-     * The queue entry the player is on.
-     *
-     * @type {?HTMLElement}
-     */
-    #playing = null
-
-    /**
-     * The identifier of the trailer in the player.
-     *
-     * @type {?string}
-     */
-    #code = null
-
-    /**
-     * The trailer the track settled on.
-     *
-     * @type {number}
-     */
-    #index = -1
-
-    /**
-     * Whether the queue is beside the trailer.
-     *
-     * @type {?boolean}
-     */
-    #wide = null
-
-    /**
-     * The player.
-     *
-     * @type {?PlyrManager}
-     */
-    #manager = null
+    #stage = null
 
     /**
      * The frame the player was built in.
@@ -92,11 +64,53 @@ export default class TrailerHero {
     #frame = null
 
     /**
-     * Whether the trailer the track settles on should start playing.
+     * The player.
+     *
+     * @type {?PlyrManager}
+     */
+    #manager = null
+
+    /**
+     * The identifier of the trailer in the player.
+     *
+     * @type {?string}
+     */
+    #code = null
+
+    /**
+     * Whether the trailer waiting on the player should start once it is ready.
      *
      * @type {boolean}
      */
-    #plays = false
+    #playsWhenReady = false
+
+    /**
+     * Whether the reader has started a trailer.
+     *
+     * @type {boolean}
+     */
+    #hasPlayed = false
+
+    /**
+     * Whether the player sits in the corner.
+     *
+     * @type {boolean}
+     */
+    #isPinned = false
+
+    /**
+     * Whether the reader sent the pinned player away for the current scroll.
+     *
+     * @type {boolean}
+     */
+    #isDismissed = false
+
+    /**
+     * The place the pinned player was last put.
+     *
+     * @type {?Object}
+     */
+    #pinGeometry = null
 
     /**
      * Whether a sync is already scheduled for the next frame.
@@ -106,19 +120,19 @@ export default class TrailerHero {
     #syncScheduled = false
 
     constructor() {
-        new MutationObserver(() => this.#scheduleSync())
-            .observe(document.body, { childList: true, subtree: true })
-
-        document.addEventListener('click', (event) => {
-            const item = event.target.closest('[data-trailer-hero-item]')
-
-            if (item) {
-                this.#rotate(item)
+        new MutationObserver((records) => {
+            // The player rewrites its own controls constantly, and none of that changes the page.
+            if (records.every((record) => this.#frame?.contains(record.target))) {
+                return
             }
-        })
 
+            this.#scheduleSync()
+        }).observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['data-code'] })
+
+        document.addEventListener('click', (event) => this.#handleClick(event))
         document.addEventListener('livewire:navigated', () => this.#scheduleSync())
-        window.matchMedia(TrailerHero.wideQuery).addEventListener('change', () => this.#scheduleSync())
+        window.addEventListener('scroll', () => this.#updatePin(), { passive: true })
+        window.addEventListener('resize', () => this.#updatePin(), { passive: true })
 
         this.#sync()
     }
@@ -146,157 +160,75 @@ export default class TrailerHero {
         const root = document.querySelector('[data-trailer-hero]')
 
         if (!root) {
+            this.#teardown()
+
             return
         }
 
         this.#root = root
-        this.#track = root.querySelector('[data-trailer-hero-slides]')
-        this.#queue = root.querySelector('[data-trailer-hero-queue]')
+        this.#slot = root.querySelector('[data-trailer-hero-slot]')
+        this.#stage = root.querySelector('[data-trailer-hero-stage]')
 
-        if (this.#frame && !document.contains(this.#frame)) {
+        const frame = root.querySelector('[data-trailer-hero-frame]')
+
+        if (!frame) {
+            return
+        }
+
+        if (frame !== this.#frame) {
             this.#teardown()
-            this.#index = -1
+            this.#frame = frame
+            this.#build()
+        } else if (root.dataset.code !== this.#code) {
+            this.#load(root.dataset.code, false)
         }
 
-        if (!this.#track || !this.#slides().length) {
+        this.#markPlaying()
+        this.#updatePin()
+    }
+
+    /**
+     * Builds the player on the hero's frame.
+     */
+    #build() {
+        const code = this.#root.dataset.code
+
+        if (!code) {
             return
         }
 
-        const wide = window.matchMedia(TrailerHero.wideQuery).matches
-
-        if (wide !== this.#wide) {
-            this.#wide = wide
-            this.#teardown()
-            this.#index = -1
-        }
-
-        if (wide) {
-            this.#syncQueue()
-
-            return
-        }
-
-        this.#syncTrack()
-    }
-
-    /**
-     * The trailers the track holds.
-     *
-     * @returns {HTMLElement[]}
-     */
-    #slides() {
-        return Array.from(this.#track?.querySelectorAll('[data-trailer-hero-slide]') ?? [])
-    }
-
-    /**
-     * The entries the queue holds.
-     *
-     * @returns {HTMLElement[]}
-     */
-    #entries() {
-        return Array.from(this.#queue?.querySelectorAll('[data-trailer-hero-item]') ?? [])
-    }
-
-    /**
-     * Holds the trailer still and lets the queue rotate through it.
-     */
-    #syncQueue() {
-        const slides = this.#slides()
-        const entries = this.#entries()
-
-        if (!entries.length) {
-            return
-        }
-
-        slides.forEach((slide, index) => slide.classList.toggle('hidden', index !== 0))
-        this.#track.scrollLeft = 0
-
-        const playing = entries.find((entry) => entry.dataset.code === this.#code) ?? entries[0]
-
-        entries.forEach((entry) => entry.classList.toggle('hidden', entry === playing))
-        this.#playing = playing
-        this.#describe(playing)
-
-        const frame = slides[0]?.querySelector('[data-trailer-hero-frame]')
-
-        if (frame && frame !== this.#frame) {
-            this.#build(frame, playing.dataset.code)
-        } else if (this.#code !== playing.dataset.code) {
-            this.#load(playing.dataset.code, false)
-        }
-    }
-
-    /**
-     * Lets the trailers be swiped through.
-     */
-    #syncTrack() {
-        const slides = this.#slides()
-
-        slides.forEach((slide) => slide.classList.remove('hidden'))
-
-        if (!this.#track.dataset.bound) {
-            this.#track.dataset.bound = 'true'
-            this.#track.addEventListener('scroll', () => this.#scheduleSync(), { passive: true })
-        }
-
-        const index = Math.round(this.#track.scrollLeft / this.#track.clientWidth)
-
-        if (index !== this.#index || !this.#frame) {
-            this.#settle(index)
-        }
-    }
-
-    /**
-     * Gives the player to the trailer at the given position.
-     *
-     * @param {number} index
-     */
-    #settle(index) {
-        const slide = this.#slides()[index]
-
-        if (!slide) {
-            return
-        }
-
-        this.#index = index
-        this.#describe(slide)
-
-        const frame = slide.querySelector('[data-trailer-hero-frame]')
-
-        if (frame && frame !== this.#frame) {
-            this.#build(frame, slide.dataset.code)
-        }
-    }
-
-    /**
-     * Builds the player on the given trailer.
-     *
-     * @param {HTMLElement} frame
-     * @param {string} code
-     */
-    #build(frame, code) {
-        this.#teardown()
-
-        frame.setAttribute('player-src', 'https://www.youtube.com/watch?v=' + code)
-        frame.replaceChildren(document.createElement('iframe'))
+        this.#frame.setAttribute('player-src', 'https://www.youtube.com/watch?v=' + code)
+        this.#frame.replaceChildren(document.createElement('iframe'))
 
         this.#code = code
-        this.#frame = frame
-        this.#manager = new PlyrManager(frame, {
+        this.#manager = new PlyrManager(this.#frame, {
             ...TrailerHero.playerOptions,
-            poster: frame.dataset.poster ?? '',
+            poster: this.#root.dataset.poster ?? '',
             youtube: {
                 ...TrailerHero.playerOptions.youtube,
                 origin: window.location.origin,
             },
         })
 
-        this.#manager.player?.on('ended', () => this.#advance())
+        const player = this.#manager.player
 
-        if (this.#plays) {
-            this.#manager.player?.play()
-            this.#plays = false
-        }
+        player?.on('ready', () => {
+            if (!this.#playsWhenReady) {
+                return
+            }
+
+            this.#playsWhenReady = false
+            player.play()
+        })
+
+        player?.on('playing', () => {
+            this.#hasPlayed = true
+            this.#markPlaying()
+            this.#updatePin()
+        })
+
+        player?.on('pause', () => this.#markPlaying())
+        player?.on('ended', () => this.#advance())
     }
 
     /**
@@ -308,11 +240,12 @@ export default class TrailerHero {
     #load(code, plays) {
         const player = this.#manager?.player
 
-        if (!player) {
+        if (!player || !code) {
             return
         }
 
         this.#code = code
+        this.#playsWhenReady = plays
         player.source = {
             type: 'video',
             sources: [{ src: code, provider: 'youtube' }],
@@ -321,106 +254,185 @@ export default class TrailerHero {
         if (plays) {
             player.play()
         }
+
+        this.#markPlaying()
     }
 
     /**
      * Releases the player.
      */
     #teardown() {
+        this.#setPinned(false)
         this.#manager?.destroy()
         this.#manager = null
         this.#frame = null
+        this.#code = null
+        this.#hasPlayed = false
+        this.#playsWhenReady = false
     }
 
     /**
-     * Puts the given entry in the player and sends the one it replaces to the back of the queue.
+     * Routes a press to the control it landed on.
      *
-     * @param {HTMLElement} entry
+     * @param {MouseEvent} event
      */
-    #rotate(entry) {
-        if (!this.#manager || entry === this.#playing) {
+    #handleClick(event) {
+        if (event.target.closest('[data-trailer-hero-close]')) {
+            event.preventDefault()
+            this.#isDismissed = true
+            this.#setPinned(false)
+
             return
         }
 
-        if (this.#playing) {
-            this.#playing.classList.remove('hidden')
-            this.#queue.appendChild(this.#playing)
+        if (event.target.closest('[data-trailer-hero-return]')) {
+            event.preventDefault()
+            this.#returnToHero()
+
+            return
         }
 
-        this.#playing = entry
-        entry.classList.add('hidden')
+        const lockup = event.target.closest('[data-trailer-lockup]')
 
-        this.#describe(entry)
-        this.#load(entry.dataset.code, true)
+        // The press also reaches Livewire, which brings the hero's details along behind it.
+        if (lockup && event.target.closest('[data-trailer-play]')) {
+            this.#feature(lockup.dataset.code, lockup.dataset.poster)
+        }
+    }
+
+    /**
+     * Gives the player the given trailer, or turns the one it already holds.
+     *
+     * @param {string} code
+     * @param {string} poster
+     */
+    #feature(code, poster) {
+        const player = this.#manager?.player
+
+        if (!player || !code) {
+            return
+        }
+
+        if (code === this.#code) {
+            if (player.playing) {
+                player.pause()
+            } else {
+                player.play()
+            }
+
+            return
+        }
+
+        if (this.#root && poster) {
+            this.#root.dataset.poster = poster
+        }
+
+        this.#load(code, true)
     }
 
     /**
      * Moves on to the trailer behind the one that just finished.
      */
     #advance() {
-        if (this.#wide) {
-            const next = this.#queue?.querySelector('[data-trailer-hero-item]:not(.hidden)')
+        const lockups = Array.from(document.querySelectorAll('[data-trailer-lockup]'))
 
-            if (next) {
-                this.#rotate(next)
-            }
-
+        if (!lockups.length) {
             return
         }
 
-        const slides = this.#slides()
-        const next = slides[(this.#index + 1) % slides.length]
+        const index = lockups.findIndex((lockup) => lockup.dataset.code === this.#code)
+        const next = lockups[index + 1] ?? lockups[0]
 
-        if (next) {
-            this.#plays = true
-            this.#track.scrollTo({ left: next.offsetLeft - this.#track.offsetLeft, behavior: 'smooth' })
-        }
+        next?.querySelector('[data-trailer-play]')?.click()
     }
 
     /**
-     * Fades the caption over to the given trailer.
-     *
-     * @param {HTMLElement} source
+     * Marks the lockup whose trailer the player is running.
      */
-    #describe(source) {
-        const caption = this.#root.querySelector('[data-trailer-hero-caption]')
-        const title = this.#root.querySelector('[data-trailer-hero-title]')
-        const meta = this.#root.querySelector('[data-trailer-hero-meta]')
-        const link = this.#root.querySelector('[data-trailer-hero-link]')
+    #markPlaying() {
+        const isPlaying = this.#manager?.player?.playing ?? false
 
-        if (!caption || title?.textContent === source.dataset.title) {
-            return
-        }
-
-        caption.classList.add('opacity-0')
-
-        window.setTimeout(() => {
-            if (title) {
-                title.textContent = source.dataset.title
-            }
-
-            if (meta) {
-                meta.textContent = source.dataset.meta
-            }
-
-            if (link) {
-                link.href = source.dataset.url
-            }
-
-            this.#reveal(source.dataset.code)
-
-            caption.classList.remove('opacity-0')
-        }, TrailerHero.captionFade)
-    }
-    /**
-     * Shows the library button belonging to the given trailer, and hides the rest.
-     *
-     * @param {string} code
-     */
-    #reveal(code) {
-        this.#root.querySelectorAll('[data-trailer-hero-action]').forEach((action) => {
-            action.classList.toggle('hidden', action.dataset.code !== code)
+        document.querySelectorAll('[data-trailer-lockup]').forEach((lockup) => {
+            lockup.toggleAttribute('data-playing', isPlaying && lockup.dataset.code === this.#code)
         })
     }
 
+    /**
+     * Pins the player to the corner, or returns it to the hero, for the current scroll.
+     */
+    #updatePin() {
+        if (!this.#slot || !this.#stage || !this.#hasPlayed) {
+            this.#setPinned(false)
+
+            return
+        }
+
+        const slotRect = this.#slot.getBoundingClientRect()
+        const headerBottom = this.#headerBottom()
+
+        if (headerBottom - slotRect.top < slotRect.height * TrailerHero.pinThreshold) {
+            this.#isDismissed = false
+            this.#setPinned(false)
+
+            return
+        }
+
+        if (this.#isDismissed) {
+            return
+        }
+
+        const top = headerBottom + TrailerHero.pinGap
+        const left = slotRect.left
+        const width = Math.min(TrailerHero.pinWidth, slotRect.width)
+
+        // Writing on every scroll would make each following read reflow the page.
+        if (this.#pinGeometry?.top !== top || this.#pinGeometry?.left !== left || this.#pinGeometry?.width !== width) {
+            this.#pinGeometry = { top, left, width }
+            this.#stage.style.setProperty('--trailer-pin-top', top + 'px')
+            this.#stage.style.setProperty('--trailer-pin-left', left + 'px')
+            this.#stage.style.setProperty('--trailer-pin-width', width + 'px')
+        }
+
+        this.#setPinned(true)
+    }
+
+    /**
+     * Puts the player in the corner, or takes it back out.
+     *
+     * @param {boolean} isPinned
+     */
+    #setPinned(isPinned) {
+        this.#isPinned = isPinned
+
+        // A render that lands mid-scroll drops the attribute, so the DOM decides whether to write.
+        if (!this.#stage || this.#stage.hasAttribute('data-pinned') === isPinned) {
+            return
+        }
+
+        this.#stage.toggleAttribute('data-pinned', isPinned)
+    }
+
+    /**
+     * The point the page's header leaves free.
+     *
+     * @returns {number}
+     */
+    #headerBottom() {
+        const header = document.querySelector('[data-trailer-header]')
+
+        return header ? header.getBoundingClientRect().bottom : 0
+    }
+
+    /**
+     * Returns the reader to the hero.
+     */
+    #returnToHero() {
+        if (!this.#slot) {
+            return
+        }
+
+        const top = window.scrollY + this.#slot.getBoundingClientRect().top - this.#headerBottom() - TrailerHero.pinGap
+
+        window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' })
+    }
 }
