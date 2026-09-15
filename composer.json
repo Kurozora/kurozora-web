@@ -32,6 +32,7 @@
         "ext-openssl": "*",
         "ext-pdo": "*",
         "ext-simplexml": "*",
+        "ext-xmlreader": "*",
         "abbasudo/pulse-users": "^1.0",
         "astrotomic/laravel-translatable": "^11.0",
         "aws/aws-sdk-php": "^3.198",
@@ -49,7 +50,6 @@
         "hosmelq/laravel-pulse-schedule": "^1.0",
         "http-interop/http-factory-guzzle": "^1.2",
         "imdhemy/laravel-purchases": "^1.0",
-        "intervention/image": "^2.7",
         "jaybizzle/crawler-detect": "^1.2",
         "kiritokatklian/laravel-color-palette": "^4.0",
         "kiritokatklian/laravel-sort-request": "^2.0",
@@ -118,12 +118,12 @@
             "url": "./nova"
         },
         {
-            "type": "git",
-            "url": "https://github.com/kiritokatklian/php-jwt-decoder"
+            "type": "path",
+            "url": "./nova-components/online-users-card"
         },
         {
             "type": "git",
-            "url": "https://github.com/W2nn3ss/nova-color-field"
+            "url": "https://github.com/kiritokatklian/php-jwt-decoder"
         }
     ],
     "autoload": {
