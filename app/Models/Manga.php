@@ -527,10 +527,16 @@ class Manga extends KModel implements HasMedia, Sitemapable
             return null;
         }
 
-        return now('Asia/Tokyo')
-            ->next((int) $publicationDay)
-            ->setTimeFromTimeString($publicationTime ?? '00:00')
-            ->inUserTimezone();
+        $publicationDate = now('Asia/Tokyo')
+            ->setTimeFromTimeString($publicationTime ?? '00:00');
+
+        if ($publicationDate->dayOfWeek !== (int) $publicationDay || $publicationDate->isPast()) {
+            $publicationDate = now('Asia/Tokyo')
+                ->next((int) $publicationDay)
+                ->setTimeFromTimeString($publicationTime ?? '00:00');
+        }
+
+        return $publicationDate->inUserTimezone();
     }
 
     /**

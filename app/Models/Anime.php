@@ -330,10 +330,16 @@ class Anime extends KModel implements HasMedia, Sitemapable
             return null;
         }
 
-        return now('Asia/Tokyo')
-            ->next((int) $airDay)
-            ->setTimeFromTimeString($airTime ?? '00:00')
-            ->inUserTimezone();
+        $broadcastDate = now('Asia/Tokyo')
+            ->setTimeFromTimeString($airTime ?? '00:00');
+
+        if ($broadcastDate->dayOfWeek !== (int) $airDay || $broadcastDate->isPast()) {
+            $broadcastDate = now('Asia/Tokyo')
+                ->next((int) $airDay)
+                ->setTimeFromTimeString($airTime ?? '00:00');
+        }
+
+        return $broadcastDate->inUserTimezone();
     }
 
     /**
