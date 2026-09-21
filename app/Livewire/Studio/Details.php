@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Studio;
 
+use App\Enums\MediaCollection;
 use App\Events\ModelViewed;
 use App\Models\MediaRating;
 use App\Models\Studio;
@@ -73,6 +74,16 @@ class Details extends Component
     public function loadPage(): void
     {
         $this->readyToLoad = true;
+    }
+
+    /**
+     * Returns the URL of the banner shown at the top of this page.
+     *
+     * @return ?string
+     */
+    public function getBannerUrlProperty(): ?string
+    {
+        return $this->studio->getFirstMediaFullUrl(MediaCollection::Banner());
     }
 
     /**

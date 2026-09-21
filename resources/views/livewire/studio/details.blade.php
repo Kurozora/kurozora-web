@@ -23,8 +23,17 @@
     <div class="pb-6" wire:init="loadPage">
         <section
             class="flex items-center justify-center relative pt-10 pb-10 pl-4 pr-4"
-            style="height: 24rem; background: url('{{ $studio->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) }}') {{ $studio->getFirstMedia(\App\Enums\MediaCollection::Banner)?->custom_properties['background_color'] ?? $studio->getFirstMedia(\App\Enums\MediaCollection::Profile)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }} no-repeat center; background-size: cover;"
+            style="height: 24rem; background-color: {{ $studio->getFirstMedia(\App\Enums\MediaCollection::Banner)?->custom_properties['background_color'] ?? $studio->getFirstMedia(\App\Enums\MediaCollection::Profile)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
         >
+            @if (!empty($this->bannerUrl))
+                <div
+                    class="absolute top-0 right-0 bottom-0 left-0 bg-center bg-no-repeat bg-cover xl:bg-origin-content xl:bg-clip-content xl:safe-area-inset"
+                    style="background-image: url('{{ $this->bannerUrl }}');"
+                ></div>
+
+                <x-background-extension :source="$this->bannerUrl" />
+            @endif
+
             <x-edge-blur edge="bottom" />
 
             <div class="relative xl:safe-area-inset">

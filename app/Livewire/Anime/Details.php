@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Anime;
 
+use App\Enums\MediaCollection;
 use App\Enums\UserLibraryStatus;
 use App\Events\ModelViewed;
 use App\Models\Anime;
@@ -342,6 +343,18 @@ class Details extends Component
                 message: __('Integrate your anime schedule into your calendar. Never miss an episode again with reminders for new airings.'),
             );
         }
+    }
+
+    /**
+     * Returns the URL of the banner shown at the top of this page.
+     *
+     * @return string
+     */
+    public function getBannerUrlProperty(): string
+    {
+        return $this->anime->getFirstMediaFullUrl(MediaCollection::Banner())
+            ?? $this->anime->getFirstMediaFullUrl(MediaCollection::Poster())
+            ?? asset('images/static/placeholders/anime_banner.webp');
     }
 
     /**

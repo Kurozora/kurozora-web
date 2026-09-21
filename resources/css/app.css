@@ -178,6 +178,55 @@ picture::before {
     padding-left: calc(var(--sidebar-width) + var(--sidebar-gutter));
   }
 
+  .background-extension {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .background-extension-mirror {
+    position: absolute;
+    top: 0;
+    left: var(--sidebar-width);
+    width: calc(100% - var(--sidebar-width));
+    height: 100%;
+    object-fit: cover;
+    transform: scaleX(-1);
+    transform-origin: left center;
+  }
+
+  .background-extension-blur {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: var(--sidebar-width);
+    height: 100%;
+  }
+
+  .background-extension-blur:nth-of-type(1) {
+    backdrop-filter: blur(3px);
+    mask-image: linear-gradient(to left, transparent 0%, #000 3%);
+  }
+
+  .background-extension-blur:nth-of-type(2) {
+    backdrop-filter: blur(6px);
+    mask-image: linear-gradient(to left, transparent 3%, #000 10%);
+  }
+
+  .background-extension-blur:nth-of-type(3) {
+    backdrop-filter: blur(12px);
+    mask-image: linear-gradient(to left, transparent 10%, #000 22%);
+  }
+
+  .background-extension-blur:nth-of-type(4) {
+    backdrop-filter: blur(24px);
+    mask-image: linear-gradient(to left, transparent 22%, #000 40%);
+  }
+
   /**
    * Theme utilities
    */

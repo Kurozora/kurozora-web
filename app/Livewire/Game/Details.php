@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Game;
 
+use App\Enums\MediaCollection;
 use App\Enums\UserLibraryStatus;
 use App\Events\ModelViewed;
 use App\Models\Game;
@@ -336,6 +337,18 @@ class Details extends Component
                 message: __('Integrate your game schedule into your calendar. Never miss a launch again with reminders for new releases.'),
             );
         }
+    }
+
+    /**
+     * Returns the URL of the banner shown at the top of this page.
+     *
+     * @return string
+     */
+    public function getBannerUrlProperty(): string
+    {
+        return $this->game->getFirstMediaFullUrl(MediaCollection::Banner())
+            ?? $this->game->getFirstMediaFullUrl(MediaCollection::Poster())
+            ?? asset('images/static/placeholders/game_banner.webp');
     }
 
     /**

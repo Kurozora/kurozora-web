@@ -1,15 +1,21 @@
 @props(['anime'])
 
+@php
+    $bannerUrl = $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner())
+        ?? $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster())
+        ?? asset('images/static/placeholders/anime_banner.webp');
+@endphp
+
 <div {{ $attributes->merge(['class' => 'relative flex snap-normal snap-center overflow-hidden max-h-[80vh]']) }} style="min-width: 100%;">
-    <div class="flex flex-nowrap" style="min-width: 100%;">
+    <div class="flex flex-nowrap xl:safe-area-inset" style="min-width: 100%;">
         <picture
-            class="relative w-full aspect-video overflow-hidden"
+            class="relative w-full aspect-video max-h-[80vh] overflow-hidden"
             style="background-color: {{ $anime->getFirstMedia(\App\Enums\MediaCollection::Banner)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
         >
             <img
                 class="w-full h-full object-cover lazyload"
                 data-sizes="auto"
-                data-src="{{ $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_banner.webp') }}"
+                data-src="{{ $bannerUrl }}"
                 alt="{{ $anime->title }} Banner"
                 title="{{ $anime->title }}"
                 width="{{ ($anime->getFirstMedia(\App\Enums\MediaCollection::Banner) ?? $anime->getFirstMedia(\App\Enums\MediaCollection::Poster))?->custom_properties['width'] ?? 300 }}"
@@ -18,6 +24,8 @@
 
             <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20"></div>
         </picture>
+
+        <x-background-extension :source="$bannerUrl" :lazy="true" />
 
         <article
             class="absolute bottom-0 left-0 right-0 xl:safe-area-inset"

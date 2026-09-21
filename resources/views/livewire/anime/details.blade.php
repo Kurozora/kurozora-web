@@ -36,17 +36,19 @@
 
     <div class="pb-6" wire:init="loadPage">
         <div class="relative overflow-hidden max-h-[80vh]">
-            <div class="relative flex flex-nowrap aspect-video md:relative md:h-full">
+            <div class="relative flex flex-nowrap md:h-full xl:safe-area-inset">
                 <x-picture
-                    class="w-full overflow-hidden"
+                    class="w-full aspect-video max-h-[80vh] overflow-hidden"
                     style="background-color: {{ ($anime->getFirstMedia(\App\Enums\MediaCollection::Banner) ?? $anime->getFirstMedia(\App\Enums\MediaCollection::Poster))?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
                     wire:ignore
                 >
-                    <img class="w-full h-full aspect-video object-cover lazyload" data-sizes="auto" data-src="{{ $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $anime->title }} Banner" title="{{ $anime->title }}">
+                    <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $this->bannerUrl }}" alt="{{ $anime->title }} Banner" title="{{ $anime->title }}">
                 </x-picture>
 
+                <x-background-extension :source="$this->bannerUrl" />
+
                 @if (!empty($anime->video_url))
-                    <div class="absolute top-0 bottom-0 left-0 right-0">
+                    <div class="absolute top-0 bottom-0 left-0 right-0 xl:safe-area-inset">
                         <div class="flex flex-col justify-center items-center h-full md:pb-40 lg:pb-0">
                             <button
                                 class="inline-flex items-center pt-4 pr-4 pb-4 pl-4 bg-blur backdrop-blur border border-transparent rounded-full font-semibold text-xs uppercase tracking-widest shadow-md hover:bg-tint-800 hover:btn-text-tinted active:bg-tint active:btn-text-tinted focus:outline-none disabled:bg-gray-100 disabled:text-gray-300 disabled:cursor-default disabled:opacity-100 transition ease-in-out duration-150"
@@ -59,7 +61,7 @@
                 @endif
             </div>
 
-            <div class="md:absolute md:bottom-0 md:left-0 md:right-0 lg:px-4">
+            <div class="md:absolute md:bottom-0 md:left-0 md:right-0 lg:pl-4 lg:pr-4 xl:safe-area-inset">
                 <div class="relative flex flex-nowrap pt-4 pb-8 pl-4 pr-4 md:mx-auto md:mb-8 md:p-2 md:max-w-lg md:bg-blur md:backdrop-filter md:backdrop-blur md:rounded-lg">
                     <div class="absolute top-0 right-0 left-0 h-full rounded-lg md:bg-blur md:backdrop-filter md:backdrop-blur"></div>
 

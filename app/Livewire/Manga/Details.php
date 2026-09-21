@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Manga;
 
+use App\Enums\MediaCollection;
 use App\Enums\UserLibraryStatus;
 use App\Events\ModelViewed;
 use App\Models\Manga;
@@ -321,6 +322,18 @@ class Details extends Component
                 message: __('Integrate your manga schedule into your calendar. Never miss a chapter again with reminders for new releases.'),
             );
         }
+    }
+
+    /**
+     * Returns the URL of the banner shown at the top of this page.
+     *
+     * @return string
+     */
+    public function getBannerUrlProperty(): string
+    {
+        return $this->manga->getFirstMediaFullUrl(MediaCollection::Banner())
+            ?? $this->manga->getFirstMediaFullUrl(MediaCollection::Poster())
+            ?? asset('images/static/placeholders/anime_banner.webp');
     }
 
     /**
