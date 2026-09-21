@@ -18,7 +18,7 @@
     <div>
         {{ $slot }}
     </div>
-    <div>
+    <div class="mt-2 text-secondary">
         {{ $footer }}
     </div>
 </div>

@@ -19,10 +19,25 @@ if (!function_exists('ios_app_url')) {
     }
 }
 
+if (!function_exists('icu_locale')) {
+    /**
+     * Get the ICU locale matching the application's current locale.
+     *
+     * @return string
+     */
+    function icu_locale(): string
+    {
+        return match ($locale = app()->getLocale()) {
+            'cn' => 'zh',
+            default => $locale,
+        };
+    }
+}
+
 if (!function_exists('ordinal_number')) {
     function ordinal_number(int|float $number): bool|string
     {
-        return (new NumberFormatter(app()->getLocale(), NumberFormatter::ORDINAL))->format($number);
+        return (new NumberFormatter(icu_locale(), NumberFormatter::ORDINAL))->format($number);
     }
 }
 
@@ -99,7 +114,7 @@ if (!function_exists('number_to_words')) {
      */
     function number_to_words(float|int $number): string
     {
-        $formatter = new NumberFormatter(app()->getLocale(), NumberFormatter::SPELLOUT);
+        $formatter = new NumberFormatter(icu_locale(), NumberFormatter::SPELLOUT);
         return $formatter->format($number);
     }
 }
@@ -560,6 +575,19 @@ if (!function_exists('appStoreVerifier')) {
             bundleId: $config['bundle_id'],
             appAppleId: $environment === Environment::PRODUCTION ? (int) config('app.ios.id') : null,
         );
+    }
+}
+
+if (!function_exists('narrow_weekday')) {
+    /**
+     * Get the single letter naming the weekday of a date.
+     *
+     * @param Carbon $date
+     * @return string
+     */
+    function narrow_weekday(Carbon $date): string
+    {
+        return (string) IntlDateFormatter::formatObject($date, 'ccccc', icu_locale());
     }
 }
 

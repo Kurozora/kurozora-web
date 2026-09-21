@@ -211,6 +211,18 @@
                 </div>
             </section>
 
+            @if (!empty($game->started_at) && $game->started_at->isFuture())
+                <section id="countdown" class="pb-8 xl:safe-area-inset">
+                    <x-countdown-bar
+                        class="ml-4 mr-4"
+                        :caption="__('Release')"
+                        :schedule="$game->started_at->toFormattedDateString()"
+                        :timestamp="$game->started_at->timestamp"
+                        anchor="#publication"
+                    />
+                </section>
+            @endif
+
             @if (!empty($game->synopsis))
                 <section class="pb-8 xl:safe-area-inset">
                     <x-section-nav class="flex flex-nowrap justify-between mb-5 pt-4">
@@ -360,33 +372,18 @@
 
                         @if ($game->status_id === 15)
                             <x-slot:footer>
-                                {{ __('The publication of this series has ended.') }}
+                                <p class="text-sm">{{ __('The publication of this series has ended.') }}</p>
                             </x-slot:footer>
                         @elseif (empty($game->publication_date))
-                            {{ __('No publication data available at the moment.') }}
-                        @elseif ($game->status_id === 14)
-                            <div
-                                class="flex flex-col align-center mt-1"
-                                x-data="{
-                                    publicationTimestamp: {{ $game->publication_date?->timestamp }},
-                                    publicationDuration: 25,
-                                    publicationString: '',
-                                    startTimer() {
-                                        if (this.publicationTimestamp == null) {
-                                            return;
-                                        }
+                            <x-slot:footer>
+                                <p class="text-sm">{{ __('No publication data available at the moment.') }}</p>
+                            </x-slot:footer>
+                        @else
+                            <x-schedule-week :release-date="$game->publication_date" />
 
-                                        this.publicationString = Date.broadcastString(this.publicationTimestamp * 1000, this.publicationDuration)
-                                    },
-                                }"
-                                x-init="() => {
-                                    setInterval(() => {
-                                        startTimer()
-                                    }, 1000);
-                                }"
-                            >
-                                <p class="font-black text-2xl" x-text="publicationString"></p>
-                            </div>
+                            <x-slot:footer>
+                                <x-local-time :timestamp="$game->publication_date->timestamp" />
+                            </x-slot:footer>
                         @endif
                     </x-information-list>
 

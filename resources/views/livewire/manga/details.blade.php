@@ -217,6 +217,18 @@
                 </div>
             </section>
 
+            @if ($manga->status_id !== 9 && !empty($manga->publication_date))
+                <section id="countdown" class="pb-8 xl:safe-area-inset">
+                    <x-countdown-bar
+                        class="ml-4 mr-4"
+                        :caption="__('Next Chapter')"
+                        :schedule="$manga->publication_string"
+                        :timestamp="$manga->publication_date->timestamp"
+                        anchor="#publication"
+                    />
+                </section>
+            @endif
+
             @if (!empty($manga->synopsis))
                 <section class="pb-8 xl:safe-area-inset">
                     <x-section-nav class="flex flex-nowrap justify-between mb-5 pt-4">
@@ -366,33 +378,18 @@
 
                         @if ($manga->status_id === 9)
                             <x-slot:footer>
-                                {{ __('The publishing of this series has ended.') }}
+                                <p class="text-sm">{{ __('The publishing of this series has ended.') }}</p>
                             </x-slot:footer>
                         @elseif (empty($manga->publication_date))
-                            {{ __('No publication data available at the moment.') }}
-                        @elseif ($manga->status_id === 8)
-                            <div
-                                class="flex flex-col align-center mt-1"
-                                x-data="{
-                                    publicationTimestamp: {{ $manga->publication_date?->timestamp }},
-                                    publicationDuration: 25,
-                                    publicationString: '',
-                                    startTimer() {
-                                        if (this.publicationTimestamp == null) {
-                                            return;
-                                        }
+                            <x-slot:footer>
+                                <p class="text-sm">{{ __('No publication data available at the moment.') }}</p>
+                            </x-slot:footer>
+                        @else
+                            <x-schedule-week :release-date="$manga->publication_date" />
 
-                                        this.publicationString = Date.broadcastString(this.publicationTimestamp * 1000, this.publicationDuration)
-                                    },
-                                }"
-                                x-init="() => {
-                                    setInterval(() => {
-                                        startTimer()
-                                    }, 1000);
-                                }"
-                            >
-                                <p class="font-black text-2xl" x-text="publicationString"></p>
-                            </div>
+                            <x-slot:footer>
+                                <x-local-time :timestamp="$manga->publication_date->timestamp" />
+                            </x-slot:footer>
                         @endif
                     </x-information-list>
 

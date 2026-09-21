@@ -210,6 +210,18 @@
                 </div>
             </section>
 
+            @if ($anime->status_id !== 4 && !empty($anime->broadcast_date))
+                <section id="countdown" class="pb-8 xl:safe-area-inset">
+                    <x-countdown-bar
+                        class="ml-4 mr-4"
+                        :caption="__('Next Episode')"
+                        :schedule="$anime->broadcast_string"
+                        :timestamp="$anime->broadcast_date->timestamp"
+                        anchor="#broadcast"
+                    />
+                </section>
+            @endif
+
             @if (!empty($anime->synopsis))
                 <section class="pb-8 xl:safe-area-inset">
                     <x-section-nav class="flex flex-nowrap justify-between mb-5 pt-4">
@@ -359,33 +371,18 @@
 
                         @if ($anime->status_id === 4)
                             <x-slot:footer>
-                                {{ __('The broadcasting of this series has ended.') }}
+                                <p class="text-sm">{{ __('The broadcasting of this series has ended.') }}</p>
                             </x-slot:footer>
                         @elseif (empty($anime->broadcast_string))
-                            {{ __('No broadcast data available at the moment.') }}
-                        @elseif ($anime->status_id === 3)
-                            <div
-                                class="flex flex-col align-center mt-1"
-                                x-data="{
-                                    broadcastTimestamp: {{ $anime->broadcast_date?->timestamp }},
-                                    broadcastDuration: {{ $anime->duration }},
-                                    broadcastString: '',
-                                    startTimer() {
-                                        if (this.broadcastTimestamp == null) {
-                                            return;
-                                        }
+                            <x-slot:footer>
+                                <p class="text-sm">{{ __('No broadcast data available at the moment.') }}</p>
+                            </x-slot:footer>
+                        @elseif (!empty($anime->broadcast_date))
+                            <x-schedule-week :release-date="$anime->broadcast_date" />
 
-                                        this.broadcastString = Date.broadcastString(this.broadcastTimestamp * 1000, this.broadcastDuration)
-                                    },
-                                }"
-                                x-init="() => {
-                                    setInterval(() => {
-                                        startTimer()
-                                    }, 1000);
-                                }"
-                            >
-                                <p class="font-black text-2xl" x-text="broadcastString"></p>
-                            </div>
+                            <x-slot:footer>
+                                <x-local-time :timestamp="$anime->broadcast_date->timestamp" />
+                            </x-slot:footer>
                         @endif
                     </x-information-list>
 
