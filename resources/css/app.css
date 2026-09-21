@@ -227,6 +227,37 @@ picture::before {
     mask-image: linear-gradient(to left, transparent 22%, #000 40%);
   }
 
+  .edge-blur-top {
+    --edge-blur-direction: to bottom;
+  }
+
+  .edge-blur-bottom {
+    --edge-blur-direction: to top;
+  }
+
+  .edge-blur-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .edge-blur-layer:nth-of-type(1) {
+    backdrop-filter: blur(0.8px);
+    mask-image: linear-gradient(var(--edge-blur-direction, to bottom), #000 70%, transparent 100%);
+  }
+
+  .edge-blur-layer:nth-of-type(2) {
+    backdrop-filter: blur(2px);
+    mask-image: linear-gradient(var(--edge-blur-direction, to bottom), #000 50%, transparent 75%);
+  }
+
+  .edge-blur-layer:nth-of-type(3) {
+    backdrop-filter: blur(4px);
+    mask-image: linear-gradient(var(--edge-blur-direction, to bottom), #000 20%, transparent 55%);
+  }
+
   /**
    * Theme utilities
    */
