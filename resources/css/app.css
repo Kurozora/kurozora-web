@@ -227,6 +227,14 @@ picture::before {
     mask-image: linear-gradient(to left, transparent 22%, #000 40%);
   }
 
+  .edge-blur {
+    transition: --edge-blur-strength 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .edge-blur-hidden {
+    --edge-blur-strength: 0;
+  }
+
   .edge-blur-top {
     --edge-blur-direction: to bottom;
   }
@@ -244,18 +252,34 @@ picture::before {
   }
 
   .edge-blur-layer:nth-of-type(1) {
-    backdrop-filter: blur(0.8px);
-    mask-image: linear-gradient(var(--edge-blur-direction, to bottom), #000 70%, transparent 100%);
+    backdrop-filter: blur(calc(0.8px * var(--edge-blur-strength, 1)));
+    mask-image: linear-gradient(
+      var(--edge-blur-direction, to bottom),
+      #000 calc(var(--edge-blur-plateau, 0px) + (100% - var(--edge-blur-plateau, 0px)) * 0.7),
+      transparent 100%
+    );
   }
 
   .edge-blur-layer:nth-of-type(2) {
-    backdrop-filter: blur(2px);
-    mask-image: linear-gradient(var(--edge-blur-direction, to bottom), #000 50%, transparent 75%);
+    backdrop-filter: blur(calc(2px * var(--edge-blur-strength, 1)));
+    mask-image: linear-gradient(
+      var(--edge-blur-direction, to bottom),
+      #000 calc(var(--edge-blur-plateau, 0px) + (100% - var(--edge-blur-plateau, 0px)) * 0.5),
+      transparent calc(var(--edge-blur-plateau, 0px) + (100% - var(--edge-blur-plateau, 0px)) * 0.75)
+    );
   }
 
   .edge-blur-layer:nth-of-type(3) {
-    backdrop-filter: blur(4px);
-    mask-image: linear-gradient(var(--edge-blur-direction, to bottom), #000 20%, transparent 55%);
+    backdrop-filter: blur(calc(4px * var(--edge-blur-strength, 1)));
+    mask-image: linear-gradient(
+      var(--edge-blur-direction, to bottom),
+      #000 calc(var(--edge-blur-plateau, 0px) + (100% - var(--edge-blur-plateau, 0px)) * 0.2),
+      transparent calc(var(--edge-blur-plateau, 0px) + (100% - var(--edge-blur-plateau, 0px)) * 0.55)
+    );
+  }
+
+  .edge-blur-tint {
+    opacity: var(--edge-blur-strength, 1);
   }
 
   /**
@@ -329,6 +353,12 @@ picture::before {
     --tw-shadow-color: var(--primary-separator-color);
     --tw-shadow: var(--tw-shadow-colored);
   }
+}
+
+@property --edge-blur-strength {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 1;
 }
 
 /**

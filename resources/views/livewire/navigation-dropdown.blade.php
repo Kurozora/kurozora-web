@@ -703,6 +703,7 @@
         position="fixed"
         x-show="showScrollEdgeEffect"
         x-cloak
-        x-transition.duration.500ms=""
+        x-transition:enter-start="edge-blur-hidden"
+        x-transition:leave-end="edge-blur-hidden"
     />
 </div>

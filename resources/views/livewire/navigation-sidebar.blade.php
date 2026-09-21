@@ -1,21 +1,13 @@
-<aside
-    class="hidden absolute flex-col h-screen z-[999] xl:flex"
-    x-data="{
-        showScrollEdgeEffect: false
-    }"
->
+<aside class="hidden absolute flex-col h-screen z-[999] xl:flex">
     <nav
-        class="fixed flex flex-col mt-2 ml-2 bg-blur backdrop-blur navigation-tint border-primary rounded-xl shadow-lg"
+        class="fixed flex flex-col mt-2 ml-2 border-primary rounded-xl shadow-lg"
         style="width: calc(var(--sidebar-width) - 0.5rem); height: calc(100% - 1rem); border-width: 0.5px"
     >
-        <div class="relative">
+        <div class="absolute top-0 right-0 bottom-0 left-0 bg-blur backdrop-blur navigation-tint rounded-xl"></div>
+
+        <div class="absolute top-0 left-0 right-0 z-10">
             {{-- Scroll Edge Effect --}}
-            <x-edge-blur
-                class="rounded-xl"
-                x-show="showScrollEdgeEffect"
-                x-cloak
-                x-transition.duration.500ms=""
-            />
+            <x-edge-blur class="rounded-t-xl" :tint="false" plateau="96px" />
 
             <div class="relative flex flex-col gap-4 mt-4 mr-4 ml-4">
                 <a
@@ -38,12 +30,9 @@
             </div>
         </div>
 
-        <div class="flex flex-col justify-between w-full h-full pb-2 overflow-y-auto">
+        <div class="relative flex flex-col justify-between w-full h-full pb-20 overflow-y-auto">
             <div class="mr-2 ml-2">
-                <div
-                    x-intersect:enter="showScrollEdgeEffect = false"
-                    x-intersect:leave="showScrollEdgeEffect = true"
-                ></div>
+                <div class="h-28"></div>
 
                 <section class="mt-4 ml-2 mr-2">
                     <x-sidebar-nav-link href="{{ route('home') }}" wire:navigate :active="request()->routeIs('home')">
@@ -212,7 +201,9 @@
             </div>
         </div>
 
-        <div>
+        <div class="absolute bottom-0 left-0 right-0 z-10">
+            <x-edge-blur class="rounded-b-xl" edge="bottom" :tint="false" height="80px" />
+
             <x-dropdown align="top" width="48" content-classes="left-4 bg-secondary" class="left-4">
                 <x-slot:trigger>
                     <button class="flex items-center w-full pl-4 pt-4 pr-4 pb-4">
