@@ -30,7 +30,7 @@
     }
 @endphp
 
-<div {{ $attributes->merge(['class' => 'relative flex-grow w-64 sm:w-96 ' . $class]) }}>
+<div {{ $attributes->merge(['class' => 'relative flex-grow w-[98%] sm:w-96 ' . $class]) }}>
     <div
         class="relative flex flex-row gap-2 pr-2 pl-2 pt-2 pb-2 h-full bg-secondary rounded-xl"
         x-data="{
@@ -59,19 +59,19 @@
                 <p class="text-sm text-secondary whitespace-nowrap" title="{{ $review->created_at->toFormattedDateString() }}">{{ $review->created_at->toFormattedDateString() }}</p>
             </div>
 
-            <div class="flex items-center gap-2">
+            <div class="flex flex-wrap items-center gap-2">
                 <livewire:components.star-rating :rating="$review->rating" :star-size="'sm'" :disabled="true" wire:key="{{ uniqid('rating-', true) }}" />
 
                 @if ($review->is_elevated)
-                    <span class="pl-2 pr-2 pt-1 pb-1 text-xs rounded-md bg-tertiary text-tint font-semibold">{{ __('Community Pick') }}</span>
+                    <span class="pl-2 pr-2 pt-1 pb-1 text-xs whitespace-nowrap rounded-md bg-tertiary text-tint font-semibold">{{ __('Community Pick') }}</span>
                 @endif
 
                 @if ($review->recommendation !== null)
-                    <span class="pl-2 pr-2 pt-1 pb-1 text-xs rounded-md bg-tertiary">{{ $review->recommendation->description }}</span>
+                    <span class="pl-2 pr-2 pt-1 pb-1 text-xs whitespace-nowrap rounded-md bg-tertiary">{{ $review->recommendation->description }}</span>
                 @endif
 
                 @if ($review->progress !== null)
-                    <span class="pl-2 pr-2 pt-1 pb-1 text-xs rounded-md bg-tertiary">{{ $progressTotal !== null ? __('Ep :x/:y', ['x' => $review->progress, 'y' => $progressTotal]) : __('Ep :x', ['x' => $review->progress]) }}</span>
+                    <span class="pl-2 pr-2 pt-1 pb-1 text-xs whitespace-nowrap rounded-md bg-tertiary">{{ $progressTotal !== null ? __('Ep :x/:y', ['x' => $review->progress, 'y' => $progressTotal]) : __('Ep :x', ['x' => $review->progress]) }}</span>
                 @endif
             </div>
 

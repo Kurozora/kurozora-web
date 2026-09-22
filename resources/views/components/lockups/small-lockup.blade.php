@@ -1,10 +1,10 @@
 @props(['anime', 'manga', 'game', 'relation', 'rank', 'trackingEnabled' => true, 'showsSchedule' => false, 'isRanked' => false, 'isRow' => true, 'inLibrary' => false])
 
 @php
-    $class = $isRow ? 'pb-2 shrink-0 snap-normal snap-center' : '';
+    $class = $isRow ? 'w-[98%] max-w-sm sm:w-80 pb-2 shrink-0 snap-normal snap-start' : 'sm:w-80';
 @endphp
 
-<div {{ $attributes->merge(['class' => 'relative flex-grow w-64 md:w-80 ' . $class]) }} @if ($inLibrary) data-in-library @endif>
+<div {{ $attributes->merge(['class' => 'relative flex-grow ' . $class]) }} @if ($inLibrary) data-in-library @endif>
     @if (!empty($anime))
         <div class="flex flex-nowrap gap-2">
             <picture

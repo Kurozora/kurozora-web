@@ -14,7 +14,7 @@
                 </x-slot:action>
             </x-section-nav>
 
-            <div class="grid grid-flow-col-dense gap-4 justify-start pl-4 pr-4 overflow-x-scroll no-scrollbar xl:safe-area-inset-scroll">
+            <div class="flex flex-nowrap gap-4 justify-start pl-4 pr-4 snap-mandatory snap-x scroll-pl-4 overflow-x-scroll no-scrollbar xl:safe-area-inset-scroll">
                 @foreach ($this->seasons as $season)
                     <x-lockups.season-lockup :season="$season" />
                 @endforeach

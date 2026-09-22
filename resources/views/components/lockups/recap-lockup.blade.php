@@ -1,7 +1,7 @@
 @props(['recap', 'isRow' => true])
 
 @php
-    $class = $isRow ? 'shrink-0' : 'flex-grow';
+    $class = $isRow ? 'max-w-sm sm:w-80 shrink-0' : 'flex-grow';
     $year = __('’:x', ['x' => substr($recap->year, -2)]);
     $foreground = $recap->is_light ? 'rgb(0 0 0 / 55%)' : 'rgb(255 255 255 / 94%)';
     $bloom = $recap->is_light ? '0 0 0' : '255 255 255';
@@ -10,7 +10,7 @@
     $crescentBlurId = uniqid('recapCrescent');
 @endphp
 
-<div wire:key="{{ uniqid(more_entropy: true) }}" class="relative pb-2 w-64 snap-normal snap-center {{ $class }}">
+<div wire:key="{{ uniqid(more_entropy: true) }}" class="relative pb-2 w-[98%] snap-normal snap-start {{ $class }}">
     <div class="relative flex flex-col">
         <x-picture class="aspect-square rounded-lg shadow-md overflow-hidden">
             <div class="absolute top-0 left-0 h-full w-full" style="container-type: size;">

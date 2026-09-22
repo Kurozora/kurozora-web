@@ -1,10 +1,10 @@
 @props(['season', 'isRow' => true])
 
 @php
-    $class = $isRow ? 'pb-2 shrink-0 snap-normal snap-center' : '';
+    $class = $isRow ? 'max-w-sm pb-2 shrink-0 snap-normal snap-start' : '';
 @endphp
 
-<div {{ $attributes->merge(['class' => 'relative flex-grow w-64 md:w-80 ' . $class]) }}>
+<div {{ $attributes->merge(['class' => 'relative flex-grow w-[98%] sm:w-80 ' . $class]) }}>
     <div class="flex flex-nowrap gap-2">
         <picture
             class="relative shrink-0 w-28 h-40 rounded-lg overflow-hidden"

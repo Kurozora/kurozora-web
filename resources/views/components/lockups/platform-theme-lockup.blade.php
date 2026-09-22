@@ -1,6 +1,6 @@
 @props(['theme'])
 
-<div class="relative flex-grow w-64 md:w-80">
+<div class="relative flex-grow w-[98%] sm:w-80">
     <div class="flex items-end gap-2 pt-4 pb-4">
         <div class="w-full">
             <p class="leading-tight line-clamp-2" title="{{ $theme->name }}">{{ $theme->name }}</p>

@@ -14,9 +14,9 @@
             <x-lockups.trailer-lockup :video="$video" :is-row="$isRow" :in-library="$marksLibrary && $video->videoable?->library?->isNotEmpty()" />
         @endforeach
 
-        <div class="w-64 md:w-80 flex-grow"></div>
-        <div class="w-64 md:w-80 flex-grow"></div>
-        <div class="w-64 md:w-80 flex-grow"></div>
-        <div class="w-64 md:w-80 flex-grow"></div>
+        <div class="w-[98%] sm:w-80 flex-grow"></div>
+        <div class="w-[98%] sm:w-80 flex-grow"></div>
+        <div class="w-[98%] sm:w-80 flex-grow"></div>
+        <div class="w-[98%] sm:w-80 flex-grow"></div>
     </div>
 @endif

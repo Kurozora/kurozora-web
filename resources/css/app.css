@@ -172,10 +172,12 @@ picture::before {
    */
   .safe-area-inset:not(.no-safe-area) {
     padding-left: var(--sidebar-width);
+    scroll-padding-left: var(--sidebar-width);
   }
 
   .safe-area-inset-scroll:not(.no-safe-area) {
     padding-left: calc(var(--sidebar-width) + var(--sidebar-gutter));
+    scroll-padding-left: calc(var(--sidebar-width) + var(--sidebar-gutter));
   }
 
   .background-extension {

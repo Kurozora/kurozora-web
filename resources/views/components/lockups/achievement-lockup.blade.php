@@ -1,7 +1,7 @@
 @props(['achievement'])
 
 <div
-    class="flex flex-col items-center justify-center border-2 border-primary rounded-xl shadow-lg overflow-hidden"
+    class="flex flex-col flex-grow items-center justify-center w-[98%] sm:w-72 border-2 border-primary rounded-xl shadow-lg overflow-hidden"
     style="min-height: 392px; background: linear-gradient(0deg, var(--bg-primary-color) 0%, var(--bg-secondary-color) 100%);"
 >
     <div class="mt-8">

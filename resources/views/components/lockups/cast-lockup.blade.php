@@ -1,16 +1,16 @@
 @props(['cast' => null, 'isRow' => true])
 
 @php
-    $containerWidth = $isRow ? 'sm:w-max' : '';
-    $castNamesContainerWidth = $isRow ? 'sm:max-w-[12rem]' : 'w-full';
+    $containerWidth = $isRow ? 'w-[98%] max-w-sm shrink-0 snap-normal snap-start' : '';
+    $castNamesContainerWidth = 'flex-grow';
     /** @var \App\Models\AnimeCast|\App\Models\GameCast $cast */
 @endphp
 
 <div {{ $attributes->merge(['class' => 'relative pb-2 ' . $containerWidth]) }}>
-    <div class="flex flex-nowrap">
+    <div class="flex flex-nowrap gap-2">
         <section class="relative flex">
             <picture
-                class="relative shrink-0 w-28 h-40 mr-2 rounded-lg overflow-hidden"
+                class="relative shrink-0 w-28 h-40 rounded-lg overflow-hidden"
                 style="background-color: {{ $cast->person?->getFirstMedia(\App\Enums\MediaCollection::Profile)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
             >
                 <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $cast->person?->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/person_poster.webp') }}" alt="{{ $cast->person?->full_name ?? __('Unknown') }} Profile Image" title="{{ $cast->person?->full_name ?? __('Unknown') }}">
@@ -23,7 +23,7 @@
             @endif
         </section>
 
-        <section class="flex flex-col gap-2 mr-2 {{ $castNamesContainerWidth }}">
+        <section class="flex flex-col gap-2 {{ $castNamesContainerWidth }}">
             <div class="flex flex-col gap-1">
                 @if (!empty($cast->person))
                     <a class="text-tint leading-tight line-clamp-2" href="{{ route('people.details', $cast->person) }}">{{ $cast->person->full_name }}</a>

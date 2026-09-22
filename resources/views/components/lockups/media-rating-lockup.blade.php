@@ -4,7 +4,7 @@
     $class = $isRow ? 'pb-2 shrink-0 snap-normal snap-center' : '';
 @endphp
 
-<div {{ $attributes->merge(['class' => 'relative flex-grow w-64 md:w-80 ' . $class]) }}>
+<div {{ $attributes->merge(['class' => 'relative flex-grow w-[98%] sm:w-80 ' . $class]) }}>
     @switch($mediaRating->model_type)
         @case(\App\Models\Anime::class)
             <div class="flex flex-nowrap gap-2">

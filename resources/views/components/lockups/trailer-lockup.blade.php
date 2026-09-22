@@ -14,7 +14,7 @@
 
 @if (!empty($title))
     <div
-        {{ $attributes->merge(['class' => 'w-64 md:w-80 pb-2 ' . ($isRow ? 'snap-normal snap-center' : 'flex-grow')]) }}
+        {{ $attributes->merge(['class' => 'w-[98%] sm:w-80 pb-2 ' . ($isRow ? 'snap-normal snap-center' : 'flex-grow')]) }}
         data-trailer-lockup
         data-code="{{ $video->code }}"
         data-poster="{{ $bannerUrl }}"

@@ -1,7 +1,7 @@
 @props(['studios' => [], 'page' => 1, 'perPage' => 25, 'isRanked' => false, 'isRow' => true, 'safeAreaInsetEnabled' => true])
 
 @php
-    $class = $isRow ? 'snap-mandatory snap-x overflow-x-scroll no-scrollbar' : 'flex-wrap';
+    $class = $isRow ? 'snap-mandatory snap-x scroll-pl-4 overflow-x-scroll no-scrollbar' : 'flex-wrap';
 
     if ($isRow && $safeAreaInsetEnabled) {
         $class .= ' xl:safe-area-inset-scroll';
@@ -13,7 +13,7 @@
         <x-lockups.studio-lockup :studio="$studio" :rank="($page - 1) * $perPage + $index + 1" :is-ranked="$isRanked" :is-row="$isRow" />
     @endforeach
 
-    <div class="w-64 md:w-80 flex-grow"></div>
-    <div class="w-64 md:w-80 flex-grow"></div>
-    <div class="w-64 md:w-80 flex-grow"></div>
+    <div class="w-[98%] sm:w-80 flex-grow"></div>
+    <div class="w-[98%] sm:w-80 flex-grow"></div>
+    <div class="w-[98%] sm:w-80 flex-grow"></div>
 </div>

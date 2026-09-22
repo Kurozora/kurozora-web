@@ -1,13 +1,13 @@
 @props(['song', 'anime' => null, 'type' => null, 'position' => null, 'episodes' => null, 'showEpisodes' => true, 'showModel' => false, 'rank', 'isRanked' => false, 'isRow' => true])
 
 @php
-    $class = $isRow ? 'shrink-0' : 'flex-grow';
+    $class = $isRow ? 'max-w-[16rem] shrink-0' : 'flex-grow';
     $artworkURL = $song->getFirstMediaFullUrl(\App\Enums\MediaCollection::Artwork()) ?? asset('images/static/placeholders/music_album.webp');
 @endphp
 
 <div
     wire:key="{{ uniqid(more_entropy: true) }}"
-    class="relative pb-2 w-64 snap-normal snap-center {{ $class }}"
+    class="relative pb-2 w-[98%] snap-normal snap-start {{ $class }}"
     @if (!empty($song->am_id)) data-music-song data-am-id="{{ $song->am_id }}" @endif
 >
     <div class="relative flex flex-col">

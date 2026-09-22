@@ -35,10 +35,15 @@
 
         @if ($this->achievements->count())
             <section class="xl:safe-area-inset">
-                <div class="grid gap-4 pl-4 pr-4 sm:grid-cols-2 lg:grid-cols-4">
+                <div class="flex flex-wrap gap-4 justify-between pl-4 pr-4">
                     @foreach ($this->achievements as $achievement)
                        <x-lockups.achievement-lockup :achievement="$achievement" />
                     @endforeach
+
+                    <div class="w-[98%] sm:w-72 flex-grow"></div>
+                    <div class="w-[98%] sm:w-72 flex-grow"></div>
+                    <div class="w-[98%] sm:w-72 flex-grow"></div>
+                    <div class="w-[98%] sm:w-72 flex-grow"></div>
                 </div>
 
                 <div class="mt-4 pl-4 pr-4">

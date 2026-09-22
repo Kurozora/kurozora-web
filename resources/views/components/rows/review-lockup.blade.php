@@ -40,12 +40,12 @@
                     <x-lockups.review-lockup :review="$review" :is-row="$isRow" :vote-overrides="$voteOverrides" :review-box-id="$reviewBoxId" />
                 @endforeach
 
-                <div class="w-64 sm:w-96 flex-grow"></div>
-                <div class="w-64 sm:w-96 flex-grow"></div>
+                <div class="w-[98%] sm:w-96 flex-grow"></div>
+                <div class="w-[98%] sm:w-96 flex-grow"></div>
             </div>
         </div>
     @endif
 
-    <div class="w-64 sm:w-96 flex-grow"></div>
-    <div class="w-64 sm:w-96 flex-grow"></div>
+    <div class="w-[98%] sm:w-96 flex-grow"></div>
+    <div class="w-[98%] sm:w-96 flex-grow"></div>
 </div>

@@ -13,6 +13,8 @@
         <x-lockups.media-rating-lockup :media-rating="$mediaRating" :is-row="$isRow" wire:key="{{ uniqid($mediaRating->id, true) }}" />
     @endforeach
 
-    <div class="w-64 sm:w-96 flex-grow"></div>
-    <div class="w-64 sm:w-96 flex-grow"></div>
+    <div class="w-[98%] sm:w-80 flex-grow"></div>
+    <div class="w-[98%] sm:w-80 flex-grow"></div>
+    <div class="w-[98%] sm:w-80 flex-grow"></div>
+    <div class="w-[98%] sm:w-80 flex-grow"></div>
 </div>
