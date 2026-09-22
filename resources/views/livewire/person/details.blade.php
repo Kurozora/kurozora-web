@@ -140,7 +140,7 @@
                 </x-slot:title>
             </x-section-nav>
 
-            <div class="grid grid-cols-2 gap-4 pl-4 pr-4 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+            <div class="grid gap-4 pl-4 pr-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
                 <x-information-list id="aliases" title="{{ __('Aliases') }}" icon="{{ asset('images/symbols/person.svg') }}">
                     <x-slot:information>
                         @if (!empty($person->full_name))

@@ -1,12 +1,12 @@
 @props(['user'])
 
 <a
-    {{ $attributes->merge(['class' => 'flex aspect-square rounded-full']) }}
+    {{ $attributes->merge(['class' => 'flex rounded-full']) }}
     href="{{ $user ? route('profile.details', $user) : route('sign-in') }}"
     wire:navigate
 >
     <picture
-        class="relative bg-primary border-2 border-black/5 rounded-full overflow-hidden"
+        class="relative aspect-square bg-primary border-2 border-black/5 rounded-full overflow-hidden"
         style="background-color: {{ $user?->getFirstMedia(\App\Enums\MediaCollection::Profile)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
     >
         <img

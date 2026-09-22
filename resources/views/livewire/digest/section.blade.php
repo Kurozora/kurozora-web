@@ -221,7 +221,7 @@
 
                 <div class="flex flex-nowrap gap-4 overflow-hidden">
                     @foreach (range(1, 4) as $skeletonCard)
-                        <div class="bg-secondary rounded-lg w-64 shrink-0 md:w-80" style="height: 168px;"></div>
+                        <x-skeletons.small-lockup-item />
                     @endforeach
                 </div>
             </div>

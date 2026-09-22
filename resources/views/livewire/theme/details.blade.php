@@ -51,7 +51,7 @@
                     </section>
                     @break
                 @default
-                    <livewire:components.explore-category-section :index="$index" :exploreCategory="$exploreCategory" :theme="$theme" :key="'explore-section-' . $exploreCategory->id . '-theme-' . $theme->id" />
+                    <livewire:components.explore-category-section :index="$index" :exploreCategory="$exploreCategory" :theme="$theme" lazy="on-load" :key="'explore-section-' . $exploreCategory->id . '-theme-' . $theme->id" />
                 @endswitch
             @endforeach
         </section>
@@ -68,13 +68,7 @@
                         <div class="flex flex-wrap gap-2 justify-end"></div>
                     </div>
 
-                    <div class="flex gap-4 justify-between pl-4 pr-4 snap-mandatory snap-x overflow-x-scroll no-scrollbar">
-                        <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
-                        <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
-                        <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
-                        <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
-                        <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
-                    </div>
+                    <x-skeletons.lockup-row :safe-area-inset-enabled="false" />
                 </div>
             </section>
             <section  class="pt-4 pb-8 border-t border-primary">
@@ -88,13 +82,7 @@
                         <div class="flex flex-wrap gap-2 justify-end"></div>
                     </div>
 
-                    <div class="flex gap-4 justify-between pl-4 pr-4 snap-mandatory snap-x overflow-x-scroll no-scrollbar">
-                        <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
-                        <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
-                        <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
-                        <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
-                        <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
-                    </div>
+                    <x-skeletons.lockup-row :safe-area-inset-enabled="false" />
                 </div>
             </section>
             <section  class="pt-4 pb-8 border-t border-primary">
@@ -108,13 +96,7 @@
                         <div class="flex flex-wrap gap-2 justify-end"></div>
                     </div>
 
-                    <div class="flex gap-4 justify-between pl-4 pr-4 snap-mandatory snap-x overflow-x-scroll no-scrollbar">
-                        <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
-                        <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
-                        <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
-                        <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
-                        <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
-                    </div>
+                    <x-skeletons.lockup-row :safe-area-inset-enabled="false" />
                 </div>
             </section>
             <section  class="pt-4 pb-8 border-t border-primary">
@@ -128,13 +110,7 @@
                         <div class="flex flex-wrap gap-2 justify-end"></div>
                     </div>
 
-                    <div class="flex gap-4 justify-between pl-4 pr-4 snap-mandatory snap-x overflow-x-scroll no-scrollbar">
-                        <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
-                        <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
-                        <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
-                        <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
-                        <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
-                    </div>
+                    <x-skeletons.lockup-row :safe-area-inset-enabled="false" />
                 </div>
             </section>
         @endif

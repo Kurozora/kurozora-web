@@ -39,6 +39,13 @@ export default class MusicManager {
     #songCache = new Map()
 
     /**
+     * The number of songs fetched per catalog lookup.
+     *
+     * @type {number}
+     */
+    #hydrationBatchSize = 25
+
+    /**
      * The now playing song's captured context.
      *
      * @type {{amID: string, songID: string, url: string, title: string, appleMusicURL: string, services: Object}|null}
@@ -224,6 +231,20 @@ export default class MusicManager {
         const response = await this.#shared.api.music(`v1/catalog/${storefront}/songs/${id}`, { include: ['library'] })
 
         return response.data.data[0]
+    }
+
+    /**
+     * Fetches the catalog songs for the given ids.
+     *
+     * @param {string[]} ids - the Apple Music ids
+     *
+     * @returns {Promise<MusicKit.Song[]>}
+     */
+    async fetchSongs(ids) {
+        const storefront = this.#shared.storefrontId ?? 'us'
+        const response = await this.#shared.api.music(`v1/catalog/${storefront}/songs`, { ids, include: ['library'] })
+
+        return response.data.data
     }
 
     /**
@@ -433,28 +454,50 @@ export default class MusicManager {
      * @returns {Promise<void>}
      */
     async #hydrateSongs() {
-        const roots = document.querySelectorAll('[data-music-detail]:not([data-music-hydrated])')
+        const roots = [...document.querySelectorAll('[data-music-detail]:not([data-music-hydrated])')]
+            .filter((root) => root.dataset.amId)
 
-        for (const root of roots) {
-            const songID = root.dataset.amId
-            if (!songID) {
-                continue
+        if (!roots.length) {
+            return
+        }
+
+        roots.forEach((root) => root.setAttribute('data-music-hydrated', ''))
+
+        const pending = roots.filter((root) => {
+            if (!this.#songCache.has(root.dataset.amId)) {
+                return true
             }
 
-            root.setAttribute('data-music-hydrated', '')
+            this.#applySong(root, this.#songCache.get(root.dataset.amId))
 
-            if (this.#songCache.has(songID)) {
-                this.#applySong(root, this.#songCache.get(songID))
-                continue
-            }
+            return false
+        })
+
+        const missing = [...new Set(pending.map((root) => root.dataset.amId))]
+
+        for (let offset = 0; offset < missing.length; offset += this.#hydrationBatchSize) {
+            const ids = missing.slice(offset, offset + this.#hydrationBatchSize)
 
             try {
-                const song = await this.fetchSong(songID)
-                this.#songCache.set(songID, song)
-                this.#applySong(root, song)
+                const songs = await this.fetchSongs(ids)
+                songs.forEach((song) => this.#songCache.set(song.id, song))
             } catch (error) {
-                root.removeAttribute('data-music-hydrated')
+                pending.filter((root) => ids.includes(root.dataset.amId))
+                    .forEach((root) => root.removeAttribute('data-music-hydrated'))
+
+                continue
             }
+
+            pending.filter((root) => ids.includes(root.dataset.amId))
+                .forEach((root) => {
+                    const song = this.#songCache.get(root.dataset.amId)
+
+                    if (song) {
+                        this.#applySong(root, song)
+                    } else {
+                        root.removeAttribute('data-music-hydrated')
+                    }
+                })
         }
     }
 

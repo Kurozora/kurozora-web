@@ -79,13 +79,7 @@
             </section>
         @elseif (!$readyToLoad)
             <section class="mt-4 xl:safe-area-inset">
-                <div class="flex flex-wrap gap-4 justify-between pl-4 pr-4">
-                    @foreach (range(1,25) as $range)
-                        <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
-                    @endforeach
-                    <div class="w-64 md:w-80 flex-grow"></div>
-                    <div class="w-64 md:w-80 flex-grow"></div>
-                </div>
+                <x-skeletons.lockup-row :kind="$kind" :is-row="false" />
             </section>
         @else
             <section class="flex flex-col items-center justify-center mt-4 text-center xl:safe-area-inset" style="min-height: 50vh;">

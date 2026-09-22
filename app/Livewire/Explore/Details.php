@@ -60,6 +60,26 @@ class Details extends Component
     }
 
     /**
+     * The library kind the placeholder lockups represent.
+     *
+     * @return int|null
+     */
+    public function getSkeletonKindProperty(): ?int
+    {
+        return ExploreCategoryTypes::libraryKind($this->exploreCategory->type);
+    }
+
+    /**
+     * The lockup the placeholders represent.
+     *
+     * @return string
+     */
+    public function getSkeletonLockupProperty(): string
+    {
+        return ExploreCategoryTypes::lockup($this->exploreCategory->type, $this->exploreCategory->size);
+    }
+
+    /**
      * The array containing the explore category items data.
      *
      * @return Collection exploreCategoryItems

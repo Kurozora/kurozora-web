@@ -21,13 +21,20 @@ class Home extends Component
     public $readyToLoad = false;
 
     /**
+     * The skeleton preview state of the page.
+     *
+     * @var bool $previewsSkeletons
+     */
+    public bool $previewsSkeletons = false;
+
+    /**
      * Prepare the component.
      *
      * @return void
      */
     public function mount(): void
     {
-        //
+        $this->previewsSkeletons = app()->isLocal() && request()->boolean('skeleton');
     }
 
     /**

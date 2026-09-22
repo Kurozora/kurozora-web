@@ -12,7 +12,7 @@
         </x-slot:action>
     </x-section-nav>
 
-    <section class="flex flex-nowrap gap-4 snap-mandatory snap-x overflow-x-scroll no-scrollbar" wire:init="loadSection">
+    <section wire:init="loadSection">
         @if ($readyToLoad)
             @switch($chartKind)
                 @case(App\Enums\ChartKind::Anime)
@@ -41,13 +41,7 @@
                     @break
             @endswitch
         @else
-            <div class="flex gap-4 justify-between pl-4 pr-4 snap-mandatory snap-x overflow-x-scroll no-scrollbar xl:safe-area-inset-scroll">
-                <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
-                <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
-                <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
-                <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
-                <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow pb-2 shrink-0 snap-normal snap-center" style="height: 168px;"></div>
-            </div>
+            <x-skeletons.lockup-row :lockup="\App\Enums\ChartKind::lockup($chartKind)" :kind="\App\Enums\ChartKind::libraryKind($chartKind)" />
         @endif
     </section>
 </section>

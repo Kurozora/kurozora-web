@@ -10,7 +10,7 @@
 
     <div class="flex flex-col">
         <picture
-            class="relative aspect-square rounded-full shadow-md overflow-hidden"
+            class="relative aspect-square rounded-full overflow-hidden"
             style="background-color: {{ $profileMedia?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
         >
             <img class="w-full h-full object-cover lazyload" style="object-position: {{ $profileMedia?->objectPositionStyle() ?? 'center' }};" data-sizes="auto" data-src="{{ $person->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/person_poster.webp') }}" alt="{{ $person->full_name }} Profile Image" title="{{ $person->full_name }}">

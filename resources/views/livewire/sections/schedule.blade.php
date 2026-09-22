@@ -41,19 +41,7 @@
                 </x-slot:action>
             </x-section-nav>
 
-            <div class="flex flex-wrap gap-4 justify-between pl-4 mr-4">
-                <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
-                <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
-                <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
-                <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
-                <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
-                <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
-                <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
-                <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
-                <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
-                <div class="w-64 md:w-80 flex-grow"></div>
-                <div class="w-64 md:w-80 flex-grow"></div>
-            </div>
+            <x-skeletons.lockup-row :is-row="false" :count="9" />
         @endif
     </section>
 </div>

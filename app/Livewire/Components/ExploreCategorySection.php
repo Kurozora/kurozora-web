@@ -17,9 +17,11 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\Isolate;
+use Livewire\Attributes\Lazy;
 use Livewire\Component;
 
 #[Isolate]
+#[Lazy(isolate: false)]
 class ExploreCategorySection extends Component
 {
     /**
@@ -58,13 +60,6 @@ class ExploreCategorySection extends Component
     public int $exploreCategoryCount = 0;
 
     /**
-     * Determines whether to load the page.
-     *
-     * @var bool $readyToLoad
-     */
-    public bool $readyToLoad = false;
-
-    /**
      * Prepare the component.
      *
      * @param int             $index
@@ -91,13 +86,20 @@ class ExploreCategorySection extends Component
     }
 
     /**
-     * Sets the property to load the section.
+     * The skeleton shown until the section resumes loading.
      *
-     * @return void
+     * @param array $params
+     *
+     * @return View
      */
-    public function loadSection(): void
+    public function placeholder(array $params): View
     {
-        $this->readyToLoad = true;
+        $exploreCategory = $params['exploreCategory'];
+
+        return view('components.skeletons.explore-category-section', [
+            'lockup' => ExploreCategoryTypes::lockup($exploreCategory->type, $exploreCategory->size),
+            'kind' => ExploreCategoryTypes::libraryKind($exploreCategory->type),
+        ]);
     }
 
     /**
@@ -107,10 +109,6 @@ class ExploreCategorySection extends Component
      */
     public function getExploreCategoryItemsProperty(): Collection
     {
-        if (!$this->readyToLoad) {
-            return collect();
-        }
-
         $exploreCategory = match ($this->exploreCategory->type) {
             ExploreCategoryTypes::MostPopularShows => $this->exploreCategory->mostPopular(Anime::class, $this->genre ?? $this->theme),
             ExploreCategoryTypes::UpcomingShows => $this->exploreCategory->upcoming(Anime::class, $this->genre ?? $this->theme),

@@ -7,12 +7,13 @@
 
 <div
     wire:key="{{ uniqid(more_entropy: true) }}"
-    class="relative pb-2 w-[98%] snap-normal snap-start {{ $class }}"
-    @if (!empty($song->am_id)) data-music-song data-am-id="{{ $song->am_id }}" @endif
+    class="relative pb-2 w-[98%] sm:w-64 snap-normal snap-start {{ $class }}"
+    @if (!empty($song->am_id)) data-music-song data-music-detail data-am-id="{{ $song->am_id }}" @endif
 >
     <div class="relative flex flex-col">
-        <x-picture class="aspect-square rounded-lg shadow-md overflow-hidden">
+        <x-picture class="aspect-square rounded-lg overflow-hidden">
             <img class="w-full h-full object-cover bg-[#A660B2]"
+                 data-music-artwork
                  width="320" height="320"
                  src="{{ $artworkURL }}"
                  title="{{ $song->original_title }}"

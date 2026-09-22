@@ -68,4 +68,44 @@ final class ExploreCategoryTypes extends Enum
     const string Themes = 'themes';
     const string Songs = 'songs';
     const string ReCAP = 'recap';
+
+    /**
+     * The library kind the given category type lists.
+     *
+     * @param string $type
+     *
+     * @return int|null
+     */
+    public static function libraryKind(string $type): ?int
+    {
+        return match ($type) {
+            self::Shows, self::MostPopularShows, self::ContinuingShows, self::ShowsSeason, self::UpcomingShows, self::NewShows, self::RecentlyUpdateShows, self::RecentlyFinishedShows => UserLibraryKind::Anime,
+            self::Literatures, self::MostPopularLiteratures, self::ContinuingLiteratures, self::LiteraturesSeason, self::UpcomingLiteratures, self::NewLiteratures, self::RecentlyUpdateLiteratures, self::RecentlyFinishedLiteratures => UserLibraryKind::Manga,
+            self::Games, self::MostPopularGames, self::GamesSeason, self::UpcomingGames, self::NewGames, self::RecentlyUpdateGames => UserLibraryKind::Game,
+            default => null,
+        };
+    }
+
+    /**
+     * The lockup the given category type renders.
+     *
+     * @param string      $type
+     * @param string|null $size
+     *
+     * @return string
+     */
+    public static function lockup(string $type, ?string $size = null): string
+    {
+        return match ($type) {
+            self::MostPopularShows => 'banner',
+            self::UpcomingShows, self::UpcomingLiteratures, self::UpcomingGames => 'upcoming',
+            self::Genres, self::Themes => 'medium',
+            self::Characters, self::People => 'person',
+            self::Songs => 'music',
+            self::ReCAP => 'recap',
+            self::UpNextEpisodes, self::Episodes => 'episode',
+            self::Shows, self::Literatures, self::Games => $size === ExploreCategorySize::Video ? 'video' : 'small',
+            default => 'small',
+        };
+    }
 }

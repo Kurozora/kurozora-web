@@ -78,7 +78,7 @@
                 </x-slot:title>
             </x-section-nav>
 
-            <div class="grid grid-cols-2 gap-4 pl-4 pr-4 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+            <div class="grid gap-4 pl-4 pr-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
                 <x-information-list id="released_on" title="{{ __('Released On') }}" icon="{{ asset('images/symbols/calendar.svg') }}">
                     <x-slot:information>
                         {{ $platform->started_at?->toFormattedDateString() ?? '-' }}

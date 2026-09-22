@@ -24,4 +24,39 @@ final class ChartKind extends Enum
     const string People = 'people';
     const string Songs = 'songs';
     const string Studios = 'studios';
+
+    /**
+     * The library kind the given chart lists.
+     *
+     * @param string $kind
+     *
+     * @return int|null
+     */
+    public static function libraryKind(string $kind): ?int
+    {
+        return match ($kind) {
+            self::Anime => UserLibraryKind::Anime,
+            self::Manga => UserLibraryKind::Manga,
+            self::Games => UserLibraryKind::Game,
+            default => null,
+        };
+    }
+
+    /**
+     * The lockup the given chart renders.
+     *
+     * @param string $kind
+     *
+     * @return string
+     */
+    public static function lockup(string $kind): string
+    {
+        return match ($kind) {
+            self::Characters, self::People => 'person',
+            self::Episodes => 'episode',
+            self::Songs => 'music',
+            self::Studios => 'studio',
+            default => 'small',
+        };
+    }
 }

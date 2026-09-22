@@ -76,13 +76,7 @@
             </section>
         @else
             <section class="xl:safe-area-inset">
-                <div class="flex flex-wrap gap-4 justify-between pl-4 pr-4">
-                    @foreach (range(1,25) as $range)
-                        <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
-                    @endforeach
-                    <div class="w-64 md:w-80 flex-grow"></div>
-                    <div class="w-64 md:w-80 flex-grow"></div>
-                </div>
+                <x-skeletons.lockup-row :lockup="\App\Enums\ChartKind::lockup($chartKind)" :kind="\App\Enums\ChartKind::libraryKind($chartKind)" :is-row="false" />
             </section>
         @endif
     </div>

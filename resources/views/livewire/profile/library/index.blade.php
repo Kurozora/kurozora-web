@@ -71,19 +71,7 @@
                 @endif
             @elseif (!$readyToLoad)
                 <section class="mt-4 pb-8 xl:safe-area-inset">
-                    <div class="flex flex-wrap gap-4 justify-between pt-4 pl-4 pr-4">
-                        <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
-                        <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
-                        <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
-                        <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
-                        <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
-                        <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
-                        <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
-                        <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
-                        <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
-                        <div class="w-64 md:w-80 flex-grow"></div>
-                        <div class="w-64 md:w-80 flex-grow"></div>
-                    </div>
+                    <x-skeletons.lockup-row class="pt-4" :kind="$kind" :is-row="false" :count="9" />
                 </section>
             @endif
         </div>

@@ -1,7 +1,7 @@
 @props(['cast' => null, 'isRow' => true])
 
 @php
-    $containerWidth = $isRow ? 'w-[98%] max-w-sm shrink-0 snap-normal snap-start' : '';
+    $containerWidth = $isRow ? 'w-[98%] max-w-sm shrink-0 snap-normal snap-start' : 'w-[98%] sm:w-96 flex-grow';
     $castNamesContainerWidth = 'flex-grow';
     /** @var \App\Models\AnimeCast|\App\Models\GameCast $cast */
 @endphp

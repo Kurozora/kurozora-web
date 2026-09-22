@@ -17,9 +17,7 @@
         <x-lockups.music-lockup :song="$mediaSong->song" :anime="$showModel ? $mediaSong->model : null" :type="$mediaSong->type" :position="$mediaSong->position" :episodes="$mediaSong->episodes" :show-episodes="$showEpisodes" :show-model="$showModel" :rank="($page - 1) * $perPage + $index + 1" :is-ranked="$isRanked" :is-row="$isRow" />
     @endforeach
 
-    <div class="w-[98%] flex-grow"></div>
-    <div class="w-[98%] flex-grow"></div>
-    <div class="w-[98%] flex-grow"></div>
-    <div class="w-[98%] flex-grow"></div>
-    <div class="w-[98%] flex-grow"></div>
+    @for ($spacerIndex = 0; $spacerIndex < 8; $spacerIndex++)
+        <div class="w-[98%] sm:w-64 flex-grow"></div>
+    @endfor
 </div>
