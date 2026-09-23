@@ -23,6 +23,7 @@ return new class extends Migration
             $table->unsignedBigInteger('episode_id');
             $table->unsignedTinyInteger('rewatch_count')->default(0);
             $table->unsignedTinyInteger('state')->default(WatchState::Watching);
+            $table->unsignedBigInteger('provider_id')->nullable();
             $table->timestamp('started_at')->nullable();
             $table->timestamp('completed_at')->nullable();
             $table->timestamps();

@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-
 use App\Enums\WatchState;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -70,5 +69,15 @@ class UserWatchedEpisode extends KModel
     public function episode(): BelongsTo
     {
         return $this->belongsTo(Episode::class);
+    }
+
+    /**
+     * The provider the episode was watched on, when catalogued.
+     *
+     * @return BelongsTo
+     */
+    public function provider(): BelongsTo
+    {
+        return $this->belongsTo(Provider::class);
     }
 }
