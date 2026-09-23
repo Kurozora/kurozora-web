@@ -1,4 +1,4 @@
-@props(['studio', 'rank', 'isRanked' => false, 'isRow' => true])
+@props(['studio', 'rank', 'detail' => null, 'isRanked' => false, 'isRow' => true])
 
 @php
     $class = $isRow ? 'max-w-sm pb-2 shrink-0 snap-normal snap-start' : '';
@@ -55,7 +55,9 @@
 
                 <p class="line-clamp-2" title="{{ $studio->name }}">{{ $studio->name }}</p>
 
-                @if (!empty($studio->founded_at))
+                @if (!empty($detail))
+                    <p class="text-sm opacity-75 line-clamp-2">{{ $detail }}</p>
+                @elseif (!empty($studio->founded_at))
                     <p class="text-sm opacity-75 line-clamp-2" title="{{ __('Founded on :x', ['x' => $studio->founded_at->toFormattedDateString()]) }}">{{ __('Founded on :x', ['x' => $studio->founded_at->toFormattedDateString()]) }}</p>
                 @endif
             </div>

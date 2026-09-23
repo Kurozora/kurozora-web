@@ -5,14 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 
 class RecapItem extends KModel implements Sortable
 {
-    use SoftDeletes,
-        SortableTrait;
+    use SortableTrait;
 
     // Table name
     const string TABLE_NAME = 'recap_items';
@@ -60,6 +58,26 @@ class RecapItem extends KModel implements Sortable
      * @return MorphTo
      */
     public function model(): MorphTo
+    {
+        return $this->morphTo();
+    }
+
+    /**
+     * The model the item's model is known from.
+     *
+     * @return MorphTo
+     */
+    public function relatedModel(): MorphTo
+    {
+        return $this->morphTo();
+    }
+
+    /**
+     * The role the item's model holds in its related model.
+     *
+     * @return MorphTo
+     */
+    public function role(): MorphTo
     {
         return $this->morphTo();
     }

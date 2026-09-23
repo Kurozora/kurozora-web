@@ -2,10 +2,14 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Character;
 use App\Models\Game;
 use App\Models\Genre;
 use App\Models\Manga;
+use App\Models\MediaStaff;
+use App\Models\Person;
 use App\Models\Recap;
+use App\Models\Studio;
 use App\Models\Theme;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -38,6 +42,10 @@ class RecapItemResourceBasic extends JsonResource
                     Manga::class => 'literatures',
                     Genre::class => 'genres',
                     Theme::class => 'themes',
+                    Studio::class => 'studios',
+                    Character::class => 'characters',
+                    Person::class => 'voices',
+                    MediaStaff::class => 'creators',
                     default => 'shows'
                 },
                 'totalSeriesCount' => $this->resource->total_series_count,

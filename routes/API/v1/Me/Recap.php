@@ -18,9 +18,12 @@ Route::prefix('/recap')
             });
 
         Route::prefix('{year}/{month}')
-            ->where(['year' => '^\d{4}$', 'month' => '^(0?[1-9]|1[012])$'])
+            ->where(['year' => '^\d{4}$', 'month' => '^(0|0?[1-9]|1[012])$'])
             ->group(function () {
                 Route::get('/', [RecapController::class, 'view'])
                     ->name('.view');
+
+                Route::get('/stats', [RecapController::class, 'stats'])
+                    ->name('.stats');
             });
     });

@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Recap;
+use App\Models\RecapStat;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -15,22 +15,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create(Recap::TABLE_NAME, function (Blueprint $table) {
+        Schema::create(RecapStat::TABLE_NAME, function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->year('year');
             $table->tinyInteger('month');
-            $table->string('type');
-            $table->unsignedSmallInteger('total_series_count')->default(0);
-            $table->unsignedBigInteger('total_parts_count')->default(0);
-            $table->unsignedBigInteger('total_parts_duration')->default(0);
-            $table->decimal('top_percentile', 5)->default(0.00);
+            $table->unsignedSmallInteger('stat');
+            $table->bigInteger('value')->default(0);
+            $table->nullableMorphs('model');
+            $table->date('occurred_at')->nullable();
             $table->timestamps();
         });
 
-        Schema::table(Recap::TABLE_NAME, function (Blueprint $table) {
+        Schema::table(RecapStat::TABLE_NAME, function (Blueprint $table) {
             // Set unique key constraints
-            $table->unique(['type', 'user_id', 'year', 'month']);
+            $table->unique(['user_id', 'year', 'month', 'stat']);
 
             // Set foreign key constraints
             $table->foreign('user_id')
@@ -48,6 +47,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists(Recap::TABLE_NAME);
+        Schema::dropIfExists(RecapStat::TABLE_NAME);
     }
 };

@@ -19,9 +19,12 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('recap_id');
             $table->morphs('model');
+            $table->nullableMorphs('related_model');
+            $table->nullableMorphs('role');
             $table->integer('position');
+            $table->unsignedInteger('parts_count')->default(0);
+            $table->unsignedBigInteger('parts_duration')->default(0);
             $table->timestamps();
-            $table->softDeletes();
         });
 
         Schema::table(RecapItem::TABLE_NAME, function (Blueprint $table) {

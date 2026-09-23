@@ -1,8 +1,8 @@
 <main
+    class="relative"
     x-data="{
         year: @entangle('year').live,
-        loadingScreenEnabled: @entangle('loadingScreenEnabled').live,
-        isNavOpen: false
+        loadingScreenEnabled: @entangle('loadingScreenEnabled').live
     }"
 >
     <x-slot:title>
@@ -30,105 +30,20 @@
             id="header"
             class="sticky top-0 z-10 xl:safe-area-inset"
         >
-            <div class="relative flex flex-row items-center justify-between mx-auto py-6">
-                <div class="flex items-center justify-between gap-2 pl-4">
-                    {{-- Hamburger --}}
-                    <div
-                        class="-mr-2 flex items-center"
-                        x-transition:enter="ease-out duration-150 delay-[50ms] transform sm:delay-300"
-                        x-transition:enter-start="opacity-0 scale-75"
-                        x-transition:enter-end="opacity-100 scale-100"
-                        x-transition:leave="ease-in duration-200 delay-100 transform sm:delay-[50ms]"
-                        x-transition:leave-start="opacity-100 scale-100"
-                        x-transition:leave-end="opacity-0 scale-75"
-                        x-on:click="isNavOpen = ! isNavOpen"
-                    >
-                        <button
-                            class="inline-flex items-center justify-center pt-2 pr-2 pb-2 rounded-md text-white focus:outline-none transition duration-150 ease-in-out"
-                        >
-                            <svg stroke="currentColor" fill="none" viewBox="0 0 24 24" width="24">
-                                <path
-                                    class="inline-flex transform origin-center"
-                                    x-show="! isNavOpen"
-                                    x-transition:enter="ease-out duration-200"
-                                    x-transition:enter-start="opacity-0 scale-75 rotate-180"
-                                    x-transition:enter-end="opacity-100 scale-100 rotate-0"
-                                    x-transition:leave="ease-in duration-200"
-                                    x-transition:leave-start="opacity-100 scale-100 rotate-0"
-                                    x-transition:leave-end="opacity-0 scale-75 rotate-180"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M4 6h16M4 12h16M4 18h16"
-                                />
+            <div class="flex flex-row items-center justify-between gap-4 pt-6 pl-4 pr-4">
+                <h1 class="text-primary text-3xl font-bold">{{ __('Re:CAP') }}</h1>
 
-                                <path
-                                    class="inline-flex transform origin-center"
-                                    x-show="isNavOpen"
-                                    x-transition:enter="ease-out duration-200"
-                                    x-transition:enter-start="opacity-0 scale-75 rotate-180"
-                                    x-transition:enter-end="opacity-100 scale-100 rotate-0"
-                                    x-transition:leave="ease-in duration-200"
-                                    x-transition:leave-start="opacity-100 scale-100 rotate-0"
-                                    x-transition:leave-end="opacity-0 scale-75 rotate-180"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M6 18L18 6M6 6l12 12"
-                                />
-                            </svg>
-                        </button>
-                    </div>
-
-                    <h1 class="text-white text-xl font-bold">{{ __('Re:CAP’:x', ['x' => substr($this->year, -2)]) }}</h1>
-                </div>
-
-                <div class="flex flex-row items-center gap-1.5 pr-4">
-                    <x-logo class="h-5 w-auto text-white" />
-                    <p class="text-white text-xl">{{ config('app.name') }}</p>
-                </div>
-            </div>
-
-            {{-- Responsive Navigation Menu --}}
-            <div
-                class="absolute w-full rounded-b-2xl"
-                x-show="isNavOpen"
-                x-cloak
-                x-collapse.duration.400ms=""
-                x-on:click="isNavOpen = !isNavOpen"
-            >
-                <div class="absolute top-0 left-0 bottom-0 right-0 blur backdrop-blur" style="z-index: -1;"></div>
-
-                <div class="mx-auto pl-4 pr-4 py-6 h-screen">
-                    <ul class="m-0 mb-4">
-                        <li class="pb-10">
-                            <p class="text-2xl text-white font-semibold">{{ __('Select a year to see your recap') }}</p>
-                        </li>
-
-                        @foreach ($this->recapYears as $recap)
-                            <li
-                                id="recap{{ $recap->year }}"
-                                wire:key="{{ uniqid($recap->year, true) }}"
-                            >
-                                <style>
-                                    #recap{{ $recap->year }} button:hover {
-                                        color: {{ $recap->background_color_2 }};
-                                    }
-                                </style>
-
-                                <button
-                                    class="flex w-full pt-6 text-6xl text-white font-semibold"
-                                    x-bind:class="{
-                                        'opacity-25 hover:opacity-100': year !== {{ $recap->year }}
-                                    }"
-                                    x-on:click="loadingScreenEnabled = true; year = {{ $recap->year }}"
-                                >
-                                    <p>{{ __('’:x', ['x' => substr($recap->year, -2)]) }}</p>
-                                </button>
-                            </li>
-                        @endforeach
-                    </ul>
-                </div>
+                <x-select-button
+                    rounded="full"
+                    chevronClass="w-5 h-5 text-primary"
+                    class="pl-4 pr-8 pt-1 pb-1 bg-blur backdrop-blur text-primary text-lg font-semibold border-0 shadow-md focus:ring-0"
+                    aria-label="{{ __('Select a year to see your recap') }}"
+                    x-model.number="year"
+                >
+                    @foreach ($this->recapYears as $recap)
+                        <option value="{{ $recap->year }}">{{ $recap->year }}</option>
+                    @endforeach
+                </x-select-button>
             </div>
         </header>
 
@@ -137,9 +52,36 @@
                 x-data="{
                     month: @entangle('month').live
                 }"
-                class="flex gap-6 pt-4 pb-4 pl-4 pr-4 whitespace-nowrap overflow-x-scroll no-scrollbar md:gap-20"
-                style="mask: linear-gradient(90deg, transparent, #000 2%, #000 98%, transparent 100%);"
+                class="flex items-center isolate"
             >
+                @if ($this->hasYearlyRecap)
+                    <div class="relative flex-none pl-4 z-10" wire:key="select-{{ $this->year }}-0">
+                        <template x-if="month === 0">
+                            <x-tinted-pill-button>
+                                <p class="pr-2 pl-2 text-base">{{ $this->year }}</p>
+                            </x-tinted-pill-button>
+                        </template>
+
+                        <template x-if="month !== 0">
+                            <x-tinted-pill-button
+                                class="shadow-none text-secondary hover:text-primary"
+                                color="transparent"
+                                x-on:click="month = 0"
+                            >
+                                <p class="pr-2 pl-2 text-base">{{ $this->year }}</p>
+                            </x-tinted-pill-button>
+                        </template>
+                    </div>
+                @endif
+
+                <div
+                    @class([
+                        'flex flex-1 gap-6 min-w-0 pt-4 pb-4 pr-4 whitespace-nowrap overflow-x-scroll no-scrollbar md:gap-20',
+                        '-ml-3 pl-3' => $this->hasYearlyRecap,
+                        'pl-4' => !$this->hasYearlyRecap,
+                    ])
+                    style="mask: linear-gradient(90deg, transparent, #000 {{ $this->hasYearlyRecap ? '0.75rem' : '2%' }}, #000 98%, transparent 100%);"
+                >
 {{--                @if ($this->year !== now()->year || now()->month === 12)--}}
 {{--                    <span wire:key="select-{{ $this->year }}">--}}
 {{--                        <template x-if="month === null">--}}
@@ -159,160 +101,146 @@
 {{--                    </span>--}}
 {{--                @endif--}}
 
-                @foreach ($this->recapMonths as $recap)
-                    <div wire:key="select-{{ $recap->year }}-{{ $recap->month }}">
-                        <template x-if="month === {{ $recap->month }}">
-                            <x-tinted-pill-button>
-                                <p class="pr-2 pl-2 text-base">{{ substr($recap->month_name, 0, 3) }}</p>
-                            </x-tinted-pill-button>
-                        </template>
+                    @if ($this->hasYearlyRecap)
+                        <div class="flex-none" aria-hidden="true"></div>
+                    @endif
 
-                        <template x-if="month !== {{ $recap->month }}">
-                            <x-tinted-pill-button
-                                color="transparent"
-                                x-on:click="month = {{ $recap->month }}"
-                            >
-                                <p class="pr-2 pl-2 text-base text-white">{{ substr($recap->month_name, 0, 3) }}</p>
-                            </x-tinted-pill-button>
-                        </template>
-                    </div>
-                @endforeach
+                    @foreach ($this->recapMonths as $recap)
+                        <div wire:key="select-{{ $recap->year }}-{{ $recap->month }}">
+                            <template x-if="month === {{ $recap->month }}">
+                                <x-tinted-pill-button>
+                                    <p class="pr-2 pl-2 text-base">{{ $recap->period_title }}</p>
+                                </x-tinted-pill-button>
+                            </template>
+
+                            <template x-if="month !== {{ $recap->month }}">
+                                <x-tinted-pill-button
+                                    class="shadow-none text-secondary hover:text-primary"
+                                    color="transparent"
+                                    x-on:click="month = {{ $recap->month }}"
+                                >
+                                    <p class="pr-2 pl-2 text-base">{{ $recap->period_title }}</p>
+                                </x-tinted-pill-button>
+                            </template>
+                        </div>
+                    @endforeach
+                </div>
             </div>
         </div>
     @endif
 
     <div
-        class="mx-auto mb-8 pb-6 text-white xl:safe-area-inset"
+        class="mx-auto pb-20 text-primary"
         x-show="!loadingScreenEnabled"
     >
-        <div class="fixed top-0 left-0 bottom-0 right-0 blur" style="background: url('{{ asset('images/static/star_bg_lg.jpg') }}') no-repeat center center; background-size: cover; transform: scale(1.1); z-index: -1;"></div>
-        <div class="fixed top-0 left-0 bottom-0 right-0 blur backdrop-blur" style="z-index: -1;"></div>
+        <x-recap-backdrop :recap="$this->backdropRecap" />
 
         @if ($this->recaps->count())
             {{-- rand() is necessary to make it re-render and run x-init --}}
             <section
-                class="mt-36"
+                class="mt-8"
                 wire:key="{{ rand() }}"
                 x-init="loadingScreenEnabled = false"
             >
-                <div class="flex flex-col items-center mt-12">
-                    <h2 class="max-w-sm text-2xl text-center font-semibold md:text-4xl">
-                        @if ($this->year == now()->year)
-                            {{ __('Series that defined your arc in :x', ['x' => now()->month($this->month)->monthName]) }}
-                        @else
-                            {{ __('Series that defined your arc in :x', ['x' => $this->year]) }}
-                        @endif
-                    </h2>
+                <div class="xl:safe-area-inset">
+                    <h2 class="pt-10 pl-4 pr-4 pb-10 text-secondary text-2xl font-semibold">{{ $this->periodHeadingParts[0] }}<x-rolling-text class="text-primary" :text="$this->periodName" />{{ $this->periodHeadingParts[1] }}</h2>
                 </div>
 
                 @foreach ($this->recaps as $recap)
                     @if ($recap->recapItems->count())
                         @switch($recap->type)
                             @case(\App\Models\Anime::class)
-                                <section class="mt-5 pl-4 pr-4 md:mt-36">
-                                    <div class="hidden md:block">
-                                        <h2 class="font-semibold md:text-2xl">{{ __('Top Anime') }}</h2>
-                                        <p class="opacity-75 font-semibold md:text-2xl">{{ __(':x total series', ['x' => $recap->total_series_count]) }}</p>
-                                    </div>
-
-                                    <div class="flex flex-nowrap gap-4 mt-12">
-                                        <div class="flex flex-col justify-between gap-2 w-full pt-4 pb-4 bg-blur rounded-xl">
-                                            <div class="block mb-4 pl-4 pr-4 md:hidden">
-                                                <h2 class="font-semibold md:text-2xl">{{ __('Top Anime') }}</h2>
-                                                <p class="opacity-75 font-semibold md:text-2xl">{{ __(':x total series', ['x' => $recap->total_series_count]) }}</p>
-                                            </div>
-
-                                            <x-rows.small-lockup :animes="$recap->recapItems->pluck('model')" :tracking-enabled="false" :is-ranked="true" :safe-area-inset-enabled="false" />
+                                <section class="mt-10">
+                                    <div class="xl:safe-area-inset">
+                                        <div class="pl-4 pr-4">
+                                            <h2 class="font-semibold text-xl">{{ $this->sectionTitles[\App\Models\Anime::class] }}</h2>
+                                            <p class="text-secondary font-semibold">{{ __(':x total series', ['x' => $recap->total_series_count]) }}</p>
                                         </div>
                                     </div>
+
+                                    <x-rows.small-lockup-columns class="mt-4" :models="$recap->recapItems->pluck('model')" :details="$this->recapItemDetails[$recap->id] ?? []" :favoritedIDs="$this->favoritedModelIDs[\App\Models\Anime::class] ?? []" />
                                 </section>
                                 @break
                             @case(\App\Models\Manga::class)
-                                <section class="mt-5 pl-4 pr-4 md:mt-36">
-                                    <div class="hidden md:block">
-                                        <h2 class="font-semibold md:text-2xl">{{ __('Top Manga') }}</h2>
-                                        <p class="opacity-75 font-semibold md:text-2xl">{{ __(':x total series', ['x' => $recap->total_series_count]) }}</p>
-                                    </div>
-
-                                    <div class="flex flex-nowrap gap-4 mt-12">
-                                        <div class="flex flex-col justify-between gap-2 w-full pt-4 pb-4 bg-blur rounded-xl">
-                                            <div class="block mb-4 pl-4 pr-4 md:hidden">
-                                                <h2 class="font-semibold md:text-2xl">{{ __('Top Manga') }}</h2>
-                                                <p class="opacity-75 font-semibold md:text-2xl">{{ __(':x total series', ['x' => $recap->total_series_count]) }}</p>
-                                            </div>
-
-                                            <x-rows.small-lockup :mangas="$recap->recapItems->pluck('model')" :tracking-enabled="false" :is-ranked="true" :safe-area-inset-enabled="false" />
+                                <section class="mt-10">
+                                    <div class="xl:safe-area-inset">
+                                        <div class="pl-4 pr-4">
+                                            <h2 class="font-semibold text-xl">{{ $this->sectionTitles[\App\Models\Manga::class] }}</h2>
+                                            <p class="text-secondary font-semibold">{{ __(':x total series', ['x' => $recap->total_series_count]) }}</p>
                                         </div>
                                     </div>
+
+                                    <x-rows.small-lockup-columns class="mt-4" :models="$recap->recapItems->pluck('model')" :details="$this->recapItemDetails[$recap->id] ?? []" :favoritedIDs="$this->favoritedModelIDs[\App\Models\Manga::class] ?? []" />
                                 </section>
                                 @break
                             @case(\App\Models\Game::class)
-                                <section class="mt-5 pl-4 pr-4 md:mt-36">
-                                    <div class="hidden md:block">
-                                        <h2 class="font-semibold md:text-2xl">{{ __('Top Games') }}</h2>
-                                        <p class="opacity-75 font-semibold md:text-2xl">{{ __(':x total series', ['x' => $recap->total_series_count]) }}</p>
-                                    </div>
-
-                                    <div class="flex flex-nowrap gap-4 mt-12">
-                                        <div class="flex flex-col justify-between gap-2 w-full pt-4 pb-4 bg-blur rounded-xl">
-                                            <div class="block mb-4 pl-4 pr-4 md:hidden">
-                                                <h2 class="font-semibold md:text-2xl">{{ __('Top Games') }}</h2>
-                                                <p class="opacity-75 font-semibold md:text-2xl">{{ __(':x total series', ['x' => $recap->total_series_count]) }}</p>
-                                            </div>
-
-                                            <x-rows.small-lockup :games="$recap->recapItems->pluck('model')" :tracking-enabled="false" :is-ranked="true" :safe-area-inset-enabled="false" />
+                                <section class="mt-10">
+                                    <div class="xl:safe-area-inset">
+                                        <div class="pl-4 pr-4">
+                                            <h2 class="font-semibold text-xl">{{ $this->sectionTitles[\App\Models\Game::class] }}</h2>
+                                            <p class="text-secondary font-semibold">{{ __(':x total series', ['x' => $recap->total_series_count]) }}</p>
                                         </div>
                                     </div>
+
+                                    <x-rows.small-lockup-columns class="mt-4" :models="$recap->recapItems->pluck('model')" :details="$this->recapItemDetails[$recap->id] ?? []" :favoritedIDs="$this->favoritedModelIDs[\App\Models\Game::class] ?? []" />
                                 </section>
                                 @break
                             @case(\App\Models\Genre::class)
-                                <section class="mt-5 pl-4 pr-4 md:mt-36">
-                                    <div class="hidden md:block">
-                                        <h2 class="font-semibold md:text-2xl">{{ __('Top Genres') }}</h2>
-                                    </div>
+                                <section class="mt-10 xl:safe-area-inset">
+                                    <div class="pl-4 pr-4">
+                                        <h2 class="font-semibold text-xl">{{ $this->sectionTitles[\App\Models\Genre::class] }}</h2>
 
-                                    <div class="flex flex-nowrap gap-4 mt-12">
-                                        <div class="flex flex-col justify-between gap-2 w-full pt-4 pb-4 bg-blur rounded-xl">
-                                            <div class="block mb-4 pl-4 pr-4 md:hidden">
-                                                <h2 class="font-semibold md:text-2xl">{{ __('Top Genres') }}</h2>
-                                            </div>
-
-                                            <div class="pl-4 pr-4">
-                                                @foreach ($recap->recapItems->take(5) as $key => $recapItem)
-                                                    <a class="flex flex-row items-center gap-2" href="{{ route('genres.details', $recapItem->model) }}">
-                                                        <p class="leading-tight font-semibold break-all md:text-2xl">{{ $key + 1 }}</p>
-
-                                                        <p class="font-bold text-2xl md:text-8xl">{{ $recapItem->model->name }}</p>
-                                                    </a>
-                                                @endforeach
-                                            </div>
-                                        </div>
+                                        <x-lockups.recap-genre-lockup class="mt-4" :recap="$recap" />
                                     </div>
                                 </section>
                                 @break
                             @case(\App\Models\Theme::class)
-                                <section class="mt-5 pl-4 pr-4 md:mt-36">
-                                    <div class="hidden md:block">
-                                        <h2 class="font-semibold md:text-2xl">{{ __('Top Themes') }}</h2>
+                                <section class="mt-10 xl:safe-area-inset">
+                                    <div class="pl-4 pr-4">
+                                        <h2 class="font-semibold text-xl">{{ $this->sectionTitles[\App\Models\Theme::class] }}</h2>
+
+                                        <x-lockups.recap-genre-lockup class="mt-4" :recap="$recap" />
+                                    </div>
+                                </section>
+                                @break
+                            @case(\App\Models\Studio::class)
+                                <section class="mt-10">
+                                    <div class="xl:safe-area-inset">
+                                        <h2 class="pl-4 pr-4 font-semibold text-xl">{{ $this->sectionTitles[\App\Models\Studio::class] }}</h2>
                                     </div>
 
-                                    <div class="flex flex-nowrap gap-4 mt-12">
-                                        <div class="flex flex-col justify-between gap-2 w-full pt-4 pb-4 bg-blur rounded-xl">
-                                            <div class="block mb-4 pl-4 pr-4 md:hidden">
-                                                <h2 class="font-semibold md:text-2xl">{{ __('Top Themes') }}</h2>
-                                            </div>
-
-                                            <div class="pl-4 pr-4">
-                                                @foreach ($recap->recapItems->take(5) as $key => $recapItem)
-                                                    <a class="flex flex-row items-center gap-2" href="{{ route('themes.details', $recapItem->model) }}">
-                                                        <p class="leading-tight font-semibold md:text-2xl">{{ $key + 1 }}</p>
-
-                                                        <p class="font-bold text-2xl break-all md:text-8xl">{{ $recapItem->model->name }}</p>
-                                                    </a>
-                                                @endforeach
-                                            </div>
-                                        </div>
+                                    <x-rows.container class="mt-4">
+                                        @foreach ($recap->recapItems->whereNotNull('model') as $recapItem)
+                                            <x-lockups.studio-lockup :studio="$recapItem->model" :rank="$loop->iteration" :detail="$this->recapItemDetails[$recap->id][$recapItem->model_id] ?? null" :is-ranked="true" />
+                                        @endforeach
+                                    </x-rows.container>
+                                </section>
+                                @break
+                            @case(\App\Models\Character::class)
+                                <section class="mt-10">
+                                    <div class="xl:safe-area-inset">
+                                        <h2 class="pl-4 pr-4 font-semibold text-xl">{{ $this->sectionTitles[\App\Models\Character::class] }}</h2>
                                     </div>
+
+                                    <x-rows.container class="mt-4" lockup="person-wide">
+                                        @foreach ($recap->recapItems->whereNotNull('model') as $recapItem)
+                                            <x-lockups.character-lockup :character="$recapItem->model" :rank="$loop->iteration" :is-ranked="true" :is-wide="true" />
+                                        @endforeach
+                                    </x-rows.container>
+                                </section>
+                                @break
+                            @case(\App\Models\Person::class)
+                            @case(\App\Models\MediaStaff::class)
+                                <section class="mt-10">
+                                    <div class="xl:safe-area-inset">
+                                        <h2 class="pl-4 pr-4 font-semibold text-xl">{{ $this->sectionTitles[$recap->type] }}</h2>
+                                    </div>
+
+                                    <x-rows.container class="mt-4" lockup="person-wide">
+                                        @foreach ($recap->recapItems->whereNotNull('model') as $recapItem)
+                                            <x-lockups.person-lockup :person="$recapItem->model" :staff-role="$this->recapItemDetails[$recap->id][$recapItem->model_id] ?? null" :rank="$loop->iteration" :is-ranked="true" :is-wide="true" />
+                                        @endforeach
+                                    </x-rows.container>
                                 </section>
                                 @break
                             @default
@@ -324,12 +252,60 @@
                 @endforeach
             </section>
 
-            <section class="mt-5 md:mt-36">
-                <div class="flex flex-col items-center mt-12">
-                    <h2 class="max-w-sm text-2xl text-center font-semibold md:text-4xl">{{ __('These milestones marked your season finale') }}</h2>
+            @foreach ($this->topTitlesByMonth as $topTitles)
+                <section class="mt-10">
+                    <div class="xl:safe-area-inset">
+                        <h2 class="pl-4 pr-4 font-semibold text-xl">{{ $topTitles['title'] }}</h2>
+                    </div>
+
+                    <x-rows.small-lockup-columns class="mt-4" :models="$topTitles['models']" :eyebrows="$topTitles['eyebrows']" :is-ranked="false" />
+                </section>
+            @endforeach
+
+            @foreach (['habits' => __('Your Habits'), 'activity' => __('Your Activity')] as $section => $sectionTitle)
+                @if (!empty($this->recapStatCards[$section]))
+                    <section class="mt-10">
+                        <div class="xl:safe-area-inset">
+                            <h2 class="pl-4 pr-4 font-semibold text-xl">{{ $sectionTitle }}</h2>
+                        </div>
+
+                        <div class="flex flex-nowrap gap-4 mt-2 pt-2 pl-4 pr-4 pb-4 snap-mandatory snap-x scroll-pl-4 overflow-x-scroll no-scrollbar xl:safe-area-inset-scroll">
+                            @foreach ($this->recapStatCards[$section] as $statCard)
+                                <x-lockups.recap-stat-lockup :title="$statCard['title']" :value="$statCard['value']" :caption="$statCard['caption']" />
+                            @endforeach
+                        </div>
+                    </section>
+                @endif
+            @endforeach
+
+            @if ($this->recapComparisons->isNotEmpty())
+                <section class="mt-10">
+                    <div class="xl:safe-area-inset">
+                        <h2 class="pl-4 pr-4 font-semibold text-xl">{{ __('Remember Last Year?') }}</h2>
+                    </div>
+
+                    <div class="flex flex-nowrap gap-4 mt-2 pt-2 pl-4 pr-4 pb-4 snap-mandatory snap-x scroll-pl-4 overflow-x-scroll no-scrollbar xl:safe-area-inset-scroll">
+                        @foreach ($this->recapComparisons as $recapComparison)
+                            <x-lockups.recap-comparison-lockup
+                                :recap="$recapComparison['recap']"
+                                :title="$recapComparison['title']"
+                                :subtitle="$recapComparison['subtitle']"
+                                :current-model="$recapComparison['currentModel']"
+                                :current-detail="$recapComparison['currentDetail']"
+                                :previous-model="$recapComparison['previousModel']"
+                                :previous-detail="$recapComparison['previousDetail']"
+                            />
+                        @endforeach
+                    </div>
+                </section>
+            @endif
+
+            <section class="mt-12">
+                <div class="xl:safe-area-inset">
+                    <h2 class="pt-10 pl-4 pr-4 pb-10 text-secondary text-2xl font-semibold">{{ __('These milestones marked your season finale') }}</h2>
                 </div>
 
-                <section class="flex flex-nowrap gap-4 mt-4 pl-4 pr-4 snap-mandatory snap-x overflow-x-scroll no-scrollbar md:mt-12">
+                <section class="flex flex-nowrap gap-4 mt-2 pt-2 pl-4 pr-4 pb-4 snap-mandatory snap-x scroll-pl-4 overflow-x-scroll no-scrollbar xl:safe-area-inset-scroll">
                     @foreach ($this->recaps as $recap)
                         @switch($recap->type)
                             @case(\App\Models\Anime::class)
@@ -374,7 +350,7 @@
                                         :progress-unit="__('Chapters')" />
                                 @endif
                                 @break
-                            @case(\App\Models\Games::class)
+                            @case(\App\Models\Game::class)
                                 @if ($recap->total_parts_duration)
                                     <x-lockups.milestone-lockup
                                         :recap="$recap"
@@ -402,7 +378,8 @@
 
                 @php($recap = $this->recaps->where('top_percentile', '!=', 0.00)->sortBy('top_percentile')->first())
                 @if (!empty($recap))
-                    <section class="flex flex-col gap-4 mt-12 pl-4 pr-4">
+                    <section class="mt-2 xl:safe-area-inset">
+                        <div class="flex flex-col gap-4 pl-4 pr-4">
                         @switch($recap->type)
                             @case(\App\Models\Anime::class)
                                 <x-lockups.milestone-lockup
@@ -426,7 +403,7 @@
                                     :progress-unit="__('Top Manga Reader')"
                                 />
                                 @break
-                            @case(\App\Models\Games::class)
+                            @case(\App\Models\Game::class)
                                 <x-lockups.milestone-lockup
                                     style="min-width: 100%; max-width: 100%;"
                                     :recap="null"
@@ -438,17 +415,14 @@
                                 @break
                             @default
                         @endswitch
+                        </div>
                     </section>
                 @endif
             </section>
         @elseif ($this->year === now()->year && $this->month === now()->month)
-            <div class="flex flex-col items-center justify-center" style="height: calc(100vh - 180px);">
-                <h2 class="max-w-sm text-center text-xl font-semibold md:max-w-2xl md:text-4xl">
-                    @if (now()->month === 12)
-                        {{ __(':x Re:CAP is still in progress. Check back in a week.', ['x' => now()->monthName]) }}
-                    @else
-                         {{ __(':x Re:CAP is still in progress. Check back in early :y.', ['x' => now()->monthName, 'y' => now()->addMonth()->monthName]) }}
-                    @endif
+            <div class="flex flex-col items-center justify-center xl:safe-area-inset" style="height: calc(100vh - 180px);">
+                <h2 class="max-w-sm pl-4 pr-4 text-center text-xl font-semibold md:max-w-2xl md:text-4xl">
+                    {{ __(':x Re:CAP is still in progress. Check back in early :y.', ['x' => now()->monthName, 'y' => now()->addMonthNoOverflow()->monthName]) }}
                 </h2>
 
                 <x-link-button class="mt-12" href="/">{{ __('Keep Tracking on :x', ['x' => config('app.name')]) }}</x-link-button>
@@ -457,11 +431,10 @@
     </div>
 
     <div
-        class="absolute top-0 bottom-0 left-0 right-0 mx-auto mb-8 pl-5 pr-5 pb-6 text-white z-10"
+        class="absolute top-0 bottom-0 left-0 right-0 mx-auto mb-8 pl-5 pr-5 pb-6 text-primary z-10"
         x-show="loadingScreenEnabled"
     >
-        <div class="fixed top-0 left-0 bottom-0 right-0 blur" style="background: url('{{ asset('images/static/star_bg_lg.jpg') }}') no-repeat center center; background-size: cover; transform: scale(1.1); z-index: -1;"></div>
-        <div class="fixed top-0 left-0 bottom-0 right-0 blur backdrop-blur" style="z-index: -1;"></div>
+        <x-recap-backdrop :recap="$this->backdropRecap" />
 
         <div class="flex flex-col items-center justify-center w-full h-screen text-center xl:safe-area-inset">
             <p class="animate-pulse text-5xl font-black">{{ __('This is your Re:CAP.') }}</p>

@@ -3,10 +3,14 @@
 namespace App\Http\Resources;
 
 use App\Models\Anime;
+use App\Models\Character;
 use App\Models\Game;
 use App\Models\Genre;
 use App\Models\Manga;
+use App\Models\MediaStaff;
+use App\Models\Person;
 use App\Models\Recap;
+use App\Models\Studio;
 use App\Models\Theme;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -24,23 +28,33 @@ class RecapItemResource extends JsonResource
      * Transform the resource into an array.
      *
      * @param Request $request
+     *
      * @return array<string, mixed>
      */
     public function toArray(Request $request): array
     {
         $resource = RecapItemResourceBasic::make($this->resource)->toArray($request);
+        $relationships = array_merge($this->getTypeSpecificData($request), $this->getItemsRelationship());
 
-        $relationships = [];
-        // Add specific data per type
-        $relationships = array_merge($relationships, $this->getTypeSpecificData($request));
-
-        // Merge relationships and return
         return array_merge($resource, ['relationships' => $relationships]);
     }
 
     /**
-     * Returns specific data that should be added
-     * depending on the type of the recap.
+     * Returns the items relationship.
+     *
+     * @return array
+     */
+    protected function getItemsRelationship(): array
+    {
+        return [
+            'items' => [
+                'data' => RecapEntryResource::collection($this->resource->recapItems),
+            ]
+        ];
+    }
+
+    /**
+     * Returns the relationships of the recap's type.
      *
      * @param Request $request
      *
@@ -82,6 +96,30 @@ class RecapItemResource extends JsonResource
                     'data' => GameResourceIdentity::collection($this->resource
                         ->recapItems
                         ->pluck('model'))
+                ]
+            ],
+            Studio::class => [
+                'studios' => [
+                    'data' => StudioResourceIdentity::collection($this->resource
+                        ->recapItems
+                        ->pluck('model')
+                        ->filter())
+                ]
+            ],
+            Character::class => [
+                'characters' => [
+                    'data' => CharacterResourceIdentity::collection($this->resource
+                        ->recapItems
+                        ->pluck('model')
+                        ->filter())
+                ]
+            ],
+            Person::class, MediaStaff::class => [
+                'people' => [
+                    'data' => PersonResourceIdentity::collection($this->resource
+                        ->recapItems
+                        ->pluck('model')
+                        ->filter())
                 ]
             ],
             default => [

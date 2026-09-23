@@ -239,13 +239,13 @@ Schedule::command('delete:stale_link_previews')
     ->onOneServer();
 
 /**********************************************/
-// Generate ReCAP every month except January and December
+// Generate previous month's ReCAP every month
 Schedule::command('generate:recaps', [
     'all',
-    now()->year,
-    now()->subMonth()->month
+    now()->subMonth()->year,
+    now()->subMonth()->month,
 ])
-    ->cron('0 9 1 2,3,4,5,6,7,8,9,10,11 *')
+    ->monthlyOn(1, '9:00')
     ->name('Generate monthly recaps')
     ->onOneServer();
 
@@ -253,7 +253,7 @@ Schedule::command('generate:recaps', [
 // Generate yearly ReCAP every week in December
 Schedule::command('generate:recaps', [
     'all',
-    now()->year
+    now()->year,
 ])
     ->yearlyOn(12, 1, '9:00')
     ->fridays()
@@ -264,7 +264,7 @@ Schedule::command('generate:recaps', [
 // Generate previous year's ReCAP every year on January
 Schedule::command('generate:recaps', [
     'all',
-    now()->subYear()->year
+    now()->subYear()->year,
 ])
     ->yearlyOn(1, 1, '9:00')
     ->name('Generate previous year’s recaps')

@@ -1,12 +1,12 @@
 @props(['recap', 'title', 'progressAriaLabel', 'progressCount', 'progressUnit', 'mediaCollection' => \App\Enums\MediaCollection::Poster])
 
 <div
-    {{ $attributes->merge(['class' => 'flex flex-col items-center justify-between gap-6 w-full pt-4 pl-4 pb-4 pr-4 bg-blur rounded-xl overflow-hidden', 'style' => 'min-width: 256px; max-width: 384px;']) }}
+    {{ $attributes->merge(['class' => 'relative flex flex-col items-center justify-between gap-6 w-full pt-4 pl-4 pb-4 pr-4 bg-blur rounded-xl shadow-md overflow-hidden', 'style' => 'min-width: 256px; max-width: 384px;']) }}
     wire:key="{{ uniqid($recap?->id, true) }}"
 >
     <div class="w-full">
         <h2 class="text-2xl font-semibold">{{ __('Milestone') }}</h2>
-        <p class="text-2xl opacity-75 font-semibold">{{ $title }}</p>
+        <p class="text-2xl text-secondary font-semibold">{{ $title }}</p>
     </div>
 
     <div class="relative aspect-square" style="height: 232px" role="progressbar" aria-label="{{ $progressAriaLabel }}">
@@ -146,7 +146,7 @@
 {{--                </div>--}}
                     <div class="flex justify-center gap-4 h-40" style="width: 147%;">
                         @foreach ($recap->recapItems->concat($recap->recapItems)->take(4)->pad(4, $recap->recapItems->last()) as $key => $recapItem)
-                            <a class="flex w-1/3 mt-auto" href="{{ route('anime.details', $recapItem->model) }}" wire:navigate style="min-height: 108px; aspect-ratio: 3/4.23;">
+                            <a class="flex w-1/3 mt-auto" href="{{ route('manga.details', $recapItem->model) }}" wire:navigate style="min-height: 108px; aspect-ratio: 3/4.23;">
                                 <picture
                                     class="relative w-full rounded-lg overflow-hidden"
                                     style="background-color: {{ $recapItem->model->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
@@ -162,4 +162,6 @@
             @default
        @endswitch
     @endif
+
+    <div class="absolute top-0 left-0 h-full w-full border border-solid border-primary rounded-xl pointer-events-none"></div>
 </div>

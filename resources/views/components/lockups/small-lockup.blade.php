@@ -1,4 +1,4 @@
-@props(['anime', 'manga', 'game', 'relation', 'rank', 'trackingEnabled' => true, 'showsSchedule' => false, 'isRanked' => false, 'isRow' => true, 'inLibrary' => false])
+@props(['anime', 'manga', 'game', 'relation', 'rank', 'eyebrow' => null, 'detail' => null, 'favoriteStatus' => null, 'trackingEnabled' => true, 'showsSchedule' => false, 'isRanked' => false, 'isRow' => true, 'inLibrary' => false])
 
 @php
     $class = $isRow ? 'w-[98%] max-w-sm sm:w-80 pb-2 shrink-0 snap-normal snap-start' : 'sm:w-80';
@@ -7,6 +7,14 @@
 <div {{ $attributes->merge(['class' => 'relative flex-grow ' . $class]) }} @if ($inLibrary) data-in-library @endif>
     @if (!empty($anime))
         <div class="flex flex-nowrap gap-2">
+            @if ($favoriteStatus !== null)
+                <div class="flex items-center shrink-0 w-3 -ml-4 -mr-1 text-tint" @if ($favoriteStatus) title="{{ __('Favorited') }}" @endif>
+                    @if ($favoriteStatus)
+                        @svg('heart_fill', 'fill-current', ['width' => 12])
+                    @endif
+                </div>
+            @endif
+
             <picture
                 class="relative shrink-0 w-28 h-40 rounded-lg overflow-hidden"
                 style="background-color: {{ $anime->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
@@ -20,7 +28,9 @@
 
             <div class="flex flex-col w-full gap-2 justify-between">
                 <div>
-                    @if ($isRanked)
+                    @if (!empty($eyebrow))
+                        <p class="text-sm leading-tight font-semibold uppercase opacity-75">{{ $eyebrow }}</p>
+                    @elseif ($isRanked)
                         <p class="text-sm leading-tight font-semibold" title="{{ __('Ranked #:x', ['x' => $rank]) }}">{{ __('#:x', ['x' => $rank]) }}</p>
                     @endif
 
@@ -57,6 +67,10 @@
 
                     <p class="leading-tight line-clamp-2" title="{{ $anime->title }}">{{ $anime->title }}</p>
 
+                    @if (!empty($detail))
+                        <p class="text-xs leading-tight font-semibold opacity-75 line-clamp-1">{{ $detail }}</p>
+                    @endif
+
                     <div class="flex flex-col gap-1">
                         <p class="text-xs leading-tight opacity-75 line-clamp-2" title="{{ empty($anime->tagline) ? ($anime->genres?->pluck('name')->join(', ', ' and ') ?? $anime->themes?->pluck('name')->join(', ', ' and ')) : $anime->tagline }}">{{ empty($anime->tagline) ? ($anime->genres?->pluck('name')->join(', ', ' and ') ?? $anime->themes?->pluck('name')->join(', ', ' and ')) : $anime->tagline }}</p>
                         <p class="text-xs leading-tight opacity-75 line-clamp-2" title="{{ $anime->tvRating->name }}">{{ $anime->tvRating->name }}</p>
@@ -78,6 +92,14 @@
         </div>
     @elseif (!empty($game))
         <div class="flex flex-nowrap gap-2">
+            @if ($favoriteStatus !== null)
+                <div class="flex items-center shrink-0 w-3 -ml-4 -mr-1 text-tint" @if ($favoriteStatus) title="{{ __('Favorited') }}" @endif>
+                    @if ($favoriteStatus)
+                        @svg('heart_fill', 'fill-current', ['width' => 12])
+                    @endif
+                </div>
+            @endif
+
             <picture
                 class="relative shrink-0 w-28 h-28 rounded-3xl overflow-hidden"
                 style="background-color: {{ $game->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
@@ -91,7 +113,9 @@
 
             <div class="flex flex-col w-full gap-2 justify-between">
                 <div>
-                    @if ($isRanked)
+                    @if (!empty($eyebrow))
+                        <p class="text-sm leading-tight font-semibold uppercase opacity-75">{{ $eyebrow }}</p>
+                    @elseif ($isRanked)
                         <p class="text-sm leading-tight font-semibold" title="{{ __('Ranked #:x', ['x' => $rank]) }}">{{ __('#:x', ['x' => $rank]) }}</p>
                     @endif
 
@@ -128,6 +152,10 @@
 
                     <p class="leading-tight line-clamp-1" title="{{ $game->title }}">{{ $game->title }}</p>
 
+                    @if (!empty($detail))
+                        <p class="text-xs leading-tight font-semibold opacity-75 line-clamp-1">{{ $detail }}</p>
+                    @endif
+
                     <div class="flex flex-col gap-1">
                         <p class="text-xs leading-tight opacity-75 line-clamp-1" title="{{ empty($game->tagline) ? ($game->genres?->pluck('name')->join(', ', ' and ') ?? $game->themes?->pluck('name')->join(', ', ' and ')) : $game->tagline }}">{{ empty($game->tagline) ? ($game->genres?->pluck('name')->join(', ', ' and ') ?? $game->themes?->pluck('name')->join(', ', ' and ')) : $game->tagline }}</p>
                         <p class="text-xs leading-tight opacity-75 line-clamp-1" title="{{ $game->tvRating->name }}">{{ $game->tvRating->name }}</p>
@@ -149,6 +177,14 @@
         </div>
     @elseif (!empty($manga))
         <div class="flex flex-nowrap gap-2">
+            @if ($favoriteStatus !== null)
+                <div class="flex items-center shrink-0 w-3 -ml-4 -mr-1 text-tint" @if ($favoriteStatus) title="{{ __('Favorited') }}" @endif>
+                    @if ($favoriteStatus)
+                        @svg('heart_fill', 'fill-current', ['width' => 12])
+                    @endif
+                </div>
+            @endif
+
             <svg class="relative shrink-0 w-28 h-40 overflow-hidden">
                 <rect width="100%" height="100%" fill="{{ $manga->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }}" mask="url(#svg-mask-book-cover)" />
 
@@ -174,7 +210,9 @@
 
             <div class="flex flex-col w-full gap-2 justify-between">
                 <div>
-                    @if ($isRanked)
+                    @if (!empty($eyebrow))
+                        <p class="text-sm leading-tight font-semibold uppercase opacity-75">{{ $eyebrow }}</p>
+                    @elseif ($isRanked)
                         <p class="text-sm leading-tight font-semibold" title="{{ __('Ranked #:x', ['x' => $rank]) }}">{{ __('#:x', ['x' => $rank]) }}</p>
                     @endif
 
@@ -209,6 +247,10 @@
                     @endif
 
                     <p class="leading-tight line-clamp-2" title="{{ $manga->title }}">{{ $manga->title }}</p>
+
+                    @if (!empty($detail))
+                        <p class="text-xs leading-tight font-semibold opacity-75 line-clamp-1">{{ $detail }}</p>
+                    @endif
 
                     <div class="flex flex-col gap-1">
                         <p class="text-xs leading-tight opacity-75 line-clamp-2" title="{{ empty($manga->tagline) ? ($manga->genres?->pluck('name')->join(', ', ' and ') ?? $manga->themes?->pluck('name')->join(', ', ' and ')) : $manga->tagline }}">{{ empty($manga->tagline) ? ($manga->genres?->pluck('name')->join(', ', ' and ') ?? $manga->themes?->pluck('name')->join(', ', ' and ')) : $manga->tagline }}</p>

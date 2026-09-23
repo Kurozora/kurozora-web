@@ -3,14 +3,12 @@
 namespace App\Models;
 
 use Carbon\Month;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Recap extends KModel
 {
-    use SoftDeletes;
-
     // Table name
     const string TABLE_NAME = 'recaps';
     protected $table = self::TABLE_NAME;
@@ -89,6 +87,32 @@ class Recap extends KModel
     public function getMonthNameAttribute(): string
     {
         return Month::from($this->month)->name;
+    }
+
+    /**
+     * The short title of the recap’s period.
+     *
+     * @return string
+     */
+    public function getPeriodTitleAttribute(): string
+    {
+        if ($this->month === 0) {
+            return (string) $this->year;
+        }
+
+        return substr($this->month_name, 0, 3);
+    }
+
+    /**
+     * Eloquent builder scope that limits the query to the recap types clients display.
+     *
+     * @param Builder $query
+     *
+     * @return Builder
+     */
+    public function scopeWhereDisplayableType(Builder $query): Builder
+    {
+        return $query->whereIn('type', [Anime::class, Manga::class, Game::class, Genre::class, Theme::class]);
     }
 
     /**

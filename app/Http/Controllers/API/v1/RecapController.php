@@ -6,11 +6,14 @@ use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\RecapItemResource;
 use App\Http\Resources\RecapResource;
+use App\Http\Resources\RecapStatResource;
 use App\Models\Anime;
 use App\Models\Game;
 use App\Models\Genre;
 use App\Models\Manga;
+use App\Models\Provider;
 use App\Models\Recap;
+use App\Models\RecapStat;
 use App\Models\Theme;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -33,13 +36,22 @@ class RecapController extends Controller
             ->groupBy(['year', 'month'])
             ->get();
 
-        if (now()->month !== 12) {
+        $hasCurrentMonth = $recaps->contains(function (Recap $recap) {
+            return $recap->year === now()->year && $recap->month === now()->month;
+        });
+
+        if (!$hasCurrentMonth) {
             $recaps->push(Recap::make([
                 'id' => 0,
                 'year' => now()->year,
                 'month' => now()->month,
             ]));
         }
+
+        $recaps = $recaps->sortBy([
+            ['year', 'desc'],
+            ['month', 'asc'],
+        ])->values();
 
         return JSONResult::success([
             'data' => RecapResource::collection($recaps)
@@ -59,10 +71,11 @@ class RecapController extends Controller
         if ($year == now()->year) {
             $month = now()->subMonth()->month;
         } else {
-            $month = 12;
+            $month = 0;
         }
 
         $recaps = auth()->user()->recaps()
+            ->whereDisplayableType()
             ->with(['recapItems.model'])
             ->where('year', '=', $year)
             ->where('month', '=', $month)
@@ -85,6 +98,7 @@ class RecapController extends Controller
     {
         $recaps = auth()->user()->recaps()
             ->with([
+                'recapItems.role',
                 'recapItems.model' => function (MorphTo $morphTo) {
                     $morphTo->withoutGlobalScopes()
                         ->constrain([
@@ -112,6 +126,38 @@ class RecapController extends Controller
 
         return JSONResult::success([
             'data' => RecapItemResource::collection($recaps)
+        ]);
+    }
+
+    /**
+     * Returns the Re:CAP stats of the given period.
+     *
+     * @param int|string $year
+     * @param int|string $month
+     *
+     * @return JsonResponse
+     */
+    public function stats(int|string $year, int|string $month): JsonResponse
+    {
+        $recapStats = RecapStat::where([
+            ['user_id', '=', auth()->id()],
+            ['year', '=', $year],
+            ['month', '=', $month],
+        ])
+            ->with([
+                'model' => function (MorphTo $morphTo) {
+                    $morphTo->constrain([
+                        Provider::class => function (Builder $query) {
+                            $query->with(['media']);
+                        },
+                    ]);
+                },
+            ])
+            ->orderBy('stat')
+            ->get();
+
+        return JSONResult::success([
+            'data' => RecapStatResource::collection($recapStats)
         ]);
     }
 }
