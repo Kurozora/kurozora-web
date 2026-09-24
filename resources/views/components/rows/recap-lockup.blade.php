@@ -1,19 +1,7 @@
 @props(['recaps' => [], 'isRow' => true, 'safeAreaInsetEnabled' => true])
 
-@php
-    $class = $isRow ? 'snap-mandatory snap-x scroll-pl-4 overflow-x-scroll no-scrollbar' : 'flex-wrap';
-
-    if ($isRow && $safeAreaInsetEnabled) {
-        $class .= ' xl:safe-area-inset-scroll';
-    }
-@endphp
-
-<div {{ $attributes->merge(['class' => 'flex gap-4 justify-between select-none pl-4 pr-4 ' . $class]) }}>
+<x-rows.container lockup="recap" class="select-none" :is-row="$isRow" :safe-area-inset-enabled="$safeAreaInsetEnabled" {{ $attributes }}>
     @foreach ($recaps as $index => $recap)
-        <x-lockups.recap-lockup :recap="$recap" :is-row="$isRow"  />
+        <x-lockups.recap-lockup :recap="$recap" :is-row="$isRow" />
     @endforeach
-
-    <div class="w-[98%] flex-grow"></div>
-    <div class="w-[98%] flex-grow"></div>
-    <div class="w-[98%] flex-grow"></div>
-</div>
+</x-rows.container>

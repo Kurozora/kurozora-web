@@ -1,4 +1,4 @@
-@props(['recap', 'title', 'subtitle', 'currentModel', 'currentDetail' => null, 'previousModel', 'previousDetail' => null])
+@props(['recap', 'title', 'subtitle', 'currentModel', 'currentDetail' => null, 'previousModel', 'previousDetail' => null, 'shareKey' => null])
 
 @once
     <style>
@@ -72,7 +72,9 @@
             @class([
                 'relative flex items-center gap-4 pl-4 pr-4 overflow-hidden',
                 'flex-row justify-between pt-8 pb-6' => $index === 0,
-                'flex-row-reverse justify-end pt-6 pb-8' => $index === 1,
+                'flex-row-reverse justify-end pt-6' => $index === 1,
+                'pb-8' => $index === 1 && empty($shareKey),
+                'pb-2' => $index === 1 && !empty($shareKey),
             ])
             href="{{ match (true) {
                 $model instanceof \App\Models\Manga => route('manga.details', $model),
@@ -106,6 +108,12 @@
             </picture>
         </a>
     @endforeach
+
+    @if ($shareKey)
+        <div class="relative flex justify-end pl-4 pr-4 pb-4">
+            <x-recap-share-button :share-key="$shareKey" />
+        </div>
+    @endif
 
     <div class="absolute top-0 left-0 h-full w-full border border-solid border-primary rounded-xl pointer-events-none"></div>
 </div>

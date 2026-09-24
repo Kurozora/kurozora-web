@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Recap;
 
+use App\Enums\MediaCollection;
 use App\Enums\RecapStatType;
 use App\Models\Anime;
 use App\Models\Character;
@@ -56,6 +57,13 @@ class Index extends Component
      * @var bool $loadingScreenEnabled
      */
     public bool $loadingScreenEnabled = true;
+
+    /**
+     * Whether the prompt to allow canvas access is shown.
+     *
+     * @var bool $confirmingCanvasAccess
+     */
+    public bool $confirmingCanvasAccess = false;
 
     /**
      * The query strings of the component.
@@ -399,7 +407,7 @@ class Index extends Component
         return match ($recapType ?? $recapItem->model_type) {
             Manga::class => $recapItem->parts_count ? __(':x chapters', ['x' => $count]) : null,
             Game::class => $minutes ? __(':x minutes', ['x' => number_format($minutes)]) : null,
-            Studio::class => $minutes ? __(':x minutes', ['x' => number_format($minutes)]) : null,
+            Studio::class, Genre::class, Theme::class => $minutes ? __(':x minutes', ['x' => number_format($minutes)]) : null,
             Character::class => null,
             Person::class => trans_choice(':count character|:count characters', $recapItem->parts_count, ['count' => $count]),
             MediaStaff::class => collect([$recapItem->role?->name, trans_choice(':count title|:count titles', $recapItem->parts_count, ['count' => $count])])->filter()->join(' · '),
@@ -622,6 +630,145 @@ class Index extends Component
         return Recap::make([
             'year' => $this->year,
         ]);
+    }
+
+    /**
+     * The shareable image cards of the selected period keyed by the button that shares them.
+     *
+     * @return array
+     */
+    #[Computed]
+    public function shareCards(): array
+    {
+        $brand = [
+            'wordmark' => __('Re:CAP'),
+            'name' => config('app.name'),
+            'colors' => [$this->backdropRecap->background_color1, $this->backdropRecap->background_color2],
+        ];
+        $cards = [];
+
+        foreach ([Genre::class => ['genres', __('Top Genres')], Theme::class => ['themes', __('Top Themes')]] as $type => [$key, $title]) {
+            $recapItems = $this->recaps->firstWhere('type', $type)?->recapItems->whereNotNull('model')->take(5);
+
+            if ($recapItems?->isNotEmpty()) {
+                $cards[$key] = [
+                    'layout' => 'genres',
+                    'title' => $title,
+                    'subtitle' => $this->sharePeriodName,
+                    'items' => $recapItems->map(fn (RecapItem $recapItem) => [
+                        'name' => $recapItem->model->name,
+                        'detail' => $this->recapItemDetail($recapItem, $type),
+                    ])->values()->all(),
+                ];
+            }
+        }
+
+        foreach ($this->recapComparisons as $index => $recapComparison) {
+            $cards['comparison-' . $index] = [
+                'layout' => 'comparison',
+                'title' => __('Compare Your Re:CAP'),
+                'subtitle' => $recapComparison['title'],
+                'entries' => [
+                    [
+                        'year' => (string) $recapComparison['recap']->year,
+                        'name' => $recapComparison['currentModel']->title,
+                        'detail' => $recapComparison['currentDetail'],
+                        'artwork' => $this->shareArtwork($recapComparison['currentModel']),
+                    ],
+                    [
+                        'year' => (string) ($recapComparison['recap']->year - 1),
+                        'name' => $recapComparison['previousModel']->title,
+                        'detail' => $recapComparison['previousDetail'],
+                        'artwork' => $this->shareArtwork($recapComparison['previousModel']),
+                    ],
+                ],
+            ];
+        }
+
+        // The first four sections the period has data for.
+        $sections = collect([
+            Anime::class => __('Top Anime'),
+            Manga::class => __('Top Manga'),
+            Game::class => __('Top Games'),
+            Character::class => __('Top Characters'),
+            Person::class => __('Top Voices'),
+            MediaStaff::class => __('Top Creators'),
+        ])
+            ->map(function (string $title, string $type) {
+                $models = $this->recaps->firstWhere('type', $type)?->recapItems->pluck('model')->filter()->values();
+
+                if ($models === null || $models->isEmpty()) {
+                    return null;
+                }
+
+                return [
+                    'title' => $title,
+                    'items' => $models->take(10)->map(fn ($model) => match (true) {
+                        $model instanceof Character => $model->name,
+                        $model instanceof Person => $model->full_name,
+                        default => $model->title,
+                    })->all(),
+                    'artwork' => $this->shareArtwork($models->first()),
+                ];
+            })
+            ->filter()
+            ->take(4)
+            ->values();
+
+        if ($sections->isNotEmpty()) {
+            $totalMinutes = (int) round($this->recaps->whereIn('type', [Anime::class, Manga::class, Game::class])->sum('total_parts_duration') / 60);
+
+            $cards['summary'] = [
+                'layout' => 'summary',
+                'period' => $this->sharePeriodName,
+                'total' => $totalMinutes ? __(':x minutes', ['x' => number_format($totalMinutes)]) : null,
+                'sections' => $sections->all(),
+            ];
+        }
+
+        return [
+            'brand' => $brand,
+            'fileName' => str('kurozora-recap-' . $this->year . ($this->month ? '-' . $this->month : ''))->slug()->value(),
+            'cards' => $cards,
+        ];
+    }
+
+    /**
+     * The name of the selected period on share cards.
+     *
+     * @return string
+     */
+    public function getSharePeriodNameProperty(): string
+    {
+        if ($this->month === 0) {
+            return (string) $this->year;
+        }
+
+        return now()->startOfYear()->year($this->year)->month($this->month)->translatedFormat('F Y');
+    }
+
+    /**
+     * The artwork a share card shows for the given model.
+     *
+     * @param Anime|Manga|Game|Character|Person $model
+     *
+     * @return array
+     */
+    protected function shareArtwork(Anime|Manga|Game|Character|Person $model): array
+    {
+        $isProfile = $model instanceof Character || $model instanceof Person;
+        $collection = $isProfile ? MediaCollection::Profile() : MediaCollection::Poster();
+
+        return [
+            'url' => $model->getFirstMediaFullUrl($collection) ?? asset($isProfile ? 'images/static/placeholders/person_poster.webp' : 'images/static/placeholders/anime_poster.webp'),
+            'color' => $model->getFirstMedia($collection->value)?->custom_properties['background_color'] ?? null,
+            'shape' => match (true) {
+                $model instanceof Manga => 'book',
+                $model instanceof Game => 'square',
+                $model instanceof Character, $model instanceof Person => 'circle',
+                default => 'poster',
+            },
+        ];
     }
 
     /**

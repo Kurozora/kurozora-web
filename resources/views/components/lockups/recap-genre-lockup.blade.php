@@ -1,4 +1,4 @@
-@props(['recap'])
+@props(['recap', 'shareKey' => null])
 
 @once
     <style>
@@ -102,7 +102,7 @@
 <x-recap-gradient-shapes />
 
 <div
-    {{ $attributes->merge(['class' => 'relative pt-5 pl-5 pr-5 pb-12 rounded-xl overflow-hidden']) }}
+    {{ $attributes->merge(['class' => 'relative pt-5 pl-5 pr-5 pb-5 rounded-xl overflow-hidden']) }}
     style="--recap-gradient-fill: radial-gradient(circle at 72% 24%, rgb(255 255 255 / 30%), rgb(255 255 255 / 8%) 45%, transparent 72%), linear-gradient(135deg, {{ $recap->background_color1 }}, {{ $recap->background_color2 }}); background: linear-gradient(135deg, {{ $recap->background_color1 }}, {{ $recap->background_color2 }}); color: {{ $recap->is_light ? 'rgb(0 0 0 / 55%)' : 'rgb(255 255 255 / 94%)' }};"
 >
     <div class="recap-genre-gradients" aria-hidden="true">
@@ -126,4 +126,10 @@
             </li>
         @endforeach
     </ol>
+
+    @if ($shareKey)
+        <div class="relative flex justify-end pt-2">
+            <x-recap-share-button :share-key="$shareKey" />
+        </div>
+    @endif
 </div>

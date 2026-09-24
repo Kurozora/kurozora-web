@@ -83,6 +83,7 @@ export default defineConfig({
                 'resources/js/lyrics.js',
                 'resources/js/markdown.js',
                 'resources/js/museum.js',
+                'resources/js/recap-share.js',
                 'resources/js/settings.js',
                 'resources/js/submenu.js',
                 'resources/js/trailer-hero.js',

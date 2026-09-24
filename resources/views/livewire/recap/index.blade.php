@@ -25,6 +25,10 @@
         recap?year={{ $this->year }}&month={{ $this->month }}
     </x-slot:appArgument>
 
+    <x-slot:scripts>
+        @vite(['resources/js/recap-share.js'])
+    </x-slot:scripts>
+
     @if ($this->recapYears->count())
         <header
             id="header"
@@ -33,17 +37,23 @@
             <div class="flex flex-row items-center justify-between gap-4 pt-6 pl-4 pr-4">
                 <h1 class="text-primary text-3xl font-bold">{{ __('Re:CAP') }}</h1>
 
-                <x-select-button
-                    rounded="full"
-                    chevronClass="w-5 h-5 text-primary"
-                    class="pl-4 pr-8 pt-1 pb-1 bg-blur backdrop-blur text-primary text-lg font-semibold border-0 shadow-md focus:ring-0"
-                    aria-label="{{ __('Select a year to see your recap') }}"
-                    x-model.number="year"
-                >
-                    @foreach ($this->recapYears as $recap)
-                        <option value="{{ $recap->year }}">{{ $recap->year }}</option>
-                    @endforeach
-                </x-select-button>
+                <div class="flex items-center gap-2">
+                    @if (isset($this->shareCards['cards']['summary']))
+                        <x-recap-share-button class="w-9 h-9" share-key="summary" :label="__('Share your Re:CAP')" />
+                    @endif
+
+                    <x-select-button
+                        rounded="full"
+                        chevronClass="w-5 h-5 text-primary"
+                        class="pl-4 pr-8 pt-1 pb-1 bg-blur backdrop-blur text-primary text-lg font-semibold border-0 shadow-md focus:ring-0"
+                        aria-label="{{ __('Select a year to see your recap') }}"
+                        x-model.number="year"
+                    >
+                        @foreach ($this->recapYears as $recap)
+                            <option value="{{ $recap->year }}">{{ $recap->year }}</option>
+                        @endforeach
+                    </x-select-button>
+                </div>
             </div>
         </header>
 
@@ -142,6 +152,7 @@
                 wire:key="{{ rand() }}"
                 x-init="loadingScreenEnabled = false"
             >
+                <div hidden data-recap-share-cards="{{ json_encode($this->shareCards) }}"></div>
                 <div class="xl:safe-area-inset">
                     <h2 class="pt-10 pl-4 pr-4 pb-10 text-secondary text-2xl font-semibold">{{ $this->periodHeadingParts[0] }}<x-rolling-text class="text-primary" :text="$this->periodName" />{{ $this->periodHeadingParts[1] }}</h2>
                 </div>
@@ -190,7 +201,7 @@
                                     <div class="pl-4 pr-4">
                                         <h2 class="font-semibold text-xl">{{ $this->sectionTitles[\App\Models\Genre::class] }}</h2>
 
-                                        <x-lockups.recap-genre-lockup class="mt-4" :recap="$recap" />
+                                        <x-lockups.recap-genre-lockup class="mt-4" :recap="$recap" share-key="genres" />
                                     </div>
                                 </section>
                                 @break
@@ -199,7 +210,7 @@
                                     <div class="pl-4 pr-4">
                                         <h2 class="font-semibold text-xl">{{ $this->sectionTitles[\App\Models\Theme::class] }}</h2>
 
-                                        <x-lockups.recap-genre-lockup class="mt-4" :recap="$recap" />
+                                        <x-lockups.recap-genre-lockup class="mt-4" :recap="$recap" share-key="themes" />
                                     </div>
                                 </section>
                                 @break
@@ -294,6 +305,7 @@
                                 :current-detail="$recapComparison['currentDetail']"
                                 :previous-model="$recapComparison['previousModel']"
                                 :previous-detail="$recapComparison['previousDetail']"
+                                :share-key="'comparison-' . $loop->index"
                             />
                         @endforeach
                     </div>
@@ -440,4 +452,26 @@
             <p class="animate-pulse text-5xl font-black">{{ __('This is your Re:CAP.') }}</p>
         </div>
     </div>
+
+    <x-dialog-modal maxWidth="sm" model="confirmingCanvasAccess">
+        <x-slot:title>
+            {{ __('Allow Canvas Access') }}
+        </x-slot:title>
+
+        <x-slot:content>
+            <div class="pt-4 pb-4 pl-4 pr-4">
+                <p>{{ __('Your browser is blocking the canvas, which your Re:CAP image is drawn on. Allow canvas access when your browser asks, then try again.') }}</p>
+            </div>
+        </x-slot:content>
+
+        <x-slot:footer>
+            <x-outlined-button wire:click="$set('confirmingCanvasAccess', false)">
+                {{ __('Cancel') }}
+            </x-outlined-button>
+
+            <x-button class="ml-2" data-recap-share-retry>
+                {{ __('Try Again') }}
+            </x-button>
+        </x-slot:footer>
+    </x-dialog-modal>
 </main>

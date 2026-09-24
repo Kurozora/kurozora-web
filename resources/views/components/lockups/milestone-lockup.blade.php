@@ -55,9 +55,14 @@
                                    values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"></feColorMatrix>
                     <feOffset id="feOffset4120" dx="21.0844"></feOffset>
                     <feGaussianBlur id="feGaussianBlur4122" stdDeviation="14.4704"></feGaussianBlur>
-                    <feComposite id="feComposite4124" in2="hardAlpha" operator="out"></feComposite>
-                    <feColorMatrix id="feColorMatrix4126" type="matrix"
-                                   values="0 0 0 0 0.573381 0 0 0 0 0.373381 0 0 0 0 0.373381 0 0 0 1 0"></feColorMatrix>
+                    <feComposite id="feComposite4124" in2="hardAlpha" operator="out" result="shadowAlpha"></feComposite>
+                    <feFlood id="feFlood4125" style="flood-color: var(--tint-color);" result="tint"></feFlood>
+                    <feComponentTransfer id="feComponentTransfer4126" in="tint" result="shade">
+                        <feFuncR type="linear" slope="0.573"></feFuncR>
+                        <feFuncG type="linear" slope="0.573"></feFuncG>
+                        <feFuncB type="linear" slope="0.573"></feFuncB>
+                    </feComponentTransfer>
+                    <feComposite id="feComposite4127" in="shade" in2="shadowAlpha" operator="in"></feComposite>
                     <feBlend id="feBlend4128" in2="BackgroundImageFix" mode="normal"
                              result="effect1_dropShadow_1454_36805"></feBlend>
                     <feBlend id="feBlend4130" in="SourceGraphic" in2="effect1_dropShadow_1454_36805" mode="normal"

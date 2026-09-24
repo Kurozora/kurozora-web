@@ -692,6 +692,28 @@ class GenerateRecaps extends Command
 
         $totalPartsCount[Game::class] = 1;
 
+        // Sum the time spent in each genre and theme across the titles tagged with it
+        $genreDurations = [];
+        $themeDurations = [];
+
+        foreach ($library as $entry) {
+            $type = $entry['type'];
+
+            if (!isset($titles['measures'][$type][$entry['id']]) || $entry['status'] == UserLibraryStatus::Ignored) {
+                continue;
+            }
+
+            $duration = $partMeasures[$type][$entry['id']]['duration'] ?? 0;
+
+            foreach ($titles['genres'][$type][$entry['id']] ?? [] as $genreID) {
+                $genreDurations[$genreID] = ($genreDurations[$genreID] ?? 0) + $duration;
+            }
+
+            foreach ($titles['themes'][$type][$entry['id']] ?? [] as $themeID) {
+                $themeDurations[$themeID] = ($themeDurations[$themeID] ?? 0) + $duration;
+            }
+        }
+
         // Find the genre and theme with the highest count
         arsort($genresArray);
         arsort($themesArray);
@@ -776,7 +798,12 @@ class GenerateRecaps extends Command
             ];
         }
 
-        foreach ([Genre::class => $topGenres, Theme::class => $topThemes] as $type => $modelIDs) {
+        $tagMeasures = [
+            Genre::class => [$topGenres, $genresArray, $genreDurations],
+            Theme::class => [$topThemes, $themesArray, $themeDurations],
+        ];
+
+        foreach ($tagMeasures as $type => [$modelIDs, $counts, $durations]) {
             if (empty($modelIDs)) {
                 continue;
             }
@@ -785,12 +812,12 @@ class GenerateRecaps extends Command
                 'total_series_count' => 0,
                 'total_parts_count' => 0,
                 'total_parts_duration' => 0,
-                'items' => array_map(function ($modelID) use ($type) {
+                'items' => array_map(function ($modelID) use ($type, $counts, $durations) {
                     return [
                         'model_type' => $type,
                         'model_id' => $modelID,
-                        'parts_count' => 0,
-                        'parts_duration' => 0,
+                        'parts_count' => $counts[$modelID] ?? 0,
+                        'parts_duration' => $durations[$modelID] ?? 0,
                     ];
                 }, $modelIDs),
             ];
