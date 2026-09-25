@@ -28,6 +28,13 @@ class AppTheme extends KModel implements HasMedia
     protected $table = self::TABLE_NAME;
 
     /**
+     * The validation rules of a theme screenshot.
+     *
+     * @var string
+     */
+    const string SCREENSHOT_RULES = 'dimensions:min_width=375,min_height=667,max_width=1206,max_height=2622';
+
+    /**
      * Registers the media collections for the model.
      */
     public function registerMediaCollections(): void

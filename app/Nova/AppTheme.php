@@ -118,8 +118,8 @@ class AppTheme extends Resource
                     Number::make('Height')
                         ->help('The maximum height available for the image.'),
                 ])
-                ->singleMediaRules('dimensions:min-width=375,min-height=667,max_width=1170,max-height=2532')
-                ->help('Screenshot should have a minimum dimension of 375x667 and a maximum dimension of 768x1024. i.e a screenshot on iPhone 6...iPhone 12 Pro Max.')
+                ->singleMediaRules(\App\Models\AppTheme::SCREENSHOT_RULES)
+                ->help('Screenshot should have a minimum dimension of 375x667 and a maximum dimension of 1206x2622.')
                 ->required(),
 
             Heading::make('Meta information'),
