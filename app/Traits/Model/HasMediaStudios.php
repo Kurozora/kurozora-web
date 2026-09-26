@@ -18,20 +18,31 @@ trait HasMediaStudios
      */
     public static function bootHasMediaStudios(): void
     {
+        static::updated(function (Model $model) {
+            if ($model->wasChanged(['tv_rating_id', 'is_nsfw'])) {
+                Studio::refreshTVRatings($model->mediaStudios()->pluck('studio_id'), $model->getConnectionName());
+            }
+        });
+
         static::deleting(function (Model $model) {
-            if (in_array(SoftDeletes::class, class_uses_recursive($model))) {
-                if ($model->forceDeleting) {
-                    $model->mediaStudios()->forceDelete();
-                    return;
-                }
+            $studioIDs = $model->mediaStudios()->pluck('studio_id');
+
+            if (in_array(SoftDeletes::class, class_uses_recursive($model)) && $model->forceDeleting) {
+                $model->mediaStudios()->forceDelete();
+            } else {
+                $model->mediaStudios()->delete();
             }
 
-            $model->mediaStudios()->delete();
+            Studio::refreshTVRatings($studioIDs, $model->getConnectionName());
         });
 
         if (in_array(SoftDeletes::class, class_uses_recursive(static::class))) {
             static::restoring(function (Model $model) {
                 $model->mediaStudios()->restore();
+            });
+
+            static::restored(function (Model $model) {
+                Studio::refreshTVRatings($model->mediaStudios()->pluck('studio_id'), $model->getConnectionName());
             });
         }
     }

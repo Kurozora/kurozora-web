@@ -43,6 +43,29 @@ class MediaStudio extends MorphPivot implements Sitemapable
     }
 
     /**
+     * Bootstrap the model and its traits.
+     *
+     * @return void
+     */
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        $refreshStudioTVRatings = function (MediaStudio $mediaStudio) {
+            Studio::refreshTVRatings([$mediaStudio->getOriginal('studio_id'), $mediaStudio->studio_id], $mediaStudio->getConnectionName());
+        };
+
+        static::created($refreshStudioTVRatings);
+        static::deleted($refreshStudioTVRatings);
+        static::restored($refreshStudioTVRatings);
+        static::updated(function (MediaStudio $mediaStudio) use ($refreshStudioTVRatings) {
+            if ($mediaStudio->wasChanged(['studio_id', 'model_type', 'model_id'])) {
+                $refreshStudioTVRatings($mediaStudio);
+            }
+        });
+    }
+
+    /**
      * Returns the anime belonging to the studio.
      *
      * @return MorphTo

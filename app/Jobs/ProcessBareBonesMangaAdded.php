@@ -45,7 +45,7 @@ class ProcessBareBonesMangaAdded implements ShouldQueue
         $manga = Manga::withoutGlobalScopes()
             ->firstWhere('mal_id', '=', $this->malID);
 
-        if (empty($manga?->tv_rating_id)) {
+        if (empty($manga?->source_id)) {
             throw new RuntimeException('Failed to back-fill bare-bones manga ' . $this->malID . '.');
         }
     }

@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Anime;
 use App\Models\Episode;
 use App\Models\Season;
+use App\Scopes\TvRatingScope;
 use DB;
 use Illuminate\Support\Collection;
 use Throwable;
@@ -30,25 +31,28 @@ class AnimeTVRatingPropagator
 
         DB::transaction(function () use ($anime, $newRatingID, $newIsNSFW) {
             // Update seasons
-            Season::where('anime_id', $anime->id)
+            Season::withoutGlobalScopes()
+                ->where('anime_id', $anime->id)
                 ->update([
                     'tv_rating_id' => $newRatingID,
                     'is_nsfw' => $newIsNSFW,
                 ]);
 
             // Update episodes
-            Episode::whereIn('season_id', function ($query) use ($anime) {
-                $query->select('id')
-                    ->from('seasons')
-                    ->where('anime_id', $anime->id);
-            })
+            Episode::withoutGlobalScopes()
+                ->whereIn('season_id', function ($query) use ($anime) {
+                    $query->select('id')
+                        ->from('seasons')
+                        ->where('anime_id', $anime->id);
+                })
                 ->update([
                     'tv_rating_id' => $newRatingID,
                     'is_nsfw' => $newIsNSFW,
                 ]);
 
             // Re-index
-            Episode::with(['mediaStat', 'translations', 'tvRating'])
+            Episode::withoutGlobalScope(TvRatingScope::class)
+                ->with(['mediaStat', 'translations', 'tvRating'])
                 ->whereIn('season_id', function ($query) use ($anime) {
                     $query->select('id')
                         ->from('seasons')
@@ -71,25 +75,26 @@ class AnimeTVRatingPropagator
     {
         DB::transaction(function () use ($animeIDs, $newRatingID) {
             // Update seasons
-            Season::whereIn('anime_id', $animeIDs)
+            Season::withoutGlobalScopes()
+                ->whereIn('anime_id', $animeIDs)
                 ->update(['tv_rating_id' => $newRatingID]);
 
             // Update episodes
-            Episode::whereIn('season_id', function ($query) use ($animeIDs) {
-                $query->select('id')
-                    ->from('seasons')
-                    ->whereIn('anime_id', $animeIDs);
-            })
+            Episode::withoutGlobalScopes()
+                ->whereIn('season_id', function ($query) use ($animeIDs) {
+                    $query->select('id')
+                        ->from('seasons')
+                        ->whereIn('anime_id', $animeIDs);
+                })
                 ->update(['tv_rating_id' => $newRatingID]);
 
             // Re-index
-            Season::whereIn('anime_id', $animeIDs)->searchable();
-
-            Episode::whereIn('season_id', function ($query) use ($animeIDs) {
-                $query->select('id')
-                    ->from('seasons')
-                    ->whereIn('anime_id', $animeIDs);
-            })
+            Episode::withoutGlobalScope(TvRatingScope::class)
+                ->whereIn('season_id', function ($query) use ($animeIDs) {
+                    $query->select('id')
+                        ->from('seasons')
+                        ->whereIn('anime_id', $animeIDs);
+                })
                 ->searchable();
         });
     }

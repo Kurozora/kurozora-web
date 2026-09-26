@@ -136,6 +136,14 @@ class Manga extends KModel implements HasMedia, Sitemapable
                 $manga->publication_season = $manga->generatePublishingSeason();
             }
         });
+
+        static::saving(function (Manga $manga) {
+            if ($manga->exists && !array_key_exists('tv_rating_id', $manga->getAttributes())) {
+                return;
+            }
+
+            $manga->tv_rating_id ??= $manga->getOriginal('tv_rating_id') ?? 1;
+        });
     }
 
     /**

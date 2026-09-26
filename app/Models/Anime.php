@@ -140,6 +140,14 @@ class Anime extends KModel implements HasMedia, Sitemapable
                 $anime->air_season = $anime->generateAiringSeason();
             }
         });
+
+        static::saving(function (Anime $anime) {
+            if ($anime->exists && !array_key_exists('tv_rating_id', $anime->getAttributes())) {
+                return;
+            }
+
+            $anime->tv_rating_id ??= $anime->getOriginal('tv_rating_id') ?? 1;
+        });
     }
 
     /**

@@ -146,6 +146,14 @@ class Game extends KModel implements HasMedia, Sitemapable
                 $game->publication_season = $game->generatePublishingSeason();
             }
         });
+
+        static::saving(function (Game $game) {
+            if ($game->exists && !array_key_exists('tv_rating_id', $game->getAttributes())) {
+                return;
+            }
+
+            $game->tv_rating_id ??= $game->getOriginal('tv_rating_id') ?? 1;
+        });
     }
 
     /**

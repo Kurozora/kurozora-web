@@ -216,11 +216,6 @@ class Studio extends Resource
 
             Heading::make('Meta'),
 
-            BelongsTo::make('TV rating', 'tvRating')
-                ->sortable()
-                ->help('The TV rating of the anime. For example NR, G, PG-12, etc.')
-                ->required(),
-
             Text::make('Slug')
                 ->onlyOnForms()
                 ->help('Used to identify the Studio in a URL: ' . config('app.url') . '/studios/<strong>' . ($this->resource->slug ?? 'slug-identifier') . '</strong>. Leave empty to auto-generate from name.'),
@@ -265,12 +260,13 @@ class Studio extends Resource
 
             BelongsTo::make('TV rating', 'tvRating')
                 ->sortable()
-                ->help('The TV rating of the studio. For example NR, G, PG-12, etc.')
-                ->required(),
+                ->help('The TV rating of the studio, based on its anime, manga, and games.')
+                ->readonly(),
 
             Boolean::make('Is NSFW')
                 ->sortable()
-                ->help('NSFW: Not Safe For Work (not suitable for watchers under the age of 18).'),
+                ->help('NSFW: Not Safe For Work (not suitable for watchers under the age of 18). Based on the studio’s anime, manga, and games.')
+                ->readonly(),
 
             Code::make('Social URLs')
                 ->json()

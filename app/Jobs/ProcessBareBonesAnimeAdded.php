@@ -45,7 +45,7 @@ class ProcessBareBonesAnimeAdded implements ShouldQueue
         $anime = Anime::withoutGlobalScopes()
             ->firstWhere('mal_id', '=', $this->malID);
 
-        if (empty($anime?->tv_rating_id)) {
+        if (empty($anime?->source_id)) {
             throw new RuntimeException('Failed to back-fill bare-bones anime ' . $this->malID . '.');
         }
     }

@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Casts\AsArrayObject;
 use App\Enums\MediaCollection;
 use App\Enums\StudioType;
+use App\Scopes\IgnoreListScope;
+use App\Scopes\TvRatingScope;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\HasMediaRatings;
 use App\Traits\Model\HasMediaStat;
@@ -14,7 +16,10 @@ use App\Traits\Model\HasViews;
 use App\Traits\Model\Noteable;
 use App\Traits\Model\TvRated;
 use App\Traits\SearchFilterable;
+use DB;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -66,6 +71,24 @@ class Studio extends KModel implements HasMedia, Sitemapable
             'founded_at' => 'date',
             'defunct_at' => 'date',
         ];
+    }
+
+    /**
+     * Bootstrap the model and its traits.
+     *
+     * @return void
+     */
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        static::saving(function (Studio $studio) {
+            if ($studio->exists && !array_key_exists('tv_rating_id', $studio->getAttributes())) {
+                return;
+            }
+
+            $studio->tv_rating_id ??= $studio->getOriginal('tv_rating_id') ?? 1;
+        });
     }
 
     /**
@@ -349,6 +372,103 @@ class Studio extends KModel implements HasMedia, Sitemapable
         return $this->viewableViaParent(
             $this->morphedByMany(Game::class, 'model', MediaStudio::class),
         )->withTimestamps();
+    }
+
+    /**
+     * Rates the given studios from their anime, manga, and games.
+     *
+     * @param Arrayable|array $studioIDs
+     * @param string|null $connection
+     *
+     * @return int
+     */
+    public static function refreshTVRatings(Arrayable|array $studioIDs, ?string $connection = null): int
+    {
+        $studioIDs = collect($studioIDs)
+            ->filter()
+            ->unique()
+            ->values();
+        $changedCount = 0;
+
+        if ($studioIDs->isEmpty()) {
+            return $changedCount;
+        }
+
+        $linkedMedia = function (Builder $query) {
+            $query->withoutGlobalScopes([TvRatingScope::class, IgnoreListScope::class])
+                ->whereNull(MediaStudio::TABLE_NAME . '.deleted_at');
+        };
+        $ratedMedia = function (Builder $query) use ($linkedMedia) {
+            $linkedMedia($query);
+            $query->where($query->qualifyColumn('tv_rating_id'), '!=', 1);
+        };
+        $nsfwMedia = function (Builder $query) use ($linkedMedia) {
+            $linkedMedia($query);
+            $query->where($query->qualifyColumn('is_nsfw'), '=', true);
+        };
+
+        static::on($connection)
+            ->withoutGlobalScopes()
+            ->whereKey($studioIDs)
+            ->withMin(['anime as min_anime_tv_rating_id' => $ratedMedia], 'tv_rating_id')
+            ->withMin(['manga as min_manga_tv_rating_id' => $ratedMedia], 'tv_rating_id')
+            ->withMin(['games as min_game_tv_rating_id' => $ratedMedia], 'tv_rating_id')
+            ->withExists([
+                'anime as anime_has_nsfw' => $nsfwMedia,
+                'manga as manga_has_nsfw' => $nsfwMedia,
+                'games as game_has_nsfw' => $nsfwMedia,
+            ])
+            ->chunkById(2000, function (Collection $studios) use ($connection, &$changedCount) {
+                $changedStudios = $studios->filter(function (Studio $studio) {
+                    $tvRatingIDs = array_filter([
+                        $studio->min_anime_tv_rating_id,
+                        $studio->min_manga_tv_rating_id,
+                        $studio->min_game_tv_rating_id,
+                    ], function ($tvRatingID) {
+                        return $tvRatingID !== null;
+                    });
+
+                    $studio->fill([
+                        'tv_rating_id' => empty($tvRatingIDs) ? 1 : (int) min($tvRatingIDs),
+                        'is_nsfw' => $studio->anime_has_nsfw || $studio->manga_has_nsfw || $studio->game_has_nsfw,
+                    ]);
+
+                    return $studio->isDirty();
+                });
+
+                if ($changedStudios->isEmpty()) {
+                    return;
+                }
+
+                $tvRatingCases = '';
+                $nsfwCases = '';
+
+                foreach ($changedStudios as $studio) {
+                    $tvRatingCases .= ' WHEN ' . (int) $studio->id . ' THEN ' . (int) $studio->tv_rating_id;
+                    $nsfwCases .= ' WHEN ' . (int) $studio->id . ' THEN ' . ($studio->is_nsfw ? 1 : 0);
+                }
+
+                static::on($connection)
+                    ->withoutGlobalScopes()
+                    ->whereKey($changedStudios->modelKeys())
+                    ->update([
+                        'tv_rating_id' => DB::raw('CASE id' . $tvRatingCases . ' END'),
+                        'is_nsfw' => DB::raw('CASE id' . $nsfwCases . ' END'),
+                    ]);
+
+                $searchableStudios = $changedStudios->reject(function (Studio $studio) {
+                    return $studio->trashed();
+                });
+
+                if ($searchableStudios->isNotEmpty()) {
+                    $searchableStudios->load(['mediaStat', 'tvRating', 'predecessors', 'successor'])
+                        ->searchable();
+                }
+
+                $changedCount += $changedStudios->count();
+            });
+
+        return $changedCount;
     }
 
     /**
