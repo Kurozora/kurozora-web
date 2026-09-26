@@ -65,10 +65,7 @@
                 </div>
             </section>
         @else
-            <section class="flex flex-col items-center justify-center mt-4 text-center xl:safe-area-inset" style="min-height: 50vh;">
-                <p class="font-bold">{{ __('No Blocked Accounts') }}</p>
-                <p class="text-sm text-secondary">{{ __('You haven’t blocked anyone yet.') }}</p>
-            </section>
+            <x-empty-state :heading="__('No Blocked Accounts')" :description="__('You haven’t blocked anyone yet.')" />
         @endif
     </div>
 </main>

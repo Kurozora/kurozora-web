@@ -1,12 +1,6 @@
 @props(['reviews' => [], 'isRow' => true, 'safeAreaInsetEnabled' => true, 'voteOverrides' => [], 'reviewBoxId' => null])
 
 @php
-    $class = $isRow ? 'snap-mandatory snap-x overflow-x-scroll no-scrollbar' : 'flex-wrap';
-
-    if ($isRow && $safeAreaInsetEnabled) {
-        $class .= ' xl:safe-area-inset-scroll';
-    }
-
     // The rows of a paginated set live on its own collection.
     $allReviews = $reviews instanceof \Illuminate\Contracts\Pagination\CursorPaginator
         || $reviews instanceof \Illuminate\Contracts\Pagination\Paginator
@@ -19,7 +13,7 @@
     $lowEffortReviews = $collapsesLowEffort ? $allReviews->filter->is_low_effort : collect();
 @endphp
 
-<div {{ $attributes->merge(['class' => 'flex gap-4 justify-between pl-4 pr-4 ' . $class]) }}>
+<x-rows.container lockup="review" :is-row="$isRow" :safe-area-inset-enabled="$safeAreaInsetEnabled" {{ $attributes }}>
     @foreach ($shownReviews as $review)
         <x-lockups.review-lockup :review="$review" :is-row="$isRow" :vote-overrides="$voteOverrides" :review-box-id="$reviewBoxId" />
     @endforeach
@@ -35,17 +29,11 @@
                 <span x-show="isExpanded" x-cloak>{{ __('Hide short reviews') }}</span>
             </button>
 
-            <div class="flex flex-wrap gap-4 justify-between mt-4" x-show="isExpanded" x-cloak>
+            <x-rows.container lockup="review" :is-row="false" class="mt-4" x-show="isExpanded" x-cloak>
                 @foreach ($lowEffortReviews as $review)
                     <x-lockups.review-lockup :review="$review" :is-row="$isRow" :vote-overrides="$voteOverrides" :review-box-id="$reviewBoxId" />
                 @endforeach
-
-                <div class="w-[98%] sm:w-96 flex-grow"></div>
-                <div class="w-[98%] sm:w-96 flex-grow"></div>
-            </div>
+            </x-rows.container>
         </div>
     @endif
-
-    <div class="w-[98%] sm:w-96 flex-grow"></div>
-    <div class="w-[98%] sm:w-96 flex-grow"></div>
-</div>
+</x-rows.container>

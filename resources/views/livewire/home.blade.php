@@ -21,9 +21,6 @@
             @foreach ($this->exploreCategories as $index => $exploreCategory)
                 @switch($exploreCategory->type)
                 @case(\App\Enums\ExploreCategoryTypes::MostPopularShows)
-                    @if ($previewsSkeletons)
-                        <x-skeletons.banner-lockup />
-                    @else
                     <section
                         class="relative  overflow-hidden max-h-[80vh]"
                         x-data="carousel()"
@@ -57,7 +54,6 @@
                             </button>
                         </div>
                     </section>
-                    @endif
 
 {{--                    <section class="relative pt-4 pb-8">--}}
 {{--                        <x-section-nav class="flex flex-nowrap justify-between mb-5 pl-4 pr-4">--}}
@@ -159,14 +155,7 @@
                     @break
                 @default
                     <section>
-                        @if ($previewsSkeletons)
-                            <x-skeletons.explore-category-section
-                                :lockup="\App\Enums\ExploreCategoryTypes::lockup($exploreCategory->type, $exploreCategory->size)"
-                                :kind="\App\Enums\ExploreCategoryTypes::libraryKind($exploreCategory->type)"
-                            />
-                        @else
-                            <livewire:components.explore-category-section :index="$index" :exploreCategory="$exploreCategory" lazy="on-load" :key="'explore-section-' . $exploreCategory->id" />
-                        @endif
+                        <livewire:components.explore-category-section :index="$index" :exploreCategory="$exploreCategory" lazy="on-load" :key="'explore-section-' . $exploreCategory->id" />
                     </section>
                 @endswitch
             @endforeach

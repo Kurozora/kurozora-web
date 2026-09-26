@@ -8,31 +8,9 @@
 
 @php
     $itemCount = $count ?? ($isRow ? ($lockup === 'person' ? 15 : 5) : 25);
-
-    $spacerCount = match ($lockup) {
-        'person' => 18,
-        'music', 'medium' => 8,
-        default => 6,
-    };
-
-    $spacerWidth = match ($lockup) {
-        'person' => 'w-28',
-        'recap' => 'w-[98%]',
-        'medium' => 'w-[98%] max-w-[16rem]',
-        'music' => 'w-[98%] sm:w-64',
-        'review', 'cast' => 'w-[98%] sm:w-96',
-        'achievement' => 'w-[98%] sm:w-72',
-        default => 'w-[98%] sm:w-80',
-    };
-
-    $class = $isRow ? 'flex-nowrap overflow-hidden' : 'flex-wrap';
-
-    if ($isRow && $safeAreaInsetEnabled) {
-        $class .= ' xl:safe-area-inset-scroll';
-    }
 @endphp
 
-<div {{ $attributes->merge(['class' => 'flex gap-4 justify-start pl-4 pr-4 ' . $class]) }}>
+<x-rows.container :lockup="$lockup" :is-row="$isRow" :safe-area-inset-enabled="$safeAreaInsetEnabled" class="justify-start" {{ $attributes }}>
     @for ($index = 0; $index < $itemCount; $index++)
         @switch($lockup)
             @case('episode')
@@ -83,14 +61,11 @@
             @case('trailer')
                 <x-skeletons.trailer-lockup-item :is-row="$isRow" />
                 @break
+            @case('theme')
+                <x-skeletons.theme-lockup-item />
+                @break
             @default
                 <x-skeletons.small-lockup-item :kind="$kind" :is-row="$isRow" />
         @endswitch
     @endfor
-
-    @unless ($isRow)
-        @for ($index = 0; $index < $spacerCount; $index++)
-            <div class="{{ $spacerWidth }} flex-grow"></div>
-        @endfor
-    @endunless
-</div>
+</x-rows.container>

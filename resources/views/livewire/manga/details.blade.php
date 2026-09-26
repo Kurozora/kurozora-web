@@ -461,22 +461,22 @@
             </section>
 
             @if ($readyToLoad)
-                <livewire:components.cast-section :kind="\App\Enums\UserLibraryKind::Manga" :manga="$manga" />
+                <livewire:components.cast-section :kind="\App\Enums\UserLibraryKind::Manga" :manga="$manga" lazy="on-load" />
 
-                <livewire:components.staff-section :kind="\App\Enums\UserLibraryKind::Manga" :manga="$manga" />
+                <livewire:components.staff-section :kind="\App\Enums\UserLibraryKind::Manga" :manga="$manga" lazy="on-load" />
 
-                <livewire:components.studios-section :kind="\App\Enums\UserLibraryKind::Manga" :manga="$manga" />
+                <livewire:components.studios-section :kind="\App\Enums\UserLibraryKind::Manga" :manga="$manga" lazy="on-load" />
 
                 <div class="bg-tinted">
                     @if (!empty($this->studio))
-                        <livewire:components.more-by-studio-section :kind="\App\Enums\UserLibraryKind::Manga" :manga="$manga" :studio="$this->studio" />
+                        <livewire:components.more-by-studio-section :kind="\App\Enums\UserLibraryKind::Manga" :manga="$manga" :studio="$this->studio" lazy="on-load" />
                     @endif
 
-                    <livewire:components.relations-section :kind="\App\Enums\UserLibraryKind::Manga" :related-kind="\App\Enums\UserLibraryKind::Manga" :manga="$manga" />
+                    <livewire:components.relations-section :kind="\App\Enums\UserLibraryKind::Manga" :related-kind="\App\Enums\UserLibraryKind::Manga" :manga="$manga" lazy="on-load" />
 
-                    <livewire:components.relations-section :kind="\App\Enums\UserLibraryKind::Manga" :related-kind="\App\Enums\UserLibraryKind::Anime" :manga="$manga" />
+                    <livewire:components.relations-section :kind="\App\Enums\UserLibraryKind::Manga" :related-kind="\App\Enums\UserLibraryKind::Anime" :manga="$manga" lazy="on-load" />
 
-                    <livewire:components.relations-section :kind="\App\Enums\UserLibraryKind::Manga" :related-kind="\App\Enums\UserLibraryKind::Game" :manga="$manga" />
+                    <livewire:components.relations-section :kind="\App\Enums\UserLibraryKind::Manga" :related-kind="\App\Enums\UserLibraryKind::Game" :manga="$manga" lazy="on-load" />
 
                     @if (!empty($manga->copyright))
                         <section class="border-t border-primary xl:safe-area-inset">

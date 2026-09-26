@@ -46,20 +46,14 @@
                 <x-skeletons.lockup-row lockup="user" :is-row="false" />
             </section>
         @else
-            <section class="flex flex-col items-center justify-center mt-4 text-center xl:safe-area-inset" style="min-height: 50vh;">
-                <x-picture>
-                    <img class="w-full max-w-sm" src="{{ asset('images/static/placeholders/empty_anime_library.webp') }}" alt="No following" title="No following">
-                </x-picture>
-
-                <p class="font-bold">{{ __('No Following') }}</p>
-
+            <x-empty-state image="empty_anime_library.webp" alt="No following" :heading="__('No Following')">
                 @if ($user->id != auth()->user()?->id)
                     <p class="text-sm text-secondary">{{ __('Be the first to follow :x!', ['x' => $user->username]) }}</p>
                     <livewire:components.follow-button :user="$user" :is-followed="(bool) $user->isFollowed" wire:key="{{ uniqid(more_entropy: true) }}" />
                 @else
                     <p class="text-sm text-secondary">{{ __('Users you follow show up here!') }}</p>
                 @endif
-            </section>
+            </x-empty-state>
         @endif
     </div>
 </main>

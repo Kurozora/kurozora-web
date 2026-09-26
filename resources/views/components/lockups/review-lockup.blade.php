@@ -1,7 +1,7 @@
 @props(['review', 'isRow' => true, 'voteOverrides' => [], 'reviewBoxId' => null])
 
 @php
-    $class = $isRow ? 'pb-2 shrink-0 snap-normal snap-center' : '';
+    $class = $isRow ? 'lockup-review' : 'lockup-review-grid';
 
     $isOwnReview = auth()->id() === $review->user_id;
     $canDelete = $isOwnReview || auth()->user()?->hasRole(['superAdmin', 'admin']);
@@ -30,7 +30,7 @@
     }
 @endphp
 
-<div {{ $attributes->merge(['class' => 'relative flex-grow w-[98%] sm:w-96 ' . $class]) }}>
+<div {{ $attributes->merge(['class' => $class]) }}>
     <div
         class="relative flex flex-row gap-2 pr-2 pl-2 pt-2 pb-2 h-full bg-secondary rounded-xl"
         x-data="{

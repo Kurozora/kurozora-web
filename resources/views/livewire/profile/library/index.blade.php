@@ -59,15 +59,7 @@
                         </div>
                     </section>
                 @else
-                    <section class="flex flex-col items-center justify-center mt-4 text-center xl:safe-area-inset" wire:key="empty-{{ strtolower($status) }}" style="min-height: 50vh;">
-                        <x-picture>
-                            <img class="w-full max-w-sm" src="{{ asset('images/static/placeholders/' . $this->emptyImage) }}" alt="Empty Library" title="Empty Library">
-                        </x-picture>
-
-                        <p class="font-bold">{{ $this->emptyHeading }}</p>
-
-                        <p class="text-sm text-secondary">{{ $this->emptyDescription }}</p>
-                    </section>
+                    <x-empty-state wire:key="empty-{{ strtolower($status) }}" :image="$this->emptyImage" alt="Empty Library" :heading="$this->emptyHeading" :description="$this->emptyDescription" />
                 @endif
             @elseif (!$readyToLoad)
                 <section class="mt-4 pb-8 xl:safe-area-inset">

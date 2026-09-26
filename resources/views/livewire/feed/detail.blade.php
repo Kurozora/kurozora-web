@@ -82,13 +82,7 @@
                 </div>
             </section>
         @elseif ($readyToLoad)
-            <section class="flex flex-col items-center justify-center mt-4 text-center" style="min-height: 50vh;">
-                @svg('bubble_left_and_bubble_right_fill', 'fill-current w-40')
-
-                <p class="font-bold">{{ __('No Replies') }}</p>
-
-                <p class="text-sm text-secondary">{{ __('Be the first to reply to this message!') }}</p>
-            </section>
+            <x-empty-state icon="bubble_left_and_bubble_right_fill" :heading="__('No Replies')" :description="__('Be the first to reply to this message!')" />
         @endif
     </div>
 </main>

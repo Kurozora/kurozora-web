@@ -1,10 +1,10 @@
 @props(['anime' => null, 'game' => null, 'isRow' => true, 'inLibrary' => false])
 
 @php
-    $class = $isRow ? 'w-[98%] max-w-sm sm:w-80 pb-2 shrink-0 snap-normal snap-start' : 'sm:w-80';
+    $class = $isRow ? 'lockup-media' : 'lockup-media-grid';
 @endphp
 
-<div {{ $attributes->merge(['class' => 'relative flex-grow ' . $class]) }} @if ($inLibrary) data-in-library @endif>
+<div {{ $attributes->merge(['class' => $class]) }} @if ($inLibrary) data-in-library @endif>
     @if (!empty($anime))
         <div class="flex flex-col">
             @if (empty($anime->video_url))

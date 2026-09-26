@@ -140,15 +140,7 @@
                 <x-skeletons.lockup-row lockup="user" :is-row="false" />
             </section>
         @else
-            <section class="flex flex-col items-center justify-center mt-4 text-center xl:safe-area-inset" style="min-height: 50vh;">
-                <x-picture>
-                    <img class="w-full max-w-sm" src="{{ asset('images/static/placeholders/empty_anime_library.webp') }}" alt="No leaderboard yet" title="No leaderboard yet">
-                </x-picture>
-
-                <p class="font-bold">{{ __('No Users') }}</p>
-
-                <p class="text-sm text-secondary">{{ __('The leaderboard is empty. Check back later!') }}</p>
-            </section>
+            <x-empty-state image="empty_anime_library.webp" alt="No leaderboard yet" :heading="__('No Users')" :description="__('The leaderboard is empty. Check back later!')" />
         @endif
     </div>
 </main>

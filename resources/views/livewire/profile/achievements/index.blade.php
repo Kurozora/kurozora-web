@@ -55,19 +55,13 @@
                 <x-skeletons.lockup-row lockup="achievement" :is-row="false" :count="8" />
             </section>
         @else
-            <section class="flex flex-col items-center justify-center mt-4 text-center xl:safe-area-inset" style="min-height: 50vh;">
-                <x-picture>
-                    <img class="w-full max-w-sm" src="{{ asset('images/static/placeholders/empty_anime_library.webp') }}" alt="No reviews" title="No achievements">
-                </x-picture>
-
-                <p class="font-bold">{{ __('No Achievements') }}</p>
-
+            <x-empty-state image="empty_anime_library.webp" alt="No achievements" :heading="__('No Achievements')">
                 @if ($user->id == auth()->user()?->id)
                     <p class="text-sm text-secondary">{{ __('Your unlocked achievements will show up here!') }}</p>
                 @else
                     <p class="text-sm text-secondary">{{ __(':x has no achievements unlocked yet.', ['x' => $user->username]) }}</p>
                 @endif
-            </section>
+            </x-empty-state>
         @endif
     </div>
 </main>

@@ -1,10 +1,10 @@
 @props(['isRow' => true])
 
 @php
-    $class = $isRow ? 'pb-2 shrink-0 snap-normal snap-center' : '';
+    $class = $isRow ? 'lockup-profile' : 'lockup-profile-grid';
 @endphp
 
-<div {{ $attributes->merge(['class' => 'relative flex-grow w-28 ' . $class]) }}>
+<div {{ $attributes->merge(['class' => $class]) }}>
     <p class="w-full aspect-square bg-secondary rounded-full"></p>
 
     <div class="flex justify-center mt-2">

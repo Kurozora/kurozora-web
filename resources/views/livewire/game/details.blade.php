@@ -433,24 +433,24 @@
             </section>
 
             @if ($readyToLoad)
-                <livewire:components.cast-section :kind="\App\Enums\UserLibraryKind::Game" :game="$game" />
+                <livewire:components.cast-section :kind="\App\Enums\UserLibraryKind::Game" :game="$game" lazy="on-load" />
 
-                <livewire:components.staff-section :kind="\App\Enums\UserLibraryKind::Game" :game="$game" />
+                <livewire:components.staff-section :kind="\App\Enums\UserLibraryKind::Game" :game="$game" lazy="on-load" />
 
-                <livewire:components.songs-section :kind="\App\Enums\UserLibraryKind::Game" :game="$game" />
+                <livewire:components.songs-section :kind="\App\Enums\UserLibraryKind::Game" :game="$game" lazy="on-load" />
 
-                <livewire:components.studios-section :kind="\App\Enums\UserLibraryKind::Game" :game="$game" />
+                <livewire:components.studios-section :kind="\App\Enums\UserLibraryKind::Game" :game="$game" lazy="on-load" />
 
                 <div class="bg-tinted">
                     @if (!empty($this->studio))
-                        <livewire:components.more-by-studio-section :kind="\App\Enums\UserLibraryKind::Game" :game="$game" :studio="$this->studio" />
+                        <livewire:components.more-by-studio-section :kind="\App\Enums\UserLibraryKind::Game" :game="$game" :studio="$this->studio" lazy="on-load" />
                     @endif
 
-                    <livewire:components.relations-section :kind="\App\Enums\UserLibraryKind::Game" :related-kind="\App\Enums\UserLibraryKind::Game" :game="$game" />
+                    <livewire:components.relations-section :kind="\App\Enums\UserLibraryKind::Game" :related-kind="\App\Enums\UserLibraryKind::Game" :game="$game" lazy="on-load" />
 
-                    <livewire:components.relations-section :kind="\App\Enums\UserLibraryKind::Game" :related-kind="\App\Enums\UserLibraryKind::Anime" :game="$game" />
+                    <livewire:components.relations-section :kind="\App\Enums\UserLibraryKind::Game" :related-kind="\App\Enums\UserLibraryKind::Anime" :game="$game" lazy="on-load" />
 
-                    <livewire:components.relations-section :kind="\App\Enums\UserLibraryKind::Game" :related-kind="\App\Enums\UserLibraryKind::Manga" :game="$game" />
+                    <livewire:components.relations-section :kind="\App\Enums\UserLibraryKind::Game" :related-kind="\App\Enums\UserLibraryKind::Manga" :game="$game" lazy="on-load" />
 
                     @if (!empty($game->copyright))
                         <section class="border-t border-primary xl:safe-area-inset">

@@ -82,25 +82,10 @@
                 </div>
             @elseif (!$readyToLoad)
                 <div id="skeleton" class="mt-4">
-                    <div class="flex flex-wrap gap-4 justify-between pl-4 pr-4">
-                        @foreach (range(1,25) as $range)
-                            <div class="bg-secondary w-64 rounded-md md:w-80 flex-grow" style="height: 168px;"></div>
-                        @endforeach
-
-                        <div class="w-64 md:w-80 flex-grow"></div>
-                        <div class="w-64 md:w-80 flex-grow"></div>
-                    </div>
+                    <x-skeletons.lockup-row lockup="theme" :is-row="false" />
                 </div>
             @else
-                <div class="flex flex-col items-center justify-center mt-4 text-center" style="min-height: 50vh;">
-                    <x-picture>
-                        <img class="w-full max-w-sm" src="{{ asset('images/static/placeholders/empty_anime_library.webp') }}" alt="Empty Theme Store" title="Empty Theme Store">
-                    </x-picture>
-
-                    <p class="font-bold">{{ __('Themes Not Found') }}</p>
-
-                    <p class="text-sm text-secondary">{{ __('No themes found with the selected criteria.') }}</p>
-                </div>
+                <x-empty-state class="flex flex-col items-center justify-center mt-4 text-center" image="empty_anime_library.webp" alt="Empty Theme Store" :heading="__('Themes Not Found')" :description="__('No themes found with the selected criteria.')" />
             @endif
         </section>
     </div>

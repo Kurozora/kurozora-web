@@ -11,9 +11,11 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\Isolate;
+use Livewire\Attributes\Lazy;
 use Livewire\Component;
 
 #[Isolate]
+#[Lazy]
 class RelationsSection extends Component
 {
     /**
@@ -50,13 +52,6 @@ class RelationsSection extends Component
      * @var Game|null $game
      */
     public ?Game $game = null;
-
-    /**
-     * Whether the component is ready to load.
-     *
-     * @var bool $readyToLoad
-     */
-    public bool $readyToLoad = false;
 
     /**
      * Prepare the component.
@@ -99,13 +94,13 @@ class RelationsSection extends Component
     }
 
     /**
-     * Sets the property to load the section.
+     * The skeleton shown until the section resumes loading.
      *
-     * @return void
+     * @return View
      */
-    public function loadSection(): void
+    public function placeholder(array $params): View
     {
-        $this->readyToLoad = true;
+        return view('components.skeletons.section', ['kind' => $params['relatedKind'] ?? \App\Enums\UserLibraryKind::Anime]);
     }
 
     /**
@@ -115,10 +110,6 @@ class RelationsSection extends Component
      */
     public function getRelationsProperty(): Collection
     {
-        if (!$this->readyToLoad) {
-            return collect();
-        }
-
         $parent = $this->parent;
 
         $relation = match ($this->relatedKind) {

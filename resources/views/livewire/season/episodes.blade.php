@@ -66,15 +66,7 @@
                 <x-skeletons.lockup-row lockup="episode" :is-row="false" />
             </section>
         @else
-            <section class="flex flex-col items-center justify-center mt-4 text-center xl:safe-area-inset" style="min-height: 50vh;">
-                <x-picture>
-                    <img class="w-full max-w-sm" src="{{ asset('images/static/placeholders/empty_anime_library.webp') }}" alt="Empty Episodes" title="Empty Episodes">
-                </x-picture>
-
-                <p class="font-bold">{{ __('Episodes Not Found') }}</p>
-
-                <p class="text-sm text-secondary">{{ __('No episodes found in the selected season.') }}</p>
-            </section>
+            <x-empty-state image="empty_anime_library.webp" alt="Empty Episodes" :heading="__('Episodes Not Found')" :description="__('No episodes found in the selected season.')" />
         @endif
     </div>
 </main>

@@ -54,15 +54,7 @@
                 <x-skeletons.lockup-row lockup="platform" :is-row="false" />
             </section>
         @else
-            <section class="flex flex-col items-center justify-center mt-4 text-center xl:safe-area-inset" style="min-height: 50vh;">
-                <x-picture>
-                    <img class="w-full max-w-sm" src="{{ asset('images/static/placeholders/empty_anime_library.webp') }}" alt="Empty Platforms Index" title="Empty Platforms Index">
-                </x-picture>
-
-                <p class="font-bold">{{ __('Platforms Not Found') }}</p>
-
-                <p class="text-sm text-secondary">{{ __('No platforms found with the selected criteria.') }}</p>
-            </section>
+            <x-empty-state image="empty_anime_library.webp" alt="Empty Platforms Index" :heading="__('Platforms Not Found')" :description="__('No platforms found with the selected criteria.')" />
         @endif
     </div>
 </main>

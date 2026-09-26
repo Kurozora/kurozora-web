@@ -67,15 +67,7 @@
                 @endforeach
             </section>
         @else
-            <section class="flex flex-col items-center justify-center mt-4 text-center" style="min-height: 50vh;">
-                <x-picture>
-                    <img class="w-full max-w-sm" src="{{ asset('images/static/placeholders/' . $this->ogImagePoster) }}" alt="{{ $this->emptyHeading }}" title="{{ $this->emptyHeading }}">
-                </x-picture>
-
-                <p class="font-bold">{{ $this->emptyHeading }}</p>
-
-                <p class="text-sm text-secondary">{{ $this->emptyDescription }}</p>
-            </section>
+            <x-empty-state class="flex flex-col items-center justify-center mt-4 text-center" :image="$this->ogImagePoster" :heading="$this->emptyHeading" :description="$this->emptyDescription" />
         @endif
     </div>
 

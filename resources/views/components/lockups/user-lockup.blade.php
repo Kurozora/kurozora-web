@@ -1,12 +1,12 @@
 @props(['user', 'isRow' => true, 'trailingAction' => null, 'leadingAccessory' => null, 'subtitle' => null, 'showFollowButton' => true])
 
 @php
-    $class = $isRow ? 'w-[98%] max-w-sm sm:w-80 pb-2 shrink-0 snap-normal snap-start' : 'w-full sm:w-80';
+    $class = $isRow ? 'lockup-media' : 'lockup-media-grid';
     $isFollowed = (bool) $user->isFollowed;
     $followersCount = $user->followers_count;
 @endphp
 
-<div {{ $attributes->merge(['class' => 'relative flex-grow ' . $class]) }}>
+<div {{ $attributes->merge(['class' => $class]) }}>
     <div class="flex flex-nowrap justify-between">
         <div class="flex items-center">
             @isset($leadingAccessory)

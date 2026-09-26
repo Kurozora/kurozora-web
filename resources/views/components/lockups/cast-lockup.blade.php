@@ -1,12 +1,12 @@
 @props(['cast' => null, 'isRow' => true])
 
 @php
-    $containerWidth = $isRow ? 'w-[98%] max-w-sm shrink-0 snap-normal snap-start' : 'w-[98%] sm:w-96 flex-grow';
+    $containerWidth = $isRow ? 'lockup-cast' : 'lockup-cast-grid';
     $castNamesContainerWidth = 'flex-grow';
     /** @var \App\Models\AnimeCast|\App\Models\GameCast $cast */
 @endphp
 
-<div {{ $attributes->merge(['class' => 'relative pb-2 ' . $containerWidth]) }}>
+<div {{ $attributes->merge(['class' => $containerWidth]) }}>
     <div class="flex flex-nowrap gap-2">
         <section class="relative flex">
             <picture

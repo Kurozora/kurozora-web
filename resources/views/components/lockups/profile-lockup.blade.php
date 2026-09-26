@@ -1,11 +1,15 @@
 @props(['name', 'media' => null, 'imageUrl', 'href', 'role' => null, 'rank', 'isRanked' => false, 'isRow' => true, 'isWide' => false])
 
 @php
-    $class = $isRow ? 'pb-2 shrink-0 snap-normal snap-center' : '';
-    $width = $isWide ? 'w-60' : 'w-28';
+    $class = match (true) {
+        $isWide && $isRow => 'lockup-profile-wide',
+        $isWide => 'lockup-profile-wide-grid',
+        $isRow => 'lockup-profile',
+        default => 'lockup-profile-grid',
+    };
 @endphp
 
-<div {{ $attributes->merge(['class' => 'relative flex-grow ' . $width . ' ' . $class]) }}>
+<div {{ $attributes->merge(['class' => $class]) }}>
     <a class="absolute w-full h-full" href="{{ $href }}" wire:navigate></a>
 
     <div class="flex flex-col">

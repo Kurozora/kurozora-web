@@ -168,6 +168,99 @@ picture::before {
   }
 
   /**
+   * Lockup sizing
+   *
+   * Each lockup and its skeleton apply the same class so the two cannot drift.
+   */
+  .lockup-media {
+    @apply relative flex-grow w-[98%] max-w-sm sm:w-80 pb-2 shrink-0 snap-normal snap-start;
+  }
+
+  .lockup-media-grid {
+    @apply relative flex-grow w-full sm:w-80;
+  }
+
+  .lockup-banner {
+    @apply relative flex flex-col flex-grow w-[98%] sm:w-80 max-w-sm pb-2 shrink-0 snap-normal snap-start;
+  }
+
+  .lockup-banner-grid {
+    @apply relative flex flex-col flex-grow w-[98%] sm:w-80;
+  }
+
+  .lockup-wide {
+    @apply relative flex flex-col flex-grow w-[98%] sm:w-80 pb-2 shrink-0 snap-normal snap-center;
+  }
+
+  .lockup-wide-grid {
+    @apply relative flex flex-col flex-grow w-[98%] sm:w-80;
+  }
+
+  .lockup-review {
+    @apply relative flex-grow w-[98%] sm:w-96 pb-2 shrink-0 snap-normal snap-center;
+  }
+
+  .lockup-review-grid {
+    @apply relative flex-grow w-[98%] sm:w-96;
+  }
+
+  .lockup-detail {
+    @apply relative flex-grow w-[98%] sm:w-80 pb-2 shrink-0 snap-normal snap-center;
+  }
+
+  .lockup-detail-grid {
+    @apply relative flex-grow w-[98%] sm:w-80;
+  }
+
+  .lockup-poster {
+    @apply relative flex-grow w-[98%] sm:w-80 max-w-sm pb-2 shrink-0 snap-normal snap-start;
+  }
+
+  .lockup-poster-grid {
+    @apply relative flex-grow w-[98%] sm:w-80;
+  }
+
+  .lockup-music {
+    @apply relative pb-2 w-[98%] sm:w-64 max-w-[16rem] shrink-0 snap-normal snap-start;
+  }
+
+  .lockup-music-grid {
+    @apply relative pb-2 w-[98%] sm:w-64 flex-grow snap-normal snap-start;
+  }
+
+  .lockup-cast {
+    @apply relative pb-2 w-[98%] max-w-sm shrink-0 snap-normal snap-start;
+  }
+
+  .lockup-cast-grid {
+    @apply relative pb-2 w-[98%] sm:w-96 flex-grow;
+  }
+
+  .lockup-trailer {
+    @apply w-[98%] sm:w-80 pb-2 shrink-0 snap-normal snap-center;
+  }
+
+  .lockup-trailer-grid {
+    @apply w-[98%] sm:w-80 pb-2 flex-grow;
+  }
+
+  .lockup-profile {
+    @apply relative flex-grow w-28 pb-2 shrink-0 snap-normal snap-center;
+  }
+
+  .lockup-profile-grid {
+    @apply relative flex-grow w-28;
+  }
+
+  .lockup-profile-wide {
+    @apply relative flex-grow w-60 pb-2 shrink-0 snap-normal snap-center;
+  }
+
+  .lockup-profile-wide-grid {
+    @apply relative flex-grow w-60;
+  }
+
+  /**
    * Sidebar utilities
    */
   .safe-area-inset:not(.no-safe-area) {

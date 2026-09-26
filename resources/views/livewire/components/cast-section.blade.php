@@ -1,4 +1,4 @@
-<div wire:init="loadSection">
+<div>
     @if ($this->cast->count())
         <section class="pb-8">
             @switch ($kind)
@@ -37,9 +37,7 @@
                         </x-slot:action>
                     </x-section-nav>
 
-                    <div class="flex flex-nowrap gap-4 snap-mandatory snap-x overflow-x-scroll no-scrollbar">
-                        <x-rows.character-lockup :manga-casts="$this->cast" />
-                    </div>
+                    <x-rows.character-lockup :manga-casts="$this->cast" />
                     @break
 
                 @default
@@ -62,19 +60,6 @@
                         @endforeach
                     </div>
             @endswitch
-        </section>
-    @elseif (!$readyToLoad)
-        <section class="pb-8">
-            <div class="flex gap-2 justify-between mb-5 pt-4 pl-4 pr-4 xl:safe-area-inset-scroll">
-                <div>
-                    <p class="bg-secondary rounded-md" style="width: 168px; height: 28px"></p>
-                    <p class="bg-secondary rounded-md" style="width: 228px; height: 22px"></p>
-                </div>
-
-                <div class="flex flex-wrap gap-2 justify-end"></div>
-            </div>
-
-            <x-skeletons.lockup-row lockup="cast" />
         </section>
     @endif
 </div>

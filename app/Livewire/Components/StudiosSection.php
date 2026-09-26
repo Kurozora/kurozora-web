@@ -11,9 +11,11 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\Isolate;
+use Livewire\Attributes\Lazy;
 use Livewire\Component;
 
 #[Isolate]
+#[Lazy]
 class StudiosSection extends Component
 {
     /**
@@ -43,13 +45,6 @@ class StudiosSection extends Component
      * @var Game|null $game
      */
     public ?Game $game = null;
-
-    /**
-     * Whether the component is ready to load.
-     *
-     * @var bool $readyToLoad
-     */
-    public bool $readyToLoad = false;
 
     /**
      * Prepare the component.
@@ -90,13 +85,13 @@ class StudiosSection extends Component
     }
 
     /**
-     * Sets the property to load the section.
+     * The skeleton shown until the section resumes loading.
      *
-     * @return void
+     * @return View
      */
-    public function loadSection(): void
+    public function placeholder(): View
     {
-        $this->readyToLoad = true;
+        return view('components.skeletons.section', ['lockup' => 'studio']);
     }
 
     /**
@@ -106,10 +101,6 @@ class StudiosSection extends Component
      */
     public function getStudiosProperty(): Collection
     {
-        if (!$this->readyToLoad) {
-            return collect();
-        }
-
         $parent = $this->parent;
 
         return $parent->studios()

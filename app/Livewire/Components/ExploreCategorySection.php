@@ -21,7 +21,7 @@ use Livewire\Attributes\Lazy;
 use Livewire\Component;
 
 #[Isolate]
-#[Lazy(isolate: false)]
+#[Lazy]
 class ExploreCategorySection extends Component
 {
     /**

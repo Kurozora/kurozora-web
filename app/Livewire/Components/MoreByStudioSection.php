@@ -12,9 +12,11 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\Isolate;
+use Livewire\Attributes\Lazy;
 use Livewire\Component;
 
 #[Isolate]
+#[Lazy]
 class MoreByStudioSection extends Component
 {
     /**
@@ -51,13 +53,6 @@ class MoreByStudioSection extends Component
      * @var Studio|null $studio
      */
     public ?Studio $studio = null;
-
-    /**
-     * Whether the component is ready to load.
-     *
-     * @var bool $readyToLoad
-     */
-    public bool $readyToLoad = false;
 
     /**
      * Prepare the component.
@@ -98,13 +93,13 @@ class MoreByStudioSection extends Component
     }
 
     /**
-     * Sets the property to load the section.
+     * The skeleton shown until the section resumes loading.
      *
-     * @return void
+     * @return View
      */
-    public function loadSection(): void
+    public function placeholder(array $params): View
     {
-        $this->readyToLoad = true;
+        return view('components.skeletons.section', ['kind' => $params['kind'] ?? \App\Enums\UserLibraryKind::Anime]);
     }
 
     /**
@@ -114,10 +109,6 @@ class MoreByStudioSection extends Component
      */
     public function getMoreByStudioProperty(): Collection
     {
-        if (!$this->readyToLoad) {
-            return collect();
-        }
-
         $relation = match ($this->kind) {
             UserLibraryKind::Anime => $this->studio->anime(),
             UserLibraryKind::Manga => $this->studio->manga(),

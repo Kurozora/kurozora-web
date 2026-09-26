@@ -60,15 +60,7 @@
                 <x-skeletons.lockup-row :kind="$kind" :is-row="false" />
             </section>
         @else
-            <section class="flex flex-col items-center justify-center mt-4 text-center xl:safe-area-inset" style="min-height: 50vh;">
-                <x-picture>
-                    <img class="w-full max-w-sm" src="{{ asset('images/static/placeholders/' . $this->emptyImage) }}" alt="{{ $this->emptyHeading }}" title="{{ $this->emptyHeading }}">
-                </x-picture>
-
-                <p class="font-bold">{{ $this->emptyHeading }}</p>
-
-                <p class="text-sm text-secondary">{{ $this->emptyDescription }}</p>
-            </section>
+            <x-empty-state :image="$this->emptyImage" :heading="$this->emptyHeading" :description="$this->emptyDescription" />
         @endif
     </div>
 </main>

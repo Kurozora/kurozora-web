@@ -41,9 +41,7 @@
                         </div>
                     @break
                     @case(\App\Enums\ExploreCategoryTypes::UpNextEpisodes)
-                        <div class="flex flex-nowrap gap-4 snap-mandatory snap-x overflow-x-scroll no-scrollbar">
-                            <livewire:components.episode.up-next-section />
-                        </div>
+                        <livewire:components.episode.up-next-section />
                     @break
                     @case(\App\Enums\ExploreCategoryTypes::UpcomingShows)
                         <div class="flex flex-nowrap gap-4 pl-4 pr-4 snap-mandatory snap-x scroll-pl-4 overflow-x-scroll no-scrollbar xl:safe-area-inset-scroll">

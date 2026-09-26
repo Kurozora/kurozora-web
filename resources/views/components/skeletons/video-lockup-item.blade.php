@@ -1,10 +1,10 @@
 @props(['isRow' => true])
 
 @php
-    $class = $isRow ? 'w-[98%] max-w-sm sm:w-80 pb-2 shrink-0 snap-normal snap-start' : 'sm:w-80';
+    $class = $isRow ? 'lockup-media' : 'lockup-media-grid';
 @endphp
 
-<div {{ $attributes->merge(['class' => 'relative flex-grow ' . $class]) }}>
+<div {{ $attributes->merge(['class' => $class]) }}>
     <p class="w-full aspect-video bg-secondary rounded-lg"></p>
 
     <div class="flex flex-nowrap gap-2 mt-4">

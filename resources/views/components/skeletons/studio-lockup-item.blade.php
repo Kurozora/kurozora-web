@@ -1,10 +1,10 @@
 @props(['isRow' => true])
 
 @php
-    $class = $isRow ? 'max-w-sm pb-2 shrink-0 snap-normal snap-start' : '';
+    $class = $isRow ? 'lockup-banner' : 'lockup-banner-grid';
 @endphp
 
-<div {{ $attributes->merge(['class' => 'relative flex flex-col flex-grow w-[98%] sm:w-80 ' . $class]) }}>
+<div {{ $attributes->merge(['class' => $class]) }}>
     <div class="relative flex items-center justify-center w-full aspect-video bg-secondary rounded-lg">
         <p class="h-32 aspect-square bg-tertiary rounded-full"></p>
     </div>

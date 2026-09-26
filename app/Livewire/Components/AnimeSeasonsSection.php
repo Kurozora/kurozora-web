@@ -9,9 +9,11 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\Isolate;
+use Livewire\Attributes\Lazy;
 use Livewire\Component;
 
 #[Isolate]
+#[Lazy]
 class AnimeSeasonsSection extends Component
 {
     /**
@@ -20,13 +22,6 @@ class AnimeSeasonsSection extends Component
      * @var Anime $anime
      */
     public Anime $anime;
-
-    /**
-     * Whether the component is ready to load.
-     *
-     * @var bool $readyToLoad
-     */
-    public bool $readyToLoad = false;
 
     /**
      * Prepare the component.
@@ -43,13 +38,13 @@ class AnimeSeasonsSection extends Component
     }
 
     /**
-     * Sets the property to load the section.
+     * The skeleton shown until the section resumes loading.
      *
-     * @return void
+     * @return View
      */
-    public function loadSection(): void
+    public function placeholder(): View
     {
-        $this->readyToLoad = true;
+        return view('components.skeletons.section', ['lockup' => 'season']);
     }
 
     /**
@@ -59,10 +54,6 @@ class AnimeSeasonsSection extends Component
      */
     public function getSeasonsProperty(): Collection
     {
-        if (!$this->readyToLoad) {
-            return collect();
-        }
-
         return $this->anime->seasons()
             ->when($this->anime->tv_rating_id > request()->tvRating(), function ($query) {
                 $query->withoutGlobalScopes();

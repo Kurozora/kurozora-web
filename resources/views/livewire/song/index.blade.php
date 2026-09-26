@@ -50,15 +50,7 @@
                 <x-skeletons.lockup-row lockup="music" :is-row="false" />
             </section>
         @else
-            <section class="flex flex-col items-center justify-center mt-4 text-center xl:safe-area-inset" style="min-height: 50vh;">
-                <x-picture>
-                    <img class="w-full max-w-sm" src="{{ asset('images/static/placeholders/empty_anime_library.webp') }}" alt="Empty Songs Index" title="Empty Songs Index">
-                </x-picture>
-
-                <p class="font-bold">{{ __('Songs Not Found') }}</p>
-
-                <p class="text-sm text-secondary">{{ __('No songs found with the selected criteria.') }}</p>
-            </section>
+            <x-empty-state image="empty_anime_library.webp" alt="Empty Songs Index" :heading="__('Songs Not Found')" :description="__('No songs found with the selected criteria.')" />
         @endif
     </div>
 </main>

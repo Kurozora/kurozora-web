@@ -46,15 +46,7 @@
                 <x-skeletons.lockup-row lockup="media-rating" :is-row="false" />
             </section>
         @else
-            <section class="flex flex-col items-center justify-center mt-4 text-center xl:safe-area-inset" style="min-height: 50vh;">
-                <x-picture>
-                    <img class="w-full max-w-sm" src="{{ asset('images/static/placeholders/empty_anime_library.webp') }}" alt="No reviews" title="No reviews">
-                </x-picture>
-
-                <p class="font-bold">{{ __('No Reviews') }}</p>
-
-                <p class="text-sm text-secondary">{{ __(':x has not reviewed any titles yet.', ['x' => $user->username]) }}</p>
-            </section>
+            <x-empty-state image="empty_anime_library.webp" alt="No reviews" :heading="__('No Reviews')" :description="__(':x has not reviewed any titles yet.', ['x' => $user->username])" />
         @endif
     </div>
 </main>

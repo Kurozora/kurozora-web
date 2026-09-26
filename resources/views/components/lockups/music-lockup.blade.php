@@ -1,13 +1,13 @@
 @props(['song', 'anime' => null, 'type' => null, 'position' => null, 'episodes' => null, 'showEpisodes' => true, 'showModel' => false, 'rank', 'isRanked' => false, 'isRow' => true])
 
 @php
-    $class = $isRow ? 'max-w-[16rem] shrink-0' : 'flex-grow';
+    $class = $isRow ? 'lockup-music' : 'lockup-music-grid';
     $artworkURL = $song->getFirstMediaFullUrl(\App\Enums\MediaCollection::Artwork()) ?? asset('images/static/placeholders/music_album.webp');
 @endphp
 
 <div
     wire:key="{{ uniqid(more_entropy: true) }}"
-    class="relative pb-2 w-[98%] sm:w-64 snap-normal snap-start {{ $class }}"
+    class="{{ $class }}"
     @if (!empty($song->am_id)) data-music-song data-music-detail data-am-id="{{ $song->am_id }}" @endif
 >
     <div class="relative flex flex-col">

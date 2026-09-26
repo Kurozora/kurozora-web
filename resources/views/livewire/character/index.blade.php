@@ -54,15 +54,7 @@
                 <x-skeletons.lockup-row lockup="person" :is-row="false" />
             </section>
         @else
-            <section class="flex flex-col items-center justify-center mt-4 text-center xl:safe-area-inset" style="min-height: 50vh;">
-                <x-picture>
-                    <img class="w-full max-w-sm" src="{{ asset('images/static/placeholders/empty_anime_library.webp') }}" alt="Empty Characters Index" title="Empty Characters Index">
-                </x-picture>
-
-                <p class="font-bold">{{ __('Characters Not Found') }}</p>
-
-                <p class="text-sm text-secondary">{{ __('No characters found with the selected criteria.') }}</p>
-            </section>
+            <x-empty-state image="empty_anime_library.webp" alt="Empty Characters Index" :heading="__('Characters Not Found')" :description="__('No characters found with the selected criteria.')" />
         @endif
     </div>
 </main>

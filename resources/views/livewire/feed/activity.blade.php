@@ -102,44 +102,30 @@
                 </div>
             </section>
         @else
-            <section class="flex flex-col items-center justify-center mt-4 pl-4 pr-4 text-center" style="min-height: 50vh;">
-                @if ($tab === 'quotes')
-                    @svg('bubble_left_and_bubble_right_fill', 'fill-current w-32 mb-4')
-
-                    <p class="font-bold mb-2">{{ __('No Quotes') }}</p>
-
-                    <p class="text-sm text-secondary mb-4 max-w-md">
-                        {{ __("Add your take when sharing someone else's post and it'll show up here.") }}
-                    </p>
-
+            @if ($tab === 'quotes')
+                <x-empty-state icon="bubble_left_and_bubble_right_fill" :heading="__('No Quotes')" :description="__('Add your take when sharing someone else\'s post and it\'ll show up here.')">
                     @auth
                         <a
-                            class="px-6 py-2 rounded-full bg-tint text-white font-semibold hover:opacity-90"
+                            class="pl-6 pr-6 pt-2 pb-2 mt-4 rounded-full bg-tint text-white font-semibold hover:opacity-90"
                             href="{{ route('feed.details', $feedMessage) }}"
                             wire:navigate.hover
                         >
                             {{ __('Quote') }}
                         </a>
                     @endauth
-                @else
-                    @svg('square_and_arrow_up_on_square_fill', 'fill-current w-32 mb-4')
-
-                    <p class="font-bold mb-2">{{ __('Amplify posts you like') }}</p>
-
-                    <p class="text-sm text-secondary mb-4 max-w-md">
-                        {{ __("Share someone else's post on your timeline by reposting it. When you do, it'll show up here.") }}
-                    </p>
-
+                </x-empty-state>
+            @else
+                <x-empty-state icon="square_and_arrow_up_on_square_fill" :heading="__('Amplify posts you like')" :description="__('Share someone else\'s post on your timeline by reposting it. When you do, it\'ll show up here.')">
                     @auth
                         <button
-                            class="px-6 py-2 rounded-full bg-tint text-white font-semibold hover:opacity-90"
+                            class="pl-6 pr-6 pt-2 pb-2 mt-4 rounded-full bg-tint text-white font-semibold hover:opacity-90"
                             wire:click="toggleSimpleReShare"
                         >
                             {{ $feedMessage->isReShared ? __('Undo Re-share') : __('Re-share') }}
                         </button>
                     @endauth
-                @endif
-            </section>
+                </x-empty-state>
+            @endif
         @endif
     </div>
 </main>
