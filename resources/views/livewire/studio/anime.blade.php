@@ -29,10 +29,10 @@
 
         @if ($readyToLoad)
             <section class="xl:safe-area-inset">
-                <x-rows.small-lockup :animes="$this->animes" :is-row="false" />
+                <x-rows.small-lockup :animes="$this->titles" :is-row="false" />
 
                 <div class="mt-4 pl-4 pr-4">
-                    {{ $this->animes->links() }}
+                    {{ $this->titles->links() }}
                 </div>
             </section>
         @else

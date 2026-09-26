@@ -2,45 +2,23 @@
 
 namespace App\Livewire\Character;
 
+use App\Livewire\BaseSearchIndex;
 use App\Traits\Livewire\WithCharacterSearch;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
-use Livewire\Component;
 
-class Index extends Component
+class Index extends BaseSearchIndex
 {
     use WithCharacterSearch {
         getSearchResultsProperty as protected parentGetSearchResultsProperty;
     }
 
     /**
-     * Whether the component is ready to load.
+     * The view to render.
      *
-     * @var bool $readyToLoad
+     * @var string $view
      */
-    public bool $readyToLoad = false;
-
-    /**
-     * Prepare the component.
-     *
-     * @return void
-     */
-    public function mount(): void
-    {
-    }
-
-    /**
-     * Sets the property to load the page.
-     *
-     * @return void
-     */
-    public function loadPage(): void
-    {
-        $this->readyToLoad = true;
-    }
+    protected string $view = 'livewire.character.index';
 
     /**
      * The computed search results property.
@@ -54,15 +32,5 @@ class Index extends Component
         }
 
         return $this->parentGetSearchResultsProperty();
-    }
-
-    /**
-     * Render the component.
-     *
-     * @return Application|Factory|View
-     */
-    public function render(): Application|Factory|View
-    {
-        return view('livewire.character.index');
     }
 }

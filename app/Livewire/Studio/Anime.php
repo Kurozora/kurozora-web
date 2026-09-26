@@ -2,19 +2,13 @@
 
 namespace App\Livewire\Studio;
 
+use App\Livewire\BaseMediaIndex;
 use App\Models\Studio;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Collection;
-use Livewire\Component;
-use Livewire\WithPagination;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
-class Anime extends Component
+class Anime extends BaseMediaIndex
 {
-    use WithPagination;
-
     /**
      * The object containing the studio data.
      *
@@ -23,11 +17,11 @@ class Anime extends Component
     public Studio $studio;
 
     /**
-     * Whether the component is ready to load.
+     * The view to render.
      *
-     * @var bool $readyToLoad
+     * @var string $view
      */
-    public bool $readyToLoad = false;
+    protected string $view = 'livewire.studio.anime';
 
     /**
      * Prepare the component.
@@ -42,43 +36,12 @@ class Anime extends Component
     }
 
     /**
-     * Sets the property to load the page.
+     * The query returning the anime the studio produced.
      *
-     * @return void
+     * @return Builder|Relation
      */
-    public function loadPage(): void
+    protected function query(): Builder|Relation
     {
-        $this->readyToLoad = true;
-    }
-
-    /**
-     * The studio's animes.
-     *
-     * @return Collection|LengthAwarePaginator
-     */
-    public function getAnimesProperty(): Collection|LengthAwarePaginator
-    {
-        if (!$this->readyToLoad) {
-            return collect();
-        }
-
-        return $this->studio->anime()
-            ->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tvRating'])
-            ->when(auth()->user(), function ($query, $user) {
-                $query->with(['library' => function ($query) use ($user) {
-                    $query->where('user_id', '=', $user->id);
-                }]);
-            })
-            ->paginate(25);
-    }
-
-    /**
-     * Render the component.
-     *
-     * @return Application|Factory|View
-     */
-    public function render(): Application|Factory|View
-    {
-        return view('livewire.studio.anime');
+        return $this->studio->anime();
     }
 }
