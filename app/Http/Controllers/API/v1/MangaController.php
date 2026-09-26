@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Enums\AdaptedAnimeFilter;
 use App\Enums\BrowseSeasonKind;
+use App\Enums\MediaCollection;
 use App\Enums\SearchScope;
 use App\Enums\SearchType;
 use App\Events\ModelViewed;
@@ -15,14 +16,15 @@ use App\Http\Requests\GetIndexRequest;
 use App\Http\Requests\GetPaginatedRequest;
 use App\Http\Requests\RateModelRequest;
 use App\Http\Requests\SearchRequest;
-use App\Http\Resources\EditorialResource;
 use App\Http\Resources\CharacterResourceIdentity;
+use App\Http\Resources\EditorialResource;
 use App\Http\Resources\LiteratureCastResourceIdentity;
 use App\Http\Resources\LiteratureResource;
 use App\Http\Resources\LiteratureResourceIdentity;
 use App\Http\Resources\MediaRatingResource;
 use App\Http\Resources\MediaRatingResourceIdentity;
 use App\Http\Resources\MediaRelatedResource;
+use App\Http\Resources\MediaResource;
 use App\Http\Resources\MediaStaffResource;
 use App\Http\Resources\StudioResource;
 use App\Models\Manga;
@@ -335,6 +337,33 @@ class MangaController extends Controller
 
         return (new BrowseSeasonController())
             ->view($getBrowseSeasonRequest);
+    }
+
+    /**
+     * Returns the image gallery of a Manga.
+     *
+     * @param GetPaginatedRequest $request
+     * @param Manga               $manga
+     *
+     * @return JsonResponse
+     */
+    public function gallery(GetPaginatedRequest $request, Manga $manga): JsonResponse
+    {
+        $data = $request->validated();
+
+        // Get the poster gallery, current image first
+        $media = $manga->media()
+            ->where('collection_name', '=', MediaCollection::Poster)
+            ->orderBy('id')
+            ->cursorPaginate($data['limit'] ?? 25);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $media->nextPageUrl() ?? '');
+
+        return JSONResult::success([
+            'data' => MediaResource::collection($media),
+            'next' => empty($nextPageURL) ? null : $nextPageURL
+        ]);
     }
 
     /**

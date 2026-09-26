@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\v1;
 
+use App\Enums\MediaCollection;
 use App\Enums\SearchScope;
 use App\Enums\SearchType;
 use App\Events\ModelViewed;
@@ -156,7 +157,6 @@ class PersonController extends Controller
         ])->withHeaders($this->catalogCacheHeaders($request, $fingerprint));
     }
 
-
     /**
      * Returns detailed information of requested IDs.
      *
@@ -222,6 +222,32 @@ class PersonController extends Controller
         ]);
     }
 
+    /**
+     * Returns the image gallery of the person.
+     *
+     * @param GetPaginatedRequest $request
+     * @param Person              $person
+     *
+     * @return JsonResponse
+     */
+    public function gallery(GetPaginatedRequest $request, Person $person): JsonResponse
+    {
+        $data = $request->validated();
+
+        // Get the profile gallery, current image first
+        $media = $person->media()
+            ->where('collection_name', '=', MediaCollection::Profile)
+            ->orderBy('id')
+            ->cursorPaginate($data['limit'] ?? 25);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $media->nextPageUrl() ?? '');
+
+        return JSONResult::success([
+            'data' => MediaResource::collection($media),
+            'next' => empty($nextPageURL) ? null : $nextPageURL,
+        ]);
+    }
 
     /**
      * Returns character information of the person.

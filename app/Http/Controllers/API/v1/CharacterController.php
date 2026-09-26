@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\v1;
 
+use App\Enums\MediaCollection;
 use App\Enums\SearchScope;
 use App\Enums\SearchType;
 use App\Events\ModelViewed;
@@ -17,6 +18,7 @@ use App\Http\Resources\GameResourceIdentity;
 use App\Http\Resources\LiteratureResourceIdentity;
 use App\Http\Resources\MediaRatingResource;
 use App\Http\Resources\MediaRatingResourceIdentity;
+use App\Http\Resources\MediaResource;
 use App\Http\Resources\PersonResourceIdentity;
 use App\Models\Character;
 use App\Models\MediaRating;
@@ -217,6 +219,33 @@ class CharacterController extends Controller
         // Show the character details response
         return JSONResult::success([
             'data' => CharacterResource::collection($character->get()),
+        ]);
+    }
+
+    /**
+     * Returns the image gallery of a character.
+     *
+     * @param GetPaginatedRequest $request
+     * @param Character           $character
+     *
+     * @return JsonResponse
+     */
+    public function gallery(GetPaginatedRequest $request, Character $character): JsonResponse
+    {
+        $data = $request->validated();
+
+        // Get the profile gallery, current image first
+        $media = $character->media()
+            ->where('collection_name', '=', MediaCollection::Profile)
+            ->orderBy('id')
+            ->cursorPaginate($data['limit'] ?? 25);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $media->nextPageUrl() ?? '');
+
+        return JSONResult::success([
+            'data' => MediaResource::collection($media),
+            'next' => empty($nextPageURL) ? null : $nextPageURL,
         ]);
     }
 

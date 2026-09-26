@@ -3,10 +3,12 @@
 namespace App\Spiders\MAL;
 
 use App\Processors\MAL\PersonProcessor;
-use App\Spiders\MAL\Middleware\CircuitBreakerMiddleware;
+use App\Processors\MAL\PicturesProcessor;
 use App\Spiders\MAL\Middleware\BackoffMiddleware;
+use App\Spiders\MAL\Middleware\CircuitBreakerMiddleware;
 use App\Spiders\MAL\Middleware\RateLimitMiddleware;
 use App\Spiders\MAL\Models\PersonItem;
+use App\Traits\Spider\ParsesPictures;
 use Exception;
 use Generator;
 use Laravel\Octane\Exceptions\DdException;
@@ -21,6 +23,8 @@ use Symfony\Component\DomCrawler\Crawler;
 
 class PersonSpider extends BasicSpider
 {
+    use ParsesPictures;
+
     public array $startUrls = [
         //
     ];
@@ -41,7 +45,8 @@ class PersonSpider extends BasicSpider
     ];
 
     public array $itemProcessors = [
-        PersonProcessor::class
+        PersonProcessor::class,
+        PicturesProcessor::class,
     ];
 
     public array $extensions = [
@@ -252,5 +257,11 @@ dd($animeCharacters);
             $animeStaff,
             $mangas
         ));
+
+        // Gallery
+        $picturesPageLink = str(config('scraper.domains.mal.people_pictures'))
+            ->replace(':x', $id)
+            ->value();
+        yield ParseResult::request('GET', $picturesPageLink, [$this, 'parsePictures']);
     }
 }

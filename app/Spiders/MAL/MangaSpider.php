@@ -4,11 +4,13 @@ namespace App\Spiders\MAL;
 
 use App\Processors\MAL\MangaProcessor;
 use App\Processors\MAL\MangaStatsProcessor;
-use App\Spiders\MAL\Middleware\CircuitBreakerMiddleware;
+use App\Processors\MAL\PicturesProcessor;
 use App\Spiders\MAL\Middleware\BackoffMiddleware;
+use App\Spiders\MAL\Middleware\CircuitBreakerMiddleware;
 use App\Spiders\MAL\Middleware\RateLimitMiddleware;
 use App\Spiders\MAL\Models\MangaItem;
 use App\Spiders\MAL\Models\MangaStatItem;
+use App\Traits\Spider\ParsesPictures;
 use Arr;
 use Exception;
 use Generator;
@@ -29,6 +31,8 @@ use Symfony\Component\DomCrawler\Crawler;
 
 class MangaSpider extends BasicSpider
 {
+    use ParsesPictures;
+
     /**
      * The list of start urls.
      *
@@ -71,6 +75,7 @@ class MangaSpider extends BasicSpider
     public array $itemProcessors = [
         MangaProcessor::class,
         MangaStatsProcessor::class,
+        PicturesProcessor::class,
     ];
 
     /**
@@ -186,6 +191,12 @@ class MangaSpider extends BasicSpider
         $statsPageLink = config('scraper.domains.mal.base') . $response->filter('a[href*="/stats"]')
                 ->attr('href');
         yield ParseResult::request('GET', $statsPageLink, [$this, 'parseStatsPage']);
+
+        // Gallery
+        $picturesPageLink = str(config('scraper.domains.mal.manga_pictures'))
+            ->replace(':x', $id)
+            ->value();
+        yield ParseResult::request('GET', $picturesPageLink, [$this, 'parsePictures']);
     }
 
     /**

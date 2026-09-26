@@ -16,6 +16,9 @@ Route::prefix('/characters')
                     ->middleware('auth.kurozora:optional')
                     ->name('.details');
 
+                Route::get('/gallery', [CharacterController::class, 'gallery'])
+                    ->name('.gallery');
+
                 Route::get('/people', [CharacterController::class, 'people'])
                     ->name('.people');
 

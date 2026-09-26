@@ -3,10 +3,12 @@
 namespace App\Spiders\MAL;
 
 use App\Processors\MAL\CharacterProcessor;
-use App\Spiders\MAL\Middleware\CircuitBreakerMiddleware;
+use App\Processors\MAL\PicturesProcessor;
 use App\Spiders\MAL\Middleware\BackoffMiddleware;
+use App\Spiders\MAL\Middleware\CircuitBreakerMiddleware;
 use App\Spiders\MAL\Middleware\RateLimitMiddleware;
 use App\Spiders\MAL\Models\CharacterItem;
+use App\Traits\Spider\ParsesPictures;
 use Generator;
 use InvalidArgumentException;
 use RoachPHP\Downloader\Middleware\RequestDeduplicationMiddleware;
@@ -20,6 +22,8 @@ use Symfony\Component\DomCrawler\Crawler;
 
 class CharacterSpider extends BasicSpider
 {
+    use ParsesPictures;
+
     public array $startUrls = [
         //
     ];
@@ -40,7 +44,8 @@ class CharacterSpider extends BasicSpider
     ];
 
     public array $itemProcessors = [
-        CharacterProcessor::class
+        CharacterProcessor::class,
+        PicturesProcessor::class,
     ];
 
     public array $extensions = [
@@ -188,6 +193,12 @@ class CharacterSpider extends BasicSpider
             $mangas,
             $people
         ));
+
+        // Gallery
+        $picturesPageLink = str(config('scraper.domains.mal.character_pictures'))
+            ->replace(':x', $id)
+            ->value();
+        yield ParseResult::request('GET', $picturesPageLink, [$this, 'parsePictures']);
     }
 
     /**
