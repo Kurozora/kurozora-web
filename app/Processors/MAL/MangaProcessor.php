@@ -6,6 +6,7 @@ use App\Enums\MediaCollection;
 use App\Enums\StudioType;
 use App\Events\BareBonesAnimeAdded;
 use App\Events\BareBonesMangaAdded;
+use App\Events\BareBonesPersonAdded;
 use App\Models\Anime;
 use App\Models\Genre;
 use App\Models\Manga;
@@ -660,6 +661,10 @@ class MangaProcessor extends CustomItemProcessor
                     'last_name' => $lastName
                 ]);
 
+            if ($person->wasRecentlyCreated) {
+                event(new BareBonesPersonAdded($person));
+            }
+
             if (empty($malAuthorID)) {
                 logger()->critical('Found an issue for manga: ' . $manga->id);
                 logger()->critical('Author: ' . $firstName . ' ' . $lastName);
@@ -854,7 +859,7 @@ class MangaProcessor extends CustomItemProcessor
      */
     private function getSynopsis(?string $synopsis): ?string
     {
-        $synopsis = empty(trim($synopsis)) ? null: $synopsis;
+        $synopsis = empty(trim($synopsis)) ? null : $synopsis;
 
         if (!empty($synopsis)) {
             if (str($synopsis)->contains('No synopsis information')) {

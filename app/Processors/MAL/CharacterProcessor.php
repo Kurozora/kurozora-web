@@ -39,43 +39,52 @@ class CharacterProcessor extends CustomItemProcessor
             ->firstWhere('mal_id', '=', $malID);
 
         $imageURL = $item->get('imageURL');
-        $name = $item->get('name');
+        $name = $item->get('name') ?: $character?->name;
         $japaneseName = $item->get('japaneseName');
         $alternativeNames = $this->getAlternativeNames($item->get('alternativeNames'), $character);
         $about = $this->getAbout($item->get('about'));
         $animes = $item->get('animes') ?? [];
         $mangas = $item->get('mangas') ?? [];
         $people = $item->get('people') ?? [];
+        $attributes = [];
+
+        // Collect conditional attributes
+        if (! empty($japaneseName)) {
+            $attributes = array_merge($attributes, [
+                'ja' => [
+                    'name' => $japaneseName,
+                    'about' => null,
+                ],
+            ]);
+        }
+
+        if (empty($name)) {
+            logger()->channel('stderr')->error('❌ [MAL_ID:CHARACTER:' . $malID . '] Missing character name; skipping . ');
+
+            return $item;
+        }
 
         if (empty($character)) {
             logger()->channel('stderr')->debug('🖨 [MAL_ID:CHARACTER:' . $malID . '] Creating character');
 
             $character = Character::withoutGlobalScopes()
-                ->create([
+                ->create(array_merge([
                     'mal_id' => $malID,
                     'name' => $name,
-                    'ja' => [
-                        'name' => $japaneseName,
-                        'about' => null
-                    ],
                     'nicknames' => $alternativeNames,
                     'about' => $about
-                ]);
+                ], $attributes));
             logger()->channel('stderr')->debug('✅️ [MAL_ID:CHARACTER:' . $malID . '] Done creating character');
         } else {
             logger()->channel('stderr')->debug('🛠 [MAL_ID:CHARACTER:' . $malID . '] Updating attributes');
             $newAlternativeNames = array_values(array_unique(array_merge($character->nicknames?->toArray() ?? [], $alternativeNames ?? [])));
 
-            $character->update([
+            // Cast lists own the name.
+            $character->update(array_merge([
                 'mal_id' => $malID,
-                'name' => $name,
-                'ja' => [
-                    'name' => $japaneseName,
-                    'about' => null
-                ],
                 'nicknames' => $newAlternativeNames,
                 'about' => $about,
-            ]);
+            ], $attributes));
             logger()->channel('stderr')->debug('✅️ [MAL_ID:CHARACTER:' . $malID . '] Done updating attributes');
         }
 
@@ -90,6 +99,9 @@ class CharacterProcessor extends CustomItemProcessor
 
         // Add people relations
         $this->addPeople($people, $character);
+
+        // Mark as scraped so backfills can skip it within their retention window.
+        $character->touch();
 
         logger()->channel('stderr')->info('✅️ [MAL_ID:CHARACTER:' . $malID . '] Done processing character');
         return $item;
@@ -216,10 +228,10 @@ class CharacterProcessor extends CustomItemProcessor
                     });
                 });
 
-                logger()->channel('stderr')->debug('✅️ [MAL_ID:CHARACTER:' . $character->mal_id . '] Done adding manga staff');
+                logger()->channel('stderr')->debug('✅️ [MAL_ID:CHARACTER:' . $character->mal_id . '] Done adding manga');
             }
         } catch (Throwable $e) {
-            logger()->channel('stderr')->error('❌ [MAL_ID:CHARACTER:' . $character->mal_id . '] Failed adding manga staff: ' . $e->getMessage());
+            logger()->channel('stderr')->error('❌ [MAL_ID:CHARACTER:' . $character->mal_id . '] Failed adding manga: ' . $e->getMessage());
         }
     }
 
@@ -251,10 +263,17 @@ class CharacterProcessor extends CustomItemProcessor
                 DB::transaction(function () use ($peopleCollection, $missingPersonIDs) {
                     $missingPersonIDs->each(function ($missingPersonID) use ($peopleCollection) {
                         $missingPerson = $peopleCollection->firstWhere('id', '=', $missingPersonID);
+                        $name = $this->getName($missingPerson['name']);
+
+                        // first_name is a NOT NULL column; skip actors MAL gives no name for.
+                        if (empty($name[0])) {
+                            return;
+                        }
 
                         $person = Person::create([
                             'mal_id' => $missingPerson['id'],
-                            'name' => $this->getName($missingPerson['name'])
+                            'first_name' => $name[0],
+                            'last_name' => $name[1] ?? null,
                         ]);
 
                         event(new BareBonesPersonAdded($person));

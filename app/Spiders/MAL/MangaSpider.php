@@ -338,7 +338,7 @@ class MangaSpider extends BasicSpider
                         ->replaceLast(':', '')
                         ->value();
 
-                    $item->children('td ul li')
+                    $item->filter('td ul li')
                         ->children('a')
                         ->each(function (Crawler $item, int $index) use ($relationType, &$relations) {
                             $digitRegex = '/(\d+)\//';

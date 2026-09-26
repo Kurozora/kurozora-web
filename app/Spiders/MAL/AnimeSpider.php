@@ -2,6 +2,7 @@
 
 namespace App\Spiders\MAL;
 
+use App\Processors\MAL\AnimeCharacterProcessor;
 use App\Processors\MAL\AnimeProcessor;
 use App\Processors\MAL\AnimeStatsProcessor;
 use App\Processors\MAL\PicturesProcessor;
@@ -11,6 +12,7 @@ use App\Spiders\MAL\Middleware\CircuitBreakerMiddleware;
 use App\Spiders\MAL\Middleware\RateLimitMiddleware;
 use App\Spiders\MAL\Models\AnimeItem;
 use App\Spiders\MAL\Models\AnimeStatItem;
+use App\Traits\Spider\ParsesAnimeCharacters;
 use App\Traits\Spider\ParsesAnimeVideos;
 use App\Traits\Spider\ParsesPictures;
 use Arr;
@@ -33,6 +35,7 @@ use Symfony\Component\DomCrawler\Crawler;
 
 class AnimeSpider extends BasicSpider
 {
+    use ParsesAnimeCharacters;
     use ParsesAnimeVideos;
     use ParsesPictures;
 
@@ -78,6 +81,7 @@ class AnimeSpider extends BasicSpider
     public array $itemProcessors = [
         AnimeProcessor::class,
         AnimeStatsProcessor::class,
+        AnimeCharacterProcessor::class,
         PicturesProcessor::class,
         VideoProcessor::class,
     ];
@@ -191,6 +195,12 @@ class AnimeSpider extends BasicSpider
             ->attr('href');
         yield ParseResult::request('GET', $statsPageLink, [$this, 'parseStatsPage']);
 
+        // Cast and staff
+        $charactersPageLink = str(config('scraper.domains.mal.anime_characters'))
+            ->replace(':x', $id)
+            ->value();
+        yield ParseResult::request('GET', $charactersPageLink, [$this, 'parseCharacters']);
+
         // Gallery
         $picturesPageLink = str(config('scraper.domains.mal.anime_pictures'))
             ->replace(':x', $id)
@@ -207,6 +217,14 @@ class AnimeSpider extends BasicSpider
     /**
      * @param Response $response
      *
+     * @return Generator<ParseResult>
+     */
+    public function parseCharacters(Response $response): Generator
+    {
+        yield from $this->parseAnimeCharacters($response);
+    }
+
+    /**
      * @return Generator<ParseResult>
      */
     public function parseStatsPage(Response $response): Generator
@@ -381,7 +399,7 @@ class AnimeSpider extends BasicSpider
                         ->replaceLast(':', '')
                         ->value();
 
-                    $item->children('td ul li')
+                    $item->filter('td ul li')
                         ->children('a')
                         ->each(function (Crawler $item, int $index) use ($relationType, &$relations) {
                             $digitRegex = '/(\d+)\//';

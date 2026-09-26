@@ -2,6 +2,8 @@
 
 namespace App\Processors\MAL;
 
+use App\Events\BareBonesCharacterAdded;
+use App\Events\BareBonesPersonAdded;
 use App\Models\Anime;
 use App\Models\AnimeCast;
 use App\Models\CastRole;
@@ -12,6 +14,8 @@ use App\Models\Person;
 use App\Models\StaffRole;
 use App\Spiders\MAL\Models\AnimeCharacterItem;
 use DB;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Support\Collection;
 use RoachPHP\ItemPipeline\ItemInterface;
 use RoachPHP\ItemPipeline\Processors\CustomItemProcessor;
 
@@ -35,6 +39,12 @@ final class AnimeCharacterProcessor extends CustomItemProcessor
         $anime = Anime::with(['cast', 'mediaStaff'])
             ->withoutGlobalScopes()
             ->firstWhere('mal_id', '=', $malID);
+
+        if (empty($anime)) {
+            logger()->channel('stderr')->error('❌ [MAL_ID:ANIME:' . $malID . '] Missing anime; skipping characters.');
+            return $item;
+        }
+
         $animeCast = $anime->cast;
         $mediaStaff = $anime->mediaStaff;
         $cast = collect($item->get('cast'));
@@ -50,8 +60,21 @@ final class AnimeCharacterProcessor extends CustomItemProcessor
             logger()->channel('stderr')->debug('🛠 [MAL_ID:ANIME:' . $malID . '] Updating characters');
 
             $characterIDs = $castChunk->pluck('character.id');
-            $characters = Character::whereIn('mal_id', $characterIDs->toArray())
+            $characters = Character::withoutGlobalScopes()
+                ->with(['mediaStat', 'translations'])
+                ->whereIn('mal_id', $characterIDs->toArray())
                 ->get();
+
+            // Rename characters to their cast names
+            $castNames = $castChunk->pluck('character.name', 'character.id');
+            $characters->each(function (Character $character) use ($castNames) {
+                $castName = $castNames->get($character->mal_id);
+
+                if (!empty($castName) && $character->name !== $castName) {
+                    $character->update(['name' => $castName]);
+                }
+            });
+
             if ($characters->count() !== $characterIDs->count()) {
                 $missingIDs = $characterIDs->diff($characters->pluck('mal_id'));
 
@@ -71,6 +94,8 @@ final class AnimeCharacterProcessor extends CustomItemProcessor
                             ]);
 
                             $characters->add($character);
+
+                            event(new BareBonesCharacterAdded($character));
                         });
                     });
                 }
@@ -78,8 +103,10 @@ final class AnimeCharacterProcessor extends CustomItemProcessor
 
             $actors = $castChunk->pluck('actors.*')->collapse();
             $actorIDs = $actors->pluck('id');
-            $people = Person::whereIn('mal_id', $actorIDs->toArray())
-                ->get(['id', 'mal_id']);
+            $people = Person::withoutGlobalScopes()
+                ->whereIn('mal_id', $actorIDs->toArray())
+                ->get();
+            $this->renamePeople($people, $actors->pluck('name', 'id'));
 
             if ($people->count() !== $actorIDs->count()) {
                 $missingIDs = $actorIDs->diff($people->pluck('mal_id'))->unique();
@@ -111,6 +138,8 @@ final class AnimeCharacterProcessor extends CustomItemProcessor
                             ]);
 
                             $people->add($person);
+
+                            event(new BareBonesPersonAdded($person));
                         });
                     });
                 }
@@ -132,16 +161,17 @@ final class AnimeCharacterProcessor extends CustomItemProcessor
                 if ($missingRoles->isNotEmpty()) {
                     logger()->channel('stderr')->error('🛠 [MAL_ID:ANIME:' . $malID . '] incorrect cast roles count');
 
-                    dd($missingRoles);
-//                    DB::transaction(function () use ($castRoles, $missingRoles) {
-//                        $missingRoles->each(function ($missingRole) use ($castRoles) {
-//                            $castRole = CastRole::create([
-//                                'name' => $missingRole
-//                            ]);
-//
-//                            $castRoles->add($castRole);
-//                        });
-//                    });
+                    DB::transaction(function () use ($castRoles, $missingRoles) {
+                        $missingRoles->each(function ($missingRole) use ($castRoles) {
+                            $castRole = CastRole::firstOrCreate([
+                                'name' => $missingRole,
+                            ], [
+                                'description' => '',
+                            ]);
+
+                            $castRoles->add($castRole);
+                        });
+                    });
                 }
             }
 
@@ -155,10 +185,11 @@ final class AnimeCharacterProcessor extends CustomItemProcessor
                 ->get();
 
             if ($languages->count() !== $languageNames->count()) {
-                dd($languages->pluck('name'), $languageNames);
+                $missingLanguages = $languageNames->diff($languages->pluck('name'));
+                logger()->channel('stderr')->error('🛠 [MAL_ID:ANIME:' . $malID . '] Unmapped cast languages: ' . $missingLanguages->implode(', '));
             }
 
-            $castChunk->each(function ($newCast) use ($anime, $languages, $cast, $malID, $characters, $castRoles, $people, $animeCast) {
+            $castChunk->each(function ($newCast) use ($anime, $languages, $malID, $characters, $castRoles, $people, $animeCast) {
                 $characterID = $newCast['character']['id'];
                 $character = $characters->firstWhere('mal_id', '=', $characterID);
 
@@ -195,6 +226,10 @@ final class AnimeCharacterProcessor extends CustomItemProcessor
                                 };
                                 $language = $languages->firstWhere('name', '=', $languageName);
 
+                                if (empty($language)) {
+                                    return;
+                                }
+
                                 $newAnimeCast = AnimeCast::create([
                                     'anime_id' => $anime->id,
                                     'character_id' => $character->id,
@@ -216,8 +251,10 @@ final class AnimeCharacterProcessor extends CustomItemProcessor
         foreach ($staff->chunk(100) as $staffChunk) {
             logger()->channel('stderr')->debug('🛠 [MAL_ID:ANIME:' . $malID . '] Updating staff');
             $ids = $staffChunk->pluck('id');
-            $people = Person::whereIn('mal_id', $ids->toArray())
+            $people = Person::withoutGlobalScopes()
+                ->whereIn('mal_id', $ids->toArray())
                 ->get();
+            $this->renamePeople($people, $staffChunk->pluck('name', 'id'));
 
             if ($people->count() !== $ids->count()) {
                 logger()->channel('stderr')->error('🛠 [MAL_ID:ANIME:' . $malID . '] incorrect staff count');
@@ -235,6 +272,8 @@ final class AnimeCharacterProcessor extends CustomItemProcessor
                         ]);
 
                         $people->add($person);
+
+                        event(new BareBonesPersonAdded($person));
                     });
                 });
             }
@@ -252,16 +291,17 @@ final class AnimeCharacterProcessor extends CustomItemProcessor
 
                     $missingRoles = $roles->diff($staffRoles->pluck('name'));
 
-                    dd($missingRoles);
-//                    DB::transaction(function () use ($staffRoles, $missingRoles) {
-//                        $missingRoles->each(function ($missingRole) use ($staffRoles) {
-//                            $staffRole = StaffRole::create([
-//                                'name' => $missingRole
-//                            ]);
-//
-//                            $staffRoles->add($staffRole);
-//                        });
-//                    });
+                    DB::transaction(function () use ($staffRoles, $missingRoles) {
+                        $missingRoles->each(function ($missingRole) use ($staffRoles) {
+                            $staffRole = StaffRole::firstOrCreate([
+                                'name' => $missingRole
+                            ], [
+                                'description' => ''
+                            ]);
+
+                            $staffRoles->add($staffRole);
+                        });
+                    });
                 }
 
                 $staffRoles->each(function (StaffRole $role) use ($anime, $person, $mediaStaff) {
@@ -283,5 +323,34 @@ final class AnimeCharacterProcessor extends CustomItemProcessor
 
         logger()->channel('stderr')->info('✅️ [MAL_ID:ANIME:' . $malID . '] Done processing characters');
         return $item;
+    }
+
+    /**
+     * Updates the names of the given people to the ones MAL lists them by.
+     *
+     * @param EloquentCollection $people
+     * @param Collection         $names
+     *
+     * @return void
+     */
+    private function renamePeople(EloquentCollection $people, Collection $names): void
+    {
+        $people->each(function (Person $person) use ($names) {
+            $name = explode(', ', $names->get($person->mal_id) ?? ''); // Lastname, Firstname
+
+            if (count($name) !== 2) {
+                return;
+            }
+
+            $firstName = trim($name[1]);
+            $lastName = trim($name[0]);
+
+            if ($person->first_name !== $firstName || $person->last_name !== $lastName) {
+                $person->update([
+                    'first_name' => $firstName,
+                    'last_name' => $lastName,
+                ]);
+            }
+        });
     }
 }
