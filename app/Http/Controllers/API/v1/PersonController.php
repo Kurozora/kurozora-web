@@ -250,6 +250,35 @@ class PersonController extends Controller
     }
 
     /**
+     * Returns the relationships of the person.
+     *
+     * @param GetPaginatedRequest $request
+     * @param Person              $person
+     *
+     * @return JsonResponse
+     */
+    public function relationships(GetPaginatedRequest $request, Person $person): JsonResponse
+    {
+        $data = $request->validated();
+
+        // Get the relationships
+        $relationships = $person->relationships()
+            ->with(['relatedPerson' => function ($query) {
+                $query->with(['media']);
+            }])
+            ->cursorPaginate($data['limit'] ?? 25);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $relationships->nextPageUrl() ?? '');
+
+        // Return person relationships
+        return JSONResult::success([
+            'data' => PersonRelationshipResource::collection($relationships),
+            'next' => empty($nextPageURL) ? null : $nextPageURL,
+        ]);
+    }
+
+    /**
      * Returns character information of the person.
      *
      * @param GetPaginatedRequest $request

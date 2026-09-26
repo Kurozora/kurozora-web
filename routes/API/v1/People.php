@@ -19,6 +19,9 @@ Route::prefix('/people')
                 Route::get('/gallery', [PersonController::class, 'gallery'])
                     ->name('.gallery');
 
+                Route::get('/relationships', [PersonController::class, 'relationships'])
+                    ->name('.relationships');
+
                 Route::get('/anime', [PersonController::class, 'anime'])
                     ->middleware('auth.kurozora:optional')
                     ->name('.anime');

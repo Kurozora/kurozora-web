@@ -289,7 +289,7 @@ class Person extends KModel implements HasMedia, Sitemapable
      *
      * @return Builder
      */
-    function anime(): Builder
+    public function anime(): Builder
     {
         $personKey = $this->getKey();
 
@@ -319,7 +319,7 @@ class Person extends KModel implements HasMedia, Sitemapable
      *
      * @return HasManyThrough
      */
-    function manga(): HasManyThrough
+    public function manga(): HasManyThrough
     {
         return $this->viewableViaParent(
             $this->hasManyThrough(Manga::class, MediaStaff::class, 'person_id', 'id', 'id', 'model_id')
@@ -332,7 +332,7 @@ class Person extends KModel implements HasMedia, Sitemapable
      *
      * @return Builder
      */
-    function games(): Builder
+    public function games(): Builder
     {
         $personKey = $this->getKey();
 
@@ -362,7 +362,7 @@ class Person extends KModel implements HasMedia, Sitemapable
      *
      * @return BelongsToMany
      */
-    function characters(): BelongsToMany
+    public function characters(): BelongsToMany
     {
         return $this->belongsToMany(Character::class, AnimeCast::class)
             ->distinct();
@@ -396,6 +396,16 @@ class Person extends KModel implements HasMedia, Sitemapable
     public function mediaStaff(): HasMany
     {
         return $this->hasMany(MediaStaff::class, 'person_id');
+    }
+
+    /**
+     * Returns the person's relationships to other people.
+     *
+     * @return HasMany
+     */
+    public function relationships(): HasMany
+    {
+        return $this->hasMany(PersonRelationship::class);
     }
 
     /**

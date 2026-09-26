@@ -4,14 +4,17 @@ namespace App\Processors\MAL;
 
 use App\Enums\AstrologicalSign;
 use App\Enums\MediaCollection;
+use App\Enums\PersonRelationshipType;
 use App\Events\BareBonesAnimeAdded;
 use App\Events\BareBonesCharacterAdded;
 use App\Events\BareBonesMangaAdded;
+use App\Events\BareBonesPersonAdded;
 use App\Models\Anime;
 use App\Models\Character;
 use App\Models\Manga;
 use App\Models\MediaStaff;
 use App\Models\Person;
+use App\Models\PersonRelationship;
 use App\Models\StaffRole;
 use App\Spiders\MAL\Models\PersonItem;
 use Carbon\Carbon;
@@ -52,6 +55,8 @@ class PersonProcessor extends CustomItemProcessor
         $animeCharacters = $item->get('animeCharacters') ?? [];
         $animeStaff = $item->get('animeStaff') ?? [];
         $mangas = $item->get('mangas') ?? [];
+        $marriages = $item->get('marriages') ?? [];
+        $deceasedDate = $this->parseDate($item->get('deceasedDate'));
 
         if (empty($person)) {
             logger()->channel('stderr')->debug('🖨 [MAL_ID:PERSON:' . $malID . '] Creating person');
@@ -67,6 +72,7 @@ class PersonProcessor extends CustomItemProcessor
                     'alternative_names' => $alternativeNames,
                     'about' => $about,
                     'birthdate' => $birthdate?->toDateString(),
+                    'deceased_date' => $deceasedDate?->toDateString(),
                     'astrological_sign' => $astrologicalSign?->value,
                     'website_urls' => $websites,
                 ]);
@@ -80,6 +86,7 @@ class PersonProcessor extends CustomItemProcessor
             $newAlternativeNames = array_values(array_unique(array_merge($person->alternative_names?->toArray() ?? [], $alternativeNames ?? [])));
             $newWebsites = $this->getWebsites($websites, $person);
             $newBirthdate = empty($birthdate) ? $person->birthdate : $birthdate;
+            $newDeceasedDate = empty($deceasedDate) ? $person->deceased_date : $deceasedDate;
             $astrologicalSign = $this->getAstrologicalSign($newBirthdate);
 
             $person->update([
@@ -91,6 +98,7 @@ class PersonProcessor extends CustomItemProcessor
                 'alternative_names' => $newAlternativeNames,
                 'about' => $about,
                 'birthdate' => $newBirthdate?->toDateString(),
+                'deceased_date' => $newDeceasedDate?->toDateString(),
                 'astrological_sign' => $astrologicalSign?->value,
                 'website_urls' => $newWebsites,
             ]);
@@ -108,6 +116,9 @@ class PersonProcessor extends CustomItemProcessor
 
         // Add manga staff
         $this->addMangaStaff($mangas, $person);
+
+        // Add relationships
+        $this->addRelationships($marriages, $person);
 
         logger()->channel('stderr')->info('✅️ [MAL_ID:PERSON:' . $malID . '] Done processing person');
         return $item;
@@ -439,6 +450,96 @@ class PersonProcessor extends CustomItemProcessor
         } catch (Throwable $e) {
             logger()->channel('stderr')->error('❌ [MAL_ID:PERSON:' . $person->mal_id . '] Failed adding manga staff: ' . $e->getMessage());
         }
+    }
+
+    /**
+     * Add the person's marriage relationships.
+     */
+    private function addRelationships(array $marriages, Person $person): void
+    {
+        if (empty($marriages)) {
+            return;
+        }
+
+        $person = clone $person;
+
+        foreach ($marriages as $marriage) {
+            $spouseMalID = $marriage['id'] ?? null;
+
+            if (empty($spouseMalID)) {
+                continue;
+            }
+
+            try {
+                $spouse = Person::withoutGlobalScopes()
+                    ->firstWhere('mal_id', '=', $spouseMalID);
+
+                if (empty($spouse)) {
+                    // The bio only gives a display name; the full scrape corrects it.
+                    $spouseName = trim((string) ($marriage['name'] ?? ''));
+
+                    if ($spouseName === '') {
+                        continue;
+                    }
+
+                    $spouse = Person::create([
+                        'mal_id' => $spouseMalID,
+                        'first_name' => $spouseName,
+                    ]);
+
+                    event(new BareBonesPersonAdded($spouse));
+                }
+
+                if ($spouse->id === $person->id) {
+                    continue;
+                }
+
+                $startedOn = $this->parseDate($marriage['date'] ?? null)?->toDateString();
+
+                // Store both directions so either person resolves the marriage.
+                PersonRelationship::firstOrCreate([
+                    'person_id' => $person->id,
+                    'related_person_id' => $spouse->id,
+                    'type' => PersonRelationshipType::Spouse,
+                ], [
+                    'started_on' => $startedOn,
+                ]);
+                PersonRelationship::firstOrCreate([
+                    'person_id' => $spouse->id,
+                    'related_person_id' => $person->id,
+                    'type' => PersonRelationshipType::Spouse,
+                ], [
+                    'started_on' => $startedOn,
+                ]);
+            } catch (Throwable $e) {
+                logger()->channel('stderr')->error('❌ [MAL_ID:PERSON:' . $person->mal_id . '] Failed adding relationship: ' . $e->getMessage());
+            }
+        }
+    }
+
+    /**
+     * Parse a free-text date.
+     */
+    private function parseDate(?string $value): ?Carbon
+    {
+        $value = trim((string) $value);
+
+        if ($value === '') {
+            return null;
+        }
+
+        foreach (['F j, Y', 'M j, Y', 'F Y', 'M Y', 'Y'] as $format) {
+            try {
+                $date = Carbon::createFromFormat('!' . $format, $value);
+
+                if ($date) {
+                    return $date;
+                }
+            } catch (Exception $e) {
+            }
+        }
+
+        return null;
     }
 
     /**

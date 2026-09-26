@@ -149,6 +149,28 @@ class PersonSpider extends BasicSpider
             $about = null;
         }
 
+        // Marriage and death are only mentioned in free-text; parse conservatively.
+        $marriages = [];
+        $deceasedDate = null;
+        try {
+            $infoHTML = $response->filter('.people-informantion-more')
+                ->html('');
+
+            if (preg_match_all('#marri(?:age|ed)\b.{0,120}?/people/(\d+)[^>]*>([^<]+)</a>.{0,80}?\b(?:on|in)\s+([A-Z][a-z]+\.?\s+(?:\d{1,2},?\s+)?\d{4})#is', $infoHTML, $matches, PREG_SET_ORDER)) {
+                foreach ($matches as $match) {
+                    $marriages[] = [
+                        'id' => $match[1],
+                        'name' => str($match[2])->trim()->value(),
+                        'date' => str($match[3])->trim()->value(),
+                    ];
+                }
+            }
+
+            if (preg_match('#(?:passed away|died|deceased)\b.{0,120}?\b(?:on|in)\s+([A-Z][a-z]+\.?\s+(?:\d{1,2},?\s+)?\d{4})#is', $infoHTML, $match)) {
+                $deceasedDate = str($match[1])->trim()->value();
+            }
+        } catch (Exception $e) {}
+
         try {
             $element = $response->filter('span:contains(\'Birthday:\')');
             $birthday = str($element->ancestors()->text())
@@ -255,7 +277,9 @@ dd($animeCharacters);
             $websites,
             $animeCharacters,
             $animeStaff,
-            $mangas
+            $mangas,
+            $marriages,
+            $deceasedDate
         ));
 
         // Gallery
