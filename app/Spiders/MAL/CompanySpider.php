@@ -119,7 +119,7 @@ class CompanySpider extends BasicSpider
                     ->match($regex)
                     ->value();
             });
-        $magazineIDs = $response->filter('table tr td.company div a[href*="/anime/magazine/"]')
+        $magazineIDs = $response->filter('div.genre-list a[href*="/manga/magazine/"]')
             ->each(function (Crawler $item) {
                 $regex = '/(\d+)\//';
                 $link = $item->attr('href');

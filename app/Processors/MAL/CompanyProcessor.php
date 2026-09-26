@@ -2,6 +2,7 @@
 
 namespace App\Processors\MAL;
 
+use App\Spiders\MAL\MagazineSpider;
 use App\Spiders\MAL\ProducerSpider;
 use RoachPHP\ItemPipeline\ItemInterface;
 use RoachPHP\ItemPipeline\Processors\ItemProcessorInterface;
@@ -32,8 +33,8 @@ class CompanyProcessor implements ItemProcessorInterface
         }
 
         if (!empty($magazineURLs)) {
-            dd('----- Caught magazines', $magazineURLs);
-//            Roach::startSpider(ProducerSpider::class, new Overrides(startUrls: $magazineURLs));
+            logger()->channel('stderr')->debug('processing: ' . implode(', ', $magazineURLs));
+            Roach::startSpider(MagazineSpider::class, new Overrides(startUrls: $magazineURLs));
         }
 
         return $item;

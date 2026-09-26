@@ -44,7 +44,7 @@ class MagazineProcessor extends CustomItemProcessor
         if (empty($studio)) {
             logger()->channel('stderr')->debug('🖨 [MAL_ID:MAGAZINE:' . $malID . '] Creating magazine');
 
-            Studio::withoutGlobalScopes()
+            $studio = Studio::withoutGlobalScopes()
                 ->create([
                     'mal_id' => $malID,
                     'type' => StudioType::Manga,
