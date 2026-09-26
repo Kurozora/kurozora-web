@@ -5,11 +5,13 @@ namespace App\Spiders\MAL;
 use App\Processors\MAL\AnimeProcessor;
 use App\Processors\MAL\AnimeStatsProcessor;
 use App\Processors\MAL\PicturesProcessor;
+use App\Processors\MAL\VideoProcessor;
 use App\Spiders\MAL\Middleware\BackoffMiddleware;
 use App\Spiders\MAL\Middleware\CircuitBreakerMiddleware;
 use App\Spiders\MAL\Middleware\RateLimitMiddleware;
 use App\Spiders\MAL\Models\AnimeItem;
 use App\Spiders\MAL\Models\AnimeStatItem;
+use App\Traits\Spider\ParsesAnimeVideos;
 use App\Traits\Spider\ParsesPictures;
 use Arr;
 use Exception;
@@ -31,6 +33,7 @@ use Symfony\Component\DomCrawler\Crawler;
 
 class AnimeSpider extends BasicSpider
 {
+    use ParsesAnimeVideos;
     use ParsesPictures;
 
     /**
@@ -76,6 +79,7 @@ class AnimeSpider extends BasicSpider
         AnimeProcessor::class,
         AnimeStatsProcessor::class,
         PicturesProcessor::class,
+        VideoProcessor::class,
     ];
 
     /**
@@ -192,6 +196,12 @@ class AnimeSpider extends BasicSpider
             ->replace(':x', $id)
             ->value();
         yield ParseResult::request('GET', $picturesPageLink, [$this, 'parsePictures']);
+
+        // Videos
+        $videosPageLink = str(config('scraper.domains.mal.anime_videos'))
+            ->replace(':x', $id)
+            ->value();
+        yield ParseResult::request('GET', $videosPageLink, [$this, 'parseVideos']);
     }
 
     /**

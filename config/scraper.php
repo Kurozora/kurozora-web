@@ -20,6 +20,7 @@ return [
             'anime' => 'https://myanimelist.net/anime',
             'anime_characters' => 'https://myanimelist.net/anime/:x/MAL/characters',
             'anime_pictures' => 'https://myanimelist.net/anime/:x/MAL/pics',
+            'anime_videos' => 'https://myanimelist.net/anime/:x/MAL/video',
             'anime_season' => 'https://myanimelist.net/anime/season',
             'anime_stats' => 'https://myanimelist.net/anime/:x/MAL/stats',
             'top_anime' => 'https://myanimelist.net/topanime.php',
