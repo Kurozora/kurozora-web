@@ -47,7 +47,7 @@ return [
          * The translation string must always be the first argument, written as a literal —
          * a concatenated or interpolated key is invisible here and gets pruned.
          */
-        'functions' => ['__', 'trans', '@lang'],
+        'functions' => ['__', 'trans', 'trans_choice', '@lang'],
     ],
 
     /**

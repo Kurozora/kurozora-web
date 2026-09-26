@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use Amirami\Localizator\Services\Parser;
+use App\Extensions\KLocalizatorParser;
 use App\Models\Anime;
 use App\Models\FeedMessage;
 use App\Models\MediaRating;
@@ -213,5 +215,10 @@ class AppServiceProvider extends ServiceProvider
 
         // Register image transformer.
         $this->app->bind(FileAdder::class, ImageTransformingFileAdder::class);
+
+        // Localizator is a dev dependency.
+        if (class_exists(Parser::class)) {
+            $this->app->bind(Parser::class, KLocalizatorParser::class);
+        }
     }
 }
