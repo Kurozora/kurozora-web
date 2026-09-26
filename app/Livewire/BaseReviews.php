@@ -11,7 +11,6 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\CursorPaginator;
-use Illuminate\Support\Collection;
 use Livewire\Component;
 
 abstract class BaseReviews extends Component
@@ -36,23 +35,6 @@ abstract class BaseReviews extends Component
     protected string $view = '';
 
     /**
-     * Whether the component is ready to load.
-     *
-     * @var bool $readyToLoad
-     */
-    public bool $readyToLoad = false;
-
-    /**
-     * Sets the property to load the page.
-     *
-     * @return void
-     */
-    public function loadPage(): void
-    {
-        $this->readyToLoad = true;
-    }
-
-    /**
      * The model the reviews belong to.
      *
      * @return Model
@@ -72,14 +54,10 @@ abstract class BaseReviews extends Component
     /**
      * Get the media ratings.
      *
-     * @return Collection|CursorPaginator
+     * @return CursorPaginator
      */
-    public function getMediaRatingsProperty(): Collection|CursorPaginator
+    public function getMediaRatingsProperty(): CursorPaginator
     {
-        if (!$this->readyToLoad) {
-            return collect();
-        }
-
         return $this->reviewable()->mediaRatings()
             ->with(array_merge(['user.media'], MediaRating::lockupEagerLoads(auth()->user())))
             ->where('description', '!=', null)

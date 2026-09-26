@@ -8,7 +8,6 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Collection;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -24,23 +23,6 @@ abstract class BaseMediaIndex extends Component
     protected string $view = '';
 
     /**
-     * Whether the component is ready to load.
-     *
-     * @var bool $readyToLoad
-     */
-    public bool $readyToLoad = false;
-
-    /**
-     * Sets the property to load the page.
-     *
-     * @return void
-     */
-    public function loadPage(): void
-    {
-        $this->readyToLoad = true;
-    }
-
-    /**
      * The query returning the titles listed on the page.
      *
      * @return Builder|Relation
@@ -50,14 +32,10 @@ abstract class BaseMediaIndex extends Component
     /**
      * Get the titles property.
      *
-     * @return Collection|LengthAwarePaginator
+     * @return LengthAwarePaginator
      */
-    public function getTitlesProperty(): Collection|LengthAwarePaginator
+    public function getTitlesProperty(): LengthAwarePaginator
     {
-        if (!$this->readyToLoad) {
-            return collect();
-        }
-
         return $this->query()
             ->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tvRating'])
             ->when(auth()->user(), function ($query, $user) {

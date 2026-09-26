@@ -20,25 +20,19 @@
         studios/{{ $studio->id }}/games
     </x-slot:appArgument>
 
-    <div class="pb-6" wire:init="loadPage">
+    <div class="pb-6">
         <x-back-link
             :url="route('studios.details', $studio)"
             :label="$studio->name"
             :title="__(':x’s Games', ['x' => $studio->name])"
         />
 
-        @if ($readyToLoad)
-            <section class="xl:safe-area-inset">
-                <x-rows.small-lockup :games="$this->titles" :is-row="false" />
+        <section class="xl:safe-area-inset">
+            <x-rows.small-lockup :games="$this->titles" :is-row="false" />
 
-                <div class="mt-4 pl-4 pr-4">
-                    {{ $this->titles->links() }}
-                </div>
-            </section>
-        @else
-            <section class="xl:safe-area-inset">
-                <x-skeletons.lockup-row :kind="\App\Enums\UserLibraryKind::Game" :is-row="false" />
-            </section>
-        @endif
+            <div class="mt-4 pl-4 pr-4">
+                {{ $this->titles->links() }}
+            </div>
+        </section>
     </div>
 </main>

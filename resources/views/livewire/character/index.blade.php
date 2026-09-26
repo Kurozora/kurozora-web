@@ -19,7 +19,7 @@
         characters
     </x-slot:appArgument>
 
-    <div class="pt-4 pb-6" wire:init="loadPage">
+    <div class="pt-4 pb-6">
         <section class="mb-4 xl:safe-area-inset">
             <div>
                 <div class="flex gap-1 pl-4 pr-4">
@@ -48,10 +48,6 @@
                 <div class="mt-4 pl-4 pr-4">
                     {{ $this->searchResults->links() }}
                 </div>
-            </section>
-        @elseif (!$readyToLoad)
-            <section class="mt-4 xl:safe-area-inset">
-                <x-skeletons.lockup-row lockup="person" :is-row="false" />
             </section>
         @else
             <x-empty-state image="empty_anime_library.webp" alt="Empty Characters Index" :heading="__('Characters Not Found')" :description="__('No characters found with the selected criteria.')" />

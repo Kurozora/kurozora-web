@@ -20,7 +20,7 @@
         studios/{{ $studio->id }}/reviews
     </x-slot:appArgument>
 
-    <div class="pb-6" wire:init="loadPage">
+    <div class="pb-6">
         <x-back-link
             :url="route('studios.details', $studio)"
             :label="$studio->name"
@@ -84,10 +84,6 @@
                 <div class="mt-4 pl-4 pr-4">
                     {{ $this->mediaRatings->links() }}
                 </div>
-            </section>
-        @elseif (!$readyToLoad)
-            <section class="xl:safe-area-inset">
-                <x-skeletons.lockup-row lockup="review" :is-row="false" />
             </section>
         @endif
     </div>
