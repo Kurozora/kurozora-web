@@ -9,22 +9,22 @@ use Pulse;
 use RoachPHP\Roach;
 use RoachPHP\Spider\Configuration\Overrides;
 
-class AnimeCharacters extends Command
+class MangaCharacters extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'scrape:mal_anime_characters 
-                            {malID? : The id of the anime. Accepts an array of comma separated IDs}';
+    protected $signature = 'scrape:mal_manga_characters
+                            {malID? : The id of the manga. Accepts an array of comma separated IDs}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Scrape anime characters from MAL.';
+    protected $description = 'Scrape manga characters from MAL.';
 
     /**
      * Execute the console command.
@@ -49,7 +49,7 @@ class AnimeCharacters extends Command
         // Generate URLs
         $urls = [];
         foreach ($malIDs as $malID) {
-            $urls[] = str(config('scraper.domains.mal.anime_characters'))
+            $urls[] = str(config('scraper.domains.mal.manga_characters'))
                 ->replace(':x', $malID)
                 ->value();
         }

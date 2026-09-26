@@ -899,14 +899,29 @@ class AnimeProcessor extends CustomItemProcessor
                 continue;
             }
 
+            $identifierColumns = [
+                'mal_id' => $malSong['mal_id'] ?? null,
+                'amazon_id' => $malSong['amazon_id'] ?? null,
+                'am_id' => $malSong['am_id'] ?? null,
+                'spotify_id' => $malSong['spotify_id'] ?? null,
+                'youtube_id' => $malSong['youtube_id'] ?? null,
+            ];
+            $identifierMatches = array_filter(
+                $identifierColumns,
+                fn ($value) => $value !== null && $value !== ''
+            );
+
             // Try to find the song by identifiers
-            $song = Song::with(['translations', 'mediaStat'])
-                ->when($malSong['mal_id'], fn($q) => $q->orWhere('mal_id', $malSong['mal_id']))
-                ->when($malSong['amazon_id'], fn($q) => $q->orWhere('amazon_id', '=', $malSong['amazon_id']))
-                ->when($malSong['am_id'], fn($q) => $q->orWhere('am_id', '=', $malSong['am_id']))
-                ->when($malSong['spotify_id'], fn($q) => $q->orWhere('spotify_id', '=', $malSong['spotify_id']))
-                ->when($malSong['youtube_id'], fn($q) => $q->orWhere('youtube_id', '=', $malSong['youtube_id']))
-                ->first();
+            $song = null;
+            if (!empty($identifierMatches)) {
+                $song = Song::with(['translations', 'mediaStat'])
+                    ->where(function ($query) use ($identifierMatches) {
+                        foreach ($identifierMatches as $column => $value) {
+                            $query->orWhere($column, '=', $value);
+                        }
+                    })
+                    ->first();
+            }
 
             // Fuzzy match by title and artist if not found
             if (!$song && !empty($malSong['artist'])) {
@@ -933,16 +948,6 @@ class AnimeProcessor extends CustomItemProcessor
                 }
             }
 
-            // Create a new song if still not found
-            if (!$song) {
-                $song = new Song();
-            }
-
-            // Always update mal_id if not null
-            if (!empty($malSong['mal_id'])) {
-                $song->mal_id = $malSong['mal_id'];
-            }
-
             // Normalize title
             $title = $malSong['title'];
             $romajiTitle = trim(preg_replace('/\s*\(.*?\)\s*/u', '', $title));
@@ -966,9 +971,9 @@ class AnimeProcessor extends CustomItemProcessor
             // Always add an English title
             $localeMap['en'] = ['title' => $romajiTitle];
 
-            // Fallback to Japanese if no other locale detected
-            if (!isset($localeMap['ja']) && !isset($localeMap['zh']) && !isset($localeMap['ko']) && $parenthesisTitle) {
-                $localeMap['ja'] = ['title' => $parenthesisTitle];
+            // Always populate Japanese, and fall back to romaji when no CJK/Hangul is detected
+            if (!isset($localeMap['ja'])) {
+                $localeMap['ja'] = ['title' => $parenthesisTitle ?: $romajiTitle];
             }
 
             // Normalize artist name
@@ -979,18 +984,17 @@ class AnimeProcessor extends CustomItemProcessor
                 $normalizedArtist = 'Unknown';
             }
 
-            $this->updateIfEmpty($song, [
-                'mal_id' => $malSong['mal_id'] ?? null,
-                'amazon_id' => $malSong['amazon_id'] ?? null,
-                'am_id' => $malSong['am_id'] ?? null,
-                'spotify_id' => $malSong['spotify_id'] ?? null,
-                'youtube_id' => $malSong['youtube_id'] ?? null,
-                'original_title' => $romajiTitle,
-                'artist' => $normalizedArtist,
-            ]);
+            $nonTranslatableAttributes = array_filter(
+                $identifierColumns,
+                fn ($value) => $value !== null && $value !== ''
+            );
+            $nonTranslatableAttributes['original_title'] = $romajiTitle;
+            $nonTranslatableAttributes['artist'] = $normalizedArtist;
 
-            if (count($localeMap)) {
-                $song->update($localeMap);
+            if (!$song) {
+                $song = Song::create(array_merge($nonTranslatableAttributes, $localeMap));
+            } else {
+                $song->fill(array_merge($nonTranslatableAttributes, $localeMap))->save();
             }
 
             // Create or update MediaSong relation

@@ -32,6 +32,7 @@ return [
             'magazine' => 'https://myanimelist.net/manga/magazine',
             'manga' => 'https://myanimelist.net/manga',
             'manga_adapted' => 'https://myanimelist.net/manga/adapted',
+            'manga_characters' => 'https://myanimelist.net/manga/:x/MAL/characters',
             'manga_pictures' => 'https://myanimelist.net/manga/:x/MAL/pics',
             'top_manga' => 'https://myanimelist.net/topmanga.php',
             'upcoming_manga' => 'https://myanimelist.net/manga.php?o=9',
@@ -84,6 +85,12 @@ return [
     */
 
     'rate_limits' => [
+        'mal' => [
+            'key' => 'scraper:mal',
+            'max_attempts' => env('SCRAPER_MAL_MAX_ATTEMPTS', 30),
+            'decay_seconds' => env('SCRAPER_MAL_DECAY_SECONDS', 60),
+            'max_wait_seconds' => env('SCRAPER_MAL_MAX_WAIT_SECONDS', 300),
+        ],
         'igdb' => [
             'key' => 'scraper:igdb',
             'max_attempts' => env('SCRAPER_IGDB_MAX_ATTEMPTS', 20),
