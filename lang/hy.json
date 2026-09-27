@@ -1474,7 +1474,7 @@
     "There are three types of in-app purchases:": "Հավելվածում գնումների երեք տեսակ կա՝",
     "There is nothing here yet.": "Այստեղ դեռ ոչինչ չկա.",
     "The request wasn’t accepted due to an issue with the bearer token or because it’s using incorrect authentication.": "Հարցումը չընդունվեց bearer թոքենի հետ կապված խնդրի կամ սխալ նույնականացման պատճառով.",
-    "There was an error fixing anime airing season.": "Անիմեի եթերաշրջանը ուղղելիս սխալ տեղի ունեցավ.",
+    "There was an error fixing media seasons.": "Մեդիայի սեզոնները ուղղելիս սխալ տեղի ունեցավ.",
     "There was an error scraping this anime.": "Այս անիմեի տվյալները հավաքելիս սխալ տեղի ունեցավ.",
     "There was an error scraping this manga.": "Այս մանգայի տվյալները հավաքելիս սխալ տեղի ունեցավ.",
     "There was an error update currently airing anime.": "Ընթացիկ եթերում գտնվող անիմեն թարմացնելիս սխալ տեղի ունեցավ.",

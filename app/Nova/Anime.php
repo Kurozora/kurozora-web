@@ -6,7 +6,7 @@ use App\Enums\DayOfWeek;
 use App\Enums\MediaCollection;
 use App\Enums\SeasonOfYear;
 use App\Nova\Actions\BulkUpdateAnime;
-use App\Nova\Actions\FixAnimeAiringSeason;
+use App\Nova\Actions\FixMediaSeason;
 use App\Nova\Actions\ScrapeAnime;
 use App\Nova\Actions\ScrapeAnimeBanner;
 use App\Nova\Actions\ScrapeAnimeSeason;
@@ -512,7 +512,7 @@ class Anime extends Resource
                     return $request->user()->hasRole('superAdmin');
                 })
                 ->standalone(),
-            FixAnimeAiringSeason::make()
+            FixMediaSeason::make()
                 ->canSee(function ($request) {
                     return $request->user()->hasRole('superAdmin');
                 })

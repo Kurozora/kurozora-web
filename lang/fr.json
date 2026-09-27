@@ -1474,7 +1474,7 @@
     "There are three types of in-app purchases:": "Il existe trois types d’achats intégrés :",
     "There is nothing here yet.": "Il n’y a encore rien ici.",
     "The request wasn’t accepted due to an issue with the bearer token or because it’s using incorrect authentication.": "La requête n’a pas été acceptée en raison d’un problème avec le jeton porteur ou parce qu’elle utilise une authentification incorrecte.",
-    "There was an error fixing anime airing season.": "Une erreur s’est produite lors de la correction de la saison de diffusion de l’anime.",
+    "There was an error fixing media seasons.": "Une erreur s’est produite lors de la correction des saisons des médias.",
     "There was an error scraping this anime.": "Une erreur s’est produite lors de la récupération des données de cet anime.",
     "There was an error scraping this manga.": "Une erreur s’est produite lors de la récupération des données de ce manga.",
     "There was an error update currently airing anime.": "Une erreur s’est produite lors de la mise à jour des anime en cours de diffusion.",

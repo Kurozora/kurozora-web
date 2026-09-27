@@ -1474,7 +1474,7 @@
     "There are three types of in-app purchases:": "应用内购买分为三种:",
     "There is nothing here yet.": "这里还什么都没有。",
     "The request wasn’t accepted due to an issue with the bearer token or because it’s using incorrect authentication.": "由于 bearer 令牌存在问题或使用了错误的认证方式，请求未被接受。",
-    "There was an error fixing anime airing season.": "修正动漫播出季度时出错。",
+    "There was an error fixing media seasons.": "修正媒体季度时出错。",
     "There was an error scraping this anime.": "抓取此动漫时出错。",
     "There was an error scraping this manga.": "抓取此漫画时出错。",
     "There was an error update currently airing anime.": "更新连载中的动漫时出错。",

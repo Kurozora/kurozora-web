@@ -1474,7 +1474,7 @@
     "There are three types of in-app purchases:": "アプリ内課金は3種類あります:",
     "There is nothing here yet.": "ここにはまだ何もありません。",
     "The request wasn’t accepted due to an issue with the bearer token or because it’s using incorrect authentication.": "ベアラートークンの問題、または認証方法が正しくないため、リクエストが受け付けられませんでした。",
-    "There was an error fixing anime airing season.": "アニメの放送シーズンの修正中にエラーが発生しました。",
+    "There was an error fixing media seasons.": "メディアのシーズンの修正中にエラーが発生しました。",
     "There was an error scraping this anime.": "このアニメのスクレイピング中にエラーが発生しました。",
     "There was an error scraping this manga.": "このマンガのスクレイピング中にエラーが発生しました。",
     "There was an error update currently airing anime.": "放送中のアニメの更新中にエラーが発生しました。",

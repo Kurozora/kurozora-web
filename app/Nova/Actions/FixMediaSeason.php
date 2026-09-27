@@ -13,7 +13,7 @@ use Laravel\Nova\Fields\ActionFields;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class FixAnimeAiringSeason extends Action implements ShouldQueue
+class FixMediaSeason extends Action implements ShouldQueue
 {
     use InteractsWithQueue, Queueable;
 
@@ -27,14 +27,14 @@ class FixAnimeAiringSeason extends Action implements ShouldQueue
     public function handle(ActionFields $fields, Collection $models): mixed
     {
         try {
-            Artisan::call('fix:anime_airing_season', [
+            Artisan::call('fix:media_season', [
                 'year' => $fields->get('year')
             ]);
         } catch (Exception $e) {
             logger()->error($e->getMessage());
-            return Action::danger(__('There was an error fixing anime airing season.'));
+            return Action::danger(__('There was an error fixing media seasons.'));
         }
-        return Action::message('Fixed anime airing seasons!');
+        return Action::message('Fixed media seasons!');
     }
 
     /**
@@ -49,7 +49,7 @@ class FixAnimeAiringSeason extends Action implements ShouldQueue
             Number::make('Year')
                 ->default(now()->year)
                 ->required()
-                ->help('The year whose anime should have its airing season fixed.'),
+                ->help('The year whose anime, manga, and games should have their season and day fixed.'),
         ];
     }
 }
