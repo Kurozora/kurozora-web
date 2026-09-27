@@ -6,10 +6,10 @@
             @if (auth()->user()->is_subscribed)
                 <livewire:anime.reminder-button :anime="$anime" wire:key="{{ uniqid($anime->id, true) }}" />
             @else
-                <livewire:components.library-button :model="$anime" wire:key="{{ uniqid($anime->id, true) }}" />
+                <x-library-button :model="$anime" />
             @endif
         @else
-            <livewire:components.library-button :model="$anime" wire:key="{{ uniqid($anime->id, true) }}" />
+            <x-library-button :model="$anime" />
         @endauth
     </x-lockups.upcoming-body>
 @elseif (!empty($game))
@@ -18,10 +18,10 @@
 {{--            @if (auth()->user()->is_subscribed)--}}
 {{--                <livewire:game.reminder-button :game="$game" wire:key="{{ uniqid($game->id, true) }}" />--}}
 {{--            @else--}}
-            <livewire:components.library-button :model="$game" wire:key="{{ uniqid($game->id, true) }}" />
+            <x-library-button :model="$game" />
 {{--            @endif--}}
         @else
-            <livewire:components.library-button :model="$game" wire:key="{{ uniqid($game->id, true) }}" />
+            <x-library-button :model="$game" />
         @endauth
     </x-lockups.upcoming-body>
 @elseif (!empty($manga))
@@ -30,10 +30,10 @@
 {{--            @if (auth()->user()->is_subscribed)--}}
 {{--                <livewire:manga.reminder-button :manga="$manga" wire:key="{{ uniqid($manga->id, true) }}" />--}}
 {{--            @else--}}
-            <livewire:components.library-button :model="$manga" wire:key="{{ uniqid($manga->id, true) }}" />
+            <x-library-button :model="$manga" />
 {{--            @endif--}}
         @else
-            <livewire:components.library-button :model="$manga" wire:key="{{ uniqid($manga->id, true) }}" />
+            <x-library-button :model="$manga" />
         @endauth
     </x-lockups.upcoming-body>
 @endif

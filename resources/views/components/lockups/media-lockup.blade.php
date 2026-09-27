@@ -94,13 +94,13 @@
                     <div class="inline-flex items-center gap-1 my-auto">
                         <p class="text-sm font-bold text-tint">{{ number_format($model->mediaStat?->rating_average ?? 0, 1) }}</p>
 
-                        <livewire:components.star-rating :rating="$model->mediaStat?->rating_average" :star-size="'sm'" :disabled="true" wire:key="{{ uniqid(more_entropy: true) }}" />
+                        <x-star-rating-display :rating="$model->mediaStat?->rating_average" star-size="sm" />
                     </div>
                 @endif
             </div>
 
             @if ($trackingEnabled)
-                <livewire:components.library-button :model="$model" wire:key="{{ uniqid($model->id, true) }}" />
+                <x-library-button :model="$model" />
             @endif
         </div>
     </div>

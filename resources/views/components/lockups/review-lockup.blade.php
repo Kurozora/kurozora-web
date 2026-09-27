@@ -60,7 +60,7 @@
             </div>
 
             <div class="flex flex-wrap items-center gap-2">
-                <livewire:components.star-rating :rating="$review->rating" :star-size="'sm'" :disabled="true" wire:key="{{ uniqid('rating-', true) }}" />
+                <x-star-rating-display :rating="$review->rating" star-size="sm" />
 
                 @if ($review->is_elevated)
                     <span class="pl-2 pr-2 pt-1 pb-1 text-xs whitespace-nowrap rounded-md bg-tertiary text-tint font-semibold">{{ __('Community Pick') }}</span>

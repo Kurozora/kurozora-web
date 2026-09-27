@@ -56,7 +56,7 @@
                         <p class="text-xs leading-tight opacity-75 line-clamp-2" title="{{ $anime->genres?->pluck('name')->join(', ', ' and ') }}">{{ $anime->genres?->pluck('name')->join(', ', ' and ') }}</p>
                     </div>
 
-                    <livewire:components.library-button :model="$anime" wire:key="{{ uniqid($anime->id, true) }}" />
+                    <x-library-button :model="$anime" />
                 </div>
             </div>
 
@@ -113,7 +113,7 @@
                         <p class="text-xs leading-tight opacity-75 line-clamp-2" title="{{ $game->genres?->pluck('name')->join(', ', ' and ') }}">{{ $game->genres?->pluck('name')->join(', ', ' and ') }}</p>
                     </div>
 
-                    <livewire:components.library-button :model="$game" wire:key="{{ uniqid($game->id, true) }}" />
+                    <x-library-button :model="$game" />
                 </div>
             </div>
 

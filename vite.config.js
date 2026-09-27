@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
 import laravel from 'laravel-vite-plugin'
 import { VitePWA } from 'vite-plugin-pwa'
-import { copyFile, access, unlink, readFile, writeFile } from 'node:fs/promises'
+import { copyFile, access, unlink, readdir, readFile, writeFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
 
 function minifyHtml(html) {
@@ -34,6 +34,61 @@ function generateOfflineHtml() {
             const source = await readFile(sourcePath, 'utf8')
             const output = minifyHtml(source.replaceAll('__APP_CSS__', `/build/${appCss}`))
             await writeFile(outputPath, output)
+        },
+    }
+}
+
+function generateIconSprite() {
+    const sets = [
+        ['symbols', ''],
+        ['brands', 'brands-'],
+        ['badges', 'badges-'],
+    ]
+
+    function symbolFor(name, source) {
+        const root = source.match(/<svg\b([^>]*)>([\s\S]*)<\/svg>/)
+        if (!root) return null
+
+        const viewBox = root[1].match(/viewBox="([^"]*)"/)
+        if (!viewBox) return null
+
+        const inner = root[2]
+            .replace(/\bid="([^"]+)"/g, (_, id) => `id="${name}__${id}"`)
+            .replace(/url\(#([^)]+)\)/g, (_, id) => `url(#${name}__${id})`)
+            .replace(/\b(xlink:href|href)="#([^"]+)"/g, (_, attribute, id) => `${attribute}="#${name}__${id}"`)
+            .trim()
+
+        return `<symbol id="${name}" viewBox="${viewBox[1]}">${inner}</symbol>`
+    }
+
+    return {
+        name: 'kurozora:icon-sprite',
+        async buildStart() {
+            const symbols = new Map()
+
+            for (const [directory, prefix] of sets) {
+                const source = resolve('public/images', directory)
+
+                let entries
+                try {
+                    entries = await readdir(source)
+                } catch {
+                    continue
+                }
+
+                for (const entry of entries.filter((entry) => entry.endsWith('.svg'))) {
+                    const name = prefix + entry.slice(0, -4)
+                    const symbol = symbolFor(name, await readFile(resolve(source, entry), 'utf8'))
+
+                    if (symbol) symbols.set(name, symbol)
+                }
+            }
+
+            const sprite = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">'
+                + [...symbols.keys()].sort().map((name) => symbols.get(name)).join('')
+                + '</svg>'
+
+            await writeFile(resolve('public/images/sprite.svg'), sprite)
         },
     }
 }
@@ -92,6 +147,7 @@ export default defineConfig({
             ],
             refresh: true,
         }),
+        generateIconSprite(),
         generateOfflineHtml(),
         VitePWA({
             strategies: 'injectManifest',

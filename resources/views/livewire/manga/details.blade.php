@@ -96,7 +96,7 @@
 
                         <div class="flex flex-wrap gap-1 justify-between">
                             <div class="flex gap-2">
-                                <livewire:components.library-button :model="$manga" wire:key="{{ uniqid($manga->id, true) }}" />
+                                <x-library-button :model="$manga" />
 
                                 <x-nova-link :href="route('manga.edit', $manga)">
                                     @svg('pencil', 'fill-current', ['width' => '44'])
@@ -136,7 +136,7 @@
                             {{ number_format($manga->mediaStat->rating_average, 1) }}
                         </p>
 
-                        <livewire:components.star-rating :rating="$manga->mediaStat->rating_average" :star-size="'sm'" :disabled="true" />
+                        <x-star-rating-display :rating="$manga->mediaStat->rating_average" star-size="sm" />
 
                         <p class="text-sm text-secondary">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x reviews', (int) $manga->mediaStat->rating_count, ['x' => number_shorten((int) $manga->mediaStat->rating_count, 0, true)]) }}</p>
                     </a>

@@ -27,7 +27,7 @@
                     </div>
 
                     <div>
-                        <livewire:components.star-rating :rating="$mediaRating->rating" :star-size="'sm'" :disabled="true" wire:key="{{ uniqid('rating-', true) }}" />
+                        <x-star-rating-display :rating="$mediaRating->rating" star-size="sm" />
                     </div>
 
                     <div class="mt-1 w-full">
@@ -61,7 +61,7 @@
                     </div>
 
                     <div>
-                        <livewire:components.star-rating :rating="$mediaRating->rating" :star-size="'sm'" :disabled="true" wire:key="{{ uniqid('rating-', true) }}" />
+                        <x-star-rating-display :rating="$mediaRating->rating" star-size="sm" />
                     </div>
 
                     <div class="mt-1 w-full">
@@ -95,7 +95,7 @@
                     </div>
 
                     <div>
-                        <livewire:components.star-rating :rating="$mediaRating->rating" :star-size="'sm'" :disabled="true" wire:key="{{ uniqid('rating-', true) }}" />
+                        <x-star-rating-display :rating="$mediaRating->rating" star-size="sm" />
                     </div>
 
                     <div class="mt-1 w-full">
@@ -129,7 +129,7 @@
                     </div>
 
                     <div>
-                        <livewire:components.star-rating :rating="$mediaRating->rating" :star-size="'sm'" :disabled="true" wire:key="{{ uniqid('rating-', true) }}" />
+                        <x-star-rating-display :rating="$mediaRating->rating" star-size="sm" />
                     </div>
 
                     <div class="mt-1 w-full">
@@ -171,7 +171,7 @@
                     </div>
 
                     <div>
-                        <livewire:components.star-rating :rating="$mediaRating->rating" :star-size="'sm'" :disabled="true" wire:key="{{ uniqid('rating-', true) }}" />
+                        <x-star-rating-display :rating="$mediaRating->rating" star-size="sm" />
                     </div>
 
                     <div class="mt-1 w-full">
@@ -205,7 +205,7 @@
                     </div>
 
                     <div>
-                        <livewire:components.star-rating :rating="$mediaRating->rating" :star-size="'sm'" :disabled="true" wire:key="{{ uniqid('rating-', true) }}" />
+                        <x-star-rating-display :rating="$mediaRating->rating" star-size="sm" />
                     </div>
 
                     <div class="mt-1 w-full">
@@ -260,7 +260,7 @@
                     </div>
 
                     <div>
-                        <livewire:components.star-rating :rating="$mediaRating->rating" :star-size="'sm'" :disabled="true" wire:key="{{ uniqid('rating-', true) }}" />
+                        <x-star-rating-display :rating="$mediaRating->rating" star-size="sm" />
                     </div>
 
                     <div class="mt-1 w-full">
@@ -294,7 +294,7 @@
                     </div>
 
                     <div>
-                        <livewire:components.star-rating :rating="$mediaRating->rating" :star-size="'sm'" :disabled="true" wire:key="{{ uniqid('rating-', true) }}" />
+                        <x-star-rating-display :rating="$mediaRating->rating" star-size="sm" />
                     </div>
 
                     <div class="mt-1 w-full">

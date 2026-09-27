@@ -49,7 +49,7 @@
             </a>
 
             <div class="shrink-0">
-                <livewire:components.library-button :model="$title" wire:key="trailer-library-{{ $video->id }}" />
+                <x-library-button :model="$title" />
             </div>
         </div>
     </div>

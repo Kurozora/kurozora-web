@@ -37,7 +37,7 @@
                 <p class="text-xs leading-tight opacity-75 line-clamp-2" title="{{ empty($anime->tagline) ? $anime->genres?->pluck('name')->join(', ', ' and ') : $anime->tagline }}">{{ empty($anime->tagline) ? $anime->genres?->pluck('name')->join(', ', ' and ') : $anime->tagline }}</p>
             </div>
 
-            <livewire:components.library-button :model="$anime" wire:key="{{ uniqid($anime->id, true) }}" />
+            <x-library-button :model="$anime" />
         </div>
     </div>
 </div>

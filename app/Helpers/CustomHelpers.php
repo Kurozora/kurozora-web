@@ -591,6 +591,104 @@ if (!function_exists('narrow_weekday')) {
     }
 }
 
+if (!function_exists('icon_sprite_paths')) {
+    /**
+     * Get the source path of every icon available in the sprite.
+     *
+     * @return array
+     */
+    function icon_sprite_paths(): array
+    {
+        static $paths;
+
+        if ($paths !== null) {
+            return $paths;
+        }
+
+        $paths = [];
+
+        foreach (['symbols' => '', 'brands' => 'brands-', 'badges' => 'badges-'] as $directory => $prefix) {
+            foreach (glob(public_path('images/' . $directory . '/*.svg')) as $path) {
+                $paths[$prefix . basename($path, '.svg')] = $path;
+            }
+        }
+
+        return $paths;
+    }
+}
+
+if (!function_exists('icon_sprite_view_box')) {
+    /**
+     * Get the view box of an icon.
+     *
+     * @param string $name
+     *
+     * @return string
+     */
+    function icon_sprite_view_box(string $name): string
+    {
+        static $viewBoxes = [];
+
+        if (isset($viewBoxes[$name])) {
+            return $viewBoxes[$name];
+        }
+
+        $path = icon_sprite_paths()[$name] ?? null;
+
+        if ($path === null) {
+            return $viewBoxes[$name] = '';
+        }
+
+        preg_match('/<svg\b[^>]*viewBox="([^"]*)"/', file_get_contents($path), $matches);
+
+        return $viewBoxes[$name] = $matches[1] ?? '';
+    }
+}
+
+if (!function_exists('icon_sprite')) {
+    /**
+     * Render an icon as a reference into the sprite.
+     *
+     * @param string       $name
+     * @param string|array $class
+     * @param array        $attributes
+     *
+     * @return string
+     */
+    function icon_sprite(string $name, string|array $class = '', array $attributes = []): string
+    {
+        if (is_array($class)) {
+            $attributes = $class;
+            $class = '';
+        }
+
+        if (!isset(icon_sprite_paths()[$name])) {
+            return (string) svg($name, $class, $attributes);
+        }
+
+        $sprite = '/images/sprite.svg';
+
+        if ($class !== '') {
+            $attributes['class'] = trim(($attributes['class'] ?? '') . ' ' . $class);
+        }
+
+        $attributes = ['viewBox' => icon_sprite_view_box($name)] + $attributes;
+
+        $rendered = '';
+
+        foreach ($attributes as $attribute => $value) {
+            if (is_int($attribute)) {
+                $rendered .= ' ' . $value;
+                continue;
+            }
+
+            $rendered .= ' ' . $attribute . '="' . e($value) . '"';
+        }
+
+        return '<svg' . $rendered . '><use href="' . $sprite . '#' . $name . '"/></svg>';
+    }
+}
+
 if (!function_exists('minutes_past_midnight')) {
     /**
      * Get the minutes past midnight of a wall-clock time.

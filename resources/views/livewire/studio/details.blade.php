@@ -71,7 +71,7 @@
                         {{ number_format($studio->mediaStat->rating_average, 1) }}
                     </p>
 
-                    <livewire:components.star-rating :rating="$studio->mediaStat->rating_average" :star-size="'sm'" :disabled="true" />
+                    <x-star-rating-display :rating="$studio->mediaStat->rating_average" star-size="sm" />
 
                     <p class="text-sm text-secondary">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x reviews', (int) $studio->mediaStat->rating_count, ['x' => number_shorten((int) $studio->mediaStat->rating_count, 0, true)]) }}</p>
                 </a>

@@ -45,7 +45,7 @@
 
     <div class="absolute bottom-0 right-0 pt-3 pr-3 pl-3 pb-3">
         <div class="flex h-10 mt-auto">
-            <livewire:components.library-button :model="$anime" wire:key="{{ uniqid($anime->id, true) }}" />
+            <x-library-button :model="$anime" />
         </div>
     </div>
 </div>

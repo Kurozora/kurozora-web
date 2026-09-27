@@ -71,13 +71,13 @@
                                 <div class="flex items-center gap-1.5">
                                     <p class="text-xs font-bold text-tint">{{ number_format($ratingAverage, 1) }}</p>
 
-                                    <livewire:components.star-rating :rating="$ratingAverage" :star-size="'sm'" :disabled="true" wire:key="hero-rating-{{ $title->getMorphClass() }}-{{ $title->id }}" />
+                                    <x-star-rating-display :rating="$ratingAverage" star-size="sm" />
                                 </div>
                             @endif
                         </div>
 
                         <div class="flex">
-                            <livewire:components.library-button :model="$title" wire:key="hero-library-{{ $title->getMorphClass() }}-{{ $title->id }}" />
+                            <x-library-button :model="$title" />
                         </div>
                     </div>
                 </div>

@@ -27,6 +27,8 @@ use App\Services\AppStoreService;
 use App\Services\LinkPreviewService;
 use App\Services\ReputationService;
 use App\Support\Media\ImageTransformingFileAdder;
+use Barryvdh\Debugbar\LaravelDebugbar;
+use BeyondCode\QueryDetector\QueryDetector;
 use Carbon\Carbon;
 use Cog\Laravel\Love\Reaction\Models\Reaction;
 use Illuminate\Cache\RateLimiting\Limit;
@@ -37,11 +39,13 @@ use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\DatabaseNotification;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Octane\Events\RequestReceived;
 use Laravel\Sanctum\Sanctum;
 use RoachPHP\Roach;
 use SocialiteProviders\Manager\SocialiteWasCalled;
@@ -85,12 +89,106 @@ class AppServiceProvider extends ServiceProvider
 
         // Log a warning if we spend more than a total of 1000 ms querying.
         if (app()->isLocal()) {
+            // Debugbar and QueryDetector register global listeners that capture their
+            // instance, so Octane's flush list cannot reset them. The listener would keep
+            // feeding a detached copy that grows until the memory limit kills the worker.
+            // Keep one instance of each and empty its state before every request instead.
+            Event::listen(RequestReceived::class, function (): void {
+                if (class_exists(QueryDetector::class)) {
+                    app(QueryDetector::class)->emptyQueries();
+                }
+
+                if (class_exists(LaravelDebugbar::class)) {
+                    foreach (app(LaravelDebugbar::class)->getCollectors() as $collector) {
+                        if (method_exists($collector, 'reset')) {
+                            $collector->reset();
+                        }
+
+                        if (method_exists($collector, 'clear')) {
+                            $collector->clear();
+                        }
+                    }
+                }
+            });
+
             DB::whenQueryingForLongerThan(1000, function (Connection $connection, QueryExecuted $query) {
                 logger()->warning("Database queries exceeded 1 second ($query->time) on {$connection->getName()}", [
                     'sql' => $query->sql
                 ]);
             });
+
+            DB::listen(function (QueryExecuted $query) {
+                // Ignore very fast queries
+                if ($query->time < 50) {
+                    return;
+                }
+
+                // Ignore internal/system tables
+                if (str($query->sql)->contains([
+                    'information_schema',
+                    'migrations',
+                    'telescope',
+                ])) {
+                    return;
+                }
+
+                // Only analyze SELECTs
+                if (! str(strtolower(trim($query->sql)))->startsWith('select')) {
+                    return;
+                }
+
+                try {
+                    $plan = DB::select(
+                        'EXPLAIN ANALYZE '.$query->sql,
+                        $query->bindings
+                    );
+                } catch (Throwable $e) {
+                    return; // some queries cannot be analyzed
+                }
+
+                $planText = json_encode($plan);
+
+                $problems = [];
+
+                // Full table scan detection
+                if (str($planText)->contains('"table_scan": true')) {
+                    $problems[] = 'Full table scan detected';
+                }
+
+                // Filesort
+                if (str($planText)->contains('filesort')) {
+                    $problems[] = 'Filesort detected (ORDER BY not indexed)';
+                }
+
+                // Temporary table
+                if (str($planText)->contains('temporary')) {
+                    $problems[] = 'Temporary table usage detected';
+                }
+
+                // Large row scan heuristic
+                if (preg_match('/rows=(\d+)/', $planText, $matches)) {
+                    $rows = (int) $matches[1];
+
+                    if ($rows > 10000) {
+                        $problems[] = "Large row scan ({$rows} rows)";
+                    }
+                }
+
+                if (! empty($problems)) {
+                    logger()->warning('Potential missing index / poor plan detected', [
+                        'time_ms' => $query->time,
+                        'issues' => $problems,
+                        'sql' => $query->sql,
+                        'bindings' => $query->bindings,
+                    ]);
+                }
+            });
         }
+
+        // Icon rendering
+        Blade::directive('svg', function (string $expression): string {
+            return "<?php echo icon_sprite($expression); ?>";
+        });
 
         // CSRF verification exceptions
         VerifyCsrfToken::except([
@@ -117,6 +215,14 @@ class AppServiceProvider extends ServiceProvider
 
         RateLimiter::for('api.library', function (Request $request) {
             return Limit::perMinute(120)->by('library:' . ($request->user()?->id ?: $request->ip()));
+        });
+
+        RateLimiter::for('api.scrobble', function (Request $request) {
+            // Trakt parity: one call per second sustained, with a small burst.
+            return [
+                Limit::perSecond(3)->by('scrobble:burst:' . ($request->user()?->id ?: $request->ip())),
+                Limit::perMinute(60)->by('scrobble:' . ($request->user()?->id ?: $request->ip())),
+            ];
         });
 
         // Register observers
