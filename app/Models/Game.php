@@ -142,7 +142,7 @@ class Game extends KModel implements HasMedia, Sitemapable
         parent::boot();
 
         static::creating(function (Game $game) {
-            if (empty($game->publication_season->value == 0)) {
+            if (!isset($game->getAttributes()['publication_season'])) {
                 $game->publication_season = $game->generatePublishingSeason();
             }
         });
@@ -447,12 +447,15 @@ class Game extends KModel implements HasMedia, Sitemapable
      * Get the season in which the game is published.
      *
      * @param int|null $value
-     * @return SeasonOfYear
+     * @return SeasonOfYear|null
      */
-    public function getPublicationSeasonAttribute(?int $value): SeasonOfYear
+    public function getPublicationSeasonAttribute(?int $value): ?SeasonOfYear
     {
-        // For some reason publish season is sometimes seen as a string, so force cast to int.
-        // Also makes 0 out of null, so win/win.
+        if (is_null($value)) {
+            return null;
+        }
+
+        // Publication season is sometimes seen as a string.
         return SeasonOfYear::fromValue((int) $value);
     }
 
@@ -464,7 +467,7 @@ class Game extends KModel implements HasMedia, Sitemapable
      */
     public function setPublicationSeasonAttribute(?int $value): void
     {
-        $this->attributes['publication_season'] = (int) $value;
+        $this->attributes['publication_season'] = $value;
     }
 
     /**
@@ -547,7 +550,7 @@ class Game extends KModel implements HasMedia, Sitemapable
         $editionCount = $this->edition_count ?? null;
         $duration = $this->duration_string;
         $publishedAt = $this->published_at;
-        $publicationSeason = $this->publication_season->description;
+        $publicationSeason = $this->publication_season?->description;
 
         if (!empty($editionCount)) {
             $informationSummary .= ' · ' . $editionCount . ' ' . trans_choice('{1} edition|editions', $editionCount);
@@ -556,7 +559,7 @@ class Game extends KModel implements HasMedia, Sitemapable
             $informationSummary .= ' · ' . $duration;
         }
         if (!empty($publishedAt)) {
-            $informationSummary .= ' · ' . $publicationSeason . ' ' . $publishedAt->format('Y');
+            $informationSummary .= ' · ' . trim($publicationSeason . ' ' . $publishedAt->format('Y'));
         }
 
         return $informationSummary;

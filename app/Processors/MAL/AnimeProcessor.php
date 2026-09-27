@@ -790,10 +790,14 @@ class AnimeProcessor extends CustomItemProcessor
      *
      * @param Carbon|null $startedAt
      *
-     * @return int
+     * @return int|null
      */
-    private function getAirSeason(?Carbon $startedAt): int
+    private function getAirSeason(?Carbon $startedAt): ?int
     {
+        if (empty($startedAt)) {
+            return null;
+        }
+
         return season_of_year($startedAt)->value;
     }
 

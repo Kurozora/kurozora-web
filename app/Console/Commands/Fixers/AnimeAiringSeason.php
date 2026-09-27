@@ -38,18 +38,21 @@ class AnimeAiringSeason extends Command
         $chunkSize = 2000;
         $year = $this->argument('year') ?? now()->year;
 
-        Anime::where([
-            ['started_at', '!=', null],
-        ])
+        Anime::withoutGlobalScopes()
+            ->where([
+                ['started_at', '!=', null],
+            ])
             ->whereYear('started_at', '=', $year)
             ->chunkById($chunkSize, function (Collection $animes) {
                 DB::transaction(function () use ($animes) {
                     $ids = [];
                     $cases = '';
+                    $seasonCases = '';
 
                     foreach ($animes as $anime) {
                         $ids[] = (int) $anime->id;
                         $cases .= ' WHEN ' . (int) $anime->id . ' THEN ' . (int) $anime->started_at->dayOfWeek;
+                        $seasonCases .= ' WHEN ' . (int) $anime->id . ' THEN ' . (int) $anime->generateAiringSeason();
                     }
 
                     if (empty($ids)) {
@@ -58,7 +61,10 @@ class AnimeAiringSeason extends Command
 
                     Anime::withoutGlobalScopes()
                         ->whereIn('id', $ids)
-                        ->update(['air_day' => DB::raw('CASE id' . $cases . ' END')]);
+                        ->update([
+                            'air_day' => DB::raw('CASE id' . $cases . ' END'),
+                            'air_season' => DB::raw('CASE id' . $seasonCases . ' END'),
+                        ]);
                 });
             });
 

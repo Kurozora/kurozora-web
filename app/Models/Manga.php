@@ -132,7 +132,7 @@ class Manga extends KModel implements HasMedia, Sitemapable
         parent::boot();
 
         static::creating(function (Manga $manga) {
-            if (empty($manga->publication_season->value == 0)) {
+            if (!isset($manga->getAttributes()['publication_season'])) {
                 $manga->publication_season = $manga->generatePublishingSeason();
             }
         });
@@ -466,12 +466,15 @@ class Manga extends KModel implements HasMedia, Sitemapable
      * Get the season in which the manga is published.
      *
      * @param int|null $value
-     * @return SeasonOfYear
+     * @return SeasonOfYear|null
      */
-    public function getPublicationSeasonAttribute(?int $value): SeasonOfYear
+    public function getPublicationSeasonAttribute(?int $value): ?SeasonOfYear
     {
-        // For some reason publish season is sometimes seen as a string, so force cast to int.
-        // Also makes 0 out of null, so win/win.
+        if (is_null($value)) {
+            return null;
+        }
+
+        // Publication season is sometimes seen as a string.
         return SeasonOfYear::fromValue((int) $value);
     }
 
@@ -483,7 +486,7 @@ class Manga extends KModel implements HasMedia, Sitemapable
      */
     public function setPublicationSeasonAttribute(?int $value): void
     {
-        $this->attributes['publication_season'] = (int) $value;
+        $this->attributes['publication_season'] = $value;
     }
 
     /**
@@ -590,7 +593,7 @@ class Manga extends KModel implements HasMedia, Sitemapable
         $volumeCount = $this->volume_count ?? null;
         $duration = $this->duration_string;
         $startedAt = $this->started_at;
-        $publicationSeason = $this->publication_season->description;
+        $publicationSeason = $this->publication_season?->description;
 
         if (!empty($volumeCount)) {
             $informationSummary .= ' · ' . $volumeCount . ' ' . trans_choice('{1} volume|volumes', $volumeCount);
@@ -599,7 +602,7 @@ class Manga extends KModel implements HasMedia, Sitemapable
             $informationSummary .= ' · ' . $duration;
         }
         if (!empty($startedAt)) {
-            $informationSummary .= ' · ' . $publicationSeason . ' ' . $startedAt->format('Y');
+            $informationSummary .= ' · ' . trim($publicationSeason . ' ' . $startedAt->format('Y'));
         }
 
         return $informationSummary;

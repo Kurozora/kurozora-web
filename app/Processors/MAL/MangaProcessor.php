@@ -912,10 +912,14 @@ class MangaProcessor extends CustomItemProcessor
      * Get the publication season.
      *
      * @param Carbon|null $startedAt
-     * @return int
+     * @return int|null
      */
-    private function getPublicationSeason(?Carbon $startedAt): int
+    private function getPublicationSeason(?Carbon $startedAt): ?int
     {
+        if (empty($startedAt)) {
+            return null;
+        }
+
         return season_of_year($startedAt)->value;
     }
 

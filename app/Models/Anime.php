@@ -136,7 +136,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
         parent::boot();
 
         static::creating(function (Anime $anime) {
-            if (empty($anime->air_season->value == 0)) {
+            if (!isset($anime->getAttributes()['air_season'])) {
                 $anime->air_season = $anime->generateAiringSeason();
             }
         });
@@ -269,12 +269,15 @@ class Anime extends KModel implements HasMedia, Sitemapable
      * Get the season in which the anime aired.
      *
      * @param int|null $value
-     * @return SeasonOfYear
+     * @return SeasonOfYear|null
      */
-    public function getAirSeasonAttribute(?int $value): SeasonOfYear
+    public function getAirSeasonAttribute(?int $value): ?SeasonOfYear
     {
-        // For some reason air season is sometimes seen as a string, so force cast to int.
-        // Also makes 0 out of null, so win/win.
+        if (is_null($value)) {
+            return null;
+        }
+
+        // Air season is sometimes seen as a string.
         return SeasonOfYear::fromValue((int) $value);
     }
 
@@ -286,7 +289,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
      */
     public function setAirSeasonAttribute(?int $value): void
     {
-        $this->attributes['air_season'] = (int) $value;
+        $this->attributes['air_season'] = $value;
     }
 
     /**
@@ -393,7 +396,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
         $episodesCount = $this->episode_count ?? null;
         $duration = $this->duration_string;
         $startedAtYear = $this->started_at;
-        $airSeason = $this->air_season->description;
+        $airSeason = $this->air_season?->description;
 
         if (!empty($episodesCount)) {
             $informationSummary .= ' · ' . $episodesCount . ' ' . trans_choice('{1} episode|episodes', $episodesCount);
@@ -402,7 +405,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
             $informationSummary .= ' · ' . $duration;
         }
         if (!empty($startedAtYear)) {
-            $informationSummary .= ' · ' . $airSeason . ' ' . $startedAtYear->format('Y');
+            $informationSummary .= ' · ' . trim($airSeason . ' ' . $startedAtYear->format('Y'));
         }
 
         return $informationSummary;

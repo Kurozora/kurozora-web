@@ -185,7 +185,7 @@ class GameProcessor extends CustomItemProcessor
             'is_nsfw' => $nsfwWeight !== null || $tvRating?->weight === 5,
             'published_at' => $publishedAt,
             'publication_day' => $publishedAt?->dayOfWeek,
-            'publication_season' => $publishedAt ? season_of_year($publishedAt)->value : 0,
+            'publication_season' => $publishedAt ? season_of_year($publishedAt)->value : null,
         ];
 
         $attributes = array_merge($attributes, $this->localizedTitles($data));
