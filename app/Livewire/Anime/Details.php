@@ -97,13 +97,6 @@ class Details extends Component
     public bool $showAddToLibrary = false;
 
     /**
-     * Whether the component is ready to load.
-     *
-     * @var bool $readyToLoad
-     */
-    public bool $readyToLoad = false;
-
-    /**
      * The addition status.
      *
      * @var string
@@ -214,16 +207,6 @@ class Details extends Component
     {
         $value->setRelation('library', $this->library);
         $value->setRelation('mediaRatings', $this->userRating);
-    }
-
-    /**
-     * Sets the property to load the page.
-     *
-     * @return void
-     */
-    public function loadPage(): void
-    {
-        $this->readyToLoad = true;
     }
 
     /**

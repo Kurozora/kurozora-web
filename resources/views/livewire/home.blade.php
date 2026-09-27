@@ -17,7 +17,7 @@
     </x-slot:appArgument>
 
     <div>
-        <section wire:init="loadPage">
+        <section>
             @foreach ($this->exploreCategories as $index => $exploreCategory)
                 @switch($exploreCategory->type)
                 @case(\App\Enums\ExploreCategoryTypes::MostPopularShows)
@@ -155,22 +155,11 @@
                     @break
                 @default
                     <section>
-                        <livewire:components.explore-category-section :index="$index" :exploreCategory="$exploreCategory" lazy="on-load" :key="'explore-section-' . $exploreCategory->id" />
+                        <livewire:components.explore-category-section :index="$index" :exploreCategory="$exploreCategory" :key="'explore-section-' . $exploreCategory->id" />
                     </section>
                 @endswitch
             @endforeach
         </section>
-
-        @if (!$readyToLoad)
-            <x-skeletons.banner-lockup />
-
-            <section class="pb-6">
-                <x-skeletons.small-lockup />
-                <x-skeletons.small-lockup />
-                <x-skeletons.small-lockup />
-                <x-skeletons.small-lockup />
-            </section>
-        @endif
 
         @guest
             <section class="xl:safe-area-inset">

@@ -12,11 +12,9 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\Isolate;
-use Livewire\Attributes\Lazy;
 use Livewire\Component;
 
 #[Isolate]
-#[Lazy]
 class MoreByStudioSection extends Component
 {
     /**
@@ -90,16 +88,6 @@ class MoreByStudioSection extends Component
             UserLibraryKind::Manga => $this->manga,
             UserLibraryKind::Game  => $this->game,
         };
-    }
-
-    /**
-     * The skeleton shown until the section resumes loading.
-     *
-     * @return View
-     */
-    public function placeholder(array $params): View
-    {
-        return view('components.skeletons.section', ['kind' => $params['kind'] ?? \App\Enums\UserLibraryKind::Anime]);
     }
 
     /**

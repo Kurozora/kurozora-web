@@ -14,13 +14,6 @@ use Livewire\Component;
 class Home extends Component
 {
     /**
-     * Determines whether to load the page.
-     *
-     * @var bool $readyToLoad
-     */
-    public $readyToLoad = false;
-
-    /**
      * Prepare the component.
      *
      * @return void
@@ -31,26 +24,12 @@ class Home extends Component
     }
 
     /**
-     * Sets the property to load the page.
-     *
-     * @return void
-     */
-    public function loadPage(): void
-    {
-        $this->readyToLoad = true;
-    }
-
-    /**
      * The object containing the collection of explore category data.
      *
      * @return array|Collection
      */
     public function getExploreCategoriesProperty(): array|Collection
     {
-        if (!$this->readyToLoad) {
-            return collect();
-        }
-
         return ExploreCategory::orderBy('position')
             ->get();
     }

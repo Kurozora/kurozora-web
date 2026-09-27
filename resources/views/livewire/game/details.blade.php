@@ -34,7 +34,7 @@
         games/{{ $game->id }}
     </x-slot:appArgument>
 
-    <div class="pb-6" wire:init="loadPage">
+    <div class="pb-6">
         <div class="relative overflow-hidden max-h-[80vh]">
             <div class="relative flex flex-nowrap md:h-full xl:safe-area-inset">
                 <x-picture
@@ -432,35 +432,33 @@
                 </div>
             </section>
 
-            @if ($readyToLoad)
-                <livewire:components.cast-section :kind="\App\Enums\UserLibraryKind::Game" :game="$game" lazy="on-load" />
+            <livewire:components.cast-section :kind="\App\Enums\UserLibraryKind::Game" :game="$game" />
 
-                <livewire:components.staff-section :kind="\App\Enums\UserLibraryKind::Game" :game="$game" lazy="on-load" />
+            <livewire:components.staff-section :kind="\App\Enums\UserLibraryKind::Game" :game="$game" />
 
-                <livewire:components.songs-section :kind="\App\Enums\UserLibraryKind::Game" :game="$game" lazy="on-load" />
+            <livewire:components.songs-section :kind="\App\Enums\UserLibraryKind::Game" :game="$game" />
 
-                <livewire:components.studios-section :kind="\App\Enums\UserLibraryKind::Game" :game="$game" lazy="on-load" />
+            <livewire:components.studios-section :kind="\App\Enums\UserLibraryKind::Game" :game="$game" />
 
-                <div class="bg-tinted">
-                    @if (!empty($this->studio))
-                        <livewire:components.more-by-studio-section :kind="\App\Enums\UserLibraryKind::Game" :game="$game" :studio="$this->studio" lazy="on-load" />
-                    @endif
+            <div class="bg-tinted">
+                @if (!empty($this->studio))
+                    <livewire:components.more-by-studio-section :kind="\App\Enums\UserLibraryKind::Game" :game="$game" :studio="$this->studio" />
+                @endif
 
-                    <livewire:components.relations-section :kind="\App\Enums\UserLibraryKind::Game" :related-kind="\App\Enums\UserLibraryKind::Game" :game="$game" lazy="on-load" />
+                <livewire:components.relations-section :kind="\App\Enums\UserLibraryKind::Game" :related-kind="\App\Enums\UserLibraryKind::Game" :game="$game" />
 
-                    <livewire:components.relations-section :kind="\App\Enums\UserLibraryKind::Game" :related-kind="\App\Enums\UserLibraryKind::Anime" :game="$game" lazy="on-load" />
+                <livewire:components.relations-section :kind="\App\Enums\UserLibraryKind::Game" :related-kind="\App\Enums\UserLibraryKind::Anime" :game="$game" />
 
-                    <livewire:components.relations-section :kind="\App\Enums\UserLibraryKind::Game" :related-kind="\App\Enums\UserLibraryKind::Manga" :game="$game" lazy="on-load" />
+                <livewire:components.relations-section :kind="\App\Enums\UserLibraryKind::Game" :related-kind="\App\Enums\UserLibraryKind::Manga" :game="$game" />
 
-                    @if (!empty($game->copyright))
-                        <section class="border-t border-primary xl:safe-area-inset">
-                            <div class="pt-4 pr-4 pb-4 pl-4">
-                                <p class="text-sm text-secondary">{!! nl2br(e($game->copyright)) !!}</p>
-                            </div>
-                        </section>
-                    @endif
-                </div>
-            @endif
+                @if (!empty($game->copyright))
+                    <section class="border-t border-primary xl:safe-area-inset">
+                        <div class="pt-4 pr-4 pb-4 pl-4">
+                            <p class="text-sm text-secondary">{!! nl2br(e($game->copyright)) !!}</p>
+                        </div>
+                    </section>
+                @endif
+            </div>
         </div>
     </div>
 

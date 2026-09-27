@@ -17,11 +17,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\Isolate;
-use Livewire\Attributes\Lazy;
 use Livewire\Component;
 
 #[Isolate]
-#[Lazy]
 class ExploreCategorySection extends Component
 {
     /**
@@ -83,23 +81,6 @@ class ExploreCategorySection extends Component
         if (!empty($theme->id)) {
             $this->theme = $theme;
         }
-    }
-
-    /**
-     * The skeleton shown until the section resumes loading.
-     *
-     * @param array $params
-     *
-     * @return View
-     */
-    public function placeholder(array $params): View
-    {
-        $exploreCategory = $params['exploreCategory'];
-
-        return view('components.skeletons.explore-category-section', [
-            'lockup' => ExploreCategoryTypes::lockup($exploreCategory->type, $exploreCategory->size),
-            'kind' => ExploreCategoryTypes::libraryKind($exploreCategory->type),
-        ]);
     }
 
     /**
