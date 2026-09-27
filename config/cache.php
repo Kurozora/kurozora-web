@@ -102,4 +102,19 @@ return [
 
     'prefix' => env('CACHE_PREFIX', str(env('APP_NAME', 'kurozora'))->slug('_').'_cache_'),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Public Page Cache
+    |--------------------------------------------------------------------------
+    |
+    | Guest responses marked as publicly cacheable are stored by the CDN for
+    | the number of seconds configured here.
+    |
+    */
+
+    'public_pages' => [
+        'enabled' => env('PUBLIC_PAGE_CACHE_ENABLED', false),
+        'ttl' => env('PUBLIC_PAGE_CACHE_TTL', 600),
+    ],
+
 ];

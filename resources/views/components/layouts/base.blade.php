@@ -64,7 +64,7 @@
         <link rel="manifest" href="{{ url('manifest.json') }}" />
 
         <!-- CSRF Token -->
-        <meta name="csrf-token" content="{{ csrf_token() }}" />
+        <meta name="csrf-token" content="{{ request()->attributes->get(\App\Http\Middleware\CacheableGuestResponse::ATTRIBUTE, false) ? '' : csrf_token() }}" />
 
         @auth
             <meta name="is-authenticated" />
