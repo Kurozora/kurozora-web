@@ -4,7 +4,7 @@
     $hasUnreadNotifications = $user !== null && $user->unreadNotifications()->exists();
 @endphp
 
-<aside class="hidden absolute flex-col h-screen z-[999] xl:flex" @if ($user) data-nav-notification="{{ $user->id }}" @endif>
+<aside class="hidden absolute flex-col h-screen z-[999] xl:flex" data-navigation-sidebar @if ($user) data-nav-notification="{{ $user->id }}" @endif>
     <nav
         class="fixed flex flex-col mt-2 ml-2 border-primary rounded-xl shadow-lg"
         style="width: calc(var(--sidebar-width) - 0.5rem); height: calc(100% - 1rem); border-width: 0.5px"

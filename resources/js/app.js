@@ -4,6 +4,7 @@ import './explore-section'
 import './alert'
 import './subscription-sheet'
 import './nav-notification'
+import './navigation'
 import './minigames/kotodama'
 
 document.addEventListener('livewire:init', () => {

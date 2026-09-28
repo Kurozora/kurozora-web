@@ -1,6 +1,7 @@
 @props(['user' => null])
 
 <div
+    data-navigation-dropdown
     x-data="{
         isSearchEnabled: false,
         isNavOpen: false,
