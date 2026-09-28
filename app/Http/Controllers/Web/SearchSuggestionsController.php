@@ -111,8 +111,10 @@ class SearchSuggestionsController extends Controller
                                 break;
                             case Person::class:
                             case Studio::class:
-                            case Song::class:
                                 $query->with(['media']);
+                                break;
+                            case Song::class:
+                                $query->with(['media', 'translations']);
                                 break;
                             case User::class:
                                 $query->with(['media'])
