@@ -37,18 +37,20 @@ function formatTimeDifference(seconds) {
 }
 
 export function getTimeUntilOrAgo(broadcastTimestamp, broadcastDuration) {
+    const secondsInWeek = 7 * 24 * 60 * 60;
     const currentTimestamp = Date.now()
-    const diffInSeconds = Math.floor((broadcastTimestamp - currentTimestamp) / 1000);
+    let diffInSeconds = Math.floor((broadcastTimestamp - currentTimestamp) / 1000);
+
+    if (diffInSeconds < -broadcastDuration) {
+        // After the broadcast duration, switch to the next weekly broadcast
+        diffInSeconds += Math.ceil((-diffInSeconds - broadcastDuration) / secondsInWeek) * secondsInWeek;
+    }
 
     if (diffInSeconds > 0) {
         // Future broadcast
         return formatTimeDifference(diffInSeconds) + ' from now';
-    } else if (diffInSeconds <= 0 && Math.abs(diffInSeconds) <= broadcastDuration) {
-        // Broadcast happening (within the duration)
-        return formatTimeDifference(Math.abs(diffInSeconds)) + ' ago';
-    } else {
-        // After the broadcast duration, switch back to counting until next broadcast
-        const nextBroadcastInSeconds = broadcastDuration + diffInSeconds;
-        return formatTimeDifference(nextBroadcastInSeconds) + ' from now';
     }
+
+    // Broadcast happening (within the duration)
+    return formatTimeDifference(Math.abs(diffInSeconds)) + ' ago';
 }
