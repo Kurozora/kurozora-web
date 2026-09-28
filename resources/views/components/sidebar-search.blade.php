@@ -46,7 +46,7 @@
     }"
     x-on:close.stop="resetAndClose()"
     x-on:click.outside="isSearchEnabled = false"
-    x-on:keydown.escape.window="resetAndClose()"
+    x-on:keydown.escape.window="isSearchEnabled = false"
     x-on:keydown.meta.k.window.prevent="focusOnSearch()"
     x-on:keydown.slash.window="handleSlashShortcut($event)"
     x-on:keydown.tab="handleTabKeydown($event)"
