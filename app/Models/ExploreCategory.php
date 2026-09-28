@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Enums\ExploreCategoryTypes;
 use App\Scopes\ExploreCategoryIsEnabledScope;
 use App\Traits\Model\HasSlug;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
@@ -130,6 +133,95 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
         }
 
         return Game::query();
+    }
+
+    /**
+     * Returns the models shown in the category.
+     *
+     * @param Genre|Theme|null $genreOrTheme
+     *
+     * @return Collection
+     */
+    public function items(Genre|Theme|null $genreOrTheme = null): Collection
+    {
+        $exploreCategory = match ($this->type) {
+            ExploreCategoryTypes::MostPopularShows => $this->mostPopular(Anime::class, $genreOrTheme),
+            ExploreCategoryTypes::UpcomingShows => $this->upcoming(Anime::class, $genreOrTheme),
+            ExploreCategoryTypes::NewShows => $this->recentlyAdded(Anime::class, $genreOrTheme),
+            ExploreCategoryTypes::RecentlyUpdateShows => $this->recentlyUpdated(Anime::class, $genreOrTheme),
+            ExploreCategoryTypes::RecentlyFinishedShows => $this->recentlyFinished(Anime::class, $genreOrTheme),
+            ExploreCategoryTypes::ContinuingShows => $this->ongoing(Anime::class, $genreOrTheme),
+            ExploreCategoryTypes::ShowsSeason => $this->currentSeason(Anime::class, $genreOrTheme),
+            ExploreCategoryTypes::MostPopularLiteratures => $this->mostPopular(Manga::class, $genreOrTheme),
+            ExploreCategoryTypes::UpcomingLiteratures => $this->upcoming(Manga::class, $genreOrTheme),
+            ExploreCategoryTypes::NewLiteratures => $this->recentlyAdded(Manga::class, $genreOrTheme),
+            ExploreCategoryTypes::RecentlyUpdateLiteratures => $this->recentlyUpdated(Manga::class, $genreOrTheme),
+            ExploreCategoryTypes::RecentlyFinishedLiteratures => $this->recentlyFinished(Manga::class, $genreOrTheme),
+            ExploreCategoryTypes::ContinuingLiteratures => $this->ongoing(Manga::class, $genreOrTheme),
+            ExploreCategoryTypes::LiteraturesSeason => $this->currentSeason(Manga::class, $genreOrTheme),
+            ExploreCategoryTypes::MostPopularGames => $this->mostPopular(Game::class, $genreOrTheme),
+            ExploreCategoryTypes::UpcomingGames => $this->upcoming(Game::class, $genreOrTheme),
+            ExploreCategoryTypes::NewGames => $this->recentlyAdded(Game::class, $genreOrTheme),
+            ExploreCategoryTypes::RecentlyUpdateGames => $this->recentlyUpdated(Game::class, $genreOrTheme),
+            ExploreCategoryTypes::GamesSeason => $this->currentSeason(Game::class, $genreOrTheme),
+            ExploreCategoryTypes::Characters => $this->charactersBornToday(),
+            ExploreCategoryTypes::UpNextEpisodes => $this->upNextEpisodes(),
+            ExploreCategoryTypes::People => $this->peopleBornToday(),
+            ExploreCategoryTypes::ReCAP => $this->reCAP(),
+            default => $this->load([
+                'exploreCategoryItems.model' => function (MorphTo $morphTo) {
+                    $morphTo->constrain([
+                        Anime::class => function (Builder $query) {
+                            $query->with(['genres', 'mediaStat', 'media', 'translation', 'tvRating', 'themes'])
+                                ->when(auth()->user(), function ($query, $user) {
+                                    return $query->with(['library' => function ($query) use ($user) {
+                                        $query->where('user_id', '=', $user->id);
+                                    }]);
+                                });
+                        },
+                        Game::class => function (Builder $query) {
+                            $query->with(['genres', 'mediaStat', 'media', 'translation', 'tvRating', 'themes'])
+                                ->when(auth()->user(), function ($query, $user) {
+                                    return $query->with(['library' => function ($query) use ($user) {
+                                        $query->where('user_id', '=', $user->id);
+                                    }]);
+                                });
+                        },
+                        Genre::class => function (Builder $query) {
+                            $query->with(['media']);
+                        },
+                        Manga::class => function (Builder $query) {
+                            $query->with(['genres', 'mediaStat', 'media', 'translation', 'tvRating', 'themes'])
+                                ->when(auth()->user(), function ($query, $user) {
+                                    return $query->with(['library' => function ($query) use ($user) {
+                                        $query->where('user_id', '=', $user->id);
+                                    }]);
+                                });
+                        },
+                        MediaSong::class => function (Builder $query) {
+                            $query->with(['song.media', 'model.translation']);
+                        },
+                        Theme::class => function (Builder $query) {
+                            $query->with(['media']);
+                        }
+                    ]);
+                }
+            ])
+        };
+
+        if ($this->type === ExploreCategoryTypes::Songs) {
+            return $exploreCategory->exploreCategoryItems->map(function ($exploreCategoryItem) {
+                if ($exploreCategoryItem?->model->model != null) {
+                    return $exploreCategoryItem->model;
+                }
+
+                return null;
+            })->filter();
+        }
+
+        return $exploreCategory->exploreCategoryItems->map(function ($exploreCategoryItem) {
+            return $exploreCategoryItem?->model;
+        })->filter();
     }
 
     /**

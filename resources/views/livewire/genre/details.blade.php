@@ -51,7 +51,7 @@
                     </section>
                     @break
                 @default
-                    <livewire:components.explore-category-section :index="$index" :exploreCategory="$exploreCategory" :genre="$genre" lazy="on-load" :key="'explore-section-' . $exploreCategory->id . '-genre-' . $genre->id" />
+                    <x-explore-category-section :explore-category="$exploreCategory" :genre="$genre" />
                 @endswitch
             @endforeach
         </section>
