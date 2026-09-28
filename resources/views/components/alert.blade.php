@@ -1,45 +1,15 @@
-@props(['message', 'isEphemeral' => true, 'type' => 'success'])
+<x-dialog-modal maxWidth="md" id="alert">
+    <x-slot:title>
+        <span data-alert-title></span>
+    </x-slot:title>
 
-@php
-    $colorCSS = match($type) {
-        'warning' => 'bg-yellow-500',
-        'error' => 'bg-red-500',
-        default => 'bg-green-500'
-    };
-    $svgName = match($type) {
-        'warning' => 'exclamationmark_circle',
-        'error' => 'xmark_circle',
-        default => 'checkmark_circle'
-    };
-@endphp
-
-<div
-    x-data="{
-        isEphemeral: @json($isEphemeral),
-        openAlertBox: true
-    }"
-    x-init="setTimeout(function () { openAlertBox = !isEphemeral }, 2500)"
->
-    <div
-        class="fixed top-0 right-0 mt-16 mb-16 ml-4 mr-4 z-[999]"
-        x-transition:enter="transition ease-out duration-300"
-        x-transition:enter-start="opacity-0"
-        x-transition:enter-end="opacity-100"
-        x-transition:leave="transition ease-in duration-300"
-        x-transition:leave-start="opacity-100"
-        x-transition:leave-end="opacity-0"
-        x-show="openAlertBox"
-    >
-        <div class="flex items-center gap-2 {{ $colorCSS }} text-white text-sm pl-4 pr-4 pt-3 pb-3 rounded shadow-md" role="alert">
-            @svg($svgName, 'fill-current', ['width' => 20])
-
-            <p class="flex">{{ $message }}</p>
-
-            @if ($isEphemeral)
-                <button type="button" class="flex" @click="openAlertBox = false">
-                    @svg('xmark', 'fill-current', ['width' => 16])
-                </button>
-            @endif
+    <x-slot:content>
+        <div class="pt-4 pb-4 pl-4 pr-4">
+            <p data-alert-message></p>
         </div>
-    </div>
-</div>
+    </x-slot:content>
+
+    <x-slot:footer>
+        <x-button x-on:click="show = false">{{ __('OK') }}</x-button>
+    </x-slot:footer>
+</x-dialog-modal>

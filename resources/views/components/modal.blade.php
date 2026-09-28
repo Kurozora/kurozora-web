@@ -14,7 +14,7 @@
 
 <div
     x-data="{
-        show: @entangle($attributes->get('model')).live,
+        show: @if ($attributes->get('model')) @entangle($attributes->get('model')).live @else false @endif,
         focusables() {
             // All focusable element types...
             let selector = 'a, button, input:not([type=\'hidden\']), textarea, select, details, [tabindex]:not([tabindex=\'-1\'])'
@@ -39,6 +39,8 @@
         }
     })"
     x-on:close.stop="show = false"
+    x-on:open-modal.window="if ($event.detail?.id === '{{ $id }}') show = true"
+    x-on:close-modal.window="if ($event.detail?.id === '{{ $id }}') show = false"
     x-on:keydown.escape.window="show = false"
     x-on:keydown.tab.prevent="$event.shiftKey || nextFocusable().focus()"
     x-on:keydown.shift.tab.prevent="prevFocusable().focus()"

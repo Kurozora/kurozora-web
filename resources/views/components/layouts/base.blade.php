@@ -149,7 +149,7 @@
                 <x-footer />
             </div>
 
-            <livewire:components.alert />
+            <x-alert />
             <livewire:components.subscription-sheet />
         </div>
 
