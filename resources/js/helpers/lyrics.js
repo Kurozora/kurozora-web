@@ -199,10 +199,8 @@ export default class LyricsManager {
 
     // MARK: - Initializers
     constructor() {
-        document.addEventListener('livewire:init', () => {
-            Livewire.on('lyrics-opened', () => requestAnimationFrame(() => this.#open()))
-            Livewire.on('lyrics-closed', () => this.#teardown())
-        })
+        window.addEventListener('lyrics-opened', () => requestAnimationFrame(() => this.#open()))
+        window.addEventListener('lyrics-closed', () => this.#teardown())
 
         document.addEventListener('livewire:navigated', () => this.#teardown())
     }
@@ -1034,7 +1032,10 @@ export default class LyricsManager {
 
         this.#stop()
         this.#root?.removeAttribute('data-open')
-        setTimeout(() => window.Livewire?.dispatch('close-lyrics'), 300)
+        setTimeout(() => {
+            document.querySelector('[data-lyrics-root]')?.replaceChildren()
+            window.dispatchEvent(new CustomEvent('lyrics-closed'))
+        }, 300)
     }
 
     /**

@@ -1,6 +1,3 @@
-<div data-lyrics-root>
-    @if ($show)
-        @php($lyrics = $this->lyrics)
 
         <div
             data-lyrics
@@ -77,5 +74,3 @@
                 <div data-lyrics-options-menu hidden class="absolute bottom-20 right-6 w-56 rounded-xl border border-primary bg-secondary p-1 shadow-xl"></div>
             @endif
         </div>
-    @endif
-</div>

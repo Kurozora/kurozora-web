@@ -160,7 +160,7 @@
             <x-music.player />
         @endpersist
 
-        <livewire:song.lyrics />
+        <div data-lyrics-root></div>
 
         @vite(['resources/js/listen.js', 'resources/js/lyrics.js'])
         <script src="https://js-cdn.music.apple.com/musickit/v3/musickit.js" async></script>

@@ -774,11 +774,24 @@ export default class MusicManager {
     /**
      * Opens the lyrics overlay for the now playing song.
      */
-    #openLyrics() {
-        const id = document.querySelector('[data-lyrics-root]')?.getAttribute('wire:id')
-        if (id && this.#nowPlaying?.songID) {
-            window.Livewire?.find(id)?.call('open', Number(this.#nowPlaying.songID))
+    async #openLyrics() {
+        const root = document.querySelector('[data-lyrics-root]')
+
+        if (!root || !this.#nowPlaying?.songID) {
+            return
         }
+
+        const response = await fetch('/songs/' + this.#nowPlaying.songID + '/lyrics', {
+            headers: { Accept: 'text/html' },
+        })
+
+        if (!response.ok) {
+            return
+        }
+
+        root.innerHTML = await response.text()
+
+        window.dispatchEvent(new CustomEvent('lyrics-opened'))
     }
 
     /**

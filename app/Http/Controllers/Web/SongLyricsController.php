@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Livewire\Song;
+namespace App\Http\Controllers\Web;
 
+use App\Http\Controllers\Controller;
 use App\Models\Song;
 use App\Models\SongLyric;
 use App\Models\SongLyricLine;
@@ -9,27 +10,15 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
-use Livewire\Attributes\Computed;
-use Livewire\Attributes\Locked;
-use Livewire\Attributes\On;
-use Livewire\Component;
 
-class Lyrics extends Component
+class SongLyricsController extends Controller
 {
     /**
      * The id of the song whose lyrics are shown.
      *
      * @var int|null $songID
      */
-    #[Locked]
-    public ?int $songID = null;
-
-    /**
-     * Whether the lyrics overlay is visible.
-     *
-     * @var bool $show
-     */
-    public bool $show = false;
+    protected ?int $songID = null;
 
     /**
      * The gap, in milliseconds, that warrants an interlude between two lines.
@@ -39,29 +28,17 @@ class Lyrics extends Component
     private const int GAP_THRESHOLD_MS = 4000;
 
     /**
-     * Opens the lyrics for the given song.
+     * Show the lyrics of a song.
      *
-     * @param int $songID
+     * @param Song $song
      *
-     * @return void
+     * @return Application|Factory|View
      */
-    public function open(int $songID): void
+    public function show(Song $song): Application|Factory|View
     {
-        $this->songID = $songID;
-        $this->show = true;
-        $this->dispatch('lyrics-opened');
-    }
+        $this->songID = $song->id;
 
-    /**
-     * Closes the lyrics overlay.
-     *
-     * @return void
-     */
-    #[On('close-lyrics')]
-    public function close(): void
-    {
-        $this->show = false;
-        $this->dispatch('lyrics-closed');
+        return view('song.lyrics', ['lyrics' => $this->lyrics()]);
     }
 
     /**
@@ -69,10 +46,9 @@ class Lyrics extends Component
      *
      * @return array
      */
-    #[Computed]
-    public function lyrics(): array
+    protected function lyrics(): array
     {
-        if (!$this->show || $this->songID === null) {
+        if ($this->songID === null) {
             return ['amID' => null, 'offsetMs' => 0, 'agents' => [], 'items' => []];
         }
 
@@ -190,13 +166,4 @@ class Lyrics extends Component
         ];
     }
 
-    /**
-     * Render the component.
-     *
-     * @return Application|Factory|View
-     */
-    public function render(): Application|Factory|View
-    {
-        return view('livewire.song.lyrics');
-    }
 }
