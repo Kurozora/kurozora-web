@@ -106,7 +106,7 @@
         x-show="isSearchEnabled && searchQuery !== ''"
     >
         <div class="flex justify-center">
-            <x-spinner data-search-spinner class="hidden" />
+            <x-spinner :wire-loading-enabled="false" data-search-spinner class="hidden" />
         </div>
 
         <div data-search-results>
