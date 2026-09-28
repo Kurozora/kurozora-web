@@ -58,7 +58,7 @@ class GameResourceBasic extends JsonResource
                 'durationTotal'         => $this->resource->duration_total_string,
                 'durationTotalCount'    => $this->resource->duration_total,
                 'publicationSeason'     => $this->resource->publication_season?->description,
-                'publicationDay'        => $this->resource->publication_day?->description,
+                'publicationDay'        => $this->resource->local_publication_day?->description,
                 'isNSFW'                => (bool) $this->resource->is_nsfw,
                 'copyright'             => $this->resource->copyright,
             ]

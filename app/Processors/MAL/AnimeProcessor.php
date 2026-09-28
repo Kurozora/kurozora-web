@@ -221,8 +221,10 @@ class AnimeProcessor extends CustomItemProcessor
             logger()->channel('stderr')->debug('🛠 [MAL_ID:ANIME:' . $malID . '] Updating attributes');
             $newTitle = $title ?? $originalTitle;
             $newEpisodeCount = empty($episodeCount) ? $anime->episode_count : $episodeCount;
+            $newSeasonCount = $newEpisodeCount > 0 ? max($anime->season_count, 1) : $anime->season_count;
             $newDuration = empty($anime->duration) ? $duration : $anime->duration;
             $newEndedAt = $anime->ended_at ?? $endedAt;
+            $newAirDay = $anime->loadMissing(['latestAiredEpisode', 'nextEpisode'])->generateAirDay() ?? $airDay;
 
             if ($anime->mediaType?->id == 4 && $anime->status?->id == 3 && $newEndedAt != null) {
                 // Movies stay in theaters about 13 weeks on average,
@@ -238,6 +240,7 @@ class AnimeProcessor extends CustomItemProcessor
                 'title' => $newTitle,
                 'synopsis' => $synopsis,
                 'episode_count' => $newEpisodeCount,
+                'season_count' => $newSeasonCount,
                 'media_type_id' => $mediaType,
                 'status_id' => $status,
                 'source_id' => $source,
@@ -245,7 +248,7 @@ class AnimeProcessor extends CustomItemProcessor
                 'duration' => $newDuration,
                 'started_at' => $startedAt,
                 'ended_at' => $newEndedAt,
-                'air_day' => $airDay,
+                'air_day' => $newAirDay,
                 'air_time' => $airTime,
                 'air_season' => $airSeason,
                 'tv_rating_id' => $tvRating->id,

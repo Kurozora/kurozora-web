@@ -26,7 +26,7 @@ class MediaSeason extends Command
      *
      * @var string
      */
-    protected $description = 'Fix anime, manga, and games season and day based on their start date.';
+    protected $description = 'Fix anime, manga, and games season and day based on their start date, and anime day based on their episodes.';
 
     /**
      * Execute the console command.
@@ -58,6 +58,9 @@ class MediaSeason extends Command
 
             $modelClass::withoutGlobalScopes()
                 ->select(['id', $seasonColumn, $dayColumn, $dateColumn])
+                ->when($modelClass === Anime::class, function ($query) {
+                    $query->with(['latestAiredEpisode', 'nextEpisode']);
+                })
                 ->when($year, function ($query) use ($dateColumn, $year) {
                     $query->whereYear($dateColumn, '=', $year);
                 })
@@ -80,8 +83,8 @@ class MediaSeason extends Command
                             $currentDay = $model->getRawOriginal($dayColumn);
                             $currentDay = is_null($currentDay) ? null : (int) $currentDay;
 
-                            if ($model instanceof Anime && !is_null($currentDay)) {
-                                $day = $currentDay;
+                            if ($model instanceof Anime) {
+                                $day = $model->generateAirDay() ?? $currentDay ?? $day;
                             }
 
                             if ($currentSeason === $season && $currentDay === $day) {

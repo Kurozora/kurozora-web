@@ -267,6 +267,30 @@ class Anime extends KModel implements HasMedia, Sitemapable
     }
 
     /**
+     * The day on which the anime airs in Japan.
+     *
+     * @return ?int
+     */
+    public function generateAirDay(): ?int
+    {
+        $episode = $this->nextEpisode ?? $this->recentlyAiredEpisode();
+
+        return $episode?->started_at->copy()->setTimezone('Asia/Tokyo')->dayOfWeek;
+    }
+
+    /**
+     * The anime's latest aired episode when it aired within the last four weeks.
+     *
+     * @return ?Episode
+     */
+    private function recentlyAiredEpisode(): ?Episode
+    {
+        $latestAiredEpisode = $this->latestAiredEpisode;
+
+        return $latestAiredEpisode?->started_at->gte(now()->subWeeks(4)) ? $latestAiredEpisode : null;
+    }
+
+    /**
      * Get the options for generating the slug.
      *
      * @return SlugOptions
@@ -340,6 +364,27 @@ class Anime extends KModel implements HasMedia, Sitemapable
     }
 
     /**
+     * The air day of the anime in the user's timezone.
+     *
+     * @return DayOfWeek|null
+     */
+    public function getLocalAirDayAttribute(): ?DayOfWeek
+    {
+        $airDay = $this->air_day?->value;
+
+        if (is_null($airDay)) {
+            return null;
+        }
+
+        $airDate = now('Asia/Tokyo')
+            ->startOfWeek(CarbonInterface::SUNDAY)
+            ->addDays($airDay)
+            ->setTimeFromTimeString($this->air_time ?? '09:00');
+
+        return DayOfWeek::fromValue($airDate->inUserTimezone()->dayOfWeek);
+    }
+
+    /**
      * The air time of the anime in UTC timezone.
      *
      * @return string|null
@@ -376,21 +421,40 @@ class Anime extends KModel implements HasMedia, Sitemapable
 
         if ($this->started_at) {
             $premiereDate = Carbon::parse($this->started_at->toDateString(), 'Asia/Tokyo')
-                ->setTimeFromTimeString($this->air_time ?? '00:00');
+                ->setTimeFromTimeString($this->air_time ?? '09:00');
 
             if ($premiereDate->isFuture()) {
                 return $premiereDate->inUserTimezone();
             }
         }
 
-        if ($this->status_id === 3 && ($latestAiredEpisode = $this->latestAiredEpisode)) {
-            $latestAiredAt = $latestAiredEpisode->started_at->copy();
+        if ($this->status_id !== 3) {
+            return null;
+        }
+
+        if ($recentlyAiredEpisode = $this->recentlyAiredEpisode()) {
+            $latestAiredAt = $recentlyAiredEpisode->started_at->copy();
 
             return $latestAiredAt->addWeeks((int) floor($latestAiredAt->diffInWeeks()) + 1)
                 ->inUserTimezone();
         }
 
-        return null;
+        $airDay = $this->air_day?->value;
+
+        if (is_null($airDay)) {
+            return null;
+        }
+
+        $broadcastDate = now('Asia/Tokyo')
+            ->setTimeFromTimeString($this->air_time ?? '09:00');
+
+        if ($broadcastDate->dayOfWeek !== $airDay || $broadcastDate->isPast()) {
+            $broadcastDate = now('Asia/Tokyo')
+                ->next($airDay)
+                ->setTimeFromTimeString($this->air_time ?? '09:00');
+        }
+
+        return $broadcastDate->inUserTimezone();
     }
 
     /**
@@ -744,6 +808,29 @@ class Anime extends KModel implements HasMedia, Sitemapable
         return $query->where(self::TABLE_NAME . '.air_season', '=', season_of_year(today()->addDays(3))->value)
             ->whereYear(self::TABLE_NAME . '.started_at', '=', today()->addDays(3)->year)
             ->limit($limit);
+    }
+
+    /**
+     * Eloquent builder scope that limits the query to anime airing on the user's current weekday.
+     *
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeAiringOnCurrentWeekday(Builder $query): Builder
+    {
+        $startOfDay = now()->inUserTimezone()->startOfDay()->setTimezone('Asia/Tokyo');
+        $endOfDay = $startOfDay->copy()->addDay();
+
+        return $query->where(function (Builder $query) use ($startOfDay, $endOfDay) {
+            $query->where(function (Builder $query) use ($startOfDay) {
+                $query->where(self::TABLE_NAME . '.air_day', '=', $startOfDay->dayOfWeek)
+                    ->whereRaw('COALESCE(' . self::TABLE_NAME . '.air_time, ?) >= ?', ['00:00:00', $startOfDay->format('H:i:s')]);
+            })
+                ->orWhere(function (Builder $query) use ($endOfDay) {
+                    $query->where(self::TABLE_NAME . '.air_day', '=', $endOfDay->dayOfWeek)
+                        ->whereRaw('COALESCE(' . self::TABLE_NAME . '.air_time, ?) < ?', ['00:00:00', $endOfDay->format('H:i:s')]);
+                });
+        });
     }
 
     /**

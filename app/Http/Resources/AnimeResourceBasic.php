@@ -73,7 +73,7 @@ class AnimeResourceBasic extends JsonResource
                 'durationTotalCount'    => $this->resource->duration_total,
                 'airSeason'             => $this->resource->air_season?->description,
                 'airTime'               => $this->resource->air_time_utc,
-                'airDay'                => $this->resource->air_day?->description,
+                'airDay'                => $this->resource->local_air_day?->description,
                 'isNSFW'                => (bool) $this->resource->is_nsfw,
                 'copyright'             => $this->resource->copyright,
             ]

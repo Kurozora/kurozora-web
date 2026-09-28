@@ -66,7 +66,7 @@ class LiteratureResourceBasic extends JsonResource
                 'durationTotalCount'    => $this->resource->duration_total,
                 'publicationSeason'     => $this->resource->publication_season?->description,
                 'publicationTime'       => $this->resource->publication_time_utc,
-                'publicationDay'        => $this->resource->publication_day?->description,
+                'publicationDay'        => $this->resource->local_publication_day?->description,
                 'isNSFW'                => (bool) $this->resource->is_nsfw,
                 'copyright'             => $this->resource->copyright,
             ]

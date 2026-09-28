@@ -501,6 +501,27 @@ class Manga extends KModel implements HasMedia, Sitemapable
     }
 
     /**
+     * The publication day of the manga in the user's timezone.
+     *
+     * @return DayOfWeek|null
+     */
+    public function getLocalPublicationDayAttribute(): ?DayOfWeek
+    {
+        $publicationDay = $this->publication_day?->value;
+
+        if (is_null($publicationDay)) {
+            return null;
+        }
+
+        $publicationDate = now('Asia/Tokyo')
+            ->startOfWeek(CarbonInterface::SUNDAY)
+            ->addDays($publicationDay)
+            ->setTimeFromTimeString($this->publication_time ?? '09:00');
+
+        return DayOfWeek::fromValue($publicationDate->inUserTimezone()->dayOfWeek);
+    }
+
+    /**
      * The publication time of the manga in UTC timezone.
      *
      * @return string|null

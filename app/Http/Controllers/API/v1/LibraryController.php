@@ -907,8 +907,8 @@ class LibraryController extends Controller
             default => null,
         };
         $scheduleDay = match ($morphClass) {
-            Anime::class => $trackable->air_day,
-            default => $trackable->publication_day,
+            Anime::class => $trackable->local_air_day,
+            default => $trackable->local_publication_day,
         };
         $scheduleSeason = match ($morphClass) {
             Anime::class => $trackable->air_season,
