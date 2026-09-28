@@ -1,7 +1,9 @@
 <div data-search-scope
+    x-on:search-state="isSearching = $event.detail.active"
     class="relative w-full"
     x-data="{
         isSearchEnabled: false,
+        isSearching: false,
         searchQuery: '',
         resetAndClose() {
             isSearchEnabled = false;
@@ -103,7 +105,7 @@
         class="absolute right-0 left-0 pt-4 pb-4 bg-primary border border-black/20 rounded-lg shadow-md overflow-y-auto z-10"
         style="max-height: 85vh; width: 360px;"
         x-cloak
-        x-show="isSearchEnabled && searchQuery !== ''"
+        x-show="isSearchEnabled && isSearching"
     >
         <div class="flex justify-center">
             <x-spinner :wire-loading-enabled="false" data-search-spinner class="hidden" />

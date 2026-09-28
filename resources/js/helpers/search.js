@@ -26,6 +26,13 @@ export default class SearchManager {
         return element.closest('[data-search-scope]') ?? document
     }
 
+    #signal(scope, active) {
+        scope.dispatchEvent?.(new CustomEvent('search-state', {
+            bubbles: true,
+            detail: { active },
+        }))
+    }
+
     async search(input) {
         const scope = this.#scope(input)
         const results = scope.querySelector('[data-search-results]')
@@ -39,6 +46,8 @@ export default class SearchManager {
 
         const controller = new AbortController()
         this.#controllers.set(input, controller)
+
+        this.#signal(scope, input.value.trim() !== '')
 
         spinner?.classList.remove('hidden')
 
