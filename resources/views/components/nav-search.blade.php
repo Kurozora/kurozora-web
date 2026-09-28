@@ -85,6 +85,7 @@
                     name="q"
                     placeholder="{{ [__('I’m searching for…'), __('Search faster with ⌘+K, ctrl+K or /')][array_rand([0,1])] }}"
                     x-ref="search"
+                    x-model="searchQuery"
                     data-search-input
                 />
             </form>

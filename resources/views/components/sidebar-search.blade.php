@@ -6,6 +6,7 @@
         resetAndClose() {
             isSearchEnabled = false;
             this.searchQuery = '';
+            window.searchManager?.reset($el);
         },
         focusables() {
             // All focusable element types...
@@ -75,6 +76,7 @@
             name="q"
             placeholder="{{ [__('Search'), '⌘+K, ctrl+K or /'][array_rand([0,1])] }}"
             x-ref="search"
+            x-model="searchQuery"
             data-search-input
         />
 
