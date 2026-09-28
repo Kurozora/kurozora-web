@@ -11,7 +11,7 @@
     >
         <div class="absolute top-0 right-0 bottom-0 left-0 bg-blur backdrop-blur navigation-tint rounded-xl"></div>
 
-        <div class="absolute top-0 left-0 right-0 z-10">
+        <div class="absolute top-0 left-0 right-0 z-20">
             {{-- Scroll Edge Effect --}}
             <x-edge-blur class="rounded-t-xl" :tint="false" plateau="96px" />
 
