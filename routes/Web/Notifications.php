@@ -8,4 +8,9 @@ Route::prefix('/notifications')
     ->group(function () {
         Route::get('/', NotificationsIndex::class)
             ->name('.index');
+
+        Route::get('/unread', function () {
+            return ['hasUnread' => auth()->user()->unreadNotifications()->exists()];
+        })
+            ->name('.unread');
     });

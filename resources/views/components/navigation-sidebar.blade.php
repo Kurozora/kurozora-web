@@ -1,4 +1,10 @@
-<aside class="hidden absolute flex-col h-screen z-[999] xl:flex">
+@props(['user' => null])
+
+@php
+    $hasUnreadNotifications = $user !== null && $user->unreadNotifications()->exists();
+@endphp
+
+<aside class="hidden absolute flex-col h-screen z-[999] xl:flex" @if ($user) data-nav-notification="{{ $user->id }}" @endif>
     <nav
         class="fixed flex flex-col mt-2 ml-2 border-primary rounded-xl shadow-lg"
         style="width: calc(var(--sidebar-width) - 0.5rem); height: calc(100% - 1rem); border-width: 0.5px"
@@ -221,9 +227,7 @@
                                     <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-full"></div>
                                 </x-picture>
 
-                                @if ($this->hasUnreadNotifications)
-                                    <span class="absolute bg-tint aspect-square rounded-full z-1" style="top: -0.1rem; right: -0.1rem; width: 0.40rem;"></span>
-                                @endif
+                                <span class="absolute bg-tint aspect-square rounded-full z-1 @if (!$hasUnreadNotifications) hidden @endif" style="top: -0.1rem; right: -0.1rem; width: 0.40rem;" data-nav-notification-badge></span>
                             </div>
 
                             <div class="ml-3">
@@ -257,9 +261,7 @@
                             <x-dropdown-link href="{{ route('notifications.index') }}" wire:navigate>
                                 <span class="flex items-center justify-between w-full">
                                     {{ __('Notifications') }}
-                                    @if ($this->hasUnreadNotifications)
-                                        <span class="bg-tint aspect-square rounded-full" style="width: 0.40rem;"></span>
-                                    @endif
+                                    <span class="bg-tint aspect-square rounded-full @if (!$hasUnreadNotifications) hidden @endif" style="width: 0.40rem;" data-nav-notification-badge></span>
                                 </span>
                             </x-dropdown-link>
                         @endauth

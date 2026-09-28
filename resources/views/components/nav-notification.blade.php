@@ -1,3 +1,7 @@
+@php
+    $hasUnreadNotifications = auth()->check() && auth()->user()->unreadNotifications()->exists();
+@endphp
+
 <a
     class="relative inline-flex h-8 w-8 items-center justify-center text-secondary cursor-pointer transition duration-150 ease-in-out hover:text-primary focus:text-primary"
     href="{{ route('notifications.index') }}"
@@ -11,9 +15,13 @@
     x-transition:leave-end="opacity-0 scale-75"
     aria-label="{{ __('Notifications') }}"
     title="{{ __('Notifications') }}"
+    @auth data-nav-notification="{{ auth()->id() }}" @endauth
 >
-    @if ($this->hasUnreadNotifications)
-        <span class="absolute bg-tint aspect-square rounded-full z-1" style="top: 0.45rem; right: 0.45rem; width: 0.40rem;"></span>
-    @endif
+    <span
+        class="absolute bg-tint aspect-square rounded-full z-1 @if (!$hasUnreadNotifications) hidden @endif"
+        style="top: 0.45rem; right: 0.45rem; width: 0.40rem;"
+        data-nav-notification-badge
+    ></span>
+
     @svg('app_badge', 'fill-current', ['width' => '18'])
 </a>

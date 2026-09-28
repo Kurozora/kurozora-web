@@ -1,6 +1,8 @@
+@props(['user' => null])
+
 <div
     x-data="{
-        isSearchEnabled: @entangle('isSearchEnabled').live,
+        isSearchEnabled: false,
         isNavOpen: false,
         showScrollEdgeEffect: false
     }"
@@ -257,7 +259,7 @@
                                 @svg('magnifyingglass', 'fill-current', ['width' => '18'])
                             </button>
 
-                            <livewire:nav-notification wire:key="nav-notification" />
+                            <x-nav-notification />
 
                             {{-- Settings Dropdown --}}
                             <x-dropdown id="more-settings" align="right" width="48" content-classes="hidden bg-secondary md:block">

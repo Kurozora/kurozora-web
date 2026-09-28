@@ -2,6 +2,8 @@ import './echo'
 import './bootstrap'
 import './explore-section'
 import './alert'
+import './subscription-sheet'
+import './nav-notification'
 import './minigames/kotodama'
 
 document.addEventListener('livewire:init', () => {

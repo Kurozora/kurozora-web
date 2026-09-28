@@ -123,9 +123,9 @@
         </svg>
 
         <div class="flex flex-col w-full">
-            <livewire:navigation-sidebar :user="auth()->user()" />
+            <x-navigation-sidebar :user="auth()->user()" />
 
-            <livewire:navigation-dropdown :user="auth()->user()" wire:key="navigation-dropdown" />
+            <x-navigation-dropdown :user="auth()->user()" />
 
             <div>
                 @if (!(auth()->user()?->hasVerifiedEmail() ?? true))
@@ -150,7 +150,7 @@
             </div>
 
             <x-alert />
-            <livewire:components.subscription-sheet />
+            <x-subscription-sheet />
         </div>
 
         <x-music.connect-prompt />
