@@ -57,7 +57,7 @@
                         class="text-xs leading-tight font-semibold opacity-75 line-clamp-2"
                         @if (!empty($scheduleTitle)) x-bind:title="'{{ $scheduleTitle }} ' + scheduleString" @endif
                         x-data="{
-                            scheduleTimestamp: {{ $scheduleDate?->timestamp }},
+                            scheduleTimestamp: @js($scheduleDate?->timestamp),
                             scheduleDuration: {{ $scheduleDuration }},
                             scheduleString: '',
                             startTimer() {
