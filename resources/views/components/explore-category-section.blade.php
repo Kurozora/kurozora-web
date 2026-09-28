@@ -33,7 +33,19 @@
                                 <x-button data-explore-section-refresh="{{ route('explore.section', ['exploreCategory' => $exploreCategory, 'genre' => $genre?->slug, 'theme' => $theme?->slug], false) }}">{{ __('Refresh') }}</x-button>
                             @endhasrole
 
-                            <x-section-nav-link href="{{ $exploreCategory->secondary_slug ? url($exploreCategory->secondary_slug) : route('explore.details', $exploreCategory) }}">{{ __('See All') }}</x-section-nav-link>
+                            @switch($exploreCategory->type)
+                            @case(\App\Enums\ExploreCategoryTypes::ShowsSeason)
+                                <x-section-nav-link href="{{ route('anime.seasons.year.season', [today()->addDays(3)->year, season_of_year(today()->addDays(3))->key]) }}">{{ __('See All') }}</x-section-nav-link>
+                            @break
+                            @case(\App\Enums\ExploreCategoryTypes::LiteraturesSeason)
+                                <x-section-nav-link href="{{ route('manga.seasons.year.season', [today()->addDays(3)->year, season_of_year(today()->addDays(3))->key]) }}">{{ __('See All') }}</x-section-nav-link>
+                            @break
+                            @case(\App\Enums\ExploreCategoryTypes::GamesSeason)
+                                <x-section-nav-link href="{{ route('games.seasons.year.season', [today()->addDays(3)->year, season_of_year(today()->addDays(3))->key]) }}">{{ __('See All') }}</x-section-nav-link>
+                            @break
+                            @default
+                                <x-section-nav-link href="{{ $exploreCategory->secondary_slug ? url($exploreCategory->secondary_slug) : route('explore.details', $exploreCategory) }}">{{ __('See All') }}</x-section-nav-link>
+                            @endswitch
                         </x-slot:action>
                     </x-section-nav>
                 </div>
