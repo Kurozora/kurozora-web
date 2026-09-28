@@ -509,23 +509,14 @@ class Game extends KModel implements HasMedia, Sitemapable
      */
     public function getPublicationDateAttribute(): ?Carbon
     {
-        $publicationDay = $this->publication_day?->value;
-        $publicationTime = $this->publication_time;
-
-        if (is_null($publicationDay) && empty($publicationTime)) {
+        if (empty($this->published_at)) {
             return null;
         }
 
-        $publicationDate = now('Asia/Tokyo')
-            ->setTimeFromTimeString($publicationTime ?? '00:00');
+        $releaseDate = Carbon::parse($this->published_at->toDateString(), 'Asia/Tokyo')
+            ->setTimeFromTimeString($this->publication_time ?? '09:00');
 
-        if ($publicationDate->dayOfWeek !== (int) $publicationDay || $publicationDate->isPast()) {
-            $publicationDate = now('Asia/Tokyo')
-                ->next((int) $publicationDay)
-                ->setTimeFromTimeString($publicationTime ?? '00:00');
-        }
-
-        return $publicationDate->inUserTimezone();
+        return $releaseDate->isFuture() ? $releaseDate->inUserTimezone() : null;
     }
 
     /**
@@ -550,9 +541,8 @@ class Game extends KModel implements HasMedia, Sitemapable
     public function getTimeUntilPublicationAttribute(): string
     {
         if ($publicationDate = $this->publication_date) {
-            $publication = $publicationDate->englishDayOfWeek . ' at ' . $publicationDate->format('H:i e');
             return Carbon::now()->inUserTimezone()
-                ->until($publication, CarbonInterface::DIFF_RELATIVE_TO_NOW, true, 3);
+                ->until($publicationDate, CarbonInterface::DIFF_RELATIVE_TO_NOW, true, 3);
         }
 
         return '';
