@@ -130,19 +130,64 @@ class PersonController extends Controller
                         break;
                     case 'shows':
                         $includeArray['anime'] = function ($query) {
-                            $query->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+                            $query->with(['genres', 'languages', 'latestAiredEpisode', 'media', 'mediaStat', 'mediaType', 'nextEpisode', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+                                ->when(auth()->user(), function ($query, $user) {
+                                    $query->with(['mediaRatings' => function ($query) use ($user) {
+                                        $query->where([
+                                            ['user_id', '=', $user->id]
+                                        ]);
+                                    }, 'library' => function ($query) use ($user) {
+                                        $query->where('user_id', '=', $user->id);
+                                    }])
+                                        ->withExists([
+                                            'favoriters as isFavorited' => function ($query) use ($user) {
+                                                $query->where('user_id', '=', $user->id);
+                                            },
+                                            'reminderers as isReminded' => function ($query) use ($user) {
+                                                $query->where('user_id', '=', $user->id);
+                                            },
+                                        ]);
+                                })
                                 ->limit(Person::MAXIMUM_RELATIONSHIPS_LIMIT);
                         };
                         break;
                     case 'literatures':
                         $includeArray['manga'] = function ($query) {
                             $query->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+                                ->when(auth()->user(), function ($query, $user) {
+                                    $query->with(['mediaRatings' => function ($query) use ($user) {
+                                        $query->where([
+                                            ['user_id', '=', $user->id]
+                                        ]);
+                                    }, 'library' => function ($query) use ($user) {
+                                        $query->where('user_id', '=', $user->id);
+                                    }])
+                                        ->withExists([
+                                            'favoriters as isFavorited' => function ($query) use ($user) {
+                                                $query->where('user_id', '=', $user->id);
+                                            },
+                                        ]);
+                                })
                                 ->limit(Person::MAXIMUM_RELATIONSHIPS_LIMIT);
                         };
                         break;
                     case 'games':
                         $includeArray['games'] = function ($query) {
                             $query->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+                                ->when(auth()->user(), function ($query, $user) {
+                                    $query->with(['mediaRatings' => function ($query) use ($user) {
+                                        $query->where([
+                                            ['user_id', '=', $user->id]
+                                        ]);
+                                    }, 'library' => function ($query) use ($user) {
+                                        $query->where('user_id', '=', $user->id);
+                                    }])
+                                        ->withExists([
+                                            'favoriters as isFavorited' => function ($query) use ($user) {
+                                                $query->where('user_id', '=', $user->id);
+                                            },
+                                        ]);
+                                })
                                 ->limit(Person::MAXIMUM_RELATIONSHIPS_LIMIT);
                         };
                         break;
@@ -195,19 +240,64 @@ class PersonController extends Controller
                         break;
                     case 'shows':
                         $includeArray['anime'] = function ($query) {
-                            $query->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+                            $query->with(['genres', 'languages', 'latestAiredEpisode', 'media', 'mediaStat', 'mediaType', 'nextEpisode', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+                                ->when(auth()->user(), function ($query, $user) {
+                                    $query->with(['mediaRatings' => function ($query) use ($user) {
+                                        $query->where([
+                                            ['user_id', '=', $user->id]
+                                        ]);
+                                    }, 'library' => function ($query) use ($user) {
+                                        $query->where('user_id', '=', $user->id);
+                                    }])
+                                        ->withExists([
+                                            'favoriters as isFavorited' => function ($query) use ($user) {
+                                                $query->where('user_id', '=', $user->id);
+                                            },
+                                            'reminderers as isReminded' => function ($query) use ($user) {
+                                                $query->where('user_id', '=', $user->id);
+                                            },
+                                        ]);
+                                })
                                 ->limit(Person::MAXIMUM_RELATIONSHIPS_LIMIT);
                         };
                         break;
                     case 'literatures':
                         $includeArray['manga'] = function ($query) {
                             $query->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+                                ->when(auth()->user(), function ($query, $user) {
+                                    $query->with(['mediaRatings' => function ($query) use ($user) {
+                                        $query->where([
+                                            ['user_id', '=', $user->id]
+                                        ]);
+                                    }, 'library' => function ($query) use ($user) {
+                                        $query->where('user_id', '=', $user->id);
+                                    }])
+                                        ->withExists([
+                                            'favoriters as isFavorited' => function ($query) use ($user) {
+                                                $query->where('user_id', '=', $user->id);
+                                            },
+                                        ]);
+                                })
                                 ->limit(Person::MAXIMUM_RELATIONSHIPS_LIMIT);
                         };
                         break;
                     case 'games':
                         $includeArray['games'] = function ($query) {
                             $query->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+                                ->when(auth()->user(), function ($query, $user) {
+                                    $query->with(['mediaRatings' => function ($query) use ($user) {
+                                        $query->where([
+                                            ['user_id', '=', $user->id]
+                                        ]);
+                                    }, 'library' => function ($query) use ($user) {
+                                        $query->where('user_id', '=', $user->id);
+                                    }])
+                                        ->withExists([
+                                            'favoriters as isFavorited' => function ($query) use ($user) {
+                                                $query->where('user_id', '=', $user->id);
+                                            },
+                                        ]);
+                                })
                                 ->limit(Person::MAXIMUM_RELATIONSHIPS_LIMIT);
                         };
                         break;

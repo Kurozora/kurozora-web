@@ -108,6 +108,7 @@ class SongController extends Controller
                     ]);
                 }]);
             });
+        $song->loadMissing($this->includeArray($includes));
 
         return JSONResult::success([
             'data' => SongResource::collection([$song])
@@ -135,10 +136,56 @@ class SongController extends Controller
                 }]);
             });
 
+        $includeInput = $request->input('include');
+        $includes = is_string($includeInput) ? explode(',', $includeInput) : (is_array($includeInput) ? $includeInput : []);
+        $song->with($this->includeArray($includes));
+
         // Show the anime details response
         return JSONResult::success([
             'data' => SongResource::collection($song->get()),
         ]);
+    }
+
+    /**
+     * Returns the relations to eager load for the requested includes.
+     *
+     * @param array $includes
+     *
+     * @return array
+     */
+    private function includeArray(array $includes): array
+    {
+        $includeArray = [];
+
+        foreach (array_unique($includes) as $include) {
+            switch ($include) {
+                case 'shows':
+                    $includeArray['anime'] = function ($query) {
+                        $query->with(['genres', 'languages', 'latestAiredEpisode', 'media', 'mediaStat', 'mediaType', 'nextEpisode', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+                            ->when(auth()->user(), function ($query, $user) {
+                                $query->with(['mediaRatings' => function ($query) use ($user) {
+                                    $query->where([
+                                        ['user_id', '=', $user->id]
+                                    ]);
+                                }, 'library' => function ($query) use ($user) {
+                                    $query->where('user_id', '=', $user->id);
+                                }])
+                                    ->withExists([
+                                        'favoriters as isFavorited' => function ($query) use ($user) {
+                                            $query->where('user_id', '=', $user->id);
+                                        },
+                                        'reminderers as isReminded' => function ($query) use ($user) {
+                                            $query->where('user_id', '=', $user->id);
+                                        },
+                                    ]);
+                            })
+                            ->limit(Song::MAXIMUM_RELATIONSHIPS_LIMIT);
+                    };
+                    break;
+            }
+        }
+
+        return $includeArray;
     }
 
     /**

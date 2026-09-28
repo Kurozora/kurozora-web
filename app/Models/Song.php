@@ -48,6 +48,9 @@ class Song extends KModel implements HasMedia, Sitemapable
         mediaRatings as protected parentMediaRatings;
     }
 
+    // Maximum relationships fetch limit
+    const int MAXIMUM_RELATIONSHIPS_LIMIT = 10;
+
     // Table name
     const string TABLE_NAME = 'songs';
     protected $table = self::TABLE_NAME;

@@ -605,6 +605,27 @@ class GameController extends Controller
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $mediaSongs->nextPageUrl() ?? '');
 
+        $includeInput = $request->input('include');
+        $includes = is_string($includeInput) ? explode(',', $includeInput) : (is_array($includeInput) ? $includeInput : []);
+
+        if (in_array('shows', $includes)) {
+            $game->load(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+                ->when(auth()->user(), function ($query, $user) use ($game) {
+                    $game->load(['mediaRatings' => function ($query) use ($user) {
+                        $query->where([
+                            ['user_id', '=', $user->id]
+                        ]);
+                    }, 'library' => function ($query) use ($user) {
+                        $query->where('user_id', '=', $user->id);
+                    }])
+                        ->loadExists([
+                            'favoriters as isFavorited' => function ($query) use ($user) {
+                                $query->where('user_id', '=', $user->id);
+                            }
+                        ]);
+                });
+        }
+
         // Set model relation
         $mediaSongs->each(function ($song) use ($game) {
             $song->setRelation('model', $game);
