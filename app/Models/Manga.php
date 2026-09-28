@@ -36,7 +36,6 @@ use App\Traits\SearchFilterable;
 use Carbon\Carbon;
 use Carbon\CarbonInterface;
 use Carbon\CarbonInterval;
-use Carbon\Exceptions\InvalidFormatException;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -519,30 +518,6 @@ class Manga extends KModel implements HasMedia, Sitemapable
             ->setTimeFromTimeString($this->publication_time ?? '09:00');
 
         return DayOfWeek::fromValue($publicationDate->inUserTimezone()->dayOfWeek);
-    }
-
-    /**
-     * The publication time of the manga in UTC timezone.
-     *
-     * @return string|null
-     */
-    public function getPublicationTimeUtcAttribute(): ?string
-    {
-        if ($this->publication_time == '00:00:00' || $this->publication_time == '00:00') {
-            return null;
-        }
-
-        try {
-            $publicationTime = Carbon::createFromFormat('H:i:s', $this->publication_time, 'Asia/Tokyo');
-        } catch (InvalidFormatException $invalidFormatException) {
-            try {
-                $publicationTime = Carbon::createFromFormat('H:i', $this->publication_time, 'Asia/Tokyo');
-            } catch (InvalidFormatException $invalidFormatException) {
-                return null;
-            }
-        }
-
-        return $publicationTime->timezone('UTC')->format('H:i');
     }
 
     /**

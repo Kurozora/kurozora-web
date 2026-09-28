@@ -39,7 +39,6 @@ use App\Traits\SearchFilterable;
 use Carbon\Carbon;
 use Carbon\CarbonInterface;
 use Carbon\CarbonInterval;
-use Carbon\Exceptions\InvalidFormatException;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -382,30 +381,6 @@ class Anime extends KModel implements HasMedia, Sitemapable
             ->setTimeFromTimeString($this->air_time ?? '09:00');
 
         return DayOfWeek::fromValue($airDate->inUserTimezone()->dayOfWeek);
-    }
-
-    /**
-     * The air time of the anime in UTC timezone.
-     *
-     * @return string|null
-     */
-    public function getAirTimeUtcAttribute(): ?string
-    {
-        if ($this->air_time == '00:00:00' || $this->air_time == '00:00') {
-            return null;
-        }
-
-        try {
-            $airTime = Carbon::createFromFormat('H:i:s', $this->air_time, 'Asia/Tokyo');
-        } catch (InvalidFormatException $invalidFormatException) {
-            try {
-                $airTime = Carbon::createFromFormat('H:i', $this->air_time, 'Asia/Tokyo');
-            } catch (InvalidFormatException $invalidFormatException) {
-                return null;
-            }
-        }
-
-        return $airTime->timezone('UTC')->format('H:i');
     }
 
     /**
