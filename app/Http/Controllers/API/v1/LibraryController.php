@@ -906,6 +906,11 @@ class LibraryController extends Controller
             Manga::class => $trackable->publication_date?->timestamp,
             default => null,
         };
+        $airTime = match ($morphClass) {
+            Anime::class => $trackable->air_time,
+            Manga::class => $trackable->publication_time,
+            default => null,
+        };
         $scheduleDay = match ($morphClass) {
             Anime::class => $trackable->local_air_day,
             default => $trackable->local_publication_day,
@@ -944,6 +949,7 @@ class LibraryController extends Controller
             'statusID' => $trackable->status_id !== null ? (int) $trackable->status_id : null,
             'statusName' => $trackable->status?->name,
             'airingDate' => $airingDate,
+            'airTime' => $airTime,
             'durationCount' => $trackable->duration,
             'popularityRank' => $trackable->mediaStat?->rank_total,
             'publicRating' => $trackable->mediaStat?->rating_average !== null ? (float) $trackable->mediaStat->rating_average : null,
