@@ -64,6 +64,16 @@ class Details extends Component
     }
 
     /**
+     * The models shown in each explore category.
+     *
+     * @return Collection
+     */
+    function getExploreCategoryItemsProperty(): Collection
+    {
+        return ExploreCategory::itemsFor(collect($this->exploreCategories), $this->genre);
+    }
+
+    /**
      * Render the component.
      *
      * @return Application|Factory|View

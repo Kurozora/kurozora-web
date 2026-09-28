@@ -51,7 +51,7 @@
                     </section>
                     @break
                 @default
-                    <x-explore-category-section :explore-category="$exploreCategory" :genre="$genre" />
+                    <x-explore-category-section :explore-category="$exploreCategory" :genre="$genre" :items="$this->exploreCategoryItems[$exploreCategory->id] ?? null" />
                 @endswitch
             @endforeach
         </section>
