@@ -1,7 +1,7 @@
-@props(['exploreCategory', 'genre' => null, 'theme' => null])
+@props(['exploreCategory', 'genre' => null, 'theme' => null, 'items' => null])
 
 @php
-    $exploreCategoryItems = $exploreCategory->items($genre ?? $theme);
+    $exploreCategoryItems = $items ?? $exploreCategory->items($genre ?? $theme);
 @endphp
 
 <div data-explore-section>

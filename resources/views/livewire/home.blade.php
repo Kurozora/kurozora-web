@@ -155,7 +155,7 @@
                     @break
                 @default
                     <section>
-                        <x-explore-category-section :explore-category="$exploreCategory" />
+                        <x-explore-category-section :explore-category="$exploreCategory" :items="$this->exploreCategoryItems[$exploreCategory->id] ?? null" />
                     </section>
                 @endswitch
             @endforeach

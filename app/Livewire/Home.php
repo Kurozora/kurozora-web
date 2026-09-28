@@ -35,6 +35,16 @@ class Home extends Component
     }
 
     /**
+     * The models shown in each explore category.
+     *
+     * @return Collection
+     */
+    public function getExploreCategoryItemsProperty(): Collection
+    {
+        return ExploreCategory::itemsFor($this->exploreCategories);
+    }
+
+    /**
      * Get the list of users.
      *
      * @return User[]|\Illuminate\Database\Eloquent\Collection

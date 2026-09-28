@@ -6,6 +6,7 @@ use App\Enums\ExploreCategoryTypes;
 use App\Scopes\ExploreCategoryIsEnabledScope;
 use App\Traits\Model\HasSlug;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Collection;
@@ -136,39 +137,94 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
     }
 
     /**
-     * Returns the models shown in the category.
+     * The relations each listed model needs to render.
      *
+     * @var array
+     */
+    public const array ITEM_RELATIONS = [
+        Anime::class => ['genres', 'media', 'mediaStat', 'themes', 'translation', 'tvRating'],
+        Game::class => ['genres', 'media', 'mediaStat', 'themes', 'translation', 'tvRating'],
+        Manga::class => ['genres', 'media', 'mediaStat', 'themes', 'translation', 'tvRating'],
+        Genre::class => ['media'],
+        Theme::class => ['media'],
+        MediaSong::class => ['song.media', 'model.translation'],
+    ];
+
+    /**
+     * Returns the models shown in each category.
+     *
+     * @param Collection       $exploreCategories
      * @param Genre|Theme|null $genreOrTheme
      *
      * @return Collection
      */
-    public function items(Genre|Theme|null $genreOrTheme = null): Collection
+    public static function itemsFor(Collection $exploreCategories, Genre|Theme|null $genreOrTheme = null): Collection
+    {
+        $itemsByCategory = $exploreCategories->mapWithKeys(function (ExploreCategory $exploreCategory) use ($genreOrTheme) {
+            return [$exploreCategory->id => $exploreCategory->items($genreOrTheme, false)];
+        });
+
+        $user = auth()->user();
+
+        $itemsByCategory->flatten()
+            ->groupBy(fn ($model) => $model::class)
+            ->each(function (Collection $models, string $class) use ($user) {
+                $relations = static::ITEM_RELATIONS[$class] ?? null;
+
+                if ($relations === null) {
+                    return;
+                }
+
+                if ($user !== null && in_array($class, [Anime::class, Game::class, Manga::class], true)) {
+                    $relations['library'] = function ($query) use ($user) {
+                        $query->where('user_id', '=', $user->id);
+                    };
+                }
+
+                EloquentCollection::make($models->all())->loadMissing($relations);
+            });
+
+        return $itemsByCategory;
+    }
+
+    /**
+     * Returns the models shown in the category.
+     *
+     * @param Genre|Theme|null $genreOrTheme
+     * @param bool             $withRelations
+     *
+     * @return Collection
+     */
+    public function items(Genre|Theme|null $genreOrTheme = null, bool $withRelations = true): Collection
     {
         $exploreCategory = match ($this->type) {
-            ExploreCategoryTypes::MostPopularShows => $this->mostPopular(Anime::class, $genreOrTheme),
-            ExploreCategoryTypes::UpcomingShows => $this->upcoming(Anime::class, $genreOrTheme),
-            ExploreCategoryTypes::NewShows => $this->recentlyAdded(Anime::class, $genreOrTheme),
-            ExploreCategoryTypes::RecentlyUpdateShows => $this->recentlyUpdated(Anime::class, $genreOrTheme),
-            ExploreCategoryTypes::RecentlyFinishedShows => $this->recentlyFinished(Anime::class, $genreOrTheme),
-            ExploreCategoryTypes::ContinuingShows => $this->ongoing(Anime::class, $genreOrTheme),
-            ExploreCategoryTypes::ShowsSeason => $this->currentSeason(Anime::class, $genreOrTheme),
-            ExploreCategoryTypes::MostPopularLiteratures => $this->mostPopular(Manga::class, $genreOrTheme),
-            ExploreCategoryTypes::UpcomingLiteratures => $this->upcoming(Manga::class, $genreOrTheme),
-            ExploreCategoryTypes::NewLiteratures => $this->recentlyAdded(Manga::class, $genreOrTheme),
-            ExploreCategoryTypes::RecentlyUpdateLiteratures => $this->recentlyUpdated(Manga::class, $genreOrTheme),
-            ExploreCategoryTypes::RecentlyFinishedLiteratures => $this->recentlyFinished(Manga::class, $genreOrTheme),
-            ExploreCategoryTypes::ContinuingLiteratures => $this->ongoing(Manga::class, $genreOrTheme),
-            ExploreCategoryTypes::LiteraturesSeason => $this->currentSeason(Manga::class, $genreOrTheme),
-            ExploreCategoryTypes::MostPopularGames => $this->mostPopular(Game::class, $genreOrTheme),
-            ExploreCategoryTypes::UpcomingGames => $this->upcoming(Game::class, $genreOrTheme),
-            ExploreCategoryTypes::NewGames => $this->recentlyAdded(Game::class, $genreOrTheme),
-            ExploreCategoryTypes::RecentlyUpdateGames => $this->recentlyUpdated(Game::class, $genreOrTheme),
-            ExploreCategoryTypes::GamesSeason => $this->currentSeason(Game::class, $genreOrTheme),
+            ExploreCategoryTypes::MostPopularShows => $this->mostPopular(Anime::class, $genreOrTheme, 10, $withRelations),
+            ExploreCategoryTypes::UpcomingShows => $this->upcoming(Anime::class, $genreOrTheme, 10, $withRelations),
+            ExploreCategoryTypes::NewShows => $this->recentlyAdded(Anime::class, $genreOrTheme, 10, $withRelations),
+            ExploreCategoryTypes::RecentlyUpdateShows => $this->recentlyUpdated(Anime::class, $genreOrTheme, 10, $withRelations),
+            ExploreCategoryTypes::RecentlyFinishedShows => $this->recentlyFinished(Anime::class, $genreOrTheme, 10, $withRelations),
+            ExploreCategoryTypes::ContinuingShows => $this->ongoing(Anime::class, $genreOrTheme, 10, $withRelations),
+            ExploreCategoryTypes::ShowsSeason => $this->currentSeason(Anime::class, $genreOrTheme, 10, $withRelations),
+            ExploreCategoryTypes::MostPopularLiteratures => $this->mostPopular(Manga::class, $genreOrTheme, 10, $withRelations),
+            ExploreCategoryTypes::UpcomingLiteratures => $this->upcoming(Manga::class, $genreOrTheme, 10, $withRelations),
+            ExploreCategoryTypes::NewLiteratures => $this->recentlyAdded(Manga::class, $genreOrTheme, 10, $withRelations),
+            ExploreCategoryTypes::RecentlyUpdateLiteratures => $this->recentlyUpdated(Manga::class, $genreOrTheme, 10, $withRelations),
+            ExploreCategoryTypes::RecentlyFinishedLiteratures => $this->recentlyFinished(Manga::class, $genreOrTheme, 10, $withRelations),
+            ExploreCategoryTypes::ContinuingLiteratures => $this->ongoing(Manga::class, $genreOrTheme, 10, $withRelations),
+            ExploreCategoryTypes::LiteraturesSeason => $this->currentSeason(Manga::class, $genreOrTheme, 10, $withRelations),
+            ExploreCategoryTypes::MostPopularGames => $this->mostPopular(Game::class, $genreOrTheme, 10, $withRelations),
+            ExploreCategoryTypes::UpcomingGames => $this->upcoming(Game::class, $genreOrTheme, 10, $withRelations),
+            ExploreCategoryTypes::NewGames => $this->recentlyAdded(Game::class, $genreOrTheme, 10, $withRelations),
+            ExploreCategoryTypes::RecentlyUpdateGames => $this->recentlyUpdated(Game::class, $genreOrTheme, 10, $withRelations),
+            ExploreCategoryTypes::GamesSeason => $this->currentSeason(Game::class, $genreOrTheme, 10, $withRelations),
             ExploreCategoryTypes::Characters => $this->charactersBornToday(),
             ExploreCategoryTypes::UpNextEpisodes => $this->upNextEpisodes(),
             ExploreCategoryTypes::People => $this->peopleBornToday(),
             ExploreCategoryTypes::ReCAP => $this->reCAP(),
-            default => $this->load([
+            default => !$withRelations ? $this->load(array_filter([
+                'exploreCategoryItems.model',
+                $this->type === ExploreCategoryTypes::Songs ? 'exploreCategoryItems.model.model' : null,
+            ])) : $this->load([
                 'exploreCategoryItems.model' => function (MorphTo $morphTo) {
                     $morphTo->constrain([
                         Anime::class => function (Builder $query) {
