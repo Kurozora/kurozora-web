@@ -48,6 +48,7 @@ class ExploreCategoryController extends Controller
                                 },
                                 'model' => function ($query) {
                                     $query->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+                                        ->morphWith([Anime::class => ['latestAiredEpisode', 'nextEpisode']])
                                         ->when(auth()->user(), function ($query, $user) {
                                             $query->with(['mediaRatings' => function ($query) use ($user) {
                                                 $query->where([
@@ -118,6 +119,7 @@ class ExploreCategoryController extends Controller
                                     },
                                     'model' => function ($query) {
                                         $query->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+                                            ->morphWith([Anime::class => ['latestAiredEpisode', 'nextEpisode']])
                                             ->when(auth()->user(), function ($query, $user) {
                                                 $query->with(['mediaRatings' => function ($query) use ($user) {
                                                     $query->where([
@@ -212,6 +214,7 @@ class ExploreCategoryController extends Controller
                                 },
                                 'model' => function ($query) {
                                     $query->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+                                        ->morphWith([Anime::class => ['latestAiredEpisode', 'nextEpisode']])
                                         ->when(auth()->user(), function ($query, $user) {
                                             $query->with(['mediaRatings' => function ($query) use ($user) {
                                                 $query->where([

@@ -155,7 +155,7 @@ class SongController extends Controller
 
         // Get the anime
         $animes = $song->anime()
-            ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+            ->with(['genres', 'languages', 'latestAiredEpisode', 'media', 'mediaStat', 'mediaType', 'nextEpisode', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
             ->when(auth()->user(), function ($query, $user) {
                 $query->with(['mediaRatings' => function ($query) use ($user) {
                     $query->where([

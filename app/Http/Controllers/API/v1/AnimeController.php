@@ -147,10 +147,13 @@ class AnimeController extends Controller
         $includes = is_string($includeInput) ? explode(',', $includeInput) : (is_array($includeInput) ? $includeInput : []);
         sort($includes);
 
+        $anime->load(['latestAiredEpisode', 'nextEpisode']);
+
         $fingerprint = [
             'kind' => 'anime',
             'publicId' => $anime->public_id,
             'updatedAt' => optional($anime->updated_at)->toIso8601String(),
+            'nextBroadcastAt' => $anime->broadcast_date?->timestamp,
             'locale' => app()->getLocale(),
             'tvRating' => (int) $request->attributes->get('tvRating', 4),
             'include' => $includes,
@@ -208,7 +211,7 @@ class AnimeController extends Controller
                             $query->with([
                                 'related' => function ($query) use ($anime) {
                                     $anime->viewableViaParent($query)
-                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin']);
+                                        ->with(['genres', 'languages', 'latestAiredEpisode', 'media', 'mediaStat', 'mediaType', 'nextEpisode', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin']);
                                 },
                                 'relation',
                             ])
@@ -290,7 +293,7 @@ class AnimeController extends Controller
         $data = $request->validated();
 
         $anime = Anime::whereIn('id', $data['ids'] ?? []);
-        $anime->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+        $anime->with(['genres', 'languages', 'latestAiredEpisode', 'media', 'mediaStat', 'mediaType', 'nextEpisode', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
             ->when(auth()->user(), function ($query, $user) use ($anime) {
                 $anime->with(['mediaRatings' => function ($query) use ($user) {
                     $query->where([
@@ -334,7 +337,7 @@ class AnimeController extends Controller
                             $query->with([
                                 'related' => function ($query) use ($anime) {
                                     $anime->viewableViaParent($query)
-                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin']);
+                                        ->with(['genres', 'languages', 'latestAiredEpisode', 'media', 'mediaStat', 'mediaType', 'nextEpisode', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin']);
                                 },
                                 'relation',
                             ])
@@ -515,7 +518,7 @@ class AnimeController extends Controller
             ->with([
                 'related' => function ($query) use ($anime) {
                     $anime->viewableViaParent($query)
-                        ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+                        ->with(['genres', 'languages', 'latestAiredEpisode', 'media', 'mediaStat', 'mediaType', 'nextEpisode', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
                         ->when(auth()->user(), function ($query, $user) {
                             $query->with(['mediaRatings' => function ($query) use ($user) {
                                 $query->where([

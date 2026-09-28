@@ -99,6 +99,9 @@ class UserFavoriteController extends Controller
             }, 'library' => function ($query) use ($user) {
                 $query->where('user_id', '=', $user->id);
             }])
+            ->when($morphClass === Anime::class, function ($query) {
+                $query->with(['latestAiredEpisode', 'nextEpisode']);
+            })
             ->withExists([
                 'favoriters as isFavorited' => function ($query) use ($user) {
                     $query->where('user_id', '=', $user->id);

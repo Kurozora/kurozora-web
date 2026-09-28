@@ -538,6 +538,15 @@ class Manga extends KModel implements HasMedia, Sitemapable
             return null;
         }
 
+        if ($this->started_at) {
+            $premiereDate = Carbon::parse($this->started_at->toDateString(), 'Asia/Tokyo')
+                ->setTimeFromTimeString($publicationTime ?? '00:00');
+
+            if ($premiereDate->isFuture()) {
+                return $premiereDate->inUserTimezone();
+            }
+        }
+
         $publicationDate = now('Asia/Tokyo')
             ->setTimeFromTimeString($publicationTime ?? '00:00');
 
@@ -572,9 +581,8 @@ class Manga extends KModel implements HasMedia, Sitemapable
     public function getTimeUntilPublicationAttribute(): string
     {
         if ($publicationDate = $this->publication_date) {
-            $publication = $publicationDate->englishDayOfWeek . ' at ' . $publicationDate->format('H:i e');
             return Carbon::now()->inUserTimezone()
-                ->until($publication, CarbonInterface::DIFF_RELATIVE_TO_NOW, true, 3);
+                ->until($publicationDate, CarbonInterface::DIFF_RELATIVE_TO_NOW, true, 3);
         }
 
         return '';

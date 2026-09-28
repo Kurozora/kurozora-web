@@ -138,6 +138,8 @@ class Details extends Component
             'status',
             'tvRating',
             'countryOfOrigin',
+            'latestAiredEpisode',
+            'nextEpisode.translation',
             'studios' => function (BelongsToMany $query) {
                 $query->withoutGlobalScopes()
                     ->orderByRaw('CASE WHEN is_studio = true THEN 0 ELSE 1 END')

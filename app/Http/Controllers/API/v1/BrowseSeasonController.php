@@ -51,6 +51,9 @@ class BrowseSeasonController extends Controller
         };
 
         $items = $model::with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+            ->when($model === Anime::class, function ($query) {
+                $query->with(['latestAiredEpisode', 'nextEpisode']);
+            })
             ->when(auth()->user(), function ($query, $user) use ($model) {
                 $query->with([
                     'mediaRatings' => fn($q) => $q->where('user_id', $user->id),

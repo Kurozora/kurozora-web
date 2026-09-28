@@ -7,6 +7,7 @@ use App\Enums\DayOfWeek;
 use App\Enums\MediaCollection;
 use App\Enums\SeasonOfYear;
 use App\Enums\UserLibraryStatus;
+use App\Scopes\TvRatingScope;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\Actionable;
 use App\Traits\Model\Favorable;
@@ -47,6 +48,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Scout\Searchable;
@@ -334,23 +336,27 @@ class Anime extends KModel implements HasMedia, Sitemapable
      */
     public function getBroadcastDateAttribute(): ?Carbon
     {
-        $airDay = $this->air_day?->value;
-        $airTime = $this->air_time;
-
-        if (is_null($airDay) && empty($airTime)) {
-            return null;
+        if ($nextEpisode = $this->nextEpisode) {
+            return $nextEpisode->started_at->copy()->inUserTimezone();
         }
 
-        $broadcastDate = now('Asia/Tokyo')
-            ->setTimeFromTimeString($airTime ?? '00:00');
+        if ($this->started_at) {
+            $premiereDate = Carbon::parse($this->started_at->toDateString(), 'Asia/Tokyo')
+                ->setTimeFromTimeString($this->air_time ?? '00:00');
 
-        if ($broadcastDate->dayOfWeek !== (int) $airDay || $broadcastDate->isPast()) {
-            $broadcastDate = now('Asia/Tokyo')
-                ->next((int) $airDay)
-                ->setTimeFromTimeString($airTime ?? '00:00');
+            if ($premiereDate->isFuture()) {
+                return $premiereDate->inUserTimezone();
+            }
         }
 
-        return $broadcastDate->inUserTimezone();
+        if ($this->status_id === 3 && ($latestAiredEpisode = $this->latestAiredEpisode)) {
+            $latestAiredAt = $latestAiredEpisode->started_at->copy();
+
+            return $latestAiredAt->addWeeks((int) floor($latestAiredAt->diffInWeeks()) + 1)
+                ->inUserTimezone();
+        }
+
+        return null;
     }
 
     /**
@@ -375,9 +381,8 @@ class Anime extends KModel implements HasMedia, Sitemapable
     public function getTimeUntilBroadcastAttribute(): string
     {
         if ($broadcastDate = $this->broadcast_date) {
-            $broadcast = $broadcastDate->englishDayOfWeek . ' at ' . $broadcastDate->format('H:i e');
             return Carbon::now()->inUserTimezone()
-                ->until($broadcast, CarbonInterface::DIFF_RELATIVE_TO_NOW, true, 3);
+                ->until($broadcastDate, CarbonInterface::DIFF_RELATIVE_TO_NOW, true, 3);
         }
 
         return '';
@@ -482,6 +487,34 @@ class Anime extends KModel implements HasMedia, Sitemapable
     {
         return $this->hasManyThrough(Episode::class, Season::class, 'anime_id', 'season_id')
             ->withoutGlobalScopes();
+    }
+
+    /**
+     * The anime's next episode to air.
+     *
+     * @return HasOneThrough
+     */
+    public function nextEpisode(): HasOneThrough
+    {
+        return $this->hasOneThrough(Episode::class, Season::class, 'anime_id', 'season_id')
+            ->withoutGlobalScope(TvRatingScope::class)
+            ->ofMany(['started_at' => 'min', 'id' => 'min'], function (Builder $query) {
+                $query->where(Episode::TABLE_NAME . '.started_at', '>', now());
+            });
+    }
+
+    /**
+     * The anime's most recently aired episode.
+     *
+     * @return HasOneThrough
+     */
+    public function latestAiredEpisode(): HasOneThrough
+    {
+        return $this->hasOneThrough(Episode::class, Season::class, 'anime_id', 'season_id')
+            ->withoutGlobalScope(TvRatingScope::class)
+            ->ofMany(['started_at' => 'max', 'id' => 'max'], function (Builder $query) {
+                $query->where(Episode::TABLE_NAME . '.started_at', '<=', now());
+            });
     }
 
     /**

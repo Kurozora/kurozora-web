@@ -121,6 +121,9 @@ class LibraryController extends Controller
                     ]);
                 },
             ])
+            ->when($morphClass === Anime::class, function ($query) {
+                $query->with(['latestAiredEpisode', 'nextEpisode']);
+            })
             ->wherePivot('status', '=', $userLibraryStatus->value)
             ->withExists([
                 'favoriters as isFavorited' => function ($query) use ($morphClass, $user) {
@@ -322,6 +325,9 @@ class LibraryController extends Controller
 
         $query = $morphClass::withoutGlobalScopes()
             ->with(['translation', 'media', 'genres', 'status', 'mediaType', 'mediaStat'])
+            ->when($morphClass === Anime::class, function ($query) {
+                $query->with(['latestAiredEpisode', 'nextEpisode']);
+            })
             ->whereIn($table . '.id', function ($sub) use ($libraryTable, $morphClass, $user) {
                 $sub->select('trackable_id')
                     ->from($libraryTable)
@@ -351,6 +357,9 @@ class LibraryController extends Controller
             $models = $models->concat(
                 $morphClass::withoutGlobalScopes()
                     ->with(['translation', 'media', 'genres', 'status', 'mediaType', 'mediaStat'])
+                    ->when($morphClass === Anime::class, function ($query) {
+                        $query->with(['latestAiredEpisode', 'nextEpisode']);
+                    })
                     ->whereIn($table . '.id', $gapIDs)
                     ->get()
             );

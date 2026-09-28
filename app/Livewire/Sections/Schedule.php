@@ -92,7 +92,7 @@ class Schedule extends Component
             ]
         ])
             ->select(Anime::TABLE_NAME . '.*')
-            ->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tvRating'])
+            ->with(['genres', 'latestAiredEpisode', 'media', 'mediaStat', 'nextEpisode', 'themes', 'translation', 'tvRating'])
             ->when(auth()->user(), function ($query, $user) {
                 $query->with(['library' => function ($query) use ($user) {
                     $query->where('user_id', '=', $user->id);

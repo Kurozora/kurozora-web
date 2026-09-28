@@ -94,7 +94,7 @@ class ScheduleController extends Controller
         return Anime::withSchedule($dateRanges)
             ->select([Anime::TABLE_NAME . '.*', DB::raw('DATE(' . Episode::TABLE_NAME . '.started_at) as grouping_date')])
             ->groupBy('grouping_date') // scope already includes grouping on id
-            ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+            ->with(['genres', 'languages', 'latestAiredEpisode', 'media', 'mediaStat', 'mediaType', 'nextEpisode', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
             ->when(auth()->user(), function ($query, $user) {
                 $query->with([
                     'mediaRatings' => fn($q) => $q->where('user_id', $user->id),
