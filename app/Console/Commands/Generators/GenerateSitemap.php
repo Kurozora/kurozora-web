@@ -105,7 +105,7 @@ class GenerateSitemap extends Command
     /**
      * Source definitions for every sitemap stream.
      *
-     * @return array<class-string<Model>, array{streams: array<string, string>, select: array<int, string>, soft_deletes: bool}>
+     * @return array<class-string<Model>, array>
      */
     private function sourceDefinitions(): array
     {
@@ -118,8 +118,9 @@ class GenerateSitemap extends Command
                     'anime_staff'     => 'anime.staff',
                     'anime_studios'   => 'anime.studios',
                 ],
-                'select'       => ['id', 'slug', 'updated_at'],
-                'soft_deletes' => true,
+                'select'         => ['id', 'slug', 'updated_at'],
+                'soft_deletes'   => true,
+                'aired_episodes' => true,
             ],
             Manga::class => [
                 'streams' => [
@@ -198,9 +199,9 @@ class GenerateSitemap extends Command
     /**
      * Generate every shard for a source.
      *
-     * @param class-string<Model>                                                                   $modelClass
-     * @param array{streams: array<string, string>, select: array<int, string>, soft_deletes: bool} $config
-     * @param bool                                                                                  $force
+     * @param class-string<Model> $modelClass
+     * @param array               $config
+     * @param bool                $force
      *
      * @return array<int, array{loc: string, lastmod: CarbonInterface}>
      * @throws ConnectionException
@@ -232,6 +233,10 @@ class GenerateSitemap extends Command
             $gate = $this->runGateQuery($modelClass, $config, $rangeStart, $rangeEnd);
             $rowCount   = (int) $gate->row_count;
             $maxUpdated = $gate->max_updated_at !== null ? Carbon::parse($gate->max_updated_at) : null;
+
+            if (!empty($config['aired_episodes']) && ($maxAiredAt = $this->maxAiredAt($rangeStart, $rangeEnd))) {
+                $maxUpdated = $maxUpdated?->max($maxAiredAt) ?? $maxAiredAt;
+            }
 
             $stored = SitemapShard::query()
                 ->where('source_table', $tableName)
@@ -266,6 +271,7 @@ class GenerateSitemap extends Command
                 ->withoutGlobalScopes()
                 ->whereBetween('id', [$rangeStart, $rangeEnd])
                 ->when($config['soft_deletes'], fn ($q) => $q->whereNull('deleted_at'))
+                ->when(!empty($config['aired_episodes']), fn ($q) => $q->with(['latestAiredEpisode']))
                 ->orderBy('id')
                 ->select($config['select'])
                 ->get();
@@ -273,10 +279,16 @@ class GenerateSitemap extends Command
             $streamXml = array_fill_keys(array_keys($config['streams']), $this->openUrlset());
 
             foreach ($rows as $row) {
+                $detailsLastmod = $row->updated_at;
+
+                if (!empty($config['aired_episodes']) && $row->latestAiredEpisode?->started_at->greaterThan($detailsLastmod)) {
+                    $detailsLastmod = $row->latestAiredEpisode->started_at;
+                }
+
                 foreach ($config['streams'] as $streamKey => $routeName) {
                     $streamXml[$streamKey] .= $this->urlElement(
                         route($routeName, $row),
-                        $row->updated_at,
+                        $streamKey === $tableName ? $detailsLastmod : $row->updated_at,
                     );
                 }
             }
@@ -312,10 +324,10 @@ class GenerateSitemap extends Command
     /**
      * The gate query for a shard.
      *
-     * @param class-string<Model>                                                                    $modelClass
-     * @param array{streams: array<string, string>, select: array<int, string>, soft_deletes: bool} $config
-     * @param int                                                                                    $rangeStart
-     * @param int                                                                                    $rangeEnd
+     * @param class-string<Model> $modelClass
+     * @param array               $config
+     * @param int                 $rangeStart
+     * @param int                 $rangeEnd
      *
      * @return Model
      */
@@ -327,6 +339,27 @@ class GenerateSitemap extends Command
             ->when($config['soft_deletes'], fn ($q) => $q->whereNull('deleted_at'))
             ->selectRaw('COUNT(*) AS row_count, MAX(updated_at) AS max_updated_at')
             ->first();
+    }
+
+    /**
+     * The most recent air date of the episodes of the anime in a shard.
+     *
+     * @param int $rangeStart
+     * @param int $rangeEnd
+     *
+     * @return ?CarbonInterface
+     */
+    private function maxAiredAt(int $rangeStart, int $rangeEnd): ?CarbonInterface
+    {
+        $maxAiredAt = Episode::withoutGlobalScopes()
+            ->join(Season::TABLE_NAME, Season::TABLE_NAME . '.id', '=', Episode::TABLE_NAME . '.season_id')
+            ->whereBetween(Season::TABLE_NAME . '.anime_id', [$rangeStart, $rangeEnd])
+            ->whereNull(Season::TABLE_NAME . '.deleted_at')
+            ->whereNull(Episode::TABLE_NAME . '.deleted_at')
+            ->where(Episode::TABLE_NAME . '.started_at', '<=', now())
+            ->max(Episode::TABLE_NAME . '.started_at');
+
+        return $maxAiredAt !== null ? Carbon::parse($maxAiredAt) : null;
     }
 
     /**
