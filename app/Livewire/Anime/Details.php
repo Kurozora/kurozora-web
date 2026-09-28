@@ -343,12 +343,40 @@ class Details extends Component
     }
 
     /**
+     * Whether the anime has an upcoming broadcast.
+     *
+     * @return bool
+     */
+    public function getHasUpcomingBroadcastProperty(): bool
+    {
+        return $this->anime->status_id !== 4 && !empty($this->anime->broadcast_date);
+    }
+
+    /**
+     * The title for this page.
+     *
+     * @return string
+     */
+    public function getPageTitleProperty(): string
+    {
+        if ($this->hasUpcomingBroadcast) {
+            return __(':x — Next Episode, Cast & Reviews', ['x' => $this->anime->title]);
+        }
+
+        return __(':x — Episodes, Cast & Reviews', ['x' => $this->anime->title]);
+    }
+
+    /**
      * The meta description for this page.
      *
      * @return string
      */
     public function getMetaDescriptionProperty(): string
     {
+        if ($this->hasUpcomingBroadcast) {
+            return __('Find the next :x episode release date, count down to air time, and track your progress. Plus, read the synopsis, check the cast, and browse reviews.', ['x' => $this->anime->title]);
+        }
+
         $facts = [];
 
         if ($this->anime->episode_count > 0) {
@@ -366,6 +394,20 @@ class Details extends Component
         $summary = array_filter([implode(' · ', $facts), $this->anime->synopsis]);
 
         return implode(' — ', $summary) ?: __('A community for anime fans with an extensive library of anime, manga, music, games, movies, specials, OVA, and ONA. Only on :x, the largest, free online anime, manga, game & music database in the world. Track, share and discover anime with friends.', ['x' => config('app.name')]);
+    }
+
+    /**
+     * The social preview description for this page.
+     *
+     * @return string
+     */
+    public function getSocialDescriptionProperty(): string
+    {
+        if ($this->hasUpcomingBroadcast) {
+            return $this->metaDescription;
+        }
+
+        return $this->anime->synopsis ?? __('A community for anime fans with an extensive library of anime, manga, music, games, movies, specials, OVA, and ONA. Only on :x, the largest, free online anime, manga, game & music database in the world. Track, share and discover anime with friends.', ['x' => config('app.name')]);
     }
 
     /**

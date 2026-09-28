@@ -1,6 +1,6 @@
 <main>
     <x-slot:title>
-        {!! __(':x — Episodes, Cast & Reviews', ['x' => $anime->title]) !!}
+        {!! $this->pageTitle !!}
     </x-slot:title>
 
     <x-slot:description>
@@ -8,8 +8,8 @@
     </x-slot:description>
 
     <x-slot:meta>
-        <meta property="og:title" content="{{ __(':x — Episodes, Cast & Reviews', ['x' => $anime->title]) }} — {{ config('app.name') }}" />
-        <meta property="og:description" content="{{ $anime->synopsis ?? __('A community for anime fans with an extensive library of anime, manga, music, games, movies, specials, OVA, and ONA. Only on :x, the largest, free online anime, manga, game & music database in the world. Track, share and discover anime with friends.', ['x' => config('app.name')]) }}" />
+        <meta property="og:title" content="{{ $this->pageTitle }} — {{ config('app.name') }}" />
+        <meta property="og:description" content="{{ $this->socialDescription }}" />
         <meta property="og:image" content="{{ $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="og:video" content="{{ $anime->video_url ?? '' }}" />
         <meta property="og:type" content="video.tv_show" />
@@ -18,8 +18,8 @@
         @foreach ($anime->tags() as $tag)
             <meta property="video:tag" content="{{ $tag->name }}" />
         @endforeach
-        <meta property="twitter:title" content="{{ __(':x — Episodes, Cast & Reviews', ['x' => $anime->title]) }} — {{ config('app.name') }}" />
-        <meta property="twitter:description" content="{{ $anime->synopsis }}" />
+        <meta property="twitter:title" content="{{ $this->pageTitle }} — {{ config('app.name') }}" />
+        <meta property="twitter:description" content="{{ $this->socialDescription }}" />
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:image" content="{{ $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="twitter:image:alt" content="{{ $anime->synopsis }}" />
@@ -212,7 +212,7 @@
                 </div>
             </section>
 
-            @if ($anime->status_id !== 4 && !empty($anime->broadcast_date))
+            @if ($this->hasUpcomingBroadcast)
                 <section id="countdown" class="pb-8 xl:safe-area-inset">
                     <x-countdown-bar
                         class="ml-4 mr-4"

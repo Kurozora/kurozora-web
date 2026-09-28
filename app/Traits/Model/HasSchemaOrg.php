@@ -123,6 +123,7 @@ trait HasSchemaOrg
             'contentRating' => $subject->tvRating?->name,
             'genre' => $subject->genres?->pluck('name')->values()->all() ?? [],
             'datePublished' => $this->schemaDatePublished()?->format('Y-m-d'),
+            'episode' => $this->schemaEpisode(),
             'keywords' => trim($this->schemaKeywordsPrefix() . ',' . ($subject->keywords ?? ''), ','),
         ];
 
@@ -224,6 +225,16 @@ trait HasSchemaOrg
     protected function schemaDatePublished(): ?CarbonInterface
     {
         return $this->started_at ?? null;
+    }
+
+    /**
+     * The next episode to air.
+     *
+     * @return ?array
+     */
+    protected function schemaEpisode(): ?array
+    {
+        return null;
     }
 
     /**

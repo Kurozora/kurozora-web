@@ -217,6 +217,40 @@ class Anime extends KModel implements HasMedia, Sitemapable
     }
 
     /**
+     * The next episode to air.
+     *
+     * @return ?array
+     */
+    protected function schemaEpisode(): ?array
+    {
+        if ($nextEpisode = $this->nextEpisode) {
+            return [
+                '@type' => 'TVEpisode',
+                'url' => route('episodes.details', $nextEpisode),
+                'name' => $nextEpisode->title,
+                'episodeNumber' => $nextEpisode->number_total,
+                'releasedEvent' => [
+                    '@type' => 'BroadcastEvent',
+                    'startDate' => $nextEpisode->started_at->toIso8601String(),
+                ],
+            ];
+        }
+
+        if (empty($this->latestAiredEpisode) && ($premiereDate = $this->broadcast_date)) {
+            return [
+                '@type' => 'TVEpisode',
+                'episodeNumber' => 1,
+                'releasedEvent' => [
+                    '@type' => 'BroadcastEvent',
+                    'startDate' => $premiereDate->toIso8601String(),
+                ],
+            ];
+        }
+
+        return null;
+    }
+
+    /**
      * The season in which the anime aired.
      *
      * @return ?int
