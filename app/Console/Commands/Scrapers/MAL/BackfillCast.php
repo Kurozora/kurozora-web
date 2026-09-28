@@ -9,6 +9,8 @@ use App\Models\Person;
 use App\Spiders\MAL\CastSpider;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Laravel\Telescope\Telescope;
 use Pulse;
 use RoachPHP\Roach;
@@ -24,7 +26,13 @@ class BackfillCast extends Command
     protected $signature = 'scrape:mal_backfill_cast
                             {model? : Limit to "anime" or "manga"; both when omitted}
                             {--limit= : Cap the number of titles scraped per model}
-                            {--all : Include titles that already have a cast}';
+                            {--all : Include titles that already have a cast}
+                            {--fresh : Include titles checked in the last 30 days}';
+
+    /**
+     * The number of days a checked title is skipped for.
+     */
+    private const int CHECKED_DAYS = 30;
 
     /**
      * The console command description.
@@ -49,6 +57,7 @@ class BackfillCast extends Command
 
         $limit = $this->option('limit') !== null ? (int) $this->option('limit') : null;
         $includesCast = $this->option('all');
+        $skipsChecked = !$this->option('fresh');
 
         // Backfills touch too many rows for monitoring or search indexing to be worth the overhead.
         Pulse::stopRecording();
@@ -60,24 +69,28 @@ class BackfillCast extends Command
 
         if ($model === null || $model === 'anime') {
             $count = $this->scrapeMissing(
+                'anime',
                 Anime::withoutGlobalScopes()->when(!$includesCast, function (Builder $query) {
                     $query->where(function (Builder $query) {
                         $query->doesntHave('cast')->orDoesntHave('mediaStaff');
                     });
                 }),
                 fn ($malID) => str(config('scraper.domains.mal.anime_characters'))->replace(':x', $malID)->value(),
-                $limit
+                $limit,
+                $skipsChecked
             );
             $this->info("Scraped $count anime.");
         }
 
         if ($model === null || $model === 'manga') {
             $count = $this->scrapeMissing(
+                'manga',
                 Manga::withoutGlobalScopes()->when(!$includesCast, function (Builder $query) {
                     $query->doesntHave('cast');
                 }),
                 fn ($malID) => str(config('scraper.domains.mal.manga_characters'))->replace(':x', $malID)->value(),
-                $limit
+                $limit,
+                $skipsChecked
             );
             $this->info("Scraped $count manga.");
         }
@@ -95,31 +108,57 @@ class BackfillCast extends Command
     /**
      * Scrape the characters page for titles matching the given query.
      *
+     * @param string   $model
      * @param Builder  $query
      * @param callable $urlFor
      * @param int|null $limit
+     * @param bool     $skipsChecked
      *
      * @return int
      */
-    private function scrapeMissing(Builder $query, callable $urlFor, ?int $limit): int
+    private function scrapeMissing(string $model, Builder $query, callable $urlFor, ?int $limit, bool $skipsChecked): int
     {
+        $cache = Cache::store('file');
         $malIDs = $query
             ->whereNull('deleted_at')
             ->whereNotNull('mal_id')
-            ->when($limit !== null, function (Builder $query) use ($limit) {
-                $query->limit($limit);
-            })
             ->orderBy('id')
-            ->pluck('mal_id');
+            ->pluck('mal_id')
+            ->when($skipsChecked, function (Collection $malIDs) use ($cache, $model) {
+                return $malIDs->reject(function ($malID) use ($cache, $model) {
+                    return $cache->has($this->checkedKey($model, $malID));
+                });
+            })
+            ->when($limit !== null, function (Collection $malIDs) use ($limit) {
+                return $malIDs->take($limit);
+            })
+            ->values();
 
         if ($malIDs->isEmpty()) {
             return 0;
         }
 
-        $urls = $malIDs->map($urlFor)->all();
-
-        Roach::startSpider(CastSpider::class, new Overrides(startUrls: $urls));
+        Roach::startSpider(CastSpider::class, new Overrides(startUrls: $malIDs->map($urlFor)->all()), [
+            'onParsed' => function (string $uri) use ($cache) {
+                if (preg_match('#/(anime|manga)/(\d+)/#', $uri, $matches)) {
+                    $cache->put($this->checkedKey($matches[1], $matches[2]), true, now()->addDays(self::CHECKED_DAYS));
+                }
+            },
+        ]);
 
         return $malIDs->count();
+    }
+
+    /**
+     * The cache key marking a title as checked.
+     *
+     * @param string     $model
+     * @param int|string $malID
+     *
+     * @return string
+     */
+    private function checkedKey(string $model, int|string $malID): string
+    {
+        return "scrape:mal_backfill_cast:$model:$malID";
     }
 }

@@ -80,5 +80,9 @@ class CastSpider extends BasicSpider
         } else {
             yield from $this->parseAnimeCharacters($response);
         }
+
+        if ($response->getStatus() === 200 && isset($this->context['onParsed'])) {
+            $this->context['onParsed']($response->getRequest()->getUri());
+        }
     }
 }
