@@ -4,7 +4,7 @@
     $exploreCategoryItems = $exploreCategory->items($genre ?? $theme);
 @endphp
 
-<div>
+<div data-explore-section>
     <div>
         @if ($exploreCategoryItems->count())
             <section class="pt-4 pb-8">
@@ -30,7 +30,7 @@
                             <x-spinner />
 
                             @hasrole('superAdmin')
-                                <x-button onclick="window.location.reload()">{{ __('Refresh') }}</x-button>
+                                <x-button data-explore-section-refresh="{{ route('explore.section', ['exploreCategory' => $exploreCategory, 'genre' => $genre?->slug, 'theme' => $theme?->slug], false) }}">{{ __('Refresh') }}</x-button>
                             @endhasrole
 
                             <x-section-nav-link href="{{ $exploreCategory->secondary_slug ? url($exploreCategory->secondary_slug) : route('explore.details', $exploreCategory) }}">{{ __('See All') }}</x-section-nav-link>
