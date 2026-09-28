@@ -1,8 +1,8 @@
-<div
+<div data-search-scope
     class="relative w-full"
     x-data="{
-        isSearchEnabled: @entangle('isSearchEnabled').live,
-        searchQuery: @entangle('searchQuery').live,
+        isSearchEnabled: false,
+        searchQuery: '',
         resetAndClose() {
             isSearchEnabled = false;
             this.searchQuery = '';
@@ -75,7 +75,7 @@
             name="q"
             placeholder="{{ [__('Search'), '⌘+K, ctrl+K or /'][array_rand([0,1])] }}"
             x-ref="search"
-            wire:model.live.debounce.500ms="searchQuery"
+            data-search-input
         />
 
         {{-- Close button --}}
@@ -104,57 +104,11 @@
         x-show="isSearchEnabled && searchQuery !== ''"
     >
         <div class="flex justify-center">
-            <x-spinner wire:target="searchQuery" />
+            <x-spinner data-search-spinner class="hidden" />
         </div>
 
-        @if (!empty($searchResults))
-            @foreach ($searchResults as $searchResult)
-                <x-search-header class="{{ $loop->first ? 'mt-0' : 'mt-6' }}">
-                    <x-slot:title>
-                        {{ $searchResult['title'] }}
-                    </x-slot:title>
-
-                    <x-slot:action>
-                        <x-section-nav-link href="{{ route('search.index', ['q' => $this->searchQuery, 'type' => $searchResult['search_type']]) }}">{{ __('See All') }}</x-section-nav-link>
-                    </x-slot:action>
-                </x-search-header>
-
-                <div class="mt-4">
-                    @switch($searchResult['type'])
-                        @case(\App\Models\Anime::TABLE_NAME)
-                            <x-rows.small-lockup :animes="$searchResult['results']" :safe-area-inset-enabled="false" />
-                            @break
-                        @case(\App\Models\Manga::TABLE_NAME)
-                            <x-rows.small-lockup :mangas="$searchResult['results']" :safe-area-inset-enabled="false" />
-                            @break
-                        @case(\App\Models\Game::TABLE_NAME)
-                            <x-rows.small-lockup :games="$searchResult['results']" :safe-area-inset-enabled="false" />
-                            @break
-                        @case(\App\Models\Episode::TABLE_NAME)
-                            <x-rows.episode-lockup :episodes="$searchResult['results']" :safe-area-inset-enabled="false" />
-                            @break
-                        @case(\App\Models\Character::TABLE_NAME)
-                            <x-rows.character-lockup :characters="$searchResult['results']" :safe-area-inset-enabled="false" />
-                            @break
-                        @case(\App\Models\Person::TABLE_NAME)
-                            <x-rows.person-lockup :people="$searchResult['results']" :safe-area-inset-enabled="false" />
-                            @break
-                        @case(\App\Models\Studio::TABLE_NAME)
-                            <x-rows.studio-lockup :studios="$searchResult['results']" :safe-area-inset-enabled="false" />
-                            @break
-                        @case(\App\Models\Song::TABLE_NAME)
-                            <x-rows.music-lockup :songs="$searchResult['results']" :safe-area-inset-enabled="false" />
-                            @break
-                        @case(\App\Models\User::TABLE_NAME)
-                            <x-rows.user-lockup :users="$searchResult['results']" :safe-area-inset-enabled="false" />
-                            @break
-                    @endswitch
-                </div>
-            @endforeach
-        @endif
-
-        @if (empty($searchResults) && !empty($searchQuery))
-            <p class="text-sm text-secondary text-center font-bold" wire:key="no-results-found">{{ __('No search results found :(') }}</p>
-        @endif
+        <div data-search-results>
+            @include('search.suggestions', ['quickLinks' => []])
+        </div>
     </div>
 </div>

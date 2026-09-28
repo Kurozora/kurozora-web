@@ -32,7 +32,7 @@
                     <p class="text-2xl font-bold">{{ config('app.name') }}</p>
                 </a>
 
-                <livewire:sidebar-search />
+                <x-sidebar-search />
             </div>
         </div>
 

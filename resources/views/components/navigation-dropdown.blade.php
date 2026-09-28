@@ -697,7 +697,7 @@
         </div>
 
         {{-- Nav Search --}}
-        <livewire:nav-search />
+        <x-nav-search />
     </div>
 
     {{-- Scroll Edge Effect --}}

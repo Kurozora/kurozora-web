@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Http\Controllers\Web;
 
 use App\Enums\SearchType;
+use App\Http\Controllers\Controller;
 use App\Models\Anime;
 use App\Models\Character;
 use App\Models\Episode;
@@ -17,16 +18,16 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
-use Livewire\Component;
+use Illuminate\Http\Request;
 
-class BaseSearch extends Component
+class SearchSuggestionsController extends Controller
 {
     /**
-     * The view to render.
+     * The search query.
      *
-     * @var string $view
+     * @var string $searchQuery
      */
-    protected string $view = 'livewire.base-search';
+    protected string $searchQuery = '';
 
     /**
      * The array of searchable models.
@@ -46,49 +47,27 @@ class BaseSearch extends Component
     ];
 
     /**
-     * The search query string.
+     * Show the search suggestions for a query.
      *
-     * @var string $searchQuery
-     */
-    public string $searchQuery = '';
-
-    /**
-     * Redirect the user to a random anime.
-     *
-     * @return void
-     */
-    public function randomAnime(): void
-    {
-        $this->redirect(route('anime.details', Anime::randomFirst()));
-    }
-
-    /**
-     * Redirect the user to a random manga.
-     *
-     * @return void
-     */
-    public function randomManga(): void
-    {
-        $this->redirect(route('manga.details', Manga::randomFirst()));
-    }
-
-    /**
-     * Redirect the user to a random game.
-     *
-     * @return void
-     */
-    public function randomGame(): void
-    {
-        $this->redirect(route('games.details', Game::randomFirst()));
-    }
-
-    /**
-     * Render the component.
+     * @param Request $request
      *
      * @return Application|Factory|View
      * @throws InvalidEnumKeyException
      */
-    public function render(): Application|Factory|View
+    public function index(Request $request): Application|Factory|View
+    {
+        $this->searchQuery = trim($request->string('q'));
+
+        return $this->render();
+    }
+
+    /**
+     * Render the suggestions.
+     *
+     * @return Application|Factory|View
+     * @throws InvalidEnumKeyException
+     */
+    protected function render(): Application|Factory|View
     {
         $searchResults = [];
 
@@ -124,7 +103,8 @@ class BaseSearch extends Component
                                     ->when(auth()->user(), function ($query, $user) {
                                         $query->withExists([
                                             'userWatchedEpisodes as isWatched' => function ($query) use ($user) {
-                                                $query->where('user_id', $user->id);
+                                                $query->where('user_id', $user->id)
+                                                    ->completed();
                                             },
                                         ]);
                                     });
@@ -159,34 +139,45 @@ class BaseSearch extends Component
             }
         }
 
-        return view($this->view, [
+        return view('search.suggestions', [
+            'searchQuery' => $this->searchQuery,
             'searchResults' => $searchResults,
-            'quickLinks' => [
-                [
-                    'title' => __('Random Anime'),
-                    'action' => 'randomAnime',
-                ],
-                [
-                    'title' => __('Random Manga'),
-                    'action' => 'randomManga',
-                ],
-                [
-                    'title' => __('Random Game'),
-                    'action' => 'randomGame',
-                ],
-                [
-                    'title' => __('About Kurozora+'),
-                    'link' => route('kb.iap'),
-                ],
-                [
-                    'title' => __('About Personalization'),
-                    'link' => route('kb.personalization'),
-                ],
-                [
-                    'title' => __('Welcome to Kurozora'),
-                    'link' => route('welcome'),
-                ],
-            ],
+            'quickLinks' => static::quickLinks(),
         ]);
+    }
+
+    /**
+     * The links offered before a query is entered.
+     *
+     * @return array
+     */
+    public static function quickLinks(): array
+    {
+        return [
+            [
+                'title' => __('Random Anime'),
+                'link' => route('random.anime'),
+            ],
+            [
+                'title' => __('Random Manga'),
+                'link' => route('random.manga'),
+            ],
+            [
+                'title' => __('Random Game'),
+                'link' => route('random.games'),
+            ],
+            [
+                'title' => __('About :x+', ['x' => config('app.name')]),
+                'link' => route('kb.iap'),
+            ],
+            [
+                'title' => __('About Personalization'),
+                'link' => route('kb.personalization'),
+            ],
+            [
+                'title' => __('Welcome to :x', ['x' => config('app.name')]),
+                'link' => route('welcome'),
+            ],
+        ];
     }
 }
