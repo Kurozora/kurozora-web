@@ -1,4 +1,4 @@
-<div data-section>
+<div data-section data-paginated="feed-messages">
     <section class="relative pb-6 mb-8 z-10">
         <x-section-nav class="flex flex-nowrap justify-between mb-5 xl:safe-area-inset-scroll">
             <x-slot:title>

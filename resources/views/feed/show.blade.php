@@ -64,7 +64,7 @@
             </section>
 
             @if ($replies->count())
-                <section class="mt-4 border-t border-primary">
+                <section class="mt-4 border-t border-primary" data-paginated="replies">
                     <div class="flex flex-col">
                         @foreach ($replies as $reply)
                             <x-feed.message-lockup :feed-message="$reply" />

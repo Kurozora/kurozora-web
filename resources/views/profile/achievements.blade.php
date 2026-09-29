@@ -35,7 +35,7 @@
             </section>
 
             @if ($achievements->count())
-                <section class="xl:safe-area-inset">
+                <section class="xl:safe-area-inset" data-paginated="achievements">
                     <div class="flex flex-wrap gap-4 justify-between pl-4 pr-4">
                         @foreach ($achievements as $achievement)
                            <x-lockups.achievement-lockup :achievement="$achievement" />

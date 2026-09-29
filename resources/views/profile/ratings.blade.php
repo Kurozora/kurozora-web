@@ -35,7 +35,7 @@
             </section>
 
             @if ($mediaRatings->count())
-                <section class="xl:safe-area-inset">
+                <section class="xl:safe-area-inset" data-paginated="ratings">
                     <x-rows.media-rating-lockup :media-ratings="$mediaRatings" :is-row="false" />
 
                     <div class="mt-4 pl-4 pr-4">

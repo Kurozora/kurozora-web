@@ -31,7 +31,7 @@
             </section>
 
             @if ($blockedUsers->count())
-                <section class="xl:safe-area-inset">
+                <section class="xl:safe-area-inset" data-paginated="blocked">
                     <div class="flex flex-wrap gap-4 justify-between pl-4 pr-4">
                         @foreach ($blockedUsers as $blockedUser)
                             <div

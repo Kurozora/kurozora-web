@@ -35,7 +35,7 @@
             </section>
 
             @if ($following->count())
-                <section class="xl:safe-area-inset">
+                <section class="xl:safe-area-inset" data-paginated="following">
                     <x-rows.user-lockup :users="$following" :is-row="false" />
 
                     <div class="mt-4 pl-4 pr-4">

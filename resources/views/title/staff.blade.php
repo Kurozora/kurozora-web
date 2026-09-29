@@ -44,7 +44,7 @@
             />
 
             @if ($mediaStaff->count())
-                <section class="xl:safe-area-inset">
+                <section class="xl:safe-area-inset" data-paginated="staff">
                     <x-rows.person-lockup :media-staff="$mediaStaff" :is-row="false" />
 
                     <div class="mt-4 pl-4 pr-4">

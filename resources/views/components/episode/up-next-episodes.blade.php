@@ -1,4 +1,4 @@
-<div data-section data-section-refresh-on="refresh-up-next-episodes" data-section-url="{{ $refreshUrl }}">
+<div data-section data-section-refresh-on="refresh-up-next-episodes" data-section-url="{{ $refreshUrl }}" data-paginated="episodes">
     @if ($episodes->count())
         <section id="up-next" class="mb-16 xl:safe-area-inset">
             <x-rows.episode-lockup :episodes="$episodes" :is-row="false" />

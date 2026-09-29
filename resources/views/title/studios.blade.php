@@ -44,7 +44,7 @@
             />
 
             @if ($studios->count())
-                <section class="xl:safe-area-inset">
+                <section class="xl:safe-area-inset" data-paginated="studios">
                     <x-rows.studio-lockup :studios="$studios" :is-row="false" />
 
                     <div class="mt-4 pl-4 pr-4">

@@ -1,6 +1,7 @@
 import './echo'
 import './bootstrap'
 import './section-refresh'
+import './pagination'
 import './alert'
 import './subscription-sheet'
 import './nav-notification'

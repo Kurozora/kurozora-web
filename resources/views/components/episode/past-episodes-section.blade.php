@@ -1,4 +1,4 @@
-<div data-section data-section-refresh-on="refresh-past-episodes" data-section-url="{{ $refreshUrl }}">
+<div data-section data-section-refresh-on="refresh-past-episodes" data-section-url="{{ $refreshUrl }}" data-paginated="past-episodes">
     <section class="mb-4 xl:safe-area-inset">
         <div>
             <div class="flex gap-1 pl-4 pr-4">

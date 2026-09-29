@@ -44,7 +44,7 @@
             />
 
             @if ($cast->count())
-                <section class="xl:safe-area-inset">
+                <section class="xl:safe-area-inset" data-paginated="cast">
                     @switch ($kind)
                         @case (\App\Enums\UserLibraryKind::Manga)
                             <x-rows.character-lockup :manga-casts="$cast" :is-row="false" />

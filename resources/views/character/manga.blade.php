@@ -28,7 +28,7 @@
                 :title="__(':x’s Mangas', ['x' => $character->name])"
             />
 
-            <section class="xl:safe-area-inset">
+            <section class="xl:safe-area-inset" data-paginated="titles">
                 <x-rows.small-lockup :mangas="$titles" :is-row="false" />
 
                 <div class="mt-4 pl-4 pr-4">

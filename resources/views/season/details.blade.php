@@ -30,7 +30,7 @@
             />
 
             @if ($seasons->count())
-                <section class="mt-4 xl:safe-area-inset">
+                <section class="mt-4 xl:safe-area-inset" data-paginated="seasons">
                     <div class="flex flex-wrap gap-4 justify-between pl-4 pr-4">
                         @foreach ($seasons as $season)
                             <x-lockups.season-lockup :season="$season" :isRow="false" />

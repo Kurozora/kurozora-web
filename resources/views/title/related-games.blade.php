@@ -43,7 +43,7 @@
                 :title="$heading"
             />
 
-            <section class="xl:safe-area-inset">
+            <section class="xl:safe-area-inset" data-paginated="relations">
                 <x-rows.small-lockup :related-games="$relations" :is-row="false" />
 
                 <div class="mt-4 pl-4 pr-4">

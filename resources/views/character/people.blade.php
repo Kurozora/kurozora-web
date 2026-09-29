@@ -28,7 +28,7 @@
                 :title="__(':x’s Voice Actors', ['x' => $character->name])"
             />
 
-            <section class="xl:safe-area-inset">
+            <section class="xl:safe-area-inset" data-paginated="people">
                 <x-rows.person-lockup :people="$people" :is-row="false" />
 
                 <div class="mt-4 pl-4 pr-4">
