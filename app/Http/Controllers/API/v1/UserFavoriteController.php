@@ -90,7 +90,8 @@ class UserFavoriteController extends Controller
                 $query->join(UserLibrary::TABLE_NAME, UserFavorite::TABLE_NAME . '.favorable_id', '=', UserLibrary::TABLE_NAME . '.trackable_id')
                     ->whereColumn(UserLibrary::TABLE_NAME . '.trackable_type', '=', UserFavorite::TABLE_NAME . '.favorable_type')
                     ->where(UserLibrary::TABLE_NAME . '.user_id', '=', $user->id)
-                    ->where(UserLibrary::TABLE_NAME . '.is_hidden', '=', false);
+                    ->where(UserLibrary::TABLE_NAME . '.is_hidden', '=', false)
+                    ->whereNull(UserLibrary::TABLE_NAME . '.deleted_at');
             })
             ->with(['genres', 'languages', 'mediaLanguages.language', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin', 'mediaRatings' => function ($query) use ($user) {
                 $query->where([

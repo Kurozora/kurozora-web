@@ -835,7 +835,8 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
                         $query->where(UserLibrary::TABLE_NAME . '.trackable_id', '=', $modelId);
                     })
                     ->where(UserLibrary::TABLE_NAME . '.user_id', '=', $this->id)
-                    ->where(UserLibrary::TABLE_NAME . '.status', '=', UserLibraryStatus::InProgress);
+                    ->where(UserLibrary::TABLE_NAME . '.status', '=', UserLibraryStatus::InProgress)
+                    ->whereNull(UserLibrary::TABLE_NAME . '.deleted_at');
             })
             ->leftJoin(UserWatchedEpisode::TABLE_NAME, function ($join) {
                 $join->on(UserWatchedEpisode::TABLE_NAME . '.episode_id', '=', Episode::TABLE_NAME . '.id')

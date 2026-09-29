@@ -55,6 +55,7 @@ trait Trackable
     public function trackers(): MorphToMany
     {
         return $this->morphToMany(User::class, 'trackable', UserLibrary::TABLE_NAME)
+            ->wherePivotNull('deleted_at')
             ->withTimestamps();
     }
 

@@ -90,7 +90,8 @@ class Favorites extends Component
                         ->whereColumn(UserLibrary::TABLE_NAME . '.trackable_id', $modelClass::TABLE_NAME . '.id')
                         ->where(UserLibrary::TABLE_NAME . '.trackable_type', '=', $modelClass)
                         ->where(UserLibrary::TABLE_NAME . '.user_id', '=', $this->user->id)
-                        ->where(UserLibrary::TABLE_NAME . '.is_hidden', '=', false);
+                        ->where(UserLibrary::TABLE_NAME . '.is_hidden', '=', false)
+                        ->whereNull(UserLibrary::TABLE_NAME . '.deleted_at');
                 });
             })
             ->inRandomOrder()
@@ -167,7 +168,8 @@ class Favorites extends Component
                         $query->on(UserLibrary::TABLE_NAME . '.trackable_id', '=', $modelClass::TABLE_NAME . '.id')
                             ->where(UserLibrary::TABLE_NAME . '.user_id', '=', $this->user->id)
                             ->where(UserLibrary::TABLE_NAME . '.trackable_type', '=', $modelClass)
-                            ->whereIn(UserLibrary::TABLE_NAME . '.status', $userLibraryStatuses);
+                            ->whereIn(UserLibrary::TABLE_NAME . '.status', $userLibraryStatuses)
+                            ->whereNull(UserLibrary::TABLE_NAME . '.deleted_at');
                     });
                 })
                 ->when(auth()->id() !== $this->user->id, function ($query) use ($modelClass) {
@@ -176,7 +178,8 @@ class Favorites extends Component
                             ->whereColumn(UserLibrary::TABLE_NAME . '.trackable_id', $modelClass::TABLE_NAME . '.id')
                             ->where(UserLibrary::TABLE_NAME . '.trackable_type', '=', $modelClass)
                             ->where(UserLibrary::TABLE_NAME . '.user_id', '=', $this->user->id)
-                            ->where(UserLibrary::TABLE_NAME . '.is_hidden', '=', false);
+                            ->where(UserLibrary::TABLE_NAME . '.is_hidden', '=', false)
+                            ->whereNull(UserLibrary::TABLE_NAME . '.deleted_at');
                     });
                 })
                 ->with(['genres', 'media', 'mediaStat', 'themes', 'translation', 'tvRating'])
@@ -205,7 +208,8 @@ class Favorites extends Component
                     $query->on(UserLibrary::TABLE_NAME . '.trackable_id', '=', $modelClass::TABLE_NAME . '.id')
                         ->where(UserLibrary::TABLE_NAME . '.user_id', '=', $this->user->id)
                         ->where(UserLibrary::TABLE_NAME . '.trackable_type', '=', $modelClass)
-                        ->whereIn(UserLibrary::TABLE_NAME . '.status', $userLibraryStatuses);
+                        ->whereIn(UserLibrary::TABLE_NAME . '.status', $userLibraryStatuses)
+                        ->whereNull(UserLibrary::TABLE_NAME . '.deleted_at');
                 });
             })
             ->when(auth()->id() !== $this->user->id, function ($query) use ($modelClass) {
@@ -214,7 +218,8 @@ class Favorites extends Component
                         ->whereColumn(UserLibrary::TABLE_NAME . '.trackable_id', $modelClass::TABLE_NAME . '.id')
                         ->where(UserLibrary::TABLE_NAME . '.trackable_type', '=', $modelClass)
                         ->where(UserLibrary::TABLE_NAME . '.user_id', '=', $this->user->id)
-                        ->where(UserLibrary::TABLE_NAME . '.is_hidden', '=', false);
+                        ->where(UserLibrary::TABLE_NAME . '.is_hidden', '=', false)
+                        ->whereNull(UserLibrary::TABLE_NAME . '.deleted_at');
                 });
             })
             ->limit(2000)

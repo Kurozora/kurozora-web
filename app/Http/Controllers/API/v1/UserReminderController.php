@@ -55,7 +55,8 @@ class UserReminderController extends Controller
                 $query->join(UserLibrary::TABLE_NAME, UserReminder::TABLE_NAME . '.remindable_id', '=', UserLibrary::TABLE_NAME . '.trackable_id')
                     ->whereColumn(UserLibrary::TABLE_NAME . '.trackable_type', '=', UserReminder::TABLE_NAME . '.remindable_type')
                     ->where(UserLibrary::TABLE_NAME . '.user_id', '=', $user->id)
-                    ->where(UserLibrary::TABLE_NAME . '.is_hidden', '=', false);
+                    ->where(UserLibrary::TABLE_NAME . '.is_hidden', '=', false)
+                    ->whereNull(UserLibrary::TABLE_NAME . '.deleted_at');
             })
             ->with(['genres', 'languages', 'mediaLanguages.language', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin', 'mediaRatings' => function ($query) use ($user) {
                 $query->where([
