@@ -47,7 +47,7 @@ class ExploreCategoryController extends Controller
                                         });
                                 },
                                 'model' => function ($query) {
-                                    $query->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+                                    $query->with(['genres', 'languages', 'mediaLanguages.language', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
                                         ->morphWith([Anime::class => ['latestAiredEpisode', 'nextEpisode']])
                                         ->when(auth()->user(), function ($query, $user) {
                                             $query->with(['mediaRatings' => function ($query) use ($user) {
@@ -118,7 +118,7 @@ class ExploreCategoryController extends Controller
                                         $query->with(['media', 'mediaStat', 'translation']);
                                     },
                                     'model' => function ($query) {
-                                        $query->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+                                        $query->with(['genres', 'languages', 'mediaLanguages.language', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
                                             ->morphWith([Anime::class => ['latestAiredEpisode', 'nextEpisode']])
                                             ->when(auth()->user(), function ($query, $user) {
                                                 $query->with(['mediaRatings' => function ($query) use ($user) {
@@ -213,7 +213,7 @@ class ExploreCategoryController extends Controller
                                     $query->with(['media', 'mediaStat', 'translation']);
                                 },
                                 'model' => function ($query) {
-                                    $query->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+                                    $query->with(['genres', 'languages', 'mediaLanguages.language', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
                                         ->morphWith([Anime::class => ['latestAiredEpisode', 'nextEpisode']])
                                         ->when(auth()->user(), function ($query, $user) {
                                             $query->with(['mediaRatings' => function ($query) use ($user) {

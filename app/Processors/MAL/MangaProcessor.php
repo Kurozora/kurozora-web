@@ -43,6 +43,22 @@ class MangaProcessor extends CustomItemProcessor
     private ?ItemInterface $item = null;
 
     /**
+     * The publication types mapped to their country of origin.
+     *
+     * @var string[]
+     */
+    private const array TYPE_COUNTRIES = [
+        'manga' => 'jp',
+        'doujinshi' => 'jp',
+        'light novel' => 'jp',
+        'novel' => 'jp',
+        'one-shot' => 'jp',
+        'manhwa' => 'kr',
+        'manhua' => 'cn',
+        'oel' => 'us',
+    ];
+
+    /**
      * @return array<int, class-string<ItemInterface>>
      */
     protected function getHandledItemClasses(): array
@@ -121,6 +137,7 @@ class MangaProcessor extends CustomItemProcessor
         $volumeCount = $this->getAttribute('Volumes');
         $chapterCount = $this->getAttribute('Chapters');
         $mediaType = $this->getAttribute('Type');
+        $country = $this->getCountryOfOrigin();
         $status = $this->getAttribute('Status');
         $source = $this->getAttribute('Source');
         $studios = $this->getAttribute('Serialization');
@@ -213,6 +230,7 @@ class MangaProcessor extends CustomItemProcessor
                     'chapter_count' => $chapterCount,
                     'page_count' => $chapterCount * 18,
                     'media_type_id' => $mediaType,
+                    'country_id' => $country ?? 'jp',
                     'status_id' => $status,
                     'source_id' => 2, // 2 = Original
                     'duration' => 240, // Default 240 seconds (4 minutes)
@@ -246,6 +264,7 @@ class MangaProcessor extends CustomItemProcessor
                 'chapter_count' => $newChapterCount,
                 'page_count' => $newPageCount,
                 'media_type_id' => $mediaType,
+                'country_id' => $country ?? $manga->country_id,
                 'status_id' => $status,
                 'source_id' => $source ?? 2, // 2 = Original
                 'duration' => $newDuration,
@@ -411,6 +430,27 @@ class MangaProcessor extends CustomItemProcessor
             'description' => ''
         ]);
         return $mediaType->id;
+    }
+
+    /**
+     * Get the country of origin.
+     *
+     * @return string|null
+     */
+    private function getCountryOfOrigin(): ?string
+    {
+        /** @var Stringable[] $attributes */
+        $attributes = $this->item->get('attributes');
+
+        foreach ($attributes as $attribute) {
+            if ($attribute->startsWith('Type:')) {
+                $type = $this->getCleanAttribute($attribute->replaceFirst('Type: ', ''));
+
+                return self::TYPE_COUNTRIES[strtolower($type)] ?? null;
+            }
+        }
+
+        return null;
     }
 
     /**

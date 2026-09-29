@@ -57,6 +57,9 @@ Route::prefix('/games')
                 Route::get('/cast', [GameController::class, 'cast'])
                     ->name('.cast');
 
+                Route::get('/languages', [GameController::class, 'languages'])
+                    ->name('.languages');
+
                 Route::get('/related-shows', [GameController::class, 'relatedShows'])
                     ->middleware('auth.kurozora:optional')
                     ->name('.related-shows');

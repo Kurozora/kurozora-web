@@ -54,6 +54,9 @@ Route::prefix('/manga')
                 Route::get('/cast', [MangaController::class, 'cast'])
                     ->name('.cast');
 
+                Route::get('/languages', [MangaController::class, 'languages'])
+                    ->name('.languages');
+
                 Route::get('/related-shows', [MangaController::class, 'relatedShows'])
                     ->middleware('auth.kurozora:optional')
                     ->name('.related-shows');

@@ -3,6 +3,7 @@
 namespace App\Console\Commands\Importers;
 
 use App\Enums\AstrologicalSign;
+use App\Enums\LanguageSupportType;
 use App\Enums\MediaCollection;
 use App\Enums\PersonRelationshipType;
 use App\Enums\StudioType;
@@ -14,6 +15,7 @@ use App\Models\GameCast;
 use App\Models\Genre;
 use App\Models\Language;
 use App\Models\MediaGenre;
+use App\Models\MediaLanguage;
 use App\Models\MediaPlatform;
 use App\Models\MediaRelation;
 use App\Models\MediaStaff;
@@ -81,7 +83,7 @@ class ImportVisualNovels extends Command
         'db/extlinks', 'db/wikidata', 'db/wikidata.header', 'db/vn_anime', 'db/anime',
         'db/tags', 'db/tags_vn', 'db/chars', 'db/chars_names', 'db/chars_vns', 'db/vn_seiyuu',
         'db/staff', 'db/staff_alias', 'db/staff_extlinks', 'db/vn_staff', 'db/vn_editions',
-        'db/vn_relations', 'db/producers_extlinks',
+        'db/vn_relations', 'db/producers_extlinks', 'db/releases_titles',
     ];
 
     /**
@@ -501,12 +503,13 @@ class ImportVisualNovels extends Command
 
         try {
             $this->info('Loading lookup tables...');
-            [$titles, $releases, $studiosByVn, $links, $platformsByVn, $animeByVn, $tagsByVn, $castByVn, $creditsByVn] = $this->measure('load dump', fn () => [
+            [$titles, $releases, $studiosByVn, $links, $platformsByVn, $languagesByVn, $animeByVn, $tagsByVn, $castByVn, $creditsByVn] = $this->measure('load dump', fn () => [
                 $this->loadTitles($directory),
                 $this->loadReleases($directory),
                 $this->loadStudios($directory),
                 $this->loadLinks($directory),
                 $this->loadPlatforms($directory),
+                $this->loadLanguages($directory),
                 $this->loadAnime($directory),
                 $this->loadTags($directory),
                 $this->loadCast($directory),
@@ -573,6 +576,7 @@ class ImportVisualNovels extends Command
                         'cast' => $castByVn['cast'][$vndbID] ?? [],
                         'seiyuu' => $castByVn['seiyuu'][$vndbID] ?? [],
                         'credits' => $creditsByVn[$vndbID] ?? [],
+                        'languages' => $languagesByVn[$vndbID] ?? [],
                     ];
 
                     $this->upsert($vndbID, $image, $olang, (int) $devstatus, $alias, $description, $titles[$vndbID], $release, $links[$vndbID] ?? [], $studiosByVn[$vndbID] ?? [], $platformsByVn[$vndbID] ?? [], $animeByVn[$vndbID] ?? [], $existingID, $source, $mediaTypeID, $extras);
@@ -946,6 +950,48 @@ class ImportVisualNovels extends Command
         }
 
         return $official;
+    }
+
+    /**
+     * Load each visual novel's voicing and release languages keyed by VNDB id.
+     *
+     * @param string $directory
+     * @return array
+     */
+    protected function loadLanguages(string $directory): array
+    {
+        $official = $this->officialReleases($directory);
+        $voiced = [];
+
+        foreach ($this->readCopy($directory . '/db/releases') as $row) {
+            if (isset($official[$row[0]])) {
+                $voiced[$row[0]] = (int) $row[4];
+            }
+        }
+
+        $titles = [];
+
+        foreach ($this->readCopy($directory . '/db/releases_titles') as [$releaseID, $language, $machine]) {
+            if ($machine !== 't' && isset($official[$releaseID])) {
+                $titles[$releaseID][$language] = $language;
+            }
+        }
+
+        $languages = [];
+
+        foreach ($this->readCopy($directory . '/db/releases_vn') as [$releaseID, $vnID]) {
+            if (!isset($official[$releaseID])) {
+                continue;
+            }
+
+            $languages[$vnID]['voiced'] = max($languages[$vnID]['voiced'] ?? 0, $voiced[$releaseID] ?? 0);
+
+            foreach ($titles[$releaseID] ?? [] as $language) {
+                $languages[$vnID]['interface'][$language] = $language;
+            }
+        }
+
+        return $languages;
     }
 
     /**
@@ -1559,11 +1605,12 @@ class ImportVisualNovels extends Command
             $this->measure('game write', fn () => $game->save());
             $this->index['vndb'][$vndbID] = $game->id;
         } else {
-            $game = $this->measure('game write', function () use ($attributes, $studios, $platforms, $publishedAt, $image) {
+            $game = $this->measure('game write', function () use ($attributes, $studios, $platforms, $publishedAt, $image, $olang, $extras) {
                 $game = Game::on(self::CONNECTION)->withoutGlobalScopes()->create($attributes);
 
                 $this->attachStudios($game, $studios);
                 $this->attachPlatforms($game, $platforms, $publishedAt);
+                $this->attachLanguages($game, $olang, $extras['languages']);
                 $this->addPoster($game, $image);
 
                 return $game;
@@ -1696,7 +1743,38 @@ class ImportVisualNovels extends Command
     }
 
     /**
-     * Attach the release platforms, creating any that do not exist yet.
+     * Attach the languages a visual novel is voiced and released in.
+     *
+     * @param Game   $game
+     * @param string $olang
+     * @param array  $languages
+     * @return void
+     */
+    protected function attachLanguages(Game $game, string $olang, array $languages): void
+    {
+        $morphClass = $game->getMorphClass();
+        $rows = [];
+
+        // VNDB voices a release 0 unknown, 1 never, 2 ero only, 3 partly, 4 fully.
+        $audioID = ($languages['voiced'] ?? 0) >= 2 ? $this->languageID($olang) : null;
+
+        if ($audioID !== null) {
+            $rows[] = ['model_id' => $game->id, 'model_type' => $morphClass, 'language_id' => $audioID, 'type' => LanguageSupportType::Audio];
+        }
+
+        foreach ($languages['interface'] ?? [] as $language) {
+            $languageID = $this->languageID($language);
+
+            if ($languageID !== null) {
+                $rows[$languageID] = ['model_id' => $game->id, 'model_type' => $morphClass, 'language_id' => $languageID, 'type' => LanguageSupportType::Interface];
+            }
+        }
+
+        $this->insertMany(MediaLanguage::TABLE_NAME, array_values($rows));
+    }
+
+    /**
+     * Attach the release platforms.
      *
      * @param Game        $game
      * @param array       $platforms

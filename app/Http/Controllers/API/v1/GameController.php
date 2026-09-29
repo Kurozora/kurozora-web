@@ -16,11 +16,12 @@ use App\Http\Requests\GetMediaSongsRequest;
 use App\Http\Requests\GetPaginatedRequest;
 use App\Http\Requests\RateModelRequest;
 use App\Http\Requests\SearchRequest;
-use App\Http\Resources\EditorialResource;
 use App\Http\Resources\CharacterResourceIdentity;
+use App\Http\Resources\EditorialResource;
 use App\Http\Resources\GameCastResourceIdentity;
 use App\Http\Resources\GameResource;
 use App\Http\Resources\GameResourceIdentity;
+use App\Http\Resources\MediaLanguageResource;
 use App\Http\Resources\MediaRatingResource;
 use App\Http\Resources\MediaRatingResourceIdentity;
 use App\Http\Resources\MediaRelatedResource;
@@ -116,7 +117,8 @@ class GameController extends Controller
 
         $user = auth()->user();
 
-        $game->load(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+        $game->load(['genres', 'languages', 'mediaLanguages.language', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+            ->withDistinctCount('supportedLanguages', 'languages.id')
             ->when($user, function ($query, $user) use ($game) {
                 $game->load(['mediaRatings' => function ($query) use ($user) {
                     $query->where([
@@ -157,7 +159,8 @@ class GameController extends Controller
                             $query->with([
                                 'related' => function ($query) use ($game) {
                                     $game->viewableViaParent($query)
-                                        ->with(['genres', 'languages', 'latestAiredEpisode', 'media', 'mediaStat', 'mediaType', 'nextEpisode', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin']);
+                                        ->with(['genres', 'languages', 'mediaLanguages.language', 'latestAiredEpisode', 'media', 'mediaStat', 'mediaType', 'nextEpisode', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+            ->withDistinctCount('supportedLanguages', 'languages.id');
                                 },
                                 'relation'
                             ])
@@ -169,7 +172,8 @@ class GameController extends Controller
                             $query->with([
                                 'related' => function ($query) use ($game) {
                                     $game->viewableViaParent($query)
-                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin']);
+                                        ->with(['genres', 'languages', 'mediaLanguages.language', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+            ->withDistinctCount('supportedLanguages', 'languages.id');
                                 },
                                 'relation'
                             ])
@@ -181,7 +185,8 @@ class GameController extends Controller
                             $query->with([
                                 'related' => function ($query) use ($game) {
                                     $game->viewableViaParent($query)
-                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin']);
+                                        ->with(['genres', 'languages', 'mediaLanguages.language', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+            ->withDistinctCount('supportedLanguages', 'languages.id');
                                 },
                                 'relation'
                             ])
@@ -233,7 +238,8 @@ class GameController extends Controller
         $data = $request->validated();
 
         $game = Game::whereIn('id', $data['ids'] ?? []);
-        $game->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+        $game->with(['genres', 'languages', 'mediaLanguages.language', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+            ->withDistinctCount('supportedLanguages', 'languages.id')
             ->when(auth()->user(), function ($query, $user) use ($game) {
                 $game->with(['mediaRatings' => function ($query) use ($user) {
                     $query->where([
@@ -274,7 +280,8 @@ class GameController extends Controller
                             $query->with([
                                 'related' => function ($query) use ($game) {
                                     $game->viewableViaParent($query)
-                                        ->with(['genres', 'languages', 'latestAiredEpisode', 'media', 'mediaStat', 'mediaType', 'nextEpisode', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin']);
+                                        ->with(['genres', 'languages', 'mediaLanguages.language', 'latestAiredEpisode', 'media', 'mediaStat', 'mediaType', 'nextEpisode', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+            ->withDistinctCount('supportedLanguages', 'languages.id');
                                 },
                                 'relation'
                             ])
@@ -286,7 +293,8 @@ class GameController extends Controller
                             $query->with([
                                 'related' => function ($query) use ($game) {
                                     $game->viewableViaParent($query)
-                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin']);
+                                        ->with(['genres', 'languages', 'mediaLanguages.language', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+            ->withDistinctCount('supportedLanguages', 'languages.id');
                                 },
                                 'relation'
                             ])
@@ -298,7 +306,8 @@ class GameController extends Controller
                             $query->with([
                                 'related' => function ($query) use ($game) {
                                     $game->viewableViaParent($query)
-                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin']);
+                                        ->with(['genres', 'languages', 'mediaLanguages.language', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+            ->withDistinctCount('supportedLanguages', 'languages.id');
                                 },
                                 'relation'
                             ])
@@ -415,6 +424,30 @@ class GameController extends Controller
      *
      * @return JsonResponse
      */
+    /**
+     * Returns the languages the game is available in.
+     *
+     * @param GetPaginatedRequest $request
+     * @param Game                $game
+     *
+     * @return JsonResponse
+     */
+    public function languages(GetPaginatedRequest $request, Game $game): JsonResponse
+    {
+        $data = $request->validated();
+
+        $mediaLanguages = $game->mediaLanguages()
+            ->with(['language', 'model'])
+            ->cursorPaginate($data['limit'] ?? 25);
+
+        $nextPageURL = str_replace($request->root(), '', $mediaLanguages->nextPageUrl() ?? '');
+
+        return JSONResult::success([
+            'data' => MediaLanguageResource::collection($mediaLanguages),
+            'next' => empty($nextPageURL) ? null : $nextPageURL,
+        ]);
+    }
+
     public function cast(GetPaginatedRequest $request, game $game): JsonResponse
     {
         $data = $request->validated();
@@ -449,7 +482,8 @@ class GameController extends Controller
             ->with([
                 'related' => function ($query) use ($game) {
                     $game->viewableViaParent($query)
-                        ->with(['genres', 'languages', 'latestAiredEpisode', 'media', 'mediaStat', 'mediaType', 'nextEpisode', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+                        ->with(['genres', 'languages', 'mediaLanguages.language', 'latestAiredEpisode', 'media', 'mediaStat', 'mediaType', 'nextEpisode', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+            ->withDistinctCount('supportedLanguages', 'languages.id')
                         ->when(auth()->user(), function ($query, $user) {
                             $query->with(['mediaRatings' => function ($query) use ($user) {
                                 $query->where([
@@ -499,7 +533,8 @@ class GameController extends Controller
             ->with([
                 'related' => function ($query) use ($game) {
                     $game->viewableViaParent($query)
-                        ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+                        ->with(['genres', 'languages', 'mediaLanguages.language', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+            ->withDistinctCount('supportedLanguages', 'languages.id')
                         ->when(auth()->user(), function ($query, $user) {
                             $query->with(['mediaRatings' => function ($query) use ($user) {
                                 $query->where([
@@ -546,7 +581,8 @@ class GameController extends Controller
             ->with([
                 'related' => function ($query) use ($game) {
                     $game->viewableViaParent($query)
-                        ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+                        ->with(['genres', 'languages', 'mediaLanguages.language', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+            ->withDistinctCount('supportedLanguages', 'languages.id')
                         ->when(auth()->user(), function ($query, $user) {
                             $query->with(['mediaRatings' => function ($query) use ($user) {
                                 $query->where([
@@ -609,7 +645,8 @@ class GameController extends Controller
         $includes = is_string($includeInput) ? explode(',', $includeInput) : (is_array($includeInput) ? $includeInput : []);
 
         if (in_array('shows', $includes)) {
-            $game->load(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+            $game->load(['genres', 'languages', 'mediaLanguages.language', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+            ->withDistinctCount('supportedLanguages', 'languages.id')
                 ->when(auth()->user(), function ($query, $user) use ($game) {
                     $game->load(['mediaRatings' => function ($query) use ($user) {
                         $query->where([

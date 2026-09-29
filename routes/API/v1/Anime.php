@@ -60,6 +60,9 @@ Route::prefix('/anime')
                 Route::get('/videos', [AnimeController::class, 'videos'])
                     ->name('.videos');
 
+                Route::get('/languages', [AnimeController::class, 'languages'])
+                    ->name('.languages');
+
                 Route::get('/related-shows', [AnimeController::class, 'relatedShows'])
                     ->middleware('auth.kurozora:optional')
                     ->name('.related-shows');

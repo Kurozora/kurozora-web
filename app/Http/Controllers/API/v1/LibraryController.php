@@ -115,7 +115,7 @@ class LibraryController extends Controller
             })
             ->sortViaRequest($request)
             ->with([
-                'genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin', 'mediaRatings' => function ($query) use ($user) {
+                'genres', 'languages', 'mediaLanguages.language', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin', 'mediaRatings' => function ($query) use ($user) {
                     $query->where([
                         ['user_id', '=', $user->id],
                     ]);

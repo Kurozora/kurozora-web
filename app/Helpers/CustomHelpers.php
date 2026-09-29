@@ -34,6 +34,32 @@ if (!function_exists('icu_locale')) {
     }
 }
 
+if (!function_exists('origin_language')) {
+    /**
+     * Get the ISO 639-1 language most likely spoken in a country.
+     *
+     * @param string|null $country
+     * @return string|null
+     */
+    function origin_language(?string $country): ?string
+    {
+        if (empty($country)) {
+            return null;
+        }
+
+        $tag = Locale::addLikelySubtags('und_' . strtoupper($country));
+
+        if (empty($tag)) {
+            return null;
+        }
+
+        // Languages are stored as ISO 639-1.
+        $language = Locale::getPrimaryLanguage($tag);
+
+        return strlen((string) $language) === 2 ? $language : null;
+    }
+}
+
 if (!function_exists('ordinal_number')) {
     function ordinal_number(int|float $number): bool|string
     {

@@ -40,7 +40,9 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\RateLimiter;
@@ -78,6 +80,36 @@ class AppServiceProvider extends ServiceProvider
         Request::macro('tvRating', function (): int {
             /** @var Request $this */
             return (int) $this->attributes->get('tvRating', 4);
+        });
+
+        // Counts the distinct values of a column across one or more relationships.
+        Builder::macro('withDistinctCount', function (array|string $relations, ?string $column = null) {
+            /** @var Builder $this */
+            $relations = is_array($relations) ? $relations : [$relations => $column];
+            $aggregates = [];
+
+            foreach ($relations as $name => $value) {
+                // Allows a plain list of relationships sharing the given column.
+                if (is_int($name)) {
+                    [$name, $value] = [$value, $column];
+                }
+
+                [$distinctColumn, $constraints] = is_array($value) ? $value : [$value, null];
+
+                if (!str_contains($name, ' as ')) {
+                    $name .= ' as ' . Str::snake(str_replace('.', '_', $name)) . '_count';
+                }
+
+                $aggregates[$name] = function (Builder $query) use ($distinctColumn, $constraints) {
+                    if ($constraints !== null) {
+                        $constraints($query);
+                    }
+
+                    $query->select(DB::raw('count(distinct ' . $query->getQuery()->getGrammar()->wrap($distinctColumn) . ')'));
+                };
+            }
+
+            return $this->withCount($aggregates);
         });
 
         // Prevent dangerous actions

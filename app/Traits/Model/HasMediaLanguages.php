@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Collection;
 
 trait HasMediaLanguages
 {
@@ -48,16 +49,120 @@ trait HasMediaLanguages
     }
 
     /**
+     * Get every language the model supports.
+     *
+     * @return MorphToMany
+     */
+    public function supportedLanguages(): MorphToMany
+    {
+        return $this->morphToMany(Language::class, 'model', MediaLanguage::class)
+            ->distinct()
+            ->orderBy('languages.name');
+    }
+
+    /**
+     * Get the languages the model is voiced in.
+     *
+     * @return MorphToMany
+     */
+    public function audioLanguages(): MorphToMany
+    {
+        return $this->languagesSupporting(LanguageSupportType::Audio());
+    }
+
+    /**
+     * Get the languages the model is subtitled in.
+     *
+     * @return MorphToMany
+     */
+    public function subtitleLanguages(): MorphToMany
+    {
+        return $this->languagesSupporting(LanguageSupportType::Subtitles());
+    }
+
+    /**
+     * Get the languages the model's interface is translated into.
+     *
+     * @return MorphToMany
+     */
+    public function interfaceLanguages(): MorphToMany
+    {
+        return $this->languagesSupporting(LanguageSupportType::Interface());
+    }
+
+    /**
+     * Get the languages the model's text is published in.
+     *
+     * @return MorphToMany
+     */
+    public function textLanguages(): MorphToMany
+    {
+        return $this->languagesSupporting(LanguageSupportType::Text());
+    }
+
+    /**
+     * Get the language the model was originally made in.
+     *
+     * @return string|null
+     */
+    public function originLanguage(): ?string
+    {
+        return origin_language($this->country_id);
+    }
+
+    /**
+     * Get the language to lead with.
+     *
+     * @return Language|null
+     */
+    public function primaryLanguage(): ?Language
+    {
+        $languages = $this->mediaLanguages
+            ->pluck('language')
+            ->filter()
+            ->unique('id')
+            ->sortBy('name');
+
+        return $languages->firstWhere('code', '=', icu_locale())
+            ?? $languages->firstWhere('code', '=', $this->originLanguage())
+            ?? $languages->first();
+    }
+
+    /**
+     * Get the support types of the model's primary language.
+     *
+     * @return Collection
+     */
+    public function primaryLanguageTypes(): Collection
+    {
+        $primary = $this->primaryLanguage();
+
+        if ($primary === null) {
+            return collect();
+        }
+
+        return $this->mediaLanguages
+            ->where('language_id', '=', $primary->id)
+            ->pluck('type')
+            ->map(fn (LanguageSupportType $type) => $type->value)
+            ->unique()
+            ->sort()
+            ->values();
+    }
+
+
+    /**
      * Get the languages the model supports for the given support type.
      *
      * @param LanguageSupportType $type
      * @return MorphToMany
      */
-    public function supportedLanguages(LanguageSupportType $type): MorphToMany
+    protected function languagesSupporting(LanguageSupportType $type): MorphToMany
     {
         return $this->morphToMany(Language::class, 'model', MediaLanguage::class)
             ->wherePivot('type', '=', $type->value)
             ->withPivot('type')
-            ->withTimestamps();
+            ->withTimestamps()
+            ->orderBy('languages.name');
     }
 }

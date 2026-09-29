@@ -50,7 +50,7 @@ class BrowseSeasonController extends Controller
             default => 'started_at'
         };
 
-        $items = $model::with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+        $items = $model::with(['genres', 'languages', 'mediaLanguages.language', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
             ->when($model === Anime::class, function ($query) {
                 $query->with(['latestAiredEpisode', 'nextEpisode']);
             })

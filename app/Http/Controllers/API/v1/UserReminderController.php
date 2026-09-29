@@ -57,7 +57,7 @@ class UserReminderController extends Controller
                     ->where(UserLibrary::TABLE_NAME . '.user_id', '=', $user->id)
                     ->where(UserLibrary::TABLE_NAME . '.is_hidden', '=', false);
             })
-            ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin', 'mediaRatings' => function ($query) use ($user) {
+            ->with(['genres', 'languages', 'mediaLanguages.language', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin', 'mediaRatings' => function ($query) use ($user) {
                 $query->where([
                     ['user_id', '=', $user->id],
                 ]);

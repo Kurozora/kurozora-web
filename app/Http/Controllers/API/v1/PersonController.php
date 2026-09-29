@@ -130,7 +130,7 @@ class PersonController extends Controller
                         break;
                     case 'shows':
                         $includeArray['anime'] = function ($query) {
-                            $query->with(['genres', 'languages', 'latestAiredEpisode', 'media', 'mediaStat', 'mediaType', 'nextEpisode', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+                            $query->with(['genres', 'languages', 'mediaLanguages.language', 'latestAiredEpisode', 'media', 'mediaStat', 'mediaType', 'nextEpisode', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
                                 ->when(auth()->user(), function ($query, $user) {
                                     $query->with(['mediaRatings' => function ($query) use ($user) {
                                         $query->where([
@@ -153,7 +153,7 @@ class PersonController extends Controller
                         break;
                     case 'literatures':
                         $includeArray['manga'] = function ($query) {
-                            $query->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+                            $query->with(['genres', 'languages', 'mediaLanguages.language', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
                                 ->when(auth()->user(), function ($query, $user) {
                                     $query->with(['mediaRatings' => function ($query) use ($user) {
                                         $query->where([
@@ -173,7 +173,7 @@ class PersonController extends Controller
                         break;
                     case 'games':
                         $includeArray['games'] = function ($query) {
-                            $query->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+                            $query->with(['genres', 'languages', 'mediaLanguages.language', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
                                 ->when(auth()->user(), function ($query, $user) {
                                     $query->with(['mediaRatings' => function ($query) use ($user) {
                                         $query->where([
@@ -240,7 +240,7 @@ class PersonController extends Controller
                         break;
                     case 'shows':
                         $includeArray['anime'] = function ($query) {
-                            $query->with(['genres', 'languages', 'latestAiredEpisode', 'media', 'mediaStat', 'mediaType', 'nextEpisode', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+                            $query->with(['genres', 'languages', 'mediaLanguages.language', 'latestAiredEpisode', 'media', 'mediaStat', 'mediaType', 'nextEpisode', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
                                 ->when(auth()->user(), function ($query, $user) {
                                     $query->with(['mediaRatings' => function ($query) use ($user) {
                                         $query->where([
@@ -263,7 +263,7 @@ class PersonController extends Controller
                         break;
                     case 'literatures':
                         $includeArray['manga'] = function ($query) {
-                            $query->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+                            $query->with(['genres', 'languages', 'mediaLanguages.language', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
                                 ->when(auth()->user(), function ($query, $user) {
                                     $query->with(['mediaRatings' => function ($query) use ($user) {
                                         $query->where([
@@ -283,7 +283,7 @@ class PersonController extends Controller
                         break;
                     case 'games':
                         $includeArray['games'] = function ($query) {
-                            $query->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+                            $query->with(['genres', 'languages', 'mediaLanguages.language', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
                                 ->when(auth()->user(), function ($query, $user) {
                                     $query->with(['mediaRatings' => function ($query) use ($user) {
                                         $query->where([

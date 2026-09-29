@@ -21,6 +21,7 @@ use App\Http\Resources\EditorialResource;
 use App\Http\Resources\LiteratureCastResourceIdentity;
 use App\Http\Resources\LiteratureResource;
 use App\Http\Resources\LiteratureResourceIdentity;
+use App\Http\Resources\MediaLanguageResource;
 use App\Http\Resources\MediaRatingResource;
 use App\Http\Resources\MediaRatingResourceIdentity;
 use App\Http\Resources\MediaRelatedResource;
@@ -113,7 +114,8 @@ class MangaController extends Controller
         // Call the ModelViewed event
         ModelViewed::dispatch($manga, $request->ip());
 
-        $manga->load(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+        $manga->load(['genres', 'languages', 'mediaLanguages.language', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+            ->withDistinctCount('supportedLanguages', 'languages.id')
             ->when(auth()->user(), function ($query, $user) use ($manga) {
                 $manga->load(['mediaRatings' => function ($query) use ($user) {
                     $query->where([
@@ -154,7 +156,8 @@ class MangaController extends Controller
                             $query->with([
                                 'related' => function ($query) use ($manga) {
                                     $manga->viewableViaParent($query)
-                                        ->with(['genres', 'languages', 'latestAiredEpisode', 'media', 'mediaStat', 'mediaType', 'nextEpisode', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin']);
+                                        ->with(['genres', 'languages', 'mediaLanguages.language', 'latestAiredEpisode', 'media', 'mediaStat', 'mediaType', 'nextEpisode', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+            ->withDistinctCount('supportedLanguages', 'languages.id');
                                 },
                                 'relation'
                             ])
@@ -166,7 +169,8 @@ class MangaController extends Controller
                             $query->with([
                                 'related' => function ($query) use ($manga) {
                                     $manga->viewableViaParent($query)
-                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin']);
+                                        ->with(['genres', 'languages', 'mediaLanguages.language', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+            ->withDistinctCount('supportedLanguages', 'languages.id');
                                 },
                                 'relation'
                             ])
@@ -178,7 +182,8 @@ class MangaController extends Controller
                             $query->with([
                                 'related' => function ($query) use ($manga) {
                                     $manga->viewableViaParent($query)
-                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin']);
+                                        ->with(['genres', 'languages', 'mediaLanguages.language', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+            ->withDistinctCount('supportedLanguages', 'languages.id');
                                 },
                                 'relation'
                             ])
@@ -219,7 +224,8 @@ class MangaController extends Controller
         $data = $request->validated();
 
         $manga = Manga::whereIn('id', $data['ids'] ?? []);
-        $manga->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+        $manga->with(['genres', 'languages', 'mediaLanguages.language', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+            ->withDistinctCount('supportedLanguages', 'languages.id')
             ->when(auth()->user(), function ($query, $user) use ($manga) {
                 $manga->with(['mediaRatings' => function ($query) use ($user) {
                     $query->where([
@@ -260,7 +266,8 @@ class MangaController extends Controller
                             $query->with([
                                 'related' => function ($query) use ($manga) {
                                     $manga->viewableViaParent($query)
-                                        ->with(['genres', 'languages', 'latestAiredEpisode', 'media', 'mediaStat', 'mediaType', 'nextEpisode', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin']);
+                                        ->with(['genres', 'languages', 'mediaLanguages.language', 'latestAiredEpisode', 'media', 'mediaStat', 'mediaType', 'nextEpisode', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+            ->withDistinctCount('supportedLanguages', 'languages.id');
                                 },
                                 'relation'
                             ])
@@ -272,7 +279,8 @@ class MangaController extends Controller
                             $query->with([
                                 'related' => function ($query) use ($manga) {
                                     $manga->viewableViaParent($query)
-                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin']);
+                                        ->with(['genres', 'languages', 'mediaLanguages.language', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+            ->withDistinctCount('supportedLanguages', 'languages.id');
                                 },
                                 'relation'
                             ])
@@ -284,7 +292,8 @@ class MangaController extends Controller
                             $query->with([
                                 'related' => function ($query) use ($manga) {
                                     $manga->viewableViaParent($query)
-                                        ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin']);
+                                        ->with(['genres', 'languages', 'mediaLanguages.language', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+            ->withDistinctCount('supportedLanguages', 'languages.id');
                                 },
                                 'relation'
                             ])
@@ -417,6 +426,30 @@ class MangaController extends Controller
      *
      * @return JsonResponse
      */
+    /**
+     * Returns the languages the manga is available in.
+     *
+     * @param GetPaginatedRequest $request
+     * @param Manga               $manga
+     *
+     * @return JsonResponse
+     */
+    public function languages(GetPaginatedRequest $request, Manga $manga): JsonResponse
+    {
+        $data = $request->validated();
+
+        $mediaLanguages = $manga->mediaLanguages()
+            ->with(['language', 'model'])
+            ->cursorPaginate($data['limit'] ?? 25);
+
+        $nextPageURL = str_replace($request->root(), '', $mediaLanguages->nextPageUrl() ?? '');
+
+        return JSONResult::success([
+            'data' => MediaLanguageResource::collection($mediaLanguages),
+            'next' => empty($nextPageURL) ? null : $nextPageURL,
+        ]);
+    }
+
     public function cast(GetPaginatedRequest $request, Manga $manga): JsonResponse
     {
         $data = $request->validated();
@@ -451,7 +484,8 @@ class MangaController extends Controller
             ->with([
                 'related' => function ($query) use ($manga) {
                     $manga->viewableViaParent($query)
-                        ->with(['genres', 'languages', 'latestAiredEpisode', 'media', 'mediaStat', 'mediaType', 'nextEpisode', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+                        ->with(['genres', 'languages', 'mediaLanguages.language', 'latestAiredEpisode', 'media', 'mediaStat', 'mediaType', 'nextEpisode', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+            ->withDistinctCount('supportedLanguages', 'languages.id')
                         ->when(auth()->user(), function ($query, $user) {
                             $query->with(['mediaRatings' => function ($query) use ($user) {
                                 $query->where([
@@ -501,7 +535,8 @@ class MangaController extends Controller
             ->with([
                 'related' => function ($query) use ($manga) {
                     $manga->viewableViaParent($query)
-                        ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+                        ->with(['genres', 'languages', 'mediaLanguages.language', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+            ->withDistinctCount('supportedLanguages', 'languages.id')
                         ->when(auth()->useR(), function ($query, $user) {
                             $query->with(['mediaRatings' => function ($query) use ($user) {
                                 $query->where([
@@ -548,7 +583,8 @@ class MangaController extends Controller
             ->with([
                 'related' => function ($query) use ($manga) {
                     $manga->viewableViaParent($query)
-                        ->with(['genres', 'languages', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+                        ->with(['genres', 'languages', 'mediaLanguages.language', 'media', 'mediaStat', 'mediaType', 'source', 'status', 'studios', 'themes', 'translation', 'tvRating', 'countryOfOrigin'])
+            ->withDistinctCount('supportedLanguages', 'languages.id')
                         ->when(auth()->user(), function ($query, $user) {
                             $query->with(['mediaRatings' => function ($query) use ($user) {
                                 $query->where([

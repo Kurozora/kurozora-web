@@ -47,7 +47,8 @@ class LiteratureResourceBasic extends JsonResource
                 'genres'                => $this->resource->genres->pluck('name'),
                 'themes'                => $this->resource->themes->pluck('name'),
                 'studio'                => $studio?->name,
-                'languages'             => LanguageResource::collection($this->resource->languages),
+                'languages'             => LanguageResource::collection($this->resource->languages), // Deprecated in favor of `languageSupport`.
+                'languageSupport'       => LanguageSupportResource::make($this->resource),
                 'countryOfOrigin'       => CountryResource::make($this->resource->countryOfOrigin),
                 'tvRating'              => $this->resource->tvRating->only(['name', 'description']),
                 'type'                  => $this->resource->mediaType->only(['name', 'description']),
