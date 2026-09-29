@@ -2,7 +2,6 @@
 
 namespace App\Extensions;
 
-use App\Http\Middleware\CacheableGuestResponse;
 use App\Models\Session;
 use Illuminate\Session\DatabaseSessionHandler as BaseDatabaseSessionHandler;
 
@@ -16,9 +15,7 @@ class KDatabaseSessionHandler extends BaseDatabaseSessionHandler
     #[\ReturnTypeWillChange]
     public function write($sessionId, $data): bool
     {
-        $attributes = request()?->attributes;
-
-        if ($attributes?->get('bot', false) === true || $attributes?->get(CacheableGuestResponse::ATTRIBUTE, false) === true) {
+        if (request()?->attributes->get('bot', false) === true) {
             return true;
         }
 

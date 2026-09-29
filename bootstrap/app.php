@@ -5,7 +5,6 @@ use App\Helpers\JSONResult;
 use App\Http\Controllers\Web\Misc\HealthCheckController;
 use App\Http\Middleware\AuthenticateAPIClient;
 use App\Http\Middleware\AuthenticateSession;
-use App\Http\Middleware\CacheableGuestResponse;
 use App\Http\Middleware\CheckKurozoraUserAuthentication;
 use App\Http\Middleware\EnsureAPIRequestsAreStateful;
 use App\Http\Middleware\EnsureUserIsNotTimedOut;
@@ -60,7 +59,6 @@ use Symfony\Component\Console\Exception\CommandNotFoundException;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
-use Symfony\Component\HttpKernel\Exception\GoneHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
@@ -95,7 +93,6 @@ return Application::configure(basePath: dirname(__DIR__))
     ])
     ->withMiddleware(function (Middleware $middleware) {
         $middleware
-            ->prepend(CacheableGuestResponse::class)
             ->redirectGuestsTo(function() {
                 return route('sign-in');
             })
@@ -130,9 +127,9 @@ return Application::configure(basePath: dirname(__DIR__))
                 SubstituteBindings::class,
             ])
             ->alias([
+                'auth' => KAuthenticate::class,
                 'abilities' => CheckAbilities::class,
                 'ability' => CheckForAnyAbility::class,
-                'auth' => KAuthenticate::class,
                 'auth.basic' => AuthenticateWithBasicAuth::class,
                 'auth.kurozora' => CheckKurozoraUserAuthentication::class,
                 'auth.session' => AuthenticateSession::class,
@@ -246,15 +243,6 @@ return Application::configure(basePath: dirname(__DIR__))
                         $apiError->id = 40009;
                         $apiError->status = 409;
                         $apiError->title = 'Conflict';
-                        $apiError->detail = $e->getMessage();
-                        return JSONResult::error([$apiError])
-                            ->withHeaders($e->getHeaders());
-                    } // Custom render for resources that have expired and require a fresh start
-                    else if ($e instanceof GoneHttpException) {
-                        $apiError = new APIError;
-                        $apiError->id = 40010;
-                        $apiError->status = 410;
-                        $apiError->title = 'Gone';
                         $apiError->detail = $e->getMessage();
                         return JSONResult::error([$apiError]);
                     }
