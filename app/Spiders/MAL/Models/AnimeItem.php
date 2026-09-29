@@ -18,5 +18,6 @@ final class AnimeItem extends AbstractItem
         readonly array $relations,
         readonly array $openings,
         readonly array $endings,
+        readonly array $externalLinks,
     ) {}
 }

@@ -16,6 +16,7 @@ return new class extends Migration
     {
         Schema::create(Franchise::TABLE_NAME, function (Blueprint $table) {
             $table->id();
+            $table->unsignedInteger('igdb_id')->unique()->nullable();
             $table->string('slug');
             $table->string('name');
             $table->timestamps();

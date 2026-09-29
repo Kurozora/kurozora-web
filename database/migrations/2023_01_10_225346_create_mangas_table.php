@@ -30,6 +30,7 @@ return new class extends Migration
             $table->string('slug', 280);
             $table->string('original_title', 280);
             $table->json('synonym_titles')->nullable();
+            $table->json('external_urls')->nullable();
             $table->string('copyright')->nullable();
             $table->unsignedMediumInteger('duration')->default(0);
             $table->time('publication_time')->nullable();

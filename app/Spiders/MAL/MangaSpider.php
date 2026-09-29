@@ -11,6 +11,7 @@ use App\Spiders\MAL\Middleware\CircuitBreakerMiddleware;
 use App\Spiders\MAL\Middleware\RateLimitMiddleware;
 use App\Spiders\MAL\Models\MangaItem;
 use App\Spiders\MAL\Models\MangaStatItem;
+use App\Traits\Spider\ParsesExternalLinks;
 use App\Traits\Spider\ParsesMangaCharacters;
 use App\Traits\Spider\ParsesPictures;
 use Arr;
@@ -33,6 +34,7 @@ use Symfony\Component\DomCrawler\Crawler;
 
 class MangaSpider extends BasicSpider
 {
+    use ParsesExternalLinks;
     use ParsesMangaCharacters;
     use ParsesPictures;
 
@@ -175,6 +177,7 @@ class MangaSpider extends BasicSpider
             });
 
         $imageUrl = $this->cleanImageUrl($response, 'div.leftside div a img[itemprop="image"]');
+        $externalLinks = $this->cleanExternalLinks($response);
         $relations = $this->cleanRelations($response, 'div.related-entries');
 
         logger()->channel('stderr')->debug('✅️ [MAL_ID:MANGA:' . $id . '] Done parsing');
@@ -189,6 +192,7 @@ class MangaSpider extends BasicSpider
             array_replace([], ...$studios),
             array_replace([], ...$genres),
             array_replace([], ...$authors),
+            $externalLinks,
         ));
 
         // Stats

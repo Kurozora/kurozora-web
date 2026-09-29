@@ -16,5 +16,6 @@ class MangaItem extends AbstractItem
         readonly array $studios,
         readonly array $genres,
         readonly array $authors,
+        readonly array $externalLinks,
     ) {}
 }

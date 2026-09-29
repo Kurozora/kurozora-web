@@ -106,6 +106,23 @@ class AnimeGames extends Command
     protected const int RETRY_DELAY_MICROSECONDS = 1000000;
 
     /**
+     * The path of the run's cookie jar.
+     *
+     * @var string|null
+     */
+    protected ?string $cookieJar = null;
+
+    /**
+     * The cookie jar shared across the run.
+     *
+     * @return string
+     */
+    protected function cookieJar(): string
+    {
+        return $this->cookieJar ??= tempnam(sys_get_temp_dir(), 'igdb_cookies_');
+    }
+
+    /**
      * Execute the console command.
      *
      * @return int
@@ -258,6 +275,8 @@ class AnimeGames extends Command
                 config('scraper.curl_impersonate.binary'),
                 '--impersonate', config('scraper.curl_impersonate.profile'),
                 '-sL', '--compressed',
+                '-c', $this->cookieJar(),
+                '-b', $this->cookieJar(),
                 '-H', 'x-requested-with: XMLHttpRequest',
                 '-H', 'accept: application/json',
                 $url,

@@ -134,6 +134,7 @@ class AnimeProcessor extends CustomItemProcessor
         $relations = $item->get('relations');
         $openingSongs = $item->get('openings');
         $endingSongs = $item->get('endings');
+        $externalLinks = $item->get('externalLinks') ?? [];
         $attributes = [];
 
         // Collect conditional attributes
@@ -215,6 +216,7 @@ class AnimeProcessor extends CustomItemProcessor
                     'air_season' => $airSeason,
                     'tv_rating_id' => $tvRating->id,
                     'is_nsfw' => $isNSFW,
+                    'external_urls' => $externalLinks,
                 ], $attributes));
             logger()->channel('stderr')->debug('✅️ [MAL_ID:ANIME:' . $malID . '] Done creating anime');
         } else {
@@ -225,6 +227,7 @@ class AnimeProcessor extends CustomItemProcessor
             $newDuration = empty($anime->duration) ? $duration : $anime->duration;
             $newEndedAt = $anime->ended_at ?? $endedAt;
             $newAirDay = $anime->loadMissing(['latestAiredEpisode', 'nextEpisode'])->generateAirDay() ?? $airDay;
+            $newExternalLinks = array_values(array_unique(array_merge($anime->external_urls?->toArray() ?? [], $externalLinks)));
 
             if ($anime->mediaType?->id == 4 && $anime->status?->id == 3 && $newEndedAt != null) {
                 // Movies stay in theaters about 13 weeks on average,
@@ -253,6 +256,7 @@ class AnimeProcessor extends CustomItemProcessor
                 'air_season' => $airSeason,
                 'tv_rating_id' => $tvRating->id,
                 'is_nsfw' => $isNSFW,
+                'external_urls' => $newExternalLinks,
             ], $attributes));
             logger()->channel('stderr')->debug('✅️ [MAL_ID:ANIME:' . $malID . '] Done updating attributes');
         }

@@ -77,7 +77,13 @@ class CharacterProcessor extends CustomItemProcessor
             logger()->channel('stderr')->debug('✅️ [MAL_ID:CHARACTER:' . $malID . '] Done creating character');
         } else {
             logger()->channel('stderr')->debug('🛠 [MAL_ID:CHARACTER:' . $malID . '] Updating attributes');
-            $newAlternativeNames = array_values(array_unique(array_merge($character->nicknames?->toArray() ?? [], $alternativeNames ?? [])));
+            $newAlternativeNames = collect($character->nicknames ?? [])
+                ->merge($alternativeNames ?? [])
+                ->map(fn ($alternativeName) => trim((string) $alternativeName))
+                ->filter()
+                ->unique()
+                ->values()
+                ->all();
 
             // Cast lists own the name.
             $character->update(array_merge([
@@ -121,10 +127,15 @@ class CharacterProcessor extends CustomItemProcessor
             return null;
         }
 
-        $currentAlternativeNames = $character?->alternative_names?->toArray() ?? [];
-        $newAlternativeNames = empty(count($alternativeNames)) ? $currentAlternativeNames : array_merge($currentAlternativeNames, $alternativeNames);
+        $newAlternativeNames = collect($character?->nicknames ?? [])
+            ->merge($alternativeNames)
+            ->map(fn ($alternativeName) => trim((string) $alternativeName))
+            ->filter()
+            ->unique()
+            ->values()
+            ->all();
 
-        return count($newAlternativeNames) ? array_values(array_unique($newAlternativeNames)) : null;
+        return count($newAlternativeNames) ? $newAlternativeNames : null;
     }
 
     /**

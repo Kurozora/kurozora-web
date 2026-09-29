@@ -54,6 +54,13 @@ class GameProcessor extends CustomItemProcessor
     protected const int MAXIMUM_BLANK_COLOR_SPREAD = 24;
 
     /**
+     * The cookie jar shared across the run.
+     *
+     * @var string|null
+     */
+    protected ?string $cookieJar = null;
+
+    /**
      * The available NSFW keywords.
      *
      * @var string[]
@@ -569,10 +576,14 @@ class GameProcessor extends CustomItemProcessor
     {
         $url = str(config('scraper.domains.igdb.game'))->replace(':x', $slug)->value();
 
+        $cookieJar = $this->cookieJar ??= tempnam(sys_get_temp_dir(), 'igdb_cookies_');
+
         $result = Process::timeout((int) config('scraper.curl_impersonate.timeout'))->run([
             config('scraper.curl_impersonate.binary'),
             '--impersonate', config('scraper.curl_impersonate.profile'),
             '-sL', '--compressed',
+            '-c', $cookieJar,
+            '-b', $cookieJar,
             $url,
         ]);
 
@@ -804,6 +815,10 @@ class GameProcessor extends CustomItemProcessor
     {
         foreach ($franchises as $franchise) {
             $model = Franchise::withoutGlobalScopes()->firstOrCreate(['name' => $franchise['name']]);
+
+            if (empty($model->igdb_id) && !empty($franchise['id'])) {
+                $model->update(['igdb_id' => $franchise['id']]);
+            }
 
             MediaFranchise::withoutGlobalScopes()->firstOrCreate([
                 'model_id' => $game->id,

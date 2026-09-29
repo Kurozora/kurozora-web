@@ -37,6 +37,7 @@ return new class extends Migration
             $table->string('slug', 280);
             $table->string('original_title', 280);
             $table->json('synonym_titles')->nullable();
+            $table->json('external_urls')->nullable();
             $table->string('country_id', 2)->default('jp')->nullable();
             $table->unsignedBigInteger('tv_rating_id')->nullable();
             $table->unsignedBigInteger('media_type_id')->nullable();

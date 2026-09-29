@@ -141,6 +141,7 @@ class MangaProcessor extends CustomItemProcessor
         $publicationTime = $this->getPublicationTime($publication);
         $publicationSeason = $this->getPublicationSeason($startedAt);
         $relations = $item->get('relations');
+        $externalLinks = $item->get('externalLinks') ?? [];
         $attributes = [];
 
         // Collect conditional attributes
@@ -222,6 +223,7 @@ class MangaProcessor extends CustomItemProcessor
                     'publication_season' => $publicationSeason,
                     'tv_rating_id' => $tvRating->id,
                     'is_nsfw' => $isNSFW,
+                    'external_urls' => $externalLinks,
                 ], $attributes));
             logger()->channel('stderr')->debug('✅️ [MAL_ID:MANGA:' . $malID . '] Done creating manga');
         } else {
@@ -232,6 +234,7 @@ class MangaProcessor extends CustomItemProcessor
             $newPageCount = empty($manga->page_count) ? $newChapterCount * 18 : $manga->page_count;
             $newDuration = empty($manga->duration) ? 240 : $manga->duration;
             $newEndedAt = $manga->ended_at ?? $endedAt;
+            $newExternalLinks = array_values(array_unique(array_merge($manga->external_urls?->toArray() ?? [], $externalLinks)));
 
             $manga->update(array_merge([
                 'mal_id' => $malID,
@@ -253,6 +256,7 @@ class MangaProcessor extends CustomItemProcessor
                 'publication_season' => $publicationSeason,
                 'tv_rating_id' => $tvRating->id,
                 'is_nsfw' => $isNSFW,
+                'external_urls' => $newExternalLinks,
             ], $attributes));
             logger()->channel('stderr')->debug('✅️ [MAL_ID:MANGA:' . $malID . '] Done updating attributes');
         }

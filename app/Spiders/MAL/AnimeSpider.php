@@ -14,6 +14,7 @@ use App\Spiders\MAL\Models\AnimeItem;
 use App\Spiders\MAL\Models\AnimeStatItem;
 use App\Traits\Spider\ParsesAnimeCharacters;
 use App\Traits\Spider\ParsesAnimeVideos;
+use App\Traits\Spider\ParsesExternalLinks;
 use App\Traits\Spider\ParsesPictures;
 use Arr;
 use Exception;
@@ -37,6 +38,7 @@ class AnimeSpider extends BasicSpider
 {
     use ParsesAnimeCharacters;
     use ParsesAnimeVideos;
+    use ParsesExternalLinks;
     use ParsesPictures;
 
     /**
@@ -170,6 +172,7 @@ class AnimeSpider extends BasicSpider
 
         $imageURL = $this->cleanImageURL($response, 'div.leftside div a img[itemprop="image"]');
         $videoURL = $this->cleanVideoURL($response, 'div.video-promotion a');
+        $externalLinks = $this->cleanExternalLinks($response);
         $relations = $this->cleanRelations($response, 'div.related-entries');
         $openings = $this->cleanSongs($response, 'div[class*="theme-songs opnening"] table'); // typo on the website
         $endings = $this->cleanSongs($response, 'div[class*="theme-songs ending"] table');
@@ -187,7 +190,8 @@ class AnimeSpider extends BasicSpider
             array_replace([], ...$genres),
             $relations,
             $openings,
-            $endings
+            $endings,
+            $externalLinks
         ));
 
         // Stats

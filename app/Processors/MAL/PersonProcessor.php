@@ -27,6 +27,18 @@ use Throwable;
 class PersonProcessor extends CustomItemProcessor
 {
     /**
+     * The hosts that serve social media profiles.
+     *
+     * @var string[]
+     */
+    private const array SOCIAL_HOSTS = [
+        'bilibili.com', 'bsky.app', 'deviantart.com', 'facebook.com', 'instagram.com',
+        'mixi.jp', 'nicovideo.jp', 'nijie.info', 'pixiv.net', 'soundcloud.com',
+        'threads.net', 'tiktok.com', 'tumblr.com', 'twitcasting.tv', 'twitter.com',
+        'vk.com', 'weibo.cn', 'weibo.com', 'x.com', 'youtube.com',
+    ];
+
+    /**
      * @return array<int, class-string<ItemInterface>>
      */
     protected function getHandledItemClasses(): array
@@ -67,6 +79,7 @@ class PersonProcessor extends CustomItemProcessor
         if (empty($person)) {
             logger()->channel('stderr')->debug('🖨 [MAL_ID:PERSON:' . $malID . '] Creating person');
             $astrologicalSign = $this->getAstrologicalSign($birthdate);
+            $newWebsites = $this->getWebsites($websites, null);
 
             $person = Person::withoutGlobalScopes()
                 ->create([
@@ -80,7 +93,8 @@ class PersonProcessor extends CustomItemProcessor
                     'birthdate' => $birthdate?->toDateString(),
                     'deceased_date' => $deceasedDate?->toDateString(),
                     'astrological_sign' => $astrologicalSign?->value,
-                    'website_urls' => $websites,
+                    'website_urls' => $newWebsites['website'],
+                    'social_urls' => $newWebsites['social'],
                 ]);
             logger()->channel('stderr')->debug('✅️ [MAL_ID:PERSON:' . $malID . '] Done creating person');
         } else {
@@ -89,7 +103,13 @@ class PersonProcessor extends CustomItemProcessor
             $newLastName = empty($name[1]) ? $person->last_name : $name[1];
             $newGivenName = empty($japaneseName[0]) ? $person->given_name : $japaneseName[0];
             $newFamilyName = empty($japaneseName[1]) ? $person->family_name : $japaneseName[1];
-            $newAlternativeNames = array_values(array_unique(array_merge($person->alternative_names?->toArray() ?? [], $alternativeNames ?? [])));
+            $newAlternativeNames = collect($person->alternative_names ?? [])
+                ->merge($alternativeNames ?? [])
+                ->map(fn ($alternativeName) => trim((string) $alternativeName))
+                ->filter()
+                ->unique()
+                ->values()
+                ->all();
             $newWebsites = $this->getWebsites($websites, $person);
             $newBirthdate = empty($birthdate) ? $person->birthdate : $birthdate;
             $newDeceasedDate = empty($deceasedDate) ? $person->deceased_date : $deceasedDate;
@@ -106,7 +126,8 @@ class PersonProcessor extends CustomItemProcessor
                 'birthdate' => $newBirthdate?->toDateString(),
                 'deceased_date' => $newDeceasedDate?->toDateString(),
                 'astrological_sign' => $astrologicalSign?->value,
-                'website_urls' => $newWebsites,
+                'website_urls' => $newWebsites['website'],
+                'social_urls' => $newWebsites['social'],
             ]);
             logger()->channel('stderr')->debug('✅️ [MAL_ID:PERSON:' . $malID . '] Done updating attributes');
         }
@@ -157,31 +178,70 @@ class PersonProcessor extends CustomItemProcessor
         }
 
         $currentAlternativeNames = $person?->alternative_names?->toArray() ?? [];
-        $newAlternativeNames = empty(count($alternativeNames)) ? $currentAlternativeNames : array_merge($currentAlternativeNames, $alternativeNames);
+        $newAlternativeNames = collect($currentAlternativeNames)
+            ->merge($alternativeNames)
+            ->map(fn ($alternativeName) => trim((string) $alternativeName))
+            ->filter()
+            ->unique()
+            ->values()
+            ->all();
 
-        return count($newAlternativeNames) ? array_values(array_unique($newAlternativeNames)) : null;
+        return count($newAlternativeNames) ? $newAlternativeNames : null;
     }
 
     /**
-     * Gt the websites of the person.
+     * Get the websites of the person, split into personal and social pages.
      *
-     * @param null|array $websites
-     * @param Person     $person
+     * @param null|array  $websites
+     * @param null|Person $person
      *
      * @return array
      */
-    private function getWebsites(?array $websites, Person $person): array
+    private function getWebsites(?array $websites, ?Person $person): array
     {
-        return collect($websites ?? [])
-            ->merge($person->website_urls?->toArray() ?? [])
+        $urls = collect($websites ?? [])
+            ->merge($person?->website_urls?->toArray() ?? [])
+            ->merge($person?->social_urls?->toArray() ?? [])
             ->transform(function ($website) {
                 return str($website)
                     ->trim()
                     ->replaceEnd('/', '')
                     ->value();
             })
-            ->unique()
-            ->toArray();
+            ->filter()
+            ->unique();
+
+        return [
+            'website' => $urls->reject($this->isSocialUrl(...))
+                ->values()
+                ->toArray(),
+            'social' => $urls->filter($this->isSocialUrl(...))
+                ->values()
+                ->toArray(),
+        ];
+    }
+
+    /**
+     * Determine whether a URL points at a social media profile.
+     *
+     * @param string $url
+     *
+     * @return bool
+     */
+    private function isSocialUrl(string $url): bool
+    {
+        $host = str(parse_url($url, PHP_URL_HOST) ?? '')
+            ->lower()
+            ->replaceStart('www.', '')
+            ->value();
+
+        foreach (self::SOCIAL_HOSTS as $socialHost) {
+            if ($host === $socialHost || str_ends_with($host, '.' . $socialHost)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
