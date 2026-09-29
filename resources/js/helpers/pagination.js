@@ -5,8 +5,10 @@ import ProgressBar from './progress-bar'
 export default class PaginationManager {
     #linkSelector = 'nav[aria-label="Pagination Navigation"] a[href]'
     #containerSelector = '[data-paginated]'
+    #loadingSelector = '[data-loading]'
     #livewireMethods = ['gotoPage', 'nextPage', 'previousPage', 'setPage']
     #progressBar = new ProgressBar()
+    #requests = new WeakMap()
 
     constructor() {
         document.addEventListener('click', (event) => this.#onClick(event))
@@ -43,7 +45,7 @@ export default class PaginationManager {
         }
 
         (link.closest('body') || document.querySelector('body')).scrollIntoView()
-        this.#paginate(container, link.href, { push: true })
+        this.load(container, link.href, { history: 'push', progress: true })
     }
 
     #onPopState() {
@@ -51,21 +53,25 @@ export default class PaginationManager {
             const currentUrl = container.dataset.paginatedUrl ?? window.location.href
 
             if (currentUrl !== window.location.href) {
-                this.#paginate(container, window.location.href, { push: false })
+                this.load(container, window.location.href, { progress: true })
             }
         }
     }
 
-    async #paginate(container, url, { push }) {
-        if (container.dataset.busy === 'true') {
-            return
+    async load(element, url, { history = null, progress = false } = {}) {
+        const container = element.closest(this.#containerSelector)
+        const request = new AbortController()
+
+        this.#requests.get(container)?.abort()
+        this.#requests.set(container, request)
+        this.#setLoading(container, true)
+
+        if (progress) {
+            this.#progressBar.start()
         }
 
-        container.dataset.busy = 'true'
-        this.#progressBar.start()
-
         try {
-            const response = await fetch(url, { headers: { Accept: 'text/html' } })
+            const response = await fetch(url, { headers: { Accept: 'text/html' }, signal: request.signal })
 
             if (!response.ok) {
                 window.Livewire.navigate(url)
@@ -83,12 +89,29 @@ export default class PaginationManager {
             replacement.dataset.paginatedUrl = url
             window.Alpine.morph(container, replacement.outerHTML)
 
-            if (push) {
-                window.history.pushState({ ...(window.history.state ?? {}), paginated: container.dataset.paginated }, '', url)
+            if (history !== null) {
+                const state = { ...(window.history.state ?? {}), paginated: container.dataset.paginated }
+
+                history === 'push'
+                    ? window.history.pushState(state, '', url)
+                    : window.history.replaceState(state, '', url)
+            }
+        } catch (error) {
+            if (error.name !== 'AbortError') {
+                throw error
             }
         } finally {
-            this.#progressBar.finish()
-            delete container.dataset.busy
+            if (this.#requests.get(container) === request) {
+                this.#requests.delete(container)
+                this.#setLoading(container, false)
+                this.#progressBar.finish()
+            }
+        }
+    }
+
+    #setLoading(container, loading) {
+        for (const indicator of container.querySelectorAll(this.#loadingSelector)) {
+            indicator.classList.toggle('hidden', !loading)
         }
     }
 }

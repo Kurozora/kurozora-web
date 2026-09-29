@@ -3,6 +3,7 @@
 use App\Enums\ParentalGuideCategory;
 use App\Enums\UserLibraryKind;
 use App\Http\Controllers\Web\AnimeController;
+use App\Http\Controllers\Web\CatalogController;
 use App\Http\Controllers\Web\SeasonController;
 use App\Http\Controllers\Web\SectionController;
 use App\Http\Controllers\Web\TitleCastController;
@@ -14,7 +15,6 @@ use App\Livewire\Browse\Continuing\Index as BrowseContinuingIndex;
 use App\Livewire\Browse\Seasons\Archive as BrowseSeasonsArchive;
 use App\Livewire\Browse\Seasons\Index as BrowseSeasonsIndex;
 use App\Livewire\Browse\Upcoming\Index as BrowseUpcomingIndex;
-use App\Livewire\Catalog;
 use App\Livewire\ParentalGuide;
 use App\Livewire\ParentalGuideCategoryEntries;
 use App\Livewire\Reviews;
@@ -24,7 +24,7 @@ use App\Models\Anime;
 Route::prefix('/anime')
     ->name('anime')
     ->group(function () {
-        Route::get('/', Catalog::class)
+        Route::get('/', [CatalogController::class, 'index'])
             ->defaults('kind', UserLibraryKind::Anime)
             ->name('.index');
 
