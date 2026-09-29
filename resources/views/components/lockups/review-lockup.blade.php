@@ -53,7 +53,7 @@
                 <div class="flex flex-wrap gap-1">
                     <a class="inline-flex items-center text-sm font-semibold break-all overflow-hidden" href="{{ route('profile.details', $review->user) }}">{{ $review->user->username }}</a>
 
-                    <livewire:components.user.badge-shelf :user="$review->user" wire:key="{{ uniqid('badges-', true) }}" />
+                    <x-user.badge-shelf :user="$review->user" />
                 </div>
 
                 <p class="text-sm text-secondary whitespace-nowrap" title="{{ $review->created_at->toFormattedDateString() }}">{{ $review->created_at->toFormattedDateString() }}</p>

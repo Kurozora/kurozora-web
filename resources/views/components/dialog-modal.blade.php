@@ -1,6 +1,6 @@
-@props(['id' => null, 'maxWidth' => null, 'stickyHeader' => false])
+@props(['id' => null, 'maxWidth' => null, 'stickyHeader' => false, 'open' => false])
 
-<x-modal :id="$id" :maxWidth="$maxWidth" {{ $attributes }}>
+<x-modal :id="$id" :maxWidth="$maxWidth" :open="$open" {{ $attributes }}>
     <div>
         <div @class(['sticky top-0 bg-primary z-10' => $stickyHeader])>
             <div class="pt-4 pb-4 pl-4 pr-4">

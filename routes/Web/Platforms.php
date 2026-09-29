@@ -1,6 +1,7 @@
 <?php
 
-use App\Livewire\Platform\Details as PlatformDetails;
+use App\Http\Controllers\Web\PlatformController;
+use App\Http\Controllers\Web\SectionController;
 use App\Livewire\Platform\Index as PlatformIndex;
 use App\Models\Platform;
 
@@ -12,8 +13,13 @@ Route::prefix('/platforms')
 
         Route::prefix('{platform}')
             ->group(function () {
-                Route::get('/', PlatformDetails::class)
+                Route::get('/', [PlatformController::class, 'show'])
                     ->name('.details');
+
+                Route::get('/sections/{section}', [SectionController::class, 'platform'])
+                    ->where('section', 'games')
+                    ->middleware('auth')
+                    ->name('.section');
 
                 Route::get('/edit', function (Platform $platform) {
                     return redirect(Nova::path() . '/resources/'. \App\Nova\Platform::uriKey() . '/' . $platform->id);

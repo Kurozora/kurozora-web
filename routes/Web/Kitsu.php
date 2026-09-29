@@ -1,7 +1,7 @@
 <?php
 
-use App\Livewire\Anime\Details as AnimeDetails;
-use App\Livewire\Manga\Details as MangaDetails;
+use App\Http\Controllers\Web\AnimeController;
+use App\Http\Controllers\Web\MangaController;
 
 Route::prefix('/{kitsu_url}')
     ->where(['kitsu_url' => '^(www\.)?kitsu(.io)?'])
@@ -14,10 +14,10 @@ Route::prefix('/{kitsu_url}')
                 Route::prefix('{anime:slug}')
                     ->name('.details')
                     ->group(function () {
-                        Route::get('/', AnimeDetails::class)
+                        Route::get('/', [AnimeController::class, 'show'])
                             ->name('.index');
 
-                        Route::get('/{any}', AnimeDetails::class)
+                        Route::get('/{any}', [AnimeController::class, 'show'])
                             ->name('.any');
                     });
             });
@@ -28,10 +28,10 @@ Route::prefix('/{kitsu_url}')
                 Route::prefix('{manga:slug}')
                     ->name('.details')
                     ->group(function () {
-                        Route::get('/', MangaDetails::class)
+                        Route::get('/', [MangaController::class, 'show'])
                             ->name('.index');
 
-                        Route::get('/{any}', MangaDetails::class)
+                        Route::get('/{any}', [MangaController::class, 'show'])
                             ->name('.any');
                     });
             });

@@ -1,6 +1,6 @@
 <?php
 
-use App\Livewire\Anime\Details as AnimeDetails;
+use App\Http\Controllers\Web\AnimeController;
 
 Route::prefix('/{trakt_url}')
     ->where(['trakt_url' => '^(www\.)?trakt(.tv)?'])
@@ -13,10 +13,10 @@ Route::prefix('/{trakt_url}')
                 Route::prefix('{anime:slug}')
                     ->name('.details')
                     ->group(function () {
-                        Route::get('/', AnimeDetails::class)
+                        Route::get('/', [AnimeController::class, 'show'])
                             ->name('.index');
 
-                        Route::get('/{any}', AnimeDetails::class)
+                        Route::get('/{any}', [AnimeController::class, 'show'])
                             ->name('.any');
                     });
             });

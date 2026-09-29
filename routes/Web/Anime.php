@@ -2,8 +2,9 @@
 
 use App\Enums\ParentalGuideCategory;
 use App\Enums\UserLibraryKind;
+use App\Http\Controllers\Web\AnimeController;
+use App\Http\Controllers\Web\SeasonController;
 use App\Http\Controllers\Web\SectionController;
-use App\Livewire\Anime\Details as AnimeDetails;
 use App\Livewire\Browse\Continuing\Index as BrowseContinuingIndex;
 use App\Livewire\Browse\Seasons\Archive as BrowseSeasonsArchive;
 use App\Livewire\Browse\Seasons\Index as BrowseSeasonsIndex;
@@ -16,7 +17,6 @@ use App\Livewire\RelatedGames;
 use App\Livewire\RelatedMangas;
 use App\Livewire\RelatedShows;
 use App\Livewire\Reviews;
-use App\Livewire\Season\Details as SeasonDetails;
 use App\Livewire\Songs;
 use App\Livewire\Staff;
 use App\Livewire\Studios;
@@ -78,7 +78,7 @@ Route::prefix('/anime')
 
         Route::prefix('{anime}')
             ->group(function () {
-                Route::get('/', AnimeDetails::class)
+                Route::get('/', [AnimeController::class, 'show'])
                     ->name('.details');
 
                 Route::get('/sections/{section}', [SectionController::class, 'anime'])
@@ -126,7 +126,7 @@ Route::prefix('/anime')
                     ->defaults('kind', UserLibraryKind::Anime)
                     ->name('.reviews');
 
-                Route::get('/seasons', SeasonDetails::class)
+                Route::get('/seasons', [SeasonController::class, 'index'])
                     ->name('.seasons');
 
                 Route::get('/songs', Songs::class)

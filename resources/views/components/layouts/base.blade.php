@@ -48,6 +48,7 @@
             'resources/js/history.js',
             'resources/js/submenu.js',
             'resources/js/dropdown.js',
+            'resources/js/user-actions.js',
             'resources/js/app.js',
             'resources/js/db.js',
             'resources/js/worker.js',
@@ -151,6 +152,10 @@
 
             <x-alert />
             <x-subscription-sheet />
+
+            @auth
+                <livewire:user-actions />
+            @endauth
         </div>
 
         <x-music.connect-prompt />

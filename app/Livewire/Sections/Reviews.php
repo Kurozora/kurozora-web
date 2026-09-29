@@ -35,13 +35,6 @@ class Reviews extends Component
     public Model $model;
 
     /**
-     * Whether the component is ready to load.
-     *
-     * @var bool $readyToLoad
-     */
-    public bool $readyToLoad = false;
-
-    /**
      * Whether to show the popup to the user.
      *
      * @var bool $showPopup
@@ -72,16 +65,6 @@ class Reviews extends Component
     }
 
     /**
-     * Sets the property to load the section.
-     *
-     * @return void
-     */
-    public function loadSection(): void
-    {
-        $this->readyToLoad = true;
-    }
-
-    /**
      * Shows the popup to the user.
      *
      * @return void
@@ -98,14 +81,11 @@ class Reviews extends Component
      */
     public function getEditorialProperty(): ?Editorial
     {
-        if (!$this->readyToLoad) {
-            return null;
-        }
-
         return $this->model->editorial()
             ->published()
             ->first();
     }
+
     /**
      * The array of reviews.
      *
@@ -113,10 +93,6 @@ class Reviews extends Component
      */
     public function getReviewsProperty(): Collection
     {
-        if (!$this->readyToLoad) {
-            return collect();
-        }
-
         return $this->model->mediaRatings()
             ->with(array_merge(['user.media', 'revisions'], MediaRating::lockupEagerLoads(auth()->user())))
             ->where('description', '!=', null)

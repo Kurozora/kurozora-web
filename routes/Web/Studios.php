@@ -1,7 +1,8 @@
 <?php
 
+use App\Http\Controllers\Web\SectionController;
+use App\Http\Controllers\Web\StudioController;
 use App\Livewire\Studio\Anime as StudioAnime;
-use App\Livewire\Studio\Details as StudioDetails;
 use App\Livewire\Studio\Games as StudioGames;
 use App\Livewire\Studio\Index as StudioIndex;
 use App\Livewire\Studio\Manga as StudioManga;
@@ -16,8 +17,13 @@ Route::prefix('/studios')
 
         Route::prefix('{studio}')
             ->group(function () {
-                Route::get('/', StudioDetails::class)
+                Route::get('/', [StudioController::class, 'show'])
                     ->name('.details');
+
+                Route::get('/sections/{section}', [SectionController::class, 'studio'])
+                    ->where('section', 'anime|manga|games')
+                    ->middleware('auth')
+                    ->name('.section');
 
                 Route::get('/edit', function (Studio $studio) {
                     return redirect(Nova::path() . '/resources/'. \App\Nova\Studio::uriKey() . '/' . $studio->id);

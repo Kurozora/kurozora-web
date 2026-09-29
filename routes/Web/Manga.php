@@ -2,6 +2,7 @@
 
 use App\Enums\ParentalGuideCategory;
 use App\Enums\UserLibraryKind;
+use App\Http\Controllers\Web\MangaController;
 use App\Http\Controllers\Web\SectionController;
 use App\Livewire\Browse\Continuing\Index as BrowseContinuingIndex;
 use App\Livewire\Browse\Seasons\Archive as BrowseSeasonsArchive;
@@ -10,7 +11,6 @@ use App\Livewire\Browse\Upcoming\Index as BrowseUpcomingIndex;
 use App\Livewire\Adapted;
 use App\Livewire\Cast;
 use App\Livewire\Catalog;
-use App\Livewire\Manga\Details as MangaDetails;
 use App\Livewire\ParentalGuide;
 use App\Livewire\ParentalGuideCategoryEntries;
 use App\Livewire\RelatedGames;
@@ -76,7 +76,7 @@ Route::prefix('/manga')
 
         Route::prefix('{manga}')
             ->group(function () {
-                Route::get('/', MangaDetails::class)
+                Route::get('/', [MangaController::class, 'show'])
                     ->name('.details');
 
                 Route::get('/sections/{section}', [SectionController::class, 'manga'])

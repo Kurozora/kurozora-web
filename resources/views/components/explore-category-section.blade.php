@@ -4,7 +4,13 @@
     $exploreCategoryItems = $items ?? $exploreCategory->items($genre ?? $theme);
 @endphp
 
-<div data-section>
+<div
+    data-section
+    @if ($exploreCategory->type == \App\Enums\ExploreCategoryTypes::UpNextEpisodes)
+        data-section-refresh-on="refresh-up-next-section"
+        data-section-url="{{ route('explore.section', ['exploreCategory' => $exploreCategory, 'genre' => $genre?->slug, 'theme' => $theme?->slug], false) }}"
+    @endif
+>
     <div>
         @if ($exploreCategoryItems->count())
             <section class="pt-4 pb-8">
@@ -59,7 +65,7 @@
                         </div>
                     @break
                     @case(\App\Enums\ExploreCategoryTypes::UpNextEpisodes)
-                        <livewire:components.episode.up-next-section />
+                        <x-rows.episode-lockup :episodes="$exploreCategoryItems" />
                     @break
                     @case(\App\Enums\ExploreCategoryTypes::UpcomingShows)
                         <div class="flex flex-nowrap gap-4 pl-4 pr-4 snap-mandatory snap-x scroll-pl-4 overflow-x-scroll no-scrollbar xl:safe-area-inset-scroll">

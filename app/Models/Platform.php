@@ -34,6 +34,9 @@ class Platform extends KModel implements HasMedia, Sitemapable
         Searchable,
         SoftDeletes;
 
+    // Maximum relationships fetch limit
+    const int MAXIMUM_RELATIONSHIPS_LIMIT = 10;
+
     // Table name
     const string TABLE_NAME = 'platforms';
     protected $table = self::TABLE_NAME;

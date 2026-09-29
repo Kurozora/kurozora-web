@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Events\ModelViewed;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
@@ -12,6 +13,41 @@ use Illuminate\View\View;
 
 class UserProfileController extends Controller
 {
+    /**
+     * Show a user's profile page.
+     *
+     * @param Request $request
+     * @param User    $user
+     *
+     * @return Application|Factory|View
+     */
+    public function show(Request $request, User $user): Application|Factory|View
+    {
+        ModelViewed::dispatch($user, $request->ip());
+
+        $authUser = $request->user();
+
+        $user->load(['media'])
+            ->loadCount([
+                'achievements',
+                'followers',
+                'following',
+                'mediaRatings',
+            ]);
+
+        return view('profile.details', [
+            'user' => $user,
+            'isOwner' => $authUser !== null && $user->is($authUser),
+            'isBlocked' => $authUser !== null && $user->blockers()
+                ->where('user_id', '=', $authUser->id)
+                ->exists(),
+            'isBlockedBy' => $authUser !== null && $user->hasBlocked($authUser),
+            'isFollowed' => $authUser !== null && $user->followers()
+                ->where('user_id', '=', $authUser->id)
+                ->exists(),
+        ]);
+    }
+
     /**
      * Show the user's profile settings.
      *

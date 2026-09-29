@@ -3,10 +3,10 @@
 use App\Enums\UserLibraryKind;
 use App\Http\Controllers\Web\MeController;
 use App\Http\Controllers\Web\Profile\LibraryController;
+use App\Http\Controllers\Web\SectionController;
 use App\Http\Controllers\Web\UserProfileController;
 use App\Livewire\Profile\Achievements\Index as AchievementsIndex;
 use App\Livewire\Profile\Blocked\Index as BlockedIndex;
-use App\Livewire\Profile\Details;
 use App\Livewire\Profile\Followers\Index as FollowersIndex;
 use App\Livewire\Profile\Following\Index as FollowingIndex;
 use App\Livewire\Profile\Library\Favorites;
@@ -38,8 +38,13 @@ Route::prefix('/profile')
         Route::prefix('/{user}')
             ->middleware('can:view,user')
             ->group(function () {
-                Route::get('/', Details::class)
+                Route::get('/', [UserProfileController::class, 'show'])
                     ->name('.details');
+
+                Route::get('/sections/{section}', [SectionController::class, 'profile'])
+                    ->where('section', 'banner-image|profile-image|anime-library|manga-library|games-library|anime-favorites|manga-favorites|games-favorites|feed-messages')
+                    ->middleware('auth')
+                    ->name('.section');
 
                 Route::prefix('/anime')
                     ->name('.anime')

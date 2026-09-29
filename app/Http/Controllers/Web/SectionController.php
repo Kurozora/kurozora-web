@@ -6,20 +6,33 @@ use App\Enums\ScheduleKind;
 use App\Enums\UserLibraryKind;
 use App\Http\Controllers\Controller;
 use App\Models\Anime;
+use App\Models\Character;
 use App\Models\Game;
 use App\Models\Manga;
+use App\Models\Person;
+use App\Models\Platform;
 use App\Models\Song;
 use App\Models\Studio;
+use App\Models\User;
 use App\View\Components\AnimeSeasonsSection;
 use App\View\Components\CastSection;
+use App\View\Components\Character\MediaSection as CharacterMediaSection;
 use App\View\Components\Chart\Section as ChartSection;
 use App\View\Components\MoreByStudioSection;
+use App\View\Components\Person\MediaSection as PersonMediaSection;
+use App\View\Components\Platform\MediaSection as PlatformMediaSection;
 use App\View\Components\RelationsSection;
 use App\View\Components\Sections\Schedule as ScheduleSection;
 use App\View\Components\Song\MediaSection as SongMediaSection;
 use App\View\Components\SongsSection;
 use App\View\Components\StaffSection;
+use App\View\Components\Studio\MediaSection as StudioMediaSection;
 use App\View\Components\StudiosSection;
+use App\View\Components\User\BannerImage;
+use App\View\Components\User\FavoritesSection;
+use App\View\Components\User\FeedMessagesSection;
+use App\View\Components\User\LibrarySection;
+use App\View\Components\User\ProfileImage;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -45,7 +58,7 @@ class SectionController extends Controller
             'staff' => new StaffSection(UserLibraryKind::Anime, $anime),
             'songs' => new SongsSection(UserLibraryKind::Anime, $anime),
             'studios' => new StudiosSection(UserLibraryKind::Anime, $anime),
-            'more-by-studio' => new MoreByStudioSection(UserLibraryKind::Anime, $anime, $this->studio($request)),
+            'more-by-studio' => new MoreByStudioSection(UserLibraryKind::Anime, $anime, $this->requestedStudio($request)),
             'related-anime' => new RelationsSection(UserLibraryKind::Anime, UserLibraryKind::Anime, $anime),
             'related-manga' => new RelationsSection(UserLibraryKind::Anime, UserLibraryKind::Manga, $anime),
             'related-games' => new RelationsSection(UserLibraryKind::Anime, UserLibraryKind::Game, $anime),
@@ -67,7 +80,7 @@ class SectionController extends Controller
             'cast' => new CastSection(UserLibraryKind::Manga, $manga),
             'staff' => new StaffSection(UserLibraryKind::Manga, $manga),
             'studios' => new StudiosSection(UserLibraryKind::Manga, $manga),
-            'more-by-studio' => new MoreByStudioSection(UserLibraryKind::Manga, $manga, $this->studio($request)),
+            'more-by-studio' => new MoreByStudioSection(UserLibraryKind::Manga, $manga, $this->requestedStudio($request)),
             'related-manga' => new RelationsSection(UserLibraryKind::Manga, UserLibraryKind::Manga, $manga),
             'related-anime' => new RelationsSection(UserLibraryKind::Manga, UserLibraryKind::Anime, $manga),
             'related-games' => new RelationsSection(UserLibraryKind::Manga, UserLibraryKind::Game, $manga),
@@ -90,10 +103,101 @@ class SectionController extends Controller
             'staff' => new StaffSection(UserLibraryKind::Game, $game),
             'songs' => new SongsSection(UserLibraryKind::Game, $game),
             'studios' => new StudiosSection(UserLibraryKind::Game, $game),
-            'more-by-studio' => new MoreByStudioSection(UserLibraryKind::Game, $game, $this->studio($request)),
+            'more-by-studio' => new MoreByStudioSection(UserLibraryKind::Game, $game, $this->requestedStudio($request)),
             'related-games' => new RelationsSection(UserLibraryKind::Game, UserLibraryKind::Game, $game),
             'related-anime' => new RelationsSection(UserLibraryKind::Game, UserLibraryKind::Anime, $game),
             'related-manga' => new RelationsSection(UserLibraryKind::Game, UserLibraryKind::Manga, $game),
+        });
+    }
+
+    /**
+     * Render a section of a character page.
+     *
+     * @param Character $character
+     * @param string    $section
+     *
+     * @return Response
+     */
+    public function character(Character $character, string $section): Response
+    {
+        return $this->render(match ($section) {
+            'anime' => new CharacterMediaSection($character, Anime::class),
+            'people' => new CharacterMediaSection($character, Person::class),
+            'manga' => new CharacterMediaSection($character, Manga::class),
+            'games' => new CharacterMediaSection($character, Game::class),
+        });
+    }
+
+    /**
+     * Render a section of a person page.
+     *
+     * @param Person $person
+     * @param string $section
+     *
+     * @return Response
+     */
+    public function person(Person $person, string $section): Response
+    {
+        return $this->render(match ($section) {
+            'anime' => new PersonMediaSection($person, Anime::class),
+            'characters' => new PersonMediaSection($person, Character::class),
+            'manga' => new PersonMediaSection($person, Manga::class),
+            'games' => new PersonMediaSection($person, Game::class),
+        });
+    }
+
+    /**
+     * Render a section of a studio page.
+     *
+     * @param Studio $studio
+     * @param string $section
+     *
+     * @return Response
+     */
+    public function studio(Studio $studio, string $section): Response
+    {
+        return $this->render(match ($section) {
+            'anime' => new StudioMediaSection($studio, Anime::class),
+            'manga' => new StudioMediaSection($studio, Manga::class),
+            'games' => new StudioMediaSection($studio, Game::class),
+        });
+    }
+
+    /**
+     * Render a section of a platform page.
+     *
+     * @param Platform $platform
+     * @param string   $section
+     *
+     * @return Response
+     */
+    public function platform(Platform $platform, string $section): Response
+    {
+        return $this->render(match ($section) {
+            'games' => new PlatformMediaSection($platform, Game::class),
+        });
+    }
+
+    /**
+     * Render a section of a profile page.
+     *
+     * @param User   $user
+     * @param string $section
+     *
+     * @return Response
+     */
+    public function profile(User $user, string $section): Response
+    {
+        return $this->render(match ($section) {
+            'banner-image' => new BannerImage($user, true),
+            'profile-image' => new ProfileImage($user, true),
+            'anime-library' => new LibrarySection($user, Anime::class),
+            'manga-library' => new LibrarySection($user, Manga::class),
+            'games-library' => new LibrarySection($user, Game::class),
+            'anime-favorites' => new FavoritesSection($user, Anime::class),
+            'manga-favorites' => new FavoritesSection($user, Manga::class),
+            'games-favorites' => new FavoritesSection($user, Game::class),
+            'feed-messages' => new FeedMessagesSection($user),
         });
     }
 
@@ -147,7 +251,7 @@ class SectionController extends Controller
      *
      * @return Studio
      */
-    protected function studio(Request $request): Studio
+    protected function requestedStudio(Request $request): Studio
     {
         return Studio::findOrFail($request->integer('studio'));
     }

@@ -1,6 +1,6 @@
 <?php
 
-use App\Livewire\Anime\Details as AnimeDetails;
+use App\Http\Controllers\Web\AnimeController;
 
 Route::prefix('/{imdb_url}')
     ->where(['imdb_url' => '^(www\.)?imdb(.com)?'])
@@ -13,7 +13,7 @@ Route::prefix('/{imdb_url}')
                 Route::prefix('{anime:imdb_id}')
                     ->name('.details')
                     ->group(function () {
-                        Route::get('/', AnimeDetails::class)
+                        Route::get('/', [AnimeController::class, 'show'])
                             ->name('.index');
                     });
             });

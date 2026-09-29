@@ -47,6 +47,23 @@ final class UserLibraryStatus extends Enum
     }
 
     /**
+     * Make an enum instance from a given URL slug.
+     *
+     * @param string|null $slug
+     *
+     * @return static|null
+     */
+    public static function fromSlug(?string $slug): ?static
+    {
+        $key = str($slug ?? '')
+            ->title()
+            ->replace('-', '')
+            ->toString();
+
+        return self::hasKey($key) ? self::fromKey($key) : null;
+    }
+
+    /**
      * Check that the enum contains a specific key.
      */
     public static function hasKey(string $key): bool

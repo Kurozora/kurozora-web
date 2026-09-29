@@ -1,9 +1,9 @@
 <?php
 
-use App\Livewire\Anime\Details as AnimeDetails;
-use App\Livewire\Character\Details as CharacterDetails;
-use App\Livewire\Manga\Details as MangaDetails;
-use App\Livewire\Person\Details as PersonDetails;
+use App\Http\Controllers\Web\AnimeController;
+use App\Http\Controllers\Web\CharacterController;
+use App\Http\Controllers\Web\MangaController;
+use App\Http\Controllers\Web\PersonController;
 
 Route::prefix('/{mal_url}')
     ->where(['mal_url' => '^(www\.)?(myanimelist|mal)(.net)?'])
@@ -16,10 +16,10 @@ Route::prefix('/{mal_url}')
                 Route::prefix('{anime:mal_id}')
                     ->name('.details')
                     ->group(function () {
-                        Route::get('/', AnimeDetails::class)
+                        Route::get('/', [AnimeController::class, 'show'])
                             ->name('.index');
 
-                        Route::get('/{any}', AnimeDetails::class)
+                        Route::get('/{any}', [AnimeController::class, 'show'])
                             ->name('.any');
                     });
             });
@@ -30,10 +30,10 @@ Route::prefix('/{mal_url}')
                 Route::prefix('{character:mal_id}')
                     ->name('.details')
                     ->group(function () {
-                        Route::get('/', CharacterDetails::class)
+                        Route::get('/', [CharacterController::class, 'show'])
                             ->name('.index');
 
-                        Route::get('/{any}', CharacterDetails::class)
+                        Route::get('/{any}', [CharacterController::class, 'show'])
                             ->name('.any');
                     });
             });
@@ -44,10 +44,10 @@ Route::prefix('/{mal_url}')
                 Route::prefix('{manga:mal_id}')
                     ->name('.details')
                     ->group(function () {
-                        Route::get('/', MangaDetails::class)
+                        Route::get('/', [MangaController::class, 'show'])
                             ->name('.index');
 
-                        Route::get('/{any}', MangaDetails::class)
+                        Route::get('/{any}', [MangaController::class, 'show'])
                             ->name('.any');
                     });
             });
@@ -58,10 +58,10 @@ Route::prefix('/{mal_url}')
                 Route::prefix('{person:mal_id}')
                     ->name('.details')
                     ->group(function () {
-                        Route::get('/', PersonDetails::class)
+                        Route::get('/', [PersonController::class, 'show'])
                             ->name('.index');
 
-                        Route::get('/{any}', PersonDetails::class)
+                        Route::get('/{any}', [PersonController::class, 'show'])
                             ->name('.any');
                     });
             });

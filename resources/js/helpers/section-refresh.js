@@ -1,14 +1,18 @@
 // section-refresh.js
 
 export default class SectionRefreshManager {
-    #selector = '[data-section-refresh]'
+    #triggerSelector = '[data-section-refresh]'
+    #listenerSelector = '[data-section][data-section-refresh-on]'
+    #subscribedEvents = new Set()
 
     constructor() {
         document.addEventListener('click', (event) => this.#onClick(event))
+        document.addEventListener('DOMContentLoaded', () => this.#subscribe())
+        document.addEventListener('livewire:navigated', () => this.#subscribe())
     }
 
     #onClick(event) {
-        const trigger = event.target.closest(this.#selector)
+        const trigger = event.target.closest(this.#triggerSelector)
 
         if (!trigger) {
             return
@@ -16,20 +20,38 @@ export default class SectionRefreshManager {
 
         event.preventDefault()
 
-        this.refresh(trigger)
+        this.refresh(trigger.closest('[data-section]'), trigger.dataset.sectionRefresh)
     }
 
-    async refresh(trigger) {
-        const section = trigger.closest('[data-section]')
-        const url = trigger.dataset.sectionRefresh
+    #subscribe() {
+        for (const section of document.querySelectorAll(this.#listenerSelector)) {
+            for (const eventName of section.dataset.sectionRefreshOn.split(' ')) {
+                if (this.#subscribedEvents.has(eventName)) {
+                    continue
+                }
 
-        if (!section || !url || trigger.dataset.busy === 'true') {
+                this.#subscribedEvents.add(eventName)
+                window.addEventListener(eventName, () => this.#refreshSubscribers(eventName))
+            }
+        }
+    }
+
+    #refreshSubscribers(eventName) {
+        for (const section of document.querySelectorAll(this.#listenerSelector)) {
+            if (section.dataset.sectionRefreshOn.split(' ').includes(eventName)) {
+                this.refresh(section, section.dataset.sectionUrl)
+            }
+        }
+    }
+
+    async refresh(section, url) {
+        if (!section || !url || section.dataset.busy === 'true') {
             return
         }
 
         const spinner = section.querySelector('[data-section-spinner]')
 
-        trigger.dataset.busy = 'true'
+        section.dataset.busy = 'true'
         spinner?.classList.remove('hidden')
 
         try {
@@ -43,7 +65,7 @@ export default class SectionRefreshManager {
 
             section.replaceWith(markup)
         } finally {
-            delete trigger.dataset.busy
+            delete section.dataset.busy
             spinner?.classList.add('hidden')
         }
     }

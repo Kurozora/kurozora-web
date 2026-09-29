@@ -1,4 +1,4 @@
-@props(['id', 'maxWidth'])
+@props(['id', 'maxWidth', 'open' => false])
 
 @php
     $id = $id ?? md5($attributes->wire('model'));
@@ -14,7 +14,7 @@
 
 <div
     x-data="{
-        show: @if ($attributes->get('model')) @entangle($attributes->get('model')).live @else false @endif,
+        show: @if ($attributes->get('model')) @entangle($attributes->get('model')).live @else {{ $open ? 'true' : 'false' }} @endif,
         focusables() {
             // All focusable element types...
             let selector = 'a, button, input:not([type=\'hidden\']), textarea, select, details, [tabindex]:not([tabindex=\'-1\'])'

@@ -8,7 +8,7 @@
         </div>
 
         <div class="flex gap-2">
-            <livewire:theme-store.get-button :theme-id="$theme->id" :name="$theme->name" wire:key="{{ uniqid($theme->id, true) }}" />
+            <x-theme-get-button :theme-id="$theme->id" :name="$theme->name" />
 
             @hasrole('superAdmin')
                 <x-nova-link :href="route('theme-store.edit', $theme)">

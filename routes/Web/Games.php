@@ -2,6 +2,7 @@
 
 use App\Enums\ParentalGuideCategory;
 use App\Enums\UserLibraryKind;
+use App\Http\Controllers\Web\GameController;
 use App\Http\Controllers\Web\SectionController;
 use App\Livewire\Adapted;
 use App\Livewire\Browse\Seasons\Archive as BrowseSeasonsArchive;
@@ -9,7 +10,6 @@ use App\Livewire\Browse\Seasons\Index as BrowseSeasonsIndex;
 use App\Livewire\Browse\Upcoming\Index as BrowseUpcomingIndex;
 use App\Livewire\Cast;
 use App\Livewire\Catalog;
-use App\Livewire\Game\Details as GameDetails;
 use App\Livewire\ParentalGuide;
 use App\Livewire\ParentalGuideCategoryEntries;
 use App\Livewire\RelatedGames;
@@ -73,7 +73,7 @@ Route::prefix('/games')
 
         Route::prefix('{game}')
             ->group(function () {
-                Route::get('/', GameDetails::class)
+                Route::get('/', [GameController::class, 'show'])
                     ->name('.details');
 
                 Route::get('/sections/{section}', [SectionController::class, 'game'])

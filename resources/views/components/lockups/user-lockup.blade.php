@@ -86,7 +86,7 @@
             @if ($trailingAction)
                 {{ $trailingAction }}
             @elseif ($showFollowButton && $user->id != auth()->user()?->id)
-                <livewire:components.follow-button :user="$user" :is-followed="$isFollowed" wire:key="{{ uniqid(more_entropy: true) }}" />
+                <x-follow-button :user="$user" :is-followed="$isFollowed" />
             @endif
         </div>
     </div>

@@ -1,8 +1,9 @@
 <?php
 
+use App\Http\Controllers\Web\PersonController;
+use App\Http\Controllers\Web\SectionController;
 use App\Livewire\Person\Anime as PersonAnime;
 use App\Livewire\Person\Characters as PersonCharacters;
-use App\Livewire\Person\Details as PersonDetails;
 use App\Livewire\Person\Games as PersonGames;
 use App\Livewire\Person\Index as PersonIndex;
 use App\Livewire\Person\Manga as PersonManga;
@@ -17,8 +18,13 @@ Route::prefix('/people')
 
         Route::prefix('{person}')
             ->group(function () {
-                Route::get('/', PersonDetails::class)
+                Route::get('/', [PersonController::class, 'show'])
                     ->name('.details');
+
+                Route::get('/sections/{section}', [SectionController::class, 'person'])
+                    ->where('section', 'anime|characters|manga|games')
+                    ->middleware('auth')
+                    ->name('.section');
 
                 Route::get('/anime', PersonAnime::class)
                     ->name('.anime');

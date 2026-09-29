@@ -1,8 +1,8 @@
 <?php
 
 use App\Http\Controllers\Web\SectionController;
+use App\Http\Controllers\Web\SongController;
 use App\Http\Controllers\Web\SongLyricsController;
-use App\Livewire\Song\Details as SongDetails;
 use App\Livewire\Song\Index as SongIndex;
 use App\Livewire\Song\Reviews as SongReviews;
 use App\Models\Song;
@@ -15,7 +15,7 @@ Route::prefix('/songs')
 
         Route::prefix('{song}')
             ->group(function () {
-                Route::get('/', SongDetails::class)
+                Route::get('/', [SongController::class, 'show'])
                     ->name('.details');
 
                 Route::get('/sections/{section}', [SectionController::class, 'song'])

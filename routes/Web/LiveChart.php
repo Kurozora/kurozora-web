@@ -1,6 +1,6 @@
 <?php
 
-use App\Livewire\Anime\Details as AnimeDetails;
+use App\Http\Controllers\Web\AnimeController;
 
 Route::prefix('/{livechart_url}')
     ->where(['livechart_url' => '^(www\.)?livechart(.me)?'])
@@ -13,10 +13,10 @@ Route::prefix('/{livechart_url}')
                 Route::prefix('{anime:livechart_id}')
                     ->name('.details')
                     ->group(function () {
-                        Route::get('/', AnimeDetails::class)
+                        Route::get('/', [AnimeController::class, 'show'])
                             ->name('.index');
 
-                        Route::get('/{any}', AnimeDetails::class)
+                        Route::get('/{any}', [AnimeController::class, 'show'])
                             ->name('.any');
                     });
             });

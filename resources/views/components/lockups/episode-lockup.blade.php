@@ -42,7 +42,7 @@
                 </div>
             </div>
 
-            <livewire:episode.watch-button :episode="$episode" wire:key="{{ uniqid($episode->id, true) }}" />
+            <x-episode-watch-button :episode="$episode" />
         </div>
     </div>
 </div>

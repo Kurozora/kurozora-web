@@ -58,7 +58,7 @@
                         {{ $displayMessage->user->username }}
                     </a>
 
-                    <livewire:components.user.badge-shelf :user="$displayMessage->user" wire:key="{{ uniqid('badges-', true) }}" />
+                    <x-user.badge-shelf :user="$displayMessage->user" />
                 </div>
 
                 <a class="relative text-sm text-secondary whitespace-nowrap hover:underline" title="{{ $displayMessage->created_at }}"

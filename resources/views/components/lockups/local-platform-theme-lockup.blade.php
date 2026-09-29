@@ -8,7 +8,7 @@
         </div>
 
         <div class="flex gap-2">
-            <livewire:theme-store.get-button :theme-id="strtolower($title)" :name="$title" wire:key="{{ uniqid($title, true) }}" />
+            <x-theme-get-button :theme-id="strtolower($title)" :name="$title" />
         </div>
     </div>
 

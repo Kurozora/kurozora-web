@@ -30,7 +30,7 @@
                 class="relative"
                 x-show="!bannerImagePreview"
             >
-                <livewire:components.banner-image-view :user="$this->user" />
+                <x-user.banner-image :user="$this->user" />
 
                 <div class="absolute top-0 right-0 bottom-0 left-0 flex justify-center bg-black/20">
                     <div class="flex items-center justify-center">
@@ -119,7 +119,7 @@
                 class="relative w-16 h-16 rounded-full overflow-hidden sm:w-24 sm:h-24"
                 x-show="!profileImagePreview"
             >
-                <livewire:components.profile-image-view :user="$this->user" />
+                <x-user.profile-image :user="$this->user" />
 
                 <div class="absolute top-0 right-0 bottom-0 left-0 flex justify-center bg-black/20">
                     <div class="flex items-center justify-center">

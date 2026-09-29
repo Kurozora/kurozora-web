@@ -141,7 +141,7 @@
 
                             <div class="flex flex-nowrap justify-end gap-1 h-10">
                                 {{-- Watch --}}
-                                <livewire:episode.watch-button :episode="$episode" wire:key="{{ uniqid($episode->id, true) }}" />
+                                <x-episode-watch-button :episode="$episode" />
 
                                 @if ($isTracking)
                                     {{-- Reminders --}}

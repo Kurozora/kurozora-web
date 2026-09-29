@@ -28,7 +28,7 @@
             :title="__(':x Episodes', ['x' => $season->title])"
         >
             <x-slot:actions>
-                <livewire:season.watch-button :season="$season" />
+                <x-season-watch-button :season="$season" />
 
                 @if ($this->canUpdateEpisodes && app()->isLocal())
                     <x-circle-button

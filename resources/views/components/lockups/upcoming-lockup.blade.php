@@ -4,7 +4,7 @@
     <x-lockups.upcoming-body :model="$anime" :href="route('anime.details', $anime)">
         @auth
             @if (auth()->user()->is_subscribed)
-                <livewire:anime.reminder-button :anime="$anime" wire:key="{{ uniqid($anime->id, true) }}" />
+                <x-reminder-button :anime="$anime" />
             @else
                 <x-library-button :model="$anime" />
             @endif

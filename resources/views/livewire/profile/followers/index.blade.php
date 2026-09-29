@@ -49,7 +49,7 @@
             <x-empty-state image="empty_anime_library.webp" alt="No followers" :heading="__('No Followers')">
                 @if ($user->id != auth()->user()?->id)
                     <p class="text-sm text-secondary">{{ __('Be the first to follow :x!', ['x' => $user->username]) }}</p>
-                    <livewire:components.follow-button :user="$user" :is-followed="(bool) $user->isFollowed" wire:key="{{ uniqid(more_entropy: true) }}" />
+                    <x-follow-button :user="$user" :is-followed="(bool) $user->isFollowed" />
                 @else
                     <p class="text-sm text-secondary">{{ __('When someone follows you, they will show up here!') }}</p>
                 @endif

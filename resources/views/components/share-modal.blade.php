@@ -10,6 +10,6 @@
     </x-slot:content>
 
     <x-slot:footer>
-        <x-button wire:click="$toggle('{{ $attributes->get('model') }}')">{{ __('Close') }}</x-button>
+        <x-button x-on:click="$dispatch('close')">{{ __('Close') }}</x-button>
     </x-slot:footer>
 </x-dialog-modal>

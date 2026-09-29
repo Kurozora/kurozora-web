@@ -59,7 +59,10 @@
         })
         $watch('displayedProgress', function(value) {
             preferredProgress = normalizePreferredProgress(value)
-            document.querySelector('#startsAt').value = normalizeDisplayedProgress(value)
+
+            if ($refs.startsAt) {
+                $refs.startsAt.value = normalizeDisplayedProgress(value)
+            }
         })
         $watch('shouldStartAt', function() {
             updateShareLink()
@@ -225,6 +228,7 @@
             <x-input
                 id="startsAt"
                 type="text"
+                x-ref="startsAt"
                 x-model.debounce.750ms="displayedProgress"
                 x-bind:disabled="!shouldStartAt"
             />
