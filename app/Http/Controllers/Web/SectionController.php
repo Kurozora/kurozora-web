@@ -7,6 +7,7 @@ use App\Enums\UserLibraryKind;
 use App\Http\Controllers\Controller;
 use App\Models\Anime;
 use App\Models\Character;
+use App\Models\FeedMessage;
 use App\Models\Game;
 use App\Models\Manga;
 use App\Models\Person;
@@ -18,6 +19,9 @@ use App\View\Components\AnimeSeasonsSection;
 use App\View\Components\CastSection;
 use App\View\Components\Character\MediaSection as CharacterMediaSection;
 use App\View\Components\Chart\Section as ChartSection;
+use App\View\Components\Episode\PastEpisodesSection;
+use App\View\Components\Episode\UpNextEpisodes;
+use App\View\Components\Feed\MessageList as FeedMessageList;
 use App\View\Components\MoreByStudioSection;
 use App\View\Components\Person\MediaSection as PersonMediaSection;
 use App\View\Components\Platform\MediaSection as PlatformMediaSection;
@@ -34,6 +38,7 @@ use App\View\Components\User\FeedMessagesSection;
 use App\View\Components\User\LibrarySection;
 use App\View\Components\User\ProfileImage;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Blade;
@@ -199,6 +204,47 @@ class SectionController extends Controller
             'games-favorites' => new FavoritesSection($user, Game::class),
             'feed-messages' => new FeedMessagesSection($user),
         });
+    }
+
+    /**
+     * Render a section of the up-next page.
+     *
+     * @param string $section
+     *
+     * @return Response
+     */
+    public function upNext(string $section): Response
+    {
+        return $this->render(match ($section) {
+            'episodes' => new UpNextEpisodes,
+            'past-episodes' => new PastEpisodesSection,
+        });
+    }
+
+    /**
+     * Render a page of feed messages, or count the messages newer than the given id.
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse|Response
+     */
+    public function feed(Request $request): JsonResponse|Response
+    {
+        $after = $request->integer('after') ?: null;
+
+        if ($after !== null && $request->wantsJson()) {
+            return response()->json([
+                'count' => FeedMessage::where('is_reply', '=', false)
+                    ->where('id', '>', $after)
+                    ->count(),
+            ]);
+        }
+
+        return $this->render(new FeedMessageList(
+            cursor: $request->integer('cursor') ?: null,
+            after: $after,
+            fragment: true
+        ));
     }
 
     /**

@@ -1,22 +1,19 @@
 <?php
 
-use App\Livewire\KnowledgeBase\CommunityGuidelines;
-use App\Livewire\KnowledgeBase\GeneratingDeveloperTokens;
-use App\Livewire\KnowledgeBase\InAppPurchases;
-use App\Livewire\KnowledgeBase\Personalization;
+use App\Http\Controllers\Web\KnowledgeBaseController;
 
 Route::prefix('/kb')
     ->name('kb')
     ->group(function() {
-        Route::get('/generating-developer-tokens', GeneratingDeveloperTokens::class)
+        Route::get('/generating-developer-tokens', [KnowledgeBaseController::class, 'generatingDeveloperTokens'])
             ->name('.generating-developer-tokens');
 
-        Route::get('/guidelines', CommunityGuidelines::class)
+        Route::get('/guidelines', [KnowledgeBaseController::class, 'guidelines'])
             ->name('.guidelines');
 
-        Route::get('/iap', InAppPurchases::class)
+        Route::get('/iap', [KnowledgeBaseController::class, 'inAppPurchases'])
             ->name('.iap');
 
-        Route::get('/personalization', Personalization::class)
+        Route::get('/personalization', [KnowledgeBaseController::class, 'personalization'])
             ->name('.personalization');
     });

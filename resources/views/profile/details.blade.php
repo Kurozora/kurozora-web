@@ -186,6 +186,8 @@
             </div>
         </div>
 
+        <x-feed.message-modals />
+
         <x-share-modal
             id="share"
             :link="route('profile.details', $user)"

@@ -2,17 +2,17 @@
 
 use App\Enums\UserLibraryKind;
 use App\Http\Controllers\Web\MeController;
+use App\Http\Controllers\Web\Profile\AchievementController;
+use App\Http\Controllers\Web\Profile\BlockedController;
+use App\Http\Controllers\Web\Profile\FollowerController;
+use App\Http\Controllers\Web\Profile\FollowingController;
 use App\Http\Controllers\Web\Profile\LibraryController;
+use App\Http\Controllers\Web\Profile\RatingController;
 use App\Http\Controllers\Web\SectionController;
 use App\Http\Controllers\Web\UserProfileController;
-use App\Livewire\Profile\Achievements\Index as AchievementsIndex;
-use App\Livewire\Profile\Blocked\Index as BlockedIndex;
-use App\Livewire\Profile\Followers\Index as FollowersIndex;
-use App\Livewire\Profile\Following\Index as FollowingIndex;
 use App\Livewire\Profile\Library\Favorites;
 use App\Livewire\Profile\Library\Index as LibraryIndex;
 use App\Livewire\Profile\Library\Reminders;
-use App\Livewire\Profile\Ratings\Index as RatingsIndex;
 use App\Livewire\Profile\Sessions\Index as SessionsIndex;
 
 Route::prefix('/profile')
@@ -94,19 +94,19 @@ Route::prefix('/profile')
 //                            ->name('.reminders');
                     });
 
-                Route::get('/achievements', AchievementsIndex::class)
+                Route::get('/achievements', [AchievementController::class, 'index'])
                     ->name('.achievements');
 
-                Route::get('/followers', FollowersIndex::class)
+                Route::get('/followers', [FollowerController::class, 'index'])
                     ->name('.followers');
 
-                Route::get('/following', FollowingIndex::class)
+                Route::get('/following', [FollowingController::class, 'index'])
                     ->name('.following');
 
-                Route::get('/ratings', RatingsIndex::class)
+                Route::get('/ratings', [RatingController::class, 'index'])
                     ->name('.ratings');
 
-                Route::get('/blocked', BlockedIndex::class)
+                Route::get('/blocked', [BlockedController::class, 'index'])
                     ->middleware('auth')
                     ->name('.blocked');
             });

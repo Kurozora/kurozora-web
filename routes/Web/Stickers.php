@@ -1,11 +1,11 @@
 <?php
 
-use App\Livewire\Stickers\Index as StickersIndex;
+use App\Http\Controllers\Web\StickerController;
 
 Route::prefix('/stickers')
     ->name('stickers')
     ->middleware('cache.headers:public;max_age=3600;etag')
     ->group(function () {
-        Route::get('/', StickersIndex::class)
+        Route::get('/', [StickerController::class, 'index'])
             ->name('.index');
     });

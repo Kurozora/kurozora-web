@@ -4,7 +4,7 @@
     <x-lockups.upcoming-body :model="$anime" :href="route('anime.details', $anime)">
         @auth
             @if (auth()->user()->is_subscribed)
-                <x-reminder-button :anime="$anime" />
+                <x-reminder-button :model="$anime" />
             @else
                 <x-library-button :model="$anime" />
             @endif
@@ -16,7 +16,7 @@
     <x-lockups.upcoming-body :model="$game" :href="route('games.details', $game)">
         @auth
 {{--            @if (auth()->user()->is_subscribed)--}}
-{{--                <livewire:game.reminder-button :game="$game" wire:key="{{ uniqid($game->id, true) }}" />--}}
+{{--                <x-reminder-button :model="$game" />--}}
 {{--            @else--}}
             <x-library-button :model="$game" />
 {{--            @endif--}}
@@ -28,7 +28,7 @@
     <x-lockups.upcoming-body :model="$manga" :href="route('manga.details', $manga)">
         @auth
 {{--            @if (auth()->user()->is_subscribed)--}}
-{{--                <livewire:manga.reminder-button :manga="$manga" wire:key="{{ uniqid($manga->id, true) }}" />--}}
+{{--                <x-reminder-button :model="$manga" />--}}
 {{--            @else--}}
             <x-library-button :model="$manga" />
 {{--            @endif--}}

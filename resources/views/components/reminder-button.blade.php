@@ -1,9 +1,10 @@
-@props(['anime'])
+@props(['model'])
 
 @php
     $reminderButton = [
-        'id' => $anime->id,
-        'reminded' => (bool) $anime->isReminded,
+        'type' => $model->getMorphClass(),
+        'id' => $model->id,
+        'reminded' => (bool) $model->isReminded,
         'authenticated' => auth()->check(),
         'signUpUrl' => route('sign-up'),
     ];
@@ -17,7 +18,7 @@
     ])
     style="min-width: 100px;"
     x-data="reminderButton({{ Js::from($reminderButton) }})"
-    x-on:anime-reminded.window="sync($event.detail)"
+    x-on:title-reminded.window="sync($event.detail)"
     x-on:present-subscription-sheet.window="busy = false"
     x-on:user-actions-failed.window="busy = false"
     x-bind:class="{ 'bg-white text-gray-500 disabled:opacity-100': reminded, 'bg-tint btn-text-tinted hover:bg-tint-800 active:bg-tint': !reminded }"

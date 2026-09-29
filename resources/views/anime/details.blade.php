@@ -100,7 +100,7 @@
                                     x-data="titleActions({{ Js::from(['type' => $anime->getMorphClass(), 'id' => $anime->id, 'tracking' => $isTracking, 'favorited' => $isFavorited, 'reminded' => $isReminded]) }})"
                                     x-on:library-updated.window="syncLibrary($event.detail)"
                                     x-on:title-favorited.window="syncFavorite($event.detail)"
-                                    x-on:anime-reminded.window="syncReminder($event.detail)"
+                                    x-on:title-reminded.window="syncReminder($event.detail)"
                                     x-on:user-actions-failed.window="busy = false"
                                 >
                                     <x-circle-button

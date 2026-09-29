@@ -2,10 +2,7 @@
 
 use App\Http\Controllers\Web\SectionController;
 use App\Http\Controllers\Web\StudioController;
-use App\Livewire\Studio\Anime as StudioAnime;
-use App\Livewire\Studio\Games as StudioGames;
 use App\Livewire\Studio\Index as StudioIndex;
-use App\Livewire\Studio\Manga as StudioManga;
 use App\Livewire\Studio\Reviews as StudioReviews;
 use App\Models\Studio;
 
@@ -31,13 +28,13 @@ Route::prefix('/studios')
                     ->middleware('auth')
                     ->name('.edit');
 
-                Route::get('/anime', StudioAnime::class)
+                Route::get('/anime', [StudioController::class, 'anime'])
                     ->name('.anime');
 
-                Route::get('/games', StudioGames::class)
+                Route::get('/games', [StudioController::class, 'games'])
                     ->name('.games');
 
-                Route::get('/manga', StudioManga::class)
+                Route::get('/manga', [StudioController::class, 'manga'])
                     ->name('.manga');
 
                 Route::get('/reviews', StudioReviews::class)

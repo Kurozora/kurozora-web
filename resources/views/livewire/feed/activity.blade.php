@@ -20,6 +20,8 @@
     </x-slot:styles>
 
     <div class="pb-6 xl:safe-area-inset">
+        <x-feed.message-modals />
+
         <section class="sticky top-0 pt-4 pb-4 backdrop-blur bg-blur z-10">
             <div class="flex gap-1 pl-4 pr-4">
                 <div class="flex flex-wrap gap-4 items-center w-full">
@@ -84,7 +86,7 @@
                 @if ($tab === 'quotes')
                     <div class="flex flex-col">
                         @foreach ($feedMessages as $message)
-                            <livewire:components.feed.message-lockup :feed-message="$message" wire:key="{{ uniqid($message->id, true) }}" />
+                            <x-feed.message-lockup :feed-message="$message" wire:key="{{ uniqid($message->id, true) }}" />
                         @endforeach
                     </div>
                 @else
@@ -119,7 +121,12 @@
                     @auth
                         <button
                             class="pl-6 pr-6 pt-2 pb-2 mt-4 rounded-full bg-tint text-white font-semibold hover:opacity-90"
-                            wire:click="toggleSimpleReShare"
+                            x-data="{ reshared: {{ Js::from((bool) $feedMessage->isReShared) }}, busy: false }"
+                            x-on:feed-message-reshared.window="if ($event.detail.id === {{ $feedMessage->id }}) { reshared = $event.detail.reshared; busy = false }"
+                            x-on:user-actions-failed.window="busy = false"
+                            x-on:click="busy = true; Livewire.dispatch('feed-message-reshare', { id: {{ $feedMessage->id }} })"
+                            x-bind:disabled="busy"
+                            x-text="reshared ? {{ Js::from(__('Undo Re-share')) }} : {{ Js::from(__('Re-share')) }}"
                         >
                             {{ $feedMessage->isReShared ? __('Undo Re-share') : __('Re-share') }}
                         </button>

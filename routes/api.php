@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\v1\APIController;
-use App\Livewire\Misc\ApiIndex;
+use App\Http\Controllers\Web\MiscController;
 
 Route::get('/', [APIController::class, 'index'])
     ->name('api.index');
@@ -9,7 +9,7 @@ Route::get('/', [APIController::class, 'index'])
 Route::prefix('/v1')
     ->name('api')
     ->group(function () {
-        Route::get('/', ApiIndex::class);
+        Route::get('/', [MiscController::class, 'apiIndex']);
 
         Route::get('/info', [APIController::class, 'info'])
             ->middleware('cache.headers:private;max_age=3600;etag')

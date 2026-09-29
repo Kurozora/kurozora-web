@@ -1,11 +1,11 @@
 <?php
 
-use App\Livewire\Digest\Index as DigestIndex;
+use App\Http\Controllers\Web\DigestController;
 
 Route::prefix('/digest')
     ->name('digest')
     ->middleware(['auth'])
     ->group(function () {
-        Route::get('/', DigestIndex::class)
+        Route::get('/', [DigestController::class, 'index'])
             ->name('.index');
     });

@@ -2,11 +2,7 @@
 
 use App\Http\Controllers\Web\PersonController;
 use App\Http\Controllers\Web\SectionController;
-use App\Livewire\Person\Anime as PersonAnime;
-use App\Livewire\Person\Characters as PersonCharacters;
-use App\Livewire\Person\Games as PersonGames;
 use App\Livewire\Person\Index as PersonIndex;
-use App\Livewire\Person\Manga as PersonManga;
 use App\Livewire\Person\Reviews as PersonReviews;
 use App\Models\Person;
 
@@ -26,10 +22,10 @@ Route::prefix('/people')
                     ->middleware('auth')
                     ->name('.section');
 
-                Route::get('/anime', PersonAnime::class)
+                Route::get('/anime', [PersonController::class, 'anime'])
                     ->name('.anime');
 
-                Route::get('/characters', PersonCharacters::class)
+                Route::get('/characters', [PersonController::class, 'characters'])
                     ->name('.characters');
 
                 Route::get('/edit', function (Person $person) {
@@ -38,10 +34,10 @@ Route::prefix('/people')
                     ->middleware('auth')
                     ->name('.edit');
 
-                Route::get('/games', PersonGames::class)
+                Route::get('/games', [PersonController::class, 'games'])
                     ->name('.games');
 
-                Route::get('/manga', PersonManga::class)
+                Route::get('/manga', [PersonController::class, 'manga'])
                     ->name('.manga');
 
                 Route::get('/reviews', PersonReviews::class)

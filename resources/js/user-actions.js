@@ -124,7 +124,7 @@ document.addEventListener('alpine:init', () => {
         },
     }))
 
-    Alpine.data('reminderButton', ({ id, reminded, authenticated, signUpUrl }) => ({
+    Alpine.data('reminderButton', ({ type, id, reminded, authenticated, signUpUrl }) => ({
         reminded,
         busy: false,
 
@@ -139,11 +139,11 @@ document.addEventListener('alpine:init', () => {
             }
 
             this.busy = true
-            window.Livewire.dispatch('anime-remind', { id })
+            window.Livewire.dispatch('title-remind', { type, id })
         },
 
-        sync({ id: updatedId, reminded }) {
-            if (updatedId !== id) {
+        sync({ type: updatedType, id: updatedId, reminded }) {
+            if (updatedType !== type || updatedId !== id) {
                 return
             }
 
@@ -165,7 +165,7 @@ document.addEventListener('alpine:init', () => {
 
         remind() {
             this.busy = true
-            window.Livewire.dispatch('anime-remind', { id })
+            window.Livewire.dispatch('title-remind', { type, id })
         },
 
         syncLibrary({ type: updatedType, id: updatedId, status }) {
@@ -190,8 +190,8 @@ document.addEventListener('alpine:init', () => {
             this.busy = false
         },
 
-        syncReminder({ id: updatedId, reminded }) {
-            if (updatedId !== id) {
+        syncReminder({ type: updatedType, id: updatedId, reminded }) {
+            if (updatedType !== type || updatedId !== id) {
                 return
             }
 
@@ -266,6 +266,149 @@ document.addEventListener('alpine:init', () => {
             const index = Math.max(0, Math.min(suffixes.length - 1, Math.floor(Math.log(Math.abs(this.followersCount)) / Math.log(1000))))
 
             return (this.followersCount / 1000 ** index).toLocaleString(undefined, { maximumFractionDigits: 0 }) + suffixes[index]
+        },
+    }))
+
+    Alpine.data('feedMessageLockup', ({ id, content, hearted, hearts, reshared, reshares, authenticated, signInUrl }) => ({
+        displayContent: '',
+        hearted,
+        hearts,
+        reshared,
+        reshares,
+        deleted: false,
+        busy: false,
+
+        init() {
+            this.render(content)
+        },
+
+        render(text) {
+            content = text
+            this.displayContent = window.markdown.parse(text.replace(/(?:https?|http):\/\/[\n\S]+$/, '').trim(), 0, null, true)
+        },
+
+        signedIn() {
+            if (authenticated) {
+                return true
+            }
+
+            window.location.assign(signInUrl)
+
+            return false
+        },
+
+        heart() {
+            if (!this.signedIn()) {
+                return
+            }
+
+            this.busy = true
+            window.Livewire.dispatch('feed-message-heart', { id })
+        },
+
+        reshare() {
+            if (!this.signedIn()) {
+                return
+            }
+
+            this.busy = true
+            window.Livewire.dispatch('feed-message-reshare', { id })
+        },
+
+        reply() {
+            window.Livewire.dispatch('feed-message-reply', { id })
+        },
+
+        open(type) {
+            if (!this.signedIn()) {
+                return
+            }
+
+            this.$dispatch('feed-message-modal', { type, id, content })
+        },
+
+        syncHeart({ id: updatedId, hearted, count }) {
+            if (updatedId !== id) {
+                return
+            }
+
+            this.hearted = hearted
+            this.hearts = count
+            this.busy = false
+        },
+
+        syncReShare({ id: updatedId, reshared, count }) {
+            if (updatedId !== id) {
+                return
+            }
+
+            this.reshared = reshared
+            this.reshares = count
+            this.busy = false
+        },
+
+        syncEdit({ id: updatedId, content: text }) {
+            if (updatedId !== id) {
+                return
+            }
+
+            this.render(text)
+        },
+
+        syncDelete({ id: updatedId }) {
+            if (updatedId !== id) {
+                return
+            }
+
+            this.deleted = true
+        },
+    }))
+
+    Alpine.data('feedMessageModals', () => ({
+        type: null,
+        id: null,
+        content: '',
+        busy: false,
+
+        open({ type, id, content }) {
+            this.type = type
+            this.id = id
+            this.content = type === 'edit' ? content : ''
+            this.busy = false
+            this.$dispatch('open-modal', { id: 'feed-message-' + type })
+        },
+
+        close() {
+            if (this.type === null) {
+                return
+            }
+
+            this.$dispatch('close-modal', { id: 'feed-message-' + this.type })
+            this.type = null
+        },
+
+        confirmEdit() {
+            this.busy = true
+            window.Livewire.dispatch('feed-message-edit', { id: this.id, content: this.content })
+        },
+
+        confirmDelete() {
+            this.busy = true
+            window.Livewire.dispatch('feed-message-delete', { id: this.id })
+        },
+
+        confirmQuote() {
+            this.busy = true
+            window.Livewire.dispatch('feed-message-quote', { id: this.id, content: this.content })
+        },
+
+        settle({ id: updatedId }) {
+            if (updatedId !== this.id) {
+                return
+            }
+
+            this.busy = false
+            this.close()
         },
     }))
 

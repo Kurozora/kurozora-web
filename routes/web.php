@@ -7,7 +7,7 @@ use App\Http\Controllers\Web\LinkPreviewController;
 use App\Http\Controllers\Web\MusicKitController;
 use App\Http\Controllers\Web\ScheduleController;
 use App\Http\Controllers\Web\SectionController;
-use App\Livewire\Welcome;
+use App\Http\Controllers\Web\WelcomeController;
 
 Route::get('chat', function () {
     return view('chat');
@@ -17,7 +17,7 @@ Route::get('chat', function () {
 Route::get('/', [HomeController::class, 'index'])
     ->name('home');
 
-Route::get('welcome', Welcome::class)
+Route::get('welcome', [WelcomeController::class, 'index'])
     ->name('welcome');
 
 Route::delete('impersonation', [ImpersonateController::class, 'stopImpersonating'])

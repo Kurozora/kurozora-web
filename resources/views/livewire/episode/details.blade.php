@@ -174,7 +174,7 @@
                                 </x-circle-button>
 
                                 {{-- Video Source --}}
-                                <livewire:components.episode.video-sources :model="$episode" />
+                                <x-episode.video-sources :model="$episode" />
 
                                 {{-- Theater Mode --}}
                                 <x-circle-button
@@ -417,10 +417,10 @@
 
             <div class="flex flex-col gap-4 pb-4 lg:w-1/4">
                 @if ($nextEpisode)
-                    <livewire:components.episode.up-next :next-episode="$nextEpisode" />
+                    <x-episode.up-next :next-episode="$nextEpisode" />
                 @endif
 
-                <livewire:components.episode.suggested-episodes :title="$this->episode->title" :next-episode-id="$this->episode->next_episode_id" />
+                <x-episode.suggested-episodes :title="$this->episode->title" :next-episode-id="$this->episode->next_episode_id" />
             </div>
         </div>
     </div>

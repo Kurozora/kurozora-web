@@ -2,9 +2,11 @@
 
 namespace App\Livewire;
 
+use App\Enums\FeedVoteType;
 use App\Enums\UserLibraryStatus;
 use App\Models\Anime;
 use App\Models\Episode;
+use App\Models\FeedMessage;
 use App\Models\Game;
 use App\Models\Manga;
 use App\Models\Season;
@@ -15,6 +17,9 @@ use App\Notifications\NewFollower;
 use App\Services\ScrobbleService;
 use App\Traits\Livewire\PresentsAlert;
 use App\Traits\Livewire\PresentsSubscriptionSheet;
+use Cog\Laravel\Love\Reactant\Models\Reactant;
+use Cog\Laravel\Love\ReactionType\Models\ReactionType;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -106,7 +111,7 @@ class UserActions extends Component
         }, id: $model->id);
 
         if ($reminded !== null && $model instanceof Anime) {
-            $this->dispatch('anime-reminded', id: $model->id, reminded: $reminded);
+            $this->dispatch('title-reminded', type: $model->getMorphClass(), id: $model->id, reminded: $reminded);
         }
     }
 
@@ -208,14 +213,15 @@ class UserActions extends Component
     }
 
     /**
-     * Toggle whether the signed-in user is reminded of an anime's airings.
+     * Toggle whether the signed-in user is reminded of a title's releases.
      *
-     * @param int $id
+     * @param string $type
+     * @param int    $id
      *
      * @return void
      */
-    #[On('anime-remind')]
-    public function remindAnime(int $id): void
+    #[On('title-remind')]
+    public function remindTitle(string $type, int $id): void
     {
         $user = $this->user();
 
@@ -231,30 +237,28 @@ class UserActions extends Component
             return;
         }
 
-        $anime = $this->query(Anime::class)->findOrFail($id);
-        $isTracking = $this->isTracking($user, $anime);
-        $wasReminded = $anime->reminderers()
-            ->where('user_id', '=', $user->id)
-            ->exists();
+        $model = $this->trackable($type, $id);
+        $isTracking = $this->isTracking($user, $model);
+        $wasReminded = $user->hasReminded($model);
 
-        DB::transaction(function () use ($user, $anime, $isTracking, $wasReminded) {
+        DB::transaction(function () use ($user, $model, $isTracking, $wasReminded) {
             if ($wasReminded) {
-                $user->unremind($anime);
+                $user->unremind($model);
             } else {
                 if (!$isTracking) {
-                    $user->track($anime, UserLibraryStatus::Planning());
+                    $user->track($model, UserLibraryStatus::Planning());
                 }
 
-                $user->remind($anime);
+                $user->remind($model);
             }
 
             $user->bumpStateVersion();
         });
 
-        $this->dispatch('anime-reminded', id: $anime->id, reminded: !$wasReminded);
+        $this->dispatch('title-reminded', type: $model->getMorphClass(), id: $model->id, reminded: !$wasReminded);
 
         if (!$wasReminded && !$isTracking) {
-            $this->dispatch('library-updated', type: $anime->getMorphClass(), id: $anime->id, status: UserLibraryStatus::Planning);
+            $this->dispatch('library-updated', type: $model->getMorphClass(), id: $model->id, status: UserLibraryStatus::Planning);
         }
     }
 
@@ -383,6 +387,169 @@ class UserActions extends Component
 
         $this->dispatch('user-followed', id: $user->id, followed: !$wasFollowed);
         $this->dispatch('followers-badge-refresh', followersCount: $wasFollowed ? -1 : 1, userID: $user->id);
+    }
+
+    /**
+     * Toggle whether the signed-in user hearts a feed message.
+     *
+     * @param int $id
+     *
+     * @return void
+     */
+    #[On('feed-message-heart')]
+    public function toggleFeedMessageHeart(int $id): void
+    {
+        $user = $this->user();
+
+        if ($user === null) {
+            return;
+        }
+
+        $feedMessage = FeedMessage::findOrFail($id);
+        $hearted = $user->toggleHeart($feedMessage) === 1;
+        $reactant = $feedMessage->getLoveReactant();
+        $count = $reactant instanceof Reactant
+            ? $reactant->reactions()
+                ->where('reaction_type_id', '=', ReactionType::fromName(FeedVoteType::Heart()->description)->getId())
+                ->count()
+            : 0;
+
+        $this->dispatch('feed-message-hearted', id: $feedMessage->id, hearted: $hearted, count: $count);
+    }
+
+    /**
+     * Toggle the signed-in user's plain re-share of a feed message.
+     *
+     * @param int $id
+     *
+     * @return void
+     */
+    #[On('feed-message-reshare')]
+    public function toggleFeedMessageReShare(int $id): void
+    {
+        $user = $this->user();
+
+        if ($user === null) {
+            return;
+        }
+
+        $feedMessage = FeedMessage::findOrFail($id);
+        $reShares = $feedMessage->simpleReShares()
+            ->where('user_id', '=', $user->id);
+
+        if ($reShares->exists()) {
+            $reShares->delete();
+            $reShared = false;
+        } else {
+            try {
+                FeedMessage::createFor($user, [
+                    'parent_id' => $feedMessage->id,
+                    'content' => '',
+                    'is_reshare' => true,
+                    'is_reply' => false,
+                    'is_nsfw' => false,
+                    'is_spoiler' => false,
+                ]);
+            } catch (AuthorizationException $exception) {
+                $this->presentAlert(title: __('Re-share'), message: $exception->getMessage());
+                return;
+            }
+
+            $reShared = true;
+        }
+
+        $this->dispatch('feed-message-reshared', id: $feedMessage->id, reshared: $reShared, count: $feedMessage->reShares()->count());
+    }
+
+    /**
+     * Quote a feed message with the signed-in user's own words.
+     *
+     * @param int    $id
+     * @param string $content
+     *
+     * @return void
+     */
+    #[On('feed-message-quote')]
+    public function quoteFeedMessage(int $id, string $content): void
+    {
+        $user = $this->user();
+
+        if ($user === null) {
+            return;
+        }
+
+        abort_if(mb_strlen($content) > FeedMessage::maxContentLength(), 422);
+
+        $feedMessage = FeedMessage::findOrFail($id);
+
+        try {
+            FeedMessage::createFor($user, [
+                'parent_id' => $feedMessage->id,
+                'content' => $content,
+                'is_reshare' => true,
+                'is_reply' => false,
+                'is_nsfw' => false,
+                'is_spoiler' => false,
+            ]);
+        } catch (AuthorizationException $exception) {
+            $this->presentAlert(title: __('Quote'), message: $exception->getMessage());
+            return;
+        }
+
+        $reShared = $feedMessage->simpleReShares()
+            ->where('user_id', '=', $user->id)
+            ->exists();
+
+        $this->dispatch('feed-message-reshared', id: $feedMessage->id, reshared: $reShared, count: $feedMessage->reShares()->count());
+    }
+
+    /**
+     * Replace the content of the signed-in user's own feed message.
+     *
+     * @param int    $id
+     * @param string $content
+     *
+     * @return void
+     */
+    #[On('feed-message-edit')]
+    public function editFeedMessage(int $id, string $content): void
+    {
+        $user = $this->user();
+
+        if ($user === null) {
+            return;
+        }
+
+        abort_if(mb_strlen($content) > FeedMessage::maxContentLength(), 422);
+
+        $user->feedMessages()
+            ->where('id', '=', $id)
+            ->update(['content' => $content]);
+
+        $this->dispatch('feed-message-edited', id: $id, content: $content);
+    }
+
+    /**
+     * Delete the signed-in user's own feed message.
+     *
+     * @param int $id
+     *
+     * @return void
+     */
+    #[On('feed-message-delete')]
+    public function deleteFeedMessage(int $id): void
+    {
+        $user = $this->user();
+
+        if ($user === null) {
+            return;
+        }
+
+        $user->feedMessages()
+            ->where('id', '=', $id)
+            ->delete();
+
+        $this->dispatch('feed-message-deleted', id: $id);
     }
 
     /**

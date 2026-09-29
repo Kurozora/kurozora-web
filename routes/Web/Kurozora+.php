@@ -1,6 +1,6 @@
 <?php
 
-use App\Livewire\KurozoraPlus\Index as KurozoraPlusIndex;
+use App\Http\Controllers\Web\KurozoraPlusController;
 
-Route::get('/kurozora-plus', KurozoraPlusIndex::class)
+Route::get('/kurozora-plus', [KurozoraPlusController::class, 'index'])
     ->name('kurozora-plus');

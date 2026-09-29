@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web;
 use App\Events\ModelViewed;
 use App\Http\Controllers\Controller;
 use App\Models\Person;
+use App\Traits\Controller\PaginatesTitles;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -12,6 +13,8 @@ use Illuminate\Http\Request;
 
 class PersonController extends Controller
 {
+    use PaginatesTitles;
+
     /**
      * Show a person's page.
      *
@@ -41,6 +44,68 @@ class PersonController extends Controller
             'person' => $person,
             'userRating' => $person->mediaRatings,
             'reviewBoxID' => str()->random(20),
+        ]);
+    }
+
+    /**
+     * Show the anime a person worked on.
+     *
+     * @param Person $person
+     *
+     * @return Application|Factory|View
+     */
+    public function anime(Person $person): Application|Factory|View
+    {
+        return view('person.anime', [
+            'person' => $person->load(['media']),
+            'titles' => $this->paginateTitles($person->anime()),
+        ]);
+    }
+
+    /**
+     * Show the manga a person worked on.
+     *
+     * @param Person $person
+     *
+     * @return Application|Factory|View
+     */
+    public function manga(Person $person): Application|Factory|View
+    {
+        return view('person.manga', [
+            'person' => $person->load(['media']),
+            'titles' => $this->paginateTitles($person->manga()),
+        ]);
+    }
+
+    /**
+     * Show the games a person worked on.
+     *
+     * @param Person $person
+     *
+     * @return Application|Factory|View
+     */
+    public function games(Person $person): Application|Factory|View
+    {
+        return view('person.games', [
+            'person' => $person->load(['media']),
+            'titles' => $this->paginateTitles($person->games()),
+        ]);
+    }
+
+    /**
+     * Show the characters a person voiced.
+     *
+     * @param Person $person
+     *
+     * @return Application|Factory|View
+     */
+    public function characters(Person $person): Application|Factory|View
+    {
+        return view('person.characters', [
+            'person' => $person->load(['media']),
+            'characters' => $person->characters()
+                ->with(['media', 'translation'])
+                ->paginate(25),
         ]);
     }
 }

@@ -2,11 +2,7 @@
 
 use App\Http\Controllers\Web\CharacterController;
 use App\Http\Controllers\Web\SectionController;
-use App\Livewire\Character\Anime as CharacterAnime;
-use App\Livewire\Character\Games as CharacterGames;
 use App\Livewire\Character\Index as CharacterIndex;
-use App\Livewire\Character\Manga as CharacterManga;
-use App\Livewire\Character\People as CharacterPeople;
 use App\Livewire\Character\Reviews as CharacterReviews;
 use App\Models\Character;
 
@@ -26,7 +22,7 @@ Route::prefix('/characters')
                     ->middleware('auth')
                     ->name('.section');
 
-                Route::get('/anime', CharacterAnime::class)
+                Route::get('/anime', [CharacterController::class, 'anime'])
                     ->name('.anime');
 
                 Route::get('/edit', function (Character $character) {
@@ -35,13 +31,13 @@ Route::prefix('/characters')
                     ->middleware('auth')
                     ->name('.edit');
 
-                Route::get('/games', CharacterGames::class)
+                Route::get('/games', [CharacterController::class, 'games'])
                     ->name('.games');
 
-                Route::get('/manga', CharacterManga::class)
+                Route::get('/manga', [CharacterController::class, 'manga'])
                     ->name('.manga');
 
-                Route::get('/people', CharacterPeople::class)
+                Route::get('/people', [CharacterController::class, 'people'])
                     ->name('.people');
 
                 Route::get('/reviews', CharacterReviews::class)

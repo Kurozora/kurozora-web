@@ -4,21 +4,19 @@ use App\Enums\ParentalGuideCategory;
 use App\Enums\UserLibraryKind;
 use App\Http\Controllers\Web\GameController;
 use App\Http\Controllers\Web\SectionController;
+use App\Http\Controllers\Web\TitleCastController;
+use App\Http\Controllers\Web\TitleRelationController;
+use App\Http\Controllers\Web\TitleSongController;
+use App\Http\Controllers\Web\TitleStaffController;
+use App\Http\Controllers\Web\TitleStudioController;
 use App\Livewire\Adapted;
 use App\Livewire\Browse\Seasons\Archive as BrowseSeasonsArchive;
 use App\Livewire\Browse\Seasons\Index as BrowseSeasonsIndex;
 use App\Livewire\Browse\Upcoming\Index as BrowseUpcomingIndex;
-use App\Livewire\Cast;
 use App\Livewire\Catalog;
 use App\Livewire\ParentalGuide;
 use App\Livewire\ParentalGuideCategoryEntries;
-use App\Livewire\RelatedGames;
-use App\Livewire\RelatedMangas;
-use App\Livewire\RelatedShows;
 use App\Livewire\Reviews;
-use App\Livewire\Songs;
-use App\Livewire\Staff;
-use App\Livewire\Studios;
 use App\Livewire\Trailers;
 use App\Models\Game;
 
@@ -81,7 +79,7 @@ Route::prefix('/games')
                     ->middleware('auth')
                     ->name('.section');
 
-                Route::get('/cast', Cast::class)
+                Route::get('/cast', [TitleCastController::class, 'index'])
                     ->defaults('kind', UserLibraryKind::Game)
                     ->name('.cast');
 
@@ -100,15 +98,15 @@ Route::prefix('/games')
                     ->whereIn('category', ParentalGuideCategory::slugs())
                     ->name('.parentalguide.category');
 
-                Route::get('/related-games', RelatedGames::class)
+                Route::get('/related-games', [TitleRelationController::class, 'games'])
                     ->defaults('kind', UserLibraryKind::Game)
                     ->name('.related-games');
 
-                Route::get('/related-mangas', RelatedMangas::class)
+                Route::get('/related-mangas', [TitleRelationController::class, 'manga'])
                     ->defaults('kind', UserLibraryKind::Game)
                     ->name('.related-literatures');
 
-                Route::get('/related-anime', RelatedShows::class)
+                Route::get('/related-anime', [TitleRelationController::class, 'anime'])
                     ->defaults('kind', UserLibraryKind::Game)
                     ->name('.related-anime');
 
@@ -121,15 +119,15 @@ Route::prefix('/games')
                     ->defaults('kind', UserLibraryKind::Game)
                     ->name('.reviews');
 
-                Route::get('/songs', Songs::class)
+                Route::get('/songs', [TitleSongController::class, 'index'])
                     ->defaults('kind', UserLibraryKind::Game)
                     ->name('.songs');
 
-                Route::get('/staff', Staff::class)
+                Route::get('/staff', [TitleStaffController::class, 'index'])
                     ->defaults('kind', UserLibraryKind::Game)
                     ->name('.staff');
 
-                Route::get('/studios', Studios::class)
+                Route::get('/studios', [TitleStudioController::class, 'index'])
                     ->defaults('kind', UserLibraryKind::Game)
                     ->name('.studios');
             });

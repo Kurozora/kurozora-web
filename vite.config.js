@@ -132,6 +132,7 @@ export default defineConfig({
                 'resources/js/db.js',
                 'resources/js/debug.js',
                 'resources/js/dropdown.js',
+                'resources/js/feed.js',
                 'resources/js/gif.js',
                 'resources/js/history.js',
                 'resources/js/listen.js',

@@ -1,11 +1,10 @@
 <?php
 
-use App\Livewire\Compare\Index as CompareIndex;
+use App\Http\Controllers\Web\CompareController;
 
 Route::prefix('/compare')
     ->name('compare')
     ->group(function () {
-        Route::get('/', CompareIndex::class)
+        Route::get('/', [CompareController::class, 'index'])
             ->name('.index');
     });
-

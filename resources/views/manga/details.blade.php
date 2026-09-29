@@ -107,11 +107,17 @@
                                     x-data="titleActions({{ Js::from(['type' => $manga->getMorphClass(), 'id' => $manga->id, 'tracking' => $isTracking, 'favorited' => $isFavorited, 'reminded' => false]) }})"
                                     x-on:library-updated.window="syncLibrary($event.detail)"
                                     x-on:title-favorited.window="syncFavorite($event.detail)"
+{{--                                    x-on:title-reminded.window="syncReminder($event.detail)"--}}
                                     x-on:user-actions-failed.window="busy = false"
                                 >
-{{--                                    <x-circle-button x-on:click="remind()" x-bind:disabled="busy" x-show="tracking">--}}
-{{--                                        <span x-show="reminded">@svg('bell_fill', 'fill-current', ['width' => '44'])</span>--}}
-{{--                                        <span x-show="!reminded">@svg('bell', 'fill-current', ['width' => '44'])</span>--}}
+{{--                                    <x-circle-button--}}
+{{--                                        x-on:click="remind()"--}}
+{{--                                        x-bind:disabled="busy"--}}
+{{--                                        x-show="tracking"--}}
+{{--                                        :style="$isTracking ? null : 'display: none;'"--}}
+{{--                                    >--}}
+{{--                                        @svg('bell_fill', 'fill-current', ['width' => '44', 'x-show' => 'reminded'] + ($isReminded ? [] : ['style' => 'display: none;']))--}}
+{{--                                        @svg('bell', 'fill-current', ['width' => '44', 'x-show' => '!reminded'] + ($isReminded ? ['style' => 'display: none;'] : []))--}}
 {{--                                    </x-circle-button>--}}
 
                                     <x-circle-button

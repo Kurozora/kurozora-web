@@ -1,21 +1,18 @@
 <?php
 
-use App\Livewire\Misc\Contact;
-use App\Livewire\Misc\PressKit;
-use App\Livewire\Misc\Projects;
-use App\Livewire\Misc\Team;
+use App\Http\Controllers\Web\MiscController;
 
 Route::name('misc')
     ->group(function() {
-        Route::get('/team', Team::class)
+        Route::get('/team', [MiscController::class, 'team'])
             ->name('.team');
 
-        Route::get('/projects', Projects::class)
+        Route::get('/projects', [MiscController::class, 'projects'])
             ->name('.projects');
 
-        Route::get('/contact', Contact::class)
+        Route::get('/contact', [MiscController::class, 'contact'])
             ->name('.contact');
 
-        Route::get('/press-kit', PressKit::class)
+        Route::get('/press-kit', [MiscController::class, 'pressKit'])
             ->name('.press-kit');
     });

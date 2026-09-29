@@ -62,7 +62,7 @@
             <section class="space-y-10">
                 @foreach ($this->mediaTypes as $mediaType)
                     <div x-show="selectedMediaType === '{{ $mediaType->name }}' || selectedMediaType === null">
-                        <livewire:components.browse.seasons-section :class="$this->modelClass()" :media-type="$mediaType" :season-of-year="$this->seasonOfYear->value" :year="$year" />
+                        <x-browse.seasons-section :class="$this->modelClass()" :media-type="$mediaType" :season-of-year="$this->seasonOfYear->value" :year="$year" />
                     </div>
                 @endforeach
             </section>

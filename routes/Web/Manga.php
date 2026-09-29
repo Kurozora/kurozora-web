@@ -4,21 +4,19 @@ use App\Enums\ParentalGuideCategory;
 use App\Enums\UserLibraryKind;
 use App\Http\Controllers\Web\MangaController;
 use App\Http\Controllers\Web\SectionController;
+use App\Http\Controllers\Web\TitleCastController;
+use App\Http\Controllers\Web\TitleRelationController;
+use App\Http\Controllers\Web\TitleStaffController;
+use App\Http\Controllers\Web\TitleStudioController;
 use App\Livewire\Browse\Continuing\Index as BrowseContinuingIndex;
 use App\Livewire\Browse\Seasons\Archive as BrowseSeasonsArchive;
 use App\Livewire\Browse\Seasons\Index as BrowseSeasonsIndex;
 use App\Livewire\Browse\Upcoming\Index as BrowseUpcomingIndex;
 use App\Livewire\Adapted;
-use App\Livewire\Cast;
 use App\Livewire\Catalog;
 use App\Livewire\ParentalGuide;
 use App\Livewire\ParentalGuideCategoryEntries;
-use App\Livewire\RelatedGames;
-use App\Livewire\RelatedMangas;
-use App\Livewire\RelatedShows;
 use App\Livewire\Reviews;
-use App\Livewire\Staff;
-use App\Livewire\Studios;
 use App\Models\Manga;
 
 Route::prefix('/manga')
@@ -84,7 +82,7 @@ Route::prefix('/manga')
                     ->middleware('auth')
                     ->name('.section');
 
-                Route::get('/cast', Cast::class)
+                Route::get('/cast', [TitleCastController::class, 'index'])
                     ->defaults('kind', UserLibraryKind::Manga)
                     ->name('.cast');
 
@@ -103,15 +101,15 @@ Route::prefix('/manga')
                     ->whereIn('category', ParentalGuideCategory::slugs())
                     ->name('.parentalguide.category');
 
-                Route::get('/related-games', RelatedGames::class)
+                Route::get('/related-games', [TitleRelationController::class, 'games'])
                     ->defaults('kind', UserLibraryKind::Manga)
                     ->name('.related-games');
 
-                Route::get('/related-mangas', RelatedMangas::class)
+                Route::get('/related-mangas', [TitleRelationController::class, 'manga'])
                     ->defaults('kind', UserLibraryKind::Manga)
                     ->name('.related-mangas');
 
-                Route::get('/related-anime', RelatedShows::class)
+                Route::get('/related-anime', [TitleRelationController::class, 'anime'])
                     ->defaults('kind', UserLibraryKind::Manga)
                     ->name('.related-anime');
 
@@ -124,11 +122,11 @@ Route::prefix('/manga')
                     ->defaults('kind', UserLibraryKind::Manga)
                     ->name('.reviews');
 
-                Route::get('/staff', Staff::class)
+                Route::get('/staff', [TitleStaffController::class, 'index'])
                     ->defaults('kind', UserLibraryKind::Manga)
                     ->name('.staff');
 
-                Route::get('/studios', Studios::class)
+                Route::get('/studios', [TitleStudioController::class, 'index'])
                     ->defaults('kind', UserLibraryKind::Manga)
                     ->name('.studios');
             });

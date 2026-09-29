@@ -1,10 +1,10 @@
 <?php
 
-use App\Livewire\Leaderboards\Reputation as ReputationLeaderboard;
+use App\Http\Controllers\Web\LeaderboardController;
 
 Route::prefix('/leaderboards')
     ->name('leaderboards')
     ->group(function () {
-        Route::get('/reputation', ReputationLeaderboard::class)
+        Route::get('/reputation', [LeaderboardController::class, 'reputation'])
             ->name('.reputation');
     });

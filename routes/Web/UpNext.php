@@ -1,6 +1,7 @@
 <?php
 
-use App\Livewire\UpNext\Episodes;
+use App\Http\Controllers\Web\SectionController;
+use App\Http\Controllers\Web\UpNextController;
 
 Route::prefix('/up-next')
     ->middleware(['auth'])
@@ -11,6 +12,10 @@ Route::prefix('/up-next')
         })
             ->name('.index');
 
-        Route::get('/episodes', Episodes::class)
+        Route::get('/episodes', [UpNextController::class, 'episodes'])
             ->name('.episodes');
+
+        Route::get('/section/{section}', [SectionController::class, 'upNext'])
+            ->where('section', 'episodes|past-episodes')
+            ->name('.section');
     });

@@ -3,12 +3,10 @@
 namespace App\Livewire\Feed;
 
 use App\Models\FeedMessage;
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Http\RedirectResponse;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -51,6 +49,15 @@ class Activity extends Component
     private const array SORTS = ['top', 'recent'];
 
     /**
+     * The component's listeners.
+     *
+     * @var array
+     */
+    protected $listeners = [
+        'feed-message-reshared' => '$refresh',
+    ];
+
+    /**
      * Prepare the component.
      *
      * @param FeedMessage $feedMessage
@@ -60,6 +67,15 @@ class Activity extends Component
     public function mount(FeedMessage $feedMessage): void
     {
         $this->feedMessage = $feedMessage;
+
+        if ($authUser = auth()->user()) {
+            $this->feedMessage->loadExists([
+                'simpleReShares as isReShared' => function ($query) use ($authUser) {
+                    $query->where('user_id', '=', $authUser->id);
+                },
+            ]);
+        }
+
         $this->normalize();
     }
 
@@ -88,43 +104,6 @@ class Activity extends Component
     {
         $this->sort = $sort;
         $this->normalize();
-        $this->resetPage();
-    }
-
-    /**
-     * Toggle a simple re-share of the feed message.
-     *
-     * @return RedirectResponse|null
-     */
-    public function toggleSimpleReShare()
-    {
-        $authUser = auth()->user();
-
-        if ($authUser === null) {
-            return to_route('sign-in');
-        }
-
-        $deleted = $this->feedMessage->simpleReShares()
-            ->where('user_id', '=', $authUser->id)
-            ->delete();
-
-        if ($deleted === 0) {
-            try {
-                FeedMessage::createFor($authUser, [
-                    'parent_id' => $this->feedMessage->id,
-                    'content' => '',
-                    'is_reshare' => true,
-                    'is_reply' => false,
-                    'is_nsfw' => false,
-                    'is_spoiler' => false,
-                ]);
-            } catch (AuthorizationException $exception) {
-                session()->flash('error', $exception->getMessage());
-                return;
-            }
-        }
-
-        $this->feedMessage->refresh();
         $this->resetPage();
     }
 
