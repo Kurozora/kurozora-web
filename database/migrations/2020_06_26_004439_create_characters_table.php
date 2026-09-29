@@ -18,6 +18,7 @@ return new class extends Migration
         Schema::create(Character::TABLE_NAME, function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('mal_id')->unique()->nullable();
+            $table->string('vndb_id')->unique()->nullable();
             $table->string('slug', 280);
             $table->json('nicknames')->nullable();
             $table->string('debut')->nullable();

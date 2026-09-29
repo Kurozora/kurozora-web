@@ -63,6 +63,8 @@ class Person extends KModel implements HasMedia, Sitemapable
             'alternative_names' => AsArrayObject::class,
             'birthdate'         => 'date',
             'deceased_date'     => 'date',
+            'external_urls'     => AsArrayObject::class,
+            'social_urls'       => AsArrayObject::class,
             'website_urls'      => AsArrayObject::class,
         ];
     }
@@ -184,6 +186,7 @@ class Person extends KModel implements HasMedia, Sitemapable
     public function toSearchableArray(): array
     {
         $person = $this->toArray();
+        unset($person['external_urls']);
         $person['letter'] = str_index($this->full_name);
         $person['full_name'] = $this->full_name;
         $person['full_given_name'] = $this->full_given_name;

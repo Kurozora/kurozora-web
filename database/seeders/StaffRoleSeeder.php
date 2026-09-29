@@ -554,6 +554,10 @@ class StaffRoleSeeder extends Seeder
             'description'   => '',
         ],
         [
+            'name'          => 'Quality Assurance',
+            'description'   => '',
+        ],
+        [
             'name'          => 'Recording',
             'description'   => '',
         ],
@@ -719,6 +723,10 @@ class StaffRoleSeeder extends Seeder
         ],
         [
             'name'          => 'Touch Up Manager',
+            'description'   => '',
+        ],
+        [
+            'name'          => 'Translator',
             'description'   => '',
         ],
         [

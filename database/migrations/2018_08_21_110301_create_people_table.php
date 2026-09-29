@@ -16,7 +16,18 @@ return new class extends Migration
     {
         Schema::create(Person::TABLE_NAME, function (Blueprint $table) {
             $table->id();
+            $table->unsignedInteger('anidb_id')->nullable();
+            $table->unsignedInteger('anison_id')->nullable();
+            $table->unsignedInteger('bgmtv_id')->nullable();
+            $table->unsignedInteger('discogs_id')->nullable();
+            $table->unsignedInteger('egs_id')->nullable();
+            $table->string('imdb_id')->nullable();
             $table->unsignedInteger('mal_id')->unique()->nullable();
+            $table->string('mbrainz_id')->nullable();
+            $table->unsignedInteger('mobygames_id')->nullable();
+            $table->unsignedInteger('vgmdb_id')->nullable();
+            $table->string('vndb_id')->unique()->nullable();
+            $table->unsignedInteger('wikidata_id')->nullable();
             $table->string('slug');
             $table->string('first_name');
             $table->string('last_name')->nullable();
@@ -27,7 +38,10 @@ return new class extends Migration
             $table->string('short_description')->nullable();
             $table->unsignedTinyInteger('astrological_sign')->nullable();
             $table->json('website_urls')->nullable();
+            $table->json('social_urls')->nullable();
+            $table->json('external_urls')->nullable();
             $table->date('birthdate')->nullable();
+            $table->string('birth_place')->nullable();
             $table->date('deceased_date')->nullable();
             $table->unsignedInteger('rank_total')->default(0);
             $table->integer('view_count')->default(0);
@@ -39,6 +53,16 @@ return new class extends Migration
             // Set index key constraints
             $table->index(['deleted_at', 'rank_total']);
             $table->index(['deleted_at', 'birthdate']);
+            $table->index(['anidb_id']);
+            $table->index(['anison_id']);
+            $table->index(['bgmtv_id']);
+            $table->index(['discogs_id']);
+            $table->index(['egs_id']);
+            $table->index(['imdb_id']);
+            $table->index(['mbrainz_id']);
+            $table->index(['mobygames_id']);
+            $table->index(['vgmdb_id']);
+            $table->index(['wikidata_id']);
 
             // Set unique key constraints
             $table->unique(['slug']);
