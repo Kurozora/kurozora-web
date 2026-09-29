@@ -16,7 +16,6 @@ use App\Models\UserWatchedEpisode;
 use App\Notifications\NewFollower;
 use App\Services\ScrobbleService;
 use App\Traits\Livewire\PresentsAlert;
-use App\Traits\Livewire\PresentsSubscriptionSheet;
 use Cog\Laravel\Love\Reactant\Models\Reactant;
 use Cog\Laravel\Love\ReactionType\Models\ReactionType;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -31,8 +30,7 @@ use Livewire\Component;
 
 class UserActions extends Component
 {
-    use PresentsAlert,
-        PresentsSubscriptionSheet;
+    use PresentsAlert;
 
     /**
      * Update the signed-in user's library entry for a title.
@@ -226,14 +224,6 @@ class UserActions extends Component
         $user = $this->user();
 
         if ($user === null) {
-            return;
-        }
-
-        if (!$user->is_subscribed) {
-            $this->presentSubscriptionSheet(
-                title: __('Integrate with Calendar'),
-                message: __('Integrate your anime schedule into your calendar. Never miss an episode again with reminders for new airings.'),
-            );
             return;
         }
 

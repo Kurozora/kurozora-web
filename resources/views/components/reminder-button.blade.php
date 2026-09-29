@@ -19,7 +19,6 @@
     style="min-width: 100px;"
     x-data="reminderButton({{ Js::from($reminderButton) }})"
     x-on:title-reminded.window="sync($event.detail)"
-    x-on:present-subscription-sheet.window="busy = false"
     x-on:user-actions-failed.window="busy = false"
     x-bind:class="{ 'bg-white text-gray-500 disabled:opacity-100': reminded, 'bg-tint btn-text-tinted hover:bg-tint-800 active:bg-tint': !reminded }"
     x-bind:disabled="reminded || busy"

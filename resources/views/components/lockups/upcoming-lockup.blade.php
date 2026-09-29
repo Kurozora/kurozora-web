@@ -3,11 +3,7 @@
 @if (!empty($anime))
     <x-lockups.upcoming-body :model="$anime" :href="route('anime.details', $anime)">
         @auth
-            @if (auth()->user()->is_subscribed)
-                <x-reminder-button :model="$anime" />
-            @else
-                <x-library-button :model="$anime" />
-            @endif
+            <x-reminder-button :model="$anime" />
         @else
             <x-library-button :model="$anime" />
         @endauth
@@ -15,11 +11,8 @@
 @elseif (!empty($game))
     <x-lockups.upcoming-body :model="$game" :href="route('games.details', $game)">
         @auth
-{{--            @if (auth()->user()->is_subscribed)--}}
-{{--                <x-reminder-button :model="$game" />--}}
-{{--            @else--}}
+{{--            <x-reminder-button :model="$game" />--}}
             <x-library-button :model="$game" />
-{{--            @endif--}}
         @else
             <x-library-button :model="$game" />
         @endauth
@@ -27,11 +20,8 @@
 @elseif (!empty($manga))
     <x-lockups.upcoming-body :model="$manga" :href="route('manga.details', $manga)">
         @auth
-{{--            @if (auth()->user()->is_subscribed)--}}
-{{--                <x-reminder-button :model="$manga" />--}}
-{{--            @else--}}
+{{--            <x-reminder-button :model="$manga" />--}}
             <x-library-button :model="$manga" />
-{{--            @endif--}}
         @else
             <x-library-button :model="$manga" />
         @endauth

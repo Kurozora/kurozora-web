@@ -24,6 +24,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
+use Throwable;
 
 class UserReminderController extends Controller
 {
@@ -106,7 +107,7 @@ class UserReminderController extends Controller
      * @param CreateUserReminderRequest $request
      *
      * @return JsonResponse
-     * @throws AuthorizationException
+     * @throws Throwable
      */
     function create(CreateUserReminderRequest $request): JsonResponse
     {
@@ -114,10 +115,6 @@ class UserReminderController extends Controller
 
         // Get the authenticated user
         $user = auth()->user();
-
-        if (!$user->is_subscribed) {
-            throw new AuthorizationException(__('Reminders are only available to subscribed users.'));
-        }
 
         // Get the models
         $libraryKind = UserLibraryKind::fromValue((int) $data['library']);

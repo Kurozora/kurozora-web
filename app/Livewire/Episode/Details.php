@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Episode;
 
+use App\Enums\UserLibraryStatus;
 use App\Enums\VideoSource;
 use App\Events\ModelViewed;
 use App\Models\Anime;
@@ -9,8 +10,6 @@ use App\Models\Episode;
 use App\Models\MediaRating;
 use App\Models\Season;
 use App\Models\Video;
-use App\Traits\Livewire\PresentsAlert;
-use App\Traits\Livewire\PresentsSubscriptionSheet;
 use App\Traits\Livewire\WithReviewBox;
 use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
 use Illuminate\Contracts\Foundation\Application;
@@ -26,9 +25,7 @@ use Throwable;
 
 class Details extends Component
 {
-    use WithReviewBox,
-        PresentsAlert,
-        PresentsSubscriptionSheet;
+    use WithReviewBox;
 
     /**
      * The object containing the episode data.
@@ -287,7 +284,7 @@ class Details extends Component
     }
 
     /**
-     * Adds the anime to the user's reminder list.
+     * Toggles the anime in the user's reminder list.
      *
      * @throws Throwable
      */
@@ -295,31 +292,27 @@ class Details extends Component
     {
         $user = auth()->user();
 
-        if ($user->is_pro) {
-            if ($this->isTracking) {
-                DB::transaction(function () use ($user) {
-                    if ($this->isReminded) { // Don't remind the user
-                        $user->unremind($this->anime);
-                    } else { // Remind the user
-                        $user->remind($this->anime);
-                    }
-
-                    $user->bumpStateVersion();
-                });
-
-                $this->isReminded = !$this->isReminded;
-            } else {
-                $this->presentAlert(
-                    title: __('Are you tracking?'),
-                    message: __('Make sure to add the anime to your library first.')
-                );
-            }
-        } else {
-            $this->presentSubscriptionSheet(
-                title: __('Integrate with Calendar'),
-                message: __('Integrate your anime schedule into your calendar. Never miss an episode again with reminders for new airings.'),
-            );
+        if ($user === null) {
+            $this->redirectRoute('sign-in', navigate: true);
+            return;
         }
+
+        DB::transaction(function () use ($user) {
+            if (!$this->isTracking) {
+                $user->track($this->anime, UserLibraryStatus::Planning());
+                $this->isTracking = true;
+            }
+
+            if ($this->isReminded) { // Don't remind the user
+                $user->unremind($this->anime);
+            } else { // Remind the user
+                $user->remind($this->anime);
+            }
+
+            $user->bumpStateVersion();
+        });
+
+        $this->isReminded = !$this->isReminded;
     }
 
     /**
