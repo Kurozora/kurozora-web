@@ -73,13 +73,13 @@
 
                     <x-star-rating-display :rating="$studio->mediaStat->rating_average" star-size="sm" />
 
-                    <p class="text-sm text-secondary">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x reviews', (int) $studio->mediaStat->rating_count, ['x' => number_shorten((int) $studio->mediaStat->rating_count, 0, true)]) }}</p>
+                    <p class="text-sm text-secondary">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x reviews', (int) $studio?->mediaStat?->rating_count, ['x' => number_shorten((int) $studio?->mediaStat?->rating_count, 0, true)]) }}</p>
                 </a>
             </div>
 
             <div id="rankingBadge" class="flex-grow px-12 border-l border-primary">
                 <a class="flex flex-col items-center" href="{{ route('charts.top', App\Enums\ChartKind::Studios) }}" wire:navigate>
-                    <p class="font-bold">{{ trans_choice('{0} -|[1,*] #:x', $studio->mediaStat->rank_total ?? 0, ['x' => $studio->mediaStat->rank_total]) }}</p>
+                    <p class="font-bold">{{ trans_choice('{0} -|[1,*] #:x', $studio?->mediaStat?->rank_total ?? 0, ['x' => $studio?->mediaStat?->rank_total ?? 0]) }}</p>
                     <p class="text-tint">
                         @svg('chart_bar_fill', 'fill-current', ['width' => '20'])
                     </p>
@@ -158,7 +158,7 @@
                 <div class="flex flex-col w-full justify-end text-right sm:w-auto">
                     <x-star-rating-bar :media-stat="$studio->mediaStat" />
 
-                    <p class="text-sm text-secondary">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x Ratings', $studio->mediaStat->rating_count, ['x' => number_format($studio->mediaStat->rating_count)]) }}</p>
+                    <p class="text-sm text-secondary">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x Ratings', $studio?->mediaStat?->rating_count ?? 0, ['x' => number_format($studio?->mediaStat?->rating_count ?? 0)]) }}</p>
                 </div>
             </div>
         </section>

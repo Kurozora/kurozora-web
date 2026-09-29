@@ -121,9 +121,25 @@ class Anime extends KModel implements HasMedia, Sitemapable
     {
         return [
             'synonym_titles' => AsArrayObject::class,
+            'external_urls' => AsArrayObject::class,
             'is_nsfw' => 'bool',
             'started_at' => 'date',
             'ended_at' => 'date',
+        ];
+    }
+
+    /**
+     * The lookup ids a bare bones entry falls back to.
+     *
+     * @return int[]
+     */
+    public static function defaultLookups(): array
+    {
+        return [
+            'media_type_id' => 1,
+            'source_id' => 1,
+            'status_id' => 1,
+            'tv_rating_id' => 1,
         ];
     }
 
@@ -139,6 +155,10 @@ class Anime extends KModel implements HasMedia, Sitemapable
         static::creating(function (Anime $anime) {
             if (!isset($anime->getAttributes()['air_season'])) {
                 $anime->air_season = $anime->generateAiringSeason();
+            }
+
+            foreach (static::defaultLookups() as $column => $id) {
+                $anime->{$column} ??= $id;
             }
         });
 
@@ -621,8 +641,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
      */
     public function resolveRouteBindingQuery($query, $value, $field = null): \Illuminate\Contracts\Database\Eloquent\Builder
     {
-        return parent::resolveRouteBindingQuery($query, $value, $field)
-            ->withoutGlobalScopes();
+        return $this->withoutGlobalScopesExceptSoftDeletes(parent::resolveRouteBindingQuery($query, $value, $field));
     }
 
     /**
@@ -924,7 +943,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
     public function toSearchableArray(): array
     {
         $anime = $this->toArray();
-        unset($anime['media']);
+        unset($anime['media'], $anime['external_urls']);
         $anime['letter'] = str_index($this->original_title);
         $anime['languages'] = $this->languages
             ->map(function ($item) {

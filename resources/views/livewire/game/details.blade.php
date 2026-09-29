@@ -84,7 +84,7 @@
                             <div class="flex w-full justify-between mt-2 gap-1 sm:gap-4">
                                 <p class="flex-grow pt-1 pr-1 pb-1 pl-1 text-white text-center text-xs font-semibold whitespace-nowrap rounded-md" style="background-color: {{ $game->status->color }};">{{ $game->status->name }}</p>
 
-                                <p class="flex-grow pt-1 pr-1 pb-1 pl-1 bg-white text-black text-center text-xs font-semibold whitespace-nowrap rounded-md"> {{ trans_choice('{0} Rank -|[1,*] Rank #:x', $game->mediaStat->rank_total ?? 0, ['x' => $game->mediaStat->rank_total]) }}</p>
+                                <p class="flex-grow pt-1 pr-1 pb-1 pl-1 bg-white text-black text-center text-xs font-semibold whitespace-nowrap rounded-md"> {{ trans_choice('{0} Rank -|[1,*] Rank #:x', $game?->mediaStat?->rank_total ?? 0, ['x' => $game?->mediaStat?->rank_total ?? 0]) }}</p>
                             </div>
                         </div>
 
@@ -132,7 +132,7 @@
 
                         <x-star-rating-display :rating="$game->mediaStat->rating_average" star-size="sm" />
 
-                        <p class="text-sm text-secondary">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x reviews', (int) $game->mediaStat->rating_count, ['x' => number_shorten((int) $game->mediaStat->rating_count, 0, true)]) }}</p>
+                        <p class="text-sm text-secondary">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x reviews', (int) $game?->mediaStat?->rating_count, ['x' => number_shorten((int) $game?->mediaStat?->rating_count, 0, true)]) }}</p>
                     </a>
                 </div>
 
@@ -160,7 +160,7 @@
 
                 <div id="rankingBadge" class="flex-grow px-12 border-l border-primary">
                     <a class="flex flex-col items-center" href="{{ route('charts.top', App\Enums\ChartKind::Games) }}" wire:navigate>
-                        <p class="font-bold">{{ trans_choice('{0} -|[1,*] #:x', $game->mediaStat->rank_total ?? 0, ['x' => $game->mediaStat->rank_total]) }}</p>
+                        <p class="font-bold">{{ trans_choice('{0} -|[1,*] #:x', $game?->mediaStat?->rank_total ?? 0, ['x' => $game?->mediaStat?->rank_total ?? 0]) }}</p>
                         <p class="text-tint">
                             @svg('chart_bar_fill', 'fill-current', ['width' => '20'])
                         </p>
@@ -273,7 +273,7 @@
                     <div class="flex flex-col w-full justify-end text-right sm:w-auto">
                         <x-star-rating-bar :media-stat="$game->mediaStat" />
 
-                        <p class="text-sm text-secondary">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x Ratings', $game->mediaStat->rating_count, ['x' => number_format($game->mediaStat->rating_count)]) }}</p>
+                        <p class="text-sm text-secondary">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x Ratings', $game?->mediaStat?->rating_count ?? 0, ['x' => number_format($game?->mediaStat?->rating_count ?? 0)]) }}</p>
                     </div>
                 </div>
             </section>

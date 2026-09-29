@@ -183,8 +183,7 @@ class Season extends KModel implements HasMedia, Sitemapable
      */
     public function resolveRouteBindingQuery($query, $value, $field = null): Builder
     {
-        return parent::resolveRouteBindingQuery($query, $value, $field)
-            ->withoutGlobalScopes();
+        return $this->withoutGlobalScopesExceptSoftDeletes(parent::resolveRouteBindingQuery($query, $value, $field));
     }
 
     /**

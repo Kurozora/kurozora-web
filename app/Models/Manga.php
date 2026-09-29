@@ -115,9 +115,25 @@ class Manga extends KModel implements HasMedia, Sitemapable
     {
         return [
             'synonym_titles' => AsArrayObject::class,
+            'external_urls' => AsArrayObject::class,
             'is_nsfw' => 'bool',
             'started_at' => 'date',
             'ended_at' => 'date',
+        ];
+    }
+
+    /**
+     * The lookup ids a bare bones entry falls back to.
+     *
+     * @return int[]
+     */
+    public static function defaultLookups(): array
+    {
+        return [
+            'media_type_id' => 8,
+            'source_id' => 1,
+            'status_id' => 6,
+            'tv_rating_id' => 1,
         ];
     }
 
@@ -133,6 +149,10 @@ class Manga extends KModel implements HasMedia, Sitemapable
         static::creating(function (Manga $manga) {
             if (!isset($manga->getAttributes()['publication_season'])) {
                 $manga->publication_season = $manga->generatePublishingSeason();
+            }
+
+            foreach (static::defaultLookups() as $column => $id) {
+                $manga->{$column} ??= $id;
             }
         });
 
@@ -768,7 +788,7 @@ class Manga extends KModel implements HasMedia, Sitemapable
     public function toSearchableArray(): array
     {
         $manga = $this->toArray();
-        unset($manga['media']);
+        unset($manga['media'], $manga['external_urls']);
         $manga['letter'] = str_index($this->original_title);
         $manga['languages'] = $this->languages
             ->map(function ($item) {
@@ -812,8 +832,7 @@ class Manga extends KModel implements HasMedia, Sitemapable
      */
     public function resolveRouteBindingQuery($query, $value, $field = null): \Illuminate\Contracts\Database\Eloquent\Builder
     {
-        return parent::resolveRouteBindingQuery($query, $value, $field)
-            ->withoutGlobalScopes();
+        return $this->withoutGlobalScopesExceptSoftDeletes(parent::resolveRouteBindingQuery($query, $value, $field));
     }
 
     /**

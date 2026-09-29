@@ -133,6 +133,20 @@ class Game extends KModel implements HasMedia, Sitemapable
     }
 
     /**
+     * The lookup ids a bare bones entry falls back to.
+     *
+     * @return int[]
+     */
+    public static function defaultLookups(): array
+    {
+        return [
+            'source_id' => 1,
+            'status_id' => 12,
+            'tv_rating_id' => 1,
+        ];
+    }
+
+    /**
      * Bootstrap the model and its traits.
      *
      * @return void
@@ -144,6 +158,10 @@ class Game extends KModel implements HasMedia, Sitemapable
         static::creating(function (Game $game) {
             if (!isset($game->getAttributes()['publication_season'])) {
                 $game->publication_season = $game->generatePublishingSeason();
+            }
+
+            foreach (static::defaultLookups() as $column => $id) {
+                $game->{$column} ??= $id;
             }
         });
 
@@ -767,8 +785,7 @@ class Game extends KModel implements HasMedia, Sitemapable
      */
     public function resolveRouteBindingQuery($query, $value, $field = null): \Illuminate\Contracts\Database\Eloquent\Builder
     {
-        return parent::resolveRouteBindingQuery($query, $value, $field)
-            ->withoutGlobalScopes();
+        return $this->withoutGlobalScopesExceptSoftDeletes(parent::resolveRouteBindingQuery($query, $value, $field));
     }
 
     /**

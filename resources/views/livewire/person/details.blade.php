@@ -101,7 +101,7 @@
                 <div class="flex flex-col w-full justify-end text-right sm:w-auto">
                     <x-star-rating-bar :media-stat="$person->mediaStat" />
 
-                    <p class="text-sm text-secondary">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x Ratings', $person->mediaStat->rating_count, ['x' => number_format($person->mediaStat->rating_count)]) }}</p>
+                    <p class="text-sm text-secondary">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x Ratings', $person?->mediaStat?->rating_count ?? 0, ['x' => number_format($person?->mediaStat?->rating_count ?? 0)]) }}</p>
                 </div>
             </div>
         </section>

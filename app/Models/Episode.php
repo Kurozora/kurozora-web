@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\EpisodeFillerKind;
 use App\Enums\MediaCollection;
 use App\Support\BreadcrumbNode;
 use App\Traits\InteractsWithMediaExtension;
@@ -79,7 +80,7 @@ class Episode extends KModel implements HasMedia, Sitemapable
     protected function casts(): array
     {
         return [
-            'is_filler' => 'bool',
+            'filler_kind' => EpisodeFillerKind::class,
             'is_nsfw' => 'bool',
             'is_premiere' => 'bool',
             'is_finale' => 'bool',
@@ -300,13 +301,10 @@ class Episode extends KModel implements HasMedia, Sitemapable
                 'type' => 'duration',
                 'selected' => null,
             ],
-            'is_filler' => [
+            'filler_kind' => [
                 'title' => __('Fillers'),
-                'type' => 'bool',
-                'options' => [
-                    __('Shown'),
-                    __('Hidden'),
-                ],
+                'type' => 'select',
+                'options' => EpisodeFillerKind::asSelectArray(),
                 'selected' => null,
             ],
             'is_special' => [
@@ -375,6 +373,7 @@ class Episode extends KModel implements HasMedia, Sitemapable
         $episode = $this->toArray();
         unset($episode['media']);
         $episode['letter'] = str_index($this->title);
+        $episode['filler_kind'] = $this->filler_kind?->value;
         $episode['media_stat'] = $this->mediaStat?->toSearchableArray();
         $episode['translations'] = $this->translations
             ->select(['locale', 'title', 'synopsis', 'tagline']);
@@ -390,7 +389,7 @@ class Episode extends KModel implements HasMedia, Sitemapable
      *
      * @return HasOneThrough
      */
-    function anime(): HasOneThrough
+    public function anime(): HasOneThrough
     {
         return $this->hasOneThrough(Anime::class, Season::class, 'id', 'id', 'season_id', 'anime_id')
             ->withoutGlobalScopes();
@@ -401,7 +400,7 @@ class Episode extends KModel implements HasMedia, Sitemapable
      *
      * @return BelongsTo
      */
-    function season(): BelongsTo
+    public function season(): BelongsTo
     {
         return $this->belongsTo(Season::class)
             ->withoutGlobalScopes();
@@ -412,7 +411,7 @@ class Episode extends KModel implements HasMedia, Sitemapable
      *
      * @return BelongsTo
      */
-    function nextEpisode(): BelongsTo
+    public function nextEpisode(): BelongsTo
     {
         return $this->belongsTo(Episode::class)
             ->withoutGlobalScopes();
@@ -423,7 +422,7 @@ class Episode extends KModel implements HasMedia, Sitemapable
      *
      * @return BelongsTo
      */
-    function previousEpisode(): BelongsTo
+    public function previousEpisode(): BelongsTo
     {
         return $this->belongsTo(Episode::class)
             ->withoutGlobalScopes();
@@ -434,7 +433,7 @@ class Episode extends KModel implements HasMedia, Sitemapable
      *
      * @return HasMany
      */
-    function userWatchedEpisodes(): HasMany
+    public function userWatchedEpisodes(): HasMany
     {
         return $this->hasMany(UserWatchedEpisode::class);
     }
@@ -460,8 +459,7 @@ class Episode extends KModel implements HasMedia, Sitemapable
      */
     public function resolveRouteBindingQuery($query, $value, $field = null): \Illuminate\Contracts\Database\Eloquent\Builder
     {
-        return parent::resolveRouteBindingQuery($query, $value, $field)
-            ->withoutGlobalScopes();
+        return $this->withoutGlobalScopesExceptSoftDeletes(parent::resolveRouteBindingQuery($query, $value, $field));
     }
 
     /**
