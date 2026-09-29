@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Extensions\KTelescopeRequestWatcher;
 use App\Models\User;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Telescope\IncomingEntry;
 use Laravel\Telescope\Telescope;
@@ -19,17 +21,8 @@ class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
 
         $this->hideSensitiveRequestDetails();
 
-        Telescope::filter(function (IncomingEntry $entry) {
-            if ($this->app->environment('local')) {
-                return true;
-            }
-
-            return $entry->isReportableException() ||
-                   $entry->isFailedRequest() ||
-                   $entry->isFailedJob() ||
-                   $entry->isScheduledTask() ||
-                   $entry->hasMonitoredTag() ||
-                   $entry->isClientRequest();
+        Telescope::filterBatch(function (Collection $entries) {
+            return $entries->contains(fn (IncomingEntry $entry) => KTelescopeRequestWatcher::isErrorEntry($entry));
         });
     }
 
