@@ -1,17 +1,16 @@
 <?php
 
-use App\Livewire\Theme\Details as ThemeDetails;
-use App\Livewire\Theme\Index as ThemeIndex;
+use App\Http\Controllers\Web\ThemeController;
 
 Route::prefix('/themes')
     ->name('themes')
     ->group(function () {
-        Route::get('/', ThemeIndex::class)
+        Route::get('/', [ThemeController::class, 'index'])
             ->name('.index');
 
         Route::prefix('{theme}')
             ->group(function () {
-                Route::get('/', ThemeDetails::class)
+                Route::get('/', [ThemeController::class, 'show'])
                     ->name('.details');
             });
     });

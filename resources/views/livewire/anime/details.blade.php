@@ -453,26 +453,26 @@
                 </div>
             </section>
 
-            <livewire:components.anime-seasons-section :anime="$anime" />
+            <x-anime-seasons-section :anime="$anime" />
 
-            <livewire:components.cast-section :kind="\App\Enums\UserLibraryKind::Anime" :anime="$anime" />
+            <x-cast-section :kind="\App\Enums\UserLibraryKind::Anime" :model="$anime" />
 
-            <livewire:components.staff-section :kind="\App\Enums\UserLibraryKind::Anime" :anime="$anime" />
+            <x-staff-section :kind="\App\Enums\UserLibraryKind::Anime" :model="$anime" />
 
-            <livewire:components.songs-section :kind="\App\Enums\UserLibraryKind::Anime" :anime="$anime" />
+            <x-songs-section :kind="\App\Enums\UserLibraryKind::Anime" :model="$anime" />
 
-            <livewire:components.studios-section :kind="\App\Enums\UserLibraryKind::Anime" :anime="$anime" />
+            <x-studios-section :kind="\App\Enums\UserLibraryKind::Anime" :model="$anime" />
 
             <div class="bg-tinted">
                 @if (!empty($this->studio))
-                    <livewire:components.more-by-studio-section :kind="\App\Enums\UserLibraryKind::Anime" :anime="$anime" :studio="$this->studio" />
+                    <x-more-by-studio-section :kind="\App\Enums\UserLibraryKind::Anime" :model="$anime" :studio="$this->studio" />
                 @endif
 
-                <livewire:components.relations-section :kind="\App\Enums\UserLibraryKind::Anime" :related-kind="\App\Enums\UserLibraryKind::Anime" :anime="$anime" />
+                <x-relations-section :kind="\App\Enums\UserLibraryKind::Anime" :related-kind="\App\Enums\UserLibraryKind::Anime" :model="$anime" />
 
-                <livewire:components.relations-section :kind="\App\Enums\UserLibraryKind::Anime" :related-kind="\App\Enums\UserLibraryKind::Manga" :anime="$anime" />
+                <x-relations-section :kind="\App\Enums\UserLibraryKind::Anime" :related-kind="\App\Enums\UserLibraryKind::Manga" :model="$anime" />
 
-                <livewire:components.relations-section :kind="\App\Enums\UserLibraryKind::Anime" :related-kind="\App\Enums\UserLibraryKind::Game" :anime="$anime" />
+                <x-relations-section :kind="\App\Enums\UserLibraryKind::Anime" :related-kind="\App\Enums\UserLibraryKind::Game" :model="$anime" />
 
                 @if (!empty($anime->copyright))
                     <section class="border-t border-primary xl:safe-area-inset">

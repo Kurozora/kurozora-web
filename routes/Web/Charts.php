@@ -1,13 +1,14 @@
 <?php
 
 use App\Enums\ChartKind;
+use App\Http\Controllers\Web\ChartController;
+use App\Http\Controllers\Web\SectionController;
 use App\Livewire\Chart\Details as ChartDetails;
-use App\Livewire\Chart\Index as ChartIndex;
 
 Route::prefix('/charts')
     ->name('charts')
     ->group(function () {
-        Route::get('/', ChartIndex::class)
+        Route::get('/', [ChartController::class, 'index'])
             ->name('.index');
 
         Route::prefix('{chart}')
@@ -15,6 +16,10 @@ Route::prefix('/charts')
             ->group(function () {
                 Route::get('/', ChartDetails::class)
                     ->name('.details');
+
+                Route::get('/section', [SectionController::class, 'chart'])
+                    ->middleware('auth')
+                    ->name('.section');
 
                 Route::get('/top', ChartDetails::class)
                     ->name('.top');

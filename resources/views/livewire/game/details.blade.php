@@ -432,24 +432,24 @@
                 </div>
             </section>
 
-            <livewire:components.cast-section :kind="\App\Enums\UserLibraryKind::Game" :game="$game" />
+            <x-cast-section :kind="\App\Enums\UserLibraryKind::Game" :model="$game" />
 
-            <livewire:components.staff-section :kind="\App\Enums\UserLibraryKind::Game" :game="$game" />
+            <x-staff-section :kind="\App\Enums\UserLibraryKind::Game" :model="$game" />
 
-            <livewire:components.songs-section :kind="\App\Enums\UserLibraryKind::Game" :game="$game" />
+            <x-songs-section :kind="\App\Enums\UserLibraryKind::Game" :model="$game" />
 
-            <livewire:components.studios-section :kind="\App\Enums\UserLibraryKind::Game" :game="$game" />
+            <x-studios-section :kind="\App\Enums\UserLibraryKind::Game" :model="$game" />
 
             <div class="bg-tinted">
                 @if (!empty($this->studio))
-                    <livewire:components.more-by-studio-section :kind="\App\Enums\UserLibraryKind::Game" :game="$game" :studio="$this->studio" />
+                    <x-more-by-studio-section :kind="\App\Enums\UserLibraryKind::Game" :model="$game" :studio="$this->studio" />
                 @endif
 
-                <livewire:components.relations-section :kind="\App\Enums\UserLibraryKind::Game" :related-kind="\App\Enums\UserLibraryKind::Game" :game="$game" />
+                <x-relations-section :kind="\App\Enums\UserLibraryKind::Game" :related-kind="\App\Enums\UserLibraryKind::Game" :model="$game" />
 
-                <livewire:components.relations-section :kind="\App\Enums\UserLibraryKind::Game" :related-kind="\App\Enums\UserLibraryKind::Anime" :game="$game" />
+                <x-relations-section :kind="\App\Enums\UserLibraryKind::Game" :related-kind="\App\Enums\UserLibraryKind::Anime" :model="$game" />
 
-                <livewire:components.relations-section :kind="\App\Enums\UserLibraryKind::Game" :related-kind="\App\Enums\UserLibraryKind::Manga" :game="$game" />
+                <x-relations-section :kind="\App\Enums\UserLibraryKind::Game" :related-kind="\App\Enums\UserLibraryKind::Manga" :model="$game" />
 
                 @if (!empty($game->copyright))
                     <section class="border-t border-primary xl:safe-area-inset">

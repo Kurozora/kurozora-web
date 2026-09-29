@@ -2,6 +2,7 @@
 
 use App\Enums\ParentalGuideCategory;
 use App\Enums\UserLibraryKind;
+use App\Http\Controllers\Web\SectionController;
 use App\Livewire\Browse\Continuing\Index as BrowseContinuingIndex;
 use App\Livewire\Browse\Seasons\Archive as BrowseSeasonsArchive;
 use App\Livewire\Browse\Seasons\Index as BrowseSeasonsIndex;
@@ -77,6 +78,11 @@ Route::prefix('/manga')
             ->group(function () {
                 Route::get('/', MangaDetails::class)
                     ->name('.details');
+
+                Route::get('/sections/{section}', [SectionController::class, 'manga'])
+                    ->where('section', 'cast|staff|studios|more-by-studio|related-manga|related-anime|related-games')
+                    ->middleware('auth')
+                    ->name('.section');
 
                 Route::get('/cast', Cast::class)
                     ->defaults('kind', UserLibraryKind::Manga)

@@ -338,9 +338,9 @@
                 </div>
             </section>
 
-            <livewire:components.song.media-section :song="$song" :type="\App\Models\Anime::class" />
+            <x-song.media-section :song="$song" :type="\App\Models\Anime::class" />
 
-            <livewire:components.song.media-section :song="$song" :type="\App\Models\Game::class" />
+            <x-song.media-section :song="$song" :type="\App\Models\Game::class" />
         </div>
 
         <div class="bg-tinted">

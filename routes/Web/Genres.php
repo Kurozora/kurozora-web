@@ -1,17 +1,16 @@
 <?php
 
-use App\Livewire\Genre\Details as GenreDetails;
-use App\Livewire\Genre\Index as GenreIndex;
+use App\Http\Controllers\Web\GenreController;
 
 Route::prefix('/genres')
     ->name('genres')
     ->group(function () {
-        Route::get('/', GenreIndex::class)
+        Route::get('/', [GenreController::class, 'index'])
             ->name('.index');
 
         Route::prefix('{genre}')
             ->group(function () {
-            Route::get('/', GenreDetails::class)
+            Route::get('/', [GenreController::class, 'show'])
                 ->name('.details');
         });
     });

@@ -5,7 +5,7 @@
         <div class="flex flex-1 gap-2 items-center">
             <x-input id="search" class="w-full" type="search" placeholder="{{ __('I’m searching for…') }}" wire:model.live.debounce.500ms="{{ $searchModel }}" />
 
-            <livewire:components.search-hint-button />
+            <x-search-hint-button />
         </div>
 
         <div class="flex flex-1 items-center justify-end space-x-1">

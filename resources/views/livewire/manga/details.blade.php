@@ -460,22 +460,22 @@
                 </div>
             </section>
 
-            <livewire:components.cast-section :kind="\App\Enums\UserLibraryKind::Manga" :manga="$manga" />
+            <x-cast-section :kind="\App\Enums\UserLibraryKind::Manga" :model="$manga" />
 
-            <livewire:components.staff-section :kind="\App\Enums\UserLibraryKind::Manga" :manga="$manga" />
+            <x-staff-section :kind="\App\Enums\UserLibraryKind::Manga" :model="$manga" />
 
-            <livewire:components.studios-section :kind="\App\Enums\UserLibraryKind::Manga" :manga="$manga" />
+            <x-studios-section :kind="\App\Enums\UserLibraryKind::Manga" :model="$manga" />
 
             <div class="bg-tinted">
                 @if (!empty($this->studio))
-                    <livewire:components.more-by-studio-section :kind="\App\Enums\UserLibraryKind::Manga" :manga="$manga" :studio="$this->studio" />
+                    <x-more-by-studio-section :kind="\App\Enums\UserLibraryKind::Manga" :model="$manga" :studio="$this->studio" />
                 @endif
 
-                <livewire:components.relations-section :kind="\App\Enums\UserLibraryKind::Manga" :related-kind="\App\Enums\UserLibraryKind::Manga" :manga="$manga" />
+                <x-relations-section :kind="\App\Enums\UserLibraryKind::Manga" :related-kind="\App\Enums\UserLibraryKind::Manga" :model="$manga" />
 
-                <livewire:components.relations-section :kind="\App\Enums\UserLibraryKind::Manga" :related-kind="\App\Enums\UserLibraryKind::Anime" :manga="$manga" />
+                <x-relations-section :kind="\App\Enums\UserLibraryKind::Manga" :related-kind="\App\Enums\UserLibraryKind::Anime" :model="$manga" />
 
-                <livewire:components.relations-section :kind="\App\Enums\UserLibraryKind::Manga" :related-kind="\App\Enums\UserLibraryKind::Game" :manga="$manga" />
+                <x-relations-section :kind="\App\Enums\UserLibraryKind::Manga" :related-kind="\App\Enums\UserLibraryKind::Game" :model="$manga" />
 
                 @if (!empty($manga->copyright))
                     <section class="border-t border-primary xl:safe-area-inset">

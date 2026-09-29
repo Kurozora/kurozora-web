@@ -2,10 +2,11 @@
 
 use App\Http\Controllers\API\v1\MiscController;
 use App\Http\Controllers\Web\Auth\ImpersonateController;
+use App\Http\Controllers\Web\HomeController;
 use App\Http\Controllers\Web\LinkPreviewController;
 use App\Http\Controllers\Web\MusicKitController;
-use App\Livewire\Home;
-use App\Livewire\Schedule\Index as ScheduleIndex;
+use App\Http\Controllers\Web\ScheduleController;
+use App\Http\Controllers\Web\SectionController;
 use App\Livewire\Welcome;
 
 Route::get('chat', function () {
@@ -13,7 +14,7 @@ Route::get('chat', function () {
 })
     ->name('chat');
 
-Route::get('/', Home::class)
+Route::get('/', [HomeController::class, 'index'])
     ->name('home');
 
 Route::get('welcome', Welcome::class)
@@ -34,8 +35,12 @@ Route::prefix('.well-known')
             ->name('.change-password');
     });
 
-Route::get('schedule', ScheduleIndex::class)
+Route::get('schedule', [ScheduleController::class, 'index'])
     ->name('schedule');
+
+Route::get('schedule/section', [SectionController::class, 'schedule'])
+    ->middleware('auth')
+    ->name('schedule.section');
 
 Route::get('/settings', function () {
     return to_route('profile.settings');

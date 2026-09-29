@@ -1,6 +1,6 @@
 import './echo'
 import './bootstrap'
-import './explore-section'
+import './section-refresh'
 import './alert'
 import './subscription-sheet'
 import './nav-notification'

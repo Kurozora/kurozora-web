@@ -147,7 +147,7 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
         Manga::class => ['genres', 'media', 'mediaStat', 'themes', 'translation', 'tvRating'],
         Genre::class => ['media'],
         Theme::class => ['media'],
-        MediaSong::class => ['song.media', 'model.translation'],
+        MediaSong::class => ['song.media', 'song.translation', 'model.translation'],
     ];
 
     /**

@@ -4,7 +4,7 @@
     $exploreCategoryItems = $items ?? $exploreCategory->items($genre ?? $theme);
 @endphp
 
-<div data-explore-section>
+<div data-section>
     <div>
         @if ($exploreCategoryItems->count())
             <section class="pt-4 pb-8">
@@ -27,10 +27,10 @@
                         </x-slot:description>
 
                         <x-slot:action>
-                            <x-spinner />
+                            <x-spinner :wire-loading-enabled="false" data-section-spinner class="hidden" />
 
                             @hasrole('superAdmin')
-                                <x-button data-explore-section-refresh="{{ route('explore.section', ['exploreCategory' => $exploreCategory, 'genre' => $genre?->slug, 'theme' => $theme?->slug], false) }}">{{ __('Refresh') }}</x-button>
+                                <x-button data-section-refresh="{{ route('explore.section', ['exploreCategory' => $exploreCategory, 'genre' => $genre?->slug, 'theme' => $theme?->slug], false) }}">{{ __('Refresh') }}</x-button>
                             @endhasrole
 
                             @switch($exploreCategory->type)
