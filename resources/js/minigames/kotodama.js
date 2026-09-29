@@ -95,7 +95,7 @@ document.addEventListener('alpine:init', () => {
 
             if (remainingMs <= 0) {
                 clearInterval(this.intervalId)
-                window.location.reload()
+                window.Livewire.navigate(window.location.href)
                 return
             }
 

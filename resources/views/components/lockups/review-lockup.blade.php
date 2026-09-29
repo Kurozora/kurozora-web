@@ -51,7 +51,7 @@
         <div class="flex flex-col items-baseline w-full">
             <div class="flex flex-wrap justify-between w-full">
                 <div class="flex flex-wrap gap-1">
-                    <a class="inline-flex items-center text-sm font-semibold break-all overflow-hidden" href="{{ route('profile.details', $review->user) }}">{{ $review->user->username }}</a>
+                    <a class="inline-flex items-center text-sm font-semibold break-all overflow-hidden" href="{{ route('profile.details', $review->user) }}" wire:navigate>{{ $review->user->username }}</a>
 
                     <x-user.badge-shelf :user="$review->user" />
                 </div>

@@ -15,7 +15,6 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
-use Livewire\Features\SupportRedirects\Redirector;
 
 class MergeLibrary extends Component
 {
@@ -103,12 +102,13 @@ class MergeLibrary extends Component
      *
      * @param string $jsonString
      *
-     * @return Redirector|void
+     * @return void
      */
-    public function mergeLibrary(string $jsonString)
+    public function mergeLibrary(string $jsonString): void
     {
         if (empty(json_decode($jsonString))) {
-            return $this->goToHome();
+            $this->goToHome();
+            return;
         }
 
         dispatch(new ProcessLocalLibraryImport(auth()->user(), $jsonString, ImportBehavior::Merge()));
@@ -121,12 +121,13 @@ class MergeLibrary extends Component
      *
      * @param string $jsonString
      *
-     * @return Redirector|void
+     * @return void
      */
-    public function overwriteLibrary(string $jsonString)
+    public function overwriteLibrary(string $jsonString): void
     {
         if (empty(json_decode($jsonString))) {
-            return $this->goToHome();
+            $this->goToHome();
+            return;
         }
 
         dispatch(new ProcessLocalLibraryImport(auth()->user(), $jsonString, ImportBehavior::Overwrite()));
@@ -139,25 +140,25 @@ class MergeLibrary extends Component
      *
      * @param bool $merging
      *
-     * @return Redirector
+     * @return void
      */
-    public function finishMerge(bool $merging): Redirector
+    public function finishMerge(bool $merging): void
     {
         if ($merging) {
             session()->flash('success', __('Local Library import is in progress.'));
         }
 
-        return $this->goToHome();
+        $this->goToHome();
     }
 
     /**
-     * Go to home page.
+     * Go to the page the user intended to visit.
      *
-     * @return Redirector
+     * @return void
      */
-    public function goToHome(): Redirector
+    public function goToHome(): void
     {
-        return redirect()->intended();
+        $this->redirect(session()->pull('url.intended', route('home')), navigate: true);
     }
 
     /**

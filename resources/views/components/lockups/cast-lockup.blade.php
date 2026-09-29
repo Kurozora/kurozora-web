@@ -26,7 +26,7 @@
         <section class="flex flex-col gap-2 {{ $castNamesContainerWidth }}">
             <div class="flex flex-col gap-1">
                 @if (!empty($cast->person))
-                    <a class="text-tint leading-tight line-clamp-2" href="{{ route('people.details', $cast->person) }}">{{ $cast->person->full_name }}</a>
+                    <a class="text-tint leading-tight line-clamp-2" href="{{ route('people.details', $cast->person) }}" wire:navigate>{{ $cast->person->full_name }}</a>
                 @else
                     <p class="text-tint leading-tight line-clamp-2" title="{{ __('Unknown') }}">{{ __('Unknown') }}</p>
                 @endif
@@ -34,7 +34,7 @@
             </div>
 
             <div class="flex flex-col text-end gap-1">
-                <a class="leading-tight line-clamp-2" href="{{ route('characters.details', $cast->character) }}">{{ __('as :x', ['x' => $cast->character->name]) }}</a>
+                <a class="leading-tight line-clamp-2" href="{{ route('characters.details', $cast->character) }}" wire:navigate>{{ __('as :x', ['x' => $cast->character->name]) }}</a>
                 <p class="text-xs leading-tight opacity-75 line-clamp-2" >{{ $cast->castRole->name }}</p>
             </div>
         </section>

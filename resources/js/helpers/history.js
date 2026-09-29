@@ -61,7 +61,7 @@ export default class HistoryManager {
 
         if (!!fallbackUrl) {
             setTimeout(() => {
-                window.location.href = fallbackUrl;
+                window.Livewire.navigate(fallbackUrl)
             }, 500);
         }
     }

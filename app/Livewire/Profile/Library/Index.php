@@ -126,7 +126,7 @@ class Index extends Component
             ->inRandomOrder()
             ->first();
 
-        $this->redirectRoute($this->detailsRoute(), $item);
+        $this->redirectRoute($this->detailsRoute(), $item, navigate: true);
     }
 
     /**

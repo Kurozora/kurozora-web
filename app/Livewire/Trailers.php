@@ -90,8 +90,8 @@ class Trailers extends Catalog
         }
 
         match ($this->kind) {
-            UserLibraryKind::Game => $this->redirectRoute('games.details', $video->videoable),
-            default => $this->redirectRoute('anime.details', $video->videoable),
+            UserLibraryKind::Game => $this->redirectRoute('games.details', $video->videoable, navigate: true),
+            default => $this->redirectRoute('anime.details', $video->videoable, navigate: true),
         };
     }
 

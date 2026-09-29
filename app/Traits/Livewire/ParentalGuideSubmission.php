@@ -94,7 +94,7 @@ trait ParentalGuideSubmission
     public function openSubmitForm(?int $category = null): void
     {
         if (auth()->user() === null) {
-            $this->redirect(route('sign-in'));
+            $this->redirectRoute('sign-in', navigate: true);
             return;
         }
 
@@ -116,7 +116,7 @@ trait ParentalGuideSubmission
         $user = auth()->user();
 
         if ($user === null) {
-            $this->redirect(route('sign-in'));
+            $this->redirectRoute('sign-in', navigate: true);
             return;
         }
 
@@ -152,7 +152,7 @@ trait ParentalGuideSubmission
         $user = auth()->user();
 
         if ($user === null) {
-            $this->redirect(route('sign-in'));
+            $this->redirectRoute('sign-in', navigate: true);
             return;
         }
 

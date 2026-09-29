@@ -70,6 +70,7 @@
                     <a
                         class="inline-flex items-center font-semibold whitespace-nowrap overflow-hidden"
                         href="{{ route('profile.details', $displayMessage->user) }}"
+                        wire:navigate
                     >
                         {{ $displayMessage->user->username }}
                     </a>
@@ -78,7 +79,7 @@
                 </div>
 
                 <a class="relative text-sm text-secondary whitespace-nowrap hover:underline" title="{{ $displayMessage->created_at }}"
-                   href="{{ route('feed.details', $displayMessage) }}">{{ $displayMessage->created_at->shortAbsoluteDiffForHumans() }}</a>
+                   href="{{ route('feed.details', $displayMessage) }}" wire:navigate>{{ $displayMessage->created_at->shortAbsoluteDiffForHumans() }}</a>
             </div>
 
             <div class="relative flex">

@@ -168,7 +168,7 @@ class RatingInput extends Component
         $user = auth()->user();
 
         if ($user === null) {
-            $this->redirect(route('sign-in'));
+            $this->redirectRoute('sign-in', navigate: true);
             return;
         }
 

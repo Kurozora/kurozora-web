@@ -120,7 +120,7 @@ class Index extends Component
     {
         // Can't scope on library if not signed in.
         if ($newValue == SearchScope::Library && !auth()->check()) {
-            $this->redirectRoute('sign-in');
+            $this->redirectRoute('sign-in', navigate: true);
             return;
         }
 

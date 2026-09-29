@@ -74,7 +74,7 @@
                             </div>
 
                             <div class="flex flex-row gap-2 items-center justify-between whitespace-nowrap">
-                                <x-link-button href="{{ route('profile.settings.user', $child) }}">
+                                <x-link-button href="{{ route('profile.settings.user', $child) }}" wire:navigate>
                                     {{ __('Settings') }}
                                 </x-link-button>
                             </div>

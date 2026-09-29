@@ -85,7 +85,7 @@ class Index extends Component
         $user = auth()->user();
 
         if ($user === null) {
-            $this->redirectRoute('sign-in');
+            $this->redirectRoute('sign-in', navigate: true);
             return;
         }
 

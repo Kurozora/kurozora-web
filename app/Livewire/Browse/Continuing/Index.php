@@ -72,8 +72,8 @@ class Index extends Component
         ])->randomFirst();
 
         match ($this->kind) {
-            UserLibraryKind::Anime => $this->redirectRoute('anime.details', $item),
-            UserLibraryKind::Manga => $this->redirectRoute('manga.details', $item),
+            UserLibraryKind::Anime => $this->redirectRoute('anime.details', $item, navigate: true),
+            UserLibraryKind::Manga => $this->redirectRoute('manga.details', $item, navigate: true),
         };
     }
 

@@ -144,7 +144,7 @@
                     @endphp
 
                     <a class="block pt-6 pb-6 pl-6 pr-6 text-center rounded-lg shadow-lg"
-                         style="background: url({{ asset('images/static/patterns/genre_pattern.svg') }}) no-repeat center center / cover, url({{ asset('images/static/patterns/grain.svg') }}), var(--tint-color);" href="{{ $href }}">
+                         style="background: url({{ asset('images/static/patterns/genre_pattern.svg') }}) no-repeat center center / cover, url({{ asset('images/static/patterns/grain.svg') }}), var(--tint-color);" href="{{ $href }}" wire:navigate>
                         <div class="flex justify-center mb-3">
                             <picture class="relative w-40 h-40 rounded-full shadow-lg overflow-hidden">
                                 <img class="w-full h-full object-cover" width="160" height="160" src="{{ $user?->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/user_profile.webp') }}" alt="{{ $user?->username ?? __('Guest') }} Profile Image" title="{{ $user?->username ?? __('Guest Profile') }}">

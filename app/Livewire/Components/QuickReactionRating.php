@@ -6,7 +6,6 @@ use App\Enums\EmojiScore;
 use App\Support\UserLibraryTouch;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Livewire\Attributes\Isolate;
 use Livewire\Component;
@@ -108,14 +107,15 @@ class QuickReactionRating extends Component
      *
      * @param int $value
      *
-     * @return RedirectResponse|void
+     * @return void
      */
     public function rate(int $value)
     {
         $user = auth()->user();
 
         if (empty($user)) {
-            return to_route('sign-in');
+            $this->redirectRoute('sign-in', navigate: true);
+            return;
         }
 
         $emojiScore = EmojiScore::coerce($value);
@@ -179,14 +179,15 @@ class QuickReactionRating extends Component
     /**
      * Removes the authenticated user's rating of the model.
      *
-     * @return RedirectResponse|void
+     * @return void
      */
     public function removeRating()
     {
         $user = auth()->user();
 
         if (empty($user)) {
-            return to_route('sign-in');
+            $this->redirectRoute('sign-in', navigate: true);
+            return;
         }
 
         // Delete through the model so observers fire.

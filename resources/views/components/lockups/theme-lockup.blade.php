@@ -1,6 +1,6 @@
 @props(['theme'])
 
-<a class="relative" href="{{ route('themes.details', ['theme' => $theme]) }}">
+<a class="relative" href="{{ route('themes.details', ['theme' => $theme]) }}" wire:navigate>
     <div class="flex">
         <picture
             class="relative rounded-lg overflow-hidden"

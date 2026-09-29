@@ -91,7 +91,8 @@ class FeedMessageComposer extends Component
     public function submit()
     {
         if (!auth()->check()) {
-            return to_route('sign-in');
+            $this->redirectRoute('sign-in', navigate: true);
+            return;
         }
 
         $this->validate();

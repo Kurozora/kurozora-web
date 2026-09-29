@@ -70,9 +70,9 @@ class Index extends Component
         $item = $modelClass::where($this->dateColumn(), '>=', yesterday())->randomFirst();
 
         match ($this->kind) {
-            UserLibraryKind::Anime => $this->redirectRoute('anime.details', $item),
-            UserLibraryKind::Manga => $this->redirectRoute('manga.details', $item),
-            UserLibraryKind::Game  => $this->redirectRoute('games.details', $item),
+            UserLibraryKind::Anime => $this->redirectRoute('anime.details', $item, navigate: true),
+            UserLibraryKind::Manga => $this->redirectRoute('manga.details', $item, navigate: true),
+            UserLibraryKind::Game  => $this->redirectRoute('games.details', $item, navigate: true),
         };
     }
 

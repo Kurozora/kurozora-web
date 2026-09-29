@@ -84,7 +84,7 @@ class UnlinkUserForm extends Component
 
         session()->flash('message', __('Child account disconnected successfully.'));
 
-        $this->redirectRoute('profile.settings');
+        $this->redirectRoute('profile.settings', navigate: true);
     }
 
     /**

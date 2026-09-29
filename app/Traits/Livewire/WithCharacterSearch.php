@@ -46,7 +46,7 @@ trait WithCharacterSearch
     public function randomCharacter(): void
     {
         $character = Character::randomFirst();
-        $this->redirectRoute('characters.details', $character);
+        $this->redirectRoute('characters.details', $character, navigate: true);
     }
 
     /**

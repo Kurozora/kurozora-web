@@ -333,7 +333,7 @@
                                 <div class="max-w-7xl">
                                     <p class="text-4xl text-white font-bold md:text-8xl">One Piece</p>
                                     <p class="mt-4 text-white font-bold md:text-2xl">Action</p>
-                                    <x-link-button class="mt-8" href="/anime/one-piece">{{ __('Visit now') }}</x-link-button>
+                                    <x-link-button class="mt-8" href="/anime/one-piece" wire:navigate>{{ __('Visit now') }}</x-link-button>
                                 </div>
                             </div>
                         </div>
@@ -358,7 +358,7 @@
                                 <div class="max-w-7xl">
                                     <p class="text-4xl text-white font-bold md:text-8xl">Horimiya</p>
                                     <p class="mt-4 text-white font-bold md:text-2xl">Romance</p>
-                                    <x-link-button class="mt-8" href="/anime/horimiya">{{ __('Visit now') }}</x-link-button>
+                                    <x-link-button class="mt-8" href="/anime/horimiya" wire:navigate>{{ __('Visit now') }}</x-link-button>
                                 </div>
                             </div>
                         </div>
@@ -383,7 +383,7 @@
                                 <div class="max-w-7xl">
                                     <p class="text-4xl text-white font-bold md:text-8xl">Assassination Classroom</p>
                                     <p class="mt-4 text-white font-bold md:text-2xl">School</p>
-                                    <x-link-button class="mt-8" href="/anime/assassination-classroom">{{ __('Visit now') }}</x-link-button>
+                                    <x-link-button class="mt-8" href="/anime/assassination-classroom" wire:navigate>{{ __('Visit now') }}</x-link-button>
                                 </div>
                             </div>
                         </div>
@@ -408,7 +408,7 @@
                                 <div class="max-w-7xl">
                                     <p class="text-4xl text-white font-bold md:text-8xl">Death Parade</p>
                                     <p class="mt-4 text-white font-bold md:text-2xl">Thriller</p>
-                                    <x-link-button class="mt-8" href="/anime/death-parade">{{ __('Visit now') }}</x-link-button>
+                                    <x-link-button class="mt-8" href="/anime/death-parade" wire:navigate>{{ __('Visit now') }}</x-link-button>
                                 </div>
                             </div>
                         </div>
@@ -433,7 +433,7 @@
                                 <div class="max-w-7xl">
                                     <p class="text-4xl text-white font-bold md:text-8xl">Haikyu!!</p>
                                     <p class="mt-4 text-white font-bold md:text-2xl">Sports</p>
-                                    <x-link-button class="mt-8" href="/anime/haikyuu">{{ __('Visit now') }}</x-link-button>
+                                    <x-link-button class="mt-8" href="/anime/haikyuu" wire:navigate>{{ __('Visit now') }}</x-link-button>
                                 </div>
                             </div>
                         </div>

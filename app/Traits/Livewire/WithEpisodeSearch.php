@@ -48,7 +48,7 @@ trait WithEpisodeSearch
             ->withoutGlobalScopes()
             ->inRandomOrder()
             ->first();
-        $this->redirectRoute('episodes.details', $episode);
+        $this->redirectRoute('episodes.details', $episode, navigate: true);
     }
 
     /**

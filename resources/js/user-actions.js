@@ -82,7 +82,7 @@ document.addEventListener('alpine:init', () => {
 
         toggle() {
             if (!authenticated) {
-                window.location.assign(signInUrl)
+                window.Livewire.navigate(signInUrl)
                 return
             }
 
@@ -106,7 +106,7 @@ document.addEventListener('alpine:init', () => {
 
         toggle() {
             if (!authenticated) {
-                window.location.assign(signInUrl)
+                window.Livewire.navigate(signInUrl)
                 return
             }
 
@@ -134,7 +134,7 @@ document.addEventListener('alpine:init', () => {
             }
 
             if (!authenticated) {
-                window.location.assign(signUpUrl)
+                window.Livewire.navigate(signUpUrl)
                 return
             }
 
@@ -292,7 +292,7 @@ document.addEventListener('alpine:init', () => {
                 return true
             }
 
-            window.location.assign(signInUrl)
+            window.Livewire.navigate(signInUrl)
 
             return false
         },
@@ -442,7 +442,7 @@ document.addEventListener('alpine:init', () => {
 
         toggle() {
             if (!authenticated) {
-                window.location.assign(signInUrl)
+                window.Livewire.navigate(signInUrl)
                 return
             }
 

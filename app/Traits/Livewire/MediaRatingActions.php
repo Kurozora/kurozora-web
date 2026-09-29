@@ -58,7 +58,7 @@ trait MediaRatingActions
         $user = auth()->user();
 
         if ($user === null) {
-            $this->redirect(route('sign-in'));
+            $this->redirectRoute('sign-in', navigate: true);
             return;
         }
 
@@ -101,7 +101,7 @@ trait MediaRatingActions
     public function openReviewReportForm(int $ratingID): void
     {
         if (auth()->user() === null) {
-            $this->redirect(route('sign-in'));
+            $this->redirectRoute('sign-in', navigate: true);
             return;
         }
 
@@ -122,7 +122,7 @@ trait MediaRatingActions
         $user = auth()->user();
 
         if ($user === null) {
-            $this->redirect(route('sign-in'));
+            $this->redirectRoute('sign-in', navigate: true);
             return;
         }
 
@@ -178,7 +178,7 @@ trait MediaRatingActions
         $user = auth()->user();
 
         if ($user === null) {
-            $this->redirect(route('sign-in'));
+            $this->redirectRoute('sign-in', navigate: true);
             return;
         }
 

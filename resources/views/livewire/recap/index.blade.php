@@ -437,7 +437,7 @@
                     {{ __(':x Re:CAP is still in progress. Check back in early :y.', ['x' => now()->monthName, 'y' => now()->addMonthNoOverflow()->monthName]) }}
                 </h2>
 
-                <x-link-button class="mt-12" href="/">{{ __('Keep Tracking on :x', ['x' => config('app.name')]) }}</x-link-button>
+                <x-link-button class="mt-12" href="{{ route('home') }}" wire:navigate>{{ __('Keep Tracking on :x', ['x' => config('app.name')]) }}</x-link-button>
             </div>
         @endif
     </div>

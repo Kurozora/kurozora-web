@@ -25,7 +25,7 @@ trait WithPlatformSearch
     public function randomPlatform(): void
     {
         $platform = Platform::randomFirst();
-        $this->redirectRoute('platforms.details', $platform);
+        $this->redirectRoute('platforms.details', $platform, navigate: true);
     }
 
     /**
@@ -36,7 +36,7 @@ trait WithPlatformSearch
      */
     public function searchIndexQuery(EloquentBuilder $query): EloquentBuilder
     {
-        return $query->with(['media']);
+        return $query->with(['media', 'translation']);
     }
 
     /**

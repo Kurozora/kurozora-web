@@ -28,7 +28,7 @@
                     </div>
 
                     <div class="flex flex-wrap justify-end items-center w-full">
-                        <x-link-button href="{{ route('theme-store.create') }}">{{ __('Create') }}</x-link-button>
+                        <x-link-button href="{{ route('theme-store.create') }}" wire:navigate>{{ __('Create') }}</x-link-button>
                     </div>
                 </div>
 

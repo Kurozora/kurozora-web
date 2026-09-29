@@ -173,7 +173,7 @@
                     @endif
 
                     <div id="rankingBadge" class="flex-grow px-12 border-l border-primary">
-                        <a class="flex flex-col items-center" href="{{ route('charts.top', App\Enums\ChartKind::Manga) }}">
+                        <a class="flex flex-col items-center" href="{{ route('charts.top', App\Enums\ChartKind::Manga) }}" wire:navigate>
                             <p class="font-bold">{{ trans_choice('{0} -|[1,*] #:x', $manga?->mediaStat?->rank_total ?? 0, ['x' => $manga?->mediaStat?->rank_total ?? 0]) }}</p>
                             <p class="text-tint">
                                 @svg('chart_bar_fill', 'fill-current', ['width' => '20'])
@@ -183,7 +183,7 @@
                     </div>
 
                     <div id="tvRatingBadge" class="flex-grow px-12 border-l border-primary">
-                        <a class="flex flex-col items-center" href="{{ route('manga.parentalguide', $manga) }}">
+                        <a class="flex flex-col items-center" href="{{ route('manga.parentalguide', $manga) }}" wire:navigate>
                             <p class="font-bold">{{ $manga->tvRating->name }}</p>
                             <p class="text-tint">
                                 @svg('tv_fill', 'fill-current', ['width' => '20'])
@@ -194,7 +194,7 @@
 
                     @if (!empty($studio))
                         <div id="studioBadge" class="flex-grow px-12 border-l border-primary">
-                            <a class="flex flex-col items-center" href="{{ route('studios.details', $studio) }}">
+                            <a class="flex flex-col items-center" href="{{ route('studios.details', $studio) }}" wire:navigate>
                                 <p class="font-bold">{{ $studio->name }}</p>
                                 <p class="text-tint">
                                     @svg('building_2_fill', 'fill-current', ['width' => '20'])

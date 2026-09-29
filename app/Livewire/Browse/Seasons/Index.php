@@ -80,9 +80,9 @@ class Index extends Component
     protected function redirectToSeasonsIndex(): void
     {
         match ($this->kind) {
-            UserLibraryKind::Anime => $this->redirectRoute('anime.seasons.index'),
-            UserLibraryKind::Manga => $this->redirectRoute('manga.seasons.index'),
-            UserLibraryKind::Game  => $this->redirectRoute('games.seasons.index'),
+            UserLibraryKind::Anime => $this->redirectRoute('anime.seasons.index', navigate: true),
+            UserLibraryKind::Manga => $this->redirectRoute('manga.seasons.index', navigate: true),
+            UserLibraryKind::Game  => $this->redirectRoute('games.seasons.index', navigate: true),
         };
     }
 

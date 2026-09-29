@@ -14,7 +14,6 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\Isolate;
 use Livewire\Component;
@@ -167,13 +166,14 @@ class ReviewBox extends Component
     /**
      * Shows the review box to the user.
      *
-     * @return RedirectResponse|void
+     * @return void
      */
     public function showReviewBox()
     {
         // Require user to authenticate if necessary.
         if (!auth()->check()) {
-            return to_route('sign-in');
+            $this->redirectRoute('sign-in', navigate: true);
+            return;
         }
 
         $user = auth()->user();
