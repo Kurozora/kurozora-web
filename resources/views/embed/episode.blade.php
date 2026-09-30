@@ -48,7 +48,17 @@
             <div class="relative w-full h-full overflow-hidden z-0" style="background-color: {{ $episode->getFirstMedia(\App\Enums\MediaCollection::Banner)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};">
                 <div class="relative w-full h-full overflow-hidden z-10">
                     @if (!empty($video))
-                        {!! $video->getEmbed(['currentTime' => $timestamp]) !!}
+                        <div
+                            class="w-full h-full"
+                            x-data="{ isPageLoaded: document.readyState === 'complete' }"
+                            x-on:load.window="isPageLoaded = true"
+                        >
+                            <template x-if="isPageLoaded">
+                                <div class="w-full h-full">
+                                    {!! $video->getEmbed(['currentTime' => $timestamp]) !!}
+                                </div>
+                            </template>
+                        </div>
                     @else
                         <x-picture
                             class="h-full"
