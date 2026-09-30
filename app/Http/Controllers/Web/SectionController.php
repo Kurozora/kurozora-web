@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Enums\ScheduleKind;
+use App\Enums\SeasonOfYear;
 use App\Enums\UserLibraryKind;
 use App\Http\Controllers\Controller;
 use App\Models\Anime;
@@ -10,12 +11,14 @@ use App\Models\Character;
 use App\Models\FeedMessage;
 use App\Models\Game;
 use App\Models\Manga;
+use App\Models\MediaType;
 use App\Models\Person;
 use App\Models\Platform;
 use App\Models\Song;
 use App\Models\Studio;
 use App\Models\User;
 use App\View\Components\AnimeSeasonsSection;
+use App\View\Components\Browse\SeasonsSection;
 use App\View\Components\CastSection;
 use App\View\Components\Character\MediaSection as CharacterMediaSection;
 use App\View\Components\Chart\Section as ChartSection;
@@ -288,6 +291,32 @@ class SectionController extends Controller
     public function chart(string $chart): Response
     {
         return $this->render(new ChartSection($chart));
+    }
+
+    /**
+     * Render a media type's section of a season browse page.
+     *
+     * @param Request $request
+     * @param string  $year
+     * @param string  $season
+     * @param int     $kind
+     *
+     * @return Response
+     */
+    public function browseSeason(Request $request, string $year, string $season, int $kind): Response
+    {
+        $modelClass = match ($kind) {
+            UserLibraryKind::Anime => Anime::class,
+            UserLibraryKind::Manga => Manga::class,
+            UserLibraryKind::Game => Game::class,
+        };
+
+        return $this->render(new SeasonsSection(
+            $modelClass,
+            MediaType::findOrFail($request->integer('mediaType')),
+            SeasonOfYear::fromKey(str($season)->ucfirst())->value,
+            (int) $year,
+        ));
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 
-use App\Livewire\Explore\Details as ExploreDetails;
+use App\Http\Controllers\Web\ExploreController;
 use App\Models\ExploreCategory;
 use App\Models\Genre;
 use App\Models\Theme;
@@ -14,7 +14,7 @@ Route::prefix('/explore')
         Route::prefix('{exploreCategory}')
             ->middleware(['explore.always-enabled'])
             ->group(function () {
-                Route::get('/', ExploreDetails::class)
+                Route::get('/', [ExploreController::class, 'show'])
                     ->name('.details');
 
                 Route::get('/section', function (ExploreCategory $exploreCategory) {

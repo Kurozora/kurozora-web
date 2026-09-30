@@ -4,14 +4,55 @@ namespace App\Http\Controllers\Web;
 
 use App\Events\ModelViewed;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\GetSearchIndexRequest;
 use App\Models\Song;
+use App\Support\SearchCriteria;
+use App\Support\SearchIndex;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class SongController extends Controller
 {
+    /**
+     * Show the songs index.
+     *
+     * @param GetSearchIndexRequest $request
+     *
+     * @return Application|Factory|View
+     */
+    public function index(GetSearchIndexRequest $request): Application|Factory|View
+    {
+        $criteria = SearchCriteria::fromRequest(
+            $request,
+            filters: Song::webSearchFilters(),
+            orders: Song::webSearchOrders(),
+        );
+
+        $songs = (new SearchIndex(Song::class, $criteria))
+            ->hydrate(fn (Builder $query) => $query->with(['media']))
+            ->paginate()
+            ->withQueryString();
+
+        return view('song.index', [
+            'criteria' => $criteria,
+            'songs' => $songs,
+        ]);
+    }
+
+    /**
+     * Send the visitor to a random song.
+     *
+     * @return RedirectResponse
+     */
+    public function random(): RedirectResponse
+    {
+        return to_route('songs.details', Song::randomFirst());
+    }
+
     /**
      * Show a song's page.
      *

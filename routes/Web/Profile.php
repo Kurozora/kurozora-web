@@ -4,15 +4,14 @@ use App\Enums\UserLibraryKind;
 use App\Http\Controllers\Web\MeController;
 use App\Http\Controllers\Web\Profile\AchievementController;
 use App\Http\Controllers\Web\Profile\BlockedController;
+use App\Http\Controllers\Web\Profile\FavoriteController;
 use App\Http\Controllers\Web\Profile\FollowerController;
 use App\Http\Controllers\Web\Profile\FollowingController;
 use App\Http\Controllers\Web\Profile\LibraryController;
 use App\Http\Controllers\Web\Profile\RatingController;
+use App\Http\Controllers\Web\Profile\ReminderController;
 use App\Http\Controllers\Web\SectionController;
 use App\Http\Controllers\Web\UserProfileController;
-use App\Livewire\Profile\Library\Favorites;
-use App\Livewire\Profile\Library\Index as LibraryIndex;
-use App\Livewire\Profile\Library\Reminders;
 use App\Livewire\Profile\Sessions\Index as SessionsIndex;
 
 Route::prefix('/profile')
@@ -49,29 +48,49 @@ Route::prefix('/profile')
                 Route::prefix('/anime')
                     ->name('.anime')
                     ->group(function () {
-                        Route::get('/', LibraryIndex::class)
+                        Route::get('/', [LibraryController::class, 'show'])
                             ->defaults('kind', UserLibraryKind::Anime)
                             ->name('.library');
 
-                        Route::get('/favorites', Favorites::class)
+                        Route::get('/random', [LibraryController::class, 'random'])
+                            ->defaults('kind', UserLibraryKind::Anime)
+                            ->name('.library.random');
+
+                        Route::get('/favorites', [FavoriteController::class, 'index'])
                             ->defaults('kind', UserLibraryKind::Anime)
                             ->name('.favorites');
 
-                        Route::get('/reminders', Reminders::class)
+                        Route::get('/favorites/random', [FavoriteController::class, 'random'])
+                            ->defaults('kind', UserLibraryKind::Anime)
+                            ->name('.favorites.random');
+
+                        Route::get('/reminders', [ReminderController::class, 'index'])
                             ->defaults('kind', UserLibraryKind::Anime)
                             ->name('.reminders');
+
+                        Route::get('/reminders/random', [ReminderController::class, 'random'])
+                            ->defaults('kind', UserLibraryKind::Anime)
+                            ->name('.reminders.random');
                     });
 
                 Route::prefix('/games')
                     ->name('.games')
                     ->group(function () {
-                        Route::get('/', LibraryIndex::class)
+                        Route::get('/', [LibraryController::class, 'show'])
                             ->defaults('kind', UserLibraryKind::Game)
                             ->name('.library');
 
-                        Route::get('/favorites', Favorites::class)
+                        Route::get('/random', [LibraryController::class, 'random'])
+                            ->defaults('kind', UserLibraryKind::Game)
+                            ->name('.library.random');
+
+                        Route::get('/favorites', [FavoriteController::class, 'index'])
                             ->defaults('kind', UserLibraryKind::Game)
                             ->name('.favorites');
+
+                        Route::get('/favorites/random', [FavoriteController::class, 'random'])
+                            ->defaults('kind', UserLibraryKind::Game)
+                            ->name('.favorites.random');
 
 //                        Route::get('/reminders', Reminders::class)
 //                            ->defaults('kind', UserLibraryKind::Game)
@@ -81,13 +100,21 @@ Route::prefix('/profile')
                 Route::prefix('/manga')
                     ->name('.manga')
                     ->group(function () {
-                        Route::get('/', LibraryIndex::class)
+                        Route::get('/', [LibraryController::class, 'show'])
                             ->defaults('kind', UserLibraryKind::Manga)
                             ->name('.library');
 
-                        Route::get('/favorites', Favorites::class)
+                        Route::get('/random', [LibraryController::class, 'random'])
+                            ->defaults('kind', UserLibraryKind::Manga)
+                            ->name('.library.random');
+
+                        Route::get('/favorites', [FavoriteController::class, 'index'])
                             ->defaults('kind', UserLibraryKind::Manga)
                             ->name('.favorites');
+
+                        Route::get('/favorites/random', [FavoriteController::class, 'random'])
+                            ->defaults('kind', UserLibraryKind::Manga)
+                            ->name('.favorites.random');
 
 //                        Route::get('/reminders', Reminders::class)
 //                            ->defaults('kind', UserLibraryKind::Manga)

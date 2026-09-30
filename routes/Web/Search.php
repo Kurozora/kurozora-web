@@ -1,7 +1,7 @@
 <?php
 
+use App\Http\Controllers\Web\SearchController;
 use App\Http\Controllers\Web\SearchSuggestionsController;
-use App\Livewire\Search\Index as SearchIndex;
 use App\Models\Anime;
 use App\Models\Game;
 use App\Models\Manga;
@@ -9,7 +9,7 @@ use App\Models\Manga;
 Route::prefix('/search')
     ->name('search')
     ->group(function () {
-        Route::get('/', SearchIndex::class)
+        Route::get('/', [SearchController::class, 'index'])
             ->name('.index');
 
         Route::get('/suggestions', [SearchSuggestionsController::class, 'index'])

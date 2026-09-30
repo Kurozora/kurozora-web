@@ -3,18 +3,63 @@
 namespace App\Http\Controllers\Web;
 
 use App\Enums\MediaCollection;
+use App\Enums\StudioType;
 use App\Events\ModelViewed;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\GetSearchIndexRequest;
 use App\Models\Studio;
+use App\Support\SearchCriteria;
+use App\Support\SearchIndex;
 use App\Traits\Controller\PaginatesTitles;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class StudioController extends Controller
 {
     use PaginatesTitles;
+
+    /**
+     * Show the studios index.
+     *
+     * @param GetSearchIndexRequest $request
+     *
+     * @return Application|Factory|View
+     */
+    public function index(GetSearchIndexRequest $request): Application|Factory|View
+    {
+        $criteria = SearchCriteria::fromRequest(
+            $request,
+            filters: Studio::webSearchFilters(),
+            orders: Studio::webSearchOrders(),
+            searchTypes: ['all' => __('All')] + StudioType::asSelectArray(),
+        );
+
+        $studios = (new SearchIndex(Studio::class, $criteria))
+            ->hydrate(fn (Builder $query) => $query->with(['media']))
+            ->letter('name')
+            ->type('type')
+            ->paginate()
+            ->withQueryString();
+
+        return view('studio.index', [
+            'criteria' => $criteria,
+            'studios' => $studios,
+        ]);
+    }
+
+    /**
+     * Send the visitor to a random studio.
+     *
+     * @return RedirectResponse
+     */
+    public function random(): RedirectResponse
+    {
+        return to_route('studios.details', Studio::randomFirst());
+    }
 
     /**
      * Show a studio's page.

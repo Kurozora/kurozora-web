@@ -1,13 +1,13 @@
 <?php
 
+use App\Http\Controllers\Web\ThemeStoreController;
 use App\Livewire\ThemeStore\CreateThemeStoreForm;
-use App\Livewire\ThemeStore\Index as ThemeStoreIndex;
 use App\Models\AppTheme;
 
 Route::prefix('/theme-store')
     ->name('theme-store')
     ->group(function () {
-        Route::get('/', ThemeStoreIndex::class)
+        Route::get('/', [ThemeStoreController::class, 'index'])
             ->name('.index');
 
         Route::prefix('{appTheme}')

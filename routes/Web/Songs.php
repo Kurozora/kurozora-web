@@ -3,15 +3,17 @@
 use App\Http\Controllers\Web\SectionController;
 use App\Http\Controllers\Web\SongController;
 use App\Http\Controllers\Web\SongLyricsController;
-use App\Livewire\Song\Index as SongIndex;
 use App\Livewire\Song\Reviews as SongReviews;
 use App\Models\Song;
 
 Route::prefix('/songs')
     ->name('songs')
     ->group(function () {
-        Route::get('/', SongIndex::class)
+        Route::get('/', [SongController::class, 'index'])
             ->name('.index');
+
+        Route::get('/random', [SongController::class, 'random'])
+            ->name('.random');
 
         Route::prefix('{song}')
             ->group(function () {

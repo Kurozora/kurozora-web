@@ -23,7 +23,9 @@
         <button
             class="relative block bg-secondary w-full aspect-video rounded-xl overflow-hidden group"
             type="button"
-            wire:click="feature({{ $video->id }})"
+            form="search-bar"
+            value="{{ $video->id }}"
+            data-search-choice="video"
             data-trailer-play
             title="{{ __('Trailer for :x', ['x' => $title->title]) }}"
             aria-label="{{ __('Trailer for :x', ['x' => $title->title]) }}"

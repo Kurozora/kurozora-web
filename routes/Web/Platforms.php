@@ -2,14 +2,16 @@
 
 use App\Http\Controllers\Web\PlatformController;
 use App\Http\Controllers\Web\SectionController;
-use App\Livewire\Platform\Index as PlatformIndex;
 use App\Models\Platform;
 
 Route::prefix('/platforms')
     ->name('platforms')
     ->group(function () {
-        Route::get('/', PlatformIndex::class)
+        Route::get('/', [PlatformController::class, 'index'])
             ->name('.index');
+
+        Route::get('/random', [PlatformController::class, 'random'])
+            ->name('.random');
 
         Route::prefix('{platform}')
             ->group(function () {

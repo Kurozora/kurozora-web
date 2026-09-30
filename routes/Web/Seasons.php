@@ -1,6 +1,6 @@
 <?php
 
-use App\Livewire\Season\Episodes;
+use App\Http\Controllers\Web\SeasonController;
 use App\Models\Season;
 
 Route::prefix('/seasons')
@@ -14,7 +14,10 @@ Route::prefix('/seasons')
                     ->middleware('auth')
                     ->name('.edit');
 
-                Route::get('/episodes', Episodes::class)
+                Route::get('/episodes', [SeasonController::class, 'episodes'])
                     ->name('.episodes');
+
+                Route::get('/episodes/random', [SeasonController::class, 'randomEpisode'])
+                    ->name('.episodes.random');
             });
     });

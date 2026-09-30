@@ -4,16 +4,61 @@ namespace App\Http\Controllers\Web;
 
 use App\Events\ModelViewed;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\GetSearchIndexRequest;
 use App\Models\Character;
+use App\Support\SearchCriteria;
+use App\Support\SearchIndex;
 use App\Traits\Controller\PaginatesTitles;
+use Carbon\Month;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class CharacterController extends Controller
 {
     use PaginatesTitles;
+
+    /**
+     * Show the characters index.
+     *
+     * @param GetSearchIndexRequest $request
+     *
+     * @return Application|Factory|View
+     */
+    public function index(GetSearchIndexRequest $request): Application|Factory|View
+    {
+        $criteria = SearchCriteria::fromRequest(
+            $request,
+            filters: Character::webSearchFilters(),
+            orders: Character::webSearchOrders(),
+            searchTypes: ['all' => __('All')] + collect(Month::cases())->mapWithKeys(fn (Month $month) => [$month->value => $month->name])->all(),
+        );
+
+        $characters = (new SearchIndex(Character::class, $criteria))
+            ->hydrate(fn (Builder $query) => $query->with(['media', 'translation']))
+            ->letter('name', 'translations')
+            ->type('birth_month')
+            ->paginate()
+            ->withQueryString();
+
+        return view('character.index', [
+            'criteria' => $criteria,
+            'characters' => $characters,
+        ]);
+    }
+
+    /**
+     * Send the visitor to a random character.
+     *
+     * @return RedirectResponse
+     */
+    public function random(): RedirectResponse
+    {
+        return to_route('characters.details', Character::randomFirst());
+    }
 
     /**
      * Show a character's page.

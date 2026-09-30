@@ -80,9 +80,9 @@ final class SearchIndex
     /**
      * The search engine attribute the search type filters.
      *
-     * @var string $typeColumn
+     * @var string|null $typeColumn
      */
-    protected string $typeColumn = 'media_type_id';
+    protected ?string $typeColumn = 'media_type_id';
 
     /**
      * The constraint the plain index applies for the search type.
@@ -111,6 +111,13 @@ final class SearchIndex
      * @var bool $excludesHidden
      */
     protected bool $excludesHidden = false;
+
+    /**
+     * Whether the search engine answers even without criteria.
+     *
+     * @var bool $searchesAlways
+     */
+    protected bool $searchesAlways = false;
 
     /**
      * Creates an index of the given model matching the given criteria.
@@ -214,12 +221,12 @@ final class SearchIndex
     /**
      * Filters the search type on the given attribute.
      *
-     * @param string       $column
+     * @param string|null  $column
      * @param Closure|null $constraint
      *
      * @return self
      */
-    public function type(string $column, ?Closure $constraint = null): self
+    public function type(?string $column, ?Closure $constraint = null): self
     {
         $this->typeColumn = $column;
         $this->typeConstraint = $constraint;
@@ -246,13 +253,25 @@ final class SearchIndex
     }
 
     /**
+     * Answers from the search engine even without criteria.
+     *
+     * @return self
+     */
+    public function withoutIndex(): self
+    {
+        $this->searchesAlways = true;
+
+        return $this;
+    }
+
+    /**
      * Paginates the results.
      *
      * @return LengthAwarePaginator
      */
     public function paginate(): LengthAwarePaginator
     {
-        if (!$this->criteria->needsSearch()) {
+        if ($this->usesIndex()) {
             return $this->indexQuery()
                 ->paginate($this->criteria->perPage);
         }
@@ -263,6 +282,35 @@ final class SearchIndex
 
         return $this->searchQuery()
             ->paginate($this->criteria->perPage);
+    }
+
+    /**
+     * The keys of every result.
+     *
+     * @return array
+     */
+    public function keys(): array
+    {
+        if ($this->usesIndex()) {
+            return $this->indexQuery()
+                ->pluck($this->modelClass::TABLE_NAME . '.id')
+                ->all();
+        }
+
+        return $this->searchQuery()
+            ->take($this->modelClass::count())
+            ->keys()
+            ->all();
+    }
+
+    /**
+     * Whether the plain index answers the criteria.
+     *
+     * @return bool
+     */
+    protected function usesIndex(): bool
+    {
+        return !$this->searchesAlways && !$this->criteria->needsSearch();
     }
 
     /**
@@ -288,12 +336,10 @@ final class SearchIndex
             $query->tap($this->hydrate);
         }
 
-        if ($this->criteria->typeValue !== null) {
-            if ($this->typeConstraint !== null) {
-                ($this->typeConstraint)($query, $this->criteria->typeValue);
-            } else {
-                $query->where($this->typeColumn, '=', $this->criteria->typeValue);
-            }
+        if ($this->criteria->typeValue !== null && $this->typeConstraint !== null) {
+            ($this->typeConstraint)($query, $this->criteria->typeValue);
+        } elseif ($this->criteria->typeValue !== null && $this->typeColumn !== null) {
+            $query->where($this->typeColumn, '=', $this->criteria->typeValue);
         }
 
         if ($this->criteria->letter !== '') {
@@ -439,7 +485,7 @@ final class SearchIndex
             $wheres['letter'] = $this->criteria->letter;
         }
 
-        if ($this->criteria->typeValue !== null) {
+        if ($this->criteria->typeValue !== null && $this->typeColumn !== null) {
             $wheres[$this->typeColumn] = $this->criteria->typeValue;
         }
 

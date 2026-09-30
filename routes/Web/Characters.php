@@ -2,15 +2,17 @@
 
 use App\Http\Controllers\Web\CharacterController;
 use App\Http\Controllers\Web\SectionController;
-use App\Livewire\Character\Index as CharacterIndex;
 use App\Livewire\Character\Reviews as CharacterReviews;
 use App\Models\Character;
 
 Route::prefix('/characters')
     ->name('characters')
     ->group(function () {
-        Route::get('/', CharacterIndex::class)
+        Route::get('/', [CharacterController::class, 'index'])
             ->name('.index');
+
+        Route::get('/random', [CharacterController::class, 'random'])
+            ->name('.random');
 
         Route::prefix('{character}')
             ->group(function () {

@@ -3,8 +3,10 @@
 namespace App\Livewire;
 
 use App\Enums\FeedVoteType;
+use App\Enums\KTheme;
 use App\Enums\UserLibraryStatus;
 use App\Models\Anime;
+use App\Models\AppTheme;
 use App\Models\Episode;
 use App\Models\FeedMessage;
 use App\Models\Game;
@@ -16,6 +18,7 @@ use App\Models\UserWatchedEpisode;
 use App\Notifications\NewFollower;
 use App\Services\ScrobbleService;
 use App\Traits\Livewire\PresentsAlert;
+use App\Traits\Livewire\PresentsSubscriptionSheet;
 use Cog\Laravel\Love\Reactant\Models\Reactant;
 use Cog\Laravel\Love\ReactionType\Models\ReactionType;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -24,6 +27,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -31,6 +35,7 @@ use Livewire\Component;
 class UserActions extends Component
 {
     use PresentsAlert;
+    use PresentsSubscriptionSheet;
 
     /**
      * Update the signed-in user's library entry for a title.
@@ -540,6 +545,80 @@ class UserActions extends Component
             ->delete();
 
         $this->dispatch('feed-message-deleted', id: $id);
+    }
+
+    /**
+     * Apply a theme for the visitor.
+     *
+     * @param string $id
+     *
+     * @return void
+     */
+    #[On('theme-get')]
+    public function getTheme(string $id): void
+    {
+        if (!is_numeric($id)) {
+            $theme = KTheme::fromValue(strtolower($id));
+
+            $this->dispatch('theme-download', theme: [
+                'id' => $theme->value,
+                'css' => $theme->toCSS(),
+            ]);
+            $this->dispatch('theme-changed', id: $theme->value);
+            return;
+        }
+
+        $user = $this->user();
+
+        if ($user === null) {
+            return;
+        }
+
+        if (!($user->is_subscribed || $user->is_pro)) {
+            $this->presentSubscriptionSheet(
+                title: __('Dynamic Themes'),
+                message: __('Choose from a range of themes to create a look that reflects your personality and style.'),
+                tipJarEnabled: true
+            );
+            return;
+        }
+
+        $appTheme = AppTheme::findOrFail($id);
+
+        $appTheme->update([
+            'download_count' => $appTheme->download_count + 1
+        ]);
+
+        $this->dispatch('theme-download', theme: [
+            'id' => $appTheme->id,
+            'css' => $appTheme->toCSS(),
+        ]);
+        $this->dispatch('theme-changed', id: (string) $appTheme->id);
+    }
+
+    /**
+     * Scrape the episodes of a season's anime on a local machine.
+     *
+     * @param int $id
+     *
+     * @return void
+     */
+    #[On('episodes-update')]
+    public function updateEpisodes(int $id): void
+    {
+        if (!app()->isLocal()) {
+            return;
+        }
+
+        $season = $this->query(Season::class)->findOrFail($id);
+        $anime = $season->anime()->withoutGlobalScopes()->first();
+
+        if ($anime?->tvdb_id === null) {
+            return;
+        }
+
+        Artisan::call('scrape:tvdb_episode', ['tvdbID' => $anime->tvdb_id]);
+        $this->dispatch('update-season');
     }
 
     /**

@@ -3,6 +3,7 @@
 use App\Enums\ParentalGuideCategory;
 use App\Enums\UserLibraryKind;
 use App\Http\Controllers\Web\AnimeController;
+use App\Http\Controllers\Web\BrowseController;
 use App\Http\Controllers\Web\CatalogController;
 use App\Http\Controllers\Web\SeasonController;
 use App\Http\Controllers\Web\SectionController;
@@ -11,14 +12,9 @@ use App\Http\Controllers\Web\TitleRelationController;
 use App\Http\Controllers\Web\TitleSongController;
 use App\Http\Controllers\Web\TitleStaffController;
 use App\Http\Controllers\Web\TitleStudioController;
-use App\Livewire\Browse\Continuing\Index as BrowseContinuingIndex;
-use App\Livewire\Browse\Seasons\Archive as BrowseSeasonsArchive;
-use App\Livewire\Browse\Seasons\Index as BrowseSeasonsIndex;
-use App\Livewire\Browse\Upcoming\Index as BrowseUpcomingIndex;
 use App\Livewire\ParentalGuide;
 use App\Livewire\ParentalGuideCategoryEntries;
 use App\Livewire\Reviews;
-use App\Livewire\Trailers;
 use App\Models\Anime;
 
 Route::prefix('/anime')
@@ -28,24 +24,36 @@ Route::prefix('/anime')
             ->defaults('kind', UserLibraryKind::Anime)
             ->name('.index');
 
-        Route::get('/trailers', Trailers::class)
+        Route::get('/trailers', [CatalogController::class, 'trailers'])
             ->defaults('kind', UserLibraryKind::Anime)
             ->name('.trailers');
+
+        Route::get('/trailers/random', [CatalogController::class, 'randomTrailer'])
+            ->defaults('kind', UserLibraryKind::Anime)
+            ->name('.trailers.random');
 
         Route::prefix('/upcoming')
             ->name('.upcoming')
             ->group(function () {
-                Route::get('/', BrowseUpcomingIndex::class)
+                Route::get('/', [BrowseController::class, 'upcoming'])
                     ->defaults('kind', UserLibraryKind::Anime)
                     ->name('.index');
+
+                Route::get('/random', [BrowseController::class, 'randomUpcoming'])
+                    ->defaults('kind', UserLibraryKind::Anime)
+                    ->name('.random');
             });
 
         Route::prefix('/continuing')
             ->name('.continuing')
             ->group(function () {
-                Route::get('/', BrowseContinuingIndex::class)
+                Route::get('/', [BrowseController::class, 'continuing'])
                     ->defaults('kind', UserLibraryKind::Anime)
                     ->name('.index');
+
+                Route::get('/random', [BrowseController::class, 'randomContinuing'])
+                    ->defaults('kind', UserLibraryKind::Anime)
+                    ->name('.random');
             });
 
         Route::prefix('/seasons')
@@ -56,7 +64,7 @@ Route::prefix('/anime')
                 })
                     ->name('.index');
 
-                Route::get('/archive', BrowseSeasonsArchive::class)
+                Route::get('/archive', [BrowseController::class, 'archive'])
                     ->defaults('kind', UserLibraryKind::Anime)
                     ->name('.archive');
 
@@ -68,9 +76,14 @@ Route::prefix('/anime')
                         })
                             ->name('.index');
 
-                        Route::get('/{season}', BrowseSeasonsIndex::class)
+                        Route::get('/{season}', [BrowseController::class, 'seasons'])
                             ->defaults('kind', UserLibraryKind::Anime)
                             ->name('.season');
+
+                        Route::get('/{season}/section', [SectionController::class, 'browseSeason'])
+                            ->defaults('kind', UserLibraryKind::Anime)
+                            ->middleware('auth')
+                            ->name('.season.section');
                     });
             });
 
@@ -118,7 +131,7 @@ Route::prefix('/anime')
                 Route::get('/related-shows', function (Anime $anime) {
                     return redirect()->route('anime.related-anime', $anime, 301);
                 })
-                    ->name('.related-shows');;
+                    ->name('.related-shows');
 
                 Route::get('/reviews', Reviews::class)
                     ->defaults('kind', UserLibraryKind::Anime)

@@ -65,20 +65,29 @@ final class SearchCriteria
     public array $searchTypes = [];
 
     /**
+     * The slug of the search type selected when the query string names none.
+     *
+     * @var string $defaultType
+     */
+    public string $defaultType = '';
+
+    /**
      * Builds the criteria the query string of the given request describes.
      *
      * @param Request $request
      * @param array   $filters
      * @param array   $orders
      * @param array   $searchTypes
+     * @param string  $defaultType
      *
      * @return self
      */
-    public static function fromRequest(Request $request, array $filters = [], array $orders = [], array $searchTypes = []): self
+    public static function fromRequest(Request $request, array $filters = [], array $orders = [], array $searchTypes = [], string $defaultType = ''): self
     {
         $criteria = new self();
         $criteria->search = trim($request->string('q')->value());
         $criteria->searchTypes = $searchTypes;
+        $criteria->defaultType = $defaultType;
         $criteria->setLetter($request->string('letter')->value());
         $criteria->setType($request->string('type')->value());
         $criteria->setPerPage($request->integer('perPage', 25));
@@ -245,6 +254,10 @@ final class SearchCriteria
     protected function setType(string $type): void
     {
         if ($type === '' || $type === 'all') {
+            $type = $this->defaultType;
+        }
+
+        if ($type === '') {
             return;
         }
 

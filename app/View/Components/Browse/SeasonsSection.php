@@ -2,6 +2,7 @@
 
 namespace App\View\Components\Browse;
 
+use App\Enums\SeasonOfYear;
 use App\Models\Game;
 use App\Models\Manga;
 use App\Models\MediaType;
@@ -33,6 +34,13 @@ class SeasonsSection extends Component
     public Collection $models;
 
     /**
+     * The URL that renders the section again.
+     *
+     * @var string $refreshUrl
+     */
+    public string $refreshUrl;
+
+    /**
      * Create a new component instance.
      *
      * @param string    $class
@@ -45,6 +53,13 @@ class SeasonsSection extends Component
         $this->class = $class;
         $this->mediaType = $mediaType;
         $this->models = $this->loadModels($seasonOfYear, $year);
+
+        $seasonKey = SeasonOfYear::fromValue($seasonOfYear)->key;
+        $this->refreshUrl = match ($class) {
+            Game::class => route('games.seasons.year.season.section', [$year, $seasonKey, 'mediaType' => $mediaType->id], false),
+            Manga::class => route('manga.seasons.year.season.section', [$year, $seasonKey, 'mediaType' => $mediaType->id], false),
+            default => route('anime.seasons.year.season.section', [$year, $seasonKey, 'mediaType' => $mediaType->id], false),
+        };
     }
 
     /**

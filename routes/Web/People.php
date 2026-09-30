@@ -2,15 +2,17 @@
 
 use App\Http\Controllers\Web\PersonController;
 use App\Http\Controllers\Web\SectionController;
-use App\Livewire\Person\Index as PersonIndex;
 use App\Livewire\Person\Reviews as PersonReviews;
 use App\Models\Person;
 
 Route::prefix('/people')
     ->name('people')
     ->group(function () {
-        Route::get('/', PersonIndex::class)
+        Route::get('/', [PersonController::class, 'index'])
             ->name('.index');
+
+        Route::get('/random', [PersonController::class, 'random'])
+            ->name('.random');
 
         Route::prefix('{person}')
             ->group(function () {

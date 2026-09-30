@@ -2,6 +2,7 @@
 
 use App\Enums\ParentalGuideCategory;
 use App\Enums\UserLibraryKind;
+use App\Http\Controllers\Web\BrowseController;
 use App\Http\Controllers\Web\CatalogController;
 use App\Http\Controllers\Web\GameController;
 use App\Http\Controllers\Web\SectionController;
@@ -10,14 +11,9 @@ use App\Http\Controllers\Web\TitleRelationController;
 use App\Http\Controllers\Web\TitleSongController;
 use App\Http\Controllers\Web\TitleStaffController;
 use App\Http\Controllers\Web\TitleStudioController;
-use App\Livewire\Adapted;
-use App\Livewire\Browse\Seasons\Archive as BrowseSeasonsArchive;
-use App\Livewire\Browse\Seasons\Index as BrowseSeasonsIndex;
-use App\Livewire\Browse\Upcoming\Index as BrowseUpcomingIndex;
 use App\Livewire\ParentalGuide;
 use App\Livewire\ParentalGuideCategoryEntries;
 use App\Livewire\Reviews;
-use App\Livewire\Trailers;
 use App\Models\Game;
 
 Route::prefix('/games')
@@ -27,20 +23,32 @@ Route::prefix('/games')
             ->defaults('kind', UserLibraryKind::Game)
             ->name('.index');
 
-        Route::get('/adapted', Adapted::class)
+        Route::get('/adapted', [CatalogController::class, 'adapted'])
             ->defaults('kind', UserLibraryKind::Game)
             ->name('.adapted');
 
-        Route::get('/trailers', Trailers::class)
+        Route::get('/adapted/random', [CatalogController::class, 'randomAdapted'])
+            ->defaults('kind', UserLibraryKind::Game)
+            ->name('.adapted.random');
+
+        Route::get('/trailers', [CatalogController::class, 'trailers'])
             ->defaults('kind', UserLibraryKind::Game)
             ->name('.trailers');
+
+        Route::get('/trailers/random', [CatalogController::class, 'randomTrailer'])
+            ->defaults('kind', UserLibraryKind::Game)
+            ->name('.trailers.random');
 
         Route::prefix('/upcoming')
             ->name('.upcoming')
             ->group(function () {
-                Route::get('/', BrowseUpcomingIndex::class)
+                Route::get('/', [BrowseController::class, 'upcoming'])
                     ->defaults('kind', UserLibraryKind::Game)
                     ->name('.index');
+
+                Route::get('/random', [BrowseController::class, 'randomUpcoming'])
+                    ->defaults('kind', UserLibraryKind::Game)
+                    ->name('.random');
             });
 
         Route::prefix('/seasons')
@@ -51,7 +59,7 @@ Route::prefix('/games')
                 })
                     ->name('.index');
 
-                Route::get('/archive', BrowseSeasonsArchive::class)
+                Route::get('/archive', [BrowseController::class, 'archive'])
                     ->defaults('kind', UserLibraryKind::Game)
                     ->name('.archive');
 
@@ -63,9 +71,14 @@ Route::prefix('/games')
                         })
                             ->name('.index');
 
-                        Route::get('/{season}', BrowseSeasonsIndex::class)
+                        Route::get('/{season}', [BrowseController::class, 'seasons'])
                             ->defaults('kind', UserLibraryKind::Game)
                             ->name('.season');
+
+                        Route::get('/{season}/section', [SectionController::class, 'browseSeason'])
+                            ->defaults('kind', UserLibraryKind::Game)
+                            ->middleware('auth')
+                            ->name('.season.section');
                     });
             });
 
@@ -113,7 +126,7 @@ Route::prefix('/games')
                 Route::get('/related-shows', function (Game $game) {
                     return redirect()->route('games.related-anime', $game, 301);
                 })
-                    ->name('.related-shows');;
+                    ->name('.related-shows');
 
                 Route::get('/reviews', Reviews::class)
                     ->defaults('kind', UserLibraryKind::Game)

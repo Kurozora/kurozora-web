@@ -40,13 +40,13 @@
                         </div>
                     @endif
 
-                    <x-search-form :criteria="$criteria" :action="$canonicalUrl">
+                    <x-search-bar :criteria="$criteria" :action="$canonicalUrl">
                         <x-slot:rightBarButtonItems>
                             <x-square-link href="{{ $randomUrl }}" wire:navigate>
                                 @svg('dice', 'fill-current', ['aria-labelledby' => $randomLabel, 'width' => '28'])
                             </x-square-link>
                         </x-slot:rightBarButtonItems>
-                    </x-search-form>
+                    </x-search-bar>
                 </div>
             </section>
 

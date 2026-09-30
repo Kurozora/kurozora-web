@@ -2,15 +2,17 @@
 
 use App\Http\Controllers\Web\SectionController;
 use App\Http\Controllers\Web\StudioController;
-use App\Livewire\Studio\Index as StudioIndex;
 use App\Livewire\Studio\Reviews as StudioReviews;
 use App\Models\Studio;
 
 Route::prefix('/studios')
     ->name('studios')
     ->group(function () {
-        Route::get('/', StudioIndex::class)
+        Route::get('/', [StudioController::class, 'index'])
             ->name('.index');
+
+        Route::get('/random', [StudioController::class, 'random'])
+            ->name('.random');
 
         Route::prefix('{studio}')
             ->group(function () {

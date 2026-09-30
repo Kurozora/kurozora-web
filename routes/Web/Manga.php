@@ -2,6 +2,7 @@
 
 use App\Enums\ParentalGuideCategory;
 use App\Enums\UserLibraryKind;
+use App\Http\Controllers\Web\BrowseController;
 use App\Http\Controllers\Web\CatalogController;
 use App\Http\Controllers\Web\MangaController;
 use App\Http\Controllers\Web\SectionController;
@@ -9,11 +10,6 @@ use App\Http\Controllers\Web\TitleCastController;
 use App\Http\Controllers\Web\TitleRelationController;
 use App\Http\Controllers\Web\TitleStaffController;
 use App\Http\Controllers\Web\TitleStudioController;
-use App\Livewire\Browse\Continuing\Index as BrowseContinuingIndex;
-use App\Livewire\Browse\Seasons\Archive as BrowseSeasonsArchive;
-use App\Livewire\Browse\Seasons\Index as BrowseSeasonsIndex;
-use App\Livewire\Browse\Upcoming\Index as BrowseUpcomingIndex;
-use App\Livewire\Adapted;
 use App\Livewire\ParentalGuide;
 use App\Livewire\ParentalGuideCategoryEntries;
 use App\Livewire\Reviews;
@@ -26,24 +22,36 @@ Route::prefix('/manga')
             ->defaults('kind', UserLibraryKind::Manga)
             ->name('.index');
 
-        Route::get('/adapted', Adapted::class)
+        Route::get('/adapted', [CatalogController::class, 'adapted'])
             ->defaults('kind', UserLibraryKind::Manga)
             ->name('.adapted');
+
+        Route::get('/adapted/random', [CatalogController::class, 'randomAdapted'])
+            ->defaults('kind', UserLibraryKind::Manga)
+            ->name('.adapted.random');
 
         Route::prefix('/upcoming')
             ->name('.upcoming')
             ->group(function () {
-                Route::get('/', BrowseUpcomingIndex::class)
+                Route::get('/', [BrowseController::class, 'upcoming'])
                     ->defaults('kind', UserLibraryKind::Manga)
                     ->name('.index');
+
+                Route::get('/random', [BrowseController::class, 'randomUpcoming'])
+                    ->defaults('kind', UserLibraryKind::Manga)
+                    ->name('.random');
             });
 
         Route::prefix('/continuing')
             ->name('.continuing')
             ->group(function () {
-                Route::get('/', BrowseContinuingIndex::class)
+                Route::get('/', [BrowseController::class, 'continuing'])
                     ->defaults('kind', UserLibraryKind::Manga)
                     ->name('.index');
+
+                Route::get('/random', [BrowseController::class, 'randomContinuing'])
+                    ->defaults('kind', UserLibraryKind::Manga)
+                    ->name('.random');
             });
 
         Route::prefix('/seasons')
@@ -54,7 +62,7 @@ Route::prefix('/manga')
                 })
                     ->name('.index');
 
-                Route::get('/archive', BrowseSeasonsArchive::class)
+                Route::get('/archive', [BrowseController::class, 'archive'])
                     ->defaults('kind', UserLibraryKind::Manga)
                     ->name('.archive');
 
@@ -66,9 +74,14 @@ Route::prefix('/manga')
                         })
                             ->name('.index');
 
-                        Route::get('/{season}', BrowseSeasonsIndex::class)
+                        Route::get('/{season}', [BrowseController::class, 'seasons'])
                             ->defaults('kind', UserLibraryKind::Manga)
                             ->name('.season');
+
+                        Route::get('/{season}/section', [SectionController::class, 'browseSeason'])
+                            ->defaults('kind', UserLibraryKind::Manga)
+                            ->middleware('auth')
+                            ->name('.season.section');
                     });
             });
 
@@ -116,7 +129,7 @@ Route::prefix('/manga')
                 Route::get('/related-shows', function (Manga $manga) {
                     return redirect()->route('manga.related-anime', $manga, 301);
                 })
-                    ->name('.related-shows');;
+                    ->name('.related-shows');
 
                 Route::get('/reviews', Reviews::class)
                     ->defaults('kind', UserLibraryKind::Manga)

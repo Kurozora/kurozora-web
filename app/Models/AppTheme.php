@@ -130,4 +130,69 @@ class AppTheme extends KModel implements HasMedia
     {
         return VisualEffectViewStyle::fromValue((int) $this->ui_visual_effect_view);
     }
+
+    /**
+     * The orderable properties.
+     *
+     * @return array[]
+     */
+    public static function webSearchOrders(): array
+    {
+        return [
+            'name' => [
+                'title' => __('Name'),
+                'options' => [
+                    'Default' => null,
+                    'A-Z' => 'asc',
+                    'Z-A' => 'desc',
+                ],
+                'selected' => null,
+            ],
+            'download_count' => [
+                'title' => __('Download Count'),
+                'options' => [
+                    'Default' => null,
+                    '0-9' => 'asc',
+                    '9-0' => 'desc',
+                ],
+                'selected' => null,
+            ],
+            'version' => [
+                'title' => __('Version'),
+                'options' => [
+                    'Default' => null,
+                    '0-9' => 'asc',
+                    '9-0' => 'desc',
+                ],
+                'selected' => null,
+            ],
+        ];
+    }
+
+    /**
+     * The filterable properties.
+     *
+     * @return array[]
+     */
+    public static function webSearchFilters(): array
+    {
+        return [
+            'download_count' => [
+                'title' => __('Download Count'),
+                'type' => 'number',
+                'selected' => null,
+            ],
+            'version' => [
+                'title' => __('Version'),
+                'type' => 'string',
+                'selected' => null,
+            ],
+            'ui_status_bar_style' => [
+                'title' => __('Appearance'),
+                'type' => 'select',
+                'options' => VisualEffectViewStyle::asSelectArray(),
+                'selected' => null,
+            ],
+        ];
+    }
 }

@@ -140,6 +140,62 @@ class Platform extends KModel implements HasMedia, Sitemapable
     }
 
     /**
+     * The orderable properties.
+     *
+     * @return array[]
+     */
+    public static function webSearchOrders(): array
+    {
+        return [
+            'name' => [
+                'title' => __('Name'),
+                'options' => [
+                    'Default' => null,
+                    'A-Z' => 'asc',
+                    'Z-A' => 'desc',
+                ],
+                'selected' => null,
+            ],
+            'type' => [
+                'title' => __('Type'),
+                'options' => [
+                    'Default' => null,
+                    'A-Z' => 'asc',
+                    'Z-A' => 'desc',
+                ],
+                'selected' => null,
+            ],
+            'generation' => [
+                'title' => __('Generation'),
+                'options' => [
+                    'Default' => null,
+                    '1-9' => 'asc',
+                    '9-1' => 'desc',
+                ],
+                'selected' => null,
+            ],
+            'started_at' => [
+                'title' => __('Released On'),
+                'options' => [
+                    'Default' => null,
+                    'Recent' => 'desc',
+                    'Oldest' => 'asc',
+                ],
+                'selected' => null,
+            ],
+            'ended_at' => [
+                'title' => __('Discontinued On'),
+                'options' => [
+                    'Default' => null,
+                    'Recent' => 'desc',
+                    'Oldest' => 'asc',
+                ],
+                'selected' => null,
+            ],
+        ];
+    }
+
+    /**
      * The filterable properties.
      *
      * @return array[]

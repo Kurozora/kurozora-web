@@ -5,14 +5,17 @@ import ProgressBar from './progress-bar'
 export default class PaginationManager {
     #linkSelector = 'nav[aria-label="Pagination Navigation"] a[href]'
     #containerSelector = '[data-paginated]'
+    #listenerSelector = '[data-paginated][data-paginated-refresh-on]'
     #loadingSelector = '[data-loading]'
     #livewireMethods = ['gotoPage', 'nextPage', 'previousPage', 'setPage']
     #progressBar = new ProgressBar()
     #requests = new WeakMap()
+    #subscribedEvents = new Set()
 
     constructor() {
         document.addEventListener('click', (event) => this.#onClick(event))
         document.addEventListener('livewire:init', () => this.#observeLivewire())
+        document.addEventListener('livewire:navigated', () => this.#subscribe())
         window.addEventListener('popstate', () => this.#onPopState())
     }
 
@@ -26,6 +29,29 @@ export default class PaginationManager {
             succeed(() => this.#progressBar.finish())
             fail(() => this.#progressBar.finish())
         })
+
+        this.#subscribe()
+    }
+
+    #subscribe() {
+        for (const container of document.querySelectorAll(this.#listenerSelector)) {
+            for (const eventName of container.dataset.paginatedRefreshOn.split(' ')) {
+                if (this.#subscribedEvents.has(eventName)) {
+                    continue
+                }
+
+                this.#subscribedEvents.add(eventName)
+                window.Livewire.on(eventName, () => this.#refreshSubscribers(eventName))
+            }
+        }
+    }
+
+    #refreshSubscribers(eventName) {
+        for (const container of document.querySelectorAll(this.#listenerSelector)) {
+            if (container.dataset.paginatedRefreshOn.split(' ').includes(eventName)) {
+                this.load(container, container.dataset.paginatedUrl ?? window.location.href)
+            }
+        }
     }
 
     #onClick(event) {
@@ -87,7 +113,7 @@ export default class PaginationManager {
             }
 
             replacement.dataset.paginatedUrl = url
-            window.Alpine.morph(container, replacement.outerHTML)
+            this.#morph(container, replacement.outerHTML)
 
             if (history !== null) {
                 const state = { ...(window.history.state ?? {}), paginated: container.dataset.paginated }
@@ -106,6 +132,37 @@ export default class PaginationManager {
                 this.#setLoading(container, false)
                 this.#progressBar.finish()
             }
+        }
+    }
+
+    #morph(container, html) {
+        const stale = []
+
+        window.Alpine.morph(container, html, {
+            key: (element) => element.getAttribute('wire:key') ?? element.getAttribute('key') ?? element.id,
+            updating: (from, to, childrenOnly, skip) => {
+                if (from.nodeType !== 1) {
+                    return
+                }
+
+                if (from.hasAttribute('wire:ignore')) {
+                    skip()
+                    return
+                }
+
+                if (from.hasAttribute('wire:ignore.self')) {
+                    childrenOnly()
+                }
+
+                if (from.hasAttribute('x-data') && from.getAttribute('x-data') !== to.getAttribute('x-data')) {
+                    stale.push(from)
+                }
+            },
+        })
+
+        for (const element of stale) {
+            window.Alpine.destroyTree(element)
+            window.Alpine.initTree(element)
         }
     }
 

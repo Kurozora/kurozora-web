@@ -294,7 +294,7 @@ export default class TrailerHero {
 
         const lockup = event.target.closest('[data-trailer-lockup]')
 
-        // The press also reaches Livewire, which brings the hero's details along behind it.
+        // The press also reaches the search bar, which brings the hero's details along behind it.
         if (lockup && event.target.closest('[data-trailer-play]')) {
             this.#feature(lockup.dataset.code, lockup.dataset.poster)
         }
