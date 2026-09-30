@@ -119,12 +119,12 @@ class AccessTokenController
             LoginAttempt::registerFailedLoginAttempt($request->ip());
 
             // Throw authorization error message
-            throw new AuthenticationException('Your :x Account or password was incorrect.', ['x' => config('app.name')]);
+            throw new AuthenticationException(__('Your :x Account or password was incorrect.', ['x' => config('app.name')]));
         }
 
         // Check if email is confirmed
         if (!$user->hasVerifiedEmail()) {
-            throw new AuthenticationException('You have not confirmed your email address yet. Please check your email inbox or spam folder.');
+            throw new AuthenticationException(__('You have not confirmed your email address yet. Please check your email inbox or spam folder.'));
         }
 
         // Issue a 2FA challenge if the account has it enabled
