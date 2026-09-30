@@ -361,7 +361,7 @@
                     </div>
 
                     <div class="mt-5">
-                        <livewire:sections.reviews :model="$episode" :review-box-id="$this->reviewBoxID" />
+                        <x-sections.reviews :model="$episode" :review-box-id="$this->reviewBoxID" />
                     </div>
                 </section>
 
@@ -424,6 +424,8 @@
             </div>
         </div>
     </div>
+
+    <x-reviews.report-modal />
 
     <livewire:components.review-box :review-box-id="$reviewBoxID" :model-id="$episode->id" :model-type="$episode->getMorphClass()" :user-rating="$userRating?->first()" />
 

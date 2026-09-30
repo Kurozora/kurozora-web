@@ -1,7 +1,8 @@
 <?php
 
+use App\Http\Controllers\Web\ReviewController;
+use App\Http\Controllers\Web\SectionController;
 use App\Livewire\Episode\Details as EpisodeDetails;
-use App\Livewire\Episode\Reviews as EpisodeReviews;
 use App\Models\Episode;
 
 Route::get('/episode/{episode}', function (string $episode) {
@@ -16,7 +17,12 @@ Route::prefix('/episodes')
             Route::get('/', EpisodeDetails::class)
                 ->name('.details');
 
-            Route::get('/reviews', EpisodeReviews::class)
+            Route::get('/sections/{section}', [SectionController::class, 'episode'])
+                ->where('section', 'reviews')
+                ->middleware('auth')
+                ->name('.section');
+
+            Route::get('/reviews', [ReviewController::class, 'episode'])
                 ->name('.reviews');
 
             Route::get('/edit', function (Episode $episode) {

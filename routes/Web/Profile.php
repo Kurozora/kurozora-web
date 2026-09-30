@@ -10,9 +10,9 @@ use App\Http\Controllers\Web\Profile\FollowingController;
 use App\Http\Controllers\Web\Profile\LibraryController;
 use App\Http\Controllers\Web\Profile\RatingController;
 use App\Http\Controllers\Web\Profile\ReminderController;
+use App\Http\Controllers\Web\Profile\SessionController;
 use App\Http\Controllers\Web\SectionController;
 use App\Http\Controllers\Web\UserProfileController;
-use App\Livewire\Profile\Sessions\Index as SessionsIndex;
 
 Route::prefix('/profile')
     ->name('profile')
@@ -27,7 +27,7 @@ Route::prefix('/profile')
                 Route::get('/', [UserProfileController::class, 'settings'])
                     ->name('.settings');
 
-                Route::get('/sessions', SessionsIndex::class)
+                Route::get('/sessions', [SessionController::class, 'index'])
                     ->name('.settings.sessions');
 
                 Route::get('/{user}', [UserProfileController::class, 'settings'])

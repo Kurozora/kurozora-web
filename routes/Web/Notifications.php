@@ -1,12 +1,12 @@
 <?php
 
-use App\Livewire\Notifications\Index as NotificationsIndex;
+use App\Http\Controllers\Web\NotificationController;
 
 Route::prefix('/notifications')
     ->name('notifications')
     ->middleware('auth')
     ->group(function () {
-        Route::get('/', NotificationsIndex::class)
+        Route::get('/', [NotificationController::class, 'index'])
             ->name('.index');
 
         Route::get('/unread', function () {

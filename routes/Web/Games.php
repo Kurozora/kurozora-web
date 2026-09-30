@@ -5,15 +5,14 @@ use App\Enums\UserLibraryKind;
 use App\Http\Controllers\Web\BrowseController;
 use App\Http\Controllers\Web\CatalogController;
 use App\Http\Controllers\Web\GameController;
+use App\Http\Controllers\Web\ParentalGuideController;
+use App\Http\Controllers\Web\ReviewController;
 use App\Http\Controllers\Web\SectionController;
 use App\Http\Controllers\Web\TitleCastController;
 use App\Http\Controllers\Web\TitleRelationController;
 use App\Http\Controllers\Web\TitleSongController;
 use App\Http\Controllers\Web\TitleStaffController;
 use App\Http\Controllers\Web\TitleStudioController;
-use App\Livewire\ParentalGuide;
-use App\Livewire\ParentalGuideCategoryEntries;
-use App\Livewire\Reviews;
 use App\Models\Game;
 
 Route::prefix('/games')
@@ -88,7 +87,7 @@ Route::prefix('/games')
                     ->name('.details');
 
                 Route::get('/sections/{section}', [SectionController::class, 'game'])
-                    ->where('section', 'cast|staff|songs|studios|more-by-studio|related-games|related-anime|related-manga')
+                    ->where('section', 'cast|staff|songs|studios|more-by-studio|related-games|related-anime|related-manga|reviews')
                     ->middleware('auth')
                     ->name('.section');
 
@@ -102,11 +101,11 @@ Route::prefix('/games')
                     ->middleware('auth')
                     ->name('.edit');
 
-                Route::get('/parentalguide', ParentalGuide::class)
+                Route::get('/parentalguide', [ParentalGuideController::class, 'index'])
                     ->defaults('kind', UserLibraryKind::Game)
                     ->name('.parentalguide');
 
-                Route::get('/parentalguide/{category}', ParentalGuideCategoryEntries::class)
+                Route::get('/parentalguide/{category}', [ParentalGuideController::class, 'category'])
                     ->defaults('kind', UserLibraryKind::Game)
                     ->whereIn('category', ParentalGuideCategory::slugs())
                     ->name('.parentalguide.category');
@@ -128,8 +127,7 @@ Route::prefix('/games')
                 })
                     ->name('.related-shows');
 
-                Route::get('/reviews', Reviews::class)
-                    ->defaults('kind', UserLibraryKind::Game)
+                Route::get('/reviews', [ReviewController::class, 'game'])
                     ->name('.reviews');
 
                 Route::get('/songs', [TitleSongController::class, 'index'])

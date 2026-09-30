@@ -11,15 +11,15 @@
 @endphp
 
 <article
-    class="relative pt-3 pr-3 pb-3 pl-8"
+    class="relative pt-3 pr-3 pb-3"
     @if ($supportsSelect)
-        :class="selectMode ? 'cursor-pointer select-none' : ''"
+        :class="selectMode ? 'pl-8 cursor-pointer select-none' : 'pl-4'"
         @click="selectMode && toggleSelection('{{ $notification->id }}', {{ $isUnread ? 'true' : 'false' }})"
     @endif
 >
     <span
         class="absolute flex items-center justify-center w-4 h-4"
-        style="top: 1.5rem; left: 0.5rem; transform: translateY(-50%);"
+        :style="selectMode ? 'top: 1.5rem; transform: translateY(-50%); left: 0.5rem;' : 'top: 1.5rem; transform: translateY(-50%); left: 0;'"
         aria-hidden="true"
     >
         @if ($supportsSelect)
@@ -107,7 +107,7 @@
         <a
             class="absolute inset-0 z-0"
             href="{{ $destinationUrl }}"
-            wire:click="markRead('{{ $notification->id }}')"
+            x-on:click="setRead([{{ Js::from($notification->id) }}], true)"
             wire:navigate
             aria-label="{{ $accessibleLabel }}"
         ></a>
@@ -118,7 +118,7 @@
             class="absolute inset-0 z-0"
             x-show="!selectMode"
             href="{{ $destinationUrl }}"
-            wire:click="markRead('{{ $notification->id }}')"
+            x-on:click="setRead([{{ Js::from($notification->id) }}], true)"
             wire:navigate
             aria-label="{{ $accessibleLabel }}"
         ></a>

@@ -1,4 +1,4 @@
-@props(['reviews' => [], 'isRow' => true, 'safeAreaInsetEnabled' => true, 'voteOverrides' => [], 'reviewBoxId' => null])
+@props(['reviews' => [], 'isRow' => true, 'safeAreaInsetEnabled' => true, 'reviewBoxId' => null])
 
 @php
     // The rows of a paginated set live on its own collection.
@@ -15,7 +15,7 @@
 
 <x-rows.container lockup="review" :is-row="$isRow" :safe-area-inset-enabled="$safeAreaInsetEnabled" {{ $attributes }}>
     @foreach ($shownReviews as $review)
-        <x-lockups.review-lockup :review="$review" :is-row="$isRow" :vote-overrides="$voteOverrides" :review-box-id="$reviewBoxId" />
+        <x-lockups.review-lockup :review="$review" :is-row="$isRow" :review-box-id="$reviewBoxId" />
     @endforeach
 
     @if ($lowEffortReviews->isNotEmpty())
@@ -31,7 +31,7 @@
 
             <x-rows.container lockup="review" :is-row="false" class="mt-4" x-show="isExpanded" x-cloak>
                 @foreach ($lowEffortReviews as $review)
-                    <x-lockups.review-lockup :review="$review" :is-row="$isRow" :vote-overrides="$voteOverrides" :review-box-id="$reviewBoxId" />
+                    <x-lockups.review-lockup :review="$review" :is-row="$isRow" :review-box-id="$reviewBoxId" />
                 @endforeach
             </x-rows.container>
         </div>

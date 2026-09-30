@@ -1,8 +1,8 @@
 <?php
 
+use App\Http\Controllers\Web\ReviewController;
 use App\Http\Controllers\Web\SectionController;
 use App\Http\Controllers\Web\StudioController;
-use App\Livewire\Studio\Reviews as StudioReviews;
 use App\Models\Studio;
 
 Route::prefix('/studios')
@@ -20,7 +20,7 @@ Route::prefix('/studios')
                     ->name('.details');
 
                 Route::get('/sections/{section}', [SectionController::class, 'studio'])
-                    ->where('section', 'anime|manga|games')
+                    ->where('section', 'anime|manga|games|reviews')
                     ->middleware('auth')
                     ->name('.section');
 
@@ -39,7 +39,7 @@ Route::prefix('/studios')
                 Route::get('/manga', [StudioController::class, 'manga'])
                     ->name('.manga');
 
-                Route::get('/reviews', StudioReviews::class)
+                Route::get('/reviews', [ReviewController::class, 'studio'])
                     ->name('.reviews');
             });
     });

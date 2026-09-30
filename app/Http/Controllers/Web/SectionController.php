@@ -8,6 +8,7 @@ use App\Enums\UserLibraryKind;
 use App\Http\Controllers\Controller;
 use App\Models\Anime;
 use App\Models\Character;
+use App\Models\Episode;
 use App\Models\FeedMessage;
 use App\Models\Game;
 use App\Models\Manga;
@@ -29,6 +30,7 @@ use App\View\Components\MoreByStudioSection;
 use App\View\Components\Person\MediaSection as PersonMediaSection;
 use App\View\Components\Platform\MediaSection as PlatformMediaSection;
 use App\View\Components\RelationsSection;
+use App\View\Components\Sections\Reviews as ReviewsSection;
 use App\View\Components\Sections\Schedule as ScheduleSection;
 use App\View\Components\Song\MediaSection as SongMediaSection;
 use App\View\Components\SongsSection;
@@ -70,6 +72,7 @@ class SectionController extends Controller
             'related-anime' => new RelationsSection(UserLibraryKind::Anime, UserLibraryKind::Anime, $anime),
             'related-manga' => new RelationsSection(UserLibraryKind::Anime, UserLibraryKind::Manga, $anime),
             'related-games' => new RelationsSection(UserLibraryKind::Anime, UserLibraryKind::Game, $anime),
+            'reviews' => new ReviewsSection($anime, $this->requestedReviewBox($request)),
         });
     }
 
@@ -92,6 +95,7 @@ class SectionController extends Controller
             'related-manga' => new RelationsSection(UserLibraryKind::Manga, UserLibraryKind::Manga, $manga),
             'related-anime' => new RelationsSection(UserLibraryKind::Manga, UserLibraryKind::Anime, $manga),
             'related-games' => new RelationsSection(UserLibraryKind::Manga, UserLibraryKind::Game, $manga),
+            'reviews' => new ReviewsSection($manga, $this->requestedReviewBox($request)),
         });
     }
 
@@ -115,59 +119,66 @@ class SectionController extends Controller
             'related-games' => new RelationsSection(UserLibraryKind::Game, UserLibraryKind::Game, $game),
             'related-anime' => new RelationsSection(UserLibraryKind::Game, UserLibraryKind::Anime, $game),
             'related-manga' => new RelationsSection(UserLibraryKind::Game, UserLibraryKind::Manga, $game),
+            'reviews' => new ReviewsSection($game, $this->requestedReviewBox($request)),
         });
     }
 
     /**
      * Render a section of a character page.
      *
+     * @param Request   $request
      * @param Character $character
      * @param string    $section
      *
      * @return Response
      */
-    public function character(Character $character, string $section): Response
+    public function character(Request $request, Character $character, string $section): Response
     {
         return $this->render(match ($section) {
             'anime' => new CharacterMediaSection($character, Anime::class),
             'people' => new CharacterMediaSection($character, Person::class),
             'manga' => new CharacterMediaSection($character, Manga::class),
             'games' => new CharacterMediaSection($character, Game::class),
+            'reviews' => new ReviewsSection($character, $this->requestedReviewBox($request)),
         });
     }
 
     /**
      * Render a section of a person page.
      *
-     * @param Person $person
-     * @param string $section
+     * @param Request $request
+     * @param Person  $person
+     * @param string  $section
      *
      * @return Response
      */
-    public function person(Person $person, string $section): Response
+    public function person(Request $request, Person $person, string $section): Response
     {
         return $this->render(match ($section) {
             'anime' => new PersonMediaSection($person, Anime::class),
             'characters' => new PersonMediaSection($person, Character::class),
             'manga' => new PersonMediaSection($person, Manga::class),
             'games' => new PersonMediaSection($person, Game::class),
+            'reviews' => new ReviewsSection($person, $this->requestedReviewBox($request)),
         });
     }
 
     /**
      * Render a section of a studio page.
      *
-     * @param Studio $studio
-     * @param string $section
+     * @param Request $request
+     * @param Studio  $studio
+     * @param string  $section
      *
      * @return Response
      */
-    public function studio(Studio $studio, string $section): Response
+    public function studio(Request $request, Studio $studio, string $section): Response
     {
         return $this->render(match ($section) {
             'anime' => new StudioMediaSection($studio, Anime::class),
             'manga' => new StudioMediaSection($studio, Manga::class),
             'games' => new StudioMediaSection($studio, Game::class),
+            'reviews' => new ReviewsSection($studio, $this->requestedReviewBox($request)),
         });
     }
 
@@ -253,16 +264,34 @@ class SectionController extends Controller
     /**
      * Render a section of a song page.
      *
-     * @param Song   $song
-     * @param string $section
+     * @param Request $request
+     * @param Song    $song
+     * @param string  $section
      *
      * @return Response
      */
-    public function song(Song $song, string $section): Response
+    public function song(Request $request, Song $song, string $section): Response
     {
         return $this->render(match ($section) {
             'anime' => new SongMediaSection($song, Anime::class),
             'games' => new SongMediaSection($song, Game::class),
+            'reviews' => new ReviewsSection($song, $this->requestedReviewBox($request)),
+        });
+    }
+
+    /**
+     * Render a section of an episode page.
+     *
+     * @param Request $request
+     * @param Episode $episode
+     * @param string  $section
+     *
+     * @return Response
+     */
+    public function episode(Request $request, Episode $episode, string $section): Response
+    {
+        return $this->render(match ($section) {
+            'reviews' => new ReviewsSection($episode, $this->requestedReviewBox($request)),
         });
     }
 
@@ -329,6 +358,20 @@ class SectionController extends Controller
     protected function requestedStudio(Request $request): Studio
     {
         return Studio::findOrFail($request->integer('studio'));
+    }
+
+    /**
+     * The id of the review box named in the request.
+     *
+     * @param Request $request
+     *
+     * @return string|null
+     */
+    protected function requestedReviewBox(Request $request): ?string
+    {
+        $reviewBox = $request->string('reviewBox')->value();
+
+        return $reviewBox === '' ? null : $reviewBox;
     }
 
     /**

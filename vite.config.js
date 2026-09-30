@@ -140,6 +140,7 @@ export default defineConfig({
                 'resources/js/markdown.js',
                 'resources/js/museum.js',
                 'resources/js/recap-share.js',
+                'resources/js/sessions-map.js',
                 'resources/js/settings.js',
                 'resources/js/submenu.js',
                 'resources/js/user-actions.js',

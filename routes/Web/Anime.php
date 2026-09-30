@@ -5,6 +5,8 @@ use App\Enums\UserLibraryKind;
 use App\Http\Controllers\Web\AnimeController;
 use App\Http\Controllers\Web\BrowseController;
 use App\Http\Controllers\Web\CatalogController;
+use App\Http\Controllers\Web\ParentalGuideController;
+use App\Http\Controllers\Web\ReviewController;
 use App\Http\Controllers\Web\SeasonController;
 use App\Http\Controllers\Web\SectionController;
 use App\Http\Controllers\Web\TitleCastController;
@@ -12,9 +14,6 @@ use App\Http\Controllers\Web\TitleRelationController;
 use App\Http\Controllers\Web\TitleSongController;
 use App\Http\Controllers\Web\TitleStaffController;
 use App\Http\Controllers\Web\TitleStudioController;
-use App\Livewire\ParentalGuide;
-use App\Livewire\ParentalGuideCategoryEntries;
-use App\Livewire\Reviews;
 use App\Models\Anime;
 
 Route::prefix('/anime')
@@ -93,7 +92,7 @@ Route::prefix('/anime')
                     ->name('.details');
 
                 Route::get('/sections/{section}', [SectionController::class, 'anime'])
-                    ->where('section', 'seasons|cast|staff|songs|studios|more-by-studio|related-anime|related-manga|related-games')
+                    ->where('section', 'seasons|cast|staff|songs|studios|more-by-studio|related-anime|related-manga|related-games|reviews')
                     ->middleware('auth')
                     ->name('.section');
 
@@ -107,11 +106,11 @@ Route::prefix('/anime')
                     ->middleware('auth')
                     ->name('.edit');
 
-                Route::get('/parentalguide', ParentalGuide::class)
+                Route::get('/parentalguide', [ParentalGuideController::class, 'index'])
                     ->defaults('kind', UserLibraryKind::Anime)
                     ->name('.parentalguide');
 
-                Route::get('/parentalguide/{category}', ParentalGuideCategoryEntries::class)
+                Route::get('/parentalguide/{category}', [ParentalGuideController::class, 'category'])
                     ->defaults('kind', UserLibraryKind::Anime)
                     ->whereIn('category', ParentalGuideCategory::slugs())
                     ->name('.parentalguide.category');
@@ -133,8 +132,7 @@ Route::prefix('/anime')
                 })
                     ->name('.related-shows');
 
-                Route::get('/reviews', Reviews::class)
-                    ->defaults('kind', UserLibraryKind::Anime)
+                Route::get('/reviews', [ReviewController::class, 'anime'])
                     ->name('.reviews');
 
                 Route::get('/seasons', [SeasonController::class, 'index'])

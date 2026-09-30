@@ -1,3 +1,146 @@
+function predictVote(state, direction) {
+    const tapped = direction === 'helpful'
+    const predicted = state.helpful === tapped ? null : tapped
+    let { helpfulCount, unhelpfulCount } = state
+
+    if (state.helpful === true) {
+        helpfulCount = Math.max(0, helpfulCount - 1)
+    } else if (state.helpful === false) {
+        unhelpfulCount = Math.max(0, unhelpfulCount - 1)
+    }
+
+    if (predicted === true) {
+        helpfulCount++
+    } else if (predicted === false) {
+        unhelpfulCount++
+    }
+
+    return { helpful: predicted, helpfulCount, unhelpfulCount }
+}
+
+function helpfulnessLockup({ id, spoiler, storageKey, helpful, helpfulCount, unhelpfulCount, authenticated, signInUrl, event }) {
+    return {
+        isDisabled: false,
+        helpful,
+        helpfulCount,
+        unhelpfulCount,
+        deleted: false,
+        busy: false,
+
+        init() {
+            this.isDisabled = spoiler && !sessionStorage.getItem(storageKey + id)
+        },
+
+        dismissSpoiler() {
+            this.isDisabled = false
+            sessionStorage.setItem(storageKey + id, '1')
+        },
+
+        signedIn() {
+            if (authenticated) {
+                return true
+            }
+
+            window.Livewire.navigate(signInUrl)
+
+            return false
+        },
+
+        vote(direction) {
+            if (!this.signedIn()) {
+                return
+            }
+
+            Object.assign(this, predictVote(this, direction))
+            this.busy = true
+            window.Livewire.dispatch(event, { id, direction })
+        },
+
+        syncVote({ id: updatedId, helpful, helpfulCount, unhelpfulCount }) {
+            if (updatedId !== id) {
+                return
+            }
+
+            this.helpful = helpful
+            this.helpfulCount = helpfulCount
+            this.unhelpfulCount = unhelpfulCount
+            this.busy = false
+        },
+
+        syncDelete({ id: updatedId }) {
+            if (updatedId !== id) {
+                return
+            }
+
+            this.deleted = true
+        },
+    }
+}
+
+function selection(property, rowValue = () => true) {
+    const attribute = 'data-' + property.replace(/[A-Z]/g, (letter) => '-' + letter.toLowerCase())
+
+    return {
+        selectMode: false,
+        selected: {},
+
+        get selectedKeys() {
+            return Object.keys(this.selected)
+        },
+
+        get hasSelection() {
+            return this.selectedKeys.length > 0
+        },
+
+        get selectionCount() {
+            return this.selectedKeys.length
+        },
+
+        get visibleRows() {
+            return Array.from(this.$root.querySelectorAll('[' + attribute + ']'))
+        },
+
+        get allSelected() {
+            const rows = this.visibleRows
+
+            return rows.length > 0 && rows.every((row) => this.selected[row.dataset[property]] !== undefined)
+        },
+
+        isSelected(key) {
+            return this.selected[key] !== undefined
+        },
+
+        toggleSelection(key, value = true) {
+            if (this.selected[key] !== undefined) {
+                delete this.selected[key]
+            } else {
+                this.selected[key] = value
+            }
+        },
+
+        enterSelectMode() {
+            this.selectMode = true
+            this.selected = {}
+        },
+
+        exitSelectMode() {
+            this.selectMode = false
+            this.selected = {}
+        },
+
+        toggleSelectAll() {
+            if (this.allSelected) {
+                this.selected = {}
+                return
+            }
+
+            this.visibleRows.forEach((row) => {
+                this.selected[row.dataset[property]] = rowValue(row)
+            })
+        },
+    }
+}
+
 document.addEventListener('alpine:init', () => {
     const Alpine = window.Alpine
 
@@ -540,6 +683,309 @@ document.addEventListener('alpine:init', () => {
             tooltip.style.bottom = bottom
             tooltip.style.left = left
             tooltip.style.transform = transform
+        },
+    }))
+
+    Alpine.data('reviewLockup', (lockup) => Object.assign(helpfulnessLockup({ ...lockup, storageKey: 'review-spoiler-dismissed-', event: 'review-vote' }), {
+        elevated: lockup.elevated,
+
+        elevate() {
+            this.busy = true
+            window.Livewire.dispatch('review-elevate', { id: lockup.id })
+        },
+
+        remove() {
+            this.busy = true
+            window.Livewire.dispatch('review-delete', { id: lockup.id })
+        },
+
+        report() {
+            if (!this.signedIn()) {
+                return
+            }
+
+            this.$dispatch('review-report-modal', { id: lockup.id })
+        },
+
+        update() {
+            window.Livewire.dispatch('show-review-box', { id: lockup.reviewBoxId })
+        },
+
+        syncElevate({ id, elevated }) {
+            if (id === lockup.id) {
+                this.elevated = elevated
+                this.busy = false
+                return
+            }
+
+            if (elevated) {
+                this.elevated = false
+            }
+        },
+    }))
+
+    Alpine.data('parentalGuideEntryLockup', (lockup) => Object.assign(helpfulnessLockup({ ...lockup, storageKey: 'pg-spoiler-dismissed-', event: 'parental-guide-vote' }), {
+        edit() {
+            window.Livewire.dispatch('parental-guide-box-open', { entry: lockup.id })
+        },
+
+        remove() {
+            this.$dispatch('parental-guide-delete-modal', { id: lockup.id })
+        },
+
+        report() {
+            if (!this.signedIn()) {
+                return
+            }
+
+            this.$dispatch('parental-guide-report-modal', { id: lockup.id })
+        },
+    }))
+
+    Alpine.data('reportModal', ({ modal, event, reason: defaultReason, otherReason }) => ({
+        id: null,
+        reason: defaultReason,
+        details: '',
+        error: null,
+        busy: false,
+
+        open({ id }) {
+            this.id = id
+            this.reason = defaultReason
+            this.details = ''
+            this.error = null
+            this.busy = false
+            this.$dispatch('open-modal', { id: modal })
+        },
+
+        close() {
+            this.$dispatch('close-modal', { id: modal })
+        },
+
+        get requiresDetails() {
+            return this.reason === otherReason
+        },
+
+        submit() {
+            this.busy = true
+            this.error = null
+            window.Livewire.dispatch(event, { id: this.id, reason: this.reason, details: this.details })
+        },
+
+        settle({ id }) {
+            if (id !== this.id) {
+                return
+            }
+
+            this.busy = false
+            this.close()
+        },
+
+        fail({ id, message }) {
+            if (id !== this.id) {
+                return
+            }
+
+            this.busy = false
+            this.error = message
+        },
+    }))
+
+    Alpine.data('confirmModal', ({ modal, event }) => ({
+        payload: null,
+        busy: false,
+
+        open(payload) {
+            this.payload = payload
+            this.busy = false
+            this.$dispatch('open-modal', { id: modal })
+        },
+
+        close() {
+            this.$dispatch('close-modal', { id: modal })
+        },
+
+        confirm() {
+            this.busy = true
+            window.Livewire.dispatch(event, this.payload)
+        },
+
+        settle() {
+            if (this.payload === null) {
+                return
+            }
+
+            this.payload = null
+            this.busy = false
+            this.close()
+        },
+    }))
+
+    Alpine.data('appIconButton', function ({ name, url, premium, authenticated, signInUrl }) {
+        return {
+            currentAppIconName: this.$persist('Kurozora').as('currentAppIconName'),
+            busy: false,
+
+            get selected() {
+                return this.currentAppIconName.toLowerCase() === name.toLowerCase()
+            },
+
+            select() {
+                if (!premium) {
+                    window.Livewire.dispatch('app-icon-changed', { appIcon: { name, url } })
+                    return
+                }
+
+                if (!authenticated) {
+                    window.Livewire.navigate(signInUrl)
+                    return
+                }
+
+                this.busy = true
+                window.Livewire.dispatch('app-icon-set', { name })
+            },
+
+            sync({ appIcon }) {
+                this.currentAppIconName = appIcon.name
+                this.busy = false
+            },
+        }
+    })
+
+    Alpine.data('notificationsPage', ({ userId, url, labels }) => Object.assign(selection('notificationId', (row) => row.dataset.unread === '1'), {
+        busy: false,
+        listeners: {},
+
+        init() {
+            const channel = window.Echo?.private('users.' + userId)
+
+            if (!channel) {
+                return
+            }
+
+            this.listeners = {
+                '.notification.created': () => this.reload(),
+                '.notification.read': () => this.refresh(),
+                '.notification.deleted': () => this.reload(),
+            }
+
+            for (const [name, listener] of Object.entries(this.listeners)) {
+                channel.listen(name, listener)
+            }
+        },
+
+        destroy() {
+            const channel = window.Echo?.private('users.' + userId)
+
+            for (const [name, listener] of Object.entries(this.listeners)) {
+                channel?.stopListening(name, listener)
+            }
+        },
+
+        list() {
+            return this.$root.querySelector('[data-paginated]')
+        },
+
+        refresh() {
+            const list = this.list()
+
+            window.paginationManager.load(list, list.dataset.paginatedUrl ?? window.location.href)
+        },
+
+        reload() {
+            window.paginationManager.load(this.list(), url, { history: 'replace' })
+        },
+
+        anySelectedUnread() {
+            return Object.values(this.selected).some((isUnread) => isUnread)
+        },
+
+        markActionLabel() {
+            return this.anySelectedUnread() ? labels.markRead : labels.markUnread
+        },
+
+        countLabel() {
+            return this.hasSelection ? labels.selected.replace(':count', this.selectionCount) : labels.select
+        },
+
+        setRead(ids, read) {
+            this.busy = true
+            window.Livewire.dispatch('notifications-read', { ids, read })
+        },
+
+        confirmDelete(ids) {
+            this.$dispatch('notifications-delete-modal', { ids })
+        },
+
+        batchMark() {
+            if (!this.hasSelection) {
+                return
+            }
+
+            this.setRead(this.selectedKeys, this.anySelectedUnread())
+        },
+
+        batchDelete() {
+            if (!this.hasSelection) {
+                return
+            }
+
+            this.confirmDelete(this.selectedKeys)
+        },
+
+        settle() {
+            this.busy = false
+            this.exitSelectMode()
+        },
+    }))
+
+    Alpine.data('sessionsPage', ({ labels }) => Object.assign(selection('sessionKey'), {
+        keys: [],
+        all: false,
+        password: '',
+        error: null,
+        busy: false,
+
+        countLabel() {
+            return this.hasSelection ? labels.selected.replace(':count', this.selectionCount) : labels.select
+        },
+
+        confirm(keys, all = false) {
+            this.keys = keys
+            this.all = all
+            this.password = ''
+            this.error = null
+            this.busy = false
+            this.$dispatch('open-modal', { id: 'sessions-sign-out' })
+        },
+
+        close() {
+            this.$dispatch('close-modal', { id: 'sessions-sign-out' })
+        },
+
+        signOut() {
+            this.busy = true
+            this.error = null
+            window.Livewire.dispatch('sessions-sign-out', { keys: this.keys, all: this.all, password: this.password })
+        },
+
+        batchSignOut() {
+            if (!this.hasSelection) {
+                return
+            }
+
+            this.confirm(this.selectedKeys)
+        },
+
+        settle() {
+            this.busy = false
+            this.close()
+            this.exitSelectMode()
+        },
+
+        fail({ message }) {
+            this.busy = false
+            this.error = message
         },
     }))
 })

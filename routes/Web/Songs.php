@@ -1,9 +1,9 @@
 <?php
 
+use App\Http\Controllers\Web\ReviewController;
 use App\Http\Controllers\Web\SectionController;
 use App\Http\Controllers\Web\SongController;
 use App\Http\Controllers\Web\SongLyricsController;
-use App\Livewire\Song\Reviews as SongReviews;
 use App\Models\Song;
 
 Route::prefix('/songs')
@@ -21,7 +21,7 @@ Route::prefix('/songs')
                     ->name('.details');
 
                 Route::get('/sections/{section}', [SectionController::class, 'song'])
-                    ->where('section', 'anime|games')
+                    ->where('section', 'anime|games|reviews')
                     ->middleware('auth')
                     ->name('.section');
 
@@ -34,7 +34,7 @@ Route::prefix('/songs')
                     ->middleware('auth')
                     ->name('.edit');
 
-                Route::get('/reviews', SongReviews::class)
+                Route::get('/reviews', [ReviewController::class, 'song'])
                     ->name('.reviews');
             });
     });

@@ -4,21 +4,33 @@ namespace App\Livewire;
 
 use App\Enums\FeedVoteType;
 use App\Enums\KTheme;
+use App\Enums\ParentalGuideReaction;
+use App\Enums\ParentalGuideReportReason;
+use App\Enums\ReportReason;
 use App\Enums\UserLibraryStatus;
+use App\Events\Notifications\NotificationDeleted;
+use App\Events\Notifications\NotificationRead;
 use App\Models\Anime;
+use App\Models\AppIcon;
 use App\Models\AppTheme;
 use App\Models\Episode;
 use App\Models\FeedMessage;
 use App\Models\Game;
 use App\Models\Manga;
+use App\Models\MediaRating;
+use App\Models\ParentalGuideEntry;
+use App\Models\Report;
 use App\Models\Season;
 use App\Models\User;
 use App\Models\UserLibrary;
 use App\Models\UserWatchedEpisode;
 use App\Notifications\NewFollower;
 use App\Services\ScrobbleService;
+use App\Support\UserLibraryTouch;
+use App\Traits\InteractsWithSessions;
 use App\Traits\Livewire\PresentsAlert;
 use App\Traits\Livewire\PresentsSubscriptionSheet;
+use BenSampo\Enum\Rules\EnumValue;
 use Cog\Laravel\Love\Reactant\Models\Reactant;
 use Cog\Laravel\Love\ReactionType\Models\ReactionType;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -29,11 +41,15 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
 class UserActions extends Component
 {
+    use InteractsWithSessions;
     use PresentsAlert;
     use PresentsSubscriptionSheet;
 
@@ -622,6 +638,359 @@ class UserActions extends Component
     }
 
     /**
+     * Toggle the signed-in user's helpfulness vote on a review.
+     *
+     * @param int    $id
+     * @param string $direction
+     *
+     * @return void
+     */
+    #[On('review-vote')]
+    public function voteOnReview(int $id, string $direction): void
+    {
+        $user = $this->user();
+
+        if ($user === null) {
+            return;
+        }
+
+        $mediaRating = MediaRating::withoutGlobalScopes()->findOrFail($id);
+
+        if ((int) $mediaRating->user_id === $user->id) {
+            return;
+        }
+
+        $vote = $this->vote($user, $mediaRating, $direction);
+
+        $this->dispatch('review-voted', id: $mediaRating->id, helpful: $vote['helpful'], helpfulCount: $vote['helpfulCount'], unhelpfulCount: $vote['unhelpfulCount']);
+    }
+
+    /**
+     * Toggle whether a review holds the community pick slot of its title.
+     *
+     * @param int $id
+     *
+     * @return void
+     */
+    #[On('review-elevate')]
+    public function elevateReview(int $id): void
+    {
+        $user = $this->user();
+
+        if ($user === null || !$user->can('elevateMediaRating')) {
+            return;
+        }
+
+        $mediaRating = MediaRating::withoutGlobalScopes()->findOrFail($id);
+
+        if (trim((string) $mediaRating->description) === '') {
+            return;
+        }
+
+        $elevated = !$mediaRating->is_elevated;
+
+        if ($elevated) {
+            MediaRating::withoutGlobalScopes()
+                ->where('model_type', '=', $mediaRating->model_type)
+                ->where('model_id', '=', $mediaRating->model_id)
+                ->where('is_elevated', '=', true)
+                ->update([
+                    'is_elevated' => false,
+                    'elevated_at' => null,
+                    'elevated_by_user_id' => null,
+                ]);
+        }
+
+        $mediaRating->update([
+            'is_elevated' => $elevated,
+            'elevated_at' => $elevated ? now() : null,
+            'elevated_by_user_id' => $elevated ? $user->id : null,
+        ]);
+
+        $this->dispatch('review-elevated', id: $mediaRating->id, elevated: $elevated);
+    }
+
+    /**
+     * Delete a review the signed-in user wrote or moderates.
+     *
+     * @param int $id
+     *
+     * @return void
+     */
+    #[On('review-delete')]
+    public function deleteReview(int $id): void
+    {
+        $user = $this->user();
+
+        if ($user === null) {
+            return;
+        }
+
+        $mediaRating = MediaRating::withoutGlobalScopes()->findOrFail($id);
+
+        if ((int) $mediaRating->user_id !== $user->id && !$user->hasRole(['superAdmin', 'admin'])) {
+            return;
+        }
+
+        $mediaRating->delete();
+
+        UserLibraryTouch::touch($mediaRating->user_id, $mediaRating->model_type, [$mediaRating->model_id]);
+
+        $this->dispatch('review-deleted', id: $mediaRating->id);
+    }
+
+    /**
+     * File the signed-in user's report of a review.
+     *
+     * @param int    $id
+     * @param string $reason
+     * @param string $details
+     *
+     * @return void
+     */
+    #[On('review-report')]
+    public function reportReview(int $id, string $reason, string $details): void
+    {
+        $user = $this->user();
+
+        if ($user === null) {
+            return;
+        }
+
+        $mediaRating = MediaRating::withoutGlobalScopes()->findOrFail($id);
+        $validator = Validator::make(['reason' => $reason, 'details' => $details], [
+            'reason' => ['bail', 'required', 'string', Rule::in(ReportReason::offeredForReview())],
+            'details' => ['bail', 'nullable', 'string', 'max:1000', 'required_if:reason,' . ReportReason::Other],
+        ]);
+
+        if ($validator->fails()) {
+            $this->dispatch('review-report-failed', id: $mediaRating->id, message: $validator->errors()->first());
+            return;
+        }
+
+        $this->report($user, $mediaRating, $reason, $details);
+
+        $this->dispatch('review-reported', id: $mediaRating->id);
+    }
+
+    /**
+     * Toggle the signed-in user's helpfulness vote on a parental guide entry.
+     *
+     * @param int    $id
+     * @param string $direction
+     *
+     * @return void
+     */
+    #[On('parental-guide-vote')]
+    public function voteOnParentalGuideEntry(int $id, string $direction): void
+    {
+        $user = $this->user();
+
+        if ($user === null) {
+            return;
+        }
+
+        $entry = ParentalGuideEntry::findOrFail($id);
+        $vote = $this->vote($user, $entry, $direction);
+
+        $this->dispatch('parental-guide-voted', id: $entry->id, helpful: $vote['helpful'], helpfulCount: $vote['helpfulCount'], unhelpfulCount: $vote['unhelpfulCount']);
+    }
+
+    /**
+     * Delete a parental guide entry the signed-in user wrote or moderates.
+     *
+     * @param int $id
+     *
+     * @return void
+     */
+    #[On('parental-guide-delete')]
+    public function deleteParentalGuideEntry(int $id): void
+    {
+        $user = $this->user();
+
+        if ($user === null) {
+            return;
+        }
+
+        $entry = ParentalGuideEntry::findOrFail($id);
+
+        if (!$user->can('delete', $entry)) {
+            return;
+        }
+
+        $entry->delete();
+
+        $this->dispatch('parental-guide-deleted', id: $entry->id);
+        $this->dispatch('parental-guide-updated');
+    }
+
+    /**
+     * File the signed-in user's report of a parental guide entry.
+     *
+     * @param int    $id
+     * @param string $reason
+     * @param string $details
+     *
+     * @return void
+     */
+    #[On('parental-guide-report')]
+    public function reportParentalGuideEntry(int $id, string $reason, string $details): void
+    {
+        $user = $this->user();
+
+        if ($user === null) {
+            return;
+        }
+
+        $entry = ParentalGuideEntry::findOrFail($id);
+        $validator = Validator::make(['reason' => $reason, 'details' => $details], [
+            'reason' => ['bail', 'required', 'string', new EnumValue(ParentalGuideReportReason::class, false)],
+            'details' => ['bail', 'nullable', 'string', 'max:1000', 'required_if:reason,' . ParentalGuideReportReason::Other],
+        ]);
+
+        if ($validator->fails()) {
+            $this->dispatch('parental-guide-report-failed', id: $entry->id, message: $validator->errors()->first());
+            return;
+        }
+
+        $entry->reports()->create([
+            'user_id' => $user->id,
+            'reason_key' => $reason,
+            'details' => $details !== '' ? $details : null,
+        ]);
+
+        $this->dispatch('parental-guide-reported', id: $entry->id);
+    }
+
+    /**
+     * Apply an app icon the signed-in user is allowed to use.
+     *
+     * @param string $name
+     *
+     * @return void
+     */
+    #[On('app-icon-set')]
+    public function setAppIcon(string $name): void
+    {
+        $appIcon = AppIcon::find($name);
+
+        if ($appIcon === null) {
+            return;
+        }
+
+        if ($appIcon->isPremium()) {
+            $user = $this->user();
+
+            if ($user === null) {
+                return;
+            }
+
+            if (!($user->is_subscribed || $user->is_pro)) {
+                $this->presentSubscriptionSheet(
+                    title: __('Stylish App Icons'),
+                    message: __('Make your home screen stand out with premium and limited time app icons.'),
+                    tipJarEnabled: true,
+                );
+                return;
+            }
+        }
+
+        $this->dispatch('app-icon-changed', appIcon: [
+            'name' => $appIcon->name,
+            'url' => $appIcon->getImage(),
+        ]);
+    }
+
+    /**
+     * Mark the signed-in user's notifications as read or unread.
+     *
+     * @param array $ids
+     * @param bool  $read
+     *
+     * @return void
+     */
+    #[On('notifications-read')]
+    public function setNotificationsRead(array $ids, bool $read): void
+    {
+        $user = $this->user();
+
+        if ($user === null || empty($ids)) {
+            return;
+        }
+
+        DB::transaction(function () use ($user, $ids, $read) {
+            $query = $user->notifications()->whereIn('id', $ids);
+
+            if ($read) {
+                $query->whereNull('read_at')->update(['read_at' => now()]);
+            } else {
+                $query->whereNotNull('read_at')->update(['read_at' => null]);
+            }
+        });
+
+        broadcast(new NotificationRead($user->id, array_values($ids), $read))->toOthers();
+
+        $this->dispatch('notifications-updated');
+    }
+
+    /**
+     * Delete the signed-in user's notifications.
+     *
+     * @param array $ids
+     *
+     * @return void
+     */
+    #[On('notifications-delete')]
+    public function deleteNotifications(array $ids): void
+    {
+        $user = $this->user();
+
+        if ($user === null || empty($ids)) {
+            return;
+        }
+
+        DB::transaction(function () use ($user, $ids) {
+            $user->notifications()->whereIn('id', $ids)->delete();
+        });
+
+        broadcast(new NotificationDeleted($user->id, array_values($ids)))->toOthers();
+
+        $this->dispatch('notifications-updated');
+    }
+
+    /**
+     * Sign the signed-in user out of other sessions after confirming the password.
+     *
+     * @param array  $keys
+     * @param bool   $all
+     * @param string $password
+     *
+     * @return void
+     */
+    #[On('sessions-sign-out')]
+    public function signOutOtherSessions(array $keys, bool $all, string $password): void
+    {
+        $user = $this->user();
+
+        if ($user === null) {
+            return;
+        }
+
+        try {
+            if ($all) {
+                $this->signOutAllOtherSessions($password);
+            } else {
+                $this->signOutSessions($keys, $password);
+            }
+        } catch (ValidationException $exception) {
+            $this->dispatch('sessions-sign-out-failed', message: collect($exception->errors())->flatten()->first());
+            return;
+        }
+
+        $this->dispatch('sessions-signed-out');
+    }
+
+    /**
      * Render the component.
      *
      * @return Application|Factory|View
@@ -692,5 +1061,95 @@ class UserActions extends Component
         $model = new $class;
 
         return $model->withoutGlobalScopesExceptSoftDeletes($model->newQuery());
+    }
+
+    /**
+     * Toggle a helpfulness vote and predict the counts the lockup shows next.
+     *
+     * @param User                           $user
+     * @param MediaRating|ParentalGuideEntry $reactable
+     * @param string                         $direction
+     *
+     * @return array
+     */
+    protected function vote(User $user, MediaRating|ParentalGuideEntry $reactable, string $direction): array
+    {
+        if ($reactable->isNotRegisteredAsLoveReactant()) {
+            $reactable->registerAsLoveReactant();
+            $reactable->refresh();
+        }
+
+        $reactable->load($reactable::lockupEagerLoads($user));
+
+        $current = $user->getHelpfulnessFor($reactable);
+        $oldHelpful = $current === null ? null : $current->is(ParentalGuideReaction::Helpful());
+        $tappedHelpful = match ($direction) {
+            'helpful' => true,
+            'unhelpful' => false,
+            default => null,
+        };
+        $predicted = $oldHelpful === $tappedHelpful ? null : $tappedHelpful;
+        $helpfulCount = (int) $reactable->helpful_count;
+        $unhelpfulCount = (int) $reactable->unhelpful_count;
+
+        if ($oldHelpful !== $predicted) {
+            if ($oldHelpful === true) {
+                $helpfulCount = max(0, $helpfulCount - 1);
+            } elseif ($oldHelpful === false) {
+                $unhelpfulCount = max(0, $unhelpfulCount - 1);
+            }
+
+            if ($predicted === true) {
+                $helpfulCount++;
+            } elseif ($predicted === false) {
+                $unhelpfulCount++;
+            }
+        }
+
+        $user->setHelpfulness($reactable, match ($predicted) {
+            true => ParentalGuideReaction::Helpful(),
+            false => ParentalGuideReaction::Unhelpful(),
+            default => null,
+        });
+
+        return [
+            'helpful' => $predicted,
+            'helpfulCount' => $helpfulCount,
+            'unhelpfulCount' => $unhelpfulCount,
+        ];
+    }
+
+    /**
+     * File one report per user on a review that isn't their own.
+     *
+     * @param User        $user
+     * @param MediaRating $mediaRating
+     * @param string      $reason
+     * @param string      $details
+     *
+     * @return void
+     */
+    protected function report(User $user, MediaRating $mediaRating, string $reason, string $details): void
+    {
+        if ((int) $mediaRating->user_id === $user->id) {
+            return;
+        }
+
+        $alreadyReported = Report::where('reportable_type', '=', $mediaRating->getMorphClass())
+            ->where('reportable_id', '=', $mediaRating->getKey())
+            ->where('user_id', '=', $user->id)
+            ->exists();
+
+        if ($alreadyReported) {
+            return;
+        }
+
+        Report::create([
+            'reportable_type' => $mediaRating->getMorphClass(),
+            'reportable_id' => $mediaRating->getKey(),
+            'user_id' => $user->id,
+            'reason_key' => $reason,
+            'details' => $details !== '' ? $details : null,
+        ]);
     }
 }

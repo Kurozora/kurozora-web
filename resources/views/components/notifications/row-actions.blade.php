@@ -2,7 +2,6 @@
 
 @php
     /** @var \App\Models\Notification $notification */
-    $markAction = $notification->isUnread() ? 'markRead' : 'markUnread';
     $markLabel = $notification->isUnread() ? __('Mark as read') : __('Mark as unread');
 @endphp
 
@@ -10,7 +9,7 @@
     <button
         type="button"
         class="text-xs text-tint hover:opacity-75 cursor-pointer"
-        wire:click.stop="{{ $markAction }}('{{ $notification->id }}')"
+        x-on:click.stop="setRead([{{ Js::from($notification->id) }}], {{ $notification->isUnread() ? 'true' : 'false' }})"
     >
         {{ $markLabel }}
     </button>
@@ -18,8 +17,7 @@
     <button
         type="button"
         class="text-xs text-red-500 hover:opacity-75 cursor-pointer"
-        wire:click.stop="deleteSingle('{{ $notification->id }}')"
-        wire:confirm="{{ __('This notification will be removed.') }}"
+        x-on:click.stop="confirmDelete([{{ Js::from($notification->id) }}])"
     >
         {{ __('Delete') }}
     </button>

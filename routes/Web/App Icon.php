@@ -1,10 +1,10 @@
 <?php
 
-use App\Livewire\AppIcon\Index as AppIconIndex;
+use App\Http\Controllers\Web\AppIconController;
 
 Route::prefix('/app-icons')
     ->name('app-icons')
     ->group(function () {
-        Route::get('/', AppIconIndex::class)
+        Route::get('/', [AppIconController::class, 'index'])
             ->name('.index');
     });

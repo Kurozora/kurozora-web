@@ -5,6 +5,7 @@ export default class NavNotificationManager {
 
     constructor() {
         this.#subscribe()
+        document.addEventListener('livewire:init', () => window.Livewire.on('notifications-updated', () => this.refresh()))
     }
 
     #element() {

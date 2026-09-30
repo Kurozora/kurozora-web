@@ -1,4 +1,4 @@
-@props(['review', 'isRow' => true, 'voteOverrides' => [], 'reviewBoxId' => null])
+@props(['review', 'isRow' => true, 'reviewBoxId' => null])
 
 @php
     $class = $isRow ? 'lockup-review' : 'lockup-review-grid';
@@ -14,37 +14,29 @@
 
     $revisions = $review->relationLoaded('revisions') ? $review->revisions : collect();
 
-    $voteOverride = $voteOverrides[$review->id] ?? null;
-
-    if ($voteOverride !== null) {
-        $isHelpful = $voteOverride['helpful'] === true;
-        $isUnhelpful = $voteOverride['helpful'] === false;
-        $helpfulCount = (int) $voteOverride['helpfulCount'];
-        $unhelpfulCount = (int) $voteOverride['unhelpfulCount'];
-    } else {
-        $currentReaction = auth()->user()?->getHelpfulnessFor($review);
-        $isHelpful = $currentReaction?->is(\App\Enums\ParentalGuideReaction::Helpful) ?? false;
-        $isUnhelpful = $currentReaction?->is(\App\Enums\ParentalGuideReaction::Unhelpful) ?? false;
-        $helpfulCount = (int) $review->helpful_count;
-        $unhelpfulCount = (int) $review->unhelpful_count;
-    }
+    $currentReaction = auth()->user()?->getHelpfulnessFor($review);
+    $lockup = [
+        'id' => $review->id,
+        'spoiler' => (bool) $review->is_spoiler,
+        'helpful' => $currentReaction === null ? null : $currentReaction->is(\App\Enums\ParentalGuideReaction::Helpful),
+        'helpfulCount' => (int) $review->helpful_count,
+        'unhelpfulCount' => (int) $review->unhelpful_count,
+        'elevated' => (bool) $review->is_elevated,
+        'authenticated' => auth()->check(),
+        'signInUrl' => route('sign-in'),
+        'reviewBoxId' => $reviewBoxId,
+    ];
 @endphp
 
-<div {{ $attributes->merge(['class' => $class]) }}>
+<div {{ $attributes->merge(['class' => $class]) }} key="review-{{ $review->id }}">
     <div
         class="relative flex flex-row gap-2 pr-2 pl-2 pt-2 pb-2 h-full bg-secondary rounded-xl"
-        x-data="{
-            isDisabled: false,
-            init() {
-                const dismissed = sessionStorage.getItem('review-spoiler-dismissed-' + @js($review->id))
-                this.isDisabled = @js($review->is_spoiler) && !dismissed
-            },
-            dismissSpoiler() {
-                this.isDisabled = false
-                sessionStorage.setItem('review-spoiler-dismissed-' + @js($review->id), '1')
-            },
-        }"
-        wire:key="{{ uniqid($review->id, true) }}"
+        x-data="reviewLockup({{ Js::from($lockup) }})"
+        x-on:review-voted.window="syncVote($event.detail)"
+        x-on:review-elevated.window="syncElevate($event.detail)"
+        x-on:review-deleted.window="syncDelete($event.detail)"
+        x-on:user-actions-failed.window="busy = false"
+        x-show="!deleted"
     >
         <x-profile-image-view class="w-12 h-12" :user="$review->user" />
 
@@ -62,9 +54,7 @@
             <div class="flex flex-wrap items-center gap-2">
                 <x-star-rating-display :rating="$review->rating" star-size="sm" />
 
-                @if ($review->is_elevated)
-                    <span class="pl-2 pr-2 pt-1 pb-1 text-xs whitespace-nowrap rounded-md bg-tertiary text-tint font-semibold">{{ __('Community Pick') }}</span>
-                @endif
+                <span class="pl-2 pr-2 pt-1 pb-1 text-xs whitespace-nowrap rounded-md bg-tertiary text-tint font-semibold" x-show="elevated" x-cloak>{{ __('Community Pick') }}</span>
 
                 @if ($review->recommendation !== null)
                     <span class="pl-2 pr-2 pt-1 pb-1 text-xs whitespace-nowrap rounded-md bg-tertiary">{{ $review->recommendation->description }}</span>
@@ -149,24 +139,26 @@
                 <div class="flex gap-2 items-center">
                     <button
                         type="button"
-                        class="inline-flex items-center gap-1 pl-2 pr-2 pt-1 pb-1 text-xs rounded-md bg-tertiary {{ $isHelpful ? 'text-tint font-semibold' : '' }}"
+                        class="inline-flex items-center gap-1 pl-2 pr-2 pt-1 pb-1 text-xs rounded-md bg-tertiary"
                         title="{{ __('Helpful') }}"
-                        wire:click="voteOnReview({{ $review->id }}, 'helpful')"
-                        {{ auth()->id() == $review->user_id ? 'disabled' : '' }}
+                        x-bind:class="{ 'text-tint font-semibold': helpful === true }"
+                        x-on:click="vote('helpful')"
+                        {{ $isOwnReview ? 'disabled' : '' }}
                     >
                         <span aria-hidden="true">👍</span>
-                        <span>{{ $helpfulCount }}</span>
+                        <span x-text="helpfulCount">{{ $lockup['helpfulCount'] }}</span>
                     </button>
 
                     <button
                         type="button"
-                        class="inline-flex items-center gap-1 pl-2 pr-2 pt-1 pb-1 text-xs rounded-md bg-tertiary {{ $isUnhelpful ? 'text-tint font-semibold' : '' }}"
+                        class="inline-flex items-center gap-1 pl-2 pr-2 pt-1 pb-1 text-xs rounded-md bg-tertiary"
                         title="{{ __('Unhelpful') }}"
-                        wire:click="voteOnReview({{ $review->id }}, 'unhelpful')"
-                        {{ auth()->id() == $review->user_id ? 'disabled' : '' }}
+                        x-bind:class="{ 'text-tint font-semibold': helpful === false }"
+                        x-on:click="vote('unhelpful')"
+                        {{ $isOwnReview ? 'disabled' : '' }}
                     >
                         <span aria-hidden="true">👎</span>
-                        <span>{{ $unhelpfulCount }}</span>
+                        <span x-text="unhelpfulCount">{{ $lockup['unhelpfulCount'] }}</span>
                     </button>
                 </div>
 
@@ -183,36 +175,33 @@
                                 <x-menu.item icon="person_fill" :href="route('profile.details', $review->user)" :new-tab="false" wire:navigate>{{ __('Show :x\'s Profile', ['x' => $review->user->username]) }}</x-menu.item>
 
                                 @can('elevateMediaRating')
-                                    <x-menu.item icon="star_fill" wire:click="elevateReview({{ $review->id }})">
-                                        @if ($review->is_elevated)
-                                            {{ __('Remove Community Pick') }}
-                                        @else
-                                            {{ __('Mark as Community Pick') }}
-                                        @endif
+                                    <x-menu.item icon="star_fill" x-on:click="elevate()">
+                                        <span x-show="elevated" x-cloak>{{ __('Remove Community Pick') }}</span>
+                                        <span x-show="!elevated">{{ __('Mark as Community Pick') }}</span>
                                     </x-menu.item>
                                 @endcan
 
                                 @if ($isOwnReview && $reviewBoxId !== null)
-                                    <x-menu.item icon="pencil" wire:click="$dispatch('show-review-box', { 'id': '{{ $reviewBoxId }}' })">{{ __('Update Review') }}</x-menu.item>
+                                    <x-menu.item icon="pencil" x-on:click="update()">{{ __('Update Review') }}</x-menu.item>
                                 @endif
 
                                 @if ($canDelete)
                                     <x-menu.submenu icon="trash" :label="__('Delete')">
-                                        <x-menu.item icon="trash" wire:click="deleteReview({{ $review->id }})">{{ __('Delete Review') }}</x-menu.item>
+                                        <x-menu.item icon="trash" x-on:click="remove()">{{ __('Delete Review') }}</x-menu.item>
                                     </x-menu.submenu>
                                 @endif
 
                                 @unless ($isOwnReview)
                                     <x-hr class="my-1" />
 
-                                    <x-menu.item wire:click="voteOnReview({{ $review->id }}, 'helpful')">
+                                    <x-menu.item x-on:click="vote('helpful')">
                                     <span class="inline-flex items-center gap-2">
                                         <span class="shrink-0 w-3 text-center" aria-hidden="true">👍</span>
                                         {{ __('Helpful') }}
                                     </span>
                                     </x-menu.item>
 
-                                    <x-menu.item wire:click="voteOnReview({{ $review->id }}, 'unhelpful')">
+                                    <x-menu.item x-on:click="vote('unhelpful')">
                                     <span class="inline-flex items-center gap-2">
                                         <span class="shrink-0 w-3 text-center" aria-hidden="true">👎</span>
                                         {{ __('Unhelpful') }}
@@ -237,7 +226,7 @@
                                 <x-hr class="my-1" />
 
                                 <x-menu.submenu icon="exclamationmark_circle" :label="__('Report')">
-                                    <x-menu.item icon="exclamationmark_circle" wire:click="openReviewReportForm({{ $review->id }})">{{ __('Report Review') }}</x-menu.item>
+                                    <x-menu.item icon="exclamationmark_circle" x-on:click="report()">{{ __('Report Review') }}</x-menu.item>
                                 </x-menu.submenu>
                             </x-slot:content>
                         </x-dropdown>

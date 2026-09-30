@@ -1,8 +1,8 @@
 <?php
 
 use App\Http\Controllers\Web\PersonController;
+use App\Http\Controllers\Web\ReviewController;
 use App\Http\Controllers\Web\SectionController;
-use App\Livewire\Person\Reviews as PersonReviews;
 use App\Models\Person;
 
 Route::prefix('/people')
@@ -20,7 +20,7 @@ Route::prefix('/people')
                     ->name('.details');
 
                 Route::get('/sections/{section}', [SectionController::class, 'person'])
-                    ->where('section', 'anime|characters|manga|games')
+                    ->where('section', 'anime|characters|manga|games|reviews')
                     ->middleware('auth')
                     ->name('.section');
 
@@ -42,7 +42,7 @@ Route::prefix('/people')
                 Route::get('/manga', [PersonController::class, 'manga'])
                     ->name('.manga');
 
-                Route::get('/reviews', PersonReviews::class)
+                Route::get('/reviews', [ReviewController::class, 'person'])
                     ->name('.reviews');
             });
     });
