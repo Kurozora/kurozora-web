@@ -34,6 +34,7 @@ use Cog\Contracts\Love\Reacterable\Models\Reacterable as ReacterableContract;
 use Cog\Laravel\Love\Reacterable\Models\Traits\Reacterable;
 use DB;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Translation\HasLocalePreference;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasVersion4Uuids as HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -71,7 +72,7 @@ use Throwable;
 use URL;
 use Xetaio\Mentions\Models\Traits\HasMentionsTrait;
 
-class User extends Authenticatable implements HasMedia, MustVerifyEmail, ReacterableContract, Sitemapable
+class User extends Authenticatable implements HasLocalePreference, HasMedia, MustVerifyEmail, ReacterableContract, Sitemapable
 {
     use Authorizable,
         Favoriter,
@@ -485,6 +486,16 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     public function language(): BelongsTo
     {
         return $this->belongsTo(Language::class, 'language_id', 'code');
+    }
+
+    /**
+     * The user's preferred locale for notifications and localization.
+     *
+     * @return null|string
+     */
+    public function preferredLocale(): ?string
+    {
+        return $this->language_id;
     }
 
     /**
