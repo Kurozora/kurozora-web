@@ -168,6 +168,11 @@ export default class PaginationManager {
 
     #setLoading(container, loading) {
         for (const indicator of container.querySelectorAll(this.#loadingSelector)) {
+            if (indicator.dataset.loading === 'hide') {
+                indicator.classList.toggle('invisible', loading)
+                continue
+            }
+
             indicator.classList.toggle('hidden', !loading)
         }
     }

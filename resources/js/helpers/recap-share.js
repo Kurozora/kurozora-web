@@ -204,9 +204,7 @@ export default class RecapShare {
      * @param {boolean} isShown
      */
     #setCanvasPromptShown(isShown) {
-        const component = document.querySelector('[data-recap-share-cards]')?.closest('[wire\\:id]')
-
-        window.Livewire?.find(component?.getAttribute('wire:id'))?.set('confirmingCanvasAccess', isShown)
+        window.dispatchEvent(new CustomEvent(isShown ? 'open-modal' : 'close-modal', { detail: { id: 'recap-canvas-access' } }))
     }
 
     /**

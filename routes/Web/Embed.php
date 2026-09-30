@@ -1,8 +1,7 @@
 <?php
 
+use App\Http\Controllers\Web\EmbedController;
 use App\Http\Controllers\Web\OEmbedController;
-use App\Livewire\Embeds\Episode as EmbedsEpisode;
-use App\Livewire\Embeds\Song as EmbedsSong;
 
 Route::prefix('/oembed')
     ->name('oembed')
@@ -17,13 +16,13 @@ Route::prefix('/embed')
     ->group(function () {
         Route::prefix('/episodes/{episode}')
             ->group(function () {
-                Route::get('/', EmbedsEpisode::class)
+                Route::get('/', [EmbedController::class, 'episode'])
                     ->name('.episodes');
             });
 
         Route::prefix('/songs/{song}')
             ->group(function () {
-                Route::get('/', EmbedsSong::class)
+                Route::get('/', [EmbedController::class, 'song'])
                     ->name('.songs');
             });
     });

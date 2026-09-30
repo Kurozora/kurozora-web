@@ -1,6 +1,8 @@
 <section
     id="suggestedEpisodes"
     class="pt-4 pb-8 {{ empty($nextEpisodeID) ? '' : 'border-t border-primary' }}"
+    data-section
+    data-section-url="{{ $refreshUrl }}"
 >
     <x-section-nav>
         <x-slot:title>
@@ -8,8 +10,12 @@
         </x-slot:title>
 
         <x-slot:action>
+            <x-spinner :wire-loading-enabled="false" class="hidden" data-section-spinner />
+
             @hasrole('superAdmin')
-                <x-button wire:click="$refresh">{{ __('Refresh') }}</x-button>
+                @if ($refreshUrl)
+                    <x-button data-section-refresh="{{ $refreshUrl }}">{{ __('Refresh') }}</x-button>
+                @endif
             @endhasrole
         </x-slot:action>
     </x-section-nav>

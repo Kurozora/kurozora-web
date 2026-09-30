@@ -1,0 +1,157 @@
+<x-base-layout>
+    <x-slot:title>
+        {{ __('Post activity') }}
+    </x-slot:title>
+
+    <x-slot:description>
+        {{ __('Quotes and re-shares of this post.') }}
+    </x-slot:description>
+
+    <x-slot:meta>
+        <meta property="og:title" content="{{ __('Post activity') }}" />
+        <meta property="og:description" content="{{ __('Quotes and re-shares of this post.') }}" />
+        <meta property="og:type" content="website" />
+        <meta name="robots" content="noindex" />
+        <link rel="canonical" href="{{ route('feed.activity', $feedMessage) }}">
+    </x-slot:meta>
+
+    <x-slot:styles>
+        @vite(['resources/css/watch.css'])
+    </x-slot:styles>
+
+    <main>
+        <x-feed.message-modals />
+
+        <div class="pb-6 xl:safe-area-inset" data-paginated="feed-activity" data-paginated-refresh-on="feed-message-reshared">
+            <form id="feed-activity-form" method="get" action="{{ route('feed.activity', $feedMessage) }}" data-search-bar class="hidden">
+                <input type="hidden" name="tab" value="{{ $tab === 'quotes' ? '' : $tab }}">
+                <input type="hidden" name="sort" value="{{ $sort === 'recent' ? '' : $sort }}">
+            </form>
+
+            <section class="sticky top-0 pt-4 pb-4 backdrop-blur bg-blur z-10">
+                <div class="flex gap-1 pl-4 pr-4">
+                    <div class="flex flex-wrap gap-4 items-center w-full">
+                        <x-circle-button aria-label="{{ __('Back') }}" onclick="historyManager.back('{{ route('feed.details', $feedMessage) }}')">
+                            @svg('chevron_backward', 'fill-current', ['width' => '20'])
+                        </x-circle-button>
+
+                        <div class="flex flex-col">
+                            <h1 class="text-2xl font-bold">{{ __('Post activity') }}</h1>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap flex-1 justify-end items-center w-full">
+                        <x-dropdown align="right" width="48">
+                            <x-slot:trigger>
+                                <x-square-button title="{{ __('Sort') }}">
+                                    @svg('arrow_up_arrow_down_circle', 'fill-current', ['width' => '18'])
+                                    <p class="ml-2 mr-2">{{ $sort === 'top' ? __('Top') : __('Recent') }}</p>
+                                </x-square-button>
+                            </x-slot:trigger>
+
+                            <x-slot:content>
+                                <button
+                                    class="block w-full pl-4 pr-4 pt-2 pb-2 text-primary text-xs text-center font-semibold hover:bg-tertiary focus:bg-secondary {{ $sort === 'top' ? 'text-tint' : '' }}"
+                                    type="button"
+                                    form="feed-activity-form"
+                                    data-search-choice="sort"
+                                    value="top"
+                                >
+                                    {{ __('Top') }}
+                                </button>
+
+                                <button
+                                    class="block w-full pl-4 pr-4 pt-2 pb-2 text-primary text-xs text-center font-semibold hover:bg-tertiary focus:bg-secondary {{ $sort === 'recent' ? 'text-tint' : '' }}"
+                                    type="button"
+                                    form="feed-activity-form"
+                                    data-search-choice="sort"
+                                    value=""
+                                >
+                                    {{ __('Recent') }}
+                                </button>
+                            </x-slot:content>
+                        </x-dropdown>
+                    </div>
+                </div>
+            </section>
+
+            <section class="border-b border-primary">
+                <div class="flex pl-4 pr-4">
+                    <button
+                        class="flex-1 pt-3 pb-3 text-sm font-semibold border-b-2 {{ $tab === 'quotes' ? 'border-tint text-tint' : 'border-transparent text-secondary' }}"
+                        type="button"
+                        form="feed-activity-form"
+                        data-search-choice="tab"
+                        value=""
+                    >
+                        {{ __('Quotes') }}
+                    </button>
+
+                    <button
+                        class="flex-1 pt-3 pb-3 text-sm font-semibold border-b-2 {{ $tab === 'reshares' ? 'border-tint text-tint' : 'border-transparent text-secondary' }}"
+                        type="button"
+                        form="feed-activity-form"
+                        data-search-choice="tab"
+                        value="reshares"
+                    >
+                        {{ __('Re-shares') }}
+                    </button>
+                </div>
+            </section>
+
+            @if ($feedMessages->count())
+                <section class="mt-4">
+                    @if ($tab === 'quotes')
+                        <div class="flex flex-col">
+                            @foreach ($feedMessages as $message)
+                                <x-feed.message-lockup :feed-message="$message" key="quote-{{ $message->id }}" />
+                            @endforeach
+                        </div>
+                    @else
+                        <div class="flex flex-col gap-4 pl-4 pr-4">
+                            @foreach ($feedMessages as $message)
+                                @if ($message->user)
+                                    <x-lockups.user-lockup :user="$message->user" :is-row="false" key="reshare-user-{{ $message->user->id }}" />
+                                @endif
+                            @endforeach
+                        </div>
+                    @endif
+
+                    <div class="mt-4 pl-4 pr-4">
+                        {{ $feedMessages->links() }}
+                    </div>
+                </section>
+            @else
+                @if ($tab === 'quotes')
+                    <x-empty-state icon="bubble_left_and_bubble_right_fill" :heading="__('No Quotes')" :description="__('Add your take when sharing someone else\'s post and it\'ll show up here.')">
+                        @auth
+                            <a
+                                class="pl-6 pr-6 pt-2 pb-2 mt-4 rounded-full bg-tint text-white font-semibold hover:opacity-90"
+                                href="{{ route('feed.details', $feedMessage) }}"
+                                wire:navigate.hover
+                            >
+                                {{ __('Quote') }}
+                            </a>
+                        @endauth
+                    </x-empty-state>
+                @else
+                    <x-empty-state icon="square_and_arrow_up_on_square_fill" :heading="__('Amplify posts you like')" :description="__('Share someone else\'s post on your timeline by reposting it. When you do, it\'ll show up here.')">
+                        @auth
+                            <button
+                                class="pl-6 pr-6 pt-2 pb-2 mt-4 rounded-full bg-tint text-white font-semibold hover:opacity-90"
+                                x-data="{ reshared: {{ Js::from((bool) $feedMessage->isReShared) }}, busy: false }"
+                                x-on:feed-message-reshared.window="if ($event.detail.id === {{ $feedMessage->id }}) { reshared = $event.detail.reshared; busy = false }"
+                                x-on:user-actions-failed.window="busy = false"
+                                x-on:click="busy = true; Livewire.dispatch('feed-message-reshare', { id: {{ $feedMessage->id }} })"
+                                x-bind:disabled="busy"
+                                x-text="reshared ? {{ Js::from(__('Undo Re-share')) }} : {{ Js::from(__('Re-share')) }}"
+                            >
+                                {{ $feedMessage->isReShared ? __('Undo Re-share') : __('Re-share') }}
+                            </button>
+                        @endauth
+                    </x-empty-state>
+                @endif
+            @endif
+        </div>
+    </main>
+</x-base-layout>

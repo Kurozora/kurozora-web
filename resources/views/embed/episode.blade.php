@@ -1,6 +1,6 @@
-<main>
+<x-layouts.embed>
     <x-slot:title>
-        {!! __('Watch :x episode :y', ['x' => $this->anime?->title, 'y' => $episode->number_total]) !!} | {!! $episode->title !!}
+        {!! __('Watch :x episode :y', ['x' => $anime?->title, 'y' => $episode->number_total]) !!} | {!! $episode->title !!}
     </x-slot:title>
 
     <x-slot:description>
@@ -11,12 +11,12 @@
     <x-slot:meta>
         <meta name="robots" content="noindex">
 
-        <meta property="og:title" content="{{ __(':x episode :y', ['x' => $this->anime?->title, 'y' => $episode->number_total]) }} | {{ $episode->title }} — {{ config('app.name') }}" />
+        <meta property="og:title" content="{{ __(':x episode :y', ['x' => $anime?->title, 'y' => $episode->number_total]) }} | {{ $episode->title }} — {{ config('app.name') }}" />
         <meta property="og:description" content="{{ $episode->synopsis ?? __('A community for anime fans with an extensive library of anime, manga, music, games, movies, specials, OVA, and ONA. Only on :x, the largest, free online anime, manga, game & music database in the world. Track, share and discover anime with friends.', ['x' => config('app.name')]) }}" />
         <meta property="og:image" content="{{ $episode->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? asset('images/static/placeholders/episode_banner.webp') }}" />
         <meta property="og:type" content="video.episode" />
         <meta property="og:video:type" content="text/html">
-        <meta property="video:series" content="{{ $this->anime?->title }}" />
+        <meta property="video:series" content="{{ $anime?->title }}" />
         <meta property="og:video:url" content="{{ route('embed.episodes', $episode) }}">
         <meta property="og:video:height" content="1080">
         <meta property="og:video:width" content="1920">
@@ -28,7 +28,7 @@
         <meta property="twitter:image" content="{{ $episode->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="twitter:image:alt" content="{{ $episode->synopsis }}" />
         <link rel="canonical" href="{{ route('embed.episodes', $episode) }}">
-        <x-misc.schema :data="$this->schema" />
+        <x-misc.schema :data="$schema" />
     </x-slot:meta>
 
     <x-slot:styles>
@@ -43,20 +43,22 @@
         @vite(['resources/js/watch.js'])
     </x-slot:scripts>
 
-    <div style="height: 100vh; max-height: calc(100vh)">
-        <div class="relative w-full h-full overflow-hidden z-0" style="background-color: {{ $episode->getFirstMedia(\App\Enums\MediaCollection::Banner)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};">
-            <div class="relative w-full h-full overflow-hidden z-10">
-                @if (!empty($this->video))
-                    {!! $this->video->getEmbed(['currentTime' => $t]) !!}
-                @else
-                    <x-picture
-                        class="h-full"
-                        style="background-color: {{ $episode->getFirstMedia(\App\Enums\MediaCollection::Banner)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
-                    >
-                        <img class="w-full h-full aspect-video object-cover lazyload" data-sizes="auto" data-src="{{ $episode->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $episode->title }} Banner" title="{{ $episode->title }}">
-                    </x-picture>
-                @endif
+    <main>
+        <div style="height: 100vh; max-height: calc(100vh)">
+            <div class="relative w-full h-full overflow-hidden z-0" style="background-color: {{ $episode->getFirstMedia(\App\Enums\MediaCollection::Banner)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};">
+                <div class="relative w-full h-full overflow-hidden z-10">
+                    @if (!empty($video))
+                        {!! $video->getEmbed(['currentTime' => $timestamp]) !!}
+                    @else
+                        <x-picture
+                            class="h-full"
+                            style="background-color: {{ $episode->getFirstMedia(\App\Enums\MediaCollection::Banner)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
+                        >
+                            <img class="w-full h-full aspect-video object-cover lazyload" data-sizes="auto" data-src="{{ $episode->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $episode->title }} Banner" title="{{ $episode->title }}">
+                        </x-picture>
+                    @endif
+                </div>
             </div>
         </div>
-    </div>
-</main>
+    </main>
+</x-layouts.embed>

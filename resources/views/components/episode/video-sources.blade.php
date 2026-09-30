@@ -1,12 +1,9 @@
 <div
     x-data="{
-        preferredVideoSource: $persist('Default'),
         select(source) {
             this.preferredVideoSource = source
-            Livewire.dispatch('preferredVideoSourceChanged', { source })
         }
     }"
-    x-init="if (preferredVideoSource !== 'Default') Livewire.dispatch('preferredVideoSourceChanged', { source: preferredVideoSource })"
 >
     <x-dropdown align="right" width="48">
         <x-slot:trigger>

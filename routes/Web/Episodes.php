@@ -1,8 +1,8 @@
 <?php
 
+use App\Http\Controllers\Web\EpisodeController;
 use App\Http\Controllers\Web\ReviewController;
 use App\Http\Controllers\Web\SectionController;
-use App\Livewire\Episode\Details as EpisodeDetails;
 use App\Models\Episode;
 
 Route::get('/episode/{episode}', function (string $episode) {
@@ -14,11 +14,11 @@ Route::prefix('/episodes')
     ->name('episodes')
     ->group(function () {
         Route::prefix('{episode}')->group(function () {
-            Route::get('/', EpisodeDetails::class)
+            Route::get('/', [EpisodeController::class, 'show'])
                 ->name('.details');
 
             Route::get('/sections/{section}', [SectionController::class, 'episode'])
-                ->where('section', 'reviews')
+                ->where('section', 'reviews|suggested-episodes')
                 ->middleware('auth')
                 ->name('.section');
 

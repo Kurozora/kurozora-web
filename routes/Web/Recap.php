@@ -1,11 +1,11 @@
 <?php
 
-use App\Livewire\Recap\Index as RecapIndex;
+use App\Http\Controllers\Web\RecapController;
 
 Route::prefix('/recap')
     ->name('recap')
     ->middleware(['auth'])
     ->group(function () {
-        Route::get('/', RecapIndex::class)
+        Route::get('/', [RecapController::class, 'index'])
             ->name('.index');
     });

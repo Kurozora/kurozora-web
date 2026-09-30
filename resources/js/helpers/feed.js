@@ -43,25 +43,33 @@ export default class FeedManager {
 
             observer.disconnect()
             this.#loadMore(sentinel)
-        }, { rootMargin: this.#root.offsetHeight / 2 + 'px' })
+        }, { rootMargin: '50% 0px' })
 
         observer.observe(sentinel)
     }
 
     async #loadMore(sentinel) {
-        const page = await this.#fetchPage({ cursor: sentinel.dataset.feedCursor })
+        const spinner = this.#root.querySelector('[data-feed-loading]')
 
-        if (!page) {
-            return
-        }
+        spinner?.classList.remove('hidden')
 
-        this.#root.querySelector('[data-feed-messages]').append(...page.children)
+        try {
+            const page = await this.#fetchPage({ cursor: sentinel.dataset.feedCursor })
 
-        if (page.dataset.feedNext) {
-            sentinel.dataset.feedCursor = page.dataset.feedNext
-            this.#observeMore()
-        } else {
-            sentinel.remove()
+            if (!page) {
+                return
+            }
+
+            this.#root.querySelector('[data-feed-messages]').append(...page.children)
+
+            if (page.dataset.feedNext) {
+                sentinel.dataset.feedCursor = page.dataset.feedNext
+                this.#observeMore()
+            } else {
+                sentinel.remove()
+            }
+        } finally {
+            spinner?.classList.add('hidden')
         }
     }
 

@@ -23,6 +23,10 @@
         </div>
 
         @if ($nextCursor)
+            <div class="flex justify-center pt-4 pb-4 hidden" data-feed-loading>
+                <x-spinner :wire-loading-enabled="false" />
+            </div>
+
             <div data-feed-more data-feed-cursor="{{ $nextCursor }}"></div>
         @endif
     </div>

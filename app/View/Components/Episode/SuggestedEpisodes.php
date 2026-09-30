@@ -31,15 +31,24 @@ class SuggestedEpisodes extends Component
     public Collection $episodes;
 
     /**
+     * The URL that renders the section again.
+     *
+     * @var string|null $refreshUrl
+     */
+    public ?string $refreshUrl;
+
+    /**
      * Create a new component instance.
      *
      * @param string          $title
      * @param int|string|null $nextEpisodeId
+     * @param string|null     $refreshUrl
      */
-    public function __construct(string $title, int|string|null $nextEpisodeId = null)
+    public function __construct(string $title, int|string|null $nextEpisodeId = null, ?string $refreshUrl = null)
     {
         $this->title = $title;
         $this->nextEpisodeID = $nextEpisodeId;
+        $this->refreshUrl = $refreshUrl;
         $this->episodes = $this->loadEpisodes();
     }
 

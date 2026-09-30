@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Recap;
+namespace App\Support;
 
 use App\Enums\MediaCollection;
 use App\Enums\RecapStatType;
@@ -16,92 +16,160 @@ use App\Models\RecapItem;
 use App\Models\RecapStat;
 use App\Models\Studio;
 use App\Models\Theme;
+use App\Models\User;
 use App\Models\UserFavorite;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
-use Livewire\Attributes\Computed;
-use Livewire\Component;
 
-class Index extends Component
+class RecapPeriod
 {
+    /**
+     * The user whose recap is shown.
+     *
+     * @var User $user
+     */
+    public User $user;
+
     /**
      * The selected year.
      *
-     * @var int|string|null $year
+     * @var int $year
      */
-    public int|string|null $year = null;
+    public int $year;
 
     /**
      * The selected month.
      *
-     * @var ?int $month
+     * @var int $month
      */
-    public ?int $month = null;
+    public int $month;
 
     /**
-     * Determines whether to load the page.
+     * The user's recap data.
      *
-     * @var bool $readyToLoad
+     * @var Collection|null $recapsCache
      */
-    public bool $readyToLoad = true;
+    private ?Collection $recapsCache = null;
 
     /**
-     * Determines whether to loading screen is shown.
+     * The user's recap years.
      *
-     * @var bool $loadingScreenEnabled
+     * @var Collection|null $recapYearsCache
      */
-    public bool $loadingScreenEnabled = true;
+    private ?Collection $recapYearsCache = null;
 
     /**
-     * Whether the prompt to allow canvas access is shown.
+     * The user's recap periods of the selected year.
      *
-     * @var bool $confirmingCanvasAccess
+     * @var Collection|null $recapPeriodsCache
      */
-    public bool $confirmingCanvasAccess = false;
+    private ?Collection $recapPeriodsCache = null;
 
     /**
-     * The query strings of the component.
+     * Whether the user has a yearly recap for the selected year.
      *
-     * @return array
+     * @var bool|null $hasYearlyRecapCache
      */
-    protected function queryString(): array
+    private ?bool $hasYearlyRecapCache = null;
+
+    /**
+     * The user's recap months.
+     *
+     * @var Collection|null $recapMonthsCache
+     */
+    private ?Collection $recapMonthsCache = null;
+
+    /**
+     * The user's top titles of the selected year paired with those of the year before.
+     *
+     * @var Collection|null $recapComparisonsCache
+     */
+    private ?Collection $recapComparisonsCache = null;
+
+    /**
+     * The IDs of the recap titles the user favorited keyed by type.
+     *
+     * @var array|null $favoritedModelIDsCache
+     */
+    private ?array $favoritedModelIDsCache = null;
+
+    /**
+     * The measures of each recap's titles keyed by recap and title.
+     *
+     * @var array|null $recapItemDetailsCache
+     */
+    private ?array $recapItemDetailsCache = null;
+
+    /**
+     * The section titles of the selected period keyed by recap type.
+     *
+     * @var array|null $sectionTitlesCache
+     */
+    private ?array $sectionTitlesCache = null;
+
+    /**
+     * The top title of each month of the selected year keyed by type.
+     *
+     * @var array|null $topTitlesByMonthCache
+     */
+    private ?array $topTitlesByMonthCache = null;
+
+    /**
+     * The stat cards of the selected period grouped by section.
+     *
+     * @var array|null $recapStatCardsCache
+     */
+    private ?array $recapStatCardsCache = null;
+
+    /**
+     * The name of the selected period.
+     *
+     * @var string|null $periodNameCache
+     */
+    private ?string $periodNameCache = null;
+
+    /**
+     * The localized period heading split around the period name.
+     *
+     * @var array|null $periodHeadingPartsCache
+     */
+    private ?array $periodHeadingPartsCache = null;
+
+    /**
+     * The recap whose colors theme the page.
+     *
+     * @var Recap|null $backdropRecapCache
+     */
+    private ?Recap $backdropRecapCache = null;
+
+    /**
+     * The shareable image cards of the selected period keyed by the button that shares them.
+     *
+     * @var array|null $shareCardsCache
+     */
+    private ?array $shareCardsCache = null;
+
+    /**
+     * The name of the selected period on share cards.
+     *
+     * @var string|null $sharePeriodNameCache
+     */
+    private ?string $sharePeriodNameCache = null;
+
+    /**
+     * Builds the period the given user selected.
+     *
+     * @param User     $user
+     * @param int      $year
+     * @param int|null $month
+     */
+    public function __construct(User $user, int $year, ?int $month = null)
     {
-        return [
-            'year' => ['except' => now()->year],
-        ];
-    }
-
-    /**
-     * Prepare the component.
-     *
-     * @return void
-     */
-    public function mount(): void
-    {
-        if (empty($this->year) || !ctype_digit((string) $this->year)) {
-            $this->year = now()->year;
-        }
-
-        $this->year = (int) $this->year;
-        $this->month = $this->defaultMonth();
-    }
-
-    /**
-     * Resets the selected month when the year changes.
-     *
-     * @return void
-     */
-    public function updatedYear(): void
-    {
-        $this->year = (int) $this->year;
-        unset($this->recapPeriods);
-        $this->month = $this->defaultMonth();
+        $this->user = $user;
+        $this->year = $year;
+        $this->month = $month ?? $this->defaultMonth();
     }
 
     /**
@@ -111,7 +179,7 @@ class Index extends Component
      */
     protected function defaultMonth(): int
     {
-        $months = $this->recapPeriods->pluck('month');
+        $months = $this->recapPeriods()->pluck('month');
 
         if ($this->year === now()->year) {
             $previousMonth = now()->subMonth()->month;
@@ -131,35 +199,24 @@ class Index extends Component
     }
 
     /**
-     * Sets the property to load the page.
-     *
-     * @return void
-     */
-    public function loadPage(): void
-    {
-        $this->readyToLoad = true;
-    }
-
-    /**
      * Get the user's recap data.
      *
-     * @return Collection|LengthAwarePaginator
+     * @return Collection
      */
-    #[Computed]
-    public function recaps(): Collection|LengthAwarePaginator
+    public function recaps(): Collection
     {
-        if (!$this->readyToLoad) {
-            return collect();
+        if ($this->recapsCache !== null) {
+            return $this->recapsCache;
         }
 
-        $recaps = auth()->user()->recaps()
+        return $this->recapsCache = $this->user->recaps()
             ->with([
                 'recapItems.role',
                 'recapItems.model' => function (MorphTo $morphTo) {
                     $morphTo->constrain([
                         Anime::class => function (Builder $query) {
                             $query->with(['genres', 'mediaStat', 'media', 'translation', 'tvRating', 'themes'])
-                                ->when(auth()->user(), function ($query, $user) {
+                                ->when($this->user, function ($query, $user) {
                                     return $query->with(['library' => function ($query) use ($user) {
                                         $query->where('user_id', '=', $user->id);
                                     }]);
@@ -167,7 +224,7 @@ class Index extends Component
                         },
                         Game::class => function (Builder $query) {
                             $query->with(['genres', 'mediaStat', 'media', 'translation', 'tvRating', 'themes'])
-                                ->when(auth()->user(), function ($query, $user) {
+                                ->when($this->user, function ($query, $user) {
                                     return $query->with(['library' => function ($query) use ($user) {
                                         $query->where('user_id', '=', $user->id);
                                     }]);
@@ -175,7 +232,7 @@ class Index extends Component
                         },
                         Manga::class => function (Builder $query) {
                             $query->with(['genres', 'mediaStat', 'media', 'translation', 'tvRating', 'themes'])
-                                ->when(auth()->user(), function ($query, $user) {
+                                ->when($this->user, function ($query, $user) {
                                     return $query->with(['library' => function ($query) use ($user) {
                                         $query->where('user_id', '=', $user->id);
                                     }]);
@@ -196,10 +253,6 @@ class Index extends Component
             ->where('year', '=', $this->year)
             ->where('month', '=', $this->month)
             ->get();
-
-        $this->loadingScreenEnabled = false;
-
-        return $recaps;
     }
 
     /**
@@ -207,22 +260,17 @@ class Index extends Component
      *
      * @return Collection
      */
-    #[Computed]
     public function recapYears(): Collection
     {
-        if (!$this->readyToLoad) {
-            return collect();
+        if ($this->recapYearsCache !== null) {
+            return $this->recapYearsCache;
         }
 
-        $recapYears = auth()->user()->recaps()
+        return $this->recapYearsCache = $this->user->recaps()
             ->select('year')
             ->distinct()
             ->orderBy('year', 'desc')
             ->get();
-
-        $this->loadingScreenEnabled = false;
-
-        return $recapYears;
     }
 
     /**
@@ -230,10 +278,13 @@ class Index extends Component
      *
      * @return Collection
      */
-    #[Computed]
     public function recapPeriods(): Collection
     {
-        return auth()->user()->recaps()
+        if ($this->recapPeriodsCache !== null) {
+            return $this->recapPeriodsCache;
+        }
+
+        return $this->recapPeriodsCache = $this->user->recaps()
             ->select('month', 'year')
             ->distinct()
             ->where('year', '=', $this->year)
@@ -246,9 +297,9 @@ class Index extends Component
      *
      * @return bool
      */
-    public function getHasYearlyRecapProperty(): bool
+    public function hasYearlyRecap(): bool
     {
-        return $this->recapPeriods->contains('month', '=', 0);
+        return $this->hasYearlyRecapCache ??= $this->recapPeriods()->contains('month', '=', 0);
     }
 
     /**
@@ -256,9 +307,13 @@ class Index extends Component
      *
      * @return Collection
      */
-    public function getRecapMonthsProperty(): Collection
+    public function recapMonths(): Collection
     {
-        $recapMonths = $this->recapPeriods
+        if ($this->recapMonthsCache !== null) {
+            return $this->recapMonthsCache;
+        }
+
+        $recapMonths = $this->recapPeriods()
             ->where('month', '!=', 0);
 
         if (now()->year === $this->year && !$recapMonths->contains('month', '=', now()->month)) {
@@ -268,7 +323,7 @@ class Index extends Component
             ]));
         }
 
-        return $recapMonths->sortBy('month')
+        return $this->recapMonthsCache = $recapMonths->sortBy('month')
             ->values();
     }
 
@@ -277,14 +332,18 @@ class Index extends Component
      *
      * @return Collection
      */
-    public function getRecapComparisonsProperty(): Collection
+    public function recapComparisons(): Collection
     {
+        if ($this->recapComparisonsCache !== null) {
+            return $this->recapComparisonsCache;
+        }
+
         if ($this->month !== 0) {
-            return collect();
+            return $this->recapComparisonsCache = collect();
         }
 
         $types = [Anime::class, Manga::class, Game::class];
-        $previousRecaps = auth()->user()->recaps()
+        $previousRecaps = $this->user->recaps()
             ->with([
                 'recapItems' => function (HasMany $query) {
                     $query->where('position', '=', 1)
@@ -311,7 +370,7 @@ class Index extends Component
             ->get()
             ->keyBy('type');
 
-        return $this->recaps
+        return $this->recapComparisonsCache = $this->recaps()
             ->whereIn('type', $types)
             ->map(function (Recap $recap) use ($previousRecaps) {
                 $currentRecapItem = $recap->recapItems->first();
@@ -344,19 +403,22 @@ class Index extends Component
      *
      * @return array
      */
-    #[Computed]
     public function favoritedModelIDs(): array
     {
-        $recapItems = $this->recaps
+        if ($this->favoritedModelIDsCache !== null) {
+            return $this->favoritedModelIDsCache;
+        }
+
+        $recapItems = $this->recaps()
             ->whereIn('type', [Anime::class, Manga::class, Game::class])
             ->pluck('recapItems')
             ->flatten();
 
         if ($recapItems->isEmpty()) {
-            return [];
+            return $this->favoritedModelIDsCache = [];
         }
 
-        return UserFavorite::where('user_id', '=', auth()->id())
+        return $this->favoritedModelIDsCache = UserFavorite::where('user_id', '=', $this->user->id)
             ->whereIn('favorable_type', $recapItems->pluck('model_type')->unique())
             ->whereIn('favorable_id', $recapItems->pluck('model_id')->unique())
             ->get(['favorable_type', 'favorable_id'])
@@ -370,10 +432,13 @@ class Index extends Component
      *
      * @return array
      */
-    #[Computed]
     public function recapItemDetails(): array
     {
-        return $this->recaps
+        if ($this->recapItemDetailsCache !== null) {
+            return $this->recapItemDetailsCache;
+        }
+
+        return $this->recapItemDetailsCache = $this->recaps()
             ->mapWithKeys(function (Recap $recap) {
                 return [
                     $recap->id => $recap->recapItems
@@ -420,13 +485,16 @@ class Index extends Component
      *
      * @return array
      */
-    #[Computed]
     public function sectionTitles(): array
     {
+        if ($this->sectionTitlesCache !== null) {
+            return $this->sectionTitlesCache;
+        }
+
         if ($this->month === 0) {
             $year = ['x' => $this->year];
 
-            return [
+            return $this->sectionTitlesCache = [
                 Anime::class => __('Your Top Anime of :x', $year),
                 Manga::class => __('Your Top Manga of :x', $year),
                 Game::class => __('Your Top Games of :x', $year),
@@ -439,7 +507,7 @@ class Index extends Component
             ];
         }
 
-        return [
+        return $this->sectionTitlesCache = [
             Anime::class => __('Your Top Anime'),
             Manga::class => __('Your Top Manga'),
             Game::class => __('Your Top Games'),
@@ -457,11 +525,14 @@ class Index extends Component
      *
      * @return array
      */
-    #[Computed]
     public function topTitlesByMonth(): array
     {
+        if ($this->topTitlesByMonthCache !== null) {
+            return $this->topTitlesByMonthCache;
+        }
+
         if ($this->month !== 0) {
-            return [];
+            return $this->topTitlesByMonthCache = [];
         }
 
         $titles = [
@@ -470,7 +541,7 @@ class Index extends Component
             Game::class => ['title' => __('Your Top Games by Month'), 'models' => collect(), 'eyebrows' => []],
         ];
 
-        auth()->user()->recaps()
+        $this->user->recaps()
             ->with([
                 'recapItems' => function (HasMany $query) {
                     $query->where('position', '=', 1)
@@ -480,7 +551,7 @@ class Index extends Component
                                     $query->with([
                                         'genres', 'mediaStat', 'media', 'translation', 'tvRating', 'themes',
                                         'library' => function ($query) {
-                                            $query->where('user_id', '=', auth()->id());
+                                            $query->where('user_id', '=', $this->user->id);
                                         },
                                     ]);
                                 };
@@ -510,7 +581,7 @@ class Index extends Component
                 $titles[$recap->type]['models']->push($model);
             });
 
-        return array_filter($titles, fn (array $section) => $section['models']->isNotEmpty());
+        return $this->topTitlesByMonthCache = array_filter($titles, fn (array $section) => $section['models']->isNotEmpty());
     }
 
     /**
@@ -518,11 +589,14 @@ class Index extends Component
      *
      * @return array
      */
-    #[Computed]
     public function recapStatCards(): array
     {
+        if ($this->recapStatCardsCache !== null) {
+            return $this->recapStatCardsCache;
+        }
+
         $recapStats = RecapStat::where([
-            ['user_id', '=', auth()->id()],
+            ['user_id', '=', $this->user->id],
             ['year', '=', $this->year],
             ['month', '=', $this->month],
         ])
@@ -590,7 +664,7 @@ class Index extends Component
             }
         }
 
-        return $cards;
+        return $this->recapStatCardsCache = $cards;
     }
 
     /**
@@ -598,13 +672,17 @@ class Index extends Component
      *
      * @return string
      */
-    public function getPeriodNameProperty(): string
+    public function periodName(): string
     {
-        if ($this->month === 0) {
-            return (string) $this->year;
+        if ($this->periodNameCache !== null) {
+            return $this->periodNameCache;
         }
 
-        return now()->startOfYear()->month($this->month)->monthName;
+        if ($this->month === 0) {
+            return $this->periodNameCache = (string) $this->year;
+        }
+
+        return $this->periodNameCache = now()->startOfYear()->month($this->month)->monthName;
     }
 
     /**
@@ -612,12 +690,16 @@ class Index extends Component
      *
      * @return array
      */
-    public function getPeriodHeadingPartsProperty(): array
+    public function periodHeadingParts(): array
     {
+        if ($this->periodHeadingPartsCache !== null) {
+            return $this->periodHeadingPartsCache;
+        }
+
         $placeholder = '%period%';
         $heading = __('Series that defined your arc in :x', ['x' => $placeholder]);
 
-        return array_pad(explode($placeholder, $heading, 2), 2, '');
+        return $this->periodHeadingPartsCache = array_pad(explode($placeholder, $heading, 2), 2, '');
     }
 
     /**
@@ -625,9 +707,9 @@ class Index extends Component
      *
      * @return Recap
      */
-    public function getBackdropRecapProperty(): Recap
+    public function backdropRecap(): Recap
     {
-        return Recap::make([
+        return $this->backdropRecapCache ??= Recap::make([
             'year' => $this->year,
         ]);
     }
@@ -637,24 +719,27 @@ class Index extends Component
      *
      * @return array
      */
-    #[Computed]
     public function shareCards(): array
     {
+        if ($this->shareCardsCache !== null) {
+            return $this->shareCardsCache;
+        }
+
         $brand = [
             'wordmark' => __('Re:CAP'),
             'name' => config('app.name'),
-            'colors' => [$this->backdropRecap->background_color1, $this->backdropRecap->background_color2],
+            'colors' => [$this->backdropRecap()->background_color1, $this->backdropRecap()->background_color2],
         ];
         $cards = [];
 
         foreach ([Genre::class => ['genres', __('Top Genres')], Theme::class => ['themes', __('Top Themes')]] as $type => [$key, $title]) {
-            $recapItems = $this->recaps->firstWhere('type', $type)?->recapItems->whereNotNull('model')->take(5);
+            $recapItems = $this->recaps()->firstWhere('type', $type)?->recapItems->whereNotNull('model')->take(5);
 
             if ($recapItems?->isNotEmpty()) {
                 $cards[$key] = [
                     'layout' => 'genres',
                     'title' => $title,
-                    'subtitle' => $this->sharePeriodName,
+                    'subtitle' => $this->sharePeriodName(),
                     'items' => $recapItems->map(fn (RecapItem $recapItem) => [
                         'name' => $recapItem->model->name,
                         'detail' => $this->recapItemDetail($recapItem, $type),
@@ -663,7 +748,7 @@ class Index extends Component
             }
         }
 
-        foreach ($this->recapComparisons as $index => $recapComparison) {
+        foreach ($this->recapComparisons() as $index => $recapComparison) {
             $cards['comparison-' . $index] = [
                 'layout' => 'comparison',
                 'title' => __('Compare Your Re:CAP'),
@@ -695,7 +780,7 @@ class Index extends Component
             MediaStaff::class => __('Top Creators'),
         ])
             ->map(function (string $title, string $type) {
-                $models = $this->recaps->firstWhere('type', $type)?->recapItems->pluck('model')->filter()->values();
+                $models = $this->recaps()->firstWhere('type', $type)?->recapItems->pluck('model')->filter()->values();
 
                 if ($models === null || $models->isEmpty()) {
                     return null;
@@ -716,17 +801,17 @@ class Index extends Component
             ->values();
 
         if ($sections->isNotEmpty()) {
-            $totalMinutes = (int) round($this->recaps->whereIn('type', [Anime::class, Manga::class, Game::class])->sum('total_parts_duration') / 60);
+            $totalMinutes = (int) round($this->recaps()->whereIn('type', [Anime::class, Manga::class, Game::class])->sum('total_parts_duration') / 60);
 
             $cards['summary'] = [
                 'layout' => 'summary',
-                'period' => $this->sharePeriodName,
+                'period' => $this->sharePeriodName(),
                 'total' => $totalMinutes ? __(':x minutes', ['x' => number_format($totalMinutes)]) : null,
                 'sections' => $sections->all(),
             ];
         }
 
-        return [
+        return $this->shareCardsCache = [
             'brand' => $brand,
             'fileName' => str('kurozora-recap-' . $this->year . ($this->month ? '-' . $this->month : ''))->slug()->value(),
             'cards' => $cards,
@@ -738,13 +823,17 @@ class Index extends Component
      *
      * @return string
      */
-    public function getSharePeriodNameProperty(): string
+    public function sharePeriodName(): string
     {
-        if ($this->month === 0) {
-            return (string) $this->year;
+        if ($this->sharePeriodNameCache !== null) {
+            return $this->sharePeriodNameCache;
         }
 
-        return now()->startOfYear()->year($this->year)->month($this->month)->translatedFormat('F Y');
+        if ($this->month === 0) {
+            return $this->sharePeriodNameCache = (string) $this->year;
+        }
+
+        return $this->sharePeriodNameCache = now()->startOfYear()->year($this->year)->month($this->month)->translatedFormat('F Y');
     }
 
     /**
@@ -769,15 +858,5 @@ class Index extends Component
                 default => 'poster',
             },
         ];
-    }
-
-    /**
-     * Render the component.
-     *
-     * @return Application|Factory|View
-     */
-    public function render(): Application|Factory|View
-    {
-        return view('livewire.recap.index');
     }
 }

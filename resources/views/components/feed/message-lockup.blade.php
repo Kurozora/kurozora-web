@@ -34,7 +34,7 @@
 @endphp
 
 <article
-    class="relative flex flex-col pr-4 pl-4 pt-4 pb-2 border-b border-primary"
+    {{ $attributes->merge(['class' => 'relative flex flex-col pr-4 pl-4 pt-4 pb-2 border-b border-primary']) }}
     x-data="feedMessageLockup({{ Js::from($lockup) }})"
     x-on:feed-message-hearted.window="syncHeart($event.detail)"
     x-on:feed-message-reshared.window="syncReShare($event.detail)"
@@ -94,26 +94,14 @@
 
             <div
                 class="relative w-full max-w-prose"
-                x-data="{
-                    hideBlur(el) {
-                        el.classList.add('hidden')
-                        this.configureHeight()
-                    },
-                    configureHeight() {
-                        if ($refs.button.offsetHeight) {
-                            $refs.content.style.height = $refs.button.offsetHeight + 'px'
-                        } else {
-                            $refs.content.style.height = null
-                        }
-                    }
-                }"
-                x-init="configureHeight()"
-                x-resize="configureHeight()"
+                x-data="{ blurred: {{ Js::from($displayMessage->is_spoiler || $displayMessage->is_nsfw) }} }"
+                x-bind:style="blurred && { minHeight: '2.25rem' }"
             >
                 <button
-                    class="absolute w-full pl-2 pr-2 pt-2 pb-2 backdrop-blur bg-tertiary text-sm rounded-md text-center {{ $displayMessage->is_spoiler || $displayMessage->is_nsfw ? '' : 'hidden' }}"
-                    x-on:click="hideBlur($el)"
-                    x-ref="button"
+                    class="absolute inset-0 flex items-center justify-center pl-2 pr-2 pt-2 pb-2 backdrop-blur bg-tertiary text-sm rounded-md text-center"
+                    x-show="blurred"
+                    x-on:click="blurred = false"
+                    @if (!($displayMessage->is_spoiler || $displayMessage->is_nsfw)) style="display: none;" @endif
                 >
                     @if ($displayMessage->is_spoiler && !$displayMessage->is_nsfw)
                         <p>{{ __('This message contains spoilers — click to view') }}</p>
@@ -125,7 +113,7 @@
                 </button>
 
                 <div
-                    x-ref="content" style="white-space: pre-wrap; overflow-wrap: break-word;"
+                    style="white-space: pre-wrap; overflow-wrap: break-word;"
                     x-html="displayContent"
                 ></div>
 

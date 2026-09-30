@@ -24,6 +24,7 @@ use App\View\Components\CastSection;
 use App\View\Components\Character\MediaSection as CharacterMediaSection;
 use App\View\Components\Chart\Section as ChartSection;
 use App\View\Components\Episode\PastEpisodesSection;
+use App\View\Components\Episode\SuggestedEpisodes;
 use App\View\Components\Episode\UpNextEpisodes;
 use App\View\Components\Feed\MessageList as FeedMessageList;
 use App\View\Components\MoreByStudioSection;
@@ -292,6 +293,7 @@ class SectionController extends Controller
     {
         return $this->render(match ($section) {
             'reviews' => new ReviewsSection($episode, $this->requestedReviewBox($request)),
+            'suggested-episodes' => new SuggestedEpisodes($episode->title, $episode->next_episode_id, route('episodes.section', [$episode, 'suggested-episodes'], false)),
         });
     }
 
