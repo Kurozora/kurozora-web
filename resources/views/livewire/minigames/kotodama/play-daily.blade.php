@@ -86,7 +86,7 @@
         <x-kotodama.nav />
 
         @if($game && $game->isFinished() && $nextPuzzleAt)
-            <div class="flex h-10 items-center justify-center">
+            <div class="flex h-10 items-center justify-center pl-4 pr-4 xl:safe-area-inset-scroll">
                 <p
                     class="text-sm text-primary text-center"
                     data-template="{{ __('Next Kotodama in :time') }}"

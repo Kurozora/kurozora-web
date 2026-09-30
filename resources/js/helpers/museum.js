@@ -213,7 +213,7 @@ export default class Museum {
     #pendingLoads = new Map()
 
     /**
-     * Fetched posters keyed by year, kept across mounts to avoid refetching.
+     * Fetched posters keyed by request URL, kept across mounts to avoid refetching.
      *
      * @type {Map<string, object[]>}
      */
@@ -315,15 +315,23 @@ export default class Museum {
      */
     constructor() {
         document.addEventListener('livewire:navigated', () => this.#mount())
+
+        if (document.readyState !== 'loading') {
+            this.#mount()
+        }
     }
 
     /**
      * Wires up the museum on the current page, or stays inert when absent.
      */
     #mount() {
-        this.#unmount()
-
         const root = document.querySelector('[data-museum]')
+
+        if (root && root === this.#root) {
+            return
+        }
+
+        this.#unmount()
         this.#root = root
         this.#endpoint = root?.dataset.museumEndpoint ?? ''
         this.#itemHeight = Number(root?.dataset.museumItemHeight) || 160
@@ -559,22 +567,24 @@ export default class Museum {
             return
         }
 
-        if (this.#cache.has(year)) {
-            this.#renderYear(column, this.#cache.get(year))
+        const url = `${this.#endpoint}/${year}`
+
+        if (this.#cache.has(url)) {
+            this.#renderYear(column, this.#cache.get(url))
             return
         }
 
         this.#inflight.add(year)
 
         try {
-            const response = await fetch(`${this.#endpoint}/${year}`, { headers: { Accept: 'application/json' } })
+            const response = await fetch(url, { headers: { Accept: 'application/json' } })
 
             if (!response.ok) {
                 throw new Error(`Museum failed to load ${year}: ${response.status}`)
             }
 
             const items = await response.json()
-            this.#cache.set(year, items)
+            this.#cache.set(url, items)
             this.#renderYear(column, items)
         } catch (error) {
             console.error(error)
@@ -874,7 +884,7 @@ export default class Museum {
         const hash = `#${year}`
 
         if (location.hash !== hash) {
-            history.replaceState(null, '', hash)
+            window.history.replaceState(window.history.state, '', hash)
         }
 
         this.#updateMeta(year)

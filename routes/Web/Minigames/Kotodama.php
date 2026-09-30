@@ -1,8 +1,6 @@
 <?php
 
-use App\Livewire\Minigames\Kotodama\ArchiveIndex as KotodamaArchiveIndex;
-use App\Livewire\Minigames\Kotodama\Leaderboards as KotodamaLeaderboards;
-use App\Livewire\Minigames\Kotodama\MyStats as KotodamaMyStats;
+use App\Http\Controllers\Web\Minigames\KotodamaController;
 use App\Livewire\Minigames\Kotodama\PlayArchive as KotodamaPlayArchive;
 use App\Livewire\Minigames\Kotodama\PlayDaily as KotodamaPlayDaily;
 use App\Livewire\Minigames\Kotodama\PlayUnlimited as KotodamaPlayUnlimited;
@@ -18,17 +16,17 @@ Route::prefix('/kotodama')
         Route::get('/unlimited', KotodamaPlayUnlimited::class)
             ->name('.unlimited');
 
-        Route::get('/leaderboards', KotodamaLeaderboards::class)
+        Route::get('/leaderboards', [KotodamaController::class, 'leaderboards'])
             ->name('.leaderboards');
 
-        Route::get('/me/stats', KotodamaMyStats::class)
+        Route::get('/me/stats', [KotodamaController::class, 'stats'])
             ->middleware('auth')
             ->name('.stats');
 
         Route::get('/versus/{seed}', KotodamaPlayVersus::class)
             ->name('.versus');
 
-        Route::get('/archive', KotodamaArchiveIndex::class)
+        Route::get('/archive', [KotodamaController::class, 'archive'])
             ->middleware(['auth', 'user.is-pro-or-subscribed'])
             ->name('.archive');
 

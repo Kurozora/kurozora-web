@@ -2,12 +2,11 @@
 
 use App\Enums\UserLibraryKind;
 use App\Http\Controllers\Web\MuseumController;
-use App\Livewire\Museum\Index;
 
 Route::prefix('/museum')
     ->name('museum')
     ->group(function () {
-        Route::get('/anime', Index::class)
+        Route::get('/anime', [MuseumController::class, 'index'])
             ->defaults('kind', UserLibraryKind::Anime)
             ->name('.anime');
 
@@ -16,7 +15,7 @@ Route::prefix('/museum')
             ->whereNumber('year')
             ->name('.anime.year');
 
-        Route::get('/manga', Index::class)
+        Route::get('/manga', [MuseumController::class, 'index'])
             ->defaults('kind', UserLibraryKind::Manga)
             ->name('.manga');
 
@@ -25,7 +24,7 @@ Route::prefix('/museum')
             ->whereNumber('year')
             ->name('.manga.year');
 
-        Route::get('/games', Index::class)
+        Route::get('/games', [MuseumController::class, 'index'])
             ->defaults('kind', UserLibraryKind::Game)
             ->name('.games');
 

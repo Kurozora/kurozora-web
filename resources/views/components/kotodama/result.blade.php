@@ -33,10 +33,10 @@
     @if($shareText)
         <pre class="whitespace-pre-wrap text-center font-mono text-sm leading-none bg-primary text-primary rounded pl-2 pr-2 pt-2 pb-2 select-all">{{ $shareText }}</pre>
 
-        <div class="flex justify-center mt-3 gap-2 flex-wrap" x-data="{ copied: false }">
+        <div class="flex justify-center mt-3 gap-2 flex-wrap" x-data="{ copied: false, shareText: @js($shareText) }">
             <x-button
                 type="button"
-                x-on:click="navigator.clipboard.writeText(@js($shareText)).then(() => { copied = true; setTimeout(() => copied = false, 2000) })"
+                x-on:click="navigator.clipboard.writeText(shareText).then(() => { copied = true; setTimeout(() => copied = false, 2000) })"
             >
                 <span x-show="!copied">{{ __('Copy to clipboard') }}</span>
                 <span x-show="copied">{{ __('Copied!') }}</span>
