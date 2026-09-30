@@ -76,9 +76,9 @@ export default class PaginationManager {
 
     #onPopState() {
         for (const container of document.querySelectorAll(this.#containerSelector)) {
-            const currentUrl = container.dataset.paginatedUrl ?? window.location.href
+            const currentUrl = new URL(container.dataset.paginatedUrl ?? window.location.href, window.location.origin)
 
-            if (currentUrl !== window.location.href) {
+            if (currentUrl.pathname === window.location.pathname && currentUrl.href !== window.location.href) {
                 this.load(container, window.location.href, { progress: true })
             }
         }

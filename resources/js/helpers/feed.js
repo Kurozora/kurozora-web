@@ -2,6 +2,7 @@
 
 export default class FeedManager {
     #root = null
+    #roots = new WeakSet()
     #timer = null
     #pending = 0
 
@@ -16,11 +17,11 @@ export default class FeedManager {
         this.#stopPolling()
         this.#root = document.querySelector('[data-feed-list]')
 
-        if (!this.#root || this.#root.dataset.feedReady === 'true') {
+        if (!this.#root || this.#roots.has(this.#root)) {
             return
         }
 
-        this.#root.dataset.feedReady = 'true'
+        this.#roots.add(this.#root)
         this.#root.querySelector('[data-feed-show-newer]')?.addEventListener('click', () => this.#showNewer())
         this.#observeMore()
 

@@ -57,11 +57,15 @@ export default class HistoryManager {
     }
 
     back(fallbackUrl = null) {
+        const before = window.location.href
+
         window.history.back()
 
         if (!!fallbackUrl) {
             setTimeout(() => {
-                window.Livewire.navigate(fallbackUrl)
+                if (window.location.href === before) {
+                    window.Livewire.navigate(fallbackUrl)
+                }
             }, 500);
         }
     }
