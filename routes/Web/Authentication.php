@@ -6,6 +6,7 @@ use App\Http\Controllers\Web\ConfirmedTwoFactorAuthenticationController;
 use App\Http\Controllers\Web\EmailVerificationNotificationController;
 use App\Http\Controllers\Web\EmailVerificationPromptController;
 use App\Http\Controllers\Web\Invitation\FamilyInviteController;
+use App\Http\Controllers\Web\MergeLibraryController;
 use App\Http\Controllers\Web\NewPasswordController;
 use App\Http\Controllers\Web\PasswordResetLinkController;
 use App\Http\Controllers\Web\RecoveryCodeController;
@@ -16,11 +17,10 @@ use App\Http\Controllers\Web\TwoFactorAuthenticationController;
 use App\Http\Controllers\Web\TwoFactorQrCodeController;
 use App\Http\Controllers\Web\TwoFactorSecretKeyController;
 use App\Http\Controllers\Web\VerifyEmailController;
-use App\Livewire\MergeLibrary;
 use Illuminate\Support\Facades\Route;
 
 // Merge library
-Route::get('/merge-library', MergeLibrary::class)
+Route::get('/merge-library', [MergeLibraryController::class, 'index'])
     ->middleware(['auth'])
     ->name('merge-library');
 

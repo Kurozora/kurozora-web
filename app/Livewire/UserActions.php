@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Enums\FeedVoteType;
+use App\Enums\ImportBehavior;
 use App\Enums\KTheme;
 use App\Enums\ParentalGuideReaction;
 use App\Enums\ParentalGuideReportReason;
@@ -10,6 +11,7 @@ use App\Enums\ReportReason;
 use App\Enums\UserLibraryStatus;
 use App\Events\Notifications\NotificationDeleted;
 use App\Events\Notifications\NotificationRead;
+use App\Jobs\ProcessLocalLibraryImport;
 use App\Models\Anime;
 use App\Models\AppIcon;
 use App\Models\AppTheme;
@@ -991,6 +993,60 @@ class UserActions extends Component
     }
 
     /**
+     * Merge the local library into the signed-in user's library.
+     *
+     * @param string $library
+     *
+     * @return void
+     */
+    #[On('local-library-merge')]
+    public function mergeLocalLibrary(string $library): void
+    {
+        $this->importLocalLibrary($library, ImportBehavior::Merge());
+    }
+
+    /**
+     * Replace the signed-in user's library with the local library.
+     *
+     * @param string $library
+     *
+     * @return void
+     */
+    #[On('local-library-overwrite')]
+    public function overwriteLocalLibrary(string $library): void
+    {
+        $this->importLocalLibrary($library, ImportBehavior::Overwrite());
+    }
+
+    /**
+     * Leave the merge page once the local library has been cleared.
+     *
+     * @param bool $merging
+     *
+     * @return void
+     */
+    #[On('local-library-cleared')]
+    public function finishLocalLibraryMerge(bool $merging): void
+    {
+        if ($merging) {
+            session()->flash('success', __('Local Library import is in progress.'));
+        }
+
+        $this->leaveMergeLibrary();
+    }
+
+    /**
+     * Go to the page the user intended to visit before merging.
+     *
+     * @return void
+     */
+    #[On('local-library-empty')]
+    public function leaveMergeLibrary(): void
+    {
+        $this->redirect(session()->pull('url.intended', route('home')), navigate: true);
+    }
+
+    /**
      * Render the component.
      *
      * @return Application|Factory|View
@@ -998,6 +1054,32 @@ class UserActions extends Component
     public function render(): Application|Factory|View
     {
         return view('livewire.user-actions');
+    }
+
+    /**
+     * Queue the local library import and ask the page to clear the local library.
+     *
+     * @param string         $library
+     * @param ImportBehavior $behavior
+     *
+     * @return void
+     */
+    protected function importLocalLibrary(string $library, ImportBehavior $behavior): void
+    {
+        $user = $this->user();
+
+        if ($user === null) {
+            return;
+        }
+
+        if (empty(json_decode($library))) {
+            $this->leaveMergeLibrary();
+            return;
+        }
+
+        dispatch(new ProcessLocalLibraryImport($user, $library, $behavior));
+
+        $this->dispatch('clear-local-library');
     }
 
     /**

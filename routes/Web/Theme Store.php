@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\Web\ThemeStoreController;
-use App\Livewire\ThemeStore\CreateThemeStoreForm;
 use App\Models\AppTheme;
 
 Route::prefix('/theme-store')
@@ -19,6 +18,6 @@ Route::prefix('/theme-store')
                     ->name('.edit');
             });
 
-        Route::get('/create', CreateThemeStoreForm::class)
+        Route::get('/create', [ThemeStoreController::class, 'create'])
             ->name('.create');
     });

@@ -44,4 +44,14 @@ class ThemeStoreController extends Controller
             'themes' => $themes,
         ]);
     }
+
+    /**
+     * Show the theme designer.
+     *
+     * @return Application|Factory|View
+     */
+    public function create(): Application|Factory|View
+    {
+        return view('theme-store.create');
+    }
 }
