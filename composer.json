@@ -22,7 +22,7 @@
         }
     ],
     "require": {
-        "php": "^8.4",
+        "php": "^8.5",
         "ext-curl": "*",
         "ext-dom": "*",
         "ext-gd": "*",
@@ -72,7 +72,7 @@
         "paulo-hortelan/requests-graph-pulse": "^1.2",
         "pragmarx/google2fa": "^8.0",
         "pusher/pusher-php-server": "^7.0",
-        "roach-php/laravel": "^3.2",
+        "roach-php/laravel": "^3.2.1",
         "robertogallea/pulse-db-size": "^1.2",
         "socialiteproviders/apple": "^5.0",
         "spatie/eloquent-sortable": "^4.0",
@@ -124,6 +124,14 @@
         {
             "type": "git",
             "url": "https://github.com/kiritokatklian/php-jwt-decoder"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/kiritokatklian/roach-php-core"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/kiritokatklian/roach-php-laravel"
         }
     ],
     "autoload": {
@@ -198,7 +206,7 @@
     "config": {
         "optimize-autoloader": true,
         "platform": {
-            "php": "8.4"
+            "php": "8.5"
         },
         "preferred-install": "dist",
         "sort-packages": true,

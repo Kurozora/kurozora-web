@@ -26,7 +26,7 @@ RUN --mount=type=secret,id=vite_reverb_app_key,env=VITE_REVERB_APP_KEY \
 ###
 
 ### Shared PHP base stage with system deps and PHP extensions installed once
-FROM php:8.4-fpm-alpine AS php-base
+FROM php:8.5-fpm-alpine AS php-base
 
 # Set labels
 LABEL app.kurozora.authors="Kiritokatklian"
