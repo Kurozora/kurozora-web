@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use App\Nova\Actions\BatchEdit;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
@@ -292,6 +293,9 @@ class Episode extends Resource
      */
     public function actions(Request $request): array
     {
-        return [];
+        return [
+            (new BatchEdit)
+                ->onlyOnIndex(),
+        ];
     }
 }
