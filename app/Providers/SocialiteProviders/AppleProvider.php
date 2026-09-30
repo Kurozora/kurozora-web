@@ -30,15 +30,16 @@ class AppleProvider extends Provider
     private const int JWKSET_CACHE_TTL = 24 * 60 * 60;
 
     /**
-     * Verifies the given Apple identity JWT, refreshing the cached JWKSet once if the signing key is unknown.
+     * Verify Apple JWT.
      *
-     * @param string $jwt
+     * @param string      $jwt
+     * @param null|string $nonce
      *
      * @return bool
      * @throws DateMalformedIntervalStringException
      * @see https://appleid.apple.com/auth/keys
      */
-    public function checkToken($jwt): bool
+    public function checkToken($jwt, $nonce = null): bool
     {
         $token = $this->getJwtConfig()->parser()->parse($jwt);
         $kid = $token->headers()->get('kid');
