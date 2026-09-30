@@ -28,7 +28,7 @@ class SetUserNoteRequest extends FormRequest
             'kind' => ['bail', 'required', 'integer', 'in:' . implode(',', ReviewKind::getValues())],
             'model_id' => ['bail', 'required', 'string'],
             // An empty body clears the note.
-            'body' => ['bail', 'present', 'nullable', 'string', 'max:5000'],
+            'body' => ['bail', 'present', 'nullable', 'string'],
         ];
     }
 }

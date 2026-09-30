@@ -19,17 +19,6 @@
             </div>
 
             <div class="mt-5">
-                <x-select id="library" wire:model="state.library">
-                    <option value="-1">{{ __('Select library') }}</option>
-                    @foreach (App\Enums\UserLibraryKind::asSelectArray() as $value => $libraryKind)
-                        <option value="{{ $value }}">{{ $libraryKind }}</option>
-                    @endforeach
-                </x-select>
-
-                <x-input-error for="library" class="mt-2"/>
-            </div>
-
-            <div class="mt-5">
                 <x-select id="import_service" wire:model="state.import_service">
                     <option value="-1">{{ __('Select service') }}</option>
                     @foreach (App\Enums\ImportService::asSelectArray() as $value => $importService)
@@ -52,8 +41,8 @@
             </div>
 
             <div class="mt-5">
-                <x-input-file id="library_file" accept=".xml" wire:model="state.library_file"
-                              placeholder="Import Anime.xml here"/>
+                <x-input-file id="library_file" accept=".xml,.gz,.zip" wire:model="state.library_file"
+                              :placeholder="__('Import an .xml, .gz or .zip file here')"/>
 
                 <x-input-error for="library_file" class="mt-2"/>
             </div>

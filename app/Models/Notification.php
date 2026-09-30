@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\UserLibraryKind;
 use App\Notifications\LibraryImportFinished;
 use App\Notifications\LibraryImportUnsupported;
 use App\Notifications\LocalLibraryImportFinished;
@@ -71,17 +72,22 @@ class Notification extends DatabaseNotification
                     : __('Someone reshared your message.');
             // Anime import notifications
             case LibraryImportFinished::class:
-                $messages = [__('Your ":service" anime import request has been processed.', ['service' => self::getData('service')])];
+                $isMangaImport = self::getData('library') === UserLibraryKind::Manga()->description;
+                $messages = [$isMangaImport
+                    ? __('Your ":service" manga import request has been processed.', ['service' => self::getData('service')])
+                    : __('Your ":service" anime import request has been processed.', ['service' => self::getData('service')])];
 
                 if (self::hasData('successful_count')) {
-                    $messages[] = trans_choice('{1} :count Anime successfully imported.|[2,*] :count Anime successfully imported.', (int) self::getData('successful_count'));
+                    $messages[] = $isMangaImport
+                        ? trans_choice('{1} :count Manga successfully imported.|[2,*] :count Manga successfully imported.', (int) self::getData('successful_count'))
+                        : trans_choice('{1} :count Anime successfully imported.|[2,*] :count Anime successfully imported.', (int) self::getData('successful_count'));
                 }
 
                 if (self::hasData('failure_count')) {
                     $messages[] = trans_choice('{1} :count failed import.|[2,*] :count failed imports.', (int) self::getData('failure_count'));
                 }
 
-                return implode(' ', $messages);
+                return implode(' ', array_map('trim', $messages));
             // Subscription notifications
             case SubscriptionStatus::class:
                 return self::getData('message') ?? '';
@@ -97,7 +103,7 @@ class Notification extends DatabaseNotification
                     $messages[] = trans_choice('{1} :count failed import.|[2,*] :count failed imports.', (int) self::getData('failure_count'));
                 }
 
-                return implode(' ', $messages);
+                return implode(' ', array_map('trim', $messages));
             // Unsupported library import notifications
             case LibraryImportUnsupported::class:
                 return __('The file structure you submitted is not supported. Please reach out so we can fix this for you.');

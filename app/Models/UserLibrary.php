@@ -2,7 +2,10 @@
 
 namespace App\Models;
 
+use App\Enums\UserLibraryPriority;
+use App\Enums\UserLibraryRewatchValue;
 use App\Enums\UserLibraryStatus;
+use App\Enums\UserLibraryStorage;
 use App\Scopes\SoftDeletingScopeBumpsUpdatedAt;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -42,6 +45,12 @@ class UserLibrary extends Pivot
     protected function casts(): array
     {
         return [
+            'is_rewatching' => 'boolean',
+            'rewatch_value' => UserLibraryRewatchValue::class,
+            'priority' => UserLibraryPriority::class,
+            'storage' => UserLibraryStorage::class,
+            'storage_amount' => 'decimal:2',
+            'tags' => 'array',
             'is_hidden' => 'boolean',
             'started_at' => 'datetime',
             'ended_at' => 'datetime',
@@ -84,7 +93,8 @@ class UserLibrary extends Pivot
         switch ($newStatus) {
             case UserLibraryStatus::InProgress:
                 $originalStatus = $this->getOriginal('status');
-                $this->started_at = ($originalStatus == UserLibraryStatus::Planning || $this->started_at == null) ? now() : $this->started_at;
+                $isStartedAtStale = $originalStatus == UserLibraryStatus::Planning && !$this->isDirty('started_at');
+                $this->started_at = ($isStartedAtStale || $this->started_at == null) ? now() : $this->started_at;
                 $this->ended_at = null;
                 break;
             case UserLibraryStatus::Dropped:

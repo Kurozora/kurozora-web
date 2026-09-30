@@ -21,6 +21,12 @@ return new class extends Migration
             $table->morphs('trackable');
             $table->tinyInteger('status');
             $table->unsignedTinyInteger('rewatch_count')->default(0);
+            $table->boolean('is_rewatching')->default(false);
+            $table->unsignedTinyInteger('rewatch_value')->nullable();
+            $table->unsignedTinyInteger('priority')->nullable();
+            $table->unsignedTinyInteger('storage')->nullable();
+            $table->decimal('storage_amount', 8, 2)->nullable();
+            $table->json('tags')->nullable();
             $table->boolean('is_hidden')->default(false);
             $table->timestamp('started_at', 6)->nullable();
             $table->timestamp('ended_at', 6)->nullable();

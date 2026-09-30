@@ -19,7 +19,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->morphs('noteable');
-            $table->text('body');
+            $table->longText('body');
             $table->timestamps();
         });
 

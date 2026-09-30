@@ -21,7 +21,7 @@ class ImportLibraryForm extends Component
     public array $state = [];
 
     /**
-     * Import anime to the user's library.
+     * Imports the export file into the user's library.
      *
      * @param ImportsUserLibrary $updater
      */

@@ -6,6 +6,7 @@ use App\Enums\ImportBehavior;
 use App\Enums\ImportService;
 use App\Enums\UserLibraryKind;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class LibraryImportRequest extends FormRequest
 {
@@ -20,7 +21,7 @@ class LibraryImportRequest extends FormRequest
     }
 
     /**
-     * Normalises the deprecated `library` alias onto the canonical `kind` param.
+     * Normalizes the deprecated `library` alias onto the canonical `kind` param.
      *
      * @return void
      */
@@ -39,13 +40,14 @@ class LibraryImportRequest extends FormRequest
     public function rules(): array
     {
         $kindRule = 'in:' . implode(',', UserLibraryKind::getValues());
+        $importService = ImportService::coerce((int) $this->input('service'));
 
         return [
-            'kind'      => ['bail', 'required', 'integer', $kindRule],
+            'kind'      => ['bail', Rule::requiredIf(!$importService?->canInferLibraryKind()), 'nullable', 'integer', $kindRule],
             'library'   => ['bail', 'nullable', 'integer', $kindRule],
             'service'   => ['bail', 'required', 'integer', 'in:' . implode(',', ImportService::getValues())],
             'behavior'  => ['bail', 'required', 'integer', 'in:' . implode(',', ImportBehavior::getValues())],
-            'file'      => ['bail', 'required', 'file', 'mimes:xml', 'max:' . config('import.max_xml_file_size')],
+            'file'      => ['bail', 'required', 'file', 'mimes:xml,gz,zip', 'max:' . config('import.max_xml_file_size')],
         ];
     }
 }

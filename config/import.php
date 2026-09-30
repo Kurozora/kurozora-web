@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'cooldown_in_days' => 1,
+    'cooldown_in_days' => (int) env('IMPORT_COOLDOWN_IN_DAYS', 1),
 
     /*
     |--------------------------------------------------------------------------

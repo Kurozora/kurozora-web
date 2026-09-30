@@ -8,14 +8,17 @@ use App\Enums\UserLibraryKind;
 use App\Enums\UserLibraryStatus;
 use App\Jobs\Concerns\ReportsLibraryImportProgress;
 use App\Models\Anime;
+use App\Models\Episode;
 use App\Models\Manga;
 use App\Models\MediaRating;
+use App\Models\Season;
 use App\Models\User;
 use App\Models\UserLibrary;
+use App\Models\UserWatchedEpisode;
 use App\Notifications\LibraryImportFinished;
-use App\Notifications\LibraryImportUnsupported;
 use Artisan;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -41,6 +44,13 @@ class ProcessMALImport implements ShouldQueue
     public int $timeout = 0;
 
     /**
+     * The largest rewatch count a user can set.
+     *
+     * @var int
+     */
+    protected const int MAX_REWATCH_COUNT = 100;
+
+    /**
      * The user to whose library data should be imported.
      *
      * @var User $user
@@ -48,11 +58,11 @@ class ProcessMALImport implements ShouldQueue
     protected User $user;
 
     /**
-     * The XML content to be imported.
+     * The entries to be imported.
      *
-     * @var string $xmlContent
+     * @var array $entries
      */
-    protected string $xmlContent;
+    protected array $entries;
 
     /**
      * The library of the import action.
@@ -89,15 +99,15 @@ class ProcessMALImport implements ShouldQueue
      * Create a new job instance.
      *
      * @param User $user
-     * @param string $xmlContent
+     * @param array $entries
      * @param UserLibraryKind $libraryKind
      * @param ImportService $service
      * @param ImportBehavior $behavior
      */
-    public function __construct(User $user, string $xmlContent, UserLibraryKind $libraryKind, ImportService $service, ImportBehavior $behavior)
+    public function __construct(User $user, array $entries, UserLibraryKind $libraryKind, ImportService $service, ImportBehavior $behavior)
     {
         $this->user = $user;
-        $this->xmlContent = $xmlContent;
+        $this->entries = $entries;
         $this->libraryKind = $libraryKind;
         $this->service = $service;
         $this->behavior = $behavior;
@@ -108,165 +118,54 @@ class ProcessMALImport implements ShouldQueue
      */
     public function handle(): void
     {
-        // Create XML object
-        $xml = simplexml_load_string($this->xmlContent);
+        $this->user->withSingleStateBump(function (): void {
+            $modelClass = match ($this->libraryKind->value) {
+                UserLibraryKind::Manga => Manga::class,
+                default => Anime::class,
+            };
 
-        // Read XML object into JSON
-        $json = json_encode($xml);
-        $json = json_decode($json, true);
-
-        $success = $this->user->withSingleStateBump(function () use ($json): bool {
-            switch ($this->libraryKind->value) {
-                case UserLibraryKind::Anime:
-                    return $this->handleAnime($json);
-                case UserLibraryKind::Manga:
-                    return $this->handleManga($json);
+            // Wipe current library if behavior is set to overwrite
+            if ($this->behavior->value === ImportBehavior::Overwrite) {
+                $this->user->clearLibrary($modelClass);
+                $this->user->clearFavorites($modelClass);
+                $this->user->clearReminders($modelClass);
+                $this->user->clearRatings($modelClass);
+                $this->user->clearNotes($modelClass);
             }
 
-            return false;
+            $existingStartDates = UserLibrary::where('user_id', '=', $this->user->id)
+                ->where('trackable_type', '=', $modelClass)
+                ->whereNotNull('started_at')
+                ->pluck('started_at', 'trackable_id')
+                ->all();
+
+            $this->startImportProgress(count($this->entries));
+
+            foreach ($this->entries as $entry) {
+                $this->importEntry($entry, $existingStartDates);
+                $this->advanceImportProgress();
+            }
         });
 
-        if ($success) {
-            $this->user->notify(new LibraryImportFinished($this->results, $this->libraryKind, $this->service, $this->behavior));
-        } else {
-            $this->user->notify(new LibraryImportUnsupported($this->results, $this->libraryKind, $this->service, $this->behavior));
-        }
+        $this->user->notify(new LibraryImportFinished($this->results, $this->libraryKind, $this->service, $this->behavior));
     }
 
     /**
-     * Execute the anime job.
+     * Handles the importing of a single entry.
      *
-     * @param array $json
-     * @return bool
+     * @param array $entry
+     * @param array $existingStartDates
      */
-    public function handleAnime(array $json): bool
+    protected function importEntry(array $entry, array $existingStartDates): void
     {
-        if (isset($json['anime'])) { // Genuine MAL export
-            // Wipe current anime library if behavior is set to overwrite
-            if ($this->behavior->value === ImportBehavior::Overwrite) {
-                $this->user->clearLibrary(Anime::class);
-                $this->user->clearFavorites(Anime::class);
-                $this->user->clearReminders(Anime::class);
-                $this->user->clearRatings(Anime::class);
-            }
+        $malID = $entry['mal_id'];
 
-            $this->startImportProgress(count($json['anime']));
-
-            // Loop through the anime in the export file
-            foreach ($json['anime'] as $anime) {
-                $animeID = $anime['series_animedb_id'];
-                $status = $anime['my_status'];
-                $rating = $anime['my_score'] ?? 0;
-                $startDate = $anime['my_start_date'] ?? '0000-00-00';
-                $endDate = $anime['my_finish_date'] ?? '0000-00-00';
-
-                // Skip records where id is not numeric
-                if (!is_numeric($animeID)) {
-                    $this->registerFailure($animeID, 'MAL ID is not a valid number.');
-                    $this->advanceImportProgress();
-                    continue;
-                }
-
-                // Handle import
-                $this->importModel((int) $animeID, $status, $rating, $startDate, $endDate);
-                $this->advanceImportProgress();
-            }
-        } else if (isset($json['folder'])) { // 9anime export
-            // Wipe current anime library if behavior is set to overwrite
-            if ($this->behavior->value === ImportBehavior::Overwrite) {
-                $this->user->clearLibrary(Anime::class);
-                $this->user->clearFavorites(Anime::class);
-                $this->user->clearReminders(Anime::class);
-                $this->user->clearRatings(Anime::class);
-            }
-
-            $this->startImportProgress(array_sum(array_map(fn (array $folder): int => count($folder['data']['item']), $json['folder'])));
-
-            // Loop through the anime in the export file
-            foreach ($json['folder'] as $folder) {
-                $status = $folder['name'];
-                $animes = $folder['data']['item'];
-
-                foreach ($animes as $anime) {
-                    $animeID = basename($anime['link']);
-
-                    // Skip records where id is not numeric
-                    if (!is_numeric($animeID)) {
-                        $this->registerFailure($animeID, 'MAL ID is not a valid number.');
-                        $this->advanceImportProgress();
-                        continue;
-                    }
-
-                    // Handle import
-                    $this->importModel((int) $animeID, $status, 0, '0000-00-00', '0000-00-00');
-                    $this->advanceImportProgress();
-                }
-            }
-        } else {
-            $this->fail('Unsupported anime import file structure.');
-            return false;
+        // Skip records where id is not numeric
+        if ($malID === null) {
+            $this->registerFailure(null, 'MAL ID is not a valid number.');
+            return;
         }
 
-        return true;
-    }
-
-    /**
-     * Execute the manga job.
-     *
-     * @param array $json
-     * @return bool
-     */
-    public function handleManga(array $json): bool
-    {
-        if (isset($json['manga'])) {
-            // Wipe current manga library if behavior is set to overwrite
-            if ($this->behavior->value === ImportBehavior::Overwrite) {
-                $this->user->clearLibrary(Manga::class);
-                $this->user->clearFavorites(Manga::class);
-                $this->user->clearReminders(Manga::class);
-                $this->user->clearRatings(Manga::class);
-            }
-
-            $this->startImportProgress(count($json['manga']));
-
-            // Loop through the manga in the export file
-            foreach ($json['manga'] as $manga) {
-                $mangaID = $manga['manga_mangadb_id'];
-                $status = $manga['my_status'];
-                $rating = $manga['my_score'] ?? 0;
-                $startDate = $manga['my_start_date'] ?? '0000-00-00';
-                $endDate = $manga['my_finish_date'] ?? '0000-00-00';
-
-                // Skip records where id is not numeric
-                if (!is_numeric($mangaID)) {
-                    $this->registerFailure($mangaID, 'MAL ID is not a valid number.');
-                    $this->advanceImportProgress();
-                    continue;
-                }
-
-                // Handle import
-                $this->importModel((int) $mangaID, $status, $rating, $startDate, $endDate);
-                $this->advanceImportProgress();
-            }
-        } else {
-            $this->fail('Unsupported manga import file structure.');
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Handles the importing of a single model from the XML file.
-     *
-     * @param int $malID
-     * @param string $malStatus
-     * @param int $malRating
-     * @param string $malStartDate
-     * @param string $malEndDate
-     */
-    protected function importModel(int $malID, string $malStatus, int $malRating, string $malStartDate, string $malEndDate): void
-    {
         // Try to find the model in our DB
         $model = match ($this->libraryKind->value) {
             UserLibraryKind::Manga => Manga::withoutGlobalScopes()
@@ -303,43 +202,42 @@ class ProcessMALImport implements ShouldQueue
         }
 
         // Convert the MAL data to our own
-        $status = $this->convertMALStatus($malStatus);
-        $rating = $this->convertMALRating($malRating);
+        $status = $entry['status'] ?? $this->inferStatus($entry);
+        $rating = $this->convertMALRating($entry['score']);
         $startedAt = null;
         $endedAt = null;
-
-        // Status not found
-        // NOTE: - Don't use empty() because 'Watching' status is 0 and that returns true.
-        if ($status === null) {
-            $this->registerFailure($malID, 'Could not handle status: ' . $malStatus);
-            return;
-        }
 
         // Check if the anime needs an end date
         switch ($status) {
             case UserLibraryStatus::OnHold:
             case UserLibraryStatus::InProgress:
-                $startedAt = $this->convertMALDate($malStartDate) ?? now();
+                $startedAt = $this->convertMALDate($entry['started_at']);
                 break;
             case UserLibraryStatus::Dropped:
             case UserLibraryStatus::Completed:
-                $endedAt = $this->convertMaLDate($malEndDate) ?? now();
-                $startedAt = $this->convertMALDate($malStartDate) ?? now();
+                $endedAt = $this->convertMALDate($entry['ended_at']);
+                $startedAt = $this->convertMALDate($entry['started_at']);
                 break;
             case UserLibraryStatus::Planning:
             default:
                 break;
         }
 
+        if ($startedAt !== null && isset($existingStartDates[$model->id])) {
+            $startedAt = $startedAt->min($existingStartDates[$model->id]);
+        }
+
         // Add the anime to their library
-        UserLibrary::updateOrCreate([
+        UserLibrary::withTrashed()->updateOrCreate([
             'user_id' => $this->user->id,
             'trackable_type' => $model->getMorphClass(),
             'trackable_id' => $model->id,
         ], [
             'status' => $status,
             'started_at' => $startedAt,
-            'ended_at' => $endedAt
+            'ended_at' => $endedAt,
+            'deleted_at' => null,
+            ...$this->trackingAttributes($entry),
         ]);
 
         // Updated their anime score
@@ -353,67 +251,156 @@ class ProcessMALImport implements ShouldQueue
             ]);
         }
 
+        if ($entry['note'] !== null) {
+            $this->importNote($model, $entry['note']);
+        }
+
+        if ($model instanceof Anime && $entry['progress'] > 0) {
+            $this->markEpisodesWatched($model, $entry['progress'], $endedAt ?? $startedAt ?? now());
+        }
+
         $this->registerSuccess($model->id, $malID, $status, $rating);
     }
 
     /**
-     * Converts a MAL status string to our library status.
+     * Returns the library attributes the given entry provides.
      *
-     * @param string $malStatus
-     * @return ?int
+     * @param array $entry
+     * @return array
      */
-    protected function convertMALStatus(string $malStatus): ?int
+    protected function trackingAttributes(array $entry): array
     {
-        $malStatus = str($malStatus)->lower()
-            ->camel()
-            ->trim()
-            ->value();
+        $isOverwrite = $this->behavior->value === ImportBehavior::Overwrite;
+        $trackingAttributes = [
+            'rewatch_count' => $entry['rewatch_count'] === null
+                ? ($isOverwrite ? 0 : null)
+                : min($entry['rewatch_count'], self::MAX_REWATCH_COUNT),
+            'is_rewatching' => $entry['is_rewatching'] ?? ($isOverwrite ? false : null),
+            'rewatch_value' => $entry['rewatch_value'],
+            'priority' => $entry['priority'],
+            'storage' => $entry['storage'],
+            'storage_amount' => $entry['storage_amount'],
+            'tags' => $entry['tags'],
+        ];
 
-        return match ($malStatus) {
-            'reading', 'watching' => UserLibraryStatus::InProgress,
-            'onHold' => UserLibraryStatus::OnHold,
-            'planToWatch', 'planToRead' => UserLibraryStatus::Planning,
-            'dropped' => UserLibraryStatus::Dropped,
-            'completed' => UserLibraryStatus::Completed,
-            default => null,
-        };
+        if ($isOverwrite) {
+            return $trackingAttributes;
+        }
+
+        return array_filter($trackingAttributes, fn (mixed $value): bool => $value !== null);
+    }
+
+    /**
+     * Adds the given imported note to the user's note on the given model.
+     *
+     * @param Model  $model
+     * @param string $note
+     */
+    protected function importNote(Model $model, string $note): void
+    {
+        $note = trim(strip_tags($note));
+        $existingNote = (string) $this->user->noteFor($model)?->body;
+
+        if ($note === '' || str_contains($existingNote, $note)) {
+            return;
+        }
+
+        if ($existingNote === '') {
+            $this->user->setNote($model, $note);
+            return;
+        }
+
+        $importHeader = __('Imported from :service on :date:', [
+            'service' => $this->service->description,
+            'date' => now()->toDateString(),
+        ]);
+
+        $this->user->setNote($model, $existingNote . "\n\n" . $importHeader . "\n" . $note);
+    }
+
+    /**
+     * Returns the library status inferred from the given entry.
+     *
+     * @param array $entry
+     * @return int
+     */
+    protected function inferStatus(array $entry): int
+    {
+        if (!empty($entry['ended_at'])) {
+            return UserLibraryStatus::Completed;
+        }
+
+        if (!empty($entry['started_at']) || $entry['progress'] > 0) {
+            return UserLibraryStatus::InProgress;
+        }
+
+        return UserLibraryStatus::Planning;
+    }
+
+    /**
+     * Marks the given number of the anime's first episodes as watched.
+     *
+     * @param Anime  $anime
+     * @param int    $episodeCount
+     * @param Carbon $completedAt
+     */
+    protected function markEpisodesWatched(Anime $anime, int $episodeCount, Carbon $completedAt): void
+    {
+        $episodeIDs = $anime->episodes()
+            ->whereNull(Episode::TABLE_NAME . '.deleted_at')
+            ->whereNull(Season::TABLE_NAME . '.deleted_at')
+            ->where(Season::TABLE_NAME . '.number', '>', 0)
+            ->where(Episode::TABLE_NAME . '.is_special', '=', false)
+            ->orderBy(Season::TABLE_NAME . '.number')
+            ->orderBy(Episode::TABLE_NAME . '.number')
+            ->limit($episodeCount)
+            ->pluck(Episode::TABLE_NAME . '.id');
+
+        if ($episodeIDs->isEmpty()) {
+            return;
+        }
+
+        $completedAttributes = array_merge(UserWatchedEpisode::completedAttributes(), [
+            'completed_at' => $completedAt,
+        ]);
+        $existingIDs = $this->user->userWatchedEpisodes()
+            ->whereIn('episode_id', $episodeIDs)
+            ->pluck('episode_id');
+
+        $this->user->episodes()->attach($episodeIDs->diff($existingIDs), $completedAttributes);
+
+        $this->user->userWatchedEpisodes()
+            ->whereIn('episode_id', $episodeIDs)
+            ->whereNull('completed_at')
+            ->update($completedAttributes);
     }
 
     /**
      * Converts and returns Kurozora specific rating.
      *
      * @param int $malRating
-     * @return int
+     * @return float
      */
-    protected function convertMALRating(int $malRating): int
+    protected function convertMALRating(int $malRating): float
     {
-        if ($malRating == 0) {
-            return $malRating;
-        }
-
-        return round($malRating) * 0.5;
+        return $malRating * 0.5;
     }
 
     /**
      * Converts and returns Carbon dates from given string.
      *
-     * @param string $malDate
-     * @return Carbon|null
+     * @param null|string $malDate
+     * @return Carbon
      */
-    protected function convertMALDate(string $malDate): ?Carbon
+    protected function convertMALDate(?string $malDate): Carbon
     {
-        if ($malDate === '0000-00-00') {
+        if (empty($malDate)) {
             return now();
         }
 
-        $dateComponents = explode('-', $malDate);
-        $date = Carbon::createFromDate($dateComponents[0], $dateComponents[1], $dateComponents[2]);
+        [$year, $month, $day] = array_map('intval', explode('-', $malDate));
 
-        if ($date->year == 0000) {
-            $date->setYear(now()->year);
-        }
-
-        return $date;
+        return Carbon::createFromDate($year ?: now()->year, max($month, 1), max($day, 1));
     }
 
     /**
@@ -422,9 +409,9 @@ class ProcessMALImport implements ShouldQueue
      * @param mixed $modelID
      * @param int   $malID
      * @param mixed $status
-     * @param int   $rating
+     * @param float $rating
      */
-    protected function registerSuccess(mixed $modelID, int $malID, mixed $status, int $rating): void
+    protected function registerSuccess(mixed $modelID, int $malID, mixed $status, float $rating): void
     {
         $this->results['successful'][] = [
             'library'   => $this->libraryKind->description,
@@ -438,10 +425,10 @@ class ProcessMALImport implements ShouldQueue
     /**
      * Registers a failure in the import process.
      *
-     * @param int|string $malID
-     * @param string     $reason
+     * @param ?int   $malID
+     * @param string $reason
      */
-    protected function registerFailure(int|string $malID, string $reason): void
+    protected function registerFailure(?int $malID, string $reason): void
     {
         $this->results['failure'][] = [
             'library'   => $this->libraryKind->description,

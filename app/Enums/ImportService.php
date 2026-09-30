@@ -27,4 +27,17 @@ final class ImportService extends Enum
             default => parent::getDescription((int) $value),
         };
     }
+
+    /**
+     * Whether the service's exports declare their library kind.
+     *
+     * @return bool
+     */
+    public function canInferLibraryKind(): bool
+    {
+        return match ($this->value) {
+            self::MAL, self::Kitsu => true,
+            default => false,
+        };
+    }
 }

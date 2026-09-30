@@ -7,6 +7,7 @@ use App\Enums\ImportService;
 use App\Enums\MediaCollection;
 use App\Enums\UserLibraryKind;
 use App\Enums\UserLibraryStatus;
+use App\Exceptions\UnsupportedLibraryExportException;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AddToLibraryRequest;
@@ -19,7 +20,6 @@ use App\Http\Requests\UpdateLibraryRequest;
 use App\Http\Resources\AnimeResourceBasic;
 use App\Http\Resources\GameResourceBasic;
 use App\Http\Resources\LiteratureResourceBasic;
-use App\Jobs\ProcessMALImport;
 use App\Models\Anime;
 use App\Models\Episode;
 use App\Models\Game;
@@ -31,20 +31,21 @@ use App\Models\UserFavorite;
 use App\Models\UserLibrary;
 use App\Models\UserReminder;
 use App\Scopes\IgnoreListScope;
+use App\Services\LibraryImporter;
+use App\Services\LibraryImportParser;
 use App\Traits\Controller\WithStateVersionETag;
 use App\Traits\Model\Remindable;
 use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
 use BenSampo\Enum\Exceptions\InvalidEnumMemberException;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\GoneHttpException;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 use Throwable;
@@ -744,67 +745,34 @@ class LibraryController extends Controller
     /**
      * Allows the authenticated user to upload a library export file to be imported.
      *
-     *
-     * @throws FileNotFoundException
      * @throws TooManyRequestsHttpException
+     * @throws ValidationException
      */
     public function import(LibraryImportRequest $request): JsonResponse
     {
         $data = $request->validated();
-
-        // Get the authenticated user
         $user = auth()->user();
 
-        // Get the library to import to
-        $libraryKind = UserLibraryKind::fromValue((int) $data['kind']);
-
-        // Get whether user is in import cooldown period
-        $isInImportCooldown = match ($libraryKind->value) {
-            UserLibraryKind::Manga => ! $user->canDoMangaImport(),
-            default => ! $user->canDoAnimeImport()
-        };
-
-        if ($isInImportCooldown) {
-            $cooldownDays = config('import.cooldown_in_days');
-
-            throw match ($libraryKind->value) {
-                UserLibraryKind::Manga => new TooManyRequestsHttpException($cooldownDays * 24 * 60 * 60, __('You can only perform a manga import every :x day(s).', ['x' => $cooldownDays])),
-                UserLibraryKind::Game => new TooManyRequestsHttpException($cooldownDays * 24 * 60 * 60, __('You can only perform a game import every :x day(s).', ['x' => $cooldownDays])),
-                default => new TooManyRequestsHttpException($cooldownDays * 24 * 60 * 60, __('You can only perform an anime import every :x day(s).', ['x' => $cooldownDays])),
-            };
+        try {
+            $entriesByKind = LibraryImportParser::parseFile($data['file']);
+        } catch (UnsupportedLibraryExportException $exception) {
+            throw ValidationException::withMessages(['file' => $exception->getMessage()]);
         }
 
-        // Read XML file
-        $xmlContent = File::get($data['file']->getRealPath());
+        $cooldownMessage = LibraryImporter::cooldownMessage($user, $entriesByKind);
 
-        // Get the import service
-        $importService = ImportService::fromValue((int) $data['service'] ?? 0);
-
-        // Get import behavior
-        $importBehavior = ImportBehavior::fromValue((int) $data['behavior']);
-
-        // Dispatch job
-        switch ($importService->value) {
-            case ImportService::MAL:
-            case ImportService::Kitsu:
-                dispatch(new ProcessMALImport($user, $xmlContent, $libraryKind, $importService, $importBehavior));
-                break;
-            default:
-                break;
+        if ($cooldownMessage !== null) {
+            throw new TooManyRequestsHttpException(config('import.cooldown_in_days') * 24 * 60 * 60, $cooldownMessage);
         }
 
-        // Update last library import date for user
-        $lastImportDateKey = match ($libraryKind->value) {
-            UserLibraryKind::Manga => 'manga_imported_at',
-            default => 'anime_imported_at',
-        };
-
-        $user->update([
-            $lastImportDateKey => now(),
-        ]);
+        LibraryImporter::dispatch($user, $entriesByKind, ImportService::fromValue((int) $data['service']), ImportBehavior::fromValue((int) $data['behavior']));
 
         return JSONResult::success([
-            'message' => __('Your anime import request has been submitted. You will be notified once it has been processed!'),
+            'message' => match (true) {
+                count($entriesByKind) > 1 => __('Your anime and manga import request has been submitted. You will be notified once it has been processed!'),
+                isset($entriesByKind[UserLibraryKind::Manga]) => __('Your manga import request has been submitted. You will be notified once it has been processed!'),
+                default => __('Your anime import request has been submitted. You will be notified once it has been processed!'),
+            },
         ]);
     }
 
