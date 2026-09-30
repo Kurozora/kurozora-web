@@ -30,6 +30,7 @@
 
         .recap-comparison-gradient--previous {
             transform: scaleX(-1);
+            clip-path: inset(0 0 -100vmax);
         }
 
         .recap-comparison-gradient--previous > div {
@@ -70,7 +71,7 @@
 
         <a
             @class([
-                'relative flex items-center gap-4 pl-4 pr-4 overflow-hidden',
+                'relative flex items-center gap-4 pl-4 pr-4',
                 'flex-row justify-between pt-8 pb-6' => $index === 0,
                 'flex-row-reverse justify-end pt-6' => $index === 1,
                 'pb-8' => $index === 1 && empty($shareKey),
