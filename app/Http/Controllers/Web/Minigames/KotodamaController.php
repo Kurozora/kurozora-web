@@ -9,15 +9,21 @@ use App\Models\Minigames\Kotodama\DailyPuzzle;
 use App\Models\Minigames\Kotodama\Game;
 use App\Models\Minigames\Kotodama\UserStats;
 use App\Models\User;
+use App\Services\Minigames\Kotodama\GameCoordinator;
 use App\Services\Minigames\Kotodama\PuzzleResolver;
 use App\Services\Minigames\Kotodama\StatsService;
+use App\View\Components\Kotodama\Countdown;
+use App\View\Components\Kotodama\Summary;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Blade;
+use Illuminate\View\Component;
 
 class KotodamaController extends Controller
 {
@@ -40,6 +46,149 @@ class KotodamaController extends Controller
      * The shortest visible bar of the guess distribution.
      */
     const int MINIMUM_BAR_PERCENT = 4;
+
+    /**
+     * The number of rows shown in the leaderboard peek.
+     */
+    const int PEEK_LIMIT = 3;
+
+    /**
+     * Show today's puzzle.
+     *
+     * @param Request $request
+     *
+     * @return Application|Factory|View
+     */
+    public function daily(Request $request): Application|Factory|View
+    {
+        $state = $this->dailyState($request->user());
+
+        return view('minigames.kotodama.daily', [
+            'game' => $state->game,
+            'puzzle' => $state->puzzle,
+            'flash' => $state->flash,
+            'mode' => GameMode::Daily(),
+            'title' => __('Kotodama · Daily #:number', ['number' => $state->puzzle?->puzzle_number ?? 0]),
+            'stats' => $state->stats,
+            'winRate' => $state->winRate,
+            'topEntries' => $state->topEntries,
+            'nextPuzzleAt' => $state->nextPuzzleAt,
+            'countdownUrl' => route('kotodama.section', 'countdown', false),
+            'summaryUrl' => route('kotodama.section', 'summary', false),
+        ]);
+    }
+
+    /**
+     * Show a practice puzzle that can be replayed endlessly.
+     *
+     * @param Request $request
+     *
+     * @return Application|Factory|View
+     */
+    public function unlimited(Request $request): Application|Factory|View
+    {
+        $game = GameCoordinator::startUnlimited(
+            PuzzleResolver::unlimited(),
+            $request->user(),
+            GameCoordinator::guestTokenFor($request->session()->getId())
+        );
+
+        return view('minigames.kotodama.play', [
+            'game' => $game,
+            'flash' => null,
+            'mode' => GameMode::Unlimited(),
+            'title' => __('Kotodama · Unlimited'),
+            'appArgument' => 'kotodama/unlimited',
+            'canonicalUrl' => route('kotodama.unlimited'),
+            'indexable' => true,
+        ]);
+    }
+
+    /**
+     * Show the puzzle behind a versus seed.
+     *
+     * @param Request $request
+     * @param string  $seed
+     *
+     * @return Application|Factory|View
+     */
+    public function versus(Request $request, string $seed): Application|Factory|View
+    {
+        $challenger = Game::where('versus_seed', $seed)
+            ->with(['word', 'user', 'guesses'])
+            ->firstOrFail();
+
+        $game = GameCoordinator::startUnlimited(
+            $challenger->word,
+            $request->user(),
+            GameCoordinator::guestTokenFor($request->session()->getId())
+        );
+        $game->mode = GameMode::Versus();
+        $game->save();
+
+        return view('minigames.kotodama.play', [
+            'game' => $game,
+            'challenger' => $challenger,
+            'flash' => null,
+            'mode' => GameMode::Versus(),
+            'title' => __('Kotodama · Versus'),
+            'appArgument' => 'kotodama/versus/' . $seed,
+            'canonicalUrl' => route('kotodama.versus', $seed),
+            'indexable' => true,
+        ]);
+    }
+
+    /**
+     * Show a past puzzle.
+     *
+     * @param Request $request
+     * @param string  $date
+     *
+     * @return Application|Factory|View
+     */
+    public function playArchive(Request $request, string $date): Application|Factory|View
+    {
+        $parsed = Carbon::parse($date);
+
+        if (!$parsed->isPast() || $parsed->isToday()) {
+            abort(404);
+        }
+
+        try {
+            $puzzle = PuzzleResolver::archive($parsed);
+        } catch (ModelNotFoundException) {
+            $puzzle = null;
+        }
+
+        return view('minigames.kotodama.play', [
+            'game' => $puzzle ? GameCoordinator::startArchive($puzzle, $request->user()) : null,
+            'flash' => $puzzle ? null : __('No puzzle is available for that date.'),
+            'mode' => GameMode::Archive(),
+            'title' => __('Kotodama · :date', ['date' => $this->formattedDate($puzzle, $date)]),
+            'appArgument' => 'kotodama/archive/' . $date,
+            'canonicalUrl' => route('kotodama.archive.play', ['date' => $date]),
+            'indexable' => false,
+        ]);
+    }
+
+    /**
+     * Render a section of the daily page.
+     *
+     * @param Request $request
+     * @param string  $section
+     *
+     * @return Response
+     */
+    public function section(Request $request, string $section): Response
+    {
+        $state = $this->dailyState($request->user());
+
+        return $this->render(match ($section) {
+            'countdown' => new Countdown($state->game, $state->nextPuzzleAt, route('kotodama.section', 'countdown', false)),
+            'summary' => new Summary($state->game, $state->stats, $state->winRate, $state->topEntries, route('kotodama.section', 'summary', false)),
+            default => abort(404),
+        });
+    }
 
     /**
      * Show the daily and streak leaderboards.
@@ -94,6 +243,52 @@ class KotodamaController extends Controller
         return view('minigames.kotodama.archive', [
             'entries' => $this->archiveEntries($request->user()),
         ]);
+    }
+
+    /**
+     * Today's puzzle, the player's game and the numbers shown beside them.
+     *
+     * @param User|null $user
+     *
+     * @return object
+     */
+    private function dailyState(?User $user): object
+    {
+        try {
+            $puzzle = PuzzleResolver::today();
+        } catch (ModelNotFoundException) {
+            $puzzle = null;
+        }
+
+        $stats = $user ? UserStats::find($user->id) : null;
+        $game = $puzzle && $user
+            ? GameCoordinator::startDaily($puzzle, $user)->load(['word.subject', 'guesses'])
+            : null;
+
+        return (object) [
+            'puzzle' => $puzzle,
+            'game' => $game,
+            'flash' => $puzzle ? null : __('No puzzle is available today.'),
+            'stats' => $stats,
+            'winRate' => $this->winRate($stats),
+            'topEntries' => $puzzle ? StatsService::dailyLeaderboard($puzzle, self::PEEK_LIMIT) : collect(),
+            'nextPuzzleAt' => $puzzle?->puzzle_date?->copy()->addDay()->startOfDay()->getTimestampMs(),
+        ];
+    }
+
+    /**
+     * The puzzle date formatted for display.
+     *
+     * @param DailyPuzzle|null $puzzle
+     * @param string           $date
+     *
+     * @return string
+     */
+    private function formattedDate(?DailyPuzzle $puzzle, string $date): string
+    {
+        $puzzleDate = $puzzle?->puzzle_date ?? Carbon::parse($date);
+
+        return $puzzleDate->locale(app()->getLocale())->isoFormat('ll');
     }
 
     /**
@@ -209,5 +404,17 @@ class KotodamaController extends Controller
                 'finished' => $finishedPuzzleIDs->contains($puzzle->id),
             ];
         });
+    }
+
+    /**
+     * Render the component as a page fragment.
+     *
+     * @param Component $component
+     *
+     * @return Response
+     */
+    protected function render(Component $component): Response
+    {
+        return response($component->shouldRender() ? Blade::renderComponent($component) : '');
     }
 }

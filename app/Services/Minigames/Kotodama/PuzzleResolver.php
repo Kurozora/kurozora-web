@@ -37,6 +37,34 @@ class PuzzleResolver
     }
 
     /**
+     * Resolve a word for an unlimited game.
+     *
+     * @param int|null $lastWordId
+     *
+     * @return Word
+     */
+    public static function unlimited(?int $lastWordId = null): Word
+    {
+        $baseQuery = Word::eligibleForSchedule()
+            ->safeToReveal()
+            ->with(['subject']);
+
+        $word = (clone $baseQuery)
+            ->when($lastWordId, fn ($query) => $query->where('id', '!=', $lastWordId))
+            ->randomFirst();
+
+        if (!$word) {
+            $word = $baseQuery->randomFirst();
+        }
+
+        if (!$word) {
+            throw (new ModelNotFoundException)->setModel(Word::class);
+        }
+
+        return $word;
+    }
+
+    /**
      * The next word to schedule.
      *
      * @return Word

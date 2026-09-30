@@ -1,58 +1,53 @@
 <?php
 
-namespace App\Livewire\Minigames\Kotodama;
+namespace App\Livewire\Components;
 
 use App\Enums\Minigames\Kotodama\GameMode;
-use App\Models\Minigames\Kotodama\DailyPuzzle;
 use App\Models\Minigames\Kotodama\Game;
 use App\Models\Minigames\Kotodama\Word;
 use App\Services\Minigames\Kotodama\GameCoordinator;
 use App\Services\Minigames\Kotodama\PuzzleResolver;
 use App\Services\Minigames\Kotodama\ShareGridFormatter;
+use App\Traits\Livewire\WithKotodamaFlash;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Carbon;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Computed;
-use App\Traits\Livewire\WithKotodamaFlash;
 use Livewire\Component;
 
-class PlayArchive extends Component
+class KotodamaPuzzle extends Component
 {
     use WithKotodamaFlash;
 
-    public string $date = '';
+    /**
+     * The current game ID.
+     *
+     * @var int|null $gameId
+     */
     public ?int $gameId = null;
-    public ?DailyPuzzle $puzzle = null;
+
+    /**
+     * The mode the game is played in.
+     *
+     * @var int $mode
+     */
+    public int $mode;
 
     /**
      * Prepare the component.
      *
-     * @param string $date
+     * @param int|null    $gameId
+     * @param int         $mode
+     * @param string|null $flash
      *
      * @return void
      */
-    public function mount(string $date): void
+    public function mount(?int $gameId, int $mode, ?string $flash = null): void
     {
-        $this->date = $date;
-
-        $parsed = Carbon::parse($date);
-
-        if (!$parsed->isPast() || $parsed->isToday()) {
-            abort(404);
-        }
-
-        try {
-            $this->puzzle = PuzzleResolver::archive($parsed);
-        } catch (ModelNotFoundException) {
-            $this->flash = __('No puzzle is available for that date.');
-            return;
-        }
-
-        $game = GameCoordinator::startArchive($this->puzzle, auth()->user());
-        $this->gameId = $game->id;
+        $this->gameId = $gameId;
+        $this->mode = $mode;
+        $this->flash = $flash;
     }
 
     /**
@@ -63,8 +58,12 @@ class PlayArchive extends Component
     #[Computed]
     public function game(): ?Game
     {
-        return $this->gameId ? Game::with(['word.subject', 'guesses'])
-            ->find($this->gameId) : null;
+        if (!$this->gameId) {
+            return null;
+        }
+
+        return Game::with(['word.subject', 'guesses'])
+            ->find($this->gameId);
     }
 
     /**
@@ -93,9 +92,38 @@ class PlayArchive extends Component
         try {
             GameCoordinator::submitGuess($game, $guess);
             $this->flash = null;
-        } catch (ValidationException $e) {
-            $this->flash = collect($e->errors())->flatten()->first();
+        } catch (ValidationException $exception) {
+            $this->flash = collect($exception->errors())->flatten()->first();
         }
+
+        unset($this->game);
+
+        if ($this->game?->isFinished()) {
+            $this->dispatch('kotodama-finished');
+        }
+    }
+
+    /**
+     * Start a new unlimited game.
+     *
+     * @return void
+     */
+    public function next(): void
+    {
+        if (!GameMode::fromValue($this->mode)->is(GameMode::Unlimited)) {
+            return;
+        }
+
+        $word = PuzzleResolver::unlimited($this->game?->word_id);
+
+        $game = GameCoordinator::startUnlimited(
+            $word,
+            auth()->user(),
+            GameCoordinator::guestTokenFor(session()->getId())
+        );
+
+        $this->gameId = $game->id;
+        $this->flash = null;
 
         unset($this->game);
     }
@@ -117,29 +145,16 @@ class PlayArchive extends Component
     }
 
     /**
-     * The puzzle date formatted for display.
-     *
-     * @return string
-     */
-    protected function formattedDate(): string
-    {
-        $date = $this->puzzle?->puzzle_date ?? Carbon::parse($this->date);
-
-        return $date->locale(app()->getLocale())->isoFormat('ll');
-    }
-
-    /**
      * Render the component.
      *
      * @return Application|Factory|View
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.minigames.kotodama.play', [
+        return view('livewire.components.kotodama-puzzle', [
             'game' => $this->game,
-            'mode' => GameMode::Archive(),
-            'title' => __('Kotodama · :date', ['date' => $this->formattedDate()]),
-            'appArgument' => 'kotodama/archive/' . $this->date,
+            'gameMode' => GameMode::fromValue($this->mode),
+            'shareText' => $this->shareText(),
         ]);
     }
 }

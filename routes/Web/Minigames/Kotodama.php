@@ -1,19 +1,15 @@
 <?php
 
 use App\Http\Controllers\Web\Minigames\KotodamaController;
-use App\Livewire\Minigames\Kotodama\PlayArchive as KotodamaPlayArchive;
-use App\Livewire\Minigames\Kotodama\PlayDaily as KotodamaPlayDaily;
-use App\Livewire\Minigames\Kotodama\PlayUnlimited as KotodamaPlayUnlimited;
-use App\Livewire\Minigames\Kotodama\PlayVersus as KotodamaPlayVersus;
 
 Route::prefix('/kotodama')
     ->name('kotodama')
     ->group(function () {
-        Route::get('/', KotodamaPlayDaily::class)
+        Route::get('/', [KotodamaController::class, 'daily'])
             ->middleware('auth')
             ->name('.daily');
 
-        Route::get('/unlimited', KotodamaPlayUnlimited::class)
+        Route::get('/unlimited', [KotodamaController::class, 'unlimited'])
             ->name('.unlimited');
 
         Route::get('/leaderboards', [KotodamaController::class, 'leaderboards'])
@@ -23,14 +19,19 @@ Route::prefix('/kotodama')
             ->middleware('auth')
             ->name('.stats');
 
-        Route::get('/versus/{seed}', KotodamaPlayVersus::class)
+        Route::get('/sections/{section}', [KotodamaController::class, 'section'])
+            ->middleware('auth')
+            ->where('section', 'countdown|summary')
+            ->name('.section');
+
+        Route::get('/versus/{seed}', [KotodamaController::class, 'versus'])
             ->name('.versus');
 
         Route::get('/archive', [KotodamaController::class, 'archive'])
             ->middleware(['auth', 'user.is-pro-or-subscribed'])
             ->name('.archive');
 
-        Route::get('/archive/{date}', KotodamaPlayArchive::class)
+        Route::get('/archive/{date}', [KotodamaController::class, 'playArchive'])
             ->middleware(['auth', 'user.is-pro-or-subscribed'])
             ->where('date', '\d{4}-\d{2}-\d{2}')
             ->name('.archive.play');
