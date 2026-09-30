@@ -4,6 +4,11 @@
 	admin {$CADDY_SERVER_ADMIN_HOST}:{$CADDY_SERVER_ADMIN_PORT}
 
 	frankenphp {
+		# Parity with docker/php/conf.d/php.ini.
+		php_ini upload_max_filesize 10M
+		php_ini post_max_size 32M
+		php_ini memory_limit 256M
+
 		worker {
 			file "{$APP_PUBLIC_PATH}/frankenphp-worker.php"
 			{$CADDY_SERVER_WORKER_DIRECTIVE}
