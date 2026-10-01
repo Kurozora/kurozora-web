@@ -8,14 +8,6 @@ use App\Models\Manga;
 use Illuminate\Support\Facades\Schedule;
 
 /**********************************************/
-// Run queue worker every minute
-Schedule::command('queue:work --timeout=0')
-    ->everyMinute()
-    ->name('Queue worker')
-    ->withoutOverlapping()
-    ->runInBackground();
-
-/**********************************************/
 // Re-score feed messages within the activity window every fifteen minutes
 Schedule::command('calculate:feed_message_ranking')
     ->everyFifteenMinutes()
@@ -85,6 +77,30 @@ Schedule::command('kotodama:sweep-abandoned')
 Schedule::command('timeouts:notify-expired')
     ->everyFiveMinutes()
     ->name('Notify expired timeouts')
+    ->withoutOverlapping()
+    ->onOneServer();
+
+/**********************************************/
+// Plan new-episode notifications for upcoming episodes every hour
+Schedule::command('notifications:plan-upcoming-episodes')
+    ->hourly()
+    ->name('Plan upcoming episode notifications')
+    ->withoutOverlapping()
+    ->onOneServer();
+
+/**********************************************/
+// Dispatch scheduled notifications whose time has come every five minutes
+Schedule::command('notifications:dispatch-scheduled')
+    ->everyFiveMinutes()
+    ->name('Dispatch scheduled notifications')
+    ->withoutOverlapping()
+    ->onOneServer();
+
+/**********************************************/
+// Notify users their weekly digest is ready every Monday morning
+Schedule::command('notifications:send-weekly-digest')
+    ->weeklyOn(1, '9:00')
+    ->name('Send weekly digest')
     ->withoutOverlapping()
     ->onOneServer();
 
