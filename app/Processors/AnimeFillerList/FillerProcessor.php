@@ -2,6 +2,7 @@
 
 namespace App\Processors\AnimeFillerList;
 
+use App\Enums\EpisodeFillerKind;
 use App\Models\Anime;
 use RoachPHP\ItemPipeline\ItemInterface;
 use RoachPHP\ItemPipeline\Processors\ItemProcessorInterface;
@@ -23,9 +24,9 @@ class FillerProcessor implements ItemProcessorInterface
         $this->item = $item;
         $fillerID = $item->get('filler_id');
         $episodeNumber = $item->get('episode_number');
-        $isFiller = $this->getIsFiller($item->get('filler_type'));
+        $fillerKind = EpisodeFillerKind::fromFillerType($item->get('filler_type'));
 
-        logger()->channel('stderr')->info(($isFiller ? 'true: ' : 'false: ') . $item->get('filler_type') . ' episode: ' . $episodeNumber);
+        logger()->channel('stderr')->info($fillerKind->description . ': ' . $item->get('filler_type') . ' episode: ' . $episodeNumber);
         logger()->channel('stderr')->info('🔄 [filler_id:' . $fillerID . '] Processing filler status');
 
         $anime = Anime::withoutGlobalScopes()
@@ -48,7 +49,7 @@ class FillerProcessor implements ItemProcessorInterface
             } else {
                 logger()->channel('stderr')->info('🛠️ [filler_id:' . $fillerID . '] Updating episode `' . $episodeNumber . '` filler status');
                 $episode->update([
-                    'is_filler' => $isFiller,
+                    'filler_kind' => $fillerKind,
                 ]);
                 logger()->channel('stderr')->info('✅️ [filler_id:' . $fillerID . '] Done updating episode `' . $episodeNumber . '` filler status');
             }
@@ -56,16 +57,5 @@ class FillerProcessor implements ItemProcessorInterface
 
         logger()->channel('stderr')->info('✅️ [filler_id:' . $fillerID . '] Done processing `' . $episodeNumber . '` filler status');
         return $item;
-    }
-
-    /**
-     * Determines whether the episode is a filler.
-     *
-     * @param string $fillerType
-     * @return bool
-     */
-    private function getIsFiller(string $fillerType): bool
-    {
-        return str($fillerType)->lower()->contains('filler');
     }
 }

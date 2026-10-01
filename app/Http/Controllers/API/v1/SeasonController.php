@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\v1;
 
+use App\Enums\EpisodeFillerKind;
 use App\Events\ModelViewed;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
@@ -101,7 +102,10 @@ class SeasonController extends Controller
 
         // Fillers
         if ($data['hide_fillers'] ?? false) {
-            $episodes = $episodes->where('is_filler', '!=', $data['hide_fillers']);
+            $episodes = $episodes->whereNotIn('filler_kind', [
+                EpisodeFillerKind::Filler,
+                EpisodeFillerKind::MixedCanonFiller,
+            ]);
         }
 
         // Paginate

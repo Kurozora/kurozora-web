@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use App\Enums\EpisodeFillerKind;
 use App\Nova\Actions\BatchEdit;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Illuminate\Http\Request;
@@ -15,6 +16,7 @@ use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\MorphMany;
 use Laravel\Nova\Fields\MorphOne;
 use Laravel\Nova\Fields\Number;
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 use Outl1ne\NovaColorField\Color;
@@ -185,11 +187,13 @@ class Episode extends Resource
                 ->sortable()
                 ->help('The duration of the episode in <b>seconds</b>. Usually the same as the duration of the anime, but can be different in special cases.'),
 
-            Boolean::make('Is Filler')
-                ->default(false)
+            Select::make('Filler Kind', 'filler_kind')
+                ->options(EpisodeFillerKind::asSelectArray())
+                ->displayUsingLabels()
+                ->default(EpisodeFillerKind::AnimeCanon)
                 ->required()
                 ->sortable()
-                ->help('Check the box if the episode is a filler, and the story is understood even if this episode is skipped.'),
+                ->help('The episode’s canon standing. Filler and Mixed episodes can be skipped with little to no loss of story.'),
 
             Boolean::make('Is NSFW')
                 ->default(false)

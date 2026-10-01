@@ -132,7 +132,7 @@ class GenerateEpisodes extends Command
                                             'synopsis' => null,
                                         ],
                                         'duration' => $anime->duration,
-                                        'filler_kind' => EpisodeFillerKind::AnimeCanon,
+                                        'filler_kind' => EpisodeFillerKind::MangaCanon,
                                         'is_verified' => false,
                                         'is_premiere' => $count == 1,
                                         'is_finale' => $count == $anime->episode_count,

@@ -374,6 +374,8 @@ class Episode extends KModel implements HasMedia, Sitemapable
         unset($episode['media']);
         $episode['letter'] = str_index($this->title);
         $episode['filler_kind'] = $this->filler_kind?->value;
+        // Deprecated: simulated for clients still filtering on `is_filler`.
+        $episode['is_filler'] = $this->filler_kind?->isFiller();
         $episode['media_stat'] = $this->mediaStat?->toSearchableArray();
         $episode['translations'] = $this->translations
             ->select(['locale', 'title', 'synopsis', 'tagline']);

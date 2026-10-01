@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\EpisodeFillerKind;
 use App\Models\Episode;
 use App\Models\Season;
 use App\Models\TvRating;
@@ -26,7 +27,7 @@ return new class extends Migration
             $table->unsignedInteger('number');
             $table->unsignedInteger('number_total');
             $table->unsignedMediumInteger('duration')->default(0);
-            $table->boolean('is_filler')->default(false);
+            $table->unsignedTinyInteger('filler_kind')->default(EpisodeFillerKind::MangaCanon);
             $table->boolean('is_nsfw')->default(false);
             $table->boolean('is_special')->default(false);
             $table->boolean('is_premiere')->default(false);

@@ -8,24 +8,24 @@ use Illuminate\Support\Str;
 /**
  * The canon standing of an episode, per animefillerlist.com.
  *
- * @method static EpisodeFillerKind AnimeCanon()
- * @method static EpisodeFillerKind Filler()
  * @method static EpisodeFillerKind MangaCanon()
+ * @method static EpisodeFillerKind AnimeCanon()
  * @method static EpisodeFillerKind MixedCanonFiller()
+ * @method static EpisodeFillerKind Filler()
  */
 final class EpisodeFillerKind extends Enum
 {
-    // Canon to the anime but original to it.
-    const int AnimeCanon = 0;
-
-    // Non-canon, skippable without losing the story.
-    const int Filler = 1;
-
     // Adapted from the source manga.
-    const int MangaCanon = 2;
+    const int MangaCanon = 0;
+
+    // Canon to the anime but original to it.
+    const int AnimeCanon = 1;
 
     // Part canon, part filler.
-    const int MixedCanonFiller = 3;
+    const int MixedCanonFiller = 2;
+
+    // Non-canon, skippable without losing the story.
+    const int Filler = 3;
 
     /**
      * Whether the kind counts as filler for the deprecated `isFiller` flag.
@@ -67,10 +67,10 @@ final class EpisodeFillerKind extends Enum
     public static function getDescription(mixed $value): string
     {
         return match ($value) {
-            self::AnimeCanon => __('Anime Canon'),
-            self::Filler => __('Filler'),
             self::MangaCanon => __('Manga Canon'),
+            self::AnimeCanon => __('Anime Canon'),
             self::MixedCanonFiller => __('Mixed Canon/Filler'),
+            self::Filler => __('Filler'),
             default => parent::getDescription($value),
         };
     }

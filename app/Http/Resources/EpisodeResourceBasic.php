@@ -48,7 +48,9 @@ class EpisodeResourceBasic extends JsonResource
                 'duration' => $this->resource->duration_string,
                 'stats' => MediaStatsResource::make($this->resource->mediaStat),
                 'videos' => VideoResource::collection($this->resource->videos),
-                'isFiller' => $this->resource->is_filler,
+                // Deprecated: simulated from the kind until `is_filler` is dropped after 1.15.0.
+                'isFiller' => $this->resource->filler_kind->isFiller(),
+                'fillerKind' => $this->resource->filler_kind->value,
                 'isNsfw' => $this->resource->is_nsfw,
                 'isPremiere' => $this->resource->is_premiere,
                 'isFinale' => $this->resource->is_finale,

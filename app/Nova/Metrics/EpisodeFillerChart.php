@@ -2,6 +2,7 @@
 
 namespace App\Nova\Metrics;
 
+use App\Enums\EpisodeFillerKind;
 use App\Models\Episode;
 use DateInterval;
 use DateTimeInterface;
@@ -19,16 +20,15 @@ class EpisodeFillerChart extends Partition
      */
     public function calculate(NovaRequest $request): mixed
     {
-        return $this->count($request, Episode::class, 'is_filler')
+        return $this->count($request, Episode::class, 'filler_kind')
             ->label(function ($value) {
-                return match ((bool) $value) {
-                    false => 'Canon',
-                    default => 'Filler',
-                };
+                return EpisodeFillerKind::getDescription((int) $value);
             })
             ->colors([
-                false => '#3dd45e',
-                true => '#d25561'
+                EpisodeFillerKind::AnimeCanon => '#0a84ff',
+                EpisodeFillerKind::MangaCanon => '#32d74b',
+                EpisodeFillerKind::MixedCanonFiller => '#ffd60a',
+                EpisodeFillerKind::Filler => '#ff453a'
             ]);
     }
 
