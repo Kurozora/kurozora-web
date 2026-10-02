@@ -96,10 +96,7 @@ class EpisodeSpider extends BasicSpider
     public int $concurrency = 2;
 
     /**
-     * The delay (in seconds) between requests. Note that there
-     * is no delay between concurrent requests. Instead, Roach
-     * will wait for the `$requestDelay` before sending the
-     * next "batch" of concurrent requests.
+     * The delay in seconds between request batches.
      *
      * @var int $requestDelay
      */
@@ -116,17 +113,54 @@ class EpisodeSpider extends BasicSpider
         preg_match($regex, $response->getUri(), $tvdbID);
         $this->tvdbID = $tvdbID[0] ?? 0;
 
-        logger()->channel('stderr')->info('🕷 [tvdb_id:' . $this->tvdbID . '] Parsing response');
-
         $detailPageUrl = $this->getDetailsPageUrl($response->getUri());
 
         if (is_string($detailPageUrl)) {
-            $seasonUrl = $detailPageUrl . '/seasons/official/1';
+            yield $this->request('GET', $detailPageUrl, 'parseSeasonsList');
+        }
+    }
 
-            yield $this->request('GET', $seasonUrl, 'parseSeason');
+    /**
+     * @param Response $response
+     *
+     * @return Generator<ParseResult>
+     */
+    public function parseSeasonsList(Response $response): Generator
+    {
+        $detailPageUrl = rtrim(preg_replace('#/seasons/official/.*$#', '', $response->getUri()), '/');
+
+        $seasonNumbers = $response->filter('a[href*="/seasons/official/"]')
+            ->each(function (Crawler $a) {
+                try {
+                    return (int) preg_replace('#.*/seasons/official/(\d+).*#', '$1', $a->link()->getUri());
+                } catch (Exception $e) {
+                    return 0;
+                }
+            });
+        $seasonNumbers = array_values(array_unique(array_filter($seasonNumbers, fn (int $number) => $number >= 0)));
+
+        $tvdbSeasonsFilter = isset($this->context['tvdbSeasons']) && is_array($this->context['tvdbSeasons'])
+            ? array_values(array_map('intval', $this->context['tvdbSeasons']))
+            : [];
+
+        if (!empty($tvdbSeasonsFilter)) {
+            $seasonNumbers = array_values(array_intersect($seasonNumbers, $tvdbSeasonsFilter));
         }
 
-        logger()->channel('stderr')->info('✅️ [tvdb_id:' . $this->tvdbID . '] Done parsing');
+        if (empty($seasonNumbers)) {
+            logger()->channel('stderr')->warning('⚠️ [tvdb_id:' . $this->tvdbID . '] No official seasons found on detail page');
+            return;
+        }
+
+        try {
+            foreach ($seasonNumbers as $seasonNumber) {
+                yield $this->request('GET', $detailPageUrl . '/seasons/official/' . $seasonNumber, 'parseSeason');
+            }
+
+            logger()->channel('stderr')->info('✅️ [tvdb_id:' . $this->tvdbID . '] Done parsing seasons list (' . count($seasonNumbers) . ' seasons queued)');
+        } catch (Exception $e) {
+            logger()->channel('stderr')->error('❌ [tvdb_id:' . $this->tvdbID . '] ' . $e->getMessage());
+        }
     }
 
     /**
@@ -136,7 +170,8 @@ class EpisodeSpider extends BasicSpider
      */
     public function parseSeason(Response $response): Generator
     {
-        logger()->channel('stderr')->info('🕷 [tvdb_id:' . $this->tvdbID . '] Parsing season response');
+        $seasonNumber = (int) preg_replace('#.*/seasons/official/(\d+).*#', '$1', $response->getUri());
+
         $this->episodes = $response->filter('table tbody')
             ->filter('tr')
             ->each(function (Crawler $item) {
@@ -147,12 +182,12 @@ class EpisodeSpider extends BasicSpider
                     ->getUri();
             });
 
+        logger()->channel('stderr')->info('🕷 [tvdb_id:' . $this->tvdbID . '] TVDB season ' . $seasonNumber . ': queueing ' . count($this->episodes) . ' episodes');
+
         try {
             foreach ($this->episodes as $episode) {
                 yield $this->request('GET', $episode, 'parseEpisode');
             }
-
-            logger()->channel('stderr')->info('✅️ [tvdb_id:' . $this->tvdbID . '] Done season parsing');
         } catch (Exception $e) {
             logger()->channel('stderr')->error('❌ [tvdb_id:' . $this->tvdbID . '] ' . $e->getMessage());
         }
@@ -165,8 +200,6 @@ class EpisodeSpider extends BasicSpider
      */
     public function parseEpisode(Response $response): Generator
     {
-        logger()->channel('stderr')->info('🕷 [tvdb_id:' . $this->tvdbID . '] Parsing episode response');
-
         if ($response->getStatus() >= 400) {
             logger()->error('Episode: ' . $response->getUri() . ';status:' . $response->getStatus());
             return $this->item([]);
@@ -183,9 +216,15 @@ class EpisodeSpider extends BasicSpider
             });
 
         // Breadcrumbs
-        $breadcrumb = $response->filter('div.page-toolbar div.crumbs a[href*="seasons/official"]')
-            ->ancestors()
-            ->text();
+        try {
+            $breadcrumb = $response->filter('div.page-toolbar div.crumbs a[href*="seasons/official"]')
+                ->ancestors()
+                ->text();
+        } catch (Exception $exception) {
+            logger()->channel('stderr')->warning('⚠️ [tvdb_id:' . $this->tvdbID . '] Missing official breadcrumb at ' . $response->getUri() . ' — skipping episode');
+            return;
+        }
+
         try {
             $absoluteBreadcrumb = $response->filter('div.page-toolbar div.crumbs a[href*="seasons/absolute"]')
                 ->ancestors()
@@ -248,8 +287,6 @@ class EpisodeSpider extends BasicSpider
                 'episode_started_at' => $episodeStartedAt,
                 'episode_banner_image_url' => $episodeBannerImageUrl,
             ]);
-
-            logger()->channel('stderr')->info('✅️ [tvdb_id:' . $this->tvdbID . '] Done episode parsing');
         } catch (Exception $e) {
             logger()->channel('stderr')->error('❌ [tvdb_id:' . $this->tvdbID . '] ' . $e->getMessage());
         }

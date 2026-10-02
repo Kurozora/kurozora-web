@@ -19,6 +19,8 @@ return new class extends Migration
         Schema::create(Season::TABLE_NAME, function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('anime_id');
+            $table->tinyInteger('tvdb_season')->nullable();
+            $table->tinyInteger('tvdb_episode_offset')->nullable();
             $table->unsignedBigInteger('tv_rating_id')->nullable();
             $table->string('public_id', 16);
             $table->integer('number');

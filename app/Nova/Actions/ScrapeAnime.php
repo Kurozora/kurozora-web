@@ -43,7 +43,18 @@ class ScrapeAnime extends Action implements ShouldQueue
                         if (empty($model->getFirstMedia(MediaCollection::Banner))) {
                             Artisan::call('scrape:tvdb_banner', ['tvdbID' => $model->tvdb_id]);
                         }
-                        Artisan::call('scrape:tvdb_episode', ['tvdbID' => $model->tvdb_id]);
+
+                        $seasonIDs = $model->seasons()
+                            ->whereNotNull('tvdb_season')
+                            ->pluck('id')
+                            ->implode(',');
+
+                        $arguments = ['tvdbID' => $model->tvdb_id];
+                        if ($seasonIDs !== '') {
+                            $arguments['--kurozora-season'] = $seasonIDs;
+                        }
+
+                        Artisan::call('scrape:tvdb_episode', $arguments);
                     }
 
                     $this->markAsFinished($model);

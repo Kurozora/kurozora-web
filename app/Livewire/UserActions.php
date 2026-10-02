@@ -635,7 +635,12 @@ class UserActions extends Component
             return;
         }
 
-        Artisan::call('scrape:tvdb_episode', ['tvdbID' => $anime->tvdb_id]);
+        $arguments = ['tvdbID' => $anime->tvdb_id];
+        if ($season->tvdb_season !== null) {
+            $arguments['--kurozora-season'] = (string) $season->id;
+        }
+
+        Artisan::call('scrape:tvdb_episode', $arguments);
         $this->dispatch('update-season');
     }
 

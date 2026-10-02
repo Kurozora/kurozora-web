@@ -143,7 +143,19 @@ class Season extends Resource
                 ->hideFromIndex()
                 ->help('The sequence in which the season starts.'),
 
-            Text::make('Title', function($resource) {
+            Number::make('TVDB Season', 'tvdb_season')
+                ->nullable()
+                ->min(0)
+                ->hideFromIndex()
+                ->help('Which TVDB season number this Kurozora season maps to. Required for the TVDB episode scraper to populate this season. TVDB season 0 is specials.'),
+
+            Number::make('TVDB Episode Offset', 'tvdb_episode_offset')
+                ->nullable()
+                ->default(0)
+                ->hideFromIndex()
+                ->help('Subtract from TVDB episode number to get the Kurozora episode number. e.g. AoT Final Season Part 1 starts at TVDB episode 60 → set offset to 59 so episode 60 becomes Kurozora episode 1.'),
+
+            Text::make('Title', function ($resource) {
                 return $resource->title;
             })
                 ->onlyOnIndex(),
