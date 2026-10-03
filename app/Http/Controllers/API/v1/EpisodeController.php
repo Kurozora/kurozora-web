@@ -290,9 +290,10 @@ class EpisodeController extends Controller
     {
         $user = auth()->user();
 
-        // Check if the episode has been watched
-        if (!$user->hasWatched($episode)) {
-            throw new AuthorizationException(__('Please watch ":x" first.', ['x' => $episode->title]));
+        $restriction = $episode->ratingRestrictionFor($user);
+
+        if ($restriction !== null) {
+            throw new AuthorizationException($restriction);
         }
 
         $data = $request->validated();

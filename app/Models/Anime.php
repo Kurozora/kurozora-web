@@ -182,6 +182,20 @@ class Anime extends KModel implements HasMedia, Sitemapable
     }
 
     /**
+     * Returns the reason the given user may not rate the anime.
+     *
+     * @param User $user
+     *
+     * @return null|string
+     */
+    public function ratingRestrictionFor(User $user): ?string
+    {
+        return $user->hasNotTracked($this)
+            ? __('Please add ":x" to your library first.', ['x' => $this->title])
+            : null;
+    }
+
+    /**
      * The Schema.org type for this entity.
      *
      * @return string

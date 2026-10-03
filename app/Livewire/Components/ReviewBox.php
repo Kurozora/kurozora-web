@@ -182,7 +182,7 @@ class ReviewBox extends Component
         $model = $this->ratedModel();
 
         // An unrateable model gets the reason instead of the editor.
-        if ($model !== null && ($restriction = $user->ratingRestrictionFor($model)) !== null) {
+        if ($model !== null && ($restriction = $model->ratingRestrictionFor($user)) !== null) {
             $this->ratingRestriction = $restriction;
             $this->showingRatingRestriction = true;
             return;
@@ -257,7 +257,7 @@ class ReviewBox extends Component
             // The note stands on its own, so it is written whether or not a rating is.
             auth()->user()->setNote($model, $this->noteText);
 
-            $restriction = auth()->user()->ratingRestrictionFor($model);
+            $restriction = $model->ratingRestrictionFor(auth()->user());
 
             if ($restriction !== null) {
                 $this->ratingRestriction = $restriction;

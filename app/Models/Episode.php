@@ -92,6 +92,20 @@ class Episode extends KModel implements HasMedia, Sitemapable
     }
 
     /**
+     * Returns the reason the given user may not rate the episode.
+     *
+     * @param User $user
+     *
+     * @return null|string
+     */
+    public function ratingRestrictionFor(User $user): ?string
+    {
+        return $user->hasWatched($this)
+            ? null
+            : __('Please watch ":x" first.', ['x' => $this->title]);
+    }
+
+    /**
      * Get the started_at attribute with the correct timezone.
      *
      * @return Attribute

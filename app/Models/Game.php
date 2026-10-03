@@ -195,6 +195,20 @@ class Game extends KModel implements HasMedia, Sitemapable
     }
 
     /**
+     * Returns the reason the given user may not rate the game.
+     *
+     * @param User $user
+     *
+     * @return null|string
+     */
+    public function ratingRestrictionFor(User $user): ?string
+    {
+        return $user->hasNotTracked($this)
+            ? __('Please add ":x" to your library first.', ['x' => $this->title])
+            : null;
+    }
+
+    /**
      * The canonical URL for this entity.
      *
      * @return string

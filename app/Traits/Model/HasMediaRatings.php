@@ -4,6 +4,7 @@ namespace App\Traits\Model;
 
 use App\Models\Editorial;
 use App\Models\MediaRating;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
@@ -11,6 +12,18 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 trait HasMediaRatings
 {
+    /**
+     * Returns the reason the given user may not rate the model.
+     *
+     * @param User $user
+     *
+     * @return null|string
+     */
+    public function ratingRestrictionFor(User $user): ?string
+    {
+        return null;
+    }
+
     /**
      * Bootstrap the model with Rating.
      *

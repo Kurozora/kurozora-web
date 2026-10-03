@@ -789,9 +789,10 @@ class GameController extends Controller
     {
         $user = auth()->user();
 
-        // Check if the user is already tracking the anime
-        if ($user->hasNotTracked($game)) {
-            throw new AuthorizationException(__('Please add ":x" to your library first.', ['x' => $game->title]));
+        $restriction = $game->ratingRestrictionFor($user);
+
+        if ($restriction !== null) {
+            throw new AuthorizationException($restriction);
         }
 
         $data = $request->validated();

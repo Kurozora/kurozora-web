@@ -729,9 +729,10 @@ class MangaController extends Controller
     {
         $user = auth()->user();
 
-        // Check if the user is already tracking the manga
-        if ($user->hasNotTracked($manga)) {
-            throw new AuthorizationException(__('Please add ":x" to your library first.', ['x' => $manga->title]));
+        $restriction = $manga->ratingRestrictionFor($user);
+
+        if ($restriction !== null) {
+            throw new AuthorizationException($restriction);
         }
 
         $data = $request->validated();

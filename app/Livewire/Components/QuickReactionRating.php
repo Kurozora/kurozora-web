@@ -152,7 +152,7 @@ class QuickReactionRating extends Component
             ->whereKey($this->modelID)
             ->first();
 
-        if ($model !== null && ($restriction = $user->ratingRestrictionFor($model)) !== null) {
+        if ($model !== null && ($restriction = $model->ratingRestrictionFor($user)) !== null) {
             $this->ratingRestriction = $restriction;
             $this->showingRatingRestriction = true;
             return;

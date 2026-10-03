@@ -162,7 +162,7 @@ class StarRating extends Component
                 ->whereKey($this->modelID)
                 ->first();
 
-            if ($model !== null && ($restriction = $user->ratingRestrictionFor($model)) !== null) {
+            if ($model !== null && ($restriction = $model->ratingRestrictionFor($user)) !== null) {
                 $this->rating = $user->mediaRatings()
                     ->where([
                         ['model_id', '=', $this->modelID],
