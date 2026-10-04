@@ -28,7 +28,6 @@ class BareBonesAnimeAddedListener implements ShouldQueue
             return;
         }
 
-        dispatch(new ProcessBareBonesAnimeAdded($event->malID))
-            ->delay(now()->addMinutes(5));
+        dispatch(new ProcessBareBonesAnimeAdded($event->malID));
     }
 }

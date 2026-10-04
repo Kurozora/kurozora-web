@@ -28,7 +28,6 @@ class BareBonesGameAddedListener implements ShouldQueue
             return;
         }
 
-        dispatch(new ProcessBareBonesGameAdded($event->slug))
-            ->delay(now()->addMinutes(5));
+        dispatch(new ProcessBareBonesGameAdded($event->slug));
     }
 }

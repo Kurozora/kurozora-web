@@ -28,7 +28,6 @@ class BareBonesProducerAddedListener implements ShouldQueue
             return;
         }
 
-        dispatch(new ProcessBareBonesProducerAdded($event->malID))
-            ->delay(now()->addMinutes(5));
+        dispatch(new ProcessBareBonesProducerAdded($event->malID));
     }
 }
