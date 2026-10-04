@@ -74,7 +74,7 @@ class PersonController extends Controller
 
         $user = $request->user();
 
-        $person->load(['media'])
+        $person->load(['media', 'relationships.relatedPerson.media'])
             ->when($user, function ($query, $user) use ($person) {
                 return $person->loadMissing(['mediaRatings' => function ($query) use ($user) {
                     $query->where('user_id', '=', $user->id);

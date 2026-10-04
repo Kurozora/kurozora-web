@@ -354,7 +354,12 @@ class PersonController extends Controller
         // Get the relationships
         $relationships = $person->relationships()
             ->with(['relatedPerson' => function ($query) {
-                $query->with(['media']);
+                $query->with(['media', 'mediaStat'])
+                    ->when(auth()->user(), function ($query, $user) {
+                        $query->with(['mediaRatings' => function ($query) use ($user) {
+                            $query->where('user_id', '=', $user->id);
+                        }]);
+                    });
             }])
             ->cursorPaginate($data['limit'] ?? 25);
 

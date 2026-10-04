@@ -260,6 +260,10 @@ picture::before {
     @apply relative flex-grow w-60;
   }
 
+  .lockup-relationship {
+    @apply relative flex-grow w-[98%] sm:w-80 max-w-sm pb-2 shrink-0 snap-normal snap-start;
+  }
+
   /**
    * Sidebar utilities
    */

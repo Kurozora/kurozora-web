@@ -195,6 +195,20 @@
             <x-person.media-section :person="$person" :type="\App\Models\Game::class" />
 
             <x-person.media-section :person="$person" :type="\App\Models\Character::class" />
+
+            @if ($person->relationships->isNotEmpty())
+                <div class="bg-tinted">
+                    <section class="pb-8">
+                        <x-section-nav class="pt-4 xl:safe-area-inset-scroll">
+                            <x-slot:title>
+                                {{ __('Relationships') }}
+                            </x-slot:title>
+                        </x-section-nav>
+
+                        <x-rows.relationship-lockup :relationships="$person->relationships" />
+                    </section>
+                </div>
+            @endif
         </div>
 
         <x-reviews.report-modal />

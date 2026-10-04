@@ -24,23 +24,16 @@ class PersonRelationshipResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $resource = [
-            'id' => (string) $this->resource->id,
-            'type' => 'relationships',
+        return [
+            'person' => PersonResourceBasic::make($this->resource->relatedPerson),
             'attributes' => [
-                'relation' => $this->resource->type->description,
-                'startedAt' => $this->resource->started_on?->toDateString(),
-                'endedAt' => $this->resource->ended_on?->toDateString(),
+                'relation' => [
+                    'name' => $this->resource->type->key,
+                    'description' => $this->resource->type->description,
+                ],
+                'startedAt' => $this->resource->started_on?->timestamp,
+                'endedAt' => $this->resource->ended_on?->timestamp,
             ],
         ];
-
-        $relationships = [
-            'people' => [
-                'href' => route('api.people.details', $this->resource->relatedPerson, false),
-                'data' => PersonResourceBasic::collection([$this->resource->relatedPerson]),
-            ],
-        ];
-
-        return array_merge($resource, ['relationships' => $relationships]);
     }
 }
