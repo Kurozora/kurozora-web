@@ -83,14 +83,14 @@ class APIClientToken extends Resource
                 ->help('The identifier name is displayed as the app name to users when requesting access to ' . config('app.name') . '.'),
 
             Text::make('Description')
-                ->rules('max:255')
+                ->rules('required', 'max:255')
                 ->help('An internal notes field to describe the purpose, scope, or target system of this token.'),
 
             Text::make('Identifier')
                 ->readonly(function () {
                     return $this->resource->exists;
                 })
-                ->rules('max:255')
+                ->rules('required', 'max:255')
                 ->help('A reverse-domain name style string for the identifier (i.e., ' . config('app.ios.bundle_id') . ').'),
 
             Password::make('Token')
