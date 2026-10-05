@@ -11,9 +11,11 @@ use App\Models\Manga;
 use App\Models\User;
 use App\Models\UserLibrary;
 use App\Notifications\LocalLibraryImportFinished;
+use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Carbon;
@@ -83,6 +85,8 @@ class ProcessLocalLibraryImport implements ShouldQueue
 
     /**
      * Execute the job.
+     *
+     * @throws ConnectionException|InvalidEnumKeyException
      */
     public function handle(): void
     {
@@ -94,7 +98,7 @@ class ProcessLocalLibraryImport implements ShouldQueue
             if ($this->behavior->value === ImportBehavior::Overwrite) {
                 $this->user->clearLibrary();
                 $this->user->clearFavorites();
-                $this->user->mediaRatings()->forceDelete();
+                $this->user->mediaRatings()->delete();
             }
 
             $this->startImportProgress(count($json));
@@ -151,7 +155,6 @@ class ProcessLocalLibraryImport implements ShouldQueue
         $createdAt = $this->convertDate($creationDate);
 
         // Add entry to their library
-        // `withTrashed()` avoids colliding with an existing tombstone on the unique key.
         UserLibrary::withTrashed()->updateOrCreate([
             'user_id' => $this->user->id,
             'trackable_type' => $model->getMorphClass(),
