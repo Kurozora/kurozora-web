@@ -19,7 +19,6 @@
 
         <form method="POST" action="{{ route('sign-up') }}">
             @csrf
-            <x-honey recaptcha="sign_up" />
 
             <x-input
                 x-data="{

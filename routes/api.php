@@ -57,9 +57,5 @@ Route::prefix('/v1')
         require 'API/v1/Minigames/Kotodama.php';
     });
 
-Route::get('/{wordpress_url}', [APIController::class, 'markSpammer'])
-    ->where(['wordpress_url' => '(?:[a-zA-Z0-9_-]+\/)?(wordpress|wp-includes|wp-admin|wp-content).*'])
-    ->name('.wordpress');
-
 Route::fallback([APIController::class, 'error'])
     ->name('.fallback');

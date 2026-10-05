@@ -21,7 +21,6 @@
 
         <form method="POST" action="{{ route('password.update') }}">
             @csrf
-            <x-honey recaptcha="reset_password" />
 
             <input type="hidden" name="token" value="{{ $request->route('token') }}">
 

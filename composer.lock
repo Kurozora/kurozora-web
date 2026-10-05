@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ca7b0fcd666c187bad11612eb6a69350",
+    "content-hash": "488006b3608012abde8d92f084f9b7b4",
     "packages": [
         {
             "name": "abbasudo/pulse-users",
@@ -6550,68 +6550,6 @@
                 }
             ],
             "time": "2026-09-28T18:12:47+00:00"
-        },
-        {
-            "name": "lukeraymonddowning/honey",
-            "version": "v1.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/lukeraymonddowning/honey.git",
-                "reference": "eddb0f599fafc56475fab48dbc79b2769015bdd9"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/lukeraymonddowning/honey/zipball/eddb0f599fafc56475fab48dbc79b2769015bdd9",
-                "reference": "eddb0f599fafc56475fab48dbc79b2769015bdd9",
-                "shasum": ""
-            },
-            "require": {
-                "guzzlehttp/guzzle": "^7.2",
-                "illuminate/support": "^9.49|^10.0|^11.0|^12.0",
-                "php": "^8.1"
-            },
-            "require-dev": {
-                "livewire/livewire": "^3.0",
-                "orchestra/testbench": "^7.0|^8.0|^9.0|^10.0"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "aliases": {
-                        "Honey": "Lukeraymonddowning\\Honey\\Facades\\Honey"
-                    },
-                    "providers": [
-                        "Lukeraymonddowning\\Honey\\Providers\\HoneyServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Lukeraymonddowning\\Honey\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "luke",
-                    "email": "lukeraymonddowning@gmail.com"
-                }
-            ],
-            "description": "Reduce spam on your Laravel site.",
-            "support": {
-                "issues": "https://github.com/lukeraymonddowning/honey/issues",
-                "source": "https://github.com/lukeraymonddowning/honey/tree/v1.1.0"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/lukeraymonddowning",
-                    "type": "github"
-                }
-            ],
-            "time": "2026-01-22T18:01:30+00:00"
         },
         {
             "name": "maennchen/zipstream-php",

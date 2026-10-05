@@ -176,13 +176,6 @@ Schedule::call(function() {
     ->onOneServer();
 
 /**********************************************/
-// Delete expired spammer blocks every day at 03:45
-Schedule::command('delete:expired_spammer_blocks')
-    ->dailyAt('3:45')
-    ->name('Delete expired spammer blocks')
-    ->onOneServer();
-
-/**********************************************/
 // Delete stale library sync tombstones every day at 03:50
 Schedule::command('delete:stale_library_tombstones')
     ->dailyAt('3:50')

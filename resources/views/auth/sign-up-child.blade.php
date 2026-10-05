@@ -19,7 +19,6 @@
 
         <form method='POST' action="{{ route('sign-up.child') }}">
             @csrf
-            <x-honey recaptcha='sign_up_child' />
 
             <section class='space-y-4'>
                 <div>

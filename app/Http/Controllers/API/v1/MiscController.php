@@ -8,8 +8,6 @@ use Carbon\Carbon;
 use File;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Lukeraymonddowning\Honey\Models\Spammer;
 use Markdown;
 
 class MiscController extends Controller
@@ -105,13 +103,4 @@ class MiscController extends Controller
         return str_replace('#UPDATE_DATE#', $lastUpdateStr, File::get($filePath));
     }
 
-    /**
-     * Mark a request as spammer.
-     *
-     * @param Request $request
-     */
-    protected function markSpammer(Request $request)
-    {
-        Spammer::markAttempt($request->ip());
-    }
 }

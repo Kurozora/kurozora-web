@@ -65,7 +65,6 @@
         "laravel/tinker": "^2.10",
         "league/flysystem-aws-s3-v3": "^3.0",
         "livewire/livewire": "^3.0",
-        "lukeraymonddowning/honey": "^1.0",
         "marvinlabs/laravel-discord-logger": "^1.0.0",
         "meilisearch/meilisearch-php": "^1.0",
         "musa11971/php-jwt-decoder": "dev-php-7.4-and-8.0-support",

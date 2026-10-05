@@ -25,7 +25,6 @@
 
         <form method="POST" action="{{ route('password.email') }}">
             @csrf
-            <x-honey recaptcha="forget_password" />
 
             <div class="block">
                 <x-label for="email" value="{{ __('Email Address') }}" />

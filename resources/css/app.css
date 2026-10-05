@@ -114,11 +114,6 @@ picture::before {
   content: "";
 }
 
-/* Hide reCAPTCHA */
-.grecaptcha-badge {
-  @apply invisible;
-}
-
 /**
  * This injects all of Tailwind's utility classes, generated based on the
  * config file.

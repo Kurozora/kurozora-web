@@ -43,7 +43,6 @@
         <section>
             <form method="POST" action="{{ route('sign-in') }}">
                 @csrf
-                <x-honey recaptcha="sign_in" />
 
                 <x-input
                     x-data="{
