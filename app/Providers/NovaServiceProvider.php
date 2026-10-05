@@ -23,6 +23,7 @@ use App\Nova\ExploreCategory;
 use App\Nova\ExploreCategoryItem;
 use App\Nova\FeedMessage;
 use App\Nova\FeedMessageHashtag;
+use App\Nova\Franchise;
 use App\Nova\Game;
 use App\Nova\GameCast;
 use App\Nova\GameTranslation;
@@ -34,6 +35,7 @@ use App\Nova\Manga;
 use App\Nova\MangaCast;
 use App\Nova\MangaTranslation;
 use App\Nova\Media;
+use App\Nova\MediaFranchise;
 use App\Nova\MediaGenre;
 use App\Nova\MediaRating;
 use App\Nova\MediaRelation;
@@ -241,6 +243,7 @@ if (class_exists('Laravel\Nova\NovaApplicationServiceProvider')) {
                         collect([
                             Editorial::class,
                             Media::class,
+                            MediaFranchise::class,
                             MediaGenre::class,
                             MediaRating::class,
                             MediaRelation::class,
@@ -262,6 +265,7 @@ if (class_exists('Laravel\Nova\NovaApplicationServiceProvider')) {
                         __('Attributes'),
                         collect([
                             CastRole::class,
+                            Franchise::class,
                             Genre::class,
                             Relation::class,
                             Source::class,

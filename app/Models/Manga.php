@@ -11,6 +11,7 @@ use App\Support\BreadcrumbNode;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\Actionable;
 use App\Traits\Model\Favorable;
+use App\Traits\Model\HasMediaFranchises;
 use App\Traits\Model\HasMediaGenres;
 use App\Traits\Model\HasMediaLanguages;
 use App\Traits\Model\HasMediaRatings;
@@ -60,6 +61,7 @@ class Manga extends KModel implements HasMedia, Sitemapable
     use Actionable,
         Favorable,
         HasFactory,
+        HasMediaFranchises,
         HasMediaGenres,
         HasMediaLanguages,
         HasMediaRatings,

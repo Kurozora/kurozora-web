@@ -7,8 +7,6 @@ use App\Enums\MediaCollection;
 use App\Enums\SeasonOfYear;
 use App\Nova\Actions\ScrapeGame;
 use App\Nova\Actions\ScrapeNewGame;
-use App\Nova\Actions\ScrapeTopGame;
-use App\Nova\Actions\ScrapeUpcomingGame;
 use App\Nova\Filters\IsNsfw;
 use App\Nova\Filters\StartedAtYear;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
@@ -103,9 +101,6 @@ class Game extends Resource
             Heading::make('Identification'),
 
             ID::make()->sortable(),
-
-            Text::make('Series ID')
-                ->help('The ID of the franchise.'),
 
             BelongsTo::make('Parent', 'parent', Game::class)
                 ->searchable()
@@ -318,13 +313,17 @@ class Game extends Resource
 
             HasMany::make('Translations', 'translations', GameTranslation::class),
 
+            MorphMany::make('Videos'),
+
             MorphMany::make('Genres', 'mediaGenres', MediaGenre::class),
 
             MorphMany::make('Themes', 'mediaThemes', MediaTheme::class),
 
             MorphMany::make('Tags', 'mediaTags', MediaTag::class),
 
-//            HasMany::make('Cast', 'cast', GameCast::class),
+            MorphMany::make('Franchises', 'mediaFranchises', MediaFranchise::class),
+
+            HasMany::make('Cast', 'cast', GameCast::class),
 
             MorphMany::make('Relations', 'mediaRelations', MediaRelation::class),
 
@@ -408,28 +407,18 @@ class Game extends Resource
     public function actions(NovaRequest $request): array
     {
         return [
-//            ScrapeNewGame::make()
-//                ->canSee(function ($request) {
-//                    return $request->user()->can('createGame');
-//                })
-//                ->confirmButtonText('Scrape New Game')
-//                ->standalone(),
-//            ScrapeTopGame::make()
-//                ->canSee(function ($request) {
-//                    return $request->user()->hasRole('superAdmin');
-//                })
-//                ->standalone(),
-//            ScrapeUpcomingGame::make()
-//                ->canSee(function ($request) {
-//                    return $request->user()->hasRole('superAdmin');
-//                })
-//                ->standalone(),
-//            ScrapeGame::make()
-//                ->confirmText('Are you sure you want to scrape this game?')
-//                ->confirmButtonText('Scrape Game')
-//                ->canSee(function ($request) {
-//                    return $request->user()->can('updateGame');
-//                })->showInline(),
+            ScrapeNewGame::make()
+                ->canSee(function ($request) {
+                    return $request->user()->can('createGame');
+                })
+                ->confirmButtonText('Scrape New Game')
+                ->standalone(),
+            ScrapeGame::make()
+                ->confirmText('Are you sure you want to scrape this game?')
+                ->confirmButtonText('Scrape Game')
+                ->canSee(function ($request) {
+                    return $request->user()->can('updateGame');
+                })->showInline(),
         ];
     }
 

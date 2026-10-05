@@ -395,6 +395,8 @@ class Anime extends Resource
 
             MorphMany::make('Tags', 'mediaTags', MediaTag::class),
 
+            MorphMany::make('Franchises', 'mediaFranchises', MediaFranchise::class),
+
             HasMany::make('Seasons'),
 
             HasMany::make('Cast', 'cast', AnimeCast::class),

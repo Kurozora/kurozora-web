@@ -11,6 +11,7 @@ use App\Scopes\TvRatingScope;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\Actionable;
 use App\Traits\Model\Favorable;
+use App\Traits\Model\HasMediaFranchises;
 use App\Traits\Model\HasMediaGenres;
 use App\Traits\Model\HasMediaLanguages;
 use App\Traits\Model\HasMediaRatings;
@@ -65,6 +66,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
         Favorable,
         Remindable,
         HasFactory,
+        HasMediaFranchises,
         HasMediaGenres,
         HasMediaLanguages,
         HasMediaRatings,

@@ -51,6 +51,14 @@ Schedule::command('fix:manga_details')
     ->onOneServer();
 
 /**********************************************/
+// Discover and refresh anime-related games weekly
+Schedule::command('scrape:igdb_anime_games --cache')
+    ->weekly()
+    ->name('Scrape anime games')
+    ->withoutOverlapping()
+    ->onOneServer();
+
+/**********************************************/
 // Top up the Kotodama word bank from the catalog every Monday at 03:40
 Schedule::command('kotodama:generate-words')
     ->weeklyOn(1, '3:40')
