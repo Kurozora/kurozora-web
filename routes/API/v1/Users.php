@@ -11,6 +11,7 @@ use App\Http\Controllers\API\v1\UserController;
 use App\Http\Controllers\API\v1\UserFavoriteController;
 use App\Http\Controllers\API\v1\UserNoteController;
 use App\Http\Controllers\API\v1\UserTimeoutController;
+use App\Http\Controllers\API\v1\UserWatchedEpisodeController;
 use App\Http\Controllers\Auth\SignInWithAppleController;
 
 Route::prefix('/users')
@@ -96,6 +97,10 @@ Route::prefix('/users')
                 Route::get('/notes', [UserNoteController::class, 'overlay'])
                     ->middleware('auth.kurozora')
                     ->name('.notes');
+
+                Route::get('/watched', [UserWatchedEpisodeController::class, 'overlay'])
+                    ->middleware('auth.kurozora')
+                    ->name('.watched');
 
                 Route::get('/profile', [UserController::class, 'profile'])
                     ->middleware('auth.kurozora:optional')
