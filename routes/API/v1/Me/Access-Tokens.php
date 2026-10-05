@@ -9,6 +9,9 @@ Route::prefix('/access-tokens')
         Route::get('/', [AccessTokenController::class, 'index'])
             ->name('.index');
 
+        Route::post('/', [AccessTokenController::class, 'issue'])
+            ->name('.create');
+
         Route::post('/delete', [AccessTokenController::class, 'deleteMultiple'])
             ->name('.delete-multiple');
 

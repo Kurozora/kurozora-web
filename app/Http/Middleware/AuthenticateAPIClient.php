@@ -43,8 +43,11 @@ class AuthenticateAPIClient
             throw new AuthenticationException('X-API-Key header missing: ' . route('kb.generating-developer-tokens'));
         }
 
+        // Browsers own the User-Agent header.
+        $identifier = $request->header('X-Client-ID') ?? $userAgent['bundle'];
+
         // TODO: - Replace with JWT validation
-        if ($this->tokenIsValid($userAgent['bundle'], $jwt)) {
+        if ($this->tokenIsValid($identifier, $jwt)) {
             return $next($request);
         } else {
             throw new AuthenticationException('The request wasn’t accepted due to an issue with the credentials.');

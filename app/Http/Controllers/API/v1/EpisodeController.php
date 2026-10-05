@@ -15,11 +15,15 @@ use App\Http\Resources\MediaRatingResourceIdentity;
 use App\Models\Anime;
 use App\Models\Episode;
 use App\Models\MediaRating;
+use App\Models\UserWatchedEpisode;
+use App\Scopes\PublicScope;
+use App\Services\ScrobbleService;
 use App\Traits\Controller\WithCatalogCacheHeaders;
-use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Throwable;
 
 class EpisodeController extends Controller
 {
@@ -132,9 +136,16 @@ class EpisodeController extends Controller
                         ['user_id', '=', $user->id],
                     ]);
                 }])
+                    ->with(['userWatchedEpisodes' => function ($query) use ($user) {
+                        $query->where('user_id', '=', $user->id)
+                            ->with(['provider' => function ($query) {
+                                $query->withoutGlobalScope(PublicScope::class);
+                            }]);
+                    }])
                     ->withExists([
                         'userWatchedEpisodes as isWatched' => function ($query) use ($user) {
-                            $query->where('user_id', '=', $user->id);
+                            $query->where('user_id', '=', $user->id)
+                                ->completed();
                         }
                     ]);
             });
@@ -223,7 +234,8 @@ class EpisodeController extends Controller
                         }])
                             ->withExists([
                                 'userWatchedEpisodes as isWatched' => function ($query) use ($user) {
-                                    $query->where('user_id', $user->id);
+                                    $query->where('user_id', $user->id)
+                                        ->completed();
                                 },
                             ]);
                     });
@@ -239,40 +251,68 @@ class EpisodeController extends Controller
      * Marks an episode as watched or not watched.
      *
      * @param MarkEpisodeAsWatchedRequest $request
-     * @param Episode $episode
+     * @param ScrobbleService             $scrobbleService
+     * @param Episode                     $episode
      *
      * @return JsonResponse
-     * @throws Exception
+     * @throws Throwable
      */
-    public function watched(MarkEpisodeAsWatchedRequest $request, Episode $episode): JSONResponse
+    public function watched(MarkEpisodeAsWatchedRequest $request, ScrobbleService $scrobbleService, Episode $episode): JsonResponse
     {
         $user = auth()->user();
-        $anime = $episode->anime()->withoutGlobalScopes()
-            ->select([Anime::TABLE_NAME . '.id'])
-            ->with([
-                'translation'
-            ])
-            ->first();
-        $hasNotTracked = $user->hasNotTracked($anime);
-
-        if ($hasNotTracked) {
-            // The item could not be found
-            throw new AuthorizationException(__('Please add ":x" to your library first.', ['x' => $anime->title]));
-        }
 
         // Find if the user has watched the episode
         $isAlreadyWatched = $user->hasWatched($episode);
 
-        // If the episode's current status is watched then detach (unwatch) it, otherwise attach (watch) it.
-        if ($isAlreadyWatched) {
-            $user->episodes()->detach($episode);
-        } else {
-            $user->episodes()->attach($episode);
-        }
+        // attach/detach bypass model events.
+        DB::transaction(function () use ($user, $episode, $isAlreadyWatched, $scrobbleService) {
+            if ($isAlreadyWatched) {
+                $user->episodes()->detach($episode);
+            } else {
+                // Marking watched implies tracking.
+                $anime = $episode->anime()->withoutGlobalScopes()
+                    ->select([Anime::TABLE_NAME.'.id'])
+                    ->first();
+                $scrobbleService->ensureTracked($user, $anime);
+
+                // An in-progress scrobble row upgrades to completed.
+                $user->episodes()->syncWithoutDetaching([
+                    $episode->id => UserWatchedEpisode::completedAttributes(),
+                ]);
+            }
+
+            $user->bumpStateVersion();
+        });
 
         return JSONResult::success([
             'data' => [
-                'isWatched' => !$isAlreadyWatched
+                'isWatched' => ! $isAlreadyWatched,
+            ],
+        ]);
+    }
+
+    /**
+     * Clears an episode's watch row.
+     *
+     * @param Episode $episode
+     *
+     * @return JsonResponse
+     * @throws Throwable
+     */
+    public function clearWatched(Episode $episode): JsonResponse
+    {
+        $user = auth()->user();
+
+        // detach bypasses model events.
+        DB::transaction(function () use ($user, $episode) {
+            $user->episodes()->detach($episode);
+
+            $user->bumpStateVersion();
+        });
+
+        return JSONResult::success([
+            'data' => [
+                'isWatched' => false
             ]
         ]);
     }

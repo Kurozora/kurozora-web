@@ -48,6 +48,7 @@ Route::prefix('/me')
         require 'Me/Notifications.php';
         require 'Me/Recap.php';
         require 'Me/Reminders.php';
+        require 'Me/Scrobble.php';
         require 'Me/Sessions.php';
         require 'Me/Settings.php';
     });

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Contracts\Web\Auth\TwoFactorAuthenticationProvider;
 use App\Helpers\JSONResult;
+use App\Http\Requests\CreateAccessTokenRequest;
 use App\Http\Requests\CreateSessionAttributeRequest;
 use App\Http\Requests\GetPaginatedRequest;
 use App\Http\Requests\SignOutSessionsRequest;
@@ -51,6 +52,36 @@ class AccessTokenController
     }
 
     /**
+     * Issues a scoped token for a headless client.
+     *
+     * @param CreateAccessTokenRequest $request
+     *
+     * @return JsonResponse
+     */
+    public function issue(CreateAccessTokenRequest $request): JsonResponse
+    {
+        $data = $request->validated();
+
+        $user = auth()->user();
+
+        $newToken = $user->createToken($data['name'], $data['abilities'] ?? ['scrobble']);
+        /** @var PersonalAccessToken $personalAccessToken */
+        $personalAccessToken = $newToken->accessToken;
+
+        $user->createSessionAttributes($personalAccessToken, [
+            'platform' => $data['platform'] ?? null,
+            'platform_version' => $data['platform_version'] ?? null,
+            'device_vendor' => $data['device_vendor'] ?? null,
+            'device_model' => $data['device_model'] ?? null,
+        ], true);
+
+        return JSONResult::success([
+            'data' => AccessTokenResource::collection([$personalAccessToken]),
+            'authenticationToken' => $newToken->plainTextToken,
+        ]);
+    }
+
+    /**
      * Displays token information
      *
      * @param PersonalAccessToken $personalAccessToken
@@ -89,7 +120,7 @@ class AccessTokenController
             ->first();
 
         // Compare the passwords
-        $passwordIsValid  = $user && Hash::check($data['password'], $user->password);
+        $passwordIsValid = $user && Hash::check($data['password'], $user->password);
         $resolvedViaSplit = false;
 
         if (
@@ -108,7 +139,7 @@ class AccessTokenController
                 );
 
                 if ($otpIsValid) {
-                    $passwordIsValid  = true;
+                    $passwordIsValid = true;
                     $resolvedViaSplit = true;
                 }
             }
@@ -134,14 +165,14 @@ class AccessTokenController
             }
 
             $challengeToken = TwoFactorChallenge::issue($user, [
-                'platform'         => $data['platform'],
+                'platform' => $data['platform'],
                 'platform_version' => $data['platform_version'],
-                'device_vendor'    => $data['device_vendor'],
-                'device_model'     => $data['device_model'],
+                'device_vendor' => $data['device_vendor'],
+                'device_model' => $data['device_model'],
             ]);
 
             return JSONResult::success([
-                'two_factor'      => true,
+                'two_factor' => true,
                 'challenge_token' => $challengeToken,
             ]);
         }
@@ -153,17 +184,17 @@ class AccessTokenController
 
         // Create a new session attribute
         $user->createSessionAttributes($personalAccessToken, [
-            'platform'          => $data['platform'],
-            'platform_version'  => $data['platform_version'],
-            'device_vendor'     => $data['device_vendor'],
-            'device_model'      => $data['device_model'],
+            'platform' => $data['platform'],
+            'platform_version' => $data['platform_version'],
+            'device_vendor' => $data['device_vendor'],
+            'device_model' => $data['device_model'],
         ], true);
 
         return JSONResult::success([
-            'data'                  => [
-                UserResource::make($user)->includingAccessToken($personalAccessToken)
+            'data' => [
+                UserResource::make($user)->includingAccessToken($personalAccessToken),
             ],
-            'authenticationToken'   => $newToken->plainTextToken
+            'authenticationToken' => $newToken->plainTextToken
         ]);
     }
 
@@ -174,7 +205,7 @@ class AccessTokenController
      * @param PersonalAccessToken $personalAccessToken
      * @return JsonResponse
      */
-    function update(UpdateSessionAttributeRequest $request, PersonalAccessToken $personalAccessToken): JsonResponse
+    public function update(UpdateSessionAttributeRequest $request, PersonalAccessToken $personalAccessToken): JsonResponse
     {
         $data = $request->validated();
 
@@ -191,7 +222,7 @@ class AccessTokenController
         $displayMessage = 'Token update successful. ';
 
         if (count($changedFields)) {
-            $displayMessage .= 'You have updated: ' . join(', ', $changedFields) . '.';
+            $displayMessage .= 'You have updated: ' . implode(', ', $changedFields) . '.';
             $personalAccessToken->sessionAttribute->save();
         } else {
             $displayMessage .= 'No information was updated.';

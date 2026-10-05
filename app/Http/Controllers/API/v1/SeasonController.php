@@ -12,8 +12,12 @@ use App\Http\Requests\MarkSeasonAsWatchedRequest;
 use App\Http\Resources\EpisodeResourceIdentity;
 use App\Http\Resources\SeasonResource;
 use App\Models\Season;
+use App\Models\UserWatchedEpisode;
+use App\Services\ScrobbleService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Throwable;
 
 class SeasonController extends Controller
 {
@@ -49,7 +53,6 @@ class SeasonController extends Controller
         ]);
     }
 
-
     /**
      * Returns detailed information of requested IDs.
      *
@@ -81,7 +84,6 @@ class SeasonController extends Controller
             'data' => SeasonResource::collection($season->get()),
         ]);
     }
-
 
     /**
      * Returns the episodes for a season
@@ -120,16 +122,17 @@ class SeasonController extends Controller
         ]);
     }
 
-
     /**
      * Marks an episode as watched or not watched.
      *
      * @param MarkSeasonAsWatchedRequest $request
+     * @param ScrobbleService            $scrobbleService
      * @param Season                     $season
      *
      * @return JsonResponse
+     * @throws Throwable
      */
-    public function watched(MarkSeasonAsWatchedRequest $request, Season $season): JSONResponse
+    public function watched(MarkSeasonAsWatchedRequest $request, ScrobbleService $scrobbleService, Season $season): JsonResponse
     {
         $user = auth()->user();
         $episodeIDs = $season->episodes()->pluck('id');
@@ -137,17 +140,33 @@ class SeasonController extends Controller
         // Find if the user has watched the season
         $isAlreadyWatched = $user->hasWatchedSeason($season);
 
-        // If the episode's current status is watched then detach (unwatch) it, otherwise attach (watch) it.
-        if ($isAlreadyWatched) {
-            $user->episodes()->detach($episodeIDs);
-        } else {
-            $existingIDs = $user->episodes()
-                ->whereIn('episode_id', $episodeIDs)
-                ->pluck('episode_id');
-            $diffedEpisodeIDs = $episodeIDs->diff($existingIDs);
+        // attach/detach bypass model events.
+        DB::transaction(function () use ($user, $season, $episodeIDs, $isAlreadyWatched, $scrobbleService) {
+            if ($isAlreadyWatched) {
+                $user->episodes()->detach($episodeIDs);
+            } else {
+                // Marking watched implies tracking.
+                $anime = $season->anime()->withoutGlobalScopes()
+                    ->select(['id'])
+                    ->first();
+                $scrobbleService->ensureTracked($user, $anime);
 
-            $user->episodes()->attach($diffedEpisodeIDs);
-        }
+                $existingIDs = $user->episodes()
+                    ->whereIn('episode_id', $episodeIDs)
+                    ->pluck('episode_id');
+                $diffedEpisodeIDs = $episodeIDs->diff($existingIDs);
+
+                $user->episodes()->attach($diffedEpisodeIDs, UserWatchedEpisode::completedAttributes());
+
+                // Upgrade in-progress scrobble rows without touching already completed ones.
+                $user->userWatchedEpisodes()
+                    ->whereIn('episode_id', $episodeIDs)
+                    ->whereNull('completed_at')
+                    ->update(UserWatchedEpisode::completedAttributes());
+            }
+
+            $user->bumpStateVersion();
+        });
 
         return JSONResult::success([
             'data' => [

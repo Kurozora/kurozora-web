@@ -23,6 +23,9 @@ Route::prefix('/episodes')
                 Route::post('/watched', [EpisodeController::class, 'watched'])
                     ->middleware('auth.kurozora');
 
+                Route::delete('/watched', [EpisodeController::class, 'clearWatched'])
+                    ->middleware('auth.kurozora');
+
                 Route::prefix('rate')
                     ->middleware(['auth.kurozora', 'user.not-timed-out'])
                     ->group(function () {
