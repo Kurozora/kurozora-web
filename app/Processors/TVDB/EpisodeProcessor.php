@@ -71,9 +71,12 @@ class EpisodeProcessor implements ItemProcessorInterface
                 ->where('tvdb_id', '=', $tvdbID)
                 ->where('episode_count', '>', 0)
 //                ->where('media_type_id', '=', 2)
+                ->withExists(['seasons as has_season_one' => function ($query) {
+                    $query->where('number', '=', 1);
+                }])
                 ->get();
 
-            if ($candidates->count() === 1) {
+            if ($candidates->count() === 1 && !$candidates->first()->has_season_one) {
                 /** @var Anime $anime */
                 $anime = $candidates->first();
                 $animeStartedAt = $this->getAnimeAirDateTime($anime);
@@ -113,7 +116,7 @@ class EpisodeProcessor implements ItemProcessorInterface
 
         if (empty($season)) {
             logger()->channel('stderr')->warning(
-                '⚠️ [tvdb_id:' . $tvdbID . '] No Kurozora Season has tvdb_season=' . $tvdbSeasonNumber . '. Set the mapping in Nova first (TVDB Season N≥2 or shared tvdb_id across multiple Anime rows requires manual setup).'
+                '⚠️ [tvdb_id:' . $tvdbID . '] No Kurozora Season has tvdb_season=' . $tvdbSeasonNumber . '. Set the mapping in Nova first (TVDB Season N≥2, a tvdb_id shared across multiple Anime rows, or an anime that already has a Season 1 requires manual setup).'
             );
             return $item;
         }
