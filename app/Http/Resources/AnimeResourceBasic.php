@@ -42,9 +42,21 @@ class AnimeResourceBasic extends JsonResource
                 'tvdbID'                => $this->resource->tvdb_id,
                 'slug'                  => $this->resource->slug,
                 'videoUrl'              => $this->resource->video_url,
-                'poster'                => MediaResource::make($this->resource->media->firstWhere('collection_name', '=', MediaCollection::Poster)),
-                'banner'                => MediaResource::make($this->resource->media->firstWhere('collection_name', '=', MediaCollection::Banner)),
-                'logo'                  => MediaResource::make($this->resource->media->firstWhere('collection_name', '=', MediaCollection::Logo)),
+                'poster'                => MediaResource::make(
+                    $this->resource->media->where('collection_name', '=', MediaCollection::Poster)
+                        ->sortBy('order_column')
+                        ->first()
+                ),
+                'banner'                => MediaResource::make(
+                    $this->resource->media->where('collection_name', '=', MediaCollection::Banner)
+                        ->sortBy('order_column')
+                        ->first()
+                ),
+                'logo'                  => MediaResource::make(
+                    $this->resource->media->where('collection_name', '=', MediaCollection::Logo)
+                        ->sortBy('order_column')
+                        ->first()
+                ),
                 'originalTitle'         => $this->resource->original_title,
                 'title'                 => $this->resource->title,
                 'synonymTitles'         => $this->resource->synonym_titles,

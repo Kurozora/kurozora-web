@@ -35,7 +35,11 @@ class GenreResource extends JsonResource
                 'backgroundColor2'  => $this->resource->background_color_2,
                 'textColor1'        => $this->resource->text_color_1,
                 'textColor2'        => $this->resource->text_color_2,
-                'symbol'            => MediaResource::make($this->resource->media->firstWhere('collection_name', '=', MediaCollection::Symbol)),
+                'symbol'            => MediaResource::make(
+                    $this->resource->media->where('collection_name', '=', MediaCollection::Symbol)
+                        ->sortBy('order_column')
+                        ->first()
+                ),
                 'description'       => $this->resource->description,
                 'isNSFW'            => (bool) $this->resource->is_nsfw
             ]

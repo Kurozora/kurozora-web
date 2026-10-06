@@ -417,7 +417,10 @@ class LibraryController extends Controller
                 'number' => (int) $episode->number,
                 'seasonNumber' => (int) $episode->season_number,
                 'startedAt' => $episode->started_at?->timestamp,
-                'bannerURL' => $episode->media->firstWhere('collection_name', '=', MediaCollection::Banner)?->getFullUrl(),
+                'bannerURL' => $episode->media->where('collection_name', '=', MediaCollection::Banner)
+                    ->sortBy('order_column')
+                    ->first()
+                    ?->getFullUrl(),
             ])
             ->all();
     }
@@ -867,8 +870,12 @@ class LibraryController extends Controller
      */
     private function buildTrackableRow(mixed $trackable, string $morphClass): array
     {
-        $poster = $trackable->media->firstWhere('collection_name', '=', MediaCollection::Poster);
-        $banner = $trackable->media->firstWhere('collection_name', '=', MediaCollection::Banner);
+        $poster = $trackable->media->where('collection_name', '=', MediaCollection::Poster)
+            ->sortBy('order_column')
+            ->first();
+        $banner = $trackable->media->where('collection_name', '=', MediaCollection::Banner)
+            ->sortBy('order_column')
+            ->first();
         $airingDate = match ($morphClass) {
             Anime::class => $trackable->broadcast_date?->timestamp,
             Manga::class => $trackable->publication_date?->timestamp,

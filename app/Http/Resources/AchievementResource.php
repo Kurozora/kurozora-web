@@ -31,7 +31,11 @@ class AchievementResource extends JsonResource
             'attributes' => [
                 'name' => $this->resource->name,
                 'description' => $this->resource->description,
-                'symbol' => MediaResource::make($this->resource->media->firstWhere('collection_name', '=', MediaCollection::Symbol)),
+                'symbol' => MediaResource::make(
+                    $this->resource->media->where('collection_name', '=', MediaCollection::Symbol)
+                        ->sortBy('order_column')
+                        ->first()
+                ),
                 'achievedAt' => $this->resource->achieved_at?->timestamp,
             ]
         ];

@@ -23,7 +23,9 @@ trait InteractsWithMediaExtension {
         $collectionName = $collectionName ?? MediaCollection::Default();
 
         if ($this->relationLoaded('media')) {
-            $media = $this->media->where('collection_name', '=', $collectionName->value)->first();
+            $media = $this->media->where('collection_name', '=', $collectionName->value)
+                ->sortBy('order_column')
+                ->first();
         } else {
             $media = $this->getFirstMedia($collectionName->value);
         }

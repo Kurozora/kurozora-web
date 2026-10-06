@@ -30,7 +30,10 @@ class AppThemeResource extends JsonResource
             'type' => 'themes',
             'href' => route('api.theme-store.details', $this->resource, false),
             'attributes' => [
-                'screenshots' => MediaResource::collection($this->resource->media->where('collection_name', '=', MediaCollection::Screenshot)),
+                'screenshots' => MediaResource::collection(
+                    $this->resource->media->where('collection_name', '=', MediaCollection::Screenshot)
+                        ->sortBy('order_column')
+                ),
                 'name' => $this->resource->name,
                 'downloadLink' => route('api.theme-store.download', ['appTheme' => $this->resource->id]),
                 'downloadCount' => $this->resource->download_count,

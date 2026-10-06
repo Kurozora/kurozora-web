@@ -30,8 +30,12 @@ class SeasonResource extends JsonResource
         $resource = array_merge($resource, [
             'attributes' => [
                 'poster' => MediaResource::make(
-                    $this->resource->media->firstWhere('collection_name', '=', MediaCollection::Poster) ??
-                    $this->resource->anime->media->firstWhere('collection_name', '=', MediaCollection::Poster)
+                    $this->resource->media->where('collection_name', '=', MediaCollection::Poster)
+                        ->sortBy('order_column')
+                        ->first() ??
+                    $this->resource->anime->media->where('collection_name', '=', MediaCollection::Poster)
+                        ->sortBy('order_column')
+                        ->first()
                 ),
                 'number' => $this->resource->number,
                 'title' => $this->resource->title,

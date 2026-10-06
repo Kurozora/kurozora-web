@@ -33,7 +33,11 @@ class PlayerResource extends JsonResource
                 'name' => $this->resource->original_name,
                 'alternativeNames' => $this->resource->alternative_names,
                 'url' => $this->resource->url,
-                'logo' => MediaResource::make($this->resource->media->firstWhere('collection_name', '=', MediaCollection::Logo)),
+                'logo' => MediaResource::make(
+                    $this->resource->media->where('collection_name', '=', MediaCollection::Logo)
+                        ->sortBy('order_column')
+                        ->first()
+                ),
             ],
         ];
     }

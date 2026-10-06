@@ -39,8 +39,16 @@ class UserResourceBasic extends JsonResource
             'uuid' => $this->resource->uuid,
             'attributes' => [
                 'slug' => $this->resource->slug,
-                'profile' => MediaResource::make($this->resource->media->firstWhere('collection_name', '=', MediaCollection::Profile)),
-                'banner' => MediaResource::make($this->resource->media->firstWhere('collection_name', '=', MediaCollection::Banner)),
+                'profile' => MediaResource::make(
+                    $this->resource->media->where('collection_name', '=', MediaCollection::Profile)
+                        ->sortBy('order_column')
+                        ->first()
+                ),
+                'banner' => MediaResource::make(
+                    $this->resource->media->where('collection_name', '=', MediaCollection::Banner)
+                        ->sortBy('order_column')
+                        ->first()
+                ),
                 'username' => $this->resource->username,
                 'biography' => $this->resource->biography,
                 'biographyHTML' => $this->resource->biography_html,

@@ -28,7 +28,11 @@ class GameResourcePoster extends JsonResource
         return array_merge(GameResourceIdentity::make($this->resource)->toArray($request), [
             'attributes' => [
                 'title'  => $this->resource->title,
-                'poster' => MediaResource::make($this->resource->media->firstWhere('collection_name', '=', MediaCollection::Poster)),
+                'poster' => MediaResource::make(
+                    $this->resource->media->where('collection_name', '=', MediaCollection::Poster)
+                        ->sortBy('order_column')
+                        ->first()
+                ),
             ],
         ]);
     }

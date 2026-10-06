@@ -28,7 +28,11 @@ class CharacterResourceBasic extends JsonResource
         $resource = array_merge($resource, [
             'attributes' => [
                 'slug' => $this->resource->slug,
-                'profile' => MediaResource::make($this->resource->media->firstWhere('collection_name', '=', MediaCollection::Profile)),
+                'profile' => MediaResource::make(
+                    $this->resource->media->where('collection_name', '=', MediaCollection::Profile)
+                        ->sortBy('order_column')
+                        ->first()
+                ),
                 'name' => $this->resource->name,
                 'nicknames' => $this->resource->nicknames,
                 'about' => $this->resource->about,
