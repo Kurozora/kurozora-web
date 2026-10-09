@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Relations\Relation;
+use InvalidArgumentException;
 
 class MediaRating extends KModel implements ReactableContract
 {
@@ -86,6 +88,55 @@ class MediaRating extends KModel implements ReactableContract
                 ->whereColumn(Episode::TABLE_NAME . '.id', self::TABLE_NAME . '.model_id')
                 ->where(self::TABLE_NAME . '.model_type', Episode::class),
         ]);
+    }
+
+    /**
+     * Orders the ratings by the title of the rated model.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string                                $direction
+     *
+     * @return void
+     */
+    public function scopeOrderByModelTitle(\Illuminate\Database\Eloquent\Builder $query, string $direction): void
+    {
+        if (!in_array($direction, ['asc', 'desc'], true)) {
+            throw new InvalidArgumentException('Order direction must be "asc" or "desc".');
+        }
+
+        $translatedTitle = function (string $modelClass, string $column) {
+            $translation = Relation::noConstraints(fn () => (new $modelClass)->translation());
+
+            return $translation->getQuery()
+                ->select($column)
+                ->whereColumn($translation->getQualifiedForeignKeyName(), self::TABLE_NAME . '.model_id')
+                ->where(self::TABLE_NAME . '.model_type', '=', $modelClass)
+                ->limit(1)
+                ->toBase();
+        };
+        $ownTitle = function (string $modelClass, string $column) {
+            return $modelClass::withoutGlobalScopes()
+                ->selectRaw($column)
+                ->whereColumn($modelClass::TABLE_NAME . '.id', self::TABLE_NAME . '.model_id')
+                ->where(self::TABLE_NAME . '.model_type', '=', $modelClass)
+                ->toBase();
+        };
+
+        $titles = collect([
+            $translatedTitle(Anime::class, 'title'),
+            $translatedTitle(Manga::class, 'title'),
+            $translatedTitle(Game::class, 'title'),
+            $translatedTitle(Episode::class, 'title'),
+            $translatedTitle(Song::class, 'title'),
+            $translatedTitle(Character::class, 'name'),
+            $ownTitle(Person::class, "concat_ws(', ', last_name, first_name)"),
+            $ownTitle(Studio::class, 'name'),
+        ]);
+
+        $query->orderByRaw(
+            'coalesce(' . $titles->map(fn ($title) => '(' . $title->toSql() . ')')->implode(', ') . ') ' . $direction,
+            $titles->flatMap(fn ($title) => $title->getBindings())->all()
+        );
     }
 
     /**
@@ -178,6 +229,69 @@ class MediaRating extends KModel implements ReactableContract
             'loveReactant' => function (BelongsTo $query) use ($with) {
                 $query->with($with);
             },
+        ];
+    }
+
+    /**
+     * The orderable properties.
+     *
+     * @return array[]
+     */
+    public static function webSearchOrders(): array
+    {
+        return [
+            'created_at' => [
+                'title' => __('Date'),
+                'options' => [
+                    'Default' => null,
+                    'Newest' => 'desc',
+                    'Oldest' => 'asc',
+                ],
+                'selected' => null,
+            ],
+            'title' => [
+                'title' => __('Title'),
+                'options' => [
+                    'Default' => null,
+                    'A-Z' => 'asc',
+                    'Z-A' => 'desc',
+                ],
+                'selected' => null,
+            ],
+            'rating' => [
+                'title' => __('Rating'),
+                'options' => [
+                    'Default' => null,
+                    'Highest' => 'desc',
+                    'Lowest' => 'asc',
+                ],
+                'selected' => null,
+            ],
+        ];
+    }
+
+    /**
+     * The filterable properties.
+     *
+     * @return array[]
+     */
+    public static function webSearchFilters(): array
+    {
+        return [
+            'has_review' => [
+                'title' => __('Content'),
+                'type' => 'bool',
+                'options' => [
+                    __('With Review'),
+                    __('Ratings Only'),
+                ],
+                'selected' => null,
+            ],
+            'rating' => [
+                'title' => __('Rating'),
+                'type' => 'rating',
+                'selected' => null,
+            ],
         ];
     }
 

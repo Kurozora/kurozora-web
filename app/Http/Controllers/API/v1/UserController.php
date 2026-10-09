@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\v1;
 
 use App\Contracts\DeletesUsers;
+use App\Enums\ReviewKind;
 use App\Events\ModelViewed;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
@@ -188,10 +189,21 @@ class UserController extends Controller
         }
 
         $limit = (int) ($data['limit'] ?? 25);
+        $page = max(1, (int) ($data['page'] ?? 1));
+        $offset = isset($data['offset'])
+            ? max(0, (int) $data['offset'])
+            : ($page - 1) * $limit;
+        $kind = isset($data['kind']) ? ReviewKind::fromValue((int) $data['kind']) : null;
+        $hasReview = isset($data['has_review']) ? (int) $data['has_review'] : null;
+        $rating = isset($data['rating']) ? (float) $data['rating'] : null;
 
         $fingerprint = [
             'limit' => $limit,
-            'cursor' => $request->query('cursor'),
+            'offset' => $offset,
+            'kind' => $kind?->value,
+            'hasReview' => $hasReview,
+            'rating' => $rating,
+            'sort' => $request->query('sort'),
             'targetUserId' => $user->id,
             'isOwner' => auth()->id() === $user->id,
         ];
@@ -201,22 +213,40 @@ class UserController extends Controller
         }
         $etag = $this->stateVersionETag($user, $fingerprint);
 
-        // Get the feed messages
-        $mediaRatings = $user->mediaRatings()
+        $query = $user->mediaRatings()
             ->addEpisodePublicIdSelect()
             ->withCount('revisions')
             ->with(array_merge([
                 'user' => fn($query) => $this->eagerLoadUser($query)
             ], MediaRating::lockupEagerLoads(auth()->user())))
-            ->orderBy('created_at', 'desc')
-            ->cursorPaginate($limit);
+            ->when($kind, fn ($query) => $query->where('model_type', '=', $kind->getMorphClass()))
+            ->when($hasReview === 1, fn ($query) => $query->whereNotNull('description'))
+            ->when($hasReview === 0, fn ($query) => $query->whereNull('description'))
+            ->when($rating !== null, function ($query) use ($rating) {
+                $query->where('rating', '>=', $rating)
+                    ->where('rating', '<', $rating + 0.5);
+            })
+            ->sortViaRequest($request)
+            ->orderBy('created_at', 'desc');
 
-        // Get next page url minus domain
-        $nextPageURL = str_replace($request->root(), '', $mediaRatings->nextPageUrl() ?? '');
+        $mediaRatings = $query->skip($offset)
+            ->take($limit + 1)
+            ->get();
+        $hasMorePages = $mediaRatings->count() > $limit;
+        $mediaRatings = $mediaRatings->take($limit);
+
+        $nextPageURL = null;
+        if ($hasMorePages) {
+            $nextQuery = array_merge($request->query(), [
+                'offset' => $offset + $limit,
+                'page' => $page + 1,
+            ]);
+            $nextPageURL = $request->getPathInfo() . '?' . http_build_query($nextQuery);
+        }
 
         return JSONResult::success([
             'data' => MediaRatingResource::collection($mediaRatings),
-            'next' => empty($nextPageURL) ? null : $nextPageURL
+            'next' => $nextPageURL
         ])->withHeaders($this->stateVersionHeaders($etag, $user));
     }
 

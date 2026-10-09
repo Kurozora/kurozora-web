@@ -31,7 +31,7 @@
                     </div>
 
                     <div class="mt-1 w-full">
-                        <x-truncated-text class="ml-4 mr-4">
+                        <x-truncated-text>
                             <x-slot:text>
                                 {!! nl2br(e($mediaRating->description)) !!}
                             </x-slot:text>
@@ -65,7 +65,7 @@
                     </div>
 
                     <div class="mt-1 w-full">
-                        <x-truncated-text class="ml-4 mr-4">
+                        <x-truncated-text>
                             <x-slot:text>
                                 {!! nl2br(e($mediaRating->description)) !!}
                             </x-slot:text>
@@ -99,7 +99,7 @@
                     </div>
 
                     <div class="mt-1 w-full">
-                        <x-truncated-text class="ml-4 mr-4">
+                        <x-truncated-text>
                             <x-slot:text>
                                 {!! nl2br(e($mediaRating->description)) !!}
                             </x-slot:text>
@@ -133,7 +133,7 @@
                     </div>
 
                     <div class="mt-1 w-full">
-                        <x-truncated-text class="ml-4 mr-4">
+                        <x-truncated-text>
                             <x-slot:text>
                                 {!! nl2br(e($mediaRating->description)) !!}
                             </x-slot:text>
@@ -175,7 +175,7 @@
                     </div>
 
                     <div class="mt-1 w-full">
-                        <x-truncated-text class="ml-4 mr-4">
+                        <x-truncated-text>
                             <x-slot:text>
                                 {!! nl2br(e($mediaRating->description)) !!}
                             </x-slot:text>
@@ -209,7 +209,7 @@
                     </div>
 
                     <div class="mt-1 w-full">
-                        <x-truncated-text class="ml-4 mr-4">
+                        <x-truncated-text>
                             <x-slot:text>
                                 {!! nl2br(e($mediaRating->description)) !!}
                             </x-slot:text>
@@ -264,7 +264,7 @@
                     </div>
 
                     <div class="mt-1 w-full">
-                        <x-truncated-text class="ml-4 mr-4">
+                        <x-truncated-text>
                             <x-slot:text>
                                 {!! nl2br(e($mediaRating->description)) !!}
                             </x-slot:text>
@@ -276,7 +276,7 @@
         @case(\App\Models\Studio::class)
             <div class="flex flex-nowrap gap-2">
                 <picture
-                    class="relative shrink-0 w-28 rounded-full overflow-hidden"
+                    class="relative shrink-0 w-28 h-28 rounded-full overflow-hidden"
                     style="background-color: {{ $mediaRating->model->getFirstMedia(\App\Enums\MediaCollection::Profile)?->custom_properties['background_color'] ?? 'var(--bg-secondary-color)' }};"
                 >
                     <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $mediaRating->model->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/studio_profile.webp') }}" alt="{{ $mediaRating->model->name }} Logo" title="{{ $mediaRating->model->name }}">
@@ -298,7 +298,7 @@
                     </div>
 
                     <div class="mt-1 w-full">
-                        <x-truncated-text class="ml-4 mr-4">
+                        <x-truncated-text>
                             <x-slot:text>
                                 {!! nl2br(e($mediaRating->description)) !!}
                             </x-slot:text>

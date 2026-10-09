@@ -305,7 +305,7 @@ final class SearchCriteria
     }
 
     /**
-     * Fills the selected direction of each order from the given input.
+     * Fills the selected direction of the first order the given input names.
      *
      * @param array $orders
      * @param mixed $input
@@ -315,10 +315,12 @@ final class SearchCriteria
     protected function setOrder(array $orders, mixed $input): void
     {
         $input = is_array($input) ? $input : [];
+        $isOrdering = false;
 
         foreach ($orders as $key => $order) {
             $direction = $input[$key] ?? null;
-            $order['selected'] = in_array($direction, ['asc', 'desc'], true) ? $direction : null;
+            $order['selected'] = !$isOrdering && in_array($direction, ['asc', 'desc'], true) ? $direction : null;
+            $isOrdering = $isOrdering || $order['selected'] !== null;
             $this->order[$key] = $order;
         }
     }
@@ -357,6 +359,7 @@ final class SearchCriteria
             'day' => preg_match('/^(0[1-9]|[12]\d|3[01])$/', $value) === 1,
             'month' => preg_match('/^([1-9]|1[0-2])$/', $value) === 1,
             'bool' => in_array($value, ['0', '1'], true),
+            'rating' => collect(range(0.5, 5, 0.5))->contains(fn ($rating) => (string) $rating === $value),
             'select' => collect($filter['options'] ?? [])->keys()->contains(fn ($option) => (string) $option === $value),
             default => strlen($value) <= 255,
         };

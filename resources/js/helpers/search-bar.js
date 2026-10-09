@@ -35,6 +35,10 @@ export default class SearchBarManager {
             return
         }
 
+        if (event.target.name.startsWith('order[') && event.target.value !== '') {
+            this.#reset(form, 'order', event.target)
+        }
+
         this.submit(form)
     }
 
@@ -66,9 +70,9 @@ export default class SearchBarManager {
         this.submit(form)
     }
 
-    #reset(form, group) {
+    #reset(form, group, kept = null) {
         for (const control of form.elements) {
-            if (!control.name.startsWith(group + '[')) {
+            if (control === kept || !control.name.startsWith(group + '[')) {
                 continue
             }
 
