@@ -325,7 +325,7 @@ class LibraryController extends Controller
         $libraryTable = UserLibrary::TABLE_NAME;
 
         $query = $morphClass::withoutGlobalScopes()
-            ->with(['translation', 'media', 'genres', 'status', 'mediaType', 'mediaStat'])
+            ->with(['translation', 'media', 'genres', 'status', 'mediaType', 'mediaStat', 'studios', 'tvRating'])
             ->when($morphClass === Anime::class, function ($query) {
                 $query->with(['latestAiredEpisode', 'nextEpisode']);
             })
@@ -357,7 +357,7 @@ class LibraryController extends Controller
         if (!empty($gapIDs)) {
             $models = $models->concat(
                 $morphClass::withoutGlobalScopes()
-                    ->with(['translation', 'media', 'genres', 'status', 'mediaType', 'mediaStat'])
+                    ->with(['translation', 'media', 'genres', 'status', 'mediaType', 'mediaStat', 'studios', 'tvRating'])
                     ->when($morphClass === Anime::class, function ($query) {
                         $query->with(['latestAiredEpisode', 'nextEpisode']);
                     })
@@ -906,6 +906,10 @@ class LibraryController extends Controller
         };
         $firstAired = $trackable->started_at ?? $trackable->published_at;
         $lastAired = $trackable->ended_at;
+        $studio = match ($morphClass) {
+            Manga::class => $trackable->studios->firstWhere('is_publisher', '=', true),
+            default => $trackable->studios->firstWhere('is_studio', '=', true),
+        } ?? $trackable->studios->first();
 
         return [
             'id' => (string) $trackable->id,
@@ -919,6 +923,7 @@ class LibraryController extends Controller
             'bannerURL' => $banner?->getFullUrl(),
             'bannerBackgroundColor' => $banner?->getCustomProperty('background_color'),
             'genresLocalized' => $trackable->genres->pluck('name')->implode(', '),
+            'studioName' => $studio?->name,
             'mediaTypeID' => $trackable->media_type_id !== null ? (int) $trackable->media_type_id : null,
             'mediaTypeName' => $trackable->mediaType?->name,
             'statusID' => $trackable->status_id !== null ? (int) $trackable->status_id : null,
@@ -929,6 +934,7 @@ class LibraryController extends Controller
             'popularityRank' => $trackable->mediaStat?->rank_total,
             'publicRating' => $trackable->mediaStat?->rating_average !== null ? (float) $trackable->mediaStat->rating_average : null,
             'tvRatingID' => $trackable->tv_rating_id !== null ? (int) $trackable->tv_rating_id : null,
+            'tvRatingName' => $trackable->tvRating?->name,
             'sourceID' => $trackable->source_id !== null ? (int) $trackable->source_id : null,
             'countryOfOrigin' => $trackable->country_id,
             'isNSFW' => $trackable->is_nsfw !== null ? (bool) $trackable->is_nsfw : null,
