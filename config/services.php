@@ -38,6 +38,7 @@ return [
         'key_id' => env('APPLE_KEY_ID'),
         'private_key' => str_replace('#', "\n", env('APPLE_PRIVATE_KEY') ?? ''), // with double quote; otherwise \n isn't parsed.
         'client_id' => env('APPLE_CLIENT_ID', 'app.kurozora.web.tracker'),
+        'client_secret' => null, // required by Socialite; minted per request from the private key.
         'redirect' => env('APPLE_REDIRECT_URI', '/siwa/callback'),
         'store_kit' => [
             'password' => env('SK_APP_PASSWORD'),
