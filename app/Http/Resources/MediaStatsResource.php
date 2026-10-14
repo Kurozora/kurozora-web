@@ -42,6 +42,8 @@ class MediaStatsResource extends JsonResource
             'rankTotal' => $this->resource->rank_total ?? 0,
             'sentiment' => $this->resource->sentiment,
             'positivePercentage' => $this->resource->positive_percentage,
+            // Deprecated: aliased to `positivePercentage` until `highestRatingPercentage` is dropped after 1.15.0.
+            'highestRatingPercentage' => $this->resource->positive_percentage,
             'favoriteSentiment' => $this->resource->favorite_sentiment,
             'favoriteCount' => $this->resource->favorite_count ?? 0,
             'favoriteShare' => round($this->resource->favorite_share, 2),
