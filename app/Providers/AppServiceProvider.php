@@ -112,6 +112,30 @@ class AppServiceProvider extends ServiceProvider
             return $this->withCount($aggregates);
         });
 
+        // Picks a random row without sorting the whole table.
+        // A macro because Eloquent replaces a null scope result with the builder.
+        Builder::macro('randomFirst', function (): ?Model {
+            /** @var Builder $this */
+            $column = $this->getModel()->getQualifiedKeyName();
+            $maxID = (clone $this)->max($column);
+
+            if ($maxID === null) {
+                return null;
+            }
+
+            for ($attempt = 0; $attempt < 5; $attempt++) {
+                $candidate = (clone $this)
+                    ->where($column, '>=', random_int(1, (int) $maxID))
+                    ->first();
+
+                if ($candidate !== null) {
+                    return $candidate;
+                }
+            }
+
+            return (clone $this)->first();
+        });
+
         // Prevent dangerous actions
         DB::prohibitDestructiveCommands(app()->isProduction());
         SeedCommand::prohibit(app()->isProduction());
