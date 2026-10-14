@@ -20,11 +20,15 @@ Route::prefix('/episodes')
                     ->middleware('auth.kurozora:optional')
                     ->name('.suggestions');
 
-                Route::post('/watched', [EpisodeController::class, 'watched'])
-                    ->middleware('auth.kurozora');
+                Route::prefix('watched')
+                    ->middleware('auth.kurozora')
+                    ->group(function () {
+                        Route::post('/', [EpisodeController::class, 'watched'])
+                            ->name('.watched');
 
-                Route::delete('/watched', [EpisodeController::class, 'clearWatched'])
-                    ->middleware('auth.kurozora');
+                        Route::delete('/', [EpisodeController::class, 'clearWatched'])
+                            ->name('.delete-watched');
+                    });
 
                 Route::prefix('rate')
                     ->middleware(['auth.kurozora', 'user.not-timed-out'])
