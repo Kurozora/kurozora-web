@@ -977,7 +977,7 @@ class Manga extends KModel implements HasMedia, Sitemapable
         return $query->where(self::TABLE_NAME . '.publication_season', '!=', season_of_year()->value)
             ->whereYear(self::TABLE_NAME . '.started_at', '!=', now()->year)
             ->where(self::TABLE_NAME . '.started_at', '<=', now())
-            ->where(self::TABLE_NAME . '.status_id', '=', 3)
+            ->where(self::TABLE_NAME . '.status_id', '=', 8)
             ->orderBy(self::TABLE_NAME . '.started_at', 'desc')
             ->limit($limit);
     }

@@ -133,6 +133,7 @@ class BrowseController extends Controller
     {
         $modelClass = $this->modelClass($kind);
         $dateColumn = $this->dateColumn($kind);
+        $statusID = $this->continuingStatusID($kind);
         $seasonStartDate = $this->seasonStartDate();
         $user = $request->user();
 
@@ -145,14 +146,14 @@ class BrowseController extends Controller
 
         $searchIndex = (new SearchIndex($modelClass, $criteria))
             ->hydrate(fn (Builder $query) => $this->hydrateTitles($query))
-            ->index(function (Builder $query) use ($modelClass, $dateColumn, $seasonStartDate) {
+            ->index(function (Builder $query) use ($modelClass, $dateColumn, $statusID, $seasonStartDate) {
                 $query->where([
-                    [$modelClass::TABLE_NAME . '.status_id', '=', 3],
+                    [$modelClass::TABLE_NAME . '.status_id', '=', $statusID],
                     [$modelClass::TABLE_NAME . '.' . $dateColumn, '<=', $seasonStartDate->toDateString()],
                 ])
                     ->orderBy($dateColumn, 'desc');
             })
-            ->where('status_id', 3)
+            ->where('status_id', $statusID)
             ->where($dateColumn, ['<=', $seasonStartDate->timestamp]);
 
         if ($user !== null && !empty($criteria->libraryStatuses())) {
@@ -203,7 +204,7 @@ class BrowseController extends Controller
     {
         $modelClass = $this->modelClass($kind);
         $item = $modelClass::where([
-            ['status_id', '=', 3],
+            ['status_id', '=', $this->continuingStatusID($kind)],
             [$this->dateColumn($kind), '<=', $this->seasonStartDate()->toDateString()],
         ])->randomFirst();
 
@@ -345,6 +346,22 @@ class BrowseController extends Controller
         return match ($kind) {
             UserLibraryKind::Anime, UserLibraryKind::Manga => 'started_at',
             UserLibraryKind::Game => 'published_at',
+        };
+    }
+
+    /**
+     * The ID of the status a continuing title of a kind has.
+     *
+     * @param int $kind
+     *
+     * @return int
+     */
+    protected function continuingStatusID(int $kind): int
+    {
+        return match ($kind) {
+            UserLibraryKind::Anime => 3,
+            UserLibraryKind::Manga => 8,
+            UserLibraryKind::Game => 14,
         };
     }
 
