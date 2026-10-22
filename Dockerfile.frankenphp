@@ -31,7 +31,7 @@ FROM ghcr.io/techarohq/anubis:v1.25.0 AS anubis-binary
 ###
 
 ### Custom FrankenPHP build with caddy-ratelimit
-FROM dunglas/frankenphp:1.12-builder-php8.5-alpine AS frankenphp-builder
+FROM dunglas/frankenphp:1.13-builder-php8.5-alpine AS frankenphp-builder
 
 COPY --from=caddy:builder-alpine /usr/bin/xcaddy /usr/bin/xcaddy
 
@@ -50,7 +50,7 @@ RUN CGO_ENABLED=1 \
 ###
 
 ### Shared PHP base stage with system deps and PHP extensions installed once
-FROM dunglas/frankenphp:1.12-php8.5-alpine AS php-base
+FROM dunglas/frankenphp:1.13-php8.5-alpine AS php-base
 
 # Override the stock FrankenPHP binary with the caddy-ratelimit build
 COPY --from=frankenphp-builder /usr/local/bin/frankenphp /usr/local/bin/frankenphp
