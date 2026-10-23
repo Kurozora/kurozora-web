@@ -163,10 +163,16 @@ class NewUserMention extends Notification
      */
     public function toApn(User $notifiable): ApnMessage
     {
-        return ApnMessage::create()
+        $apnMessage = ApnMessage::create()
             ->title($this->model->user->username . ' mentioned you')
             ->badge($notifiable->unreadNotifications()->count())
             ->body($this->model->content)
             ->custom('notification_id', $this->id);
+
+        if ($this->model instanceof FeedMessage) {
+            $apnMessage->custom('path', 'feed/' . $this->model->getKey());
+        }
+
+        return $apnMessage;
     }
 }

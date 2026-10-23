@@ -130,7 +130,8 @@ class NewEpisode extends Notification implements ShouldQueue
                 'number' => $this->episodeNumber,
                 'title' => $this->resolvedTitle(),
             ]))
-            ->custom('notification_id', $this->id);
+            ->custom('notification_id', $this->id)
+            ->custom('path', 'episode/' . $this->episodePublicID);
     }
 
     /**

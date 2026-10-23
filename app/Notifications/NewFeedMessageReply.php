@@ -107,6 +107,7 @@ class NewFeedMessageReply extends Notification implements ShouldQueue
             ->title($this->feedMessage->user->username . ' Replied to Your Message')
             ->badge($notifiable->unreadNotifications()->count())
             ->body($this->feedMessage->content)
-            ->custom('notification_id', $this->id);
+            ->custom('notification_id', $this->id)
+            ->custom('path', 'feed/' . $this->feedMessage->id);
     }
 }

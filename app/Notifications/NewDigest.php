@@ -65,7 +65,8 @@ class NewDigest extends Notification implements ShouldQueue
             ->title(__('Your week in anime'))
             ->badge($notifiable->unreadNotifications()->count())
             ->body(__('Your weekly digest is ready. See what dropped on your list.'))
-            ->custom('notification_id', $this->id);
+            ->custom('notification_id', $this->id)
+            ->custom('path', 'digest');
     }
 
     /**

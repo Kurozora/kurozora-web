@@ -104,6 +104,7 @@ class NewFollower extends Notification implements ShouldQueue
             ->title(__('New follower'))
             ->badge($notifiable->unreadNotifications()->count())
             ->body(__(':x followed you.', ['x' => $this->follower->username]))
-            ->custom('notification_id', $this->id);
+            ->custom('notification_id', $this->id)
+            ->custom('path', 'profile/' . $this->follower->id);
     }
 }

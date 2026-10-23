@@ -107,7 +107,8 @@ class SubscriptionStatus extends Notification
             ->title($this->getTitle())
             ->body($this->getDescription())
             ->badge($notifiable->unreadNotifications()->count())
-            ->custom('notification_id', $this->id);
+            ->custom('notification_id', $this->id)
+            ->custom('path', 'kurozora-plus');
     }
 
     /**

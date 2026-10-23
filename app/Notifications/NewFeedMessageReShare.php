@@ -110,6 +110,7 @@ class NewFeedMessageReShare extends Notification implements ShouldQueue
             ->title($isQuote ? $username . ' quoted your message' : $username . ' re-shared your message')
             ->badge($notifiable->unreadNotifications()->count())
             ->body($isQuote ? $this->feedMessage->content : '')
-            ->custom('notification_id', $this->id);
+            ->custom('notification_id', $this->id)
+            ->custom('path', 'feed/' . $this->feedMessage->id);
     }
 }

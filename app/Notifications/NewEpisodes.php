@@ -114,7 +114,7 @@ class NewEpisodes extends Notification implements ShouldQueue
      */
     public function toApn(User $notifiable): ApnMessage
     {
-        return ApnMessage::create()
+        $apnMessage = ApnMessage::create()
             ->title(str(__('New Episodes'))->lower()->ucfirst())
             ->badge($notifiable->unreadNotifications()->count())
             ->body(__(':count new episodes of :title are out now.', [
@@ -122,6 +122,12 @@ class NewEpisodes extends Notification implements ShouldQueue
                 'title' => $this->resolvedTitle(),
             ]))
             ->custom('notification_id', $this->id);
+
+        if ($episodeID = $this->episodes[0]['episodeID'] ?? null) {
+            $apnMessage->custom('path', 'episode/' . $episodeID);
+        }
+
+        return $apnMessage;
     }
 
     /**
