@@ -8920,9 +8920,9 @@ function generateWireObject(component, state) {
     get(target, property) {
       if (property === "__instance")
         return component;
-      if (property in aliases) {
+      if (Object.hasOwn(aliases, property)) {
         return getProperty(component, aliases[property]);
-      } else if (property in properties) {
+      } else if (Object.hasOwn(properties, property)) {
         return getProperty(component, property);
       } else if (property in state) {
         return state[property];
@@ -9113,13 +9113,13 @@ var Component = class {
   mergeQueuedUpdates(diff2) {
     Object.entries(this.queuedUpdates).forEach(([updateKey, updateValue]) => {
       Object.entries(diff2).forEach(([diffKey, diffValue]) => {
-        if (diffKey.startsWith(updateValue)) {
+        if (diffKey === updateKey || diffKey.startsWith(updateKey + ".")) {
           delete diff2[diffKey];
         }
       });
       diff2[updateKey] = updateValue;
     });
-    this.queuedUpdates = [];
+    this.queuedUpdates = {};
     return diff2;
   }
   applyUpdates(object, updates) {
@@ -9912,6 +9912,10 @@ function injectStyles() {
 
     #nprogress {
       pointer-events: none;
+
+      /* NProgress fades out by setting opacity here, which creates a stacking context... */
+      position: relative;
+      z-index: 1031;
     }
 
     #nprogress .bar {
