@@ -6,6 +6,7 @@ use App\Enums\UserLibraryKind;
 use App\Notifications\LibraryImportFinished;
 use App\Notifications\LibraryImportUnsupported;
 use App\Notifications\LocalLibraryImportFinished;
+use App\Notifications\NewDigest;
 use App\Notifications\NewEpisode;
 use App\Notifications\NewEpisodes;
 use App\Notifications\NewFeedMessageReply;
@@ -148,6 +149,9 @@ class Notification extends DatabaseNotification
                     'count' => $count,
                     'title' => self::getData('animeTitle'),
                 ]);
+            // Digest notifications
+            case NewDigest::class:
+                return __('Your weekly digest is ready. See what dropped on your list.');
         }
 
         return __('You have a new notification.');
@@ -168,6 +172,8 @@ class Notification extends DatabaseNotification
             NewUserMention::class => __('Mention'),
             SubscriptionStatus::class => __('Subscription Update'),
             UserTimedOut::class, UserTimeoutExpired::class => __('Moderation'),
+            NewEpisode::class, NewEpisodes::class => __('New episode'),
+            NewDigest::class => __('Your week'),
             default => __('Other')
         };
     }
@@ -190,6 +196,8 @@ class Notification extends DatabaseNotification
             LibraryImportUnsupported::class => 'library',
             SubscriptionStatus::class => 'unlock',
             UserTimedOut::class, UserTimeoutExpired::class => 'shield_checkered',
+            NewEpisode::class, NewEpisodes::class => 'tv_sparkle',
+            NewDigest::class => 'library_chart_bar_xaxis_ascending_badge_clock',
             default => 'notifications',
         };
     }
@@ -234,6 +242,12 @@ class Notification extends DatabaseNotification
             case NewSession::class:
             case SubscriptionStatus::class:
                 return route('profile.settings');
+            case NewEpisode::class:
+            case NewEpisodes::class:
+                $episodeID = self::getData('episodeID');
+                return $episodeID !== null ? route('episodes.details', $episodeID) : null;
+            case NewDigest::class:
+                return route('digest.index');
             case LibraryImportFinished::class:
             case LibraryImportUnsupported::class:
             case LocalLibraryImportFinished::class:
