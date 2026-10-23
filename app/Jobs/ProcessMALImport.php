@@ -16,6 +16,7 @@ use App\Models\User;
 use App\Models\UserLibrary;
 use App\Models\UserWatchedEpisode;
 use App\Notifications\LibraryImportFinished;
+use App\Scopes\MorphTvRatingScope;
 use Artisan;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Model;
@@ -242,7 +243,7 @@ class ProcessMALImport implements ShouldQueue
 
         // Updated their anime score
         if (!empty($rating)) {
-            MediaRating::updateOrCreate([
+            MediaRating::withoutGlobalScope(MorphTvRatingScope::class)->updateOrCreate([
                 'user_id' => $this->user->id,
                 'model_type' => $model->getMorphClass(),
                 'model_id' => $model->id,

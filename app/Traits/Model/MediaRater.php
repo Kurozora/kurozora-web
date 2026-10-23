@@ -7,6 +7,7 @@ use App\Models\Anime;
 use App\Models\MediaRating;
 use App\Models\RatingCategory;
 use App\Models\RatingCategoryScore;
+use App\Scopes\MorphTvRatingScope;
 use App\Support\LowEffortReviewDetector;
 use App\Support\UserLibraryTouch;
 use Illuminate\Database\Eloquent\Builder;
@@ -122,6 +123,7 @@ trait MediaRater
     public function clearRatings(?string $type = null): bool
     {
         $affected = (bool) $this->mediaRatings()
+            ->withoutGlobalScope(MorphTvRatingScope::class)
             ->when($type != null, function ($query) use ($type) {
                 $query->where('model_type', '=', $type);
             })
@@ -161,6 +163,7 @@ trait MediaRater
 
         /** @var MediaRating|null $existing */
         $existing = $this->mediaRatings()
+            ->withoutGlobalScope(MorphTvRatingScope::class)
             ->where('model_type', '=', $morphClass)
             ->where('model_id', '=', $modelKey)
             ->first();
