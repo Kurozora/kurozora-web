@@ -1,7 +1,7 @@
 # Synced from Google's published crawler IP ranges:
-#   https://developers.google.com/static/search/apis/ipranges/googlebot.json (updated 2026-10-16T14:46:09.000000)
-#   https://developers.google.com/static/search/apis/ipranges/special-crawlers.json (updated 2026-10-16T14:46:08.000000)
-#   https://developers.google.com/static/search/apis/ipranges/user-triggered-fetchers-google.json (updated 2026-10-16T14:46:08.000000)
+#   https://developers.google.com/static/search/apis/ipranges/googlebot.json (updated 2026-10-30T15:46:20.000000)
+#   https://developers.google.com/static/search/apis/ipranges/special-crawlers.json (updated 2026-10-30T15:46:39.000000)
+#   https://developers.google.com/static/search/apis/ipranges/user-triggered-fetchers-google.json (updated 2026-10-30T15:46:38.000000)
 # 1093 unique prefixes
 
 - name: google-crawlers
